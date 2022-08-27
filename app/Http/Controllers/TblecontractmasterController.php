@@ -69,6 +69,7 @@ class TblecontractmasterController extends Controller
      */
     public function store(Request $request)
     {
+        dd($request->all());
         $request->validate(
             [
                 'invdate'=>'required',
@@ -136,11 +137,11 @@ class TblecontractmasterController extends Controller
     {
         //
     }
-
+    //  Function OK
     public function getItem(Request $request)
     {
         // dd($request->all());
-        $cid=$request->cid;
+        $cid=$request->categoryId;
         $itmid=DB::table('TbleItem')
         ->select ("icode","iname")->distinct()
         ->join('tbleobszws','tbleobszws.itmid','=','TbleItem.icode')
@@ -148,23 +149,16 @@ class TblecontractmasterController extends Controller
         ->get();
         return response()->json([$itmid],200);
     }
-
+    //  Function Ok
     public function getSize(Request $request)
     {
         // dd($request->all());
-        $cid=$request->cid;
+        $itemId=$request->itemId;
         $categoryid=$request->categoryid;
+        $Myqry="SELECT distinct a.trid,b.sizename FROM tbleobszws as a inner join tblesize as b
+        on a.itmsizeid=b.sizeid where a.itmid0=$categoryid and a.itmid=$itemId" ;
+        $itemsizeid=  DB::select ($Myqry);
 
-        $itemsizeid=DB::table('tblesize')
-        ->select("trid","sizename","tbleobszws.itmid0")->distinct()
-        ->join('tbleobszws','tbleobszws.itmsizeid','=','tblesize.sizeid')
-        // ->where('tbleobszws.itmid',$cid)
-        ->where(function($q) use($cid,$categoryid) {
-            $q->where('tbleobszws.itmid',$cid)
-            ->orWhere('tbleobszws.itmid0', $categoryid);
-        })
-        // ->orWhere('tbleobszws.itmid0',$categoryid)
-        ->get();
         return response()->json([$itemsizeid],200);
     }
 

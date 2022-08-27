@@ -1,3 +1,46 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+
+/* Hide Arrows for input[type=number] */
+/* Chrome, Safari, Edge, Opera */
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+-webkit-appearance: none;
+margin: 0;
+}
+
+/* Firefox */
+input[type=number] {
+-moz-appearance: textfield;
+}
+
+/* SELECT  */
+select{
+    @apply rounded h-8 text-sm uppercase;
+}
+option{
+    @apply text-sm text-slate-500;
+}
+input{
+    @apply h-8;
+}
+input[type="text"]{
+    @apply rounded;
+}
+input[type="number"]{
+    @apply rounded text-right;
+}
+input[type="date"]{
+    @apply rounded;
+}
+input:disabled{
+    @apply bg-slate-500 text-white;
+}
+button{
+    @apply rounded bg-green-500 text-white hover:bg-green-700;
+}
+table{
+    @apply rounded-t-lg
+}

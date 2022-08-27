@@ -1,28 +1,5 @@
-<link href="{{ asset('css/style.css') }}" rel="stylesheet">
-<script src="https://kit.fontawesome.com/a076d05399.js"></script>
-
-{{-- <div class="mt-2">
-    @if (isset($co))
-
-    <div>
-
-        <x-label for="mheadid" :value="__('Account Man Head')" />
-        <select required name="mheadid" id="mheadid" class="block mt-1 bg-slate-200 text-sm rounded-lg">
-            <option value="" disabled >Select careof</option>
-            @foreach ($co as $list)
-                <option value="{{$list->smid}}" > {{$list->par1}}   </option>
-            @endforeach
-        </select>
-    </div>
-
-    @endif
-</div> --}}
-
 <nav x-data="{ open: false }" class="bg-white border-b border-gray-100">
     <!-- Primary Navigation Menu -->
-    {{-- <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8"> --}}
-
-
     <div class="max-w-9xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="flex justify-between h-16">
             <div class="flex">.
