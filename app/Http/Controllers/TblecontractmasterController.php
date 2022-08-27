@@ -146,29 +146,24 @@ class TblecontractmasterController extends Controller
         ->join('tbleobszws','tbleobszws.itmid','=','TbleItem.icode')
         ->where('tbleobszws.itmid0',$cid)
         ->get();
-        // $itmid = collect($itmid);
-        // return $itmid;
-        //    print_r($itmid);
-        // $html='<option value="" > select item </option> ';
-        // foreach($itmid as $list)
-        // {
-        // $html.='<option value="'.$list->icode.'">'.$list->iname.'</option>';
-        // }
         return response()->json([$itmid],200);
     }
-
 
     public function getSize(Request $request)
     {
         // dd($request->all());
         $cid=$request->cid;
-        $iid=$request->iid;
+        $categoryid=$request->categoryid;
 
         $itemsizeid=DB::table('tblesize')
-        ->select("trid","sizename")->distinct()
+        ->select("trid","sizename","tbleobszws.itmid0")->distinct()
         ->join('tbleobszws','tbleobszws.itmsizeid','=','tblesize.sizeid')
-        ->where('tbleobszws.itmid',$cid)
-        // ->and('tbleobszws.sizeid',$iid)
+        // ->where('tbleobszws.itmid',$cid)
+        ->where(function($q) use($cid,$categoryid) {
+            $q->where('tbleobszws.itmid',$cid)
+            ->orWhere('tbleobszws.itmid0', $categoryid);
+        })
+        // ->orWhere('tbleobszws.itmid0',$categoryid)
         ->get();
         return response()->json([$itemsizeid],200);
     }
