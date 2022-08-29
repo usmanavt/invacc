@@ -15,10 +15,10 @@ class CreateTblecontractmasterTable extends Migration
     {
         Schema::create('tblecontractmaster', function (Blueprint $table) {
             $table->id();
-            $table->smallinteger('invid')->unique();
+            $table->smallInteger('invid');
             $table->date('invdate');
             $table->string('invno',30);
-            $table->smallinteger('supcode');
+            $table->smallInteger('supcode');
             $table->decimal('convrate', 6, 2)->nullable();
             $table->decimal('insurance', 6, 2)->nullable();
             $table->timestamps();
