@@ -1,33 +1,17 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\SupplierController;
-use App\Http\Controllers\CustomerController;
-use App\Http\Controllers\LocationController;
-use App\Http\Controllers\SubheadController;
-use App\Http\Controllers\ItemcategoryController;
 use App\Http\Controllers\ItemController;
-use App\Http\Controllers\ItemsizeController;
-use App\Http\Controllers\GrouprelationController;
 use App\Http\Controllers\MenuController;
-use App\Http\Controllers\TblecontractmasterController;
+use App\Http\Controllers\SubheadController;
+use App\Http\Controllers\CustomerController;
+use App\Http\Controllers\ItemsizeController;
+use App\Http\Controllers\LocationController;
+use App\Http\Controllers\SupplierController;
+use App\Http\Controllers\ItemcategoryController;
+use App\Http\Controllers\GrouprelationController;
+use App\Http\Controllers\ContractMasterController;
 
-
-
-
-
-
-
-/*
-|--------------------------------------------------------------------------
-| Web Routes
-|--------------------------------------------------------------------------
-|
-| Here is where you can register web routes for your application. These
-| routes are loaded by the RouteServiceProvider within a group which
-| contains the "web" middleware group. Now create something great!
-|
-*/
 
 Route::get('/', function () {
     // return view('welcome');
@@ -47,27 +31,10 @@ Route::get('/test1', function () {
 });
 
 
-
-
 require __DIR__.'/auth.php';
-
-Route::resource('suppliers', SupplierController::class);
-Route::resource('customers', CustomerController::class);
-Route::resource('locations', LocationController::class);
-Route::resource('subheads', SubheadController::class);
-Route::resource('itemcategories', ItemcategoryController::class);
-Route::resource('items', ItemController::class);
-Route::resource('itemsize', ItemsizeController::class);
-Route::resource('grouprelations', GrouprelationController::class);
-
-Route::resource('contracts', TblecontractmasterController::class);
-
 
 
 Route::get('/layouts/navigation/{id}',[MenuController::class,'Showmenu']);
-
-
-
 
 
 Route::get('/supplier/delete/{id}',[SupplierController::class,'destroy'])->name('suppliers.destroy');
@@ -93,16 +60,24 @@ Route::post('/item/update/{id}',[ItemController::class,'update'])->name('item.up
 
 Route::get('/itemsize/delete/{id}',[ItemsizeController::class,'destroy'])->name('itemsize.destroy');
 Route::post('/itemsize/update/{id}',[ItemsizeController::class,'update'])->name('itemsize.update');
+Route::post('/itemsize/save/',[ItemsizeController::class,'storetemp']);
 
 
 Route::get('/grouprelation/delete/{id}',[GrouprelationController::class,'destroy'])->name('grouprelation.destroy');
 Route::post('/grouprelation/update/{id}',[GrouprelationController::class,'update'])->name('grouprelation.update');
 
 
-Route::post('/itemsize/save/',[ItemsizeController::class,'storetemp']);
+// Contract Master Controller
+Route::get('/getItem', [ContractMasterController::class, 'getItem']);
+Route::get('/getSize', [ContractMasterController::class, 'getSize']);
+Route::resource('contracts', ContractMasterController::class);
 
-// Route::post('/getitem/{id}', [TblecontractmasterController::class, 'getitem']);
 
-Route::get('/getItem', [TblecontractmasterController::class, 'getItem']);
-Route::get('/getSize', [TblecontractmasterController::class, 'getSize']);
-
+Route::resource('suppliers', SupplierController::class);
+Route::resource('customers', CustomerController::class);
+Route::resource('locations', LocationController::class);
+Route::resource('subheads', SubheadController::class);
+Route::resource('itemcategories', ItemcategoryController::class);
+Route::resource('items', ItemController::class);
+Route::resource('itemsize', ItemsizeController::class);
+Route::resource('grouprelations', GrouprelationController::class);
