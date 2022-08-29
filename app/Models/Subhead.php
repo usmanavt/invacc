@@ -10,6 +10,4 @@ class Subhead extends Model
     use HasFactory;
     protected $table= "tblsubhead";
     protected $fillable = ['mheadid','subheadid','subheadname','sstatus','ob'];
-
-
 }
