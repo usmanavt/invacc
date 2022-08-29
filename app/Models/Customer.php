@@ -13,11 +13,5 @@ class Customer extends Model
     'cnname','cpaddress','cdivraddress','contpaddress','cphoneoff','cphoneres','cfax'
     ,'cemail','cstatus','obalance','ntnno','staxno','cop'];
 
-
-
-
-
-
-
 }
 
