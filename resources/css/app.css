@@ -38,9 +38,9 @@ input[type="date"]{
 input:disabled{
     @apply bg-slate-500 text-white;
 }
-button{
+/* button{
     @apply rounded bg-green-500 text-white hover:bg-green-700;
-}
+} */
 table{
     @apply rounded-t-lg
 }

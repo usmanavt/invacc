@@ -15,7 +15,6 @@ class CreateTbleitem0Table extends Migration
     {
         Schema::create('tbleitem0', function (Blueprint $table) {
             $table->id();
-            $table->smallinteger('icode0')->unique();
             $table->string('iname0',75);
             $table->string('inname0',30)->nullable();
             $table->timestamps();

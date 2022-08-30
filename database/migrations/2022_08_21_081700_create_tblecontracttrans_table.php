@@ -15,7 +15,7 @@ class CreateTblecontracttransTable extends Migration
     {
         Schema::create('tblecontracttrans', function (Blueprint $table) {
             $table->id();
-            $table->smallinteger('tinvid');
+            $table->bigInteger('tblecontractmaster_id');
             $table->integer('transid');
             $table->smallinteger('brandid')->nullable();
             $table->smallinteger('bundle1');

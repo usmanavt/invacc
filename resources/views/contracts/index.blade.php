@@ -26,29 +26,26 @@
                             <table class="min-w-full divided-y divide-gray-500">
 								<thead>
 									<tr>
-										<td class="px-6 py-3 bg-gray-100 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Man Head</td>
-										{{-- <td class="px-6 py-3 bg-gray-100 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">KnickName</td> --}}
-										<td class="px-6 py-3 bg-gray-100 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Sub Head</td>
-										<td class="px-6 py-3 bg-gray-100 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">O/Balance</td>
-										<td class="px-6 py-3 bg-gray-100 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</td>
+										<td class="px-6 py-3 bg-gray-100 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Invoice #</td>
+										<td class="px-6 py-3 bg-gray-100 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Dated</td>
+										<td class="px-6 py-3 bg-gray-100 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Supplier</td>
 										<td class="px-6 py-3 bg-gray-100 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</td>
 
 									</tr>
 								</thead>
 								<tbody class="bg-white divide-y divide-gray-200">
-									@foreach($subheads as $subhead)
+									@foreach($contracts as $contract)
 										<tr class="border-b">
-											<td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{$subhead->mheadname}}</td>
-											<td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{$subhead->subheadname}}</td>
-											<td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{$subhead->ob}}</td>
-											<td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{$subhead->sstatus}}</td>
-											</td>
+											<td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{$contract->invno}}</td>
+											<td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{$contract->invdate}}</td>
+											<td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{$contract->supplier->sname}}</td>
+											
 											<td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-											    <a class="text-sm text-indigo-500 hover:text-gray-900" href="{{route('subheads.edit',$subhead->id)}}">
+											    <a class="text-sm text-indigo-500 hover:text-gray-900" href="{{route('contracts.edit',$contract->id)}}">
                                                     <i class="fa fa-edit fa-fw"></i>
                                                     Edit
                                                 </a>
-                                                <a class="text-sm text-indigo-500 hover:text-red-900" href="{{route('subheads.destroy',$subhead->id)}}" >
+                                                <a class="text-sm text-indigo-500 hover:text-red-900" href="{{route('contracts.destroy',$contract->id)}}" >
                                                     <i class="fa fa-trash text-red-600 fa-fw "></i>
                                                     Delete
                                                 </a>
@@ -64,7 +61,7 @@
 
                 {{-- Pagination --}}
                 {{-- <x-pagination>
-                    {{ $subheads->links() }}
+                    {{ $contracts->links() }}
                 </x-pagination> --}}
 
             </div>

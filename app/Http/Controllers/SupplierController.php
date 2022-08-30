@@ -8,11 +8,7 @@ use DB;
 
 class SupplierController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
+
     public function index(Request $request)
     {
         $search = $request->search;
@@ -30,37 +26,22 @@ class SupplierController extends Controller
         return view('suppliers.index')->with('suppliers',$suppliers);
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
     public function create()
     {
         return view('suppliers.create');
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
     public function store(Request $request)
     {
-        // $supplier = DB::table('tblesupplier')->where('id', DB::raw("(select max('id') from tblesupplier )"))->get();
-
         $request->validate(
             [
                 'sname'=>'required',
                 'sname'=>'required|unique:Tblesupplier',
                 'email'=>'email'
-            ]
-            );
+            ]);
 
 
         $maxValue = DB::table('Tblesupplier')->max('scode')+1;
-        // dd($maxValue);
         // try {
             // DB::transaction(function () {
                 $supplier = new Supplier();
@@ -87,23 +68,11 @@ class SupplierController extends Controller
         // }
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\Models\Supplier  $supplier
-     * @return \Illuminate\Http\Response
-     */
     public function show(Supplier $supplier)
     {
         return view('suppliers.show')->with('supplier',$supplier);
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Models\Supplier  $supplier
-     * @return \Illuminate\Http\Response
-     */
     public function edit($id)
     {
 

@@ -24,11 +24,11 @@
                         {{-- Contract Master --}}
                         <div class="grid grid-cols-12 gap-2 py-2 items-center">
                             {{-- Contract Master --}}
-                            <label for="supcode">Supplier</label>
-                            <select class="col-span-2"  name="supcode" id="supcode" required>
+                            <label for="supplier_id">Supplier</label>
+                            <select class="col-span-2"  name="supplier_id" id="supplier_id" required>
                                 <option value="" selected>Contract</option>
-                                @foreach($supdta as $list)
-                                    <option value="{{$list->supid}}" >  {{$list->supname}}  </option>
+                                @foreach($suppliers as $supplier)
+                                    <option value="{{$supplier->id}}" >  {{$supplier->sname}}  </option>
                                 @endforeach
                             </select>
 
@@ -38,33 +38,33 @@
                             <input type="date" class="col-span-2" name="invdate" required>
 
                             {{-- Contract Master - Invoice Number --}}
-                            <label for="invno">Invoice ID #</label>
+                            <label for="invno">Invoice #</label>
                             <input type="text" class="col-span-2" name="invno" placeholder="Invoice No" minlength="3"  title="minimum 3 characters required" required>
 
                         </div>
 
                         {{-- Contract Details --}}
                         <div class="flex flex-row pt-8">
-                            <table class="table table-fixed relative rounded" >
+                            <table class="table table-fixed relative rounded pt-4" >
                                 <caption class="absolute inline-block text-indigo-500 text-sm" style="top:-20px;">
                                 To add a new row, press <kbd class="bg-slate-500 text-white rounded px-2">Ctrl + Space</kbd>
                                 </caption>
-                                <thead>
+                                <thead class="">
                                     <tr class="bg-slate-700 text-white" >
-                                        <th>RowId</th>
-                                        <th>Category</th>
-                                        <th>Name</th>
-                                        <th>Size</th>
-                                        <th>Brand</th>
-                                        <th>Bnd</th>
-                                        <th>Pcs/Bnd</th>
-                                        <th>Bnd</th>
-                                        <th>Pcs/Bnd</th>
-                                        <th>TotPcs</th>
-                                        <th class="w-24">Wt(MT)</th>
-                                        <th class="w-24">Rs($)</th>
-                                        <th class="w-24">Val($)</th>
-                                        <th>Delete</th>
+                                        <th class="border border-slate-300 px-3">RowId</th>
+                                        <th class="border border-slate-300 px-3">Category</th>
+                                        <th class="border border-slate-300 px-3">Name</th>
+                                        <th class="border border-slate-300 px-3">Size</th>
+                                        <th class="border border-slate-300 px-3">Brand</th>
+                                        <th class="border border-slate-300 px-3">Bnd</th>
+                                        <th class="border border-slate-300 px-3">Pcs/Bnd</th>
+                                        <th class="border border-slate-300 px-3">Bnd</th>
+                                        <th class="border border-slate-300 px-3">Pcs/Bnd</th>
+                                        <th class="border border-slate-300 px-3">TotPcs</th>
+                                        <th class="border border-slate-300 px-3" class="w-24">Wt(MT)</th>
+                                        <th class="border border-slate-300 px-3" class="w-24">Rs($)</th>
+                                        <th class="border border-slate-300 px-3" class="w-24">Val($)</th>
+                                        <th class="border border-slate-300 px-3">Delete</th>
                                     </tr>
                                 </thead>
                                 <tbody id="tableBody">
@@ -75,7 +75,7 @@
 
                         {{-- Submit Button --}}
                         <div class="pt-2">
-                            <button class="inline-flex items-center px-4 py-1 w-36 text-center">
+                            <button class="bg-green-500 text-white rounded hover:bg-green-700 inline-flex items-center px-4 py-1 w-28 text-center">
                                 <i class="fa fa-save fa-fw"></i>
                                 {{ __('Submit') }}
                             </button>
@@ -116,7 +116,7 @@ function popItemId(el,id){
     {
         return // Don't work on empty selectedItemId
     }
-    let url = window.origin + "/getItem?categoryId=" + selectCategoryId
+    let url = window.origin + "/getItems?category_id=" + selectCategoryId
     // console.log(url)
     fetch(url,{
         method:"GET",
@@ -124,25 +124,19 @@ function popItemId(el,id){
         })
         .then(response => response.json())
         .then(function(response){
-            // console.log(response)
-
-            // This object has array in array, that's why dbl loop
-            for (let index = 0; index < response.length; index++) {
-                const element = response[index];
-                // Add select initial
-                var startOption = document.createElement('option')
-                startOption.value = ""
-                startOption.text = "--Name"
-                selectedItemId.appendChild(startOption)
-                //
-                element.forEach(e => {
-                    // console.log(e.icode, e.iname)
-                    var sel = document.createElement('option')
-                    sel.value = e.icode
-                    sel.text = e.iname
-                    selectedItemId.appendChild(sel)
-                        });
-                }
+            console.log(response)
+            var startOption = document.createElement('option')
+            startOption.value = ""
+            startOption.text = "--Name"
+            selectedItemId.appendChild(startOption)
+        
+            response.forEach(e => {
+                console.log(e)
+                var sel = document.createElement('option')
+                sel.value = e.id
+                sel.text = e.iname
+                selectedItemId.appendChild(sel)
+                });
         })
         .catch(err => {
             console.log(err.message)
@@ -151,7 +145,7 @@ function popItemId(el,id){
 function popItemSize(el,id){
     var selectedItemId = el.options[el.selectedIndex].value // Name Select
     var selectedItemIdRowNumber = id
-    console.log(selectedItemId, selectedItemIdRowNumber)
+    // console.log(selectedItemId, selectedItemIdRowNumber)
     var selCategory = document.getElementById(`categoryId${id}`)
     var selCategoryId = selCategory.options[selCategory.selectedIndex].value
     var selItemSizeId = document.getElementById(`itemSizeId${id}`)
@@ -162,7 +156,7 @@ function popItemSize(el,id){
     {
         return // Don't work on empty selectedItemId
     }
-    let url = window.origin + "/getSize?itemId=" + selectedItemId + "&categoryid=" + selCategoryId
+    let url = window.origin + "/getSizes?item_id=" + selectedItemId + "&category_id=" + selCategoryId
     console.log(url)
     fetch(url,{
         method:"GET",
@@ -224,8 +218,8 @@ function addNewRow()
     <td>
         <select onchange="popItemId(this,${rowNumber})" name="categoryId[]" id="categoryId${rowNumber}" required>
             <option value="" selected>--Category</option>
-            @foreach($grpdta as $grplist)
-                <option value="{{$grplist->grpid}}" >  {{$grplist->grpname}}  </option>
+            @foreach($categories as $category)
+                <option value="{{$category->id}}" >{{ $category->iname0}}</option>
             @endforeach
         </select>
     </td>
@@ -240,8 +234,8 @@ function addNewRow()
     <td>
         <select class="form-control brandid" required name="brandid[]" id="brandid${rowNumber}" required>
             <option value="" selected>Item Size</option>
-            @foreach($brddta as $brdlist)
-                <option value="{{$brdlist->bid}}" >  {{$brdlist->bname}}  </option>
+            @foreach($brands as $brand)
+                <option value="{{$brand->id}}" >  {{$brand->brandname}}  </option>
             @endforeach
         </select>
     </td>

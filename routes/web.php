@@ -4,13 +4,13 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ItemController;
 use App\Http\Controllers\MenuController;
 use App\Http\Controllers\SubheadController;
+use App\Http\Controllers\CategoryController;
+use App\Http\Controllers\ContractController;
 use App\Http\Controllers\CustomerController;
 use App\Http\Controllers\ItemsizeController;
 use App\Http\Controllers\LocationController;
 use App\Http\Controllers\SupplierController;
-use App\Http\Controllers\ItemcategoryController;
 use App\Http\Controllers\GrouprelationController;
-use App\Http\Controllers\ContractMasterController;
 
 
 Route::get('/', function () {
@@ -51,8 +51,7 @@ Route::post('/location/update/{id}',[LocationController::class,'update']);
 Route::get('/subhead/delete/{id}',[SubheadController::class,'destroy'])->name('subheads.destroy');
 Route::post('/subhead/update/{id}',[SubheadController::class,'update']);
 
-Route::get('/itemcategory/delete/{id}',[ItemcategoryController::class,'destroy'])->name('itemcategory.destroy');
-Route::post('/itemcategory/update/{id}',[ItemcategoryController::class,'update'])->name('itemcategory.update');
+
 
 
 Route::get('/item/delete/{id}',[ItemController::class,'destroy'])->name('item.destroy');
@@ -67,17 +66,19 @@ Route::get('/grouprelation/delete/{id}',[GrouprelationController::class,'destroy
 Route::post('/grouprelation/update/{id}',[GrouprelationController::class,'update'])->name('grouprelation.update');
 
 
-// Contract Master Controller
-Route::get('/getItem', [ContractMasterController::class, 'getItem']);
-Route::get('/getSize', [ContractMasterController::class, 'getSize']);
-Route::resource('contracts', ContractMasterController::class);
+// Contract Controller
+Route::get('/getItems', [ContractController::class, 'getItems']);
+Route::get('/getSizes', [ContractController::class, 'getSizes']);
+Route::resource('contracts', ContractController::class);
+
+//  Category Controller
+Route::resource('categories', CategoryController::class);
 
 
 Route::resource('suppliers', SupplierController::class);
 Route::resource('customers', CustomerController::class);
 Route::resource('locations', LocationController::class);
 Route::resource('subheads', SubheadController::class);
-Route::resource('itemcategories', ItemcategoryController::class);
 Route::resource('items', ItemController::class);
 Route::resource('itemsize', ItemsizeController::class);
 Route::resource('grouprelations', GrouprelationController::class);

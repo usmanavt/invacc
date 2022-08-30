@@ -15,10 +15,9 @@ class CreateTblecontractmasterTable extends Migration
     {
         Schema::create('tblecontractmaster', function (Blueprint $table) {
             $table->id();
-            $table->smallInteger('invid');
+            $table->bigInteger('supplier_id');
             $table->date('invdate');
             $table->string('invno',30);
-            $table->smallInteger('supcode');
             $table->decimal('convrate', 6, 2)->nullable();
             $table->decimal('insurance', 6, 2)->nullable();
             $table->timestamps();
