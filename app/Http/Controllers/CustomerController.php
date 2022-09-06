@@ -56,7 +56,7 @@ class CustomerController extends Controller
             $customer->obalance = $request->obalance;
             $customer->ntnno = $request->ntnno;
             $customer->staxNo = $request->staxno;
-            $customer->cop = $request->cop;
+            $customer->tbleco_id = $request->cop;
             $customer->save();
             DB::commit();
             Session::flash('success','Customer created');
@@ -99,7 +99,7 @@ class CustomerController extends Controller
             $customer->obalance = $request->obalance;
             $customer->ntnno = $request->ntnno;
             $customer->staxNo = $request->staxno;
-            $customer->cop = $request->cop;
+            $customer->tbleco_id = $request->cop;
             $customer->save();
             DB::commit();
             Session::flash('info','Customer updated');

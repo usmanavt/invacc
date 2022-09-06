@@ -25,6 +25,48 @@
                                 <x-input id="inname" class="bg-indigo-100" type="text" name="inname" :value="old('inname')"  required minlength="3"/>
                                 @if($errors->has('inname'))<div class="text-red-500 text-xs">{{ $errors->first('inname') }}</div>@endif
     
+
+                                <x-label for="" value="Category"/>
+                                <select required name="category_id" class="bg-indigo-100 w-full" required>
+                                    <option value="" selected>--Category</option>
+                                    @foreach ($categories as $category)
+                                        <option value="{{ $category->id }}">{{ $category->iname0 }}</option>
+                                    @endforeach
+                                </select>
+
+                                <x-label for="" value="ItemSize"/>
+                                <select required name="item_size_id" class="bg-indigo-100 w-full" required>
+                                    <option value="" selected>--ItemSize</option>
+                                    @foreach ($itemsizes as $itemsize)
+                                        <option value="{{ $itemsize->id }}">{{ $itemsize->sizename }}</option>
+                                    @endforeach
+                                </select>
+
+                                <x-label for="" value="Source"/>
+                                <select required name="source_id" class="bg-indigo-100 w-full" required>
+                                    <option value="" selected>--Source</option>
+                                    @foreach ($sources as $source)
+                                        <option value="{{ $source->id }}">{{ $source->srcname }}</option>
+                                    @endforeach
+                                </select>
+
+                                <x-label for="" value="Unit"/>
+                                <select required name="unit_id" class="bg-indigo-100 w-full" required>
+                                    <option value="" selected>--Unit</option>
+                                    @foreach ($units as $unit)
+                                        <option value="{{ $unit->id }}">{{ $unit->unitname }}</option>
+                                    @endforeach
+                                </select>
+
+                                <x-label for="" value="Brand"/>
+                                <select required name="brand_id" class="bg-indigo-100 w-full" required>
+                                    <option value="" selected>--brand</option>
+                                    @foreach ($brands as $brand)
+                                        <option value="{{ $brand->id }}">{{ $brand->brandname }}</option>
+                                    @endforeach
+                                </select>
+
+
                                 <div class="mt-2">
                                     <button class="inline-flex items-center px-4 py-2 bg-green-500 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-green-700 active:bg-green-900 focus:outline-none focus:border-green-900 focus:ring ring-gray-300 disabled:opacity-25 transition ease-in-out duration-150">
                                         <i class="fa fa-save fa-fw"></i>

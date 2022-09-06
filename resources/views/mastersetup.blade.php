@@ -11,7 +11,27 @@
                 <div class="p-4 bg-white border-b border-gray-200">
 
                     <div class="flex flex-col flex-wrap md:flex-row items-center gap-2 justify-center">
+
+                        <a  class="basis-0 w-full md:basis-1/3 bg-blue-500 hover:bg-blue-700 text-white px-2 py-4 rounded-lg shadow-lg" href="{{ route('categories.index') }}">
+                            <i class="fa-solid fa-arrow-up-from-ground-water fa-2xl"></i> Categories 
+                        </a>
+                      
+                        <a  class="basis-0 w-full md:basis-1/3 bg-blue-500 hover:bg-blue-700 text-white px-2 py-4 rounded-lg shadow-lg" href="{{ route('units.index') }}">
+                            <i class="fa-solid fa-arrow-up-from-ground-water fa-2xl"></i> Units
+                        </a>
                         
+                        <a  class="basis-0 w-full md:basis-1/3 bg-blue-500 hover:bg-blue-700 text-white px-2 py-4 rounded-lg shadow-lg" href="{{ route('itemsize.index') }}">
+                            <i class="fa-solid fa-xmarks-lines fa-2xl"></i> Items Size
+                        </a>
+
+                        <a  class="basis-0 w-full md:basis-1/3 bg-blue-500 hover:bg-blue-700 text-white px-2 py-4 rounded-lg shadow-lg" href="{{ route('brands.index') }}">
+                            <i class="fa-solid fa-xmarks-lines fa-2xl"></i> Brands
+                        </a>
+
+                        <a  class="basis-0 w-full md:basis-1/3 bg-blue-500 hover:bg-blue-700 text-white px-2 py-4 rounded-lg shadow-lg" href="{{ route('sources.index') }}">
+                            <i class="fa-solid fa-xmarks-lines fa-2xl"></i> Sources
+                        </a>
+
                         <a class="basis-0 w-full md:basis-1/3 bg-blue-500 hover:bg-blue-700 text-white px-2 py-4 rounded-lg shadow-lg"  href="{{ route('suppliers.index') }}" >
                             <i class="fa-solid fa-truck-field fa-2xl"></i> Suppliers
                         </a>
@@ -28,21 +48,17 @@
                             <i class="fa-solid fa-kitchen-set fa-2xl"></i> ChartOfAccount
                         </a>
                                 
-                        <a  class="basis-0 w-full md:basis-1/3 bg-blue-500 hover:bg-blue-700 text-white px-2 py-4 rounded-lg shadow-lg" href="{{ route('categories.index') }}">
-                            <i class="fa-solid fa-arrow-up-from-ground-water fa-2xl"></i> Category
-                        </a>
+                      
 
                         <a  class="basis-0 w-full md:basis-1/3 bg-blue-500 hover:bg-blue-700 text-white px-2 py-4 rounded-lg shadow-lg" href="{{ route('items.index') }}">
                             <i class="fa-solid fa-arrow-up-from-bracket fa-2xl"></i> Items
                         </a>
 
-                        <a  class="basis-0 w-full md:basis-1/3 bg-blue-500 hover:bg-blue-700 text-white px-2 py-4 rounded-lg shadow-lg" href="{{ route('itemsize.index') }}">
-                            <i class="fa-solid fa-xmarks-lines fa-2xl"></i> Items Size
-                        </a>
+                     
 
-                        <a  class="basis-0 w-full md:basis-1/3 bg-blue-500 hover:bg-blue-700 text-white px-2 py-4 rounded-lg shadow-lg" href="{{ route('grouprelations.index') }}">
+                        {{-- <a  class="basis-0 w-full md:basis-1/3 bg-blue-500 hover:bg-blue-700 text-white px-2 py-4 rounded-lg shadow-lg" href="{{ route('groups.index') }}">
                             <i class="fa-solid fa-arrows-to-circle fa-2xl"></i> Group Relation
-                        </a>
+                        </a> --}}
 
                     </div>
                 </div>

@@ -95,11 +95,11 @@
                                 </div>
 
                                 <div class="basis-0 md:basis-1/6">
-                                    <x-label for="cop" :value="__('Source')" />
+                                    <x-label for="cop" :value="__('Care Of')" />
                                     <select required name="cop" id="cop" class="bg-indigo-100">
                                         <option value="" selected>--Care of</option>
                                         @foreach($careof as $list)
-                                            @if ($customer->cop == $list->id) 
+                                            @if ($customer->tbleco_id == $list->id) 
                                             <option value="{{$list->id}}" selected>{{$list->coname}}</option>    
                                             @else
                                             <option value="{{$list->id}}">{{$list->coname}}</option>    

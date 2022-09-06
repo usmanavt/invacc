@@ -39,9 +39,9 @@ class ContractController extends Controller
         $suppliers = Supplier::select('id','sname')->get();
         $itemsizes = ItemSize::select('id','sizename')->get();
         $brands = Brand::select('id','brandname')->get();
-        $groups = Group::with('categories','items')->where('category_id',4)->get();
+        // $groups = Group::with('categories','items')->where('category_id',4)->get();
         
-        $data=compact('categories','suppliers','itemsizes','brands','groups');
+        $data=compact('categories','suppliers','itemsizes','brands');
         return view('contracts.create')->with($data);
     }
 

@@ -20,7 +20,7 @@
                             {{-- Contract Master --}}
                             <label for="supplier_id">Supplier</label>
                             <select class="col-span-2"  name="supplier_id" id="supplier_id" required>
-                                <option value="" selected>Contract</option>
+                                <option value="" selected>--Supplier</option>
                                 @foreach($suppliers as $supplier)
                                     <option value="{{$supplier->id}}" >  {{$supplier->sname}}  </option>
                                 @endforeach
@@ -227,7 +227,7 @@ function addNewRow()
     </td>
     <td>
         <select class="form-control brandid" required name="brandid[]" id="brandid${rowNumber}" required>
-            <option value="" selected>Item Size</option>
+            <option value="" selected>--Brand</option>
             @foreach($brands as $brand)
                 <option value="{{$brand->id}}" >  {{$brand->brandname}}  </option>
             @endforeach

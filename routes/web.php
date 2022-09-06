@@ -3,6 +3,10 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ItemController;
 use App\Http\Controllers\MenuController;
+use App\Http\Controllers\UnitController;
+use App\Http\Controllers\BrandController;
+use App\Http\Controllers\GroupController;
+use App\Http\Controllers\SourceController;
 use App\Http\Controllers\SubheadController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\ContractController;
@@ -10,7 +14,6 @@ use App\Http\Controllers\CustomerController;
 use App\Http\Controllers\ItemSizeController;
 use App\Http\Controllers\LocationController;
 use App\Http\Controllers\SupplierController;
-use App\Http\Controllers\GrouprelationController;
 
 
 Route::get('/', function () {
@@ -26,13 +29,25 @@ Route::get('/transactons', function () {
 
 require __DIR__.'/auth.php';
 
+//  Category Controller
+Route::resource('categories', CategoryController::class);
+
+//  Unit Controller
+Route::resource('units', UnitController::class);
+
+//  Brand Controller
+Route::resource('brands',BrandController::class);
+
+//  Source Controller
+Route::resource('sources',SourceController::class);
+
+
 // Contract Controller
 Route::get('/getItems', [ContractController::class, 'getItems']);
 Route::get('/getSizes', [ContractController::class, 'getSizes']);
 Route::resource('contracts', ContractController::class);
 
-//  Category Controller
-Route::resource('categories', CategoryController::class);
+
 
 //  Supplier Controller
 Route::resource('suppliers', SupplierController::class);
@@ -46,10 +61,10 @@ Route::resource('locations', LocationController::class);
 Route::resource('itemsize', ItemSizeController::class);
 //  Customer Controller
 Route::resource('customers', CustomerController::class);
-
+//  Group Controller
+Route::resource('group', GroupController::class);
 
 Route::resource('subheads', SubheadController::class);
-Route::resource('grouprelations', GrouprelationController::class);
 
 
 Route::get('/layouts/navigation/{id}',[MenuController::class,'Showmenu']);

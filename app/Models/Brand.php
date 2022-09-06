@@ -2,8 +2,9 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
+use App\Models\Item;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Brand extends Model
 {
@@ -21,4 +22,7 @@ class Brand extends Model
     {
         return ucfirst($this->attributes['brandname']);
     }
+
+    //  Relationships
+    public function items(){ return $this->hasMany(Item::class); }
 }

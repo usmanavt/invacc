@@ -4,6 +4,11 @@ namespace App\Http\Controllers;
 
 use DB;
 use App\Models\Item;
+use App\Models\Unit;
+use App\Models\Brand;
+use App\Models\Source;
+use App\Models\Category;
+use App\Models\ItemSize;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Session;
 
@@ -16,6 +21,7 @@ class ItemController extends Controller
             $q->where('iname','LIKE',"%$search%")
             ->orWhere('inname','LIKE',"%$search%");
         })
+        ->with('category','brand','itemSize','source')
         ->orderBy('id','desc')
         ->paginate(5);
         return view('items.index')->with('items',$items);
@@ -23,28 +29,40 @@ class ItemController extends Controller
 
     public function create()
     {
-        return view('items.create')->with('items',Item::all());
+        return view('items.create')
+            ->with('units',Unit::all())
+            ->with('categories',Category::all())
+            ->with('itemsizes',ItemSize::all())
+            ->with('sources',Source::all())
+            ->with('brands',Brand::all())
+            ->with('items',Item::all())
+            ;
     }
 
     public function store(Request $request)
     {
+        // dd($request->all());
         $request->validate([
-                'iname'=>'required|unique:tbleItem'
-            ]);
-            DB::beginTransaction();
-            try {
-                $item = new Item();
-                $item->iname = $request->iname;
-                $item->inname = $request->inname;
-                $item->save();
-                DB::commit();
-                Session::flash('success','Item created');
-                return redirect()->back();
-            } catch (\Throwable $th) {
-                DB::rollback();
-                throw $th;
-            }
-
+            'iname'=>'required|min:3|unique:tbleItem'
+        ]);
+        DB::beginTransaction();
+        try {
+            $item = new Item();
+            $item->iname = $request->iname;
+            $item->inname = $request->inname;
+            $item->category_id = $request->category_id;
+            $item->item_size_id = $request->item_size_id;
+            $item->source_id = $request->source_id;
+            $item->unit_id = $request->unit_id;
+            $item->brand_id = $request->brand_id;
+            $item->save();
+            DB::commit();
+            Session::flash('success','Item created');
+            return redirect()->back();
+        } catch (\Throwable $th) {
+            DB::rollback();
+            throw $th;
+        }
     }
 
 
@@ -55,11 +73,19 @@ class ItemController extends Controller
 
     public function edit(Item $item)
     {
-        return view('items.edit')->with('item',$item);
+        return view('items.edit')
+        ->with('units',Unit::all())
+        ->with('categories',Category::all())
+        ->with('itemsizes',ItemSize::all())
+        ->with('sources',Source::all())
+        ->with('brands',Brand::all())
+        ->with('item',$item)
+        ;
     }
 
     public function update(Item $item,Request $request)
     {
+        // dd($request->all());
         $request->validate([
             'iname'=>'required|unique:tbleItem,iname,'.$item->id
         ]);
@@ -67,6 +93,11 @@ class ItemController extends Controller
         try {
             $item->iname = $request->iname;
             $item->inname = $request->inname;
+            $item->category_id = $request->category_id;
+            $item->item_size_id = $request->item_size_id;
+            $item->source_id = $request->source_id;
+            $item->unit_id = $request->unit_id;
+            $item->brand_id = $request->brand_id;
             $item->save();
             DB::commit();
             Session::flash('info','Item updated');

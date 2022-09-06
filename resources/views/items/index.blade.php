@@ -11,7 +11,7 @@
     </x-slot>
 
     <div class="py-6">
-        <div class="max-w-3xl mx-auto sm:px-2 lg:px-4">
+        <div class="max-w-7xl mx-auto sm:px-2 lg:px-4">
             <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
 
                 {{-- Search Form --}}
@@ -28,6 +28,11 @@
 									<tr>
 										<td class="px-6 py-3 bg-gray-100 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Item Name</td>
 										<td class="px-6 py-3 bg-gray-100 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Knick Name</td>
+                                        <td class="px-6 py-3 bg-gray-100 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Category</td>
+                                        <td class="px-6 py-3 bg-gray-100 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Brand</td>
+                                        <td class="px-6 py-3 bg-gray-100 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Source</td>
+                                        <td class="px-6 py-3 bg-gray-100 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Item Size</td>
+                                        <td class="px-6 py-3 bg-gray-100 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Unit</td>
                                         <td class="px-6 py-3 bg-gray-100 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Action</td>
 									</tr>
 								</thead>
@@ -36,6 +41,11 @@
 										<tr class="border-b">
 											<td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{$Item->iname}}</td>
 											<td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{$Item->inname}}</td>
+											<td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{$Item->category->iname0}}</td>
+											<td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{$Item->brand->brandname}}</td>
+											<td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{$Item->source->srcname}}</td>
+											<td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{$Item->itemSize->sizename}}</td>
+											<td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{$Item->unit->unitname}}</td>
 											<td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
                                                 <a class="text-sm text-indigo-500 hover:text-gray-900" href="{{route('items.edit',$Item->id)}}">
                                                     <i class="fa fa-edit fa-fw"></i>

@@ -2,8 +2,9 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
+use App\Models\Item;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class ItemSize extends Model
 {
@@ -21,5 +22,8 @@ class ItemSize extends Model
     {
         $this->attributes['sizename'] = ucfirst($value);
     }
+
+     //  Relationships
+     public function items(){ return $this->hasMany(Item::class); }
 
 }
