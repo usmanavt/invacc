@@ -15,8 +15,10 @@
                     <div class="flex gap-8">
                         {{-- Form Data --}}
                         <div class="flex flex-col justify-start items-center">
+                            
                             <form action="{{ route('categories.store') }}" method="post" >
                             @csrf
+                            
                                 <x-label for="Iname0" :value="__('Name')"/>
                                 <x-input id="iname0" class="bg-indigo-100" type="text" name="iname0" :value="old('iname0')"  required minlength="3"/>
                                 @if($errors->has('iname0'))<div class="text-red-500 text-xs">{{ $errors->first('iname0') }}</div>@endif

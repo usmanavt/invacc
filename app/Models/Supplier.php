@@ -13,7 +13,7 @@ class Supplier extends Model
     protected $fillable = ['sname',
     'snname','spaddress','sphoneoff',
     'sphoneres','sfax','semail','sstatus',
-    'obalance','ntnno','staxNo','srcId'];
+    'obalance','ntnno','staxNo','srcId','active'];
 
     // Accessors
     public function getSNamettribute($value)

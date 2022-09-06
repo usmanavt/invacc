@@ -9,5 +9,18 @@ class Location extends Model
 {
     use HasFactory;
     protected $table= "tblelocation";
-    protected $fillable = ['locid','locname','locaddress'];
+    protected $fillable = ['locname','locaddress'];
+
+    // Accessors
+    public function getLocnameAttribute()
+    {
+        return ucfirst($this->attributes['locname']);
+    }
+    //  Mutators
+    public function setLocnameAttribute($value)
+    {
+        $this->attributes['locname'] = ucfirst($value);
+    }
+
+    // Relationships
 }

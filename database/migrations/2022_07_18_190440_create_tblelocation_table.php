@@ -15,7 +15,6 @@ class CreateTblelocationTable extends Migration
     {
         Schema::create('tblelocation', function (Blueprint $table) {
             $table->id();
-            $table->smallInteger('locid')->unique();
             $table->string('locname','50');
             $table->string('locaddress','100')->nullable();;
             $table->timestamps();

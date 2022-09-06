@@ -13,6 +13,17 @@ class Item extends Model
     protected $table= "tbleItem";
     protected $fillable = ['iname','inname'];
 
+    // Accessors
+    public function getInameAttribute()
+    {
+        return ucfirst($this->attributes['iname']);
+    }
+    //  Mutators
+    public function setInameAttribute($value)
+    {
+        $this->attributes['iname'] = ucfirst($value);
+    }
+
     //  Relationships
     public function groups()
     {

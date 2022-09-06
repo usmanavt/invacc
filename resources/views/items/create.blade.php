@@ -5,49 +5,44 @@
         </h2>
     </x-slot>
 
-
-
     <div class="py-6">
-        <div class="max-w-7xl mx-auto sm:px-2 lg:px-4">
+        <div class="max-w-3xl mx-auto sm:px-2 lg:px-4">
             <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
 
-                <!-- Session Status -->
-                <x-auth-session-status class="mb-4" :status="session('status')" />
-
-                <!-- Validation Errors -->
-                <x-auth-validation-errors class="mb-4" :errors="$errors" />
                 {{-- Create Form --}}
-                <div class="px-12 py-2" >
-
-
-                    <a class="text-sm text-indigo-500 hover:text-gray-900 mb-2" href="{{route('items.index')}}">
-                        <i class="fa fa-edit fa-fw"></i>
-                        View
-                    </a>
-
-                    {{-- <a class="text-sm text-indigo-500 hover:text-gray-900 mb-2" href="{{route('dashboard')}}">
-                        <i class="fa fa-edit fa-fw"></i>
-                        Dashboard
-                    </a> --}}
-
-                    <form action="{{ route('items.store') }}" method="post" >
-                        @csrf
-                                <div class="flex flex-row justify-start space-x-12 items-center">
-                                    <x-label for="Iname" :value="__('Item ')" />
-                                    <x-input id="iname" class="block mt-2 bg-slate-200 w-96" type="iname" name="iname" :value="old('iname')"  />
+                <div class="px-6 py-2" >
+                    
+                    <div class="flex gap-8">
+                        {{-- Form Data --}}
+                        <div class="flex flex-col justify-start items-center">
+                            <form action="{{ route('items.store') }}" method="post" >
+                            @csrf
+                                <x-label for="iname" :value="__('Name')"/>
+                                <x-input id="iname" class="bg-indigo-100" type="text" name="iname" :value="old('iname')"  required minlength="3"/>
+                                @if($errors->has('iname'))<div class="text-red-500 text-xs">{{ $errors->first('iname') }}</div>@endif
+                                
+                                <x-label for="inname" :value="__('Knick Name')"/>
+                                <x-input id="inname" class="bg-indigo-100" type="text" name="inname" :value="old('inname')"  required minlength="3"/>
+                                @if($errors->has('inname'))<div class="text-red-500 text-xs">{{ $errors->first('inname') }}</div>@endif
+    
+                                <div class="mt-2">
+                                    <button class="inline-flex items-center px-4 py-2 bg-green-500 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-green-700 active:bg-green-900 focus:outline-none focus:border-green-900 focus:ring ring-gray-300 disabled:opacity-25 transition ease-in-out duration-150">
+                                        <i class="fa fa-save fa-fw"></i>
+                                        {{ __('Submit') }}
+                                    </button>
                                 </div>
-                                <div class="flex flex-row justify-start space-x-12 items-center">
-                                    <x-label for="inname" :value="__('Knick Name')" />
-                                    <x-input id="inname" class="block mt-2 bg-slate-200" type="inname" name="inname" :value="old('inname')"  />
-                                </div>
-
-                            <div class="mt-2">
-                                <button class="inline-flex items-center px-4 py-2 bg-green-800 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-green-700 active:bg-green-900 focus:outline-none focus:border-green-900 focus:ring ring-gray-300 disabled:opacity-25 transition ease-in-out duration-150">
-                                    <i class="fa fa-save fa-fw bg-green-900"></i>
-                                    {{ __('Submit') }}
-                                </button>
-                            </div>
-                    </form>
+                            </form>
+                        </div>
+                        {{-- Listing --}}
+                        <div class="ml-4 pt-1 border border-slate-300 w-full p-2">
+                            <span class="text-indigo-500 border-b">Existing Items</span>
+                            <ul class="h-28 overflow-y-scroll">
+                                @foreach ($items as $item)
+                                    <li>{{ $item->iname }}</li>
+                                @endforeach
+                            </ul>
+                        </div>
+                    </div>
                 </div>
 
             </div>

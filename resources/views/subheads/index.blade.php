@@ -27,7 +27,6 @@
 								<thead>
 									<tr>
 										<td class="px-6 py-3 bg-gray-100 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Man Head</td>
-										{{-- <td class="px-6 py-3 bg-gray-100 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">KnickName</td> --}}
 										<td class="px-6 py-3 bg-gray-100 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Sub Head</td>
 										<td class="px-6 py-3 bg-gray-100 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">O/Balance</td>
 										<td class="px-6 py-3 bg-gray-100 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</td>
@@ -38,7 +37,7 @@
 								<tbody class="bg-white divide-y divide-gray-200">
 									@foreach($subheads as $subhead)
 										<tr class="border-b">
-											<td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{$subhead->mheadname}}</td>
+											<td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{$subhead->manhead->mheadname}}</td>
 											<td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{$subhead->subheadname}}</td>
 											<td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{$subhead->ob}}</td>
 											<td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{$subhead->sstatus}}</td>
@@ -63,9 +62,9 @@
                 </div>
 
                 {{-- Pagination --}}
-                {{-- <x-pagination>
+                <x-pagination>
                     {{ $subheads->links() }}
-                </x-pagination> --}}
+                </x-pagination>
 
             </div>
         </div>

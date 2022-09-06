@@ -84,7 +84,7 @@
                                 <div class="basis-0 md:basis-1/5 self-center pt-4">
                                     <input class="checked:bg-blue-500 checked:border-blue-500 focus:outline-none" type="checkbox" name="sstatus" checked>
                                     <label class="inline-block text-gray-800">
-                                        Supplier Active
+                                        Supplier Active?
                                     </label>
                                 </div>
                             </div>

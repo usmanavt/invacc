@@ -15,7 +15,6 @@ class CreateTblecustomerTable extends Migration
     {
         Schema::create('tblecustomer', function (Blueprint $table) {
             $table->id();
-            $table->smallInteger('ccode')->unique();
             $table->string('cname',100);
             $table->string('cnname',50)->nullable();
             $table->text('cpaddress')->nullable();

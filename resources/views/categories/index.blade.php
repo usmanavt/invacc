@@ -11,7 +11,7 @@
     </x-slot>
 
     <div class="py-6">
-        <div class="max-w-7xl mx-auto sm:px-2 lg:px-4">
+        <div class="max-w-3xl mx-auto sm:px-2 lg:px-4">
             <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
 
                 {{-- Search Form --}}

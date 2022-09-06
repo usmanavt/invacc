@@ -81,7 +81,7 @@
                                                     <i class="fa fa-binoculars fa-fw"></i>
                                                     View
                                                 </a> --}}
-											    <a class="text-sm text-indigo-500 hover:text-gray-900" href="{{route('suppliers.edit',$supplier->id)}}">
+											    <a class="text-sm text-indigo-500 hover:text-gray-900" href="{{route('suppliers.edit',$supplier)}}">
                                                     <i class="fa fa-edit fa-fw"></i>
                                                     Edit
                                                 </a>

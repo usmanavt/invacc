@@ -11,11 +11,6 @@
         <div class="max-w-3xl mx-auto sm:px-2 lg:px-4">
             <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
 
-                <!-- Session Status -->
-                <x-auth-session-status class="mb-4" :status="session('status')" />
-
-                <!-- Validation Errors -->
-                {{-- <x-auth-validation-errors class="mb-4" :errors="$errors" /> --}}
                 {{-- Create Form --}}
                 <div class="px-12 py-2" >
                     <div class="flex flex-col justify-start items-center">

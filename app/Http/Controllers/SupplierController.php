@@ -2,9 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use DB;
 use App\Models\Supplier;
 use Illuminate\Http\Request;
-use DB;
+use Illuminate\Support\Facades\Session;
 
 class SupplierController extends Controller
 {
@@ -18,11 +19,10 @@ class SupplierController extends Controller
             ->orWhere('sphoneoff','LIKE',"%$search%")
             ->orWhere('sphoneres','LIKE',"%$search%")
             ->orWhere('semail','LIKE',"%$search%")
-            // ->orWhere('source','LIKE',"%$search%")
             ->orWhere('spaddress','LIKE',"%$search%");
         })
         ->orderBy('id','desc')
-        ->paginate(6);
+        ->paginate(5);
         return view('suppliers.index')->with('suppliers',$suppliers);
     }
 
@@ -34,38 +34,38 @@ class SupplierController extends Controller
     public function store(Request $request)
     {
         $request->validate(
-            [
-                'sname'=>'required',
-                'sname'=>'required|unique:Tblesupplier',
-                'email'=>'email'
-            ]);
-
-
-        $maxValue = DB::table('Tblesupplier')->max('scode')+1;
-        // try {
-            // DB::transaction(function () {
-                $supplier = new Supplier();
-                $supplier->scode = $maxValue;
-                $supplier->sname = $request->sname;
-                $supplier->snname = $request->snname;
-                $supplier->spaddress = $request->spaddress;
-                $supplier->sphoneoff = $request->sphoneoff;
-                $supplier->sphoneres = $request->sphoneres;
-                $supplier->sfax = $request->sfax;
-                $supplier->semail = $request->semail;
-                $supplier->sstatus = $request->sstatus;
-                $supplier->obalance = $request->obalance;
-                $supplier->ntnno = $request->ntnno;
-                $supplier->staxNo = $request->staxNo;
-                $supplier->srcId = $request->srcId;
-                $supplier->save();
-        //     });
-        //     // return redirect()->route('suppliers.index');
+        [
+            'sname'=>'required|min:3|unique:tblesupplier'
+        ]);
+        
+        DB::beginTransaction();
+        try {
+            $supplier = new Supplier();
+            $supplier->sname = $request->sname;
+            $supplier->snname = $request->snname;
+            $supplier->spaddress = $request->spaddress;
+            $supplier->sphoneoff = $request->sphoneoff;
+            $supplier->sphoneres = $request->sphoneres;
+            $supplier->sfax = $request->sfax;
+            $supplier->semail = $request->semail;
+            if($request->has('sstatus'))
+            {
+                $supplier->sstatus = 'Active';
+            }else {
+                $supplier->sstatus = 'Deactive';
+            }
+            $supplier->obalance = $request->obalance;
+            $supplier->ntnno = $request->ntnno;
+            $supplier->staxNo = $request->staxNo;
+            $supplier->srcId = $request->srcId == 1 ? 1:2;
+            $supplier->save();
+            DB::commit();
+            Session::flash('success','Supplier created');
             return redirect()->back();
-        // } catch (\Throwable $th) {
-        //     DB::rollback();
-        //     throw $th;
-        // }
+        } catch (\Throwable $th) {
+            DB::rollback();
+            throw $th;
+        }
     }
 
     public function show(Supplier $supplier)
@@ -73,73 +73,48 @@ class SupplierController extends Controller
         return view('suppliers.show')->with('supplier',$supplier);
     }
 
-    public function edit($id)
+    public function edit(Supplier $supplier)
     {
+        return view('suppliers.edit')->with('supplier',$supplier);
+    }
 
-        // $data1['src']=DB::table('Tblesource')->get();
-        $supplier=Supplier::find($id);
-        if (is_null($supplier))
+    public function update(Supplier $supplier,Request $request )
+    {
+        $request->validate(
+            [
+                'sname'=>'required|min:3|unique:tblesupplier,sname,'.$supplier->id 
+            ]);
+        DB::beginTransaction();
+        try {
+            $supplier->sname = $request->sname;
+            $supplier->snname = $request->snname;
+            $supplier->spaddress = $request->spaddress;
+            $supplier->sphoneoff = $request->sphoneoff;
+            $supplier->sphoneres = $request->sphoneres;
+            $supplier->sfax = $request->sfax;
+            $supplier->semail = $request->semail;
+            if($request->has('sstatus'))
             {
-                // NOT FOUND
-                return redirect()->back();
+                $supplier->sstatus = 'Active';
+            }else {
+                $supplier->sstatus = 'Deactive';
             }
-                else
-            {
-
-
-                $data=compact('supplier');
-                return view('suppliers.edit')->with($data);
-            };
-
-
-
-
-        // return view('suppliers.edit')->with('supplier',$supplier);
+            $supplier->obalance = $request->obalance;
+            $supplier->ntnno = $request->ntnno;
+            $supplier->staxNo = $request->staxNo;
+            $supplier->srcId = $request->srcId;
+            $supplier->save();
+            DB::commit();
+            Session::flash('info','Supplier updated');
+            return redirect()->route('suppliers.index');
+        } catch (\Throwable $th) {
+            DB::rollback();
+            throw $th;
+        }
     }
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\Supplier  $supplier
-     * @return \Illuminate\Http\Response
-     */
-    public function update($id,Request $request )
+    public function destroy(Supplier $supplier)
     {
-                $supplier=Supplier::find($id);
-                $supplier->sname = $request->sname;
-                $supplier->snname = $request->snname;
-                $supplier->spaddress = $request->spaddress;
-                $supplier->sphoneoff = $request->sphoneoff;
-                $supplier->sphoneres = $request->sphoneres;
-                $supplier->sfax = $request->sfax;
-                $supplier->semail = $request->semail;
-                $supplier->sstatus = $request->sstatus;
-                $supplier->obalance = $request->obalance;
-                $supplier->ntnno = $request->ntnno;
-                $supplier->staxNo = $request->staxNo;
-                $supplier->srcId = $request->srcId;
-                $supplier->save();
-             return redirect()->route('suppliers.index');
-
+        
     }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \App\Models\Supplier  $supplier
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy($id)
-{
-    $supplier=Supplier::find($id);
-        if(!is_null($supplier));
-{
-    ($supplier)->delete();
-
-
-}
-return redirect()->back();
-}
-
 }

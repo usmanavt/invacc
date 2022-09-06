@@ -60,9 +60,9 @@
                 </div>
 
                 {{-- Pagination --}}
-                {{-- <x-pagination>
+                <x-pagination>
                     {{ $contracts->links() }}
-                </x-pagination> --}}
+                </x-pagination>
 
             </div>
         </div>

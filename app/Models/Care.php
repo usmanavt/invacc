@@ -5,9 +5,15 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Tbleco extends Model
+// Care Of model
+class Care extends Model
 {
     use HasFactory;
     protected $table= "tbleco";
-    protected $fillable = ['coname','sstatus'];
+
+    // Relationships
+    public function customers()
+    {
+        return $this->hasMany(Customer::class);
+    }
 }
