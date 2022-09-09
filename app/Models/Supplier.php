@@ -9,22 +9,17 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 class Supplier extends Model
 {
     use HasFactory;
-    protected $table= "tblesupplier";
-    protected $fillable = ['sname',
-    'snname','spaddress','sphoneoff',
-    'sphoneres','sfax','semail','sstatus',
-    'obalance','ntnno','staxNo','srcId','active'];
-
-    // Accessors
-    public function getSNamettribute($value)
-    {
-        return strtoupper($value);
-    }
+    protected $fillable = ['name',
+    'nikc','address','phoneoff',
+    'phoneres','fax','email','status',
+    'obalance','ntn','stax','source_id','status'];
 
     //  Relationships
     public function contracts()
     {
         return $this->hasMany(Contract::class);
     }
+ 
+    public function source(){ return $this->belongsTo(Source::class); }
 
 }

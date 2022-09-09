@@ -3,7 +3,8 @@
 namespace App\Http\Controllers;
 
 use DB;
-use App\Models\Manhead;
+use App\Models\Head;
+use App\Models\heads;
 use App\Models\Subhead;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Session;
@@ -16,12 +17,12 @@ class SubheadController extends Controller
     {
         $search = $request->search;
         $subheads = Subhead::where(function($q) use ($search){
-            $q->where('subheadname','LIKE',"%$search%")
-              ->orWhereHas('manhead', function($qu) use($search){
-                $qu->where('mheadname','like',"%$search%");
+            $q->where('title','LIKE',"%$search%")
+              ->orWhereHas('head', function($qu) use($search){
+                $qu->where('title','like',"%$search%");
             });
         })
-        ->with('manhead')
+        ->with('head')
         ->orderBy('id','desc')
         ->paginate(5);
          return view('subheads.index')->with('subheads',$subheads);
@@ -30,27 +31,27 @@ class SubheadController extends Controller
 
     public function create()
     {
-        return view('subheads.create')->with('manhead',Manhead::all())->with('subheads',Subhead::all());
+        return view('subheads.create')->with('heads',Head::all())->with('subheads',Subhead::all());
     }
 
     public function store(Request $request)
     {
         // dd($request->all());
         $request->validate([
-            'subheadname'=>'required|unique:tblsubhead|min:3',
-            'ob'=>'required|numeric'
+            'title'=>'required|unique:subheads|min:3',
+            // 'ob'=>'required|numeric'
         ]);
         DB::beginTransaction();
         try {
             $subhead = new Subhead();
-            $subhead->tblmanhead_id = $request->tblmanhead_id;
-            $subhead->subheadname = $request->subheadname;
+            $subhead->head_id = $request->head_id;
+            $subhead->title = $request->title;
             $subhead->ob = $request->ob;
-            if($request->has('sstatus'))
+            if($request->has('status'))
             {
-                $subhead->sstatus = 'Active';
+                $subhead->status = 1;
             }else {
-                $subhead->sstatus = 'Deactive';
+                $subhead->status = 0;
             }
             $subhead->save();
             DB::commit();
@@ -62,29 +63,28 @@ class SubheadController extends Controller
         }
     }
 
-    public function edit($id)
+    public function edit(Subhead $subhead)
     {
-        return view('subheads.edit')->with('manhead',Manhead::all())->with('subhead',Subhead::findOrFail($id));
+        return view('subheads.edit')->with('heads',Head::all())->with('subhead',$subhead);
     }
 
     public function update(Subhead $subhead,Request $request)
     {
         // dd($request->all());
         $request->validate([
-            'subheadname'=>'required|min:3|unique:tblsubhead,subheadname,' . $subhead->id,
-            'ob'=>'required|numeric'
+            'title'=>'required|min:3|unique:subheads,title,' . $subhead->id,
+            // 'ob'=>'required|numeric'
         ]);
         DB::beginTransaction();
         try {
-            $subhead=Subhead::findOrFail($subhead->id);
-            $subhead->tblmanhead_id = $request->tblmanhead_id;
-            $subhead->subheadname = $request->subheadname;
+            $subhead->head_id = $request->head_id;
+            $subhead->title = $request->title;
             $subhead->ob = $request->ob;
-            if($request->has('sstatus'))
+            if($request->has('status'))
             {
-                $subhead->sstatus = 'Active';
+                $subhead->status = 1;
             }else {
-                $subhead->sstatus = 'Deactive';
+                $subhead->status = 0;
             }
             $subhead->save();
             DB::commit();

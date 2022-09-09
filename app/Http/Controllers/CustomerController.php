@@ -15,8 +15,8 @@ class CustomerController extends Controller
     {
         $search = $request->search;
         $customers = Customer::where(function($q) use ($search){
-            $q->where('cname','LIKE',"%$search%")
-            ->orWhere('cemail','LIKE',"%$search%");
+            $q->where('title','LIKE',"%$search%")
+            ->orWhere('email','LIKE',"%$search%");
         })
         ->with('care')
         ->orderBy('id','desc')
@@ -26,37 +26,37 @@ class CustomerController extends Controller
 
     public function create()
     {
-        return view('customers.create')->with('careof',Care::all());
+        return view('customers.create')->with('care',Care::all());
     }
 
     public function store(Request $request)
     {
         // dd($request->all());
         $request->validate([
-            'cname'=>'required|min:3|unique:tblecustomer',
-            'cemail'=>'required|unique:tblecustomer'
+            'title'=>'required|min:3|unique:customers',
+            // 'email'=>'required|unique:customers'
         ]);
 
         DB::beginTransaction();
         try {
             $customer = new Customer();
-            $customer->cname = $request->cname;
-            $customer->cnname = $request->cnname;
-            $customer->cpaddress = $request->cpaddress;
-            $customer->cphoneoff = $request->cphoneoff;
-            $customer->cphoneres = $request->cphoneres;
-            $customer->cfax = $request->cfax;
-            $customer->cemail = $request->cemail;
-            if($request->has('cstatus'))
+            $customer->title = $request->title;
+            $customer->nick = $request->nick;
+            $customer->address = $request->address;
+            $customer->phoneoff = $request->phoneoff;
+            $customer->phoneres = $request->phoneres;
+            $customer->fax = $request->fax;
+            $customer->email = $request->email;
+            if($request->has('status'))
             {
-                $customer->cstatus = 'Active';
+                $customer->status = 1;
             }else {
-                $customer->cstatus = 'Deactive';
+                $customer->status = 0;
             }
             $customer->obalance = $request->obalance;
-            $customer->ntnno = $request->ntnno;
-            $customer->staxNo = $request->staxno;
-            $customer->tbleco_id = $request->cop;
+            $customer->ntn = $request->ntn;
+            $customer->stax = $request->stax;
+            $customer->care_id = $request->care_id;
             $customer->save();
             DB::commit();
             Session::flash('success','Customer created');
@@ -69,7 +69,7 @@ class CustomerController extends Controller
    
     public function edit($id)
     {
-        return view('customers.edit')->with('customer',Customer::findOrFail($id))->with('careof',Care::all());
+        return view('customers.edit')->with('customer',Customer::findOrFail($id))->with('care',Care::all());
     }
 
 
@@ -77,29 +77,29 @@ class CustomerController extends Controller
     {
         // dd($request->all());
         $request->validate([
-            'cname'=>'required|min:3|unique:tblecustomer,cname,'. $customer->id ,
-            'cemail'=>'required|unique:tblecustomer,cemail,'. $customer->id 
+            'title'=>'required|min:3|unique:customers,title,'. $customer->id ,
+            // 'email'=>'required|unique:customers,email,'. $customer->id 
         ]);
 
         DB::beginTransaction();
         try {
-            $customer->cname = $request->cname;
-            $customer->cnname = $request->cnname;
-            $customer->cpaddress = $request->cpaddress;
-            $customer->cphoneoff = $request->cphoneoff;
-            $customer->cphoneres = $request->cphoneres;
-            $customer->cfax = $request->cfax;
-            $customer->cemail = $request->cemail;
-            if($request->has('cstatus'))
+            $customer->title = $request->title;
+            $customer->nick = $request->nick;
+            $customer->address = $request->address;
+            $customer->phoneoff = $request->phoneoff;
+            $customer->phoneres = $request->phoneres;
+            $customer->fax = $request->fax;
+            $customer->email = $request->email;
+            if($request->has('status'))
             {
-                $customer->cstatus = 'Active';
+                $customer->status = 1;
             }else {
-                $customer->cstatus = 'Deactive';
+                $customer->status = 0;
             }
             $customer->obalance = $request->obalance;
-            $customer->ntnno = $request->ntnno;
-            $customer->staxNo = $request->staxno;
-            $customer->tbleco_id = $request->cop;
+            $customer->ntn = $request->ntn;
+            $customer->stax = $request->stax;
+            $customer->care_id = $request->care_id;
             $customer->save();
             DB::commit();
             Session::flash('info','Customer updated');

@@ -9,7 +9,9 @@ use Illuminate\Database\Eloquent\Model;
 class Care extends Model
 {
     use HasFactory;
-    protected $table= "tbleco";
+    protected $fillable = [
+        'title','status'
+    ];
 
     // Relationships
     public function customers()

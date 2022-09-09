@@ -17,9 +17,9 @@
                         <div class="flex flex-col justify-start items-center">
                             <form action="{{ route('sources.store') }}" method="post" >
                             @csrf
-                                <x-label for="srcname" :value="__('Name')"/>
-                                <x-input id="srcname" class="bg-indigo-100" type="text" name="srcname" :value="old('srcname')"  required minlength="2"/>
-                                @if($errors->has('srcname'))<div class="text-red-500 text-xs">{{ $errors->first('srcname') }}</div>@endif
+                                <x-label for="title" :value="__('Name')"/>
+                                <x-input id="title" class="bg-indigo-100" type="text" name="title" :value="old('title')"  required minlength="2"/>
+                                @if($errors->has('title'))<div class="text-red-500 text-xs">{{ $errors->first('title') }}</div>@endif
                            
                                 <div class="mt-2">
                                     <button class="inline-flex items-center px-4 py-2 bg-green-500 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-green-700 active:bg-green-900 focus:outline-none focus:border-green-900 focus:ring ring-gray-300 disabled:opacity-25 transition ease-in-out duration-150">
@@ -34,7 +34,7 @@
                             <span class="text-indigo-500 border-b">Existing Sources</span>
                             <ul class="h-28 overflow-y-scroll">
                                 @foreach ($sources as $source)
-                                    <li>{{ $source->srcname }}</li>
+                                    <li>{{ $source->title }}</li>
                                 @endforeach
                             </ul>
                         </div>

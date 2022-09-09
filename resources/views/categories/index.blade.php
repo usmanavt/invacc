@@ -27,17 +27,17 @@
 								<thead>
 									<tr>
 										<td class="px-6 py-3 bg-gray-100 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Category</td>
-										<td class="px-6 py-3 bg-gray-100 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Knick Name</td>
+										<td class="px-6 py-3 bg-gray-100 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Nick</td>
+										<td class="px-6 py-3 bg-gray-100 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</td>
                                         <td class="px-6 py-3 bg-gray-100 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Action</td>
                                     </tr>
 								</thead>
 								<tbody class="bg-white divide-y divide-gray-200">
 									@foreach($categories as $category)
 										<tr class="border-b">
-											<td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{$category->iname0}}</td>
-											<td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{$category->inname0}}</td>
-
-
+											<td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{$category->title}}</td>
+											<td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{$category->nick}}</td>
+                                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{$category->status == 1 ? 'Active':'Deactive'}}</td>
 
 											<td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
                                                 <a class="text-sm text-indigo-500 hover:text-gray-900" href="{{route('categories.edit',$category->id)}}">

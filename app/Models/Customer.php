@@ -8,16 +8,15 @@ use Illuminate\Database\Eloquent\Model;
 class Customer extends Model
 {
     use HasFactory;
-    protected $table= "tblecustomer";
-    protected $fillable = ['cname',
-    'cnname','cpaddress','cdivraddress','contpaddress','cphoneoff','cphoneres','cfax'
-    ,'cemail','cstatus','obalance','ntnno','staxno','cop'];
+    protected $fillable = ['name',
+    'nick','address','address2','contactaddress','phoneoff','phoneres','fax'
+    ,'email','status','obalance','ntn','stax','care_id'];
 
 
     //  Relationship
     public function care()
     {
-        return $this->belongsTo(Care::class,'tbleco_id');
+        return $this->belongsTo(Care::class);
     }
 }
 

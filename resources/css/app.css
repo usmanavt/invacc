@@ -1,6 +1,7 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+@import  "tabulator-tables";
 
 
 /* Hide Arrows for input[type=number] */

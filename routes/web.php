@@ -1,19 +1,18 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\ItemController;
-use App\Http\Controllers\MenuController;
-use App\Http\Controllers\UnitController;
+use App\Http\Controllers\SkuController;
+use App\Http\Controllers\HeadController;
 use App\Http\Controllers\BrandController;
-use App\Http\Controllers\GroupController;
 use App\Http\Controllers\SourceController;
 use App\Http\Controllers\SubheadController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\ContractController;
 use App\Http\Controllers\CustomerController;
-use App\Http\Controllers\ItemSizeController;
 use App\Http\Controllers\LocationController;
+use App\Http\Controllers\MaterialController;
 use App\Http\Controllers\SupplierController;
+use App\Http\Controllers\DimensionController;
 
 
 Route::get('/', function () {
@@ -31,52 +30,30 @@ require __DIR__.'/auth.php';
 
 //  Category Controller
 Route::resource('categories', CategoryController::class);
-
-//  Unit Controller
-Route::resource('units', UnitController::class);
-
+//  Sku Controller
+Route::resource('skus', SkuController::class);
+//  Dimension Controller
+Route::resource('dimensions', DimensionController::class);
 //  Brand Controller
 Route::resource('brands',BrandController::class);
-
 //  Source Controller
 Route::resource('sources',SourceController::class);
+//  Supplier Controller
+Route::resource('suppliers', SupplierController::class);
+//  Customer Controller
+Route::resource('customers', CustomerController::class);
+//  Location Controller
+Route::resource('locations', LocationController::class);
+//  Head Controller
+Route::resource('heads', HeadController::class);
+//  Subhead Controller
+Route::resource('subheads', SubheadController::class);
+//  Material Controller
+Route::get('/getMaterialMaster', [MaterialController::class, 'getMaster'])->name('materials.master');
+Route::resource('materials', MaterialController::class);
 
 
 // Contract Controller
-Route::get('/getItems', [ContractController::class, 'getItems']);
-Route::get('/getSizes', [ContractController::class, 'getSizes']);
+Route::get('/getContractMaster', [ContractController::class, 'getMaster'])->name('contracts.master');
+Route::get('/getContractDetails', [ContractController::class, 'getDetails'])->name('contracts.details');
 Route::resource('contracts', ContractController::class);
-
-
-
-//  Supplier Controller
-Route::resource('suppliers', SupplierController::class);
-
-//  Item Controller
-Route::resource('items', ItemController::class);
-
-//  Location Controller
-Route::resource('locations', LocationController::class);
-//  ItemSize Controller
-Route::resource('itemsize', ItemSizeController::class);
-//  Customer Controller
-Route::resource('customers', CustomerController::class);
-//  Group Controller
-Route::resource('group', GroupController::class);
-
-Route::resource('subheads', SubheadController::class);
-
-
-Route::get('/layouts/navigation/{id}',[MenuController::class,'Showmenu']);
-
-
-Route::post('/customer/update/{id}',[CustomerController::class,'update']);
-Route::get('/customer/delete/{id}',[CustomerController::class,'destroy'])->name('customers.destroy');
-
-
-Route::get('/subhead/delete/{id}',[SubheadController::class,'destroy'])->name('subheads.destroy');
-Route::post('/subhead/update/{id}',[SubheadController::class,'update']);
-
-Route::get('/grouprelation/delete/{id}',[GrouprelationController::class,'destroy'])->name('grouprelation.destroy');
-Route::post('/grouprelation/update/{id}',[GrouprelationController::class,'update'])->name('grouprelation.update');
-
