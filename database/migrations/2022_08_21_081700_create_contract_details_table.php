@@ -17,6 +17,7 @@ class CreateContractDetailsTable extends Migration
             $table->id();
             $table->bigInteger('contract_id');
             $table->bigInteger('material_id');
+            $table->string('material_title');
             $table->bigInteger('supplier_id');
             $table->bigInteger('user_id');
             $table->bigInteger('category_id');

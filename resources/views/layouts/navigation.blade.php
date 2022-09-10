@@ -2,7 +2,8 @@
     <!-- Primary Navigation Menu -->
     <div class="max-w-9xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="flex justify-between h-16">
-            <div class="flex">.
+            <div class="flex">
+
                 <!-- Logo -->
                 <div class="shrink-0 flex items-center">
                     <a href="{{ route('mastersetup') }}">
@@ -10,110 +11,110 @@
                     </a>
                 </div>
 
-                <!-- Navigation Links -->
-                <div class="hidden space-x-8 sm:-my-px sm:ml-10 sm:flex">
-                    <x-nav-link :href="route('mastersetup')" :active="request()->routeIs('mastersetup')">
-                        {{ __('Master Setup') }}
-                    </x-nav-link>
+                <!-- Master Setup -->
+                <div class="hidden sm:flex sm:items-center sm:ml-6">
+                    <x-dropdown align="left" width="48">
+                        <x-slot name="trigger">
+                            <button
+                                class="flex items-center text-sm font-medium text-gray-500 hover:text-gray-700 hover:border-gray-300 focus:outline-none focus:text-gray-700 focus:border-gray-300 transition duration-150 ease-in-out">
+                                <div>Master Setup</div>
+    
+                                <div class="ml-1">
+                                    <svg class="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg"
+                                        viewBox="0 0 20 20">
+                                        <path fill-rule="evenodd"
+                                            d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
+                                            clip-rule="evenodd" />
+                                    </svg>
+                                </div>
+                            </button>
+                        </x-slot>
+    
+                        <x-slot name="content">
+                            <x-dropdown-link href="{{ route('categories.index') }}">Categories</x-dropdown-link>
+                            <x-dropdown-link href="{{ route('skus.index') }}">Skus</x-dropdown-link>
+                            <x-dropdown-link href="{{ route('dimensions.index') }}">Dimensions</x-dropdown-link>
+                            <x-dropdown-link href="{{ route('brands.index') }}">Brands</x-dropdown-link>
+                            <x-dropdown-link href="{{ route('sources.index') }}">Sources</x-dropdown-link>
+                            <x-dropdown-link href="{{ route('suppliers.index') }}">Suppliers</x-dropdown-link>
+                            <x-dropdown-link href="{{ route('customers.index') }}">Customers</x-dropdown-link>
+                            <x-dropdown-link href="{{ route('locations.index') }}">Locations</x-dropdown-link>
+                            <x-dropdown-link href="{{ route('heads.index') }}">Account Heads</x-dropdown-link>
+                            <x-dropdown-link href="{{ route('subheads.index') }}">Chart of Accounts</x-dropdown-link>
+                            <x-dropdown-link href="{{ route('materials.index') }}">Materials</x-dropdown-link>
+                        </x-slot>
+                    </x-dropdown>
                 </div>
 
-
-                <div class="hidden space-x-8 sm:-my-px sm:ml-10 sm:flex">
-                    <x-nav-link :href="route('transaction')" :active="request()->routeIs('transaction')">
-                        {{ __('Transactions') }}
-                    </x-nav-link>
+                {{-- Transactions --}}
+                <div class="hidden sm:flex sm:items-center sm:ml-6">
+                    <x-dropdown align="left" width="48">
+                        <x-slot name="trigger">
+                            <button
+                                class="flex items-center text-sm font-medium text-gray-500 hover:text-gray-700 hover:border-gray-300 focus:outline-none focus:text-gray-700 focus:border-gray-300 transition duration-150 ease-in-out">
+                                <div>Transactions</div>
+    
+                                <div class="ml-1">
+                                    <svg class="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg"
+                                        viewBox="0 0 20 20">
+                                        <path fill-rule="evenodd"
+                                            d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
+                                            clip-rule="evenodd" />
+                                    </svg>
+                                </div>
+                            </button>
+                        </x-slot>
+    
+                        <x-slot name="content">
+                            <x-dropdown-link href="{{ route('contracts.index') }}">Contracts</x-dropdown-link>
+                            {{-- <x-dropdown-link href="{{ route('skus.index') }}">Skus</x-dropdown-link>
+                            <x-dropdown-link href="{{ route('dimensions.index') }}">Dimensions</x-dropdown-link>
+                            <x-dropdown-link href="{{ route('brands.index') }}">Brands</x-dropdown-link>
+                            <x-dropdown-link href="{{ route('sources.index') }}">Sources</x-dropdown-link>
+                            <x-dropdown-link href="{{ route('suppliers.index') }}">Suppliers</x-dropdown-link>
+                            <x-dropdown-link href="{{ route('customers.index') }}">Customers</x-dropdown-link>
+                            <x-dropdown-link href="{{ route('locations.index') }}">Locations</x-dropdown-link>
+                            <x-dropdown-link href="{{ route('heads.index') }}">Account Heads</x-dropdown-link>
+                            <x-dropdown-link href="{{ route('subheads.index') }}">Chart of Accounts</x-dropdown-link>
+                            <x-dropdown-link href="{{ route('materials.index') }}">Materials</x-dropdown-link> --}}
+                        </x-slot>
+                    </x-dropdown>
                 </div>
 
-                <div class="hidden space-x-8 sm:-my-px sm:ml-10 sm:flex">
-                    <x-nav-link :href="route('customers.index')" :active="request()->routeIs('customers.*')">
-                        {{ __('Reports') }}
-                    </x-nav-link>
+                {{-- Reports --}}
+                <div class="hidden sm:flex sm:items-center sm:ml-6">
+                    <x-dropdown align="left" width="48">
+                        <x-slot name="trigger">
+                            <button
+                                class="flex items-center text-sm font-medium text-gray-500 hover:text-gray-700 hover:border-gray-300 focus:outline-none focus:text-gray-700 focus:border-gray-300 transition duration-150 ease-in-out">
+                                <div>Reports</div>
+    
+                                <div class="ml-1">
+                                    <svg class="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg"
+                                        viewBox="0 0 20 20">
+                                        <path fill-rule="evenodd"
+                                            d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
+                                            clip-rule="evenodd" />
+                                    </svg>
+                                </div>
+                            </button>
+                        </x-slot>
+    
+                        <x-slot name="content">
+                            {{-- <x-dropdown-link href="{{ route('contracts.index') }}">Contracts</x-dropdown-link> --}}
+                            {{-- <x-dropdown-link href="{{ route('skus.index') }}">Skus</x-dropdown-link>
+                            <x-dropdown-link href="{{ route('dimensions.index') }}">Dimensions</x-dropdown-link>
+                            <x-dropdown-link href="{{ route('brands.index') }}">Brands</x-dropdown-link>
+                            <x-dropdown-link href="{{ route('sources.index') }}">Sources</x-dropdown-link>
+                            <x-dropdown-link href="{{ route('suppliers.index') }}">Suppliers</x-dropdown-link>
+                            <x-dropdown-link href="{{ route('customers.index') }}">Customers</x-dropdown-link>
+                            <x-dropdown-link href="{{ route('locations.index') }}">Locations</x-dropdown-link>
+                            <x-dropdown-link href="{{ route('heads.index') }}">Account Heads</x-dropdown-link>
+                            <x-dropdown-link href="{{ route('subheads.index') }}">Chart of Accounts</x-dropdown-link>
+                            <x-dropdown-link href="{{ route('materials.index') }}">Materials</x-dropdown-link> --}}
+                        </x-slot>
+                    </x-dropdown>
                 </div>
-
-
-
-                {{-- <input type="checkbox" id="check">
-                    <label for="check" >
-                        <i class="fas fa-bars"  id="btn">  </i>
-                        <i class="fas fa-times" id="cancel">  </i>
-                    </label>
-                    <div class="sidebar">
-                        <header> Main Menu</header>
-                        <ul>
-                            <li> <a href="{{ url('layouts/navigation/1')}} "><i class="fas fa-qrcode"></i> Master Setup </a>  </li>
-                            <li> <a href="{{ url('layouts/navigation/2')}} "><i class="fas fa-link"></i>Transaction </a>  </li>
-                            <li> <a href="{{ url('layouts/navigation/3')}} "><i class="fas fa-stream"></i> Reports </a>  </li>
-                            <li> <a href="#"><i class="fas fa-calendar-week"></i>Utility</a>   </li>
-                            <li> <a href="#"><i class="fas fa-question-circle"></i>Permission Setup</a>   </li>
-                            <li> <a href="#"><i class="fas fa-sliders-h"></i>Locking </a>  </li>
-                            <li> <a href="#"><i class="fas fa-envelope"></i>About </a>  </li>
-                        </ul>
-
-                    </div> --}}
-
-
-
-
-
-
-
-
-
-                <!-- Navigation Links -->
-                {{-- <div class="hidden space-x-8 sm:-my-px sm:ml-10 sm:flex">
-                    <x-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')">
-                        {{ __('Dashboard') }}
-                    </x-nav-link>
-                </div>
-
-
-                <div class="hidden space-x-8 sm:-my-px sm:ml-10 sm:flex">
-                    <x-nav-link :href="route('suppliers.index')" :active="request()->routeIs('suppliers.*')">
-                        {{ __('Suppliers') }}
-                    </x-nav-link>
-                </div>
-
-                <div class="hidden space-x-8 sm:-my-px sm:ml-10 sm:flex">
-                    <x-nav-link :href="route('customers.index')" :active="request()->routeIs('customers.*')">
-                        {{ __('Customers') }}
-                    </x-nav-link>
-                </div>
-
-                <div class="hidden space-x-8 sm:-my-px sm:ml-10 sm:flex">
-                    <x-nav-link :href="route('locations.index')" :active="request()->routeIs('locations.*')">
-                        {{ __('Locations') }}
-                    </x-nav-link>
-                </div>
-
-                <div class="hidden space-x-8 sm:-my-px sm:ml-10 sm:flex">
-                    <x-nav-link :href="route('subheads.index')" :active="request()->routeIs('subheads.*')">
-                        {{ __('CharOfAccount') }}
-                    </x-nav-link>
-                </div>
-
-                <div class="hidden space-x-8 sm:-my-px sm:ml-10 sm:flex">
-                    <x-nav-link :href="route('itemcategories.index')" :active="request()->routeIs('itemcategories.*')">
-                        {{ __('Items Category') }}
-                    </x-nav-link>
-                </div>
-
-                <div class="hidden space-x-8 sm:-my-px sm:ml-10 sm:flex">
-                    <x-nav-link :href="route('items.index')" :active="request()->routeIs('items.*')">
-                        {{ __('Items') }}
-                    </x-nav-link>
-                </div>
-
-                <div class="hidden space-x-8 sm:-my-px sm:ml-10 sm:flex">
-                    <x-nav-link :href="route('itemsize.index')" :active="request()->routeIs('itemsize.*')">
-                        {{ __('Items Size') }}
-                    </x-nav-link>
-                </div>
-
-                <div class="hidden space-x-8 sm:-my-px sm:ml-10 sm:flex">
-                    <x-nav-link :href="route('grouprelations.index')" :active="request()->routeIs('grouprelations.*')">
-                        {{ __('Group Relation') }}
-                    </x-nav-link>
-                </div> --}}
 
             </div>
 

@@ -98,6 +98,7 @@ class ContractController extends Controller
                 $cd = new ContractDetails();
                 $cd->contract_id = $contract->id;
                 $cd->material_id = $material->id;
+                $cd->material_title = $material->title;
                 $cd->supplier_id = $contract->supplier_id;
                 $cd->user_id = auth()->id();
                 $cd->category_id = $material->category_id;
@@ -128,14 +129,9 @@ class ContractController extends Controller
    
     }
 
-    public function show(Contract $contract)
-    {
-        //
-    }
-
     public function edit(Contract $contract)
     {
-        //
+        return view('contracts.edit')->with('suppliers',Supplier::select('id','title')->get())->with('contract',$contract)->with('cd',ContractDetails::where('contract_id',$contract->id)->get());
     }
 
     public function update(Request $request, Contract $contract)

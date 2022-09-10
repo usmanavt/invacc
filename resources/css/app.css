@@ -1,7 +1,6 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
-@import  "tabulator-tables";
 
 
 /* Hide Arrows for input[type=number] */
@@ -44,4 +43,14 @@ input:disabled{
 } */
 table{
     @apply rounded-t-lg
+}
+
+/* Tabulator */
+
+/* Tabulator */
+.hide-subtable{
+    display: none;
+}
+.subtable {
+    margin-left: 20px;
 }

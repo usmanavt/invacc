@@ -1,7 +1,7 @@
 <x-app-layout>
 
     @push('styles')
-    <link rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/tabulator/5.3.3/css/tabulator_simple.min.css' integrity='sha512-MiBxahZcoFzbr3jfdy0MzAzdqPy0q9/ZX6usJ4QfsvVPMe4ywyKui1+lWEEOLwpDkEtEgkRxb2r9+RGOVCRhMw==' crossorigin='anonymous'/>
+    <link rel="stylesheet" href="{{ asset('css/tabulator_simple.min.css') }}">
     @endpush
 
     <x-slot name="header">
@@ -18,20 +18,11 @@
 
     {{-- Tabulator --}}
     <div class="py-6">
-        <div class="max-w-9xl mx-auto sm:px-2 lg:px-4">
+        <div class="max-w-7xl mx-auto sm:px-2 lg:px-4">
             <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg p-4">
-
-                <div class="flex justify-between items-center py-2">
-                    <div class="flex flex-row relative">
-                        <i class="fa fa-search fa-fw text-indigo-500 absolute top-1 left-1"></i>
-                        <input type="text" class="pl-8 border focus:ring focus:ring-indigo-500 h-8" id="data_filter" onkeyup="dataFilter(this)" placeholder="Search here...">
-                    </div>
-                    <div id="example-table-info" class="mr-2 text-sm text-gray-500"></div>
-                </div>
                 
-                <div id="tableData" class="py-2">
-                    {{-- tabulator Data --}}
-                </div>
+                {{-- tabulator component --}}
+                <x-tabulator />
 
             </div>
         </div>
@@ -39,13 +30,15 @@
 
     
 @push('scripts')
-<script src='https://cdnjs.cloudflare.com/ajax/libs/tabulator/5.3.3/js/tabulator.min.js' integrity='sha512-LUXZzTaZ4dfN43AUEQtKG6xxKYlThiiBtjdmgs7FK5OnUFNE2FnQTb/n+DdQX7CDg9wZDeYKYUk1FVfUgIw7ug==' crossorigin='anonymous'>
-</script>
+<script src="{{ asset('js/tabulator.min.js') }}"></script>
 @endpush
 
 @push('scripts')
 <script>
     var hideIcon = function(cell, formatterParams, onRendered){ return "<i class='fa fa-eye text-green-600'></i>";};
+    var editIcon = function(cell, formatterParams, onRendered){ return "<i class='fa fa-edit text-blue-600'></i>";};
+    var deleteIcon = function(cell, formatterParams, onRendered){ return "<i class='fa fa-trash text-red-600'></i>";};
+
     const getMaster = @json(route('contracts.master'));
     const getDetails = @json(route('contracts.details'));
     let table;
@@ -108,7 +101,8 @@
                     },
                     ajaxURL: getDetails,
                     columns: [
-                        {title: "Category",field: "category" , minWidth:512},
+                        {title: "Material",field: "material_title"},
+                        {title: "Category",field: "category"},
                         {title: "Sku",field: "sku"},
                         {title: "Dimension",field: "dimension"},
                         {title: "Source",field: "source"},
@@ -154,11 +148,16 @@
             {title:"Dated", field:"invoice_date" , visible:true , responsive:0},
             {title:"Supplier", field:"supplier.title" ,  responsive:0},
             {title:"Created By", field:"user.name" ,  responsive:0},
-            // {title:"Delete" , formatter:deleteIcon, hozAlign:"center",headerSort:false, responsive:0,
-            //     cellClick:function(e, cell){ 
-            //         // window.open(window.location + "/" + cell.getRow().getData().id + "/delete" ,"_self");
-            //     }
-            // },
+            {title:"Edit" , formatter:editIcon, hozAlign:"center",headerSort:false, responsive:0,
+                cellClick:function(e, cell){ 
+                    window.open(window.location + "/" + cell.getRow().getData().id + "/edit" ,"_self");
+                }
+            },
+            {title:"Delete" , formatter:deleteIcon, hozAlign:"center",headerSort:false, responsive:0,
+                cellClick:function(e, cell){ 
+                    window.open(window.location + "/" + cell.getRow().getData().id  ,"_self");
+                }
+            },
         ],
         // Extra Pagination Data for End Users
         ajaxResponse:function(getDataUrl, params, response){
@@ -178,7 +177,7 @@
             holderEl.setAttribute('id', "subTable" + id + "");
             holderEl.setAttribute('class',"hide-subtable subtable");
 
-            tableEl.setAttribute('class', "subTable" + id + "");
+            tableEl.setAttribute('class', "subTable" + id + "" );
 
             holderEl.appendChild(tableEl);
             row.getElement().appendChild(holderEl);
