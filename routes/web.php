@@ -25,6 +25,9 @@ Route::get('/mastersetup', function () {
 Route::get('/transactons', function () {
     return view('transaction');
 })->middleware(['auth'])->name('transaction');
+Route::get('/reports', function () {
+    return view('reports');
+})->middleware(['auth'])->name('reports');
 
 require __DIR__.'/auth.php';
 
@@ -51,8 +54,6 @@ Route::resource('subheads', SubheadController::class);
 //  Material Controller
 Route::get('/getMaterialMaster', [MaterialController::class, 'getMaster'])->name('materials.master');
 Route::resource('materials', MaterialController::class);
-
-
 // Contract Controller
 Route::get('/getContractMaster', [ContractController::class, 'getMaster'])->name('contracts.master');
 Route::get('/getContractDetails', [ContractController::class, 'getDetails'])->name('contracts.details');

@@ -31,6 +31,7 @@
                         </x-slot>
     
                         <x-slot name="content">
+                            <x-dropdown-link href="{{ route('mastersetup') }}">Master</x-dropdown-link>
                             <x-dropdown-link href="{{ route('categories.index') }}">Categories</x-dropdown-link>
                             <x-dropdown-link href="{{ route('skus.index') }}">Skus</x-dropdown-link>
                             <x-dropdown-link href="{{ route('dimensions.index') }}">Dimensions</x-dropdown-link>
@@ -66,6 +67,7 @@
                         </x-slot>
     
                         <x-slot name="content">
+                            <x-dropdown-link href="{{ route('transaction') }}">Transaction</x-dropdown-link>
                             <x-dropdown-link href="{{ route('contracts.index') }}">Contracts</x-dropdown-link>
                             {{-- <x-dropdown-link href="{{ route('skus.index') }}">Skus</x-dropdown-link>
                             <x-dropdown-link href="{{ route('dimensions.index') }}">Dimensions</x-dropdown-link>
@@ -101,6 +103,7 @@
                         </x-slot>
     
                         <x-slot name="content">
+                            <x-dropdown-link href="{{ route('reports') }}">Reports</x-dropdown-link>
                             {{-- <x-dropdown-link href="{{ route('contracts.index') }}">Contracts</x-dropdown-link> --}}
                             {{-- <x-dropdown-link href="{{ route('skus.index') }}">Skus</x-dropdown-link>
                             <x-dropdown-link href="{{ route('dimensions.index') }}">Dimensions</x-dropdown-link>
