@@ -79,13 +79,13 @@ let table;
 let searchValue = "";
 let dyanmicTable = ""; // Tabulator 
 let dynamicTableData = @json($cd);
+//  ---------------- For MODAL -----------------------//
 //  Table Filter
 function dataFilter(element)
 {
     searchValue = element.value;
     table.setData(getMaster,{search:searchValue});
 }
-
 // The Table for Materials Modal
 table = new Tabulator("#tableData", {
     autoResize:true,
@@ -133,25 +133,23 @@ table = new Tabulator("#tableData", {
 })
 //  Adds New row to dyanmicTable
 table.on('rowClick',function(e,row){
-    // console.log('hi');
     var simple = {...row}
     var data = simple._row.data
-    // console.log(data);
-    console.log(dynamicTableData);
     //  Filter Data here . 
-    var result = dynamicTableData.filter( dt => dt.id == data.id)
+    var result = dynamicTableData.filter( dt => dt.material_id == data.id)
     if(result.length <= 0)
     {
         pushDynamicData(data)
     }
 
 })
-//  Adds actual data to row
+// -----------------FOR MODAL -------------------------------//
+//  Adds actual data to row - EDIT Special
 function pushDynamicData(data)
 {
     dynamicTableData.push({ 
-        id:data.id,
-        title:data.title,
+        material_id:data.id,
+        material_title:data.title,
         category_id:data.category_id,
         category:data.category,
         
@@ -232,14 +230,13 @@ dynamicTable = new Tabulator("#dynamicTable", {
         {title:"Brand", field:"brand",cssClass:"bg-gray-200 font-semibold"},
 
         {title:"Bundle1", field:"bundle1",editor:"number",cssClass:"bg-green-200 font-semibold",validator:"required" ,formatter:"money", formatterParams:{thousand:",",precision:2},validator:["required","integer"] ,cellEdited: updateBundles},
-        {title:"Pcs/Bnd1", field:"pcspbundle1",editor:"number",cssClass:"bg-green-200 font-semibold",validator:"required" ,formatter:"money", formatterParams:{thousand:",",precision:2},validator:["required","integer"] , cellEdited: updateBundles},
+        {title:"Pcs/Bnd1", field:"pcspbundle1",editor:"number",cssClass:"bg-green-200 font-semibold",validator:"required" ,formatter:"money", formatterParams:{thousand:",",precision:2},validator:["required","integer"] ,cellEdited: updateBundles},
         {title:"Bundle2", field:"bundle2",editor:"number",cssClass:"bg-yellow-200 font-semibold",formatter:"money", formatterParams:{thousand:",",precision:2},validator:["required","integer"],cellEdited: updateBundles},
         {title:"Pcs/Bnd2", field:"pcspbundle2",editor:"number",cssClass:"bg-yellow-200 font-semibold",formatter:"money", formatterParams:{thousand:",",precision:2},validator:["required","integer"],cellEdited: updateBundles},
 
         {title:"TotPcs", field:"ttpcs",cssClass:"bg-gray-200 font-semibold" ,formatter:"money",editable:false ,validator:["required","float"],
             formatter:function(cell,row)
             {
-                // console.log(cell.getData().bundle1);
                 return (cell.getData().bundle1 * cell.getData().pcspbundle1) + (cell.getData().bundle2 * cell.getData().pcspbundle2)
             }
         },
@@ -270,27 +267,12 @@ document.addEventListener('keyup', (e)=>{
 // Ensure Buttons Are Closed
 function disableSubmitButton()
 {
-    dynamicTableData.forEach((item) => {
-        // console.log(item);
-    }) 
     if(dynamicTableData.length <= 0 )
     {
         document.getElementById("submitbutton").disabled = true;
     }else {
         document.getElementById("submitbutton").disabled = false;
     }
-}
-//  For Setting Dates
-function setDateToToday()
-{
-    var arr = document.getElementById('invdate');
-    var now = new Date();
-    var day = ("0" + now.getDate()).slice(-2);
-    var month = ("0" + (now.getMonth() + 1)).slice(-2);
-    var today = now.getFullYear()+"-"+(month)+"-"+(day) ;
-    // console.log(today);
-    arr.setAttribute("min",today);
-    //  LearnMore - https://stackoverflow.com/questions/12346381/set-date-in-input-type-date?answertab=active#tab-top
 }
   // Validation & Post
 function validateForm()
@@ -328,7 +310,6 @@ function validateForm()
     // Qty Required
     for (let index = 0; index < dynamicTableData.length; index++) {
         const element = dynamicTableData[index];
-        // console.log(element);
         if(element.bundle1 == 0 || element.pcspbundle1 == 0 || element.gdsprice == 0 || element.gdswt == 0)
         {
             showSnackbar("Please fill Bundle,PcsBundle,Weight & Price all rows to proceed","info");
@@ -338,9 +319,9 @@ function validateForm()
     disableSubmitButton(true);
     var data = { 'contracts' : dynamicTableData ,'supplier_id': supplier_id.value,'invoice_date':invoice_date.value,'number':number.value};
     // All Ok - Proceed
-    fetch(@json(route('contracts.store')),{
+    fetch(@json(route('contracts.update',$contract)),{
         credentials: 'same-origin', // 'include', default: 'omit'
-        method: 'POST', // 'GET', 'PUT', 'DELETE', etc.
+        method: 'PUT', // 'GET', 'PUT', 'DELETE', etc.
         // body: formData, // Coordinate the body type with 'Content-Type'
         body:JSON.stringify(data),
         headers: new Headers({

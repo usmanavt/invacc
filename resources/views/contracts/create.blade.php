@@ -131,7 +131,6 @@
     })
     //  Adds New row to dyanmicTable
     table.on('rowClick',function(e,row){
-        // console.log('hi');
         var simple = {...row}
         var data = simple._row.data
         //  Filter Data here . 
@@ -255,9 +254,6 @@
     // Ensure Buttons Are Closed
     function disableSubmitButton()
     {
-        dynamicTableData.forEach((item) => {
-            // console.log(item);
-        }) 
         if(dynamicTableData.length <= 0 )
         {
             document.getElementById("submitbutton").disabled = true;
@@ -273,7 +269,6 @@
         var day = ("0" + now.getDate()).slice(-2);
         var month = ("0" + (now.getMonth() + 1)).slice(-2);
         var today = now.getFullYear()+"-"+(month)+"-"+(day) ;
-        // console.log(today);
         arr.setAttribute("min",today);
         //  LearnMore - https://stackoverflow.com/questions/12346381/set-date-in-input-type-date?answertab=active#tab-top
     }
@@ -313,7 +308,6 @@
         // Qty Required
         for (let index = 0; index < dynamicTableData.length; index++) {
             const element = dynamicTableData[index];
-            // console.log(element);
             if(element.bundle1 == 0 || element.pcspbundle1 == 0 || element.gdsprice == 0 || element.gdswt == 0)
             {
                 showSnackbar("Please fill Bundle,PcsBundle,Weight & Price all rows to proceed","info");

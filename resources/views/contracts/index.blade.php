@@ -77,7 +77,6 @@
                 let tableHolder = document.getElementById("subTable" + row.getData().id + "");
                 tableHolder.classList.toggle('hide-subtable');
                 var r = row.getElement() //  Get Info About Cell
-                console.log(r)  
                 if(tableHolder.classList.contains('hide-subtable'))
                 {
                     r.childNodes[0].classList.remove('fa-eye-slash','text-gray-500')

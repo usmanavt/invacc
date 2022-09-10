@@ -136,7 +136,86 @@ class ContractController extends Controller
 
     public function update(Request $request, Contract $contract)
     {
-        //
+        // dd($request->all());
+        DB::beginTransaction();
+        try {
+            // Save Contract Data First : If changed
+            $contract->number = $request->number;
+            $contract->invoice_date = $request->invoice_date;
+            $contract->supplier = $request->supplier;
+            $contract->save();
+            // Get Data
+            $cds = $request->contracts; // This is array
+            $cds = ContractDetails::hydrate($cds); // Convert it into Model Collection
+            // Now get old ContractDetails and then get the difference and delete difference
+            $oldcd = ContractDetails::where('contract_id',$contract->id)->get();
+            $deleted = $oldcd->diff($cds);
+            //  Delete contract details if marked for deletion
+            foreach ($deleted as $d) {
+                $d->delete();
+            }
+            // Now update existing and add new
+            foreach ($cds as $cd) {
+                if($cd->id)
+                {
+                    $cds = ContractDetails::where('id',$cd->id)->first();
+                    $cds->contract_id = $cd->contract_id;
+                    $cds->material_id = $cd->material_id;
+                    $cds->material_title = $cd->material_title;
+                    $cds->supplier_id = $cd->supplier_id;
+                    $cds->user_id = $cd->user_id;
+                    $cds->category_id = $cd->category_id;
+                    $cds->sku_id = $cd->sku_id;
+                    $cds->dimension_id = $cd->dimension_id;
+                    $cds->source_id = $cd->source_id;
+                    $cds->brand_id = $cd->brand_id;
+                    $cds->category = $cd->category;
+                    $cds->sku = $cd->sku;
+                    $cds->dimension = $cd->dimension;
+                    $cds->source = $cd->source;
+                    $cds->brand = $cd->brand;
+                    $cds->bundle1 = $cd->bundle1;
+                    $cds->pcspbundle1 = $cd->pcspbundle1;
+                    $cds->bundle2 = $cd->bundle2;
+                    $cds->pcspbundle2 = $cd->pcspbundle2;
+                    $cds->gdswt = $cd->gdswt;
+                    $cds->gdsprice = $cd->gdsprice;
+                    $cds->save();
+                }else 
+                {
+                    //  The item is new, Add it
+                    $cds = new ContractDetails();
+                    $cds->contract_id = $contract->id;
+                    $cds->material_id = $cd->material_id;
+                    $cds->material_title = $cd->material_title;
+                    $cds->supplier_id = $contract->supplier_id;
+                    $cds->user_id = auth()->id();
+                    $cds->category_id = $cd->category_id;
+                    $cds->sku_id = $cd->sku_id;
+                    $cds->dimension_id = $cd->dimension_id;
+                    $cds->source_id = $cd->source_id;
+                    $cds->brand_id = $cd->brand_id;
+                    $cds->category = $cd->category;
+                    $cds->sku = $cd->sku;
+                    $cds->dimension = $cd->dimension;
+                    $cds->source = $cd->source;
+                    $cds->brand = $cd->brand;
+                    $cds->bundle1 = $cd->bundle1;
+                    $cds->pcspbundle1 = $cd->pcspbundle1;
+                    $cds->bundle2 = $cd->bundle2;
+                    $cds->pcspbundle2 = $cd->pcspbundle2;
+                    $cds->gdswt = $cd->gdswt;
+                    $cds->gdsprice = $cd->gdsprice;
+                    $cds->save();
+                }
+            }
+            DB::commit();
+            Session::flash('success','Contract Information Saved');
+            return response()->json(['success'],200);
+        } catch (\Throwable $th) {
+            DB::rollback();
+            throw $th;
+        }
     }
 
     public function destroy(Contract $contract)
