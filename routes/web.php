@@ -53,6 +53,7 @@ Route::resource('heads', HeadController::class);
 Route::resource('subheads', SubheadController::class);
 //  Material Controller
 Route::get('/getMaterialMaster', [MaterialController::class, 'getMaster'])->name('materials.master');
+Route::get('/copymaterial/copy/{material}', [MaterialController::class, 'copyMaterial'])->name('materials.copy');
 Route::resource('materials', MaterialController::class);
 // Contract Controller
 Route::get('/getContractMaster', [ContractController::class, 'getMaster'])->name('contracts.master');

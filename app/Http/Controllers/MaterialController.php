@@ -58,8 +58,17 @@ class MaterialController extends Controller
     {
         // dd($request->all());
         $request->validate([
-            'title'=>'required|min:3|unique:materials'
+            // 'title'=>'required|min:3|unique:materials'
         ]);
+        $title = $request->title;
+        $dimension_id = $request->dimension_id;
+        $mat = Material::where('dimension_id',$dimension_id)->where('title',$title)->first();
+        if($mat)
+        {
+            // dd($mat);
+            Session::flash('info','Same dimension for same title exists');
+            return redirect()->back();
+        }
         DB::beginTransaction();
         try {
             $material = new Material();
@@ -89,6 +98,20 @@ class MaterialController extends Controller
     public function show(Material $material)
     {
         //
+    }
+
+    public function copyMaterial(Material $material)
+    {
+        // dd($material);
+        return view('materials.copy')
+        // ->with('skus',Sku::all())
+        // ->with('categories',Category::all())
+        ->with('dimensions',Dimension::all())
+        // ->with('sources',Source::all())
+        // ->with('brands',Brand::all())
+        ->with('material',$material)
+        ->with('materials',Material::select('id','title')->get())
+        ;
     }
 
     public function edit(Material $material)
