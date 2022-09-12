@@ -49,6 +49,10 @@
 											<td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{$material->sku}}</td>
 											<td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{$material->status == 1 ? 'Active':'Deactive'}}</td>
                                             <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                                                <a class="text-sm text-green-500 hover:text-gray-900" href="{{route('materials.copy',$material)}}">
+                                                    <i class="fa fa-copy fa-fw"></i>
+                                                    Copy
+                                                </a>
                                                 <a class="text-sm text-indigo-500 hover:text-gray-900" href="{{route('materials.edit',$material->id)}}">
                                                     <i class="fa fa-edit fa-fw"></i>
                                                     Edit
