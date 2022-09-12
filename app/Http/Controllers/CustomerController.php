@@ -75,7 +75,7 @@ class CustomerController extends Controller
 
     public function update(Customer $customer,Request $request)
     {
-        // dd($request->all());
+        dd($request->all());
         $request->validate([
             'title'=>'required|min:3|unique:customers,title,'. $customer->id ,
             // 'email'=>'required|unique:customers,email,'. $customer->id 

@@ -142,7 +142,7 @@ class ContractController extends Controller
             // Save Contract Data First : If changed
             $contract->number = $request->number;
             $contract->invoice_date = $request->invoice_date;
-            $contract->supplier = $request->supplier;
+            $contract->supplier_id = $request->supplier_id;
             $contract->save();
             // Get Data
             $cds = $request->contracts; // This is array

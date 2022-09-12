@@ -19,7 +19,7 @@
                             
                                 <div class="basis-0 md:basis-1/6">
                                     <x-label for="title" value="Name" />
-                                    <x-input id="title" class="bg-indigo-100" type="text" title="title" value="{{ $customer->title }}"  required/>
+                                    <x-input id="title" class="bg-indigo-100" type="text" name="title" value="{{ $customer->title }}"  required/>
                                     @if($errors->has('title'))<div class="text-red-500 text-xs">{{ $errors->first('title') }}</div>@endif
                                 </div>
 

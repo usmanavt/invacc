@@ -199,6 +199,28 @@
         });
     }
 
+    var totpcsCalc = function(values, data, calcParams){
+    //values - array of column values
+    //data - all table data
+    //calcParams - params passed from the column definition object
+    var calc = 0;
+    values.forEach(function(value){
+        calc += value ;
+    });
+    return calc;
+}
+var totalVal = function(values, data, calcParams){
+    //values - array of column values
+    //data - all table data
+    //calcParams - params passed from the column definition object
+    var calc = 0;
+    values.forEach(function(value){
+        calc += value ;
+    });
+    return calc;
+}
+
+
     //  Dynamic Table [User data]
     dynamicTable = new Tabulator("#dynamicTable", {
         data:dynamicTableData,
@@ -231,15 +253,28 @@
             {title:"Bundle2", field:"bundle2",editor:"number",cssClass:"bg-yellow-200 font-semibold",formatter:"money", formatterParams:{thousand:",",precision:2},validator:["required","integer"],cellEdited: updateBundles},
             {title:"Pcs/Bnd2", field:"pcspbundle2",editor:"number",cssClass:"bg-yellow-200 font-semibold",formatter:"money", formatterParams:{thousand:",",precision:2},validator:["required","integer"],cellEdited: updateBundles},
 
-            {title:"TotPcs", field:"ttpcs",cssClass:"bg-gray-200 font-semibold" ,formatter:"money",editable:false ,validator:["required","float"]},
+            {title:"TotPcs", field:"ttpcs",cssClass:"bg-gray-200 font-semibold" ,formatter:"money",
+            formatter:function(cell,row)
+            {
+                return (cell.getData().bundle1 * cell.getData().pcspbundle1) + (cell.getData().bundle2 * cell.getData().pcspbundle2)
+            },
+            bottomCalc:totpcsCalc
+        },
 
-            {title:"Wt(MT)", field:"gdswt",editor:"number",cssClass:"bg-green-200 font-semibold",formatter:"money",validator:["required","float"],cellEdited:updateCost},
-            {title:"Rs($)", field:"gdsprice",editor:"number",cssClass:"bg-green-200 font-semibold",formatter:"money",validator:["required","float"], cellEdited:updateCost},
-            {title:"Val($)", field:"gdspricetot",cssClass:"bg-gray-200 font-semibold",formatter:"money",validator:["required","float"], formatterParams:{
-                decimal:".",
-                thousand:",",
-                symbol:"$"
-            }},
+
+        {title:"Wt(MT)", field:"gdswt",editor:"number",cssClass:"bg-green-200 font-semibold",formatter:"money",validator:["required","numeric"],cellEdited:updateCost, bottomCalc:"sum", bottomCalcParams:{precision:3}},
+        {title:"Rs($)", field:"gdsprice",editor:"number",cssClass:"bg-green-200 font-semibold",formatter:"money",validator:["required","numeric"], cellEdited:updateCost, bottomCalc:"sum", bottomCalcParams:{precision:3}},
+        {title:"Val($)", field:"gdspricetot",cssClass:"bg-gray-200 font-semibold",bottomCalc:totalVal,formatter:"money", formatterParams:{
+            decimal:".",
+            thousand:",",
+            symbol:"$"
+        },
+            formatter:function(cell,row)
+            {
+                return (cell.getData().gdswt * cell.getData().gdsprice) 
+            }
+            
+        },
 
         ],
     })

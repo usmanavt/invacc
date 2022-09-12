@@ -18,9 +18,9 @@
                             @method('PUT')
                             <div class="flex flex-col md:flex-row justify-start flex-wrap gap-2 items-center">
                                 <div class="basis-0 md:basis-1/6">
-                                    <x-label for="name" :value="__('Supplier Name')" />
-                                    <x-input id="name" class="bg-indigo-100" type="text" name="name" :value="$supplier->name"  />
-                                    @if($errors->has('name'))<div class="text-red-500 text-xs">{{ $errors->first('name') }}</div>@endif
+                                    <x-label for="title" :value="__('Supplier title')" />
+                                    <x-input id="title" class="bg-indigo-100" type="text" name="title" :value="$supplier->title"  />
+                                    @if($errors->has('title'))<div class="text-red-500 text-xs">{{ $errors->first('title') }}</div>@endif
                                 </div>
                                 <div class="basis-0 md:basis-1/6">
                                     <x-label for="nick" :value="__('Knick Name')" />
