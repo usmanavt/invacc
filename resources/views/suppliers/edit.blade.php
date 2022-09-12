@@ -1,7 +1,7 @@
 <x-app-layout>
     <x-slot name="header">
         <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-            {{ __('Edit Supplier') }}
+            Edit Supplier
         </h2>
     </x-slot>
 
@@ -9,144 +9,102 @@
         <div class="max-w-7xl mx-auto sm:px-2 lg:px-4">
             <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
 
-                <!-- Session Status -->
-                <x-auth-session-status class="mb-4" :status="session('status')" />
-
-                <!-- Validation Errors -->
-                <x-auth-validation-errors class="mb-4" :errors="$errors" />
                 {{-- Create Form --}}
-                <div class="px-12 py-2 " ;>
-
-                    <a class="text-sm text-indigo-500 hover:text-gray-900 mb-2" href="{{route('suppliers.index')}}">
-                        <i class="fa fa-edit fa-fw"></i>
-                        View
-                    </a>
-
-                    {{-- <a class="text-sm text-indigo-500 hover:text-gray-900 mb-2" href="{{route('dashboard')}}">
-                        <i class="fa fa-edit fa-fw"></i>
-                        Dashboard
-                    </a> --}}
-
-                    <form action="{{ url('/supplier/update')."/".  $supplier->id   }} "  method="post" >
-                        @csrf
-                            <div class="flex flex-row justify-start space-x-12 items-center">
-                                {{-- <div>5------------------------------------8\7---788*-/*/
-                                    1.12
-
-                                    44<x-label for="scode" :value="__('Scode')" />
-                                    <x-input id="scode" class="block mt-1 bg-slate-200" type="scode" name="scode" :value="old('scode')" required autofocus />
-                                </div> --}}
-                                <div>
-                                    <x-label for="sname" :value="__('Supplier Name')" />
-                                    <x-input id="sname" class="block mt-2 bg-slate-200 w-96" type="sname" name="sname" value="{{$supplier->sname}}"  />
+                <div class="px-6 py-2" >
+                    <div class="flex gap-8">
+                        
+                        <form action="{{ route('suppliers.update',$supplier) }}" method="post" >
+                            @csrf
+                            @method('PUT')
+                            <div class="flex flex-col md:flex-row justify-start flex-wrap gap-2 items-center">
+                                <div class="basis-0 md:basis-1/6">
+                                    <x-label for="name" :value="__('Supplier Name')" />
+                                    <x-input id="name" class="bg-indigo-100" type="text" name="name" :value="$supplier->name"  />
+                                    @if($errors->has('name'))<div class="text-red-500 text-xs">{{ $errors->first('name') }}</div>@endif
                                 </div>
-                                <div>
-                                    <x-label for="snname" :value="__('Knick Name')" />
-                                    <x-input id="snname" class="block mt-2 bg-slate-200" type="snname" name="snname" value="{{$supplier->snname}}"   />
+                                <div class="basis-0 md:basis-1/6">
+                                    <x-label for="nick" :value="__('Knick Name')" />
+                                    <x-input id="nick" class="bg-indigo-100" type="text" name="nick" :value="$supplier->nick"  />
+                                    @if($errors->has('nick'))<div class="text-red-500 text-xs">{{ $errors->first('nick') }}</div>@endif
                                 </div>
 
-                                <div>
-                                    <x-label for="sphoneoff" :value="__('Tel.(Office)')" />
-                                    <x-input id="sphoneoff" class="block mt-2 bg-slate-200" type="sphoneoff" name="sphoneoff" value="{{$supplier->sphoneoff}}"   />
+                                <div class="basis-0 md:basis-1/6">
+                                    <x-label for="phoneoff" :value="__('Tel.(Office)')" />
+                                    <x-input id="phoneoff" class="bg-indigo-100" type="text" name="phoneoff" :value="$supplier->phoneoff"/>
+                                    @if($errors->has('phoneoff'))<div class="text-red-500 text-xs">{{ $errors->first('phoneoff') }}</div>@endif
                                 </div>
-                                <div>
-                                    <x-label for="sphoneres" :value="__('Tel.(Residence)')" />
-                                    <x-input id="sphoneres" class="block mt-2 bg-slate-200" type="sphoneres" name="sphoneres" value="{{$supplier->sphoneres}}"   />
+                                <div class="basis-0 md:basis-1/6">
+                                    <x-label for="phoneres" :value="__('Tel.(Residence)')" />
+                                    <x-input id="phoneres" class="bg-indigo-100" type="text" name="phoneres" :value="$supplier->phoneres"/>
+                                    @if($errors->has('phoneres'))<div class="text-red-500 text-xs">{{ $errors->first('phoneres') }}</div>@endif
                                 </div>
-                            </div>
-
-                            <div class="flex flex-row justify-between items-center mt-6">
-
-                                <div>
-                                    <x-label for="sfax" :value="__('Fax No')" />
-                                    <x-input id="sfax" class="block mt-1 bg-slate-200 w-10" type="sfax" name="sfax" value="{{$supplier->sfax}}"   />
-                                </div>
-                            <div>
-                                    <x-label for="semail" :value="__('Email')" />
-                                    <x-input id="semail" class="block mt-1 bg-slate-200" type="semail" name="semail" value="{{$supplier->semail}}"    />
+                                <div class="basis-0 md:basis-1/6">
+                                    <x-label for="fax" :value="__('Fax No')" />
+                                    <x-input id="fax" class="bg-indigo-100" type="text" name="fax" :value="$supplier->fax"/>
+                                    @if($errors->has('fax'))<div class="text-red-500 text-xs">{{ $errors->first('fax') }}</div>@endif
                                 </div>
 
-                                <div>
-                                    <x-label for="ntnno" :value="__('NTN No')" />
-                                    <x-input id="ntnno" class="block mt-1 bg-slate-200" type="ntnno" name="ntnno" value="{{$supplier->ntnno}}"   />
+                                <div class="basis-0 md:basis-1/6">
+                                    <x-label for="email" :value="__('Email')" />
+                                    <x-input id="email" class="bg-indigo-100" type="email" name="email" :value="$supplier->email"/>
+                                    @if($errors->has('email'))<div class="text-red-500 text-xs">{{ $errors->first('email') }}</div>@endif
                                 </div>
-                                <div>
-                                    <x-label for="staxNo" :value="__('Sale Tax Registration No')" />
-                                    <x-input id="staxNo" class="block mt-1 bg-slate-200" type="staxNo" name="staxNo" value="{{$supplier->staxNo}}"   />
+        
+                                <div class="basis-0 md:basis-1/6">
+                                    <x-label for="ntn" :value="__('NTN No')" />
+                                    <x-input id="ntn" class="bg-indigo-100" type="text" name="ntn" :value="$supplier->ntn"/>
+                                    @if($errors->has('ntn'))<div class="text-red-500 text-xs">{{ $errors->first('ntn') }}</div>@endif
                                 </div>
-                                <div>
+
+                                <div class="basis-0 md:basis-1/6">
+                                    <x-label for="stax" :value="__('Sale Tax Registration No')" />
+                                    <x-input id="stax" class="bg-indigo-100" type="text" name="stax" :value="$supplier->stax"/>
+                                    @if($errors->has('stax'))<div class="text-red-500 text-xs">{{ $errors->first('stax') }}</div>@endif
+                                </div>
+
+                                <div class="basis-0 md:basis-1/6">
                                     <x-label for="obalance" :value="__('O/Balance')" />
-                                    <x-input id="obalance" class="block mt-1 bg-slate-200" type="obalance" name="obalance" value="{{$supplier->obalance}}"   />
+                                    <x-input id="obalance" class="bg-indigo-100" type="text" name="obalance" :value="$supplier->obalance"/>
+                                    @if($errors->has('obalance'))<div class="text-red-500 text-xs">{{ $errors->first('obalance') }}</div>@endif
                                 </div>
-                            </div>
 
-                            <div class="mt-4">
-                                <div>
-                                    {{-- <x-label for="spaddress" :value="__('Address')" />
-                                    <x-input  id="spaddress" class="block mt-1 bg-slate-200 w-full" type="spaddress" name="spaddress" :value="old('spaddress')"   /> --}}
-
-                                    {{-- <div class="flex justify-center">
-                                        <div class="mb-3 xl:w-96"> --}}
-                                          <label for="exampleFormControlTextarea1" class="form-label inline-block mb-2 text-gray-700"
-                                            >Supplier Address</label>
-                                          <textarea  class=" form-control block w-full px-3 py-1.5 text-base font-normal  text-gray-700  bg-white bg-clip-padding  border border-solid border-gray-300 rounded transition ease-in-out m-0 focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none" name="spaddress" id="spaddress" rows="3" placeholder="">{{$supplier->spaddress}}</textarea>
-                                        {{-- </div>
-                                      </div> --}}
-
-
-
-                                </div>
-                            </div>
-
-
-
-                            <div class="flex flex-row justify-start items-start mt-2">
-                                {{-- <div>
-                                    <x-label for="sstatus" :value="__('Active Stauts')" />
-                                    <x-input id="sstatus" class="block mt-1 bg-slate-200" type="sstatus" name="sstatus" :value="old('sstatus')"  />
-                                </div> --}}
-
-                                <div class="form-check">
-                                    <input class="form-check-input appearance-none rounded-full h-4 w-4 border border-gray-300 bg-white checked:bg-blue-600 checked:border-blue-600 focus:outline-none transition duration-200 mt-1 align-top bg-no-repeat bg-center bg-contain float-left mr-2 cursor-pointer" value="Active" type="radio" name="sstatus" id="flexRadioDefault1" {{ ($supplier->sstatus=="Active")? "checked":"" }}>
-                                    <label class="form-check-label inline-block text-gray-800" for="flexRadioDefault1">
-                                      Active
-                                    </label>
-                                  </div>
-                                  <div class="form-check">
-                                    <input class="form-check-input appearance-none rounded-full h-4 w-4 border border-gray-300 bg-white checked:bg-blue-600 checked:border-blue-600 focus:outline-none transition duration-200 mt-1 align-top bg-no-repeat bg-center bg-contain float-left mr-2 cursor-pointer" value="Stop" type="radio" name="sstatus" id="flexRadioDefault2" {{ ($supplier->sstatus=="Stop")? "checked":"" }} >
-                                    <label class="form-check-label inline-block text-gray-800" for="flexRadioDefault2">
-                                      Stop
-                                    </label>
-                                  </div>
-
-
-
-
-                            </div>
-
-                            <div class="mt-2">
-                                <div>
-                                    <x-label for="srcId" :value="__('Source')" />
-                                    <select required name="srcId" id="srcId" class="block mt-1 bg-slate-200 text-sm rounded-lg">
-                                        <option value="" disabled>Select Source</option>
-                                        <option value="{{ Constants::LOCAL }}" {{ $supplier->srcId==1? 'selected':'' }}>{{ Constants::LOCAL_STRING }}</option>
-                                        <option value="{{ Constants::IMPORTED }}" {{ $supplier->srcId==2? 'selected':'' }}>{{ Constants::IMPORTED_STRING }}</option>
+                                <div class="basis-0 md:basis-1/6">
+                                    <x-label for="source_id" :value="__('Source')" />
+                                    <select required name="source_id" id="source_id" class="bg-indigo-100">
+                                        @foreach ($sources as $source)
+                                            <option value="{{ $source->id }}" @if ($supplier->source_id == $source->id)
+                                                selected
+                                            @endif>{{ $source->title }}</option>
+                                        @endforeach
                                     </select>
+                                </div>   
+
+                                <div class="basis-0 md:basis-3/5">
+                                    <x-label for="address" :value="__('Supplier Address')" />
+                                    <x-input id="address" class="bg-indigo-100 w-full" type="text" name="address" :value="$supplier->address"/>
                                 </div>
 
+                                <div class="basis-0 md:basis-1/5 self-center pt-4">
+                                    <input class="checked:bg-blue-500 checked:border-blue-500 focus:outline-none" type="checkbox" name="status" @if ($supplier->status == 1)
+                                        checked
+                                    @endif >
+                                    <label class="inline-block text-gray-800">
+                                        Supplier Active?
+                                    </label>
+                                </div>
                             </div>
+
                             <div class="mt-2">
-                                <button class="inline-flex items-center px-4 py-2 bg-green-800 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-green-700 active:bg-green-900 focus:outline-none focus:border-green-900 focus:ring ring-gray-300 disabled:opacity-25 transition ease-in-out duration-150">
-                                    <i class="fa fa-save fa-fw bg-green-900"></i>
-                                    {{ __('Confirm') }}
+                                <button class="inline-flex items-center px-4 py-2 bg-green-500 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-green-700 active:bg-green-900 focus:outline-none focus:border-green-900 focus:ring ring-gray-300 disabled:opacity-25 transition ease-in-out duration-150">
+                                    <i class="fa fa-save fa-fw"></i>
+                                    {{ __('Submit') }}
                                 </button>
                             </div>
-                    </form>
-                </div>
+                        </form>
 
+                    </div>
+                </div>
             </div>
         </div>
     </div>
-
-
 </x-app-layout>

@@ -2,140 +2,100 @@
 
 namespace App\Http\Controllers;
 
+use DB;
 use App\Models\Location;
 use Illuminate\Http\Request;
-use DB;
+use Illuminate\Support\Facades\Session;
 
 class LocationController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
+
     public function index(Request $request)
     {
         $search = $request->search;
         $locations = Location::where(function($q) use ($search){
-            $q->where('locname','LIKE',"%$search%")
-            ->orWhere('locaddress','LIKE',"%$search%");
+            $q->where('title','LIKE',"%$search%")
+            ->orWhere('address','LIKE',"%$search%");
         })
         ->orderBy('id','desc')
         ->paginate(6);
         return view('locations.index')->with('locations',$locations);
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
     public function create()
     {
-        return view('locations.create');
+        return view('locations.create')->with('locations',Location::all());
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
     public function store(Request $request)
     {
-        $request->validate(
-            [
-                'locname'=>'required',
-                'locname'=>'required|unique:tblelocation'
+        $request->validate([
+            'title'=>'required|unique:locations'
+        ]);
 
-            ]
-            );
-
-
-        $maxValue = DB::table('tblelocation')->max('locid')+1;
-        // dd($maxValue);
-        // try {
-            // DB::transaction(function () {
-                $location = new Location();
-                $location->locid = $maxValue;
-                $location->locname = $request->locname;
-                $location->locaddress = $request->locaddress;
-                $location->save();
-        //     });
-        //     // return redirect()->route('suppliers.index');
+        DB::beginTransaction();
+        try {
+            $location = new Location();
+            $location->title = $request->title;
+            $location->address = $request->address;
+            if($request->has('status'))
+            {
+                $location->status = 1;
+            }else {
+                $location->status = 0;
+            }
+            $location->save();
+            DB::commit();
+            Session::flash('success','Location created');
             return redirect()->back();
-        // } catch (\Throwable $th) {
-        //     DB::rollback();
-        //     throw $th;
-        // }
+        } catch (\Throwable $th) {
+            DB::rollback();
+            throw $th;
+        }
+
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\Models\Location  $location
-     * @return \Illuminate\Http\Response
-     */
+   
     public function show(Location $location)
     {
         //
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Models\Location  $location
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
-    {
 
-        $location=Location::find($id);
-        if (is_null($location))
+    public function edit(Location $location)
+    {
+        return view('locations.edit')->with('location',$location);
+    }
+
+ 
+    public function update(Location $location,Request $request)
+    {
+        $request->validate([
+            'title'=>'required|unique:locations,title,'.$location->id
+        ]);
+        DB::beginTransaction();
+        try {
+            $location->title = $request->title;
+            $location->address = $request->address;
+            if($request->has('status'))
             {
-                // NOT FOUND
-                return redirect()->back();
+                $location->status = 1;
+            }else {
+                $location->status = 0;
             }
-                else
-            {
-
-
-                $data=compact('location');
-                return view('locations.edit')->with($data);
-            };
+            $location->save();
+            DB::commit();
+            Session::flash('info','Location updated');
+            return redirect()->route('locations.index');
+        } catch (\Throwable $th) {
+            DB::rollback();
+            throw $th;
+        }
+   
     }
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\Location  $location
-     * @return \Illuminate\Http\Response
-     */
-    public function update($id,Request $request)
-    {
-        $location=Location::find($id);
-                $location->locname = $request->locname;
-                $location->locaddress = $request->locaddress;
-                $location->save();
-             return redirect()->route('locations.index');
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \App\Models\Location  $location
-     * @return \Illuminate\Http\Response
-     */
     public function destroy($id)
     {
-            $location=Location::find($id);
-            if(!is_null($location));
-        {
-            ($location)->delete();
-
-
-        }
-return redirect()->back();
+        return redirect()->back();
     }
 }

@@ -13,21 +13,20 @@ class CreateSuppliersTable extends Migration
      */
     public function up()
     {
-        Schema::create('tblesupplier', function (Blueprint $table) {
+        Schema::create('suppliers', function (Blueprint $table) {
             $table->id();
-            $table->smallInteger('scode')->unique();
-            $table->string('sname',100);
-            $table->string('snname',50)->nullable();
-            $table->text('spaddress')->nullable();
-            $table->string('sphoneoff',30)->nullable();
-            $table->string('sphoneres',30)->nullable();
-            $table->string('sfax',30)->nullable();
-            $table->string('semail',40)->nullable();
-            $table->string('sstatus',15);
-            $table->integer('obalance')->nullable();
-            $table->string('ntnno',30)->nullable();
-            $table->string('staxNo',30)->nullable();
-            $table->smallInteger('srcId')->default(1);
+            $table->bigInteger('source_id');
+            $table->string('title',100);
+            $table->string('nick',50)->nullable();
+            $table->text('address')->nullable();
+            $table->string('phoneoff',30)->nullable();
+            $table->string('phoneres',30)->nullable();
+            $table->string('fax',30)->nullable();
+            $table->string('email',40)->nullable();
+            $table->smallInteger('status')->default(1); // 1-Active , 0-Deactive
+            $table->decimal('obalance',15,2)->nullable();
+            $table->string('ntn',30)->nullable();
+            $table->string('stax',30)->nullable();
             $table->timestamps();
         });
     }
@@ -39,6 +38,6 @@ class CreateSuppliersTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('tblesupplier');
+        Schema::dropIfExists('suppliers');
     }
 }

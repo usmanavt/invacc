@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class Location extends Model
 {
     use HasFactory;
-    protected $table= "tblelocation";
-    protected $fillable = ['locid','locname','locaddress'];
+    protected $fillable = ['name','address','status'];
+
+    // Relationships
 }
