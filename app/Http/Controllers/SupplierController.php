@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use DB;
+use App\Models\Source;
 use App\Models\Supplier;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Session;
@@ -14,12 +15,12 @@ class SupplierController extends Controller
     {
         $search = $request->search;
         $suppliers = Supplier::where(function($q) use ($search){
-            $q->where('sname','LIKE',"%$search%")
-            ->orWhere('snname','LIKE',"%$search%")
-            ->orWhere('sphoneoff','LIKE',"%$search%")
-            ->orWhere('sphoneres','LIKE',"%$search%")
-            ->orWhere('semail','LIKE',"%$search%")
-            ->orWhere('spaddress','LIKE',"%$search%");
+            $q->where('title','LIKE',"%$search%")
+            ->orWhere('nick','LIKE',"%$search%")
+            ->orWhere('phoneoff','LIKE',"%$search%")
+            ->orWhere('phoneres','LIKE',"%$search%")
+            ->orWhere('email','LIKE',"%$search%")
+            ->orWhere('address','LIKE',"%$search%");
         })
         ->orderBy('id','desc')
         ->paginate(5);
@@ -28,36 +29,36 @@ class SupplierController extends Controller
 
     public function create()
     {
-        return view('suppliers.create');
+        return view('suppliers.create')->with('sources',Source::all());
     }
 
     public function store(Request $request)
     {
         $request->validate(
         [
-            'sname'=>'required|min:3|unique:tblesupplier'
+            'name'=>'required|min:3|unique:suppliers'
         ]);
         
         DB::beginTransaction();
         try {
             $supplier = new Supplier();
-            $supplier->sname = $request->sname;
-            $supplier->snname = $request->snname;
-            $supplier->spaddress = $request->spaddress;
-            $supplier->sphoneoff = $request->sphoneoff;
-            $supplier->sphoneres = $request->sphoneres;
-            $supplier->sfax = $request->sfax;
-            $supplier->semail = $request->semail;
-            if($request->has('sstatus'))
+            $supplier->name = $request->name;
+            $supplier->nick = $request->nick;
+            $supplier->address = $request->address;
+            $supplier->phoneoff = $request->phoneoff;
+            $supplier->phoneres = $request->phoneres;
+            $supplier->fax = $request->fax;
+            $supplier->email = $request->email;
+            if($request->has('status'))
             {
-                $supplier->sstatus = 'Active';
+                $supplier->status = 1;
             }else {
-                $supplier->sstatus = 'Deactive';
+                $supplier->status = 0;
             }
             $supplier->obalance = $request->obalance;
-            $supplier->ntnno = $request->ntnno;
-            $supplier->staxNo = $request->staxNo;
-            $supplier->srcId = $request->srcId == 1 ? 1:2;
+            $supplier->ntn = $request->ntn;
+            $supplier->stax = $request->stax;
+            $supplier->source_id = $request->source_id;
             $supplier->save();
             DB::commit();
             Session::flash('success','Supplier created');
@@ -75,34 +76,34 @@ class SupplierController extends Controller
 
     public function edit(Supplier $supplier)
     {
-        return view('suppliers.edit')->with('supplier',$supplier);
+        return view('suppliers.edit')->with('supplier',$supplier)->with('sources',Source::all());
     }
 
     public function update(Supplier $supplier,Request $request )
     {
         $request->validate(
             [
-                'sname'=>'required|min:3|unique:tblesupplier,sname,'.$supplier->id 
+                'name'=>'required|min:3|unique:suppliers,name,'.$supplier->id 
             ]);
         DB::beginTransaction();
         try {
-            $supplier->sname = $request->sname;
-            $supplier->snname = $request->snname;
-            $supplier->spaddress = $request->spaddress;
-            $supplier->sphoneoff = $request->sphoneoff;
-            $supplier->sphoneres = $request->sphoneres;
-            $supplier->sfax = $request->sfax;
-            $supplier->semail = $request->semail;
-            if($request->has('sstatus'))
+            $supplier->name = $request->name;
+            $supplier->nick = $request->nick;
+            $supplier->address = $request->address;
+            $supplier->phoneoff = $request->phoneoff;
+            $supplier->phoneres = $request->phoneres;
+            $supplier->fax = $request->fax;
+            $supplier->email = $request->email;
+            if($request->has('status'))
             {
-                $supplier->sstatus = 'Active';
+                $supplier->status =1;
             }else {
-                $supplier->sstatus = 'Deactive';
+                $supplier->status = 0;
             }
             $supplier->obalance = $request->obalance;
-            $supplier->ntnno = $request->ntnno;
-            $supplier->staxNo = $request->staxNo;
-            $supplier->srcId = $request->srcId;
+            $supplier->ntn = $request->ntnno;
+            $supplier->stax = $request->stax;
+            $supplier->source_id = $request->source_id;
             $supplier->save();
             DB::commit();
             Session::flash('info','Supplier updated');

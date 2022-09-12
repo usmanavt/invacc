@@ -14,8 +14,8 @@ class LocationController extends Controller
     {
         $search = $request->search;
         $locations = Location::where(function($q) use ($search){
-            $q->where('locname','LIKE',"%$search%")
-            ->orWhere('locaddress','LIKE',"%$search%");
+            $q->where('title','LIKE',"%$search%")
+            ->orWhere('address','LIKE',"%$search%");
         })
         ->orderBy('id','desc')
         ->paginate(6);
@@ -30,14 +30,20 @@ class LocationController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'locname'=>'required|unique:tblelocation'
+            'title'=>'required|unique:locations'
         ]);
 
         DB::beginTransaction();
         try {
             $location = new Location();
-            $location->locname = $request->locname;
-            $location->locaddress = $request->locaddress;
+            $location->title = $request->title;
+            $location->address = $request->address;
+            if($request->has('status'))
+            {
+                $location->status = 1;
+            }else {
+                $location->status = 0;
+            }
             $location->save();
             DB::commit();
             Session::flash('success','Location created');
@@ -65,16 +71,22 @@ class LocationController extends Controller
     public function update(Location $location,Request $request)
     {
         $request->validate([
-            'locname'=>'required|unique:tblelocation,locname,'.$location->id
+            'title'=>'required|unique:locations,title,'.$location->id
         ]);
         DB::beginTransaction();
         try {
-            $location->locname = $request->locname;
-            $location->locaddress = $request->locaddress;
+            $location->title = $request->title;
+            $location->address = $request->address;
+            if($request->has('status'))
+            {
+                $location->status = 1;
+            }else {
+                $location->status = 0;
+            }
             $location->save();
             DB::commit();
-            Session::flash('info','Location created');
-            return redirect()->back();
+            Session::flash('info','Location updated');
+            return redirect()->route('locations.index');
         } catch (\Throwable $th) {
             DB::rollback();
             throw $th;
@@ -84,6 +96,6 @@ class LocationController extends Controller
 
     public function destroy($id)
     {
-
+        return redirect()->back();
     }
 }

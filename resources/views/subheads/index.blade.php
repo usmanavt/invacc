@@ -1,7 +1,7 @@
 <x-app-layout>
     <x-slot name="header">
         <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-            {{ __('ChartOfAccount') }}
+            ChartOfAccount
             {{-- Create New Customer --}}
             <a class="text-sm text-green-500 hover:text-gray-900" href="{{route('subheads.create')}}">
                 {{-- Add Icon --}}
@@ -26,8 +26,8 @@
                             <table class="min-w-full divided-y divide-gray-500">
 								<thead>
 									<tr>
-										<td class="px-6 py-3 bg-gray-100 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Man Head</td>
-										<td class="px-6 py-3 bg-gray-100 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Sub Head</td>
+										<td class="px-6 py-3 bg-gray-100 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Acct Head</td>
+										<td class="px-6 py-3 bg-gray-100 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Title</td>
 										<td class="px-6 py-3 bg-gray-100 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">O/Balance</td>
 										<td class="px-6 py-3 bg-gray-100 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</td>
 										<td class="px-6 py-3 bg-gray-100 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</td>
@@ -37,11 +37,11 @@
 								<tbody class="bg-white divide-y divide-gray-200">
 									@foreach($subheads as $subhead)
 										<tr class="border-b">
-											<td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{$subhead->manhead->mheadname}}</td>
-											<td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{$subhead->subheadname}}</td>
+											<td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{$subhead->head->title}}</td>
+											<td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{$subhead->title}}</td>
 											<td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{$subhead->ob}}</td>
-											<td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{$subhead->sstatus}}</td>
-											</td>
+											<td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{$subhead->status == 1 ? 'Active':'Deactive'}}</td>
+
 											<td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
 											    <a class="text-sm text-indigo-500 hover:text-gray-900" href="{{route('subheads.edit',$subhead->id)}}">
                                                     <i class="fa fa-edit fa-fw"></i>

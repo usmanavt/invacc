@@ -17,13 +17,13 @@
                         <div class="flex flex-col justify-start items-center">
                             <form action="{{ route('locations.store') }}" method="post" >
                             @csrf
-                                <x-label for="locname" :value="__('Name')"/>
-                                <x-input id="locname" class="bg-indigo-100" type="text" name="locname" :value="old('locname')"  required minlength="3"/>
-                                @if($errors->has('locname'))<div class="text-red-500 text-xs">{{ $errors->first('locname') }}</div>@endif
+                                <x-label for="title" :value="__('Name')"/>
+                                <x-input id="title" class="bg-indigo-100" type="text" name="title" :value="old('title')"  required minlength="3"/>
+                                @if($errors->has('title'))<div class="text-red-500 text-xs">{{ $errors->first('title') }}</div>@endif
                                 
-                                <x-label for="locaddress" :value="__('Knick Name')"/>
-                                <x-input id="locaddress" class="bg-indigo-100" type="text" name="locaddress" :value="old('locaddress')"  required minlength="3"/>
-                                @if($errors->has('locaddress'))<div class="text-red-500 text-xs">{{ $errors->first('locaddress') }}</div>@endif
+                                <x-label for="address" :value="__('Knick Name')"/>
+                                <x-input id="address" class="bg-indigo-100" type="text" name="address" :value="old('address')"  required minlength="3"/>
+                                @if($errors->has('address'))<div class="text-red-500 text-xs">{{ $errors->first('address') }}</div>@endif
     
                                 <div class="mt-2">
                                     <button class="inline-flex items-center px-4 py-2 bg-green-500 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-green-700 active:bg-green-900 focus:outline-none focus:border-green-900 focus:ring ring-gray-300 disabled:opacity-25 transition ease-in-out duration-150">
@@ -38,7 +38,7 @@
                             <span class="text-indigo-500 border-b">Existing locations</span>
                             <ul class="h-28 overflow-y-scroll">
                                 @foreach ($locations as $location)
-                                    <li>{{ $location->locname }}</li>
+                                    <li>{{ $location->title }}</li>
                                 @endforeach
                             </ul>
                         </div>

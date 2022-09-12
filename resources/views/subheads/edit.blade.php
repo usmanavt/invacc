@@ -1,7 +1,7 @@
 <x-app-layout>
     <x-slot name="header">
         <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-            {{ __('Edit Account Head') }}
+           Edit Account Head
         </h2>
     </x-slot>
 
@@ -18,28 +18,28 @@
                         <form action="{{ route('subheads.update',$subhead) }}" method="post" >
                             @csrf
                             @method('PUT')
-                            <x-label for="tblmanhead_id" :value="__('Source')" />
-                            <select required name="tblmanhead_id" id="tblmanhead_id" class="bg-indigo-100">
+                            <x-label for="head_id" :value="__('Source')" />
+                            <select required name="head_id" id="head_id" class="bg-indigo-100">
                                 <option value="" selected>--Chart of Accounts</option>
-                                @foreach($manhead as $list)
-                                    @if ($list->id == $subhead->tblmanhead_id)
-                                        <option value="{{$list->id}}" selected>{{$list->mheadname}}</option>
+                                @foreach($heads as $head)
+                                    @if ($head->id == $subhead->head_id)
+                                        <option value="{{$head->id}}" selected>{{$head->title}}</option>
                                     @else 
-                                        <option value="{{$list->id}}">{{$list->mheadname}}</option>
+                                        <option value="{{$head->id}}">{{$head->title}}</option>
                                     @endif
                                 @endforeach
                             </select>
 
-                            <x-label for="subheadname" :value="__('Sub Heading')"/>
-                            <x-input id="subheadname" class="bg-indigo-100" type="text" name="subheadname" value="{{ $subhead->subheadname }}"  required minlength="3"/>
-                            @if($errors->has('subheadname'))<div class="text-red-500 text-xs">{{ $errors->first('subheadname') }}</div>@endif
+                            <x-label for="title" value="Title"/>
+                            <x-input id="title" class="bg-indigo-100" type="text" name="title" value="{{ $subhead->title }}"  required minlength="3"/>
+                            @if($errors->has('title'))<div class="text-red-500 text-xs">{{ $errors->first('title') }}</div>@endif
 
                             <x-label for="ob" :value="__('O/Balance')"/>
                             <x-input id="ob" class="bg-indigo-100" type="text" name="ob" value="{{ $subhead->ob }}"  required minlength="3"/>
                             @if($errors->has('ob'))<div class="text-red-500 text-xs">{{ $errors->first('ob') }}</div>@endif
 
-                            <input class="checked:bg-blue-500 checked:border-blue-500 focus:outline-none" type="checkbox" name="sstatus"
-                                @if ($subhead->sstatus == 'Active')
+                            <input class="checked:bg-blue-500 checked:border-blue-500 focus:outline-none" type="checkbox" name="status"
+                                @if ($subhead->status == 1)
                                     checked
                                 @endif
                             >

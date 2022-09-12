@@ -1,7 +1,7 @@
 <x-app-layout>
     <x-slot name="header">
         <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-            {{ __('Edit Supplier') }}
+            Edit Supplier
         </h2>
     </x-slot>
 
@@ -18,48 +18,48 @@
                             @method('PUT')
                             <div class="flex flex-col md:flex-row justify-start flex-wrap gap-2 items-center">
                                 <div class="basis-0 md:basis-1/6">
-                                    <x-label for="sname" :value="__('Supplier Name')" />
-                                    <x-input id="sname" class="bg-indigo-100" type="text" name="sname" :value="$supplier->sname"  />
-                                    @if($errors->has('sname'))<div class="text-red-500 text-xs">{{ $errors->first('sname') }}</div>@endif
+                                    <x-label for="name" :value="__('Supplier Name')" />
+                                    <x-input id="name" class="bg-indigo-100" type="text" name="name" :value="$supplier->name"  />
+                                    @if($errors->has('name'))<div class="text-red-500 text-xs">{{ $errors->first('name') }}</div>@endif
                                 </div>
                                 <div class="basis-0 md:basis-1/6">
-                                    <x-label for="snname" :value="__('Knick Name')" />
-                                    <x-input id="snname" class="bg-indigo-100" type="text" name="snname" :value="$supplier->snname"  />
-                                    @if($errors->has('snname'))<div class="text-red-500 text-xs">{{ $errors->first('snname') }}</div>@endif
-                                </div>
-
-                                <div class="basis-0 md:basis-1/6">
-                                    <x-label for="sphoneoff" :value="__('Tel.(Office)')" />
-                                    <x-input id="sphoneoff" class="bg-indigo-100" type="text" name="sphoneoff" :value="$supplier->sphoneoff"/>
-                                    @if($errors->has('sphoneoff'))<div class="text-red-500 text-xs">{{ $errors->first('sphoneoff') }}</div>@endif
-                                </div>
-                                <div class="basis-0 md:basis-1/6">
-                                    <x-label for="sphoneres" :value="__('Tel.(Residence)')" />
-                                    <x-input id="sphoneres" class="bg-indigo-100" type="text" name="sphoneres" :value="$supplier->sphoneres"/>
-                                    @if($errors->has('sphoneres'))<div class="text-red-500 text-xs">{{ $errors->first('sphoneres') }}</div>@endif
-                                </div>
-                                <div class="basis-0 md:basis-1/6">
-                                    <x-label for="sfax" :value="__('Fax No')" />
-                                    <x-input id="sfax" class="bg-indigo-100" type="text" name="sfax" :value="$supplier->sfax"/>
-                                    @if($errors->has('sfax'))<div class="text-red-500 text-xs">{{ $errors->first('sfax') }}</div>@endif
+                                    <x-label for="nick" :value="__('Knick Name')" />
+                                    <x-input id="nick" class="bg-indigo-100" type="text" name="nick" :value="$supplier->nick"  />
+                                    @if($errors->has('nick'))<div class="text-red-500 text-xs">{{ $errors->first('nick') }}</div>@endif
                                 </div>
 
                                 <div class="basis-0 md:basis-1/6">
-                                    <x-label for="semail" :value="__('Email')" />
-                                    <x-input id="semail" class="bg-indigo-100" type="email" name="semail" :value="$supplier->semail"/>
-                                    @if($errors->has('semail'))<div class="text-red-500 text-xs">{{ $errors->first('semail') }}</div>@endif
+                                    <x-label for="phoneoff" :value="__('Tel.(Office)')" />
+                                    <x-input id="phoneoff" class="bg-indigo-100" type="text" name="phoneoff" :value="$supplier->phoneoff"/>
+                                    @if($errors->has('phoneoff'))<div class="text-red-500 text-xs">{{ $errors->first('phoneoff') }}</div>@endif
+                                </div>
+                                <div class="basis-0 md:basis-1/6">
+                                    <x-label for="phoneres" :value="__('Tel.(Residence)')" />
+                                    <x-input id="phoneres" class="bg-indigo-100" type="text" name="phoneres" :value="$supplier->phoneres"/>
+                                    @if($errors->has('phoneres'))<div class="text-red-500 text-xs">{{ $errors->first('phoneres') }}</div>@endif
+                                </div>
+                                <div class="basis-0 md:basis-1/6">
+                                    <x-label for="fax" :value="__('Fax No')" />
+                                    <x-input id="fax" class="bg-indigo-100" type="text" name="fax" :value="$supplier->fax"/>
+                                    @if($errors->has('fax'))<div class="text-red-500 text-xs">{{ $errors->first('fax') }}</div>@endif
+                                </div>
+
+                                <div class="basis-0 md:basis-1/6">
+                                    <x-label for="email" :value="__('Email')" />
+                                    <x-input id="email" class="bg-indigo-100" type="email" name="email" :value="$supplier->email"/>
+                                    @if($errors->has('email'))<div class="text-red-500 text-xs">{{ $errors->first('email') }}</div>@endif
                                 </div>
         
                                 <div class="basis-0 md:basis-1/6">
-                                    <x-label for="ntnno" :value="__('NTN No')" />
-                                    <x-input id="ntnno" class="bg-indigo-100" type="text" name="ntnno" :value="$supplier->ntnno"/>
-                                    @if($errors->has('ntnno'))<div class="text-red-500 text-xs">{{ $errors->first('ntnno') }}</div>@endif
+                                    <x-label for="ntn" :value="__('NTN No')" />
+                                    <x-input id="ntn" class="bg-indigo-100" type="text" name="ntn" :value="$supplier->ntn"/>
+                                    @if($errors->has('ntn'))<div class="text-red-500 text-xs">{{ $errors->first('ntn') }}</div>@endif
                                 </div>
 
                                 <div class="basis-0 md:basis-1/6">
-                                    <x-label for="staxNo" :value="__('Sale Tax Registration No')" />
-                                    <x-input id="staxNo" class="bg-indigo-100" type="text" name="staxNo" :value="$supplier->staxNo"/>
-                                    @if($errors->has('staxNo'))<div class="text-red-500 text-xs">{{ $errors->first('staxNo') }}</div>@endif
+                                    <x-label for="stax" :value="__('Sale Tax Registration No')" />
+                                    <x-input id="stax" class="bg-indigo-100" type="text" name="stax" :value="$supplier->stax"/>
+                                    @if($errors->has('stax'))<div class="text-red-500 text-xs">{{ $errors->first('stax') }}</div>@endif
                                 </div>
 
                                 <div class="basis-0 md:basis-1/6">
@@ -69,20 +69,23 @@
                                 </div>
 
                                 <div class="basis-0 md:basis-1/6">
-                                    <x-label for="srcId" :value="__('Source')" />
-                                    <select required name="srcId" id="srcId" class="bg-indigo-100">
-                                        <option value="{{ Constants::LOCAL }}" {{ $supplier->srcId==1? 'selected':'' }}>{{ Constants::LOCAL_STRING }}</option>
-                                        <option value="{{ Constants::IMPORTED }}" {{ $supplier->srcId==2? 'selected':'' }}>{{ Constants::IMPORTED_STRING }}</option>
+                                    <x-label for="source_id" :value="__('Source')" />
+                                    <select required name="source_id" id="source_id" class="bg-indigo-100">
+                                        @foreach ($sources as $source)
+                                            <option value="{{ $source->id }}" @if ($supplier->source_id == $source->id)
+                                                selected
+                                            @endif>{{ $source->title }}</option>
+                                        @endforeach
                                     </select>
                                 </div>   
 
                                 <div class="basis-0 md:basis-3/5">
-                                    <x-label for="spaddress" :value="__('Supplier Address')" />
-                                    <x-input id="spaddress" class="bg-indigo-100 w-full" type="text" name="spaddress" :value="$supplier->spaddress"/>
+                                    <x-label for="address" :value="__('Supplier Address')" />
+                                    <x-input id="address" class="bg-indigo-100 w-full" type="text" name="address" :value="$supplier->address"/>
                                 </div>
 
                                 <div class="basis-0 md:basis-1/5 self-center pt-4">
-                                    <input class="checked:bg-blue-500 checked:border-blue-500 focus:outline-none" type="checkbox" name="sstatus" @if ($supplier->sstatus == 'Active')
+                                    <input class="checked:bg-blue-500 checked:border-blue-500 focus:outline-none" type="checkbox" name="status" @if ($supplier->status == 1)
                                         checked
                                     @endif >
                                     <label class="inline-block text-gray-800">

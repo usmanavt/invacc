@@ -17,13 +17,21 @@
                         <form action="{{route('categories.update',$category)}}" method="post" >
                             @csrf
                             @method('PUT')
-                                <x-label for="Iname0" :value="__('Item Category')" class="w-24"/>
-                                <x-input id="iname0" class="bg-indigo-100" type="text" name="iname0" value="{{$category->iname0}}" />
-                                @if($errors->has('iname0'))<div class="text-red-500 text-xs">{{ $errors->first('iname0') }}</div>@endif
+                                <x-label for="title" :value="__('Item Category')" class="w-24"/>
+                                <x-input id="title" class="bg-indigo-100" type="text" name="title" value="{{$category->title}}" />
+                                @if($errors->has('title'))<div class="text-red-500 text-xs">{{ $errors->first('title') }}</div>@endif
 
-                                <x-label for="inname0" :value="__('Knick Name')" class="w-24"/>
-                                <x-input id="inname0" class="bg-indigo-100" type="text" name="inname0" value="{{$category->inname0}}" />
-                                @if($errors->has('inname0'))<div class="text-red-500 text-xs">{{ $errors->first('inname0') }}</div>@endif
+                                <x-label for="nick" :value="__('Knick Name')" class="w-24"/>
+                                <x-input id="nick" class="bg-indigo-100" type="text" name="nick" value="{{$category->nick}}" />
+                                @if($errors->has('nick'))<div class="text-red-500 text-xs">{{ $errors->first('nick') }}</div>@endif
+
+                                
+                                <input class="checked:bg-blue-500 checked:border-blue-500 focus:outline-none" type="checkbox" name="status" @if ($category->status == 1)
+                                        checked
+                                    @endif >
+                                <label class="inline-block text-gray-800">
+                                    Category Active?
+                                </label>
 
                                 <div class="mt-2">
                                     <button class="inline-flex items-center px-4 py-2 bg-green-500 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-green-700 active:bg-green-900 focus:outline-none focus:border-green-900 focus:ring ring-gray-300 disabled:opacity-25 transition ease-in-out duration-150">
