@@ -107,7 +107,7 @@ class MaterialController extends Controller
     {
         // dd($request->all());
         $request->validate([
-            // 'title'=>'required|unique:materials,title,'.$item->id
+            'title'=>'required|unique:materials,title,'.$item->id
         ]);
         DB::beginTransaction();
         try {

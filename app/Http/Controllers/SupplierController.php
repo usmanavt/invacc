@@ -36,13 +36,13 @@ class SupplierController extends Controller
     {
         $request->validate(
         [
-            'name'=>'required|min:3|unique:suppliers'
+            'title'=>'required|min:3|unique:suppliers'
         ]);
         
         DB::beginTransaction();
         try {
             $supplier = new Supplier();
-            $supplier->name = $request->name;
+            $supplier->title = $request->title;
             $supplier->nick = $request->nick;
             $supplier->address = $request->address;
             $supplier->phoneoff = $request->phoneoff;
@@ -62,7 +62,7 @@ class SupplierController extends Controller
             $supplier->save();
             DB::commit();
             Session::flash('success','Supplier created');
-            return redirect()->back();
+            return redirect()->route('suppliers.index');
         } catch (\Throwable $th) {
             DB::rollback();
             throw $th;
@@ -83,11 +83,11 @@ class SupplierController extends Controller
     {
         $request->validate(
             [
-                'name'=>'required|min:3|unique:suppliers,name,'.$supplier->id 
+                'title'=>'required|min:3|unique:suppliers,title,'.$supplier->id 
             ]);
         DB::beginTransaction();
         try {
-            $supplier->name = $request->name;
+            $supplier->title = $request->title;
             $supplier->nick = $request->nick;
             $supplier->address = $request->address;
             $supplier->phoneoff = $request->phoneoff;
