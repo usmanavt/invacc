@@ -18,32 +18,27 @@
                         <form action="{{ route('subheads.store') }}" method="post" >
                             @csrf
                               
-                            <x-label for="tblmanhead_id" :value="__('Source')" />
-                            <select required name="tblmanhead_id" id="tblmanhead_id" class="bg-indigo-100">
-                                <option value="" selected>--Chart of Accounts</option>
-                                @foreach($manhead as $list)
-                                    <option value="{{$list->id}}">  {{$list->mheadname}}  </option>
+                            <x-label for="head_id" :value="__('Source')" />
+                            <select required name="head_id" id="head_id" class="bg-indigo-100">
+                                <option value="" selected>--Account Head</option>
+                                @foreach($heads as $head)
+                                    <option value="{{$head->id}}">  {{$head->title}}  </option>
 
                                 @endforeach
                             </select>
 
-                            <x-label for="subheadname" :value="__('Sub Heading')"/>
-                            <x-input id="subheadname" class="bg-indigo-100" type="text" name="subheadname" :value="old('subheadname')"  required minlength="3"/>
-                            @if($errors->has('subheadname'))<div class="text-red-500 text-xs">{{ $errors->first('subheadname') }}</div>@endif
+                            <x-label for="title" :value="__('Sub Heading')"/>
+                            <x-input id="title" class="bg-indigo-100" type="text" name="title" :value="old('title')"  required minlength="3"/>
+                            @if($errors->has('title'))<div class="text-red-500 text-xs">{{ $errors->first('title') }}</div>@endif
 
                             <x-label for="ob" :value="__('O/Balance')"/>
                             <x-input id="ob" class="bg-indigo-100" type="text" name="ob" :value="old('ob')"  required minlength="3"/>
                             @if($errors->has('ob'))<div class="text-red-500 text-xs">{{ $errors->first('ob') }}</div>@endif
 
-                            <input class="checked:bg-blue-500 checked:border-blue-500 focus:outline-none" type="checkbox" name="sstatus" checked>
-                            <label class="inline-block text-gray-800 mt-2">
-                                Sub Head Active?
-                            </label>
-
                             <div class="mt-2">
                                 <button class="inline-flex items-center px-4 py-2 bg-green-500 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-green-700 active:bg-green-900 focus:outline-none focus:border-green-900 focus:ring ring-gray-300 disabled:opacity-25 transition ease-in-out duration-150">
                                     <i class="fa fa-save fa-fw"></i>
-                                    {{ __('Submit') }}
+                                    Submit
                                 </button>
                             </div>
 
@@ -55,7 +50,7 @@
                         <span class="text-indigo-500 border-b">Existing Subheads</span>
                         <ul class="h-28 overflow-y-scroll">
                             @foreach ($subheads as $subhead)
-                                <li>{{ $subhead->subheadname }}</li>
+                                <li>{{ $subhead->title }}</li>
                             @endforeach
                         </ul>
                     </div>

@@ -44,3 +44,13 @@ input:disabled{
 table{
     @apply rounded-t-lg
 }
+
+/* Tabulator */
+
+/* Tabulator */
+.hide-subtable{
+    display: none;
+}
+.subtable {
+    margin-left: 20px;
+}

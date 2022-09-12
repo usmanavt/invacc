@@ -14,7 +14,7 @@ class SourceController extends Controller
     {
         $search = $request->search;
         $sources = Source::where(function($q) use ($search){
-            $q->where('srcname','LIKE',"%$search%");
+            $q->where('title','LIKE',"%$search%");
         })
         ->orderBy('id','desc')
         ->paginate(5);
@@ -30,13 +30,13 @@ class SourceController extends Controller
     {
         // dd($request->all());
         $request->validate([
-            'srcname'=>'required|min:2|unique:tblesource',
+            'title'=>'required|min:2|unique:sources',
         ]);
 
         DB::beginTransaction();
         try {
             $source = new Source();
-            $source->srcname = $request->srcname;
+            $source->title = $request->title;
             $source->save();
             DB::commit();
             Session::flash('success','Source created');
@@ -57,12 +57,18 @@ class SourceController extends Controller
     {
         // dd($request->all());
         $request->validate([
-            'srcname'=>'required|min:3|unique:tblesource,srcname,'. $source->id ,
+            'title'=>'required|min:3|unique:sources,title,'. $source->id ,
         ]);
 
         DB::beginTransaction();
         try {
-            $source->srcname = $request->srcname;
+            $source->title = $request->title;
+            if($request->has('status'))
+            {
+                $source->status = 1;
+            }else {
+                $source->status = 0;
+            }
             $source->save();
             DB::commit();
             Session::flash('info','Source updated');

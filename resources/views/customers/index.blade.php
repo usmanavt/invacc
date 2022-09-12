@@ -41,13 +41,13 @@
 								<tbody class="bg-white divide-y divide-gray-200">
 									@foreach($customers as $customer)
 										<tr class="border-b">
-											<td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{$customer->cname}}</td>
-											<td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{$customer->cemail}}</td>
+											<td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{$customer->title}}</td>
+											<td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{$customer->email}}</td>
 											<td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{$customer->obalance}}</td>
-											<td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{$customer->cpaddress}}</td>
-											<td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{$customer->ntnno}}</td>
-									        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{$customer->cstatus}}</td>
-											<td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{$customer->care->coname}}</td>
+											<td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{$customer->address}}</td>
+											<td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{$customer->ntn}}</td>
+									        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{$customer->status == 1 ? 'Active':'Deactive'}}</td>
+											<td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{$customer->care->title}}</td>
 											</td>
 											<td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
 											    <a class="text-sm text-indigo-500 hover:text-gray-900" href="{{route('customers.edit',$customer->id)}}">

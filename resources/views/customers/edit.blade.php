@@ -18,54 +18,54 @@
                             <div class="flex flex-col md:flex-row justify-start flex-wrap gap-2 items-center">
                             
                                 <div class="basis-0 md:basis-1/6">
-                                    <x-label for="cname" :value="__('Customer Name')" />
-                                    <x-input id="cname" class="bg-indigo-100" type="text" name="cname" value="{{ $customer->cname }}"  required/>
-                                    @if($errors->has('cname'))<div class="text-red-500 text-xs">{{ $errors->first('cname') }}</div>@endif
+                                    <x-label for="title" value="Name" />
+                                    <x-input id="title" class="bg-indigo-100" type="text" title="title" value="{{ $customer->title }}"  required/>
+                                    @if($errors->has('title'))<div class="text-red-500 text-xs">{{ $errors->first('title') }}</div>@endif
                                 </div>
 
                                 <div class="basis-0 md:basis-1/6">
-                                    <x-label for="cnname" :value="__('Knick Name')" />
-                                    <x-input id="cnname" class="bg-indigo-100" type="text" name="cnname" value="{{ $customer->cnname }}"  />
-                                    @if($errors->has('cnname'))<div class="text-red-500 text-xs">{{ $errors->first('cnname') }}</div>@endif
+                                    <x-label for="nick" value="Nick" />
+                                    <x-input id="nick" class="bg-indigo-100" type="text" name="nick" value="{{ $customer->nick }}"  />
+                                    @if($errors->has('nick'))<div class="text-red-500 text-xs">{{ $errors->first('nick') }}</div>@endif
                                 </div>
 
                                 <div class="basis-0 md:basis-1/6">
-                                    <x-label for="cphoneoff" :value="__('Tel.(Office)')" />
-                                    <x-input id="cphoneoff" class="bg-indigo-100" type="text" name="cphoneoff" value="{{ $customer->cphoneoff }}"  />
-                                    @if($errors->has('cphoneoff'))<div class="text-red-500 text-xs">{{ $errors->first('cphoneoff') }}</div>@endif
+                                    <x-label for="phoneoff" :value="__('Tel.(Office)')" />
+                                    <x-input id="phoneoff" class="bg-indigo-100" type="text" name="phoneoff" value="{{ $customer->phoneoff }}"  />
+                                    @if($errors->has('phoneoff'))<div class="text-red-500 text-xs">{{ $errors->first('phoneoff') }}</div>@endif
                                 </div>
                             
                                 <div class="basis-0 md:basis-1/6">
-                                    <x-label for="cphoneres" :value="__('Tel.(Residence)')" />
-                                    <x-input id="cphoneres" class="bg-indigo-100" type="text" name="cphoneres" value="{{ $customer->cphoneres }}"  />
-                                    @if($errors->has('cphoneres'))<div class="text-red-500 text-xs">{{ $errors->first('cphoneres') }}</div>@endif
+                                    <x-label for="phoneres" :value="__('Tel.(Residence)')" />
+                                    <x-input id="phoneres" class="bg-indigo-100" type="text" name="phoneres" value="{{ $customer->phoneres }}"  />
+                                    @if($errors->has('phoneres'))<div class="text-red-500 text-xs">{{ $errors->first('phoneres') }}</div>@endif
                                 </div>
 
                                 <div class="basis-0 md:basis-1/6">
-                                    <x-label for="cfax" :value="__('Fax No')" />
-                                    <x-input id="cfax" class="bg-indigo-100" type="text" name="cfax" value="{{ $customer->cfax }}"  />
-                                    @if($errors->has('cfax'))<div class="text-red-500 text-xs">{{ $errors->first('cfax') }}</div>@endif
-
-                                </div>
-
-                                <div class="basis-0 md:basis-1/6">
-                                    <x-label for="cemail" :value="__('Email')" />
-                                    <x-input id="cemail" class="bg-indigo-100" type="text" name="cemail" value="{{ $customer->cemail }}" required/>
-                                    @if($errors->has('cemail'))<div class="text-red-500 text-xs">{{ $errors->first('cemail') }}</div>@endif
+                                    <x-label for="fax" :value="__('Fax No')" />
+                                    <x-input id="fax" class="bg-indigo-100" type="text" name="fax" value="{{ $customer->fax }}"  />
+                                    @if($errors->has('fax'))<div class="text-red-500 text-xs">{{ $errors->first('fax') }}</div>@endif
 
                                 </div>
 
                                 <div class="basis-0 md:basis-1/6">
-                                    <x-label for="ntnno" :value="__('NTN No')" />
-                                    <x-input id="ntnno" class="bg-indigo-100" type="text" name="ntnno" value="{{ $customer->ntnno }}"  />
-                                    @if($errors->has('ntnno'))<div class="text-red-500 text-xs">{{ $errors->first('ntnno') }}</div>@endif
+                                    <x-label for="email" :value="__('Email')" />
+                                    <x-input id="email" class="bg-indigo-100" type="text" name="email" value="{{ $customer->email }}" />
+                                    @if($errors->has('email'))<div class="text-red-500 text-xs">{{ $errors->first('email') }}</div>@endif
 
                                 </div>
 
                                 <div class="basis-0 md:basis-1/6">
-                                    <x-label for="staxno" :value="__('Sale Tax Registration No')" />
-                                    <x-input id="staxno" class="bg-indigo-100" type="text" name="staxno" value="{{ $customer->staxno }}"  />
-                                    @if($errors->has('staxno'))<div class="text-red-500 text-xs">{{ $errors->first('staxno') }}</div>@endif
+                                    <x-label for="ntn" :value="__('NTN No')" />
+                                    <x-input id="ntn" class="bg-indigo-100" type="text" name="ntn" value="{{ $customer->ntn }}"  />
+                                    @if($errors->has('ntn'))<div class="text-red-500 text-xs">{{ $errors->first('ntn') }}</div>@endif
+
+                                </div>
+
+                                <div class="basis-0 md:basis-1/6">
+                                    <x-label for="stax" :value="__('Sale Tax Registration No')" />
+                                    <x-input id="stax" class="bg-indigo-100" type="text" name="stax" value="{{ $customer->stax }}"  />
+                                    @if($errors->has('stax'))<div class="text-red-500 text-xs">{{ $errors->first('stax') }}</div>@endif
 
                                 </div>
 
@@ -77,15 +77,15 @@
                                 </div>
 
                                 <div class="basis-0 md:basis-3/5">
-                                    <x-label for="cpaddress" :value="__('Customer Address')" />
-                                    <x-input id="cpaddress" class="bg-indigo-100 w-full" type="text" name="cpaddress" value="{{ $customer->cpaddress }}"  />
-                                    @if($errors->has('cpaddress'))<div class="text-red-500 text-xs">{{ $errors->first('cpaddress') }}</div>@endif
+                                    <x-label for="address2" :value="__('Customer Address')" />
+                                    <x-input id="address2" class="bg-indigo-100 w-full" type="text" name="address2" value="{{ $customer->address2 }}"  />
+                                    @if($errors->has('address2'))<div class="text-red-500 text-xs">{{ $errors->first('address2') }}</div>@endif
 
                                 </div>
 
                                 <div class="basis-0 md:basis-1/5 self-center pt-4">
-                                    <input class="checked:bg-blue-500 checked:border-blue-500 focus:outline-none" type="checkbox" name="cstatus" 
-                                    @if ($customer->cstatus == 'Active')
+                                    <input class="checked:bg-blue-500 checked:border-blue-500 focus:outline-none" type="checkbox" name="status" 
+                                    @if ($customer->status == 1)
                                         checked
                                     @endif
                                     >
@@ -95,14 +95,14 @@
                                 </div>
 
                                 <div class="basis-0 md:basis-1/6">
-                                    <x-label for="cop" :value="__('Care Of')" />
-                                    <select required name="cop" id="cop" class="bg-indigo-100">
+                                    <x-label for="care_id" :value="__('Care Of')" />
+                                    <select required name="care_id" id="care_id" class="bg-indigo-100">
                                         <option value="" selected>--Care of</option>
-                                        @foreach($careof as $list)
-                                            @if ($customer->tbleco_id == $list->id) 
-                                            <option value="{{$list->id}}" selected>{{$list->coname}}</option>    
+                                        @foreach($care as $list)
+                                            @if ($customer->care_id == $list->id) 
+                                            <option value="{{$list->id}}" selected>{{$list->title}}</option>    
                                             @else
-                                            <option value="{{$list->id}}">{{$list->coname}}</option>    
+                                            <option value="{{$list->id}}">{{$list->title}}</option>    
                                             @endif  
                                         @endforeach
                                     </select>

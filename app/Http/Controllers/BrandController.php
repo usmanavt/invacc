@@ -14,7 +14,7 @@ class BrandController extends Controller
     {
         $search = $request->search;
         $brands = Brand::where(function($q) use ($search){
-            $q->where('brandname','LIKE',"%$search%");
+            $q->where('title','LIKE',"%$search%");
         })
         ->orderBy('id','desc')
         ->paginate(5);
@@ -30,19 +30,19 @@ class BrandController extends Controller
     {
         // dd($request->all());
         $request->validate([
-            'brandname'=>'required|min:2|unique:tblebrand',
+            'title'=>'required|min:2|unique:brands',
         ]);
 
         DB::beginTransaction();
         try {
             $brand = new Brand();
-            $brand->brandname = $request->brandname;
-            if($request->has('sstatus'))
+            $brand->title = $request->title;
+            if($request->has('status'))
             {
-                $brand->sstatus = 'Active';
+                $brand->status = 1;
             }
             else {
-                $brand->sstatus = 'Deactive';
+                $brand->status = 0;
             }
             $brand->save();
             DB::commit();
@@ -64,18 +64,18 @@ class BrandController extends Controller
     {
         // dd($request->all());
         $request->validate([
-            'brandname'=>'required|min:3|unique:tblebrand,brandname,'. $brand->id ,
+            'title'=>'required|min:3|unique:brands,title,'. $brand->id ,
         ]);
 
         DB::beginTransaction();
         try {
-            $brand->brandname = $request->brandname;
-            if($request->has('sstatus'))
+            $brand->title = $request->title;
+            if($request->has('status'))
             {
-                $brand->sstatus = 'Active';
+                $brand->status = 1;
             }
             else {
-                $brand->sstatus = 'Deactive';
+                $brand->status = 0;
             }
             $brand->save();
             DB::commit();

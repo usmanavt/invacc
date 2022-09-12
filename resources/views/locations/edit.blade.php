@@ -1,7 +1,7 @@
 <x-app-layout>
     <x-slot name="header">
         <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-            {{ __('Edit Location') }}
+          Edit Location
         </h2>
     </x-slot>
 
@@ -17,13 +17,22 @@
                         <form action="{{route('locations.update',$location)}}" method="post" >
                             @csrf
                             @method('PUT')
-                                <x-label for="locname" :value="__('Item Category')" class="w-24"/>
-                                <x-input id="locname" class="bg-indigo-100" type="text" name="locname" value="{{$location->locname}}" />
-                                @if($errors->has('locname'))<div class="text-red-500 text-xs">{{ $errors->first('locname') }}</div>@endif
+                                <x-label for="title" :value="__('Item Category')" class="w-24"/>
+                                <x-input id="title" class="bg-indigo-100" type="text" name="title" value="{{$location->title}}" />
+                                @if($errors->has('title'))<div class="text-red-500 text-xs">{{ $errors->first('title') }}</div>@endif
 
-                                <x-label for="locaddress" :value="__('Knick Name')" class="w-24"/>
-                                <x-input id="locaddress" class="bg-indigo-100" type="text" name="locaddress" value="{{$location->locaddress}}" />
-                                @if($errors->has('locaddress'))<div class="text-red-500 text-xs">{{ $errors->first('locaddress') }}</div>@endif
+                                <x-label for="address" :value="__('Knick Name')" class="w-24"/>
+                                <x-input id="address" class="bg-indigo-100" type="text" name="address" value="{{$location->address}}" />
+                                @if($errors->has('address'))<div class="text-red-500 text-xs">{{ $errors->first('address') }}</div>@endif
+
+                                <div class="basis-0 md:basis-1/5 self-center pt-4">
+                                    <input class="checked:bg-blue-500 checked:border-blue-500 focus:outline-none" type="checkbox" name="status" @if ($location->status == 1)
+                                        checked
+                                    @endif >
+                                    <label class="inline-block text-gray-800">
+                                        Location Active?
+                                    </label>
+                                </div>
 
                                 <div class="mt-2">
                                     <button class="inline-flex items-center px-4 py-2 bg-green-500 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-green-700 active:bg-green-900 focus:outline-none focus:border-green-900 focus:ring ring-gray-300 disabled:opacity-25 transition ease-in-out duration-150">
