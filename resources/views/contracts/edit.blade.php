@@ -70,6 +70,8 @@
 
     @push('scripts')
 <script>
+let table;
+let searchValue = "";
 const deleteIcon = function(cell,formatterParams){return "<i class='fa fa-trash text-red-500'></i>";};
 const getMaster = @json(route('materials.master')); // For Material Modal
 let csrfToken = document.head.querySelector("[name~=csrf-token][content]").content;
@@ -77,6 +79,80 @@ let modal = document.getElementById("myModal")
 
 let dyanmicTable = ""; // Tabulator 
 let dynamicTableData = @json($cd);
+
+
+    //  ---------------- For MODAL -----------------------//
+    //  Table Filter
+    function dataFilter(element)
+    {
+        searchValue = element.value;
+        table.setData(getMaster,{search:searchValue});
+    }
+    //  The Table for Materials Modal
+    table = new Tabulator("#tableData", {
+        autoResize:true,
+        responsiveLayout:"collapse",
+        layout:"fitData",    	
+        index:"id",                                 
+        placeholder:"No Data Available",            
+        pagination:true,                            
+        paginationMode:"remote",                    
+        sortMode:"remote",
+        filterMode:"remote",
+        paginationSize:20,                      
+        paginationSizeSelector:[10,25,50,100],  
+        ajaxParams: function(){
+            return {search:searchValue};
+        },
+        ajaxURL: getMaster,
+        ajaxContentType:"json", 
+        initialSort:[ {column:"id", dir:"desc"} ],
+        height:"100%",
+                    
+        columns:[
+            // Master Data
+            {title:"Id", field:"id" , responsive:0},
+            {title:"Material", field:"title" , visible:true ,headerSort:false, responsive:0},
+            {title:"Category", field:"category" , visible:true ,headerSortStartingDir:"asc" , responsive:0},
+            {title:"Dimesion", field:"dimension" ,  responsive:0},
+            {title:"Source", field:"source" ,  responsive:0},
+            {title:"Sku", field:"sku" ,  responsive:0},
+            {title:"Brand", field:"brand" ,  responsive:0},
+            // {title:"Delete" , formatter:deleteIcon, hozAlign:"center",headerSort:false, responsive:0,
+            //     cellClick:function(e, cell){ 
+            //         // window.open(window.location + "/" + cell.getRow().getData().id + "/delete" ,"_self");
+            //     }
+            // },
+        ],
+        // Extra Pagination Data for End Users
+        ajaxResponse:function(getDataUrl, params, response){
+            remaining = response.total;
+            let doc = document.getElementById("example-table-info");
+            doc.classList.add('font-weight-bold');
+            doc.innerText = `Displaying ${response.from} - ${response.to} out of ${remaining} records`;
+            return response;
+        }
+    })
+    //  Adds New row to dyanmicTable
+    table.on('rowClick',function(e,row){
+        var simple = {...row}
+        var data = simple._row.data
+        //  Filter Data here . 
+        var result = dynamicTableData.filter( dt => dt.material_id == data.id)
+        if(result.length <= 0)
+        {
+            pushDynamicData(data)
+        }
+    })
+    function showModal(){ modal.style.display = "block"}
+    function closeModal(){  modal.style.display = "none"}
+    //  When the user clicks anywhere outside of the modal, close it
+    window.onclick = function(event) {
+        if (event.target == modal) {
+            modal.style.display = "none";
+        }
+    } 
+    // -----------------FOR MODAL -------------------------------//
 
 //  Adds actual data to row - EDIT Special
 function pushDynamicData(data)
@@ -107,45 +183,31 @@ function pushDynamicData(data)
         gdsprice:0,
         gdspricetot:0
     })
+    //  dyanmicTable.setData()
+     dynamicTable.setData(dynamicTableData);
 }
 
-var updateBundles = (cell) => {
+var updateValues = (cell) => {
     var data = cell.getData();
     var sum = (Number(data.bundle1) * Number(data.pcspbundle1)) + (Number(data.bundle2) * Number(data.pcspbundle2))
+    var sum2 =  Number(data.gdswt) * Number(data.gdsprice)
     var row = cell.getRow();
     row.update({
-        "ttpcs": sum
+        "ttpcs": sum,
+        "gdspricetot": sum2
     });
 }
 
-var updateCost = (cell) => {
-    var data = cell.getData();
-    var sum = Number(data.gdswt) * Number(data.gdsprice)
-    var row = cell.getRow();
-    row.update({
-        "gdspricetot": sum
-    });
-}
-
-var totpcsCalc = function(values, data, calcParams){
+var totalVal = function(values, data, calcParams){
     //values - array of column values
     //data - all table data
     //calcParams - params passed from the column definition object
+    // console.log(data);
     var calc = 0;
     values.forEach(function(value){
         calc += value ;
     });
     return calc;
-}
-var totalVal = function(values, data, calcParams){
-    //values - array of column values
-    //data - all table data
-    //calcParams - params passed from the column definition object
-    var calc = 0;
-    values.forEach(function(value){
-        calc += parseFloat( value ) ;
-    });
-    return  calc;
 }
 
 //  Dynamic Table [User data]
@@ -183,7 +245,9 @@ dynamicTable = new Tabulator("#dynamicTable", {
             formatter:"money", 
             formatterParams:{thousand:",",precision:2},
             validator:["required","integer"],
-            cellEdited: updateBundles   },
+            cellEdited: updateValues,
+            bottomCalc: "sum", 
+            },
         
         {   title:"Pcs/Bnd1",      
             field:"pcspbundle1",
@@ -193,7 +257,9 @@ dynamicTable = new Tabulator("#dynamicTable", {
             formatter:"money", 
             formatterParams:{thousand:",",precision:2},
             validator:["required","integer"] ,
-            cellEdited: updateBundles   },
+            cellEdited: updateValues  ,
+            bottomCalc: "sum", 
+            },
 
         {   title:"Bundle2",       
             field:"bundle2",
@@ -202,7 +268,9 @@ dynamicTable = new Tabulator("#dynamicTable", {
             formatter:"money",
             formatterParams:{thousand:",",precision:2},
             validator:["required","integer"],
-            cellEdited: updateBundles   },
+            cellEdited: updateValues  ,
+            bottomCalc: "sum", 
+            },
 
         {   title:"Pcs/Bnd2",      
             field:"pcspbundle2",
@@ -211,7 +279,9 @@ dynamicTable = new Tabulator("#dynamicTable", {
             formatter:"money", 
             formatterParams:{thousand:",",precision:2},
             validator:["required","integer"],
-            cellEdited: updateBundles   },
+            cellEdited: updateValues ,
+            bottomCalc: "sum", 
+            },
 
         {   title:"TotPcs",        
             field:"ttpcs",
@@ -222,7 +292,7 @@ dynamicTable = new Tabulator("#dynamicTable", {
             {
                 return (cell.getData().bundle1 * cell.getData().pcspbundle1) + (cell.getData().bundle2 * cell.getData().pcspbundle2)
             },
-            bottomCalc:totpcsCalc   },
+            bottomCalc:totalVal   },
 
         {   title:"Wt(MT)",        
             field:"gdswt",
@@ -231,7 +301,7 @@ dynamicTable = new Tabulator("#dynamicTable", {
             formatter:"money", 
             formatterParams:{thousand:",",precision:3},
             validator:["required","numeric"],
-            cellEdited:updateCost, 
+            cellEdited:updateValues, 
             bottomCalc:"sum", 
             bottomCalcParams:{precision:3}  },
 
@@ -242,7 +312,7 @@ dynamicTable = new Tabulator("#dynamicTable", {
             formatter:"money", 
             formatterParams:{thousand:",",precision:3},
             validator:["required","numeric"], 
-            cellEdited:updateCost, 
+            cellEdited:updateValues, 
             bottomCalc:"sum", 
             bottomCalcParams:{precision:3}      },
         

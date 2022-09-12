@@ -58,24 +58,99 @@
     </div>
 
     
-@push('scripts')
-<script src="{{ asset('js/tabulator.min.js') }}"></script>
-@endpush
-{{-- Modal - Should come below Tabulator --}}
-<x-tabulator-modal />
-
+    @push('scripts')
+    <script src="{{ asset('js/tabulator.min.js') }}"></script>
+    @endpush
+    
+    <x-tabulator-modal />
 
 @push('scripts')
 <script>
+    let table;
+    let searchValue = "";
     const deleteIcon = function(cell,formatterParams){return "<i class='fa fa-trash text-red-500'></i>";};
     const getMaster = @json(route('materials.master'));
     let csrfToken = document.head.querySelector("[name~=csrf-token][content]").content;
     let modal = document.getElementById("myModal")
 
-
     let dyanmicTable = ""; // Tabulator 
     let dynamicTableData = [];
 
+    //  ---------------- For MODAL -----------------------//
+    //  Table Filter
+    function dataFilter(element)
+    {
+        searchValue = element.value;
+        table.setData(getMaster,{search:searchValue});
+    }
+    //  The Table for Materials Modal
+    table = new Tabulator("#tableData", {
+        autoResize:true,
+        responsiveLayout:"collapse",
+        layout:"fitData",    	
+        index:"id",                                 
+        placeholder:"No Data Available",            
+        pagination:true,                            
+        paginationMode:"remote",                    
+        sortMode:"remote",
+        filterMode:"remote",
+        paginationSize:20,                      
+        paginationSizeSelector:[10,25,50,100],  
+        ajaxParams: function(){
+            return {search:searchValue};
+        },
+        ajaxURL: getMaster,
+        ajaxContentType:"json", 
+        initialSort:[ {column:"id", dir:"desc"} ],
+        height:"100%",
+                    
+        columns:[
+            // Master Data
+            {title:"Id", field:"id" , responsive:0},
+            {title:"Material", field:"title" , visible:true ,headerSort:false, responsive:0},
+            {title:"Category", field:"category" , visible:true ,headerSortStartingDir:"asc" , responsive:0},
+            {title:"Dimesion", field:"dimension" ,  responsive:0},
+            {title:"Source", field:"source" ,  responsive:0},
+            {title:"Sku", field:"sku" ,  responsive:0},
+            {title:"Brand", field:"brand" ,  responsive:0},
+            // {title:"Delete" , formatter:deleteIcon, hozAlign:"center",headerSort:false, responsive:0,
+            //     cellClick:function(e, cell){ 
+            //         // window.open(window.location + "/" + cell.getRow().getData().id + "/delete" ,"_self");
+            //     }
+            // },
+        ],
+        // Extra Pagination Data for End Users
+        ajaxResponse:function(getDataUrl, params, response){
+            remaining = response.total;
+            let doc = document.getElementById("example-table-info");
+            doc.classList.add('font-weight-bold');
+            doc.innerText = `Displaying ${response.from} - ${response.to} out of ${remaining} records`;
+            return response;
+        }
+    })
+    //  Adds New row to dyanmicTable
+    table.on('rowClick',function(e,row){
+        var simple = {...row}
+        var data = simple._row.data
+        // console.log(data);
+        //  Filter Data here . 
+        var result = dynamicTableData.filter( dt => dt.id == data.id)
+        if(result.length <= 0)
+        {
+           pushDynamicData(data)
+        }
+    })
+    function showModal(){ modal.style.display = "block"}
+    function closeModal(){  modal.style.display = "none"}
+    //  When the user clicks anywhere outside of the modal, close it
+    window.onclick = function(event) {
+        if (event.target == modal) {
+            modal.style.display = "none";
+        }
+    } 
+    // -----------------FOR MODAL -------------------------------//
+
+    //  ------------------Dynamic Table----------------------//
     //  Adds actual data to row
     function pushDynamicData(data)
     {
@@ -105,52 +180,36 @@
             gdsprice:0,
             gdspricetot:0
         })
+        // dyanmicTable.setData()
+        dynamicTable.setData(dynamicTableData);
     }
 
-    var updateBundles = (cell) => {
+    var updateValues = (cell) => {
         var data = cell.getData();
         var sum = (Number(data.bundle1) * Number(data.pcspbundle1)) + (Number(data.bundle2) * Number(data.pcspbundle2))
+        var sum2 =  Number(data.gdswt) * Number(data.gdsprice)
         var row = cell.getRow();
         row.update({
-            "ttpcs": sum
+            "ttpcs": sum,
+            "gdspricetot": sum2
         });
     }
 
-    var updateCost = (cell) => {
-        var data = cell.getData();
-        var sum = Number(data.gdswt) * Number(data.gdsprice)
-        var row = cell.getRow();
-        row.update({
-            "gdspricetot": sum
+    var totalVal = function(values, data, calcParams){
+        //values - array of column values
+        //data - all table data
+        //calcParams - params passed from the column definition object
+        // console.log(data);
+        var calc = 0;
+        values.forEach(function(value){
+            calc += value ;
         });
+        return calc;
     }
-
-    var totpcsCalc = function(values, data, calcParams){
-    //values - array of column values
-    //data - all table data
-    //calcParams - params passed from the column definition object
-    var calc = 0;
-    values.forEach(function(value){
-        calc += value ;
-    });
-    return calc;
-}
-var totalVal = function(values, data, calcParams){
-    //values - array of column values
-    //data - all table data
-    //calcParams - params passed from the column definition object
-    var calc = 0;
-    values.forEach(function(value){
-        calc += value ;
-    });
-    return calc;
-}
-
-
     //  Dynamic Table [User data]
     dynamicTable = new Tabulator("#dynamicTable", {
-        data:dynamicTableData,
         layout:'fitData',
+        // data:dynamicTableData,
         reactiveData:true,
         columns:[
             {title:"Delete" , formatter:deleteIcon, headerSort:false, responsive:0,
@@ -161,46 +220,114 @@ var totalVal = function(values, data, calcParams){
                     // disableSubmitButton();
                 }
             },
-            {title:"Id", field:"id",cssClass:"bg-gray-200 font-semibold"},
-            {title:"Material", field:"title",cssClass:"bg-gray-200 font-semibold"},
-            {title:"Category_id", field:"category_id",visible:false,cssClass:"bg-gray-200 font-semibold"},
-            {title:"Category", field:"category",cssClass:"bg-gray-200 font-semibold"},
-            {title:"Dimension", field:"dimension_id",visible:false,cssClass:"bg-gray-200 font-semibold"},
-            {title:"Dimension", field:"dimension",cssClass:"bg-gray-200 font-semibold"},
-            {title:"Source", field:"source_id",visible:false,cssClass:"bg-gray-200 font-semibold"},
-            {title:"Source", field:"source",cssClass:"bg-gray-200 font-semibold"},
-            {title:"Sku", field:"sku_id",visible:false,cssClass:"bg-gray-200 font-semibold"},
-            {title:"Sku", field:"sku",cssClass:"bg-gray-200 font-semibold"},
-            {title:"Brand", field:"brand_id",visible:false,cssClass:"bg-gray-200 font-semibold"},
-            {title:"Brand", field:"brand",cssClass:"bg-gray-200 font-semibold"},
+            {title:"Id",                field:"id",    cssClass:"bg-gray-200 font-semibold"},
+            {title:"Material",          field:"title", cssClass:"bg-gray-200 font-semibold"},
+            {title:"Category_id",       field:"category_id",    cssClass:"bg-gray-200 font-semibold",visible:false},
+            {title:"Category",          field:"category",       cssClass:"bg-gray-200 font-semibold"},
+            {title:"Dimension",         field:"dimension_id",   cssClass:"bg-gray-200 font-semibold",visible:false},
+            {title:"Dimension",         field:"dimension",      cssClass:"bg-gray-200 font-semibold"},
+            {title:"Source",            field:"source_id",      cssClass:"bg-gray-200 font-semibold",visible:false},
+            {title:"Source",            field:"source",         cssClass:"bg-gray-200 font-semibold"},
+            {title:"Sku",               field:"sku_id",         cssClass:"bg-gray-200 font-semibold",visible:false},
+            {title:"Sku",               field:"sku",            cssClass:"bg-gray-200 font-semibold"},
+            {title:"Brand",             field:"brand_id",       cssClass:"bg-gray-200 font-semibold",visible:false},
+            {title:"Brand",             field:"brand",          cssClass:"bg-gray-200 font-semibold"},
 
-            {title:"Bundle1", field:"bundle1",editor:"number",cssClass:"bg-green-200 font-semibold",validator:"required" ,formatter:"money", formatterParams:{thousand:",",precision:2},validator:["required","integer"] ,cellEdited: updateBundles},
-            {title:"Pcs/Bnd1", field:"pcspbundle1",editor:"number",cssClass:"bg-green-200 font-semibold",validator:"required" ,formatter:"money", formatterParams:{thousand:",",precision:2},validator:["required","integer"] , cellEdited: updateBundles},
-            {title:"Bundle2", field:"bundle2",editor:"number",cssClass:"bg-yellow-200 font-semibold",formatter:"money", formatterParams:{thousand:",",precision:2},validator:["required","integer"],cellEdited: updateBundles},
-            {title:"Pcs/Bnd2", field:"pcspbundle2",editor:"number",cssClass:"bg-yellow-200 font-semibold",formatter:"money", formatterParams:{thousand:",",precision:2},validator:["required","integer"],cellEdited: updateBundles},
-
-            {title:"TotPcs", field:"ttpcs",cssClass:"bg-gray-200 font-semibold" ,formatter:"money",
-            formatter:function(cell,row)
-            {
-                return (cell.getData().bundle1 * cell.getData().pcspbundle1) + (cell.getData().bundle2 * cell.getData().pcspbundle2)
-            },
-            bottomCalc:totpcsCalc
-        },
-
-
-        {title:"Wt(MT)", field:"gdswt",editor:"number",cssClass:"bg-green-200 font-semibold",formatter:"money",validator:["required","numeric"],cellEdited:updateCost, bottomCalc:"sum", bottomCalcParams:{precision:3}},
-        {title:"Rs($)", field:"gdsprice",editor:"number",cssClass:"bg-green-200 font-semibold",formatter:"money",validator:["required","numeric"], cellEdited:updateCost, bottomCalc:"sum", bottomCalcParams:{precision:3}},
-        {title:"Val($)", field:"gdspricetot",cssClass:"bg-gray-200 font-semibold",bottomCalc:totalVal,formatter:"money", formatterParams:{
-            decimal:".",
-            thousand:",",
-            symbol:"$"
-        },
-            formatter:function(cell,row)
-            {
-                return (cell.getData().gdswt * cell.getData().gdsprice) 
-            }
+            {   title:"Bundle1",       
+                field:"bundle1",
+                editor:"number",
+                cssClass:"bg-green-200 font-semibold",
+                validator:"required",
+                formatter:"money", 
+                formatterParams:{thousand:",",precision:2},
+                validator:["required","integer"],
+                cellEdited: updateValues, 
+                bottomCalc: "sum", 
+               },
             
-        },
+            {   title:"Pcs/Bnd1",      
+                field:"pcspbundle1",
+                editor:"number",
+                cssClass:"bg-green-200 font-semibold",
+                validator:"required" ,
+                formatter:"money", 
+                formatterParams:{thousand:",",precision:2},
+                validator:["required","integer"] ,
+                cellEdited: updateValues   ,
+                bottomCalc: "sum",
+            },
+
+            {   title:"Bundle2",       
+                field:"bundle2",
+                editor:"number",
+                cssClass:"bg-yellow-200 font-semibold",
+                formatter:"money",
+                formatterParams:{thousand:",",precision:2},
+                validator:["required","integer"],
+                cellEdited: updateValues   ,
+                bottomCalc: "sum",
+            },
+
+            {   title:"Pcs/Bnd2",      
+                field:"pcspbundle2",
+                editor:"number",
+                cssClass:"bg-yellow-200 font-semibold",
+                formatter:"money", 
+                formatterParams:{thousand:",",precision:2},
+                validator:["required","integer"],
+                cellEdited: updateValues  ,
+                bottomCalc: "sum",
+            },
+
+            {   title:"TotPcs",        
+                field:"ttpcs",
+                cssClass:"bg-gray-200 font-semibold",
+                formatter:"money",
+                formatterParams:{thousand:",",precision:3},
+                formatter:function(cell,row)
+                {
+                    return (cell.getData().bundle1 * cell.getData().pcspbundle1) + (cell.getData().bundle2 * cell.getData().pcspbundle2)
+                },
+                bottomCalc:totalVal },
+
+            {   title:"Wt(MT)",        
+                field:"gdswt",
+                editor:"number",
+                cssClass:"bg-green-200 font-semibold",
+                formatter:"money", 
+                formatterParams:{thousand:",",precision:3},
+                validator:["required","numeric"],
+                cellEdited:updateValues, 
+                bottomCalc:"sum", 
+                bottomCalcParams:{precision:3}  },
+
+            {   title:"Rs($)",         
+                field:"gdsprice",
+                editor:"number",
+                cssClass:"bg-green-200 font-semibold",
+                formatter:"money", 
+                formatterParams:{thousand:",",precision:3},
+                validator:["required","numeric"], 
+                cellEdited:updateValues, 
+                bottomCalc:"sum", 
+                bottomCalcParams:{precision:3}      },
+            
+            {   title:"Val($)",    
+                field:"gdspricetot",
+                cssClass:"bg-gray-200 font-semibold",
+                bottomCalc:totalVal,
+                bottomCalcParams:{precision:3} ,
+                formatter:"money", 
+                formatterParams:{
+                    decimal:".",
+                    thousand:",",
+                    symbol:"$",
+                    precision:3     },
+                formatter:function(cell,row)
+                {
+                    return (cell.getData().gdswt * cell.getData().gdsprice) 
+                }
+            },
 
         ],
     })
