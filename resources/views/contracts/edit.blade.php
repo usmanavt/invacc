@@ -61,14 +61,14 @@
     </div>
 
     
-@push('scripts')
-<script src="{{ asset('js/tabulator.min.js') }}"></script>
-@endpush
+    @push('scripts')
+    <script src="{{ asset('js/tabulator.min.js') }}"></script>
+    @endpush
+    
+    {{-- Modal - Should come below Tabulator --}}
+    <x-tabulator-modal />
 
-{{-- Modal - Should come below Tabulator --}}
-<x-tabulator-modal />
-
-@push('scripts')
+    @push('scripts')
 <script>
 const deleteIcon = function(cell,formatterParams){return "<i class='fa fa-trash text-red-500'></i>";};
 const getMaster = @json(route('materials.master')); // For Material Modal

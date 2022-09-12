@@ -35,7 +35,7 @@ class MaterialController extends Controller
         $dir = $request->sort[0]["dir"];         //  Nested Array
         //  With Tables
         $materials = Material::where(function ($query) use ($search){
-            $query->where('id','LIKE','%' . $search . '%');
+            $query->where('title','LIKE','%' . $search . '%');
         })
         ->orderBy($field,$dir)
         ->paginate((int) $size);
