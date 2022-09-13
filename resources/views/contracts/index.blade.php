@@ -110,8 +110,10 @@
                         {title: "Pcs/Bnd1",field: "pcspbundle1"},
                         {title: "Bundle2",field: "bundle2"},
                         {title: "Pcs/Bnd2",field: "pcspbundle2"},
-                        {title: "Gdswt",field: "gdswt"},
-                        {title: "Value",field: "gdsprice"},
+                        {title: "Gdswt",field: "gdswt"  formatter:"money", 
+                formatterParams:{thousand:",",precision:3},},
+                        {title: "Value",field: "gdsprice"  formatter:"money", 
+                formatterParams:{thousand:",",precision:3},},
 
                         // {title:"Approve Single" , hozAlign:"center",visible:visibleApprove,headerSort:false, responsive:0,
                         //     formatter:function(cell, onRendered){

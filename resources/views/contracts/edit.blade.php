@@ -246,7 +246,6 @@ dynamicTable = new Tabulator("#dynamicTable", {
             formatterParams:{thousand:",",precision:2},
             validator:["required","integer"],
             cellEdited: updateValues,
-            bottomCalc: "sum", 
             },
         
         {   title:"Pcs/Bnd1",      
@@ -258,7 +257,6 @@ dynamicTable = new Tabulator("#dynamicTable", {
             formatterParams:{thousand:",",precision:2},
             validator:["required","integer"] ,
             cellEdited: updateValues  ,
-            bottomCalc: "sum", 
             },
 
         {   title:"Bundle2",       
@@ -269,7 +267,6 @@ dynamicTable = new Tabulator("#dynamicTable", {
             formatterParams:{thousand:",",precision:2},
             validator:["required","integer"],
             cellEdited: updateValues  ,
-            bottomCalc: "sum", 
             },
 
         {   title:"Pcs/Bnd2",      
@@ -280,7 +277,6 @@ dynamicTable = new Tabulator("#dynamicTable", {
             formatterParams:{thousand:",",precision:2},
             validator:["required","integer"],
             cellEdited: updateValues ,
-            bottomCalc: "sum", 
             },
 
         {   title:"TotPcs",        
