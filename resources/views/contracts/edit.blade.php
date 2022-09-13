@@ -309,8 +309,7 @@ dynamicTable = new Tabulator("#dynamicTable", {
             formatterParams:{thousand:",",precision:3},
             validator:["required","numeric"], 
             cellEdited:updateValues, 
-            bottomCalc:"sum", 
-            bottomCalcParams:{precision:3}      },
+        },
         
         {   title:"Val($)",    
             field:"gdspricetot",
