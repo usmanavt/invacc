@@ -83,7 +83,7 @@
                         <span class="text-indigo-500 border-b">Existing Materials</span>
                         <ul class="h-auto overflow-y-scroll">
                             @foreach ($materials as $material)
-                                <li>{{ $material->title }}</li>
+                                <li>{{ $material->title }} | {{ $material->dimension }}</li>
                             @endforeach
                         </ul>
 
