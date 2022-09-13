@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\SkuController;
 use App\Http\Controllers\HeadController;
 use App\Http\Controllers\BrandController;
+use App\Http\Controllers\HscodeController;
 use App\Http\Controllers\SourceController;
 use App\Http\Controllers\SubheadController;
 use App\Http\Controllers\CategoryController;
@@ -51,10 +52,16 @@ Route::resource('locations', LocationController::class);
 Route::resource('heads', HeadController::class);
 //  Subhead Controller
 Route::resource('subheads', SubheadController::class);
+//  HSE Controller
+Route::resource('hscodes', HscodeController::class);
 //  Material Controller
 Route::get('/getMaterialMaster', [MaterialController::class, 'getMaster'])->name('materials.master');
 Route::get('/copymaterial/copy/{material}', [MaterialController::class, 'copyMaterial'])->name('materials.copy');
 Route::resource('materials', MaterialController::class);
+
+
+
+
 // Contract Controller
 Route::get('/getContractMaster', [ContractController::class, 'getMaster'])->name('contracts.master');
 Route::get('/getContractDetails', [ContractController::class, 'getDetails'])->name('contracts.details');

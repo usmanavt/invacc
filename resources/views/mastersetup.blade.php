@@ -52,6 +52,10 @@
                             <i class="fa-solid fa-kitchen-set fa-2xl"></i> ChartOfAccount
                         </a>
 
+                        <a  class="basis-0 w-full md:basis-1/3 bg-blue-500 hover:bg-blue-700 text-white px-2 py-4 rounded-lg shadow-lg" href="{{ route('hscodes.index') }}">
+                            <i class="fa-solid fa-kitchen-set fa-2xl"></i> HS Codes
+                        </a>
+
                         <a  class="basis-0 w-full md:basis-1/3 bg-blue-500 hover:bg-blue-700 text-white px-2 py-4 rounded-lg shadow-lg" href="{{ route('materials.index') }}">
                             <i class="fa-solid fa-arrow-up-from-bracket fa-2xl"></i> Materials
                         </a>

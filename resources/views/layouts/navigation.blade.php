@@ -42,6 +42,7 @@
                             <x-dropdown-link href="{{ route('locations.index') }}">Locations</x-dropdown-link>
                             <x-dropdown-link href="{{ route('heads.index') }}">Account Heads</x-dropdown-link>
                             <x-dropdown-link href="{{ route('subheads.index') }}">Chart of Accounts</x-dropdown-link>
+                            <x-dropdown-link href="{{ route('hscodes.index') }}">Hscode</x-dropdown-link>
                             <x-dropdown-link href="{{ route('materials.index') }}">Materials</x-dropdown-link>
                         </x-slot>
                     </x-dropdown>

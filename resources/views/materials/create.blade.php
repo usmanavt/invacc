@@ -26,7 +26,7 @@
 
 
                                 <x-label for="title" value="Title"/>
-                                <x-input id="title" class="bg-indigo-100" type="text" name="title" :value="old('title')"  required minlength="3"/>
+                                <x-input id="title" class="bg-indigo-100 w-96" type="text" name="title" :value="old('title')"  required minlength="3"/>
                                 @if($errors->has('title'))<div class="text-red-500 text-xs">{{ $errors->first('title') }}</div>@endif
                                 
                                 <x-label for="nick" value="Nick"/>
