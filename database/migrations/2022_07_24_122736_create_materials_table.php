@@ -22,6 +22,7 @@ class CreateMaterialsTable extends Migration
             $table->bigInteger('sku_id');
             $table->bigInteger('brand_id');
             $table->bigInteger('source_id');
+            $table->bigInteger('hscode_id');
             $table->string('category');
             $table->string('dimension');
             $table->string('source');

@@ -74,6 +74,14 @@
                                     @endforeach
                                 </select>
 
+                               
+                                <x-label for="" value="hscode"/>
+                                <select required name="hscode_id" class="bg-indigo-100 w-full" required onchange="getHiddenValues(this)">
+                                    <option value="" selected>--hscode</option>
+                                    @foreach ($hscodes as $hscode)
+                                        <option value="{{ $hscode->id }}">{{ $hscode->hscode }}</option>
+                                    @endforeach
+                                </select>
 
                                 <div class="mt-2">
                                     <button class="inline-flex items-center px-4 py-2 bg-green-500 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-green-700 active:bg-green-900 focus:outline-none focus:border-green-900 focus:ring ring-gray-300 disabled:opacity-25 transition ease-in-out duration-150">
@@ -86,7 +94,7 @@
                         {{-- Listing --}}
                         <div class="ml-4 pt-1 border border-slate-300 w-full p-2">
                             <span class="text-indigo-500 border-b">Existing Materials</span>
-                            <ul class="h-28 overflow-y-scroll">
+                            <ul class="h-auto overflow-y-scroll">
                                 @foreach ($materials as $material)
                                     <li>{{ $material->title }} | {{ $material->dimension }}</li>
                                 @endforeach

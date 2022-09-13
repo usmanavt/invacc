@@ -12,7 +12,7 @@ class Dimension extends Model
     protected $tabel = 'dimensions';
     protected $fillable = ['title','status'];
 
-     //  Relationships
-     public function materials(){ return $this->hasMany(Material::class); }
+    //  Relationships
+    public function materials(){ return $this->hasMany(Material::class); }
 
 }

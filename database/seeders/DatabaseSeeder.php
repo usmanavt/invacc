@@ -288,6 +288,7 @@ class DatabaseSeeder extends Seeder
         ]);
     }
 
+
     public function adminSeeder()
     {
         User::create([

@@ -30,7 +30,7 @@
     
 
                             <x-label for="" value="Category"/>
-                            <x-input class="" type="text"  name="category" value="{{ $material->category }}" />
+                            <x-input class="" type="text"  name="category" value="{{ $material->category }}" disabled />
                             <input type="hidden" name="category_id" value="{{ $material->category_id }}">
 
                             <x-label for="" value="dimension"/>
@@ -45,18 +45,21 @@
                             </select>
 
                             <x-label for="" value="Source"/>
-                            <x-input class="" type="text"  name="source" value="{{ $material->source }}" />
+                            <x-input class="" type="text"  name="source" value="{{ $material->source }}" disabled />
                             <input type="hidden" name="source_id" value="{{ $material->source_id }}">
 
                             <x-label for="" value="Sku"/>
-                            <x-input class="" type="text"  name="sku" value="{{ $material->sku }}" />
+                            <x-input class="" type="text"  name="sku" value="{{ $material->sku }}" disabled />
                             <input type="hidden" name="sku_id" value="{{ $material->sku_id }}">
                         
 
                             <x-label for="" value="Brand"/>
-                            <x-input class="" type="text"  name="brand" value="{{ $material->brand }}" />
+                            <x-input class="" type="text"  name="brand" value="{{ $material->brand }}" disabled />
                             <input type="hidden" name="brand_id" value="{{ $material->brand_id }}">
                             
+                            {{-- <x-label for="" value="hscode"/>
+                            <x-input class="" type="text"   value="{{ $material->hscodes->hscode }}" disabled /> --}}
+                                <input type="hidden" name="hscode_id" value="{{ $material->hscode_id }}">
 
                             <input class="checked:bg-blue-500 checked:border-blue-500 focus:outline-none" type="checkbox" name="status"
                             @if ($material->status == 1)
