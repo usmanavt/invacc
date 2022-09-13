@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use DB;
 use App\Models\Sku;
 use App\Models\Brand;
+use App\Models\Hscode;
 use App\Models\Source;
 use App\Models\Category;
 use App\Models\Material;
@@ -19,7 +20,10 @@ class MaterialController extends Controller
         $search = $request->search;
         $materials = Material::where(function($q) use ($search){
             $q->where('title','LIKE',"%$search%")
-            ->orWhere('nick','LIKE',"%$search%");
+            ->orWhere('nick','LIKE',"%$search%")
+            ->orWhereHas('hscodes', function($qu) use ($search){
+                $qu->where('hscode','LIKE',"$search");
+            });
         })
         ->orderBy('id','desc')
         ->paginate(5);
@@ -50,6 +54,7 @@ class MaterialController extends Controller
             ->with('dimensions',Dimension::all())
             ->with('sources',Source::all())
             ->with('brands',Brand::all())
+            ->with('hscodes',Hscode::select('id','hscode')->get())
             ->with('materials',Material::all())
             ;
     }
@@ -79,6 +84,7 @@ class MaterialController extends Controller
             $material->source_id = $request->source_id;
             $material->sku_id = $request->sku_id;
             $material->brand_id = $request->brand_id;
+            $material->hscode_id = $request->hscode_id;
             $material->category = $request->category;
             $material->dimension = $request->dimension;
             $material->source = $request->source;
@@ -109,6 +115,7 @@ class MaterialController extends Controller
         ->with('dimensions',Dimension::all())
         // ->with('sources',Source::all())
         // ->with('brands',Brand::all())
+        // ->with('hscodes',Hscode::all())
         ->with('material',$material)
         ->with('materials',Material::select('id','title')->get())
         ;
@@ -122,6 +129,7 @@ class MaterialController extends Controller
         ->with('dimensions',Dimension::all())
         ->with('sources',Source::all())
         ->with('brands',Brand::all())
+        ->with('hscodes',Hscode::select('id','hscode')->get())
         ->with('material',$material)
         ;
     }
@@ -141,6 +149,7 @@ class MaterialController extends Controller
             $material->source_id = $request->source_id;
             $material->sku_id = $request->sku_id;
             $material->brand_id = $request->brand_id;
+            $material->hscode_id = $request->hscode_id;
             $material->category = $request->category;
             $material->dimension = $request->dimension;
             $material->source = $request->source;

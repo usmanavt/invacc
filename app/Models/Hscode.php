@@ -6,13 +6,14 @@ use App\Models\Material;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
-class Dimension extends Model
+class Hscode extends Model
 {
     use HasFactory;
-    protected $tabel = 'dimensions';
-    protected $fillable = ['title','status'];
+    protected $fillable = ['hscode','cd','st','rd','acd','ast','it','wse'];
 
     //  Relationships
-    public function materials(){ return $this->hasMany(Material::class); }
-
+    public function material()
+    {
+        return $this->belongsTo(Material::class);
+    }
 }

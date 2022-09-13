@@ -90,6 +90,17 @@
                                     @endforeach
                                 </select>
 
+                                <x-label for="" value="hscode"/>
+                                <select required name="hscode_id" class="bg-indigo-100 w-full" required onchange="getHiddenValues(this)">
+                                    @foreach ($hscodes as $hscode)
+                                        @if ($material->hscode_id == $hscode->id)
+                                            <option value="{{ $hscode->id }}" selected>{{ $hscode->hscode }}</option>
+                                        @else                                            
+                                            <option value="{{ $hscode->id }}">{{ $hscode->hscode }}</option>
+                                        @endif
+                                    @endforeach
+                                </select>
+
                                 <input class="checked:bg-blue-500 checked:border-blue-500 focus:outline-none" type="checkbox" name="status"
                                 @if ($material->status == 1)
                                     checked
