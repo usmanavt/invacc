@@ -19,8 +19,8 @@ class CreateContractsTable extends Migration
             $table->bigInteger('user_id');
             $table->string('invoice_date');
             $table->string('number',20);
-            $table->decimal('conversion_rate', 15, 2)->nullable();
-            $table->decimal('insurance', 15, 2)->nullable();
+            $table->decimal('conversion_rate', 15, 3)->nullable();
+            $table->decimal('insurance', 15, 3)->nullable();
             $table->timestamps();
         });
     }

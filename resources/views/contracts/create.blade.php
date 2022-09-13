@@ -242,7 +242,6 @@
                 formatterParams:{thousand:",",precision:2},
                 validator:["required","integer"],
                 cellEdited: updateValues, 
-                bottomCalc: "sum", 
                },
             
             {   title:"Pcs/Bnd1",      
@@ -254,7 +253,6 @@
                 formatterParams:{thousand:",",precision:2},
                 validator:["required","integer"] ,
                 cellEdited: updateValues   ,
-                bottomCalc: "sum",
             },
 
             {   title:"Bundle2",       
@@ -265,7 +263,6 @@
                 formatterParams:{thousand:",",precision:2},
                 validator:["required","integer"],
                 cellEdited: updateValues   ,
-                bottomCalc: "sum",
             },
 
             {   title:"Pcs/Bnd2",      
@@ -276,7 +273,6 @@
                 formatterParams:{thousand:",",precision:2},
                 validator:["required","integer"],
                 cellEdited: updateValues  ,
-                bottomCalc: "sum",
             },
 
             {   title:"TotPcs",        

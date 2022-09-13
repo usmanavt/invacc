@@ -34,8 +34,8 @@ class CreateContractDetailsTable extends Migration
             $table->decimal('pcspbundle1',6,2);
             $table->decimal('bundle2',6,2)->nullable();
             $table->decimal('pcspbundle2',6,2)->nullable();
-            $table->decimal('gdswt', 15,2);
-            $table->decimal('gdsprice',15,2);
+            $table->decimal('gdswt', 15,3);
+            $table->decimal('gdsprice',15,3);
             $table->timestamps();
         });
     }
