@@ -32,7 +32,7 @@
                             @if($errors->has('title'))<div class="text-red-500 text-xs">{{ $errors->first('title') }}</div>@endif
 
                             <x-label for="ob" :value="__('O/Balance')"/>
-                            <x-input id="ob" class="bg-indigo-100" type="text" name="ob" :value="old('ob')"  required minlength="3"/>
+                            <x-input id="ob" class="bg-indigo-100" type="text" name="ob" :value="old('ob')" />
                             @if($errors->has('ob'))<div class="text-red-500 text-xs">{{ $errors->first('ob') }}</div>@endif
 
                             <div class="mt-2">
@@ -48,7 +48,7 @@
                     {{-- Listing --}}
                     <div class="ml-4 pt-1 border border-slate-300 w-full p-2">
                         <span class="text-indigo-500 border-b">Existing Subheads</span>
-                        <ul class="h-28 overflow-y-scroll">
+                        <ul class="h-auto overflow-y-scroll">
                             @foreach ($subheads as $subhead)
                                 <li>{{ $subhead->title }}</li>
                             @endforeach
