@@ -32,7 +32,7 @@
                         {{-- Listing --}}
                         <div class="ml-4 pt-1 border border-slate-300 w-full p-2">
                             <span class="text-indigo-500 border-b">Existing Dimensions</span>
-                            <ul class="h-28 overflow-y-scroll">
+                            <ul class="h-auto overflow-y-scroll">
                                 @foreach ($dimensions as $dimension)
                                     <li>{{ $dimension->title }}</li>
                                 @endforeach

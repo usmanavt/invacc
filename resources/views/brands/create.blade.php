@@ -32,7 +32,7 @@
                         {{-- Listing --}}
                         <div class="ml-4 pt-1 border border-slate-300 w-full p-2">
                             <span class="text-indigo-500 border-b">Existing Brands</span>
-                            <ul class="h-28 overflow-y-scroll">
+                            <ul class="h-auto overflow-y-scroll">
                                 @foreach ($brands as $brand)
                                     <li>{{ $brand->title }}</li>
                                 @endforeach

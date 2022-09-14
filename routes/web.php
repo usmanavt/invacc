@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\SkuController;
 use App\Http\Controllers\HeadController;
+use App\Http\Controllers\UserController;
 use App\Http\Controllers\BrandController;
 use App\Http\Controllers\HscodeController;
 use App\Http\Controllers\SourceController;
@@ -58,11 +59,13 @@ Route::resource('hscodes', HscodeController::class);
 Route::get('/getMaterialMaster', [MaterialController::class, 'getMaster'])->name('materials.master');
 Route::get('/copymaterial/copy/{material}', [MaterialController::class, 'copyMaterial'])->name('materials.copy');
 Route::resource('materials', MaterialController::class);
-
+//  Users Controller
+Route::resource('users',UserController::class);
 
 
 
 // Contract Controller
-Route::get('/getContractMaster', [ContractController::class, 'getMaster'])->name('contracts.master');
-Route::get('/getContractDetails', [ContractController::class, 'getDetails'])->name('contracts.details');
+Route::get('/contracts/{contract}/printcontract', [ContractController::class, 'printContract'])->name('contracts.print');
+Route::get('/contracts/getContractMaster', [ContractController::class, 'getMaster'])->name('contracts.master');
+Route::get('/contracts/getContractDetails', [ContractController::class, 'getDetails'])->name('contracts.details');
 Route::resource('contracts', ContractController::class);

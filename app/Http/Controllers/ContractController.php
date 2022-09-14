@@ -8,6 +8,7 @@ use App\Models\Material;
 use App\Models\Supplier;
 use Illuminate\Http\Request;
 use App\Models\ContractDetails;
+use \Mpdf\Mpdf as PDF;
 use Illuminate\Support\Facades\Session;
 
 class ContractController extends Controller
@@ -221,6 +222,48 @@ class ContractController extends Controller
     public function destroy(Contract $contract)
     {
         //
+    }
+
+    public function printContract($id)
+    {
+        // dd($id);
+        $contract = Contract::findOrFail($id);
+        $cd = ContractDetails::where('contract_id',$contract->id)->get();
+        $html = view('contracts.print')->with('cd',$cd)->with('contract',$contract)->render();
+        $filename = $contract->id . '.pdf';
+        ini_set('max_execution_time', '2000');
+        ini_set("pcre.backtrack_limit", "100000000");   
+        ini_set("memory_limit","8000M");
+        ini_set('allow_url_fopen',1);
+        $temp = storage_path('temp');
+        // Create the mPDF document
+        $mpdf = new PDF( [
+            'mode' => 'utf-8',
+            'format' => 'A4',
+            'margin_header' => '3',
+            'margin_top' => '20',
+            'margin_bottom' => '20',
+            'margin_footer' => '2',
+            'default_font_size' => 9,
+            'orientation' => 'L'
+        ]);     
+        $mpdf->SetHTMLFooter('
+            <table width="100%" style="border-top:1px solid gray">
+                <tr>
+                    <td width="33%">{DATE j-m-Y}</td>
+                    <td width="33%" align="center">{PAGENO}/{nbpg}</td>
+                    <td width="33%" style="text-align: right;">' . $filename . '</td>
+                </tr>
+            </table>');
+        $chunks = explode("chunk", $html);
+        foreach($chunks as $key => $val) {
+            $mpdf->WriteHTML($val);
+        }
+        $mpdf->Output($filename,'I');
+        // 'D': download the PDF file
+        // 'I': serves in-line to the browser
+        // 'S': returns the PDF document as a string
+        // 'F': save as file $file_out
     }
 
 }

@@ -68,6 +68,9 @@
                         </x-slot>
     
                         <x-slot name="content">
+                            @if (auth()->user()->email == 'ali.jibran@auvitronics.com')
+                            <x-dropdown-link href="{{ route('users.index') }}">Users</x-dropdown-link>
+                            @endif
                             <x-dropdown-link href="{{ route('transaction') }}">Transaction</x-dropdown-link>
                             <x-dropdown-link href="{{ route('contracts.index') }}">Contracts</x-dropdown-link>
                             {{-- <x-dropdown-link href="{{ route('skus.index') }}">Skus</x-dropdown-link>
