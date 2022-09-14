@@ -17,7 +17,8 @@ class UserController extends Controller
     public function index(Request $request)
     {
         $search = $request->search;
-        $users = User::where(function($q) use ($search){
+        $users = User::select('id','name','email')
+        ->where(function($q) use ($search){
             $q->where('name','LIKE',"%$search%")
             ->where('email','LIKE',"%$search%");
         })
@@ -100,12 +101,6 @@ class UserController extends Controller
 
     }
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \App\Models\User  $user
-     * @return \Illuminate\Http\Response
-     */
     public function destroy(User $user)
     {
         return redirect()->back();

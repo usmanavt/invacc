@@ -65,6 +65,7 @@ Route::resource('users',UserController::class);
 
 
 // Contract Controller
-Route::get('/getContractMaster', [ContractController::class, 'getMaster'])->name('contracts.master');
-Route::get('/getContractDetails', [ContractController::class, 'getDetails'])->name('contracts.details');
+Route::get('/contracts/{contract}/printcontract', [ContractController::class, 'printContract'])->name('contracts.print');
+Route::get('/contracts/getContractMaster', [ContractController::class, 'getMaster'])->name('contracts.master');
+Route::get('/contracts/getContractDetails', [ContractController::class, 'getDetails'])->name('contracts.details');
 Route::resource('contracts', ContractController::class);
