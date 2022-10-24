@@ -4979,7 +4979,15 @@ __webpack_require__.r(__webpack_exports__);
 
 
 window.Alpine = alpinejs__WEBPACK_IMPORTED_MODULE_1__["default"];
-alpinejs__WEBPACK_IMPORTED_MODULE_1__["default"].start();
+alpinejs__WEBPACK_IMPORTED_MODULE_1__["default"].start(); //  For Setting Dates
+
+function setDateToToday(element) {
+  var now = new Date();
+  var day = ("0" + now.getDate()).slice(-2);
+  var month = ("0" + (now.getMonth() + 1)).slice(-2);
+  var today = now.getFullYear() + "-" + month + "-" + day;
+  element.setAttribute("min", today); //  LearnMore - https://stackoverflow.com/questions/12346381/set-date-in-input-type-date?answertab=active#tab-top
+}
 
 /***/ }),
 

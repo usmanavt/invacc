@@ -21,7 +21,7 @@
                         {{-- Contract Master --}}
                         <div class="grid grid-cols-12 gap-2 py-2 items-center">
 
-                            <label for="supplier_id">Supplier</label>
+                            <label for="supplier_id">Supplier<x-req /></label>
                             <select class="col-span-2" name="supplier_id" id="supplier_id" required>
                                 <option value="" selected>--Supplier</option>
                                 @foreach($suppliers as $supplier)
@@ -29,10 +29,10 @@
                                 @endforeach
                             </select>
 
-                            <label for="invoice_date">Invoice Date</label>
-                            <input type="date" class="col-span-2" id="invoice_date" name="invoice_date" required>
+                            <label for="invoice_date">Invoice Date<x-req /></label>
+                            <input type="date" value="{{ date('Y-m-d') }}" class="col-span-2" id="invoice_date" name="invoice_date" required>
 
-                            <label for="number">Invoice #</label>
+                            <label for="number">Invoice #<x-req /></label>
                             <input type="text" class="col-span-2" id="number" name="number" placeholder="Invoice No"
                                 minlength="3" title="minimum 3 characters required" required>
 
@@ -57,26 +57,99 @@
         </div>
     </div>
 
-    
-    @push('scripts')
+
+@push('scripts')
     <script src="{{ asset('js/tabulator.min.js') }}"></script>
-    @endpush
-    
-    <x-tabulator-modal />
+@endpush
+
+<x-tabulator-modal title="Materials" />
 
 @push('scripts')
 <script>
     let table;
     let searchValue = "";
     const deleteIcon = function(cell,formatterParams){return "<i class='fa fa-trash text-red-500'></i>";};
-    const getMaster = @json(route('materials.master'));
+    const getMasterData = @json(route('materials.master'));
     let csrfToken = document.head.querySelector("[name~=csrf-token][content]").content;
     let modal = document.getElementById("myModal")
+    console.log(getMasterData);
 
-    let dyanmicTable = ""; // Tabulator 
+    let dyanmicTable = ""; // Tabulator
     let dynamicTableData = [];
 
+    // Add event handler to read keyboard key up event
+    document.addEventListener('keyup', (e)=>{
+        //  We are using ctrl key + 'ArrowUp' to show Modal
+        if(e.ctrlKey && e.keyCode == 32){
+            showModal()
+        }
+    })
+    // Ensure Buttons Are Closed
+    function disableSubmitButton()
+    {
+        if(dynamicTableData.length <= 0 )
+        {
+            document.getElementById("submitbutton").disabled = true;
+        }else {
+            document.getElementById("submitbutton").disabled = false;
+        }
+    }
+</script>
+@endpush
+
+@push('scripts')
+<script>
     //  ---------------- For MODAL -----------------------//
+    function showModal(){ modal.style.display = "block"}
+    function closeModal(){  modal.style.display = "none"}
+    //  When the user clicks anywhere outside of the modal, close it
+    window.onclick = function(event) {
+        if (event.target == modal) {
+            modal.style.display = "none";
+        }
+    }
+    //  ------------------Dynamic Table----------------------//
+    //  Adds actual data to row
+    function pushDynamicData(data)
+    {
+        var inArray = dynamicTableData.filter( i => dynamicTableData.id == data.id)
+
+        dynamicTableData.push({ id:data.id})
+
+        dynamicTable.addData([
+            {
+                id:data.id,
+                title:data.title,
+                category_id:data.category_id,
+                category:data.category,
+
+                source_id:data.source_id,
+                source:data.source,
+
+                brand_id:data.brand_id,
+                brand:data.brand,
+
+                sku_id:data.sku_id,
+                sku:data.sku,
+
+                dimension_id:data.dimension_id,
+                dimension:data.dimension,
+
+                bundle1:0,
+                bundle2:0,
+                pcspbundle1:0,
+                pcspbundle2:0,
+                gdswt:0,
+                gdsprice:0,
+                gdspricetot:0
+            }
+        ])
+    }
+</script>
+@endpush
+
+@push('scripts')
+<script>
     //  Table Filter
     function dataFilter(element)
     {
@@ -87,23 +160,23 @@
     table = new Tabulator("#tableData", {
         autoResize:true,
         responsiveLayout:"collapse",
-        layout:"fitData",    	
-        index:"id",                                 
-        placeholder:"No Data Available",            
-        pagination:true,                            
-        paginationMode:"remote",                    
+        layout:"fitData",
+        index:"id",
+        placeholder:"No Data Available",
+        pagination:true,
+        paginationMode:"remote",
         sortMode:"remote",
         filterMode:"remote",
-        paginationSize:20,                      
-        paginationSizeSelector:[10,25,50,100],  
+        paginationSize:10,
+        paginationSizeSelector:[10,25,50,100],
         ajaxParams: function(){
             return {search:searchValue};
         },
-        ajaxURL: getMaster,
-        ajaxContentType:"json", 
+        ajaxURL: getMasterData,
+        ajaxContentType:"json",
         initialSort:[ {column:"id", dir:"desc"} ],
         height:"100%",
-                    
+
         columns:[
             // Master Data
             {title:"Id", field:"id" , responsive:0},
@@ -113,11 +186,6 @@
             {title:"Source", field:"source" ,  responsive:0},
             {title:"Sku", field:"sku" ,  responsive:0},
             {title:"Brand", field:"brand" ,  responsive:0},
-            // {title:"Delete" , formatter:deleteIcon, hozAlign:"center",headerSort:false, responsive:0,
-            //     cellClick:function(e, cell){ 
-            //         // window.open(window.location + "/" + cell.getRow().getData().id + "/delete" ,"_self");
-            //     }
-            // },
         ],
         // Extra Pagination Data for End Users
         ajaxResponse:function(getDataUrl, params, response){
@@ -133,57 +201,13 @@
         var simple = {...row}
         var data = simple._row.data
         // console.log(data);
-        //  Filter Data here . 
+        //  Filter Data here .
         var result = dynamicTableData.filter( dt => dt.id == data.id)
         if(result.length <= 0)
         {
-           pushDynamicData(data)
+            pushDynamicData(data)
         }
     })
-    function showModal(){ modal.style.display = "block"}
-    function closeModal(){  modal.style.display = "none"}
-    //  When the user clicks anywhere outside of the modal, close it
-    window.onclick = function(event) {
-        if (event.target == modal) {
-            modal.style.display = "none";
-        }
-    } 
-    // -----------------FOR MODAL -------------------------------//
-
-    //  ------------------Dynamic Table----------------------//
-    //  Adds actual data to row
-    function pushDynamicData(data)
-    {
-        dynamicTableData.push({ 
-            id:data.id,
-            title:data.title,
-            category_id:data.category_id,
-            category:data.category,
-            
-            source_id:data.source_id,
-            source:data.source,
-            
-            brand_id:data.brand_id,
-            brand:data.brand,
-            
-            sku_id:data.sku_id,
-            sku:data.sku,
-            
-            dimension_id:data.dimension_id,
-            dimension:data.dimension,
-
-            bundle1:0,
-            bundle2:0,
-            pcspbundle1:0,
-            pcspbundle2:0,
-            gdswt:0,
-            gdsprice:0,
-            gdspricetot:0
-        })
-        // dyanmicTable.setData()
-        dynamicTable.setData(dynamicTableData);
-    }
-
     var updateValues = (cell) => {
         var data = cell.getData();
         var sum = (Number(data.bundle1) * Number(data.pcspbundle1)) + (Number(data.bundle2) * Number(data.pcspbundle2))
@@ -213,7 +237,7 @@
         reactiveData:true,
         columns:[
             {title:"Delete" , formatter:deleteIcon, headerSort:false, responsive:0,
-                cellClick:function(e, cell){ 
+                cellClick:function(e, cell){
                     cell.getRow().delete();
                     dynamicTableData = dynamicTable.getData(); // Ensure that our data is clean
                     dynamicTable.redraw();
@@ -233,29 +257,29 @@
             {title:"Brand",             field:"brand_id",       cssClass:"bg-gray-200 font-semibold",visible:false},
             {title:"Brand",             field:"brand",          cssClass:"bg-gray-200 font-semibold"},
 
-            {   title:"Bundle1",       
+            {   title:"Bundle1",
                 field:"bundle1",
                 editor:"number",
                 cssClass:"bg-green-200 font-semibold",
                 validator:"required",
-                formatter:"money", 
+                formatter:"money",
                 formatterParams:{thousand:",",precision:2},
                 validator:["required","integer"],
-                cellEdited: updateValues, 
+                cellEdited: updateValues,
                },
-            
-            {   title:"Pcs/Bnd1",      
+
+            {   title:"Pcs/Bnd1",
                 field:"pcspbundle1",
                 editor:"number",
                 cssClass:"bg-green-200 font-semibold",
                 validator:"required" ,
-                formatter:"money", 
+                formatter:"money",
                 formatterParams:{thousand:",",precision:2},
                 validator:["required","integer"] ,
                 cellEdited: updateValues   ,
             },
 
-            {   title:"Bundle2",       
+            {   title:"Bundle2",
                 field:"bundle2",
                 editor:"number",
                 cssClass:"bg-yellow-200 font-semibold",
@@ -265,17 +289,17 @@
                 cellEdited: updateValues   ,
             },
 
-            {   title:"Pcs/Bnd2",      
+            {   title:"Pcs/Bnd2",
                 field:"pcspbundle2",
                 editor:"number",
                 cssClass:"bg-yellow-200 font-semibold",
-                formatter:"money", 
+                formatter:"money",
                 formatterParams:{thousand:",",precision:2},
                 validator:["required","integer"],
                 cellEdited: updateValues  ,
             },
 
-            {   title:"TotPcs",        
+            {   title:"TotPcs",
                 field:"ttpcs",
                 cssClass:"bg-gray-200 font-semibold",
                 formatter:"money",
@@ -286,33 +310,33 @@
                 },
                 bottomCalc:totalVal },
 
-            {   title:"Wt(MT)",        
+            {   title:"Wt(MT)",
                 field:"gdswt",
                 editor:"number",
                 cssClass:"bg-green-200 font-semibold",
-                formatter:"money", 
+                formatter:"money",
                 formatterParams:{thousand:",",precision:3},
                 validator:["required","numeric"],
-                cellEdited:updateValues, 
-                bottomCalc:"sum", 
+                cellEdited:updateValues,
+                bottomCalc:"sum",
                 bottomCalcParams:{precision:3}  },
 
-            {   title:"Rs($)",         
+            {   title:"Rs($)",
                 field:"gdsprice",
                 editor:"number",
                 cssClass:"bg-green-200 font-semibold",
-                formatter:"money", 
+                formatter:"money",
                 formatterParams:{thousand:",",precision:3},
-                validator:["required","numeric"], 
-                cellEdited:updateValues, 
+                validator:["required","numeric"],
+                cellEdited:updateValues,
             },
-            
-            {   title:"Val($)",    
+
+            {   title:"Val($)",
                 field:"gdspricetot",
                 cssClass:"bg-gray-200 font-semibold",
                 bottomCalc:totalVal,
                 bottomCalcParams:{precision:3} ,
-                formatter:"money", 
+                formatter:"money",
                 formatterParams:{
                     decimal:".",
                     thousand:",",
@@ -320,41 +344,13 @@
                     precision:3     },
                 formatter:function(cell,row)
                 {
-                    return (cell.getData().gdswt * cell.getData().gdsprice) 
+                    return (cell.getData().gdswt * cell.getData().gdsprice)
                 }
             },
 
         ],
     })
 
-    // Add event handler to read keyboard key up event
-    document.addEventListener('keyup', (e)=>{
-        //  We are using ctrl key + 'ArrowUp' to show Modal
-        if(e.ctrlKey && e.keyCode == 32){
-            showModal()
-        }
-    })
-    // Ensure Buttons Are Closed
-    function disableSubmitButton()
-    {
-        if(dynamicTableData.length <= 0 )
-        {
-            document.getElementById("submitbutton").disabled = true;
-        }else {
-            document.getElementById("submitbutton").disabled = false;
-        }
-    }
-    //  For Setting Dates
-    function setDateToToday()
-    {
-        var arr = document.getElementById('invdate');
-        var now = new Date();
-        var day = ("0" + now.getDate()).slice(-2);
-        var month = ("0" + (now.getMonth() + 1)).slice(-2);
-        var today = now.getFullYear()+"-"+(month)+"-"+(day) ;
-        arr.setAttribute("min",today);
-        //  LearnMore - https://stackoverflow.com/questions/12346381/set-date-in-input-type-date?answertab=active#tab-top
-    }
     // Validation & Post
     function validateForm()
     {
@@ -423,10 +419,8 @@
             showSnackbar("Errors occured","red");
             disableSubmitButton(false);
         })
-    } 
+    }
 </script>
 @endpush
-
-
 
 </x-app-layout>

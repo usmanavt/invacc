@@ -18,7 +18,7 @@
                             <button
                                 class="flex items-center text-sm font-medium text-gray-500 hover:text-gray-700 hover:border-gray-300 focus:outline-none focus:text-gray-700 focus:border-gray-300 transition duration-150 ease-in-out">
                                 <div>Master Setup</div>
-    
+
                                 <div class="ml-1">
                                     <svg class="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg"
                                         viewBox="0 0 20 20">
@@ -29,7 +29,7 @@
                                 </div>
                             </button>
                         </x-slot>
-    
+
                         <x-slot name="content">
                             <x-dropdown-link href="{{ route('mastersetup') }}">Master</x-dropdown-link>
                             <x-dropdown-link href="{{ route('categories.index') }}">Categories</x-dropdown-link>
@@ -44,6 +44,9 @@
                             <x-dropdown-link href="{{ route('subheads.index') }}">Chart of Accounts</x-dropdown-link>
                             <x-dropdown-link href="{{ route('hscodes.index') }}">Hscode</x-dropdown-link>
                             <x-dropdown-link href="{{ route('materials.index') }}">Materials</x-dropdown-link>
+                            @if (auth()->user()->email == 'ali.jibran@auvitronics.com')
+                            <x-dropdown-link href="{{ route('users.index') }}">Users</x-dropdown-link>
+                            @endif
                         </x-slot>
                     </x-dropdown>
                 </div>
@@ -55,7 +58,7 @@
                             <button
                                 class="flex items-center text-sm font-medium text-gray-500 hover:text-gray-700 hover:border-gray-300 focus:outline-none focus:text-gray-700 focus:border-gray-300 transition duration-150 ease-in-out">
                                 <div>Transactions</div>
-    
+
                                 <div class="ml-1">
                                     <svg class="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg"
                                         viewBox="0 0 20 20">
@@ -66,23 +69,12 @@
                                 </div>
                             </button>
                         </x-slot>
-    
+
                         <x-slot name="content">
-                            @if (auth()->user()->email == 'ali.jibran@auvitronics.com')
-                            <x-dropdown-link href="{{ route('users.index') }}">Users</x-dropdown-link>
-                            @endif
+
                             <x-dropdown-link href="{{ route('transaction') }}">Transaction</x-dropdown-link>
                             <x-dropdown-link href="{{ route('contracts.index') }}">Contracts</x-dropdown-link>
-                            {{-- <x-dropdown-link href="{{ route('skus.index') }}">Skus</x-dropdown-link>
-                            <x-dropdown-link href="{{ route('dimensions.index') }}">Dimensions</x-dropdown-link>
-                            <x-dropdown-link href="{{ route('brands.index') }}">Brands</x-dropdown-link>
-                            <x-dropdown-link href="{{ route('sources.index') }}">Sources</x-dropdown-link>
-                            <x-dropdown-link href="{{ route('suppliers.index') }}">Suppliers</x-dropdown-link>
-                            <x-dropdown-link href="{{ route('customers.index') }}">Customers</x-dropdown-link>
-                            <x-dropdown-link href="{{ route('locations.index') }}">Locations</x-dropdown-link>
-                            <x-dropdown-link href="{{ route('heads.index') }}">Account Heads</x-dropdown-link>
-                            <x-dropdown-link href="{{ route('subheads.index') }}">Chart of Accounts</x-dropdown-link>
-                            <x-dropdown-link href="{{ route('materials.index') }}">Materials</x-dropdown-link> --}}
+                            <x-dropdown-link href="{{ route('cis.index') }}">Comm Invoices</x-dropdown-link>
                         </x-slot>
                     </x-dropdown>
                 </div>
@@ -94,7 +86,7 @@
                             <button
                                 class="flex items-center text-sm font-medium text-gray-500 hover:text-gray-700 hover:border-gray-300 focus:outline-none focus:text-gray-700 focus:border-gray-300 transition duration-150 ease-in-out">
                                 <div>Reports</div>
-    
+
                                 <div class="ml-1">
                                     <svg class="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg"
                                         viewBox="0 0 20 20">
@@ -105,7 +97,7 @@
                                 </div>
                             </button>
                         </x-slot>
-    
+
                         <x-slot name="content">
                             <x-dropdown-link href="{{ route('reports') }}">Reports</x-dropdown-link>
                             {{-- <x-dropdown-link href="{{ route('contracts.index') }}">Contracts</x-dropdown-link> --}}

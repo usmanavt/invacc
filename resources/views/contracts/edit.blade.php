@@ -60,13 +60,13 @@
         </div>
     </div>
 
-    
+
     @push('scripts')
     <script src="{{ asset('js/tabulator.min.js') }}"></script>
     @endpush
-    
+
     {{-- Modal - Should come below Tabulator --}}
-    <x-tabulator-modal />
+    <x-tabulator-modal title="Material"/>
 
     @push('scripts')
 <script>
@@ -77,7 +77,7 @@ const getMaster = @json(route('materials.master')); // For Material Modal
 let csrfToken = document.head.querySelector("[name~=csrf-token][content]").content;
 let modal = document.getElementById("myModal")
 
-let dyanmicTable = ""; // Tabulator 
+let dyanmicTable = ""; // Tabulator
 let dynamicTableData = @json($cd);
 
 
@@ -92,23 +92,23 @@ let dynamicTableData = @json($cd);
     table = new Tabulator("#tableData", {
         autoResize:true,
         responsiveLayout:"collapse",
-        layout:"fitData",    	
-        index:"id",                                 
-        placeholder:"No Data Available",            
-        pagination:true,                            
-        paginationMode:"remote",                    
+        layout:"fitData",
+        index:"id",
+        placeholder:"No Data Available",
+        pagination:true,
+        paginationMode:"remote",
         sortMode:"remote",
         filterMode:"remote",
-        paginationSize:20,                      
-        paginationSizeSelector:[10,25,50,100],  
+        paginationSize:20,
+        paginationSizeSelector:[10,25,50,100],
         ajaxParams: function(){
             return {search:searchValue};
         },
         ajaxURL: getMaster,
-        ajaxContentType:"json", 
+        ajaxContentType:"json",
         initialSort:[ {column:"id", dir:"desc"} ],
         height:"100%",
-                    
+
         columns:[
             // Master Data
             {title:"Id", field:"id" , responsive:0},
@@ -119,7 +119,7 @@ let dynamicTableData = @json($cd);
             {title:"Sku", field:"sku" ,  responsive:0},
             {title:"Brand", field:"brand" ,  responsive:0},
             // {title:"Delete" , formatter:deleteIcon, hozAlign:"center",headerSort:false, responsive:0,
-            //     cellClick:function(e, cell){ 
+            //     cellClick:function(e, cell){
             //         // window.open(window.location + "/" + cell.getRow().getData().id + "/delete" ,"_self");
             //     }
             // },
@@ -137,7 +137,7 @@ let dynamicTableData = @json($cd);
     table.on('rowClick',function(e,row){
         var simple = {...row}
         var data = simple._row.data
-        //  Filter Data here . 
+        //  Filter Data here .
         var result = dynamicTableData.filter( dt => dt.material_id == data.id)
         if(result.length <= 0)
         {
@@ -151,27 +151,27 @@ let dynamicTableData = @json($cd);
         if (event.target == modal) {
             modal.style.display = "none";
         }
-    } 
+    }
     // -----------------FOR MODAL -------------------------------//
 
 //  Adds actual data to row - EDIT Special
 function pushDynamicData(data)
 {
-    dynamicTableData.push({ 
+    dynamicTableData.push({
         material_id:data.id,
         material_title:data.title,
         category_id:data.category_id,
         category:data.category,
-        
+
         source_id:data.source_id,
         source:data.source,
-        
+
         brand_id:data.brand_id,
         brand:data.brand,
-        
+
         sku_id:data.sku_id,
         sku:data.sku,
-        
+
         dimension_id:data.dimension_id,
         dimension:data.dimension,
 
@@ -217,7 +217,7 @@ dynamicTable = new Tabulator("#dynamicTable", {
     reactiveData:true,
     columns:[
         {title:"Delete" , formatter:deleteIcon, headerSort:false, responsive:0,
-            cellClick:function(e, cell){ 
+            cellClick:function(e, cell){
                 cell.getRow().delete();
                 dynamicTableData = dynamicTable.getData(); // Ensure that our data is clean
                 dynamicTable.redraw();
@@ -237,29 +237,29 @@ dynamicTable = new Tabulator("#dynamicTable", {
         {title:"Brand",             field:"brand_id",       cssClass:"bg-gray-200 font-semibold",visible:false},
         {title:"Brand",             field:"brand",          cssClass:"bg-gray-200 font-semibold"},
 
-        {   title:"Bundle1",       
+        {   title:"Bundle1",
             field:"bundle1",
             editor:"number",
             cssClass:"bg-green-200 font-semibold",
             validator:"required",
-            formatter:"money", 
+            formatter:"money",
             formatterParams:{thousand:",",precision:2},
             validator:["required","integer"],
             cellEdited: updateValues,
             },
-        
-        {   title:"Pcs/Bnd1",      
+
+        {   title:"Pcs/Bnd1",
             field:"pcspbundle1",
             editor:"number",
             cssClass:"bg-green-200 font-semibold",
             validator:"required" ,
-            formatter:"money", 
+            formatter:"money",
             formatterParams:{thousand:",",precision:2},
             validator:["required","integer"] ,
             cellEdited: updateValues  ,
             },
 
-        {   title:"Bundle2",       
+        {   title:"Bundle2",
             field:"bundle2",
             editor:"number",
             cssClass:"bg-yellow-200 font-semibold",
@@ -269,17 +269,17 @@ dynamicTable = new Tabulator("#dynamicTable", {
             cellEdited: updateValues  ,
             },
 
-        {   title:"Pcs/Bnd2",      
+        {   title:"Pcs/Bnd2",
             field:"pcspbundle2",
             editor:"number",
             cssClass:"bg-yellow-200 font-semibold",
-            formatter:"money", 
+            formatter:"money",
             formatterParams:{thousand:",",precision:2},
             validator:["required","integer"],
             cellEdited: updateValues ,
             },
 
-        {   title:"TotPcs",        
+        {   title:"TotPcs",
             field:"ttpcs",
             cssClass:"bg-gray-200 font-semibold",
             formatter:"money",
@@ -290,33 +290,33 @@ dynamicTable = new Tabulator("#dynamicTable", {
             },
             bottomCalc:totalVal   },
 
-        {   title:"Wt(MT)",        
+        {   title:"Wt(MT)",
             field:"gdswt",
             editor:"number",
             cssClass:"bg-green-200 font-semibold",
-            formatter:"money", 
+            formatter:"money",
             formatterParams:{thousand:",",precision:3},
             validator:["required","numeric"],
-            cellEdited:updateValues, 
-            bottomCalc:"sum", 
+            cellEdited:updateValues,
+            bottomCalc:"sum",
             bottomCalcParams:{precision:3}  },
 
-        {   title:"Rs($)",         
+        {   title:"Rs($)",
             field:"gdsprice",
             editor:"number",
             cssClass:"bg-green-200 font-semibold",
-            formatter:"money", 
+            formatter:"money",
             formatterParams:{thousand:",",precision:3},
-            validator:["required","numeric"], 
-            cellEdited:updateValues, 
+            validator:["required","numeric"],
+            cellEdited:updateValues,
         },
-        
-        {   title:"Val($)",    
+
+        {   title:"Val($)",
             field:"gdspricetot",
             cssClass:"bg-gray-200 font-semibold",
             bottomCalc:totalVal,
             bottomCalcParams:{precision:3} ,
-            formatter:"money", 
+            formatter:"money",
             formatterParams:{
                 decimal:".",
                 thousand:",",
@@ -324,7 +324,7 @@ dynamicTable = new Tabulator("#dynamicTable", {
                 precision:3     },
             formatter:function(cell,row)
             {
-                return (cell.getData().gdswt * cell.getData().gdsprice) 
+                return (cell.getData().gdswt * cell.getData().gdsprice)
             }
         },
 
@@ -416,7 +416,7 @@ function validateForm()
         showSnackbar("Errors occured","red");
         disableSubmitButton(false);
     })
-} 
+}
 </script>
 @endpush
 

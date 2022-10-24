@@ -16,17 +16,7 @@ class ContractController extends Controller
 
     public function index(Request $request)
     {
-        $search = $request->search;
-        $contracts = Contract::select('id','invoice_date','number','supplier_id')
-        ->where(function($q) use ($search){
-            $q->where('number','like',"%$search%")
-            ->orWhereDate('created_at','like',"%$search%")
-            ->orWhereHas('supplier', function($qu) use($search){
-                $qu->where('title','like',"%$search%");
-            });
-        })
-        ->paginate(5);
-        return view('contracts.index')->with('contracts',$contracts);
+        return view('contracts.index');
     }
 
     public function getMaster(Request $request)
@@ -127,7 +117,7 @@ class ContractController extends Controller
             DB::rollback();
             throw $th;
         }
-   
+
     }
 
     public function edit(Contract $contract)
@@ -182,7 +172,7 @@ class ContractController extends Controller
                     $cds->gdswt = $cd->gdswt;
                     $cds->gdsprice = $cd->gdsprice;
                     $cds->save();
-                }else 
+                }else
                 {
                     //  The item is new, Add it
                     $cds = new ContractDetails();
@@ -232,7 +222,7 @@ class ContractController extends Controller
         $html = view('contracts.print')->with('cd',$cd)->with('contract',$contract)->render();
         $filename = $contract->id . '.pdf';
         ini_set('max_execution_time', '2000');
-        ini_set("pcre.backtrack_limit", "100000000");   
+        ini_set("pcre.backtrack_limit", "100000000");
         ini_set("memory_limit","8000M");
         ini_set('allow_url_fopen',1);
         $temp = storage_path('temp');
@@ -246,7 +236,7 @@ class ContractController extends Controller
             'margin_footer' => '2',
             'default_font_size' => 9,
             'orientation' => 'L'
-        ]);     
+        ]);
         $mpdf->SetHTMLFooter('
             <table width="100%" style="border-top:1px solid gray">
                 <tr>

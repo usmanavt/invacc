@@ -15,6 +15,7 @@ use App\Http\Controllers\LocationController;
 use App\Http\Controllers\MaterialController;
 use App\Http\Controllers\SupplierController;
 use App\Http\Controllers\DimensionController;
+use App\Http\Controllers\CommercialInvoiceController;
 
 
 Route::get('/', function () {
@@ -56,8 +57,8 @@ Route::resource('subheads', SubheadController::class);
 //  HSE Controller
 Route::resource('hscodes', HscodeController::class);
 //  Material Controller
-Route::get('/getMaterialMaster', [MaterialController::class, 'getMaster'])->name('materials.master');
-Route::get('/copymaterial/copy/{material}', [MaterialController::class, 'copyMaterial'])->name('materials.copy');
+Route::get('/materials/getMaterialMaster', [MaterialController::class, 'getMaster'])->name('materials.master');
+Route::get('/materials/copymaterial/copy/{material}', [MaterialController::class, 'copyMaterial'])->name('materials.copy');
 Route::resource('materials', MaterialController::class);
 //  Users Controller
 Route::resource('users',UserController::class);
@@ -69,3 +70,8 @@ Route::get('/contracts/{contract}/printcontract', [ContractController::class, 'p
 Route::get('/contracts/getContractMaster', [ContractController::class, 'getMaster'])->name('contracts.master');
 Route::get('/contracts/getContractDetails', [ContractController::class, 'getDetails'])->name('contracts.details');
 Route::resource('contracts', ContractController::class);
+//  CommercialInvoice
+Route::get('/cis/getCisMaster', [CommercialInvoiceController::class, 'getMaster'])->name('cis.master');
+Route::get('/cis/getCisDetails', [CommercialInvoiceController::class, 'getDetails'])->name('cis.details');
+Route::get('/cis/getContractDetails', [CommercialInvoiceController::class, 'getContractDetails'])->name('cis.condet');
+Route::resource('cis', CommercialInvoiceController::class);
