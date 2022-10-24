@@ -4,7 +4,7 @@
     <!-- Modal content -->
     <div class="max-w-3xl mx-auto mt-52 bg-white rounded shadow px-6">
         <div class="flex justify-between py-4">
-            <h1 class="font-semibold">Material List</h1>
+            <h1 class="font-semibold">{{ $title }}</h1>
             <span class="close px-2 bg-gray-300 rounded-full text-white cursor-pointer hover:bg-gray-400" onclick="closeModal()">&times;</span>
         </div>
         <div class="">
@@ -14,7 +14,7 @@
             </div>
                 <div id="example-table-info" class="mr-2 text-sm text-gray-500"></div>
             </div>
-            
+
             <div id="tableData">
                 {{-- table data --}}
             </div>

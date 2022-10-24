@@ -14,7 +14,7 @@ class AddHscodeToMaterials extends Migration
     public function up()
     {
         Schema::table('materials', function (Blueprint $table) {
-            $table->bigInteger('hscode_id')->default(0);
+            // $table->bigInteger('hscode_id')->default(0);
         });
     }
 

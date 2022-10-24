@@ -8,6 +8,7 @@ use App\Models\Brand;
 use App\Models\Source;
 use App\Models\Category;
 use App\Models\Contract;
+use App\Models\Material;
 use App\Models\Supplier;
 use App\Models\Dimension;
 use Illuminate\Database\Eloquent\Model;
@@ -20,7 +21,7 @@ class ContractDetails extends Model
     // protected $primaryKey = 'invid';
     // public $incrementing = false; // If no autoincrement
     protected $table= "contract_details";
-    protected $fillable = ['contract_id','supplier_id','user_id','category_id','sku_id','dimension_id','source_id','brand_id','bundle1','pcspbundle1','bundle2','pcspbundle2','gdswt','gdsprice','category','sku','dimension','source','brand'];
+    protected $fillable = ['contract_id','material_id','material_title','supplier_id','user_id','category_id','sku_id','dimension_id','source_id','brand_id','bundle1','pcspbundle1','bundle2','pcspbundle2','gdswt','gdsprice','category','sku','dimension','source','brand'];
 
     public function contract(){ return $this->belongsTo(Contract::class); }
     public function supplier(){ return $this->belongsTo(Supplier::class); }
@@ -30,5 +31,6 @@ class ContractDetails extends Model
     public function dimension(){ return $this->belongsTo(Dimension::class); }
     public function source(){ return $this->belongsTo(Source::class); }
     public function brand(){ return $this->belongsTo(Brand::class); }
-    
+    public function material(){ return $this->belongsTo(Material::class); }
+
 }
