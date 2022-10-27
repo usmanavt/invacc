@@ -28,23 +28,12 @@ class ContractController extends Controller
         $dir = $request->sort[0]["dir"];         //  Nested Array
         //  With Tables
         $contracts = Contract::where(function ($query) use ($search){
-                $query->where('id','LIKE','%' . $search . '%');
+                $query->where('id','LIKE','%' . $search . '%')
+                ->orWhere('number','LIKE','%' . $search . '%');
             })
-            // ->orWhereHas('category',function($query) use($search){
-            //     $query->where('iname0','LIKE',"%$search%");
-            // })
-            // ->orWhereHas('brand',function($query) use($search){
-            //     $query->where('brandname','LIKE',"%$search%");
-            // })
-            // ->orWherehas('itemSize',function($query) use($search){
-            //     $query->where('sizename','LIKE',"%$search%");
-            // })
-            // ->orWherehas('unit',function($query) use($search){
-            //     $query->where('unitname','LIKE',"%$search%");
-            // })
-            // ->orWherehas('source',function($query) use($search){
-            //     $query->where('srcname','LIKE',"%$search%");
-            // })
+            ->orWherehas('supplier',function($query) use($search){
+                $query->where('title','LIKE',"%$search%");
+            })
         ->with('user:id,name','supplier:id,title')
         ->orderBy($field,$dir)
         ->paginate((int) $size);

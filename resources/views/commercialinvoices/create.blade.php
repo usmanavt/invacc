@@ -23,16 +23,13 @@
                             <legend>Invoice Level Entries</legend>
                             <div class="grid grid-cols-12 gap-2 py-2 items-center">
 
-                                <x-input-date title="Invoice Date" name="invoicedate" req required class="col-span-2"/>
+                                <x-input-date title="Inv. Date" name="invoicedate" req required class="col-span-2"/>
 
-                                <x-input-text title="Invoice #" name="invoiceno" req required class="col-span-2"/>
-                                <x-input-text title="Challan #" name="challanno" req required class="col-span-2"/>
+                                <x-input-text title="Invoice #" name="invoiceno" req required class=""/>
+                                <x-input-text title="Challan #" name="challanno" req required class=""/>
 
-                            </div>
-                            <div class="grid grid-cols-12 gap-2 py-2 items-center">
-
-                                <x-input-numeric title="Conversion Rate" name="conversionrate"  req required class="col-span-2"/>
-                                <x-input-numeric title="Insurance" name="insurance"  req required class="col-span-2"/>
+                                <x-input-numeric title="Conv. Rate" name="conversionrate"  req required class=""/>
+                                <x-input-numeric title="Insurance" name="insurance"  req required class=""/>
 
                             </div>
                         </fieldset>
@@ -41,33 +38,36 @@
                             <legend>Invoice Level Expenses</legend>
                             <div class="grid grid-cols-12 gap-2 py-2 items-center">
 
-                                <x-input-numeric title="Bank Chrgs" name="bankcharges"  req required  onblur="calculateBankCharges()"/>
-                                <x-input-numeric title="Cust Coll" name="collofcustom"  req required  onblur="calculateBankCharges()"/>
-                                <x-input-numeric title="Ex Tax of" name="exataxoffie"  req required  onblur="calculateBankCharges()"/>
-                                <x-input-numeric title="Ship Doc Chg" name="lngnshipdochrgs"  req required  onblur="calculateBankCharges()"/>
-                                <x-input-numeric title="Lcl Cartage" name="localcartage"  req required  onblur="calculateBankCharges()"/>
-                                <x-input-numeric title="Misc Exp Lunch" name="miscexplunchetc"  req required  onblur="calculateBankCharges()"/>
-                                <x-input-numeric title="Custom Sepoy" name="customsepoy"  req required  onblur="calculateBankCharges()"/>
-                                <x-input-numeric title="Weigh Bridge" name="weighbridge"  req required  onblur="calculateBankCharges()"/>
-                                <x-input-numeric title="Misc Exp" name="miscexpenses"  req required  onblur="calculateBankCharges()"/>
-                                <x-input-numeric title="Agency Chgs" name="agencychrgs"  req required  onblur="calculateBankCharges()"/>
-                                <x-input-numeric title="Other Chgs" name="otherchrgs"  req required  onblur="calculateBankCharges()"/>
-                                <x-input-numeric title="Total" name="total" disabled />
+                                <x-input-numeric title="Bank Chrgs" name="bankcharges" required  onblur="calculateBankCharges()"/>
+                                <x-input-numeric title="Cust Coll" name="collofcustom" required  onblur="calculateBankCharges()"/>
+                                <x-input-numeric title="Ex Tax of" name="exataxoffie" required  onblur="calculateBankCharges()"/>
+                                <x-input-numeric title="Ship Doc Chg" name="lngnshipdochrgs" required  onblur="calculateBankCharges()"/>
+                                <x-input-numeric title="Lcl Cartage" name="localcartage" required  onblur="calculateBankCharges()"/>
+                                <x-input-numeric title="Misc Exp Lunch" name="miscexplunchetc" required  onblur="calculateBankCharges()"/>
+                                <x-input-numeric title="Custom Sepoy" name="customsepoy" required  onblur="calculateBankCharges()"/>
+                                <x-input-numeric title="Weigh Bridge" name="weighbridge" required  onblur="calculateBankCharges()"/>
+                                <x-input-numeric title="Misc Exp" name="miscexpenses" required  onblur="calculateBankCharges()"/>
+                                <x-input-numeric title="Agency Chgs" name="agencychrgs" required  onblur="calculateBankCharges()"/>
+                                <x-input-numeric title="Other Chgs" name="otherchrgs" required  onblur="calculateBankCharges()"/>
+                                <x-input-numeric title="Total" name="banktotal" disabled />
 
                             </div>
                         </fieldset>
 
                         {{-- Contract Details --}}
+                        <div class="flex flex-row px-4 py-2 items-center">
+                            <x-label value="Add Pcs & Feet Size & Press"></x-label>
+                            <x-button id="calculate" class="mx-2" onclick="calculate()">Calculate</x-button>
+                            <x-label value="This will prepare your commercial invoice for Submission"></x-label>
+                        </div>
                         <x-tabulator-dynamic />
 
                         {{-- Submit Button --}}
                         <div class="pt-2">
-                            <button
-                                id="submitbutton" onclick="validateForm()"
-                                class="bg-green-500 text-white rounded hover:bg-green-700 inline-flex items-center px-4 py-1 w-28 text-center">
+                            <x-button id="submitbutton" onclick="validateForm()">
                                 <i class="fa fa-save fa-fw"></i>
                                 Submit
-                            </button>
+                            </x-button>
                         </div>
 
                     </div>
@@ -88,13 +88,19 @@
         let table;
         let searchValue = "";
         const deleteIcon = function(cell,formatterParams){return "<i class='fa fa-trash text-red-500'></i>";};
-        const getMaster = @json(route('cis.condet'));
+        const getMaster = @json(route('contracts.master'));
+        const getDetails = @json(route('cis.condet'));
         let csrfToken = document.head.querySelector("[name~=csrf-token][content]").content;
+        //
         let modal = document.getElementById("myModal")
-        console.log(getMaster);
+        let calculateButton = document.getElementById("calculate")
+        let submitButton = document.getElementById("submitbutton")
 
-        let dyanmicTable = ""; // Tabulator
-        let dynamicTableData = [];
+        let dynamicTable = ""
+        let dynamicTableData = []
+        let adopted = false
+        let detailsUrl = ''
+
         // Bank Charges
         let bankcharges= document.getElementById("bankcharges")
         let collofcustom= document.getElementById("collofcustom")
@@ -107,11 +113,15 @@
         let miscexpenses= document.getElementById("miscexpenses")
         let agencychrgs= document.getElementById("agencychrgs")
         let otherchrgs= document.getElementById("otherchrgs")
-        let total= document.getElementById("total")
+        let banktotal= document.getElementById("banktotal")
         // Important Rates
         var conversionrate = document.getElementById("conversionrate");
         var insurance = document.getElementById("insurance");
-
+        //  Add Event on  Page Load
+        document.addEventListener('DOMContentLoaded',()=>{
+            calculateButton.disabled = true
+            submitButton.disabled = true
+        })
         // Add event handler to read keyboard key up event & conversionrate
         document.addEventListener('keyup', (e)=>{
 
@@ -129,26 +139,19 @@
                     insurance.focus();
                     return;
                 }
-                showModal()
+                if(!adopted)
+                {
+                    showModal()
+                }
             }
         })
-        // Calculate Bank Charges
+        // Calculate Bank Charges [ onblur ]
         function calculateBankCharges()
         {
             var t =  parseFloat(bankcharges.value) + parseFloat(collofcustom.value) + parseFloat(exataxoffie.value) + parseFloat(lngnshipdochrgs.value) + parseFloat(localcartage.value) + parseFloat(miscexplunchetc.value) + parseFloat(customsepoy.value) + parseFloat(weighbridge.value) + parseFloat(miscexpenses.value) + parseFloat(agencychrgs.value) + parseFloat(otherchrgs.value)
             // var t = parseFloat(bankcharges.value) + parseFloat(collofcustom.value)
-            total.value = t.toFixed(3)
-            console.log(total.value);
-        }
-        // Ensure Buttons Are Closed
-        function disableSubmitButton()
-        {
-            if(dynamicTableData.length <= 0 )
-            {
-                document.getElementById("submitbutton").disabled = true;
-            }else {
-                document.getElementById("submitbutton").disabled = false;
-            }
+            banktotal.value = t.toFixed(2)
+            // console.log(banktotal.value);
         }
     </script>
 @endpush
@@ -163,63 +166,6 @@
                 modal.style.display = "none";
             }
         }
-        //  ------------------Dynamic Table----------------------//
-        //  Adds actual data to row
-        function pushDynamicData(data)
-        {
-            var inArray = dynamicTableData.filter( i => dynamicTableData.id == data.id)
-            // console.log(inArray);
-
-            dynamicTableData.push({ id:data.id,material:data.material_title})
-
-            var vpcs = (data.bundle1 * data.pcspbundle1) + (data.bundle2 * data.pcspbundle2).toFixed(2)
-            var vgdswt = data.gdswt
-            var vwinkg = ((vgdswt / vpcs ) * 1000).toFixed(3)
-
-            dynamicTable.addData([
-                {
-                    id:data.id,
-                    material_title:data.material.title,
-                    contract_id:data.contract_id,
-                    material_id:data.material_id,
-                    supplier_id:data.supplier_id,
-                    user_id:data.user_id,
-                    category_id:data.category_id,
-                    sku_id:data.sku_id,
-                    dimension_id:data.dimension_id,
-                    source_id:data.source_id,
-                    brand_id:data.brand_id,
-
-                    pcs:vpcs,
-                    gdswt:vgdswt,
-                    inkg:vwinkg,
-                    gdsprice:data.gdsprice,
-                    amtindollar: data.gdswt * data.gdsprice ,
-                    amtinpkr: ( data.gdswt *  data.gdsprice )* parseFloat(conversionrate.value),
-
-                    hscode:data.material.hscodes.hscode,
-                    cd:data.material.hscodes.cd,
-                    st:data.material.hscodes.st,
-                    rd:data.material.hscodes.rd,
-                    acd:data.material.hscodes.acd,
-                    ast:data.material.hscodes.ast,
-                    it:data.material.hscodes.it,
-                    wsc:data.material.hscodes.wse,
-
-                    length:0,
-                    itmratio:0,
-                    insuranceperitem:0,
-                    amountwithoutinsurance:0,
-                    onepercentdutypkr:0,
-                    pricevaluecostsheet:0,
-                }
-            ])
-        }
-    </script>
-@endpush
-
-@push('scripts')
-    <script>
         //  Table Filter
         function dataFilter(element)
         {
@@ -250,17 +196,8 @@
             columns:[
                 // Master Data
                 {title:"Id", field:"id" , responsive:0},
-                {title:"ContID", field:"contract_id" , visible:true ,headerSort:false, responsive:0},
-                {title:"MatID", field:"material_id" , visible:true ,headerSortStartingDir:"asc" , responsive:0},
-                {title:"Title", field:"material_title" ,  responsive:0},
-                {title:"Category", field:"category" ,  responsive:0},
-                {title:"Sku", field:"sku" ,  responsive:0},
-                {title:"Brand", field:"brand" ,  responsive:0},
-                // {title:"Delete" , formatter:deleteIcon, hozAlign:"center",headerSort:false, responsive:0,
-                //     cellClick:function(e, cell){
-                //         // window.open(window.location + "/" + cell.getRow().getData().id + "/delete" ,"_self");
-                //     }
-                // },
+                {title:"Invoice #", field:"number" , visible:true ,headerSort:false, responsive:0},
+                {title:"Supplier", field:"supplier.title" , visible:true ,headerSort:false, responsive:0},
             ],
             // Extra Pagination Data for End Users
             ajaxResponse:function(getDataUrl, params, response){
@@ -271,27 +208,93 @@
                 return response;
             }
         })
-        //  Adds New row to dyanmicTable
+        //  Adds New row to dynamicTable
         table.on('rowClick',function(e,row){
             var simple = {...row}
             var data = simple._row.data
-            // console.log(data);
-            //  Filter Data here .
-            var result = dynamicTableData.filter( dt => dt.id == data.id)
-            if(result.length <= 0)
-            {
-                pushDynamicData(data)
-            }
+
+            detailsUrl = `${getDetails}/?id=${data.id}`
+            fetchDataFromServer(detailsUrl)
+            adopted = true
+            calculateButton.disabled = false
         })
-        //  customCount (Abbu Function)
-        var customCalc = function(values, data, calcParams){
-            //values - array of column values
-            //data - all table data
-            //calcParams - params passed from the column definition object
+    </script>
+@endpush
+
+@push('scripts')
+    <script>
+        //  ------------------Dynamic Table----------------------//
+        async function fetchDataFromServer(url)
+        {
+            var data =  await fetch(url,{
+                method:"GET",
+                headers: { 'Accept':'application/json','Content-type':'application/json'},
+                })
+                .then((response) => response.json()) //Transform data to json
+                .then(function(response){
+                    console.log(response);
+                    return response;
+                })
+                .catch(function(error){
+                    console.log("Error : " + error);
+            })
+            //  Stremaline Data for Tabulator
+            for (let index = 0; index < data.length; index++) {
+                const obj = data[index];
+                const mat = obj['material']
+                const hsc = mat['hscodes']
+
+                // console.log(obj.bundle1 , obj.pcspbundle1 ,obj.bundle2 , obj.pcspbundle2);
+                var vpcs = ((obj.bundle1 * obj.pcspbundle1) + (obj.bundle2 * obj.pcspbundle2)).toFixed(2)
+                // console.log(vpcs);
+                var vwinkg = ((obj.gdswt / vpcs ) * 1000).toFixed(3)
+                dynamicTable.addData([
+                    {
+                        id :                obj.id,
+                        material_title :    obj.material_title,
+                        contract_id :       obj.contract_id,
+                        material_id :       obj.material_id,
+                        supplier_id :       obj.supplier_id,
+                        user_id :           obj.user_id,
+                        category_id :       obj.category_id,
+                        sku_id :            obj.sku_id,
+                        dimension_id :      obj.dimension_id,
+                        source_id :         obj.source_id,
+                        brand_id :          obj.brand_id,
+
+                        pcs :               vpcs,
+                        gdswt :             obj.gdswt,
+                        inkg :              vwinkg,
+                        gdsprice :          obj.gdsprice,
+
+                        amtindollar :       obj.gdswt * obj.gdsprice ,
+                        amtinpkr :          ( obj.gdswt *  obj.gdsprice ) * parseFloat(conversionrate.value),
+
+                        hscode :            hsc.hscode,
+                        cd :                hsc.cd,
+                        st :                hsc.st,
+                        rd :                hsc.rd,
+                        acd :               hsc.acd,
+                        ast :               hsc.ast,
+                        it :                hsc.it,
+                        wsc :               hsc.wse,
+
+                        length :            0,
+                        itmratio :          0,
+                        insuranceperitem :  0,
+                        amountwithoutinsurance : 0,
+                        onepercentdutypkr : 0,
+                        pricevaluecostsheet : 0,
+                    }
+                ])
+            }
+        }
+        var calculate = function(){
+            // alert(dynamicTable.getData())
+            const data = dynamicTable.getData()
             var amtinpkrtotal = 0
             data.forEach(e => {
                 amtinpkrtotal += parseFloat(e.amtinpkr)
-                // console.log(amtinpkrtotal);
             });
             data.forEach(e => {
                 var itmratio = e.amtinpkr / amtinpkrtotal * 100
@@ -308,6 +311,10 @@
                 var wsca = pricevaluecostsheet / e.wsc
                 var total = cda + rda + sta + acda + asta + ita + wsca
                 var perpc = total / e.pcs
+                var perfeet = (perpc / e.length).toFixed(2)
+
+
+                console.log(perpc , perfeet );
                 e.itmratio = itmratio
                 e.insuranceperitem = insuranceperitem
                 e.amountwithoutinsurance = parseFloat(amountwithoutinsurance).toFixed(2)
@@ -323,22 +330,21 @@
                 e.total = (total).toFixed(2)
                 e.perpc = (perpc).toFixed(2)
                 e.perkg = (perpc / e.inkg).toFixed(2)
-                e.perfeet = (length == 0 ? length: perpc / length).toFixed(2)
+                e.perfeet = perfeet
+                e.totallccostwexp = ( total + pricevaluecostsheet + (banktotal.value * itmratio / 100)).toFixed(2)
             })
+            dynamicTable.setData(data)
+            submitButton.disabled = false
         }
         //  Dynamic Table [User data]
         dynamicTable = new Tabulator("#dynamicTable", {
             layout:'fitDataTable',
-            // data:dynamicTableData,
             responsiveLayout:"collapse",
             reactiveData:true,
             columns:[
                 {title:"Del" , formatter:deleteIcon, headerSort:false, responsive:0,
                     cellClick:function(e, cell){
                         cell.getRow().delete();
-                        dynamicTableData = dynamicTable.getData(); // Ensure that our data is clean
-                        dynamicTable.redraw();
-                        // disableSubmitButton();
                     }
                 },
                 {title:"Id",                field:"id", visible:false,            cssClass:"bg-gray-200 font-semibold"},
@@ -356,6 +362,7 @@
                     title:'Quantity', headerHozAlign:"center",
                     columns:[
                         {   title:"Pcs",headerHozAlign :'center',
+                            responsive:0,
                             field:"pcs",
                             editor:"number",
                             headerVertical:true,
@@ -363,6 +370,16 @@
                             cssClass:"bg-green-200 font-semibold",
                             validator:["required","numeric"],
                             formatterParams:{thousand:",",precision:2},
+                            // cellEdited:function(cell){
+                            //     var data = cell.getData();
+                            //     var calc = Number(data.pcs) / Number(data.gdswt) * 100
+                            //     var ppc = (Number(data.totallccostwexp)) / Number(data.pcs).toFixed(2)
+                            //     var row = cell.getRow()
+                            //     row.update({
+                            //         "inkg": calc,
+                            //         "perpc":ppc,
+                            //     })
+                            // }
                         },
                         {title:"Wt(mt)",            field:"gdswt",
                         headerVertical:true,         cssClass:"bg-gray-200 font-semibold"},
@@ -375,17 +392,17 @@
                             cssClass:"bg-green-200 font-semibold",
                             formatter:"money",
                             responsive:0,
-                            formatterParams:{thousand:",",precision:3},
+                            formatterParams:{thousand:",",precision:2},
                             validator:["required","numeric"],
-                            bottomCalcParams:{precision:3}  ,
-                            cellEdited:function(cell){
-                                var data = cell.getData();
-                                var sum = Number(data.perpc) / Number(data.length)
-                                var row = cell.getRow();
-                                row.update({
-                                    "perfeet": sum
-                                });
-                            }
+                            bottomCalcParams:{precision:2}  ,
+                            // cellEdited:function(cell){
+                            //     var data = cell.getData();
+                            //     var sum = Number(data.perpc) / Number(data.length)
+                            //     var row = cell.getRow();
+                            //     row.update({
+                            //         "perfeet": sum
+                            //     });
+                            // }
                         },
                     ]
                 },
@@ -416,7 +433,6 @@
                             field:"itmratio",
                             headerVertical:true,
                             formatter:"money",
-                            bottomCalc:customCalc,
                             formatterParams:{thousand:",",precision:2},
                         },
                     ]
@@ -449,25 +465,24 @@
                     formatter:"money",
                     formatterParams:{thousand:",",precision:2},
                 },
-
                 {
                     title:'Duties Rate', headerHozAlign:"center",
                     columns:[
-                        {title:"Code",              field:"hscode",
+                        {title:"Code",              field:"material.hscodes.hscode",
                         headerVertical:true,      cssClass:"bg-gray-200 font-semibold", visible:false},
-                        {title:"CD",                field:"cd",
+                        {title:"CD",                field:"material.hscodes.cd",
                         headerVertical:true,       cssClass:"bg-gray-200 font-semibold", visible:false},
-                        {title:"ST",                field:"st",
+                        {title:"ST",                field:"material.hscodes.st",
                         headerVertical:true,         cssClass:"bg-gray-200 font-semibold", visible:false},
-                        {title:"RD",                field:"rd",
+                        {title:"RD",                field:"material.hscodes.rd",
                         headerVertical:true,       cssClass:"bg-gray-200 font-semibold", visible:false},
-                        {title:"ACD",               field:"acd",
+                        {title:"ACD",               field:"material.hscodes.acd",
                         headerVertical:true,         cssClass:"bg-gray-200 font-semibold", visible:false},
-                        {title:"AST",               field:"ast",
+                        {title:"AST",               field:"material.hscodes.ast",
                         headerVertical:true,       cssClass:"bg-gray-200 font-semibold", visible:false},
-                        {title:"IT",                field:"it",
+                        {title:"IT",                field:"material.hscodes.it",
                         headerVertical:true,       cssClass:"bg-gray-200 font-semibold", visible:false},
-                        {title:"WSC",               field:"wsc",
+                        {title:"WSC",               field:"material.hscodes.wse",
                         headerVertical:true,        cssClass:"bg-gray-200 font-semibold", visible:false},
                     ]
                 },
@@ -514,7 +529,50 @@
                 },
             ],
         })
-
+        dynamicTable.on("dataLoaded", function(data){
+            //data - all data loaded into the table
+            // console.log('in table loaded funt');
+            // var amtinpkrtotal = 0
+            // if (!data.length <=0)
+            // {
+            //     data.forEach(e => {
+            //         amtinpkrtotal += parseFloat(e.amtinpkr)
+            //         // console.log(amtinpkrtotal);
+            //     });
+            //     data.forEach(e => {
+            //         var itmratio = e.amtinpkr / amtinpkrtotal * 100
+            //         var insuranceperitem = parseFloat(insurance.value) * itmratio / 100
+            //         var amountwithoutinsurance = ( e.amtindollar + insuranceperitem ) * parseFloat(conversionrate.value)
+            //         var onepercentdutypkr = amountwithoutinsurance * 0.01
+            //         var pricevaluecostsheet = parseFloat(onepercentdutypkr + amountwithoutinsurance)
+            //         var cda = e.cd * pricevaluecostsheet / 100
+            //         var rda = e.rd * pricevaluecostsheet / 100
+            //         var acda = e.acd * pricevaluecostsheet / 100
+            //         var sta = (pricevaluecostsheet + cda + rda + acda) * e.st / 100
+            //         var asta = (pricevaluecostsheet + cda + rda + acda) * e.ast / 100
+            //         var ita =(pricevaluecostsheet + cda + sta + rda + acda + asta) * e.it / 100
+            //         var wsca = pricevaluecostsheet / e.wsc
+            //         var total = cda + rda + sta + acda + asta + ita + wsca
+            //         var perpc = total / e.pcs
+            //         e.itmratio = itmratio
+            //         e.insuranceperitem = insuranceperitem
+            //         e.amountwithoutinsurance = parseFloat(amountwithoutinsurance).toFixed(2)
+            //         e.onepercentdutypkr = (onepercentdutypkr).toFixed(2)
+            //         e.pricevaluecostsheet = (pricevaluecostsheet).toFixed(2)
+            //         e.cda = (cda).toFixed(2)
+            //         e.rda = (rda).toFixed(2)
+            //         e.acda = (acda).toFixed(2)
+            //         e.sta = (sta).toFixed(2)
+            //         e.asta = (asta).toFixed(2)
+            //         e.ita = (ita).toFixed(2)
+            //         e.wsca = (wsca).toFixed(2)
+            //         e.total = (total).toFixed(2)
+            //         e.perpc = (perpc).toFixed(2)
+            //         e.perkg = (perpc / e.inkg).toFixed(2)
+            //         e.perfeet = (length == 0 ? length: perpc / length).toFixed(2)
+            //     })
+            // }
+        });
         // Validation & Post
         function validateForm()
         {
@@ -522,19 +580,6 @@
             var invoicedate = document.getElementById("invoicedate")
             var invoiceno = document.getElementById("invoiceno")
             var challanno = document.getElementById("challanno")
-
-            // var bankcharges  = document.getElementById("bankcharges")
-            // var collofcustom  = document.getElementById("collofcustom")
-            // var exataxoffie  = document.getElementById("exataxoffie")
-            // var lngnshipdochrgs  = document.getElementById("lngnshipdochrgs")
-            // var localcartage  = document.getElementById("localcartage")
-            // var miscexplunchetc  = document.getElementById("miscexplunchetc")
-            // var customsepoy  = document.getElementById("customsepoy")
-            // var weighbridge  = document.getElementById("weighbridge")
-            // var miscexpenses  = document.getElementById("miscexpenses")
-            // var agencychrgs  = document.getElementById("agencychrgs")
-            // var otherchrgs  = document.getElementById("otherchrgs")
-
             if(invoiceno.value === ''){
                 showSnackbar("Invoice # required ","error");
                 invoiceno.focus()
@@ -545,20 +590,14 @@
                 challanno.focus()
                 return;
             }
-
-            // if ( bankcharges.value <= 0 || collofcustom.value <= 0 || exataxoffie.value <= 0 || lngnshipdochrgs.value <= 0 || localcartage.value <= 0 || miscexplunchetc.value <= 0 || customsepoy.value <= 0 || weighbridge.value <= 0 || miscexpenses.value <= 0 || agencychrgs.value <= 0 || otherchrgs <= 0 )
-            // {
-            //     showSnackbar("Please provide value of Invoice Level Expenses other then '0' ","error");
-            //     return;
-            // }
-
+            const dynamicTableData = dynamicTable.getData();
             if(dynamicTableData.length == 0)
             {
                 showSnackbar("You must have atleast 1 row of item to Proceed","info");
                 return;
             }
-            dynamicTableData = dynamicTable.getData();
-            disableSubmitButton(true);
+
+            // disableSubmitButton(true);
             var data = {
                 'conversionrate' : parseFloat(conversionrate.value).toFixed(2),
                 'insurance' : parseFloat(insurance.value).toFixed(2),
@@ -576,7 +615,7 @@
                 'miscexpenses' : parseFloat(miscexpenses.value).toFixed(2),
                 'agencychrgs' : parseFloat(agencychrgs.value).toFixed(2),
                 'otherchrgs' : parseFloat(otherchrgs.value).toFixed(2),
-                'total' : parseFloat(total.value).toFixed(2),
+                'total' : parseFloat(banktotal.value).toFixed(2),
                 'comminvoice' : dynamicTableData
             };
             // All Ok - Proceed
