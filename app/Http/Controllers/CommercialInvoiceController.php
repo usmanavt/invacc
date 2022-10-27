@@ -41,31 +41,15 @@ class CommercialInvoiceController extends Controller
 
     public function getDetails(Request $request)
     {
-        $search = $request->search;
-        $size = $request->size;
-        $contractDetails = CommercialInvoiceDetails::where('commercial_invoice_id',$request->id)
-        ->paginate((int) $size);
+        $contractDetails = CommercialInvoiceDetails::where('commercial_invoice_id',$request->id)->get();
         return $contractDetails;
     }
 
     public function getContractDetails(Request $request)
     {
-         // dd($request->all());
-         $search = $request->search;
-         $size = $request->size;
-         $field = $request->sort[0]["field"];     //  Nested Array
-         $dir = $request->sort[0]["dir"];         //  Nested Array
-         //  With Tables
-         $cd = ContractDetails::where(function ($query) use ($search){
-                 $query->where('material_title','LIKE','%' . $search . '%')
-                 ->orWhere('brand','LIKE','%' . $search . '%')
-                 ->orWhere('category','LIKE','%' . $search . '%');
-             })
-
-         ->with('material.hscodes')
-         ->orderBy($field,$dir)
-         ->paginate((int) $size);
-         return $cd;
+        $id = $request->id;
+        $contractDetails = ContractDetails::with('material.hscodes')->where('contract_id',$id)->get();
+        return response()->json($contractDetails, 200);
     }
 
     public function create()
