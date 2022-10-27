@@ -18,6 +18,8 @@ class CreateCommercialInvoicesTable extends Migration
             $table->timestamp('invoice_date');
             $table->string('invoiceno', 30);
             $table->string('challanno', 30);
+            $table->timestamp('machine_date')->nullable();
+            $table->string('machineno', 30);
             $table->decimal('conversionrate', 15, 3)->default(00.000);
             $table->decimal('insurance', 15, 3)->default(00.000);
             $table->decimal('bankcharges', 15, 3)->default(00.000);

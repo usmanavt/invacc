@@ -30,6 +30,10 @@
 
                                 <x-input-numeric title="Conv. Rate" name="conversionrate"  req required class=""/>
                                 <x-input-numeric title="Insurance" name="insurance"  req required class=""/>
+                            </div>
+                            <div class="grid grid-cols-12 gap-2 py-2 items-center">
+                                <x-input-date title="Mac. Date" name="machine_date" req required class="col-span-2"/>
+                                <x-input-text title="Machine #" name="machineno" req required class="col-span-2"/>
 
                             </div>
                         </fieldset>
@@ -268,7 +272,7 @@
                         gdsprice :          obj.gdsprice,
 
                         amtindollar :       obj.gdswt * obj.gdsprice ,
-                        amtinpkr :          ( obj.gdswt *  obj.gdsprice ) * parseFloat(conversionrate.value),
+                        amtinpkr :          ( obj.gdswt *  obj.gdsprice  * conversionrate.value).toFixed(0),
 
                         hscode :            hsc.hscode,
                         cd :                hsc.cd,
@@ -308,16 +312,16 @@
                 var sta = (pricevaluecostsheet + cda + rda + acda) * e.st / 100
                 var asta = (pricevaluecostsheet + cda + rda + acda) * e.ast / 100
                 var ita =(pricevaluecostsheet + cda + sta + rda + acda + asta) * e.it / 100
-                var wsca = pricevaluecostsheet / e.wsc
+                var wsca = (pricevaluecostsheet * e.wsc) /100
                 var total = cda + rda + sta + acda + asta + ita + wsca
-                var perpc = total / e.pcs
-                var perfeet = (perpc / e.length).toFixed(2)
+                var perfeet = (e.perpc / e.length).toFixed(2)
+                var totallccostwexp = total + pricevaluecostsheet + (banktotal.value * itmratio / 100)
+                var perpc = (totallccostwexp / e.pcs).toFixed(2)
+                var perkg = (perpc / e.inkg).toFixed(2)
 
-
-                console.log(perpc , perfeet );
                 e.itmratio = itmratio
                 e.insuranceperitem = insuranceperitem
-                e.amountwithoutinsurance = parseFloat(amountwithoutinsurance).toFixed(2)
+                e.amountwithoutinsurance = amountwithoutinsurance
                 e.onepercentdutypkr = (onepercentdutypkr).toFixed(2)
                 e.pricevaluecostsheet = (pricevaluecostsheet).toFixed(2)
                 e.cda = (cda).toFixed(2)
@@ -328,10 +332,11 @@
                 e.ita = (ita).toFixed(2)
                 e.wsca = (wsca).toFixed(2)
                 e.total = (total).toFixed(2)
-                e.perpc = (perpc).toFixed(2)
-                e.perkg = (perpc / e.inkg).toFixed(2)
-                e.perfeet = perfeet
-                e.totallccostwexp = ( total + pricevaluecostsheet + (banktotal.value * itmratio / 100)).toFixed(2)
+                e.perkg = perkg
+                e.totallccostwexp = totallccostwexp
+                e.perpc = perpc
+                e.perfeet = (perpc / e.length )
+                // console.log(total,pricevaluecostsheet,banktotal.value,itmratio);
             })
             dynamicTable.setData(data)
             submitButton.disabled = false
@@ -382,6 +387,8 @@
                             // }
                         },
                         {title:"Wt(mt)",            field:"gdswt",
+                        formatter:"money",
+                        formatterParams:{thousand:",",precision:3},
                         headerVertical:true,         cssClass:"bg-gray-200 font-semibold"},
                         {title:"Wt(pcs/kg)",        field:"inkg", responsive:0,
                         headerVertical:true,        cssClass:"bg-gray-200 font-semibold"},
@@ -427,7 +434,6 @@
                             formatter:"money",
                             bottomCalc:"sum",
                             bottomCalcFormatter:"money",
-                            formatterParams:{thousand:",",precision:2},
                         },
                         {   title:"Item Ratio(%)",
                             field:"itmratio",
@@ -442,21 +448,18 @@
                     field:"insuranceperitem",
                     headerVertical:true,
                     formatter:"money",
-                    formatterParams:{thousand:",",precision:2},
                 },
                 {
                     title:"Amt W/Insur (PKR)",
                     field:"amountwithoutinsurance",
                     headerVertical:true,
                     formatter:"money",
-                    formatterParams:{thousand:",",precision:2},
                 },
                 {
                     title:"1% Duty (PKR)",
                     field:"onepercentdutypkr",
                     headerVertical:true,
                     formatter:"money",
-                    formatterParams:{thousand:",",precision:2},
                 },
                 {
                     title:"Price value (CS)",
@@ -580,6 +583,9 @@
             var invoicedate = document.getElementById("invoicedate")
             var invoiceno = document.getElementById("invoiceno")
             var challanno = document.getElementById("challanno")
+            var machineno = document.getElementById("machineno")
+            var machine_date = document.getElementById("machine_date")
+
             if(invoiceno.value === ''){
                 showSnackbar("Invoice # required ","error");
                 invoiceno.focus()
@@ -587,6 +593,11 @@
             }
             if(challanno.value === ''){
                 showSnackbar("challanno # required ","error");
+                challanno.focus()
+                return;
+            }
+            if(machineno.value === ''){
+                showSnackbar("machineno # required ","error");
                 challanno.focus()
                 return;
             }
@@ -603,7 +614,9 @@
                 'insurance' : parseFloat(insurance.value).toFixed(2),
                 'invoiceno' : invoiceno.value,
                 'challanno' : challanno.value,
-                'invoicedate' : parseFloat(invoicedate.value).toFixed(2),
+                'machineno' : machineno.value,
+                'machine_date' :machine_date.value,
+                'invoicedate' : invoicedate.value,
                 'bankcharges' : parseFloat(bankcharges.value).toFixed(2),
                 'collofcustom' : parseFloat(collofcustom.value).toFixed(2),
                 'exataxoffie' : parseFloat(exataxoffie.value).toFixed(2),
@@ -640,7 +653,7 @@
             })
             .catch(error => {
                 showSnackbar("Errors occured","red");
-                disableSubmitButton(false);
+                // disableSubmitButton(false);
             })
         }
     </script>
