@@ -15,6 +15,8 @@ class CreateCommercialInvoiceDetailsTable extends Migration
     {
         Schema::create('commercial_invoice_details', function (Blueprint $table) {
             $table->id();
+            $table->timestamp('machine_date')->nullable();
+            $table->string('machineno', 30);
             $table->bigInteger('commercial_invoice_id');
             $table->bigInteger('contract_id');
             $table->bigInteger('material_id');
@@ -57,9 +59,9 @@ class CreateCommercialInvoiceDetailsTable extends Migration
             $table->decimal('ita', 15, 3)->default(00.000);
             $table->decimal('wsca', 15, 3)->default(00.000);
             $table->decimal('total', 15, 3)->default(00.000);
-            $table->decimal('perpc', 15, 3)->default(00.000);
-            $table->decimal('perkg', 15, 3)->default(00.000);
-            $table->decimal('perft', 15, 3)->default(00.000);
+            $table->decimal('perpc', 15, 3)->nullable();
+            $table->decimal('perkg', 15, 3)->nullable();
+            $table->decimal('perft', 15, 3)->nullable();
 
             $table->timestamps();
         });

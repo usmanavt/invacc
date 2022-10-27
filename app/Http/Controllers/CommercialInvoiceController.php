@@ -73,6 +73,8 @@ class CommercialInvoiceController extends Controller
             $ci->invoice_date = $request->invoicedate;
             $ci->invoiceno = $request->invoiceno;
             $ci->challanno = $request->challanno;
+            $ci->machine_date = $request->machine_date;
+            $ci->machineno = $request->machineno;
             $ci->conversionrate = $request->conversionrate;
             $ci->insurance = $request->insurance;
             $ci->bankcharges = $request->bankcharges;
@@ -91,6 +93,9 @@ class CommercialInvoiceController extends Controller
 
             foreach ($comminvoice as $cid) {
                 $c = new CommercialInvoiceDetails();
+
+                $c->machine_date = $request->machine_date;
+                $c->machineno = $request->machineno;
 
                 $c->commercial_invoice_id = $ci->id;
                 $c->contract_id = $cid['contract_id'];
