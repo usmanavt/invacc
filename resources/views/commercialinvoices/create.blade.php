@@ -269,10 +269,18 @@
                         pcs :               vpcs,
                         gdswt :             obj.gdswt,
                         inkg :              vwinkg,
+                        length :            0,
+
                         gdsprice :          obj.gdsprice,
 
                         amtindollar :       obj.gdswt * obj.gdsprice ,
                         amtinpkr :          ( obj.gdswt *  obj.gdsprice  * conversionrate.value).toFixed(0),
+                        itmration:          0,
+
+                        insuranceperitem :  0,
+                        amountwithoutinsurance : 0,
+                        onepercentdutypkr : 0,
+                        pricevaluecostsheet : 0,
 
                         hscode :            hsc.hscode,
                         cd :                hsc.cd,
@@ -283,12 +291,10 @@
                         it :                hsc.it,
                         wsc :               hsc.wse,
 
-                        length :            0,
-                        itmratio :          0,
-                        insuranceperitem :  0,
-                        amountwithoutinsurance : 0,
-                        onepercentdutypkr : 0,
-                        pricevaluecostsheet : 0,
+                        totallccostwexp:    0,
+                        perpc:              0,
+                        perkg:              0,
+                        perfeet:            0,
                     }
                 ])
             }
@@ -296,16 +302,33 @@
         var calculate = function(){
             // alert(dynamicTable.getData())
             const data = dynamicTable.getData()
+            //  First Iteration to calculate Basic Data
+            data.forEach(e => {
+                var pcs = e.pcs
+                var gdswt = e.gdswt
+                var inkg = ((e.gdswt / e.pcs ) * 1000).toFixed(3)
+                var length = e.length
+                var gdsprice = e.gdsprice
+                //  update data element
+                e.pcs = pcs
+                e.gdswt = gdswt
+                e.inkg = inkg
+                e.length = length
+                e.gdsprice = gdsprice
+            })
+            //  Get Ratio after price/length/pcs update
             var amtinpkrtotal = 0
             data.forEach(e => {
                 amtinpkrtotal += parseFloat(e.amtinpkr)
             });
             data.forEach(e => {
-                var itmratio = e.amtinpkr / amtinpkrtotal * 100
+                var amtinpkr = conversionrate.value * e.gdsprice * e.gdswt
+                var itmratio = amtinpkr / amtinpkrtotal * 100
                 var insuranceperitem = parseFloat(insurance.value) * itmratio / 100
                 var amountwithoutinsurance = ( e.amtindollar + insuranceperitem ) * parseFloat(conversionrate.value)
                 var onepercentdutypkr = amountwithoutinsurance * 0.01
                 var pricevaluecostsheet = parseFloat(onepercentdutypkr + amountwithoutinsurance)
+
                 var cda = e.cd * pricevaluecostsheet / 100
                 var rda = e.rd * pricevaluecostsheet / 100
                 var acda = e.acd * pricevaluecostsheet / 100
@@ -319,6 +342,8 @@
                 var perpc = (totallccostwexp / e.pcs).toFixed(2)
                 var perkg = (perpc / e.inkg).toFixed(2)
 
+                e.amtindollar = e.gdswt * e.gdsprice
+                e.amtinpkr = amtinpkr
                 e.itmratio = itmratio
                 e.insuranceperitem = insuranceperitem
                 e.amountwithoutinsurance = amountwithoutinsurance
@@ -336,7 +361,7 @@
                 e.totallccostwexp = totallccostwexp
                 e.perpc = perpc
                 e.perfeet = (perpc / e.length )
-                // console.log(total,pricevaluecostsheet,banktotal.value,itmratio);
+                // e.inkg = inkg
             })
             dynamicTable.setData(data)
             submitButton.disabled = false
@@ -352,17 +377,17 @@
                         cell.getRow().delete();
                     }
                 },
-                {title:"Id",                field:"id", visible:false,            cssClass:"bg-gray-200 font-semibold"},
-                {title:"Material",          field:"material_title", cssClass:"bg-gray-200 font-semibold"},
-                {title:"contract_id",       field:"contract_id",    cssClass:"bg-gray-200 font-semibold",visible:false},
-                {title:"material_id",       field:"material_id",    cssClass:"bg-gray-200 font-semibold",visible:false},
-                {title:"supplier_id",       field:"supplier_id",    cssClass:"bg-gray-200 font-semibold",visible:false},
-                {title:"user_id",           field:"user_id",        cssClass:"bg-gray-200 font-semibold",visible:false},
-                {title:"category_id",       field:"category_id",    cssClass:"bg-gray-200 font-semibold",visible:false},
-                {title:"sku_id",            field:"sku_id",         cssClass:"bg-gray-200 font-semibold",visible:false},
-                {title:"dimension_id",      field:"dimension_id",   cssClass:"bg-gray-200 font-semibold",visible:false},
-                {title:"source_id",         field:"source_id",      cssClass:"bg-gray-200 font-semibold",visible:false},
-                {title:"brand_id",          field:"brand_id",       cssClass:"bg-gray-200 font-semibold",visible:false},
+                {title:"Id",           field:"id", visible:false},
+                {title:"Material",     field:"material_title"},
+                {title:"contract_id",  field:"contract_id",visible:false},
+                {title:"material_id",  field:"material_id",visible:false},
+                {title:"supplier_id",  field:"supplier_id",visible:false},
+                {title:"user_id",      field:"user_id",visible:false},
+                {title:"category_id",  field:"category_id",visible:false},
+                {title:"sku_id",       field:"sku_id",visible:false},
+                {title:"dimension_id", field:"dimension_id",visible:false},
+                {title:"source_id",    field:"source_id",visible:false},
+                {title:"brand_id",     field:"brand_id",visible:false},
                 {
                     title:'Quantity', headerHozAlign:"center",
                     columns:[
@@ -375,23 +400,23 @@
                             cssClass:"bg-green-200 font-semibold",
                             validator:["required","numeric"],
                             formatterParams:{thousand:",",precision:2},
-                            // cellEdited:function(cell){
-                            //     var data = cell.getData();
-                            //     var calc = Number(data.pcs) / Number(data.gdswt) * 100
-                            //     var ppc = (Number(data.totallccostwexp)) / Number(data.pcs).toFixed(2)
-                            //     var row = cell.getRow()
-                            //     row.update({
-                            //         "inkg": calc,
-                            //         "perpc":ppc,
-                            //     })
-                            // }
                         },
-                        {title:"Wt(mt)",            field:"gdswt",
-                        formatter:"money",
-                        formatterParams:{thousand:",",precision:3},
-                        headerVertical:true,         cssClass:"bg-gray-200 font-semibold"},
-                        {title:"Wt(pcs/kg)",        field:"inkg", responsive:0,
-                        headerVertical:true,        cssClass:"bg-gray-200 font-semibold"},
+                        {   title:"Wt(mt)",
+                            field:"gdswt",
+                            responsive:0,
+                            editor:"number",
+                            headerVertical:true,
+                            formatter:"money",
+                            cssClass:"bg-green-200 font-semibold",
+                            validator:["required","numeric"],
+                            formatterParams:{thousand:",",precision:2},
+                        },
+                        {   title:"Wt(pcs/kg)",
+                            field:"inkg",
+                            responsive:0,
+                            headerVertical:true,
+                            cssClass:"bg-gray-200 font-semibold"
+                        },
                         {   title:"Lng(pcs/feet)",
                             field:"length",
                             headerVertical:true,
@@ -402,21 +427,22 @@
                             formatterParams:{thousand:",",precision:2},
                             validator:["required","numeric"],
                             bottomCalcParams:{precision:2}  ,
-                            // cellEdited:function(cell){
-                            //     var data = cell.getData();
-                            //     var sum = Number(data.perpc) / Number(data.length)
-                            //     var row = cell.getRow();
-                            //     row.update({
-                            //         "perfeet": sum
-                            //     });
-                            // }
                         },
                     ]
                 },
                 {
                     title:'Price',
                     columns:[
-                        {title:"$/Ton",            field:"gdsprice",          cssClass:"bg-gray-200 font-semibold",formatter:"money" , formatterParams:{thousand:",",precision:2}},
+                        {   title:"$/Ton",
+                            field:"gdsprice",
+                            formatter:"money" ,
+                            editor:"number",
+                            responsive:0,
+                            headerVertical:true,
+                            cssClass:"bg-green-200 font-semibold",
+                            validator:["required","numeric"],
+                            formatterParams:{thousand:",",precision:2}
+                        },
                     ]
                 },
                 {
@@ -471,21 +497,21 @@
                 {
                     title:'Duties Rate', headerHozAlign:"center",
                     columns:[
-                        {title:"Code",              field:"material.hscodes.hscode",
+                        {title:"Code",              field:"hscode",
                         headerVertical:true,      cssClass:"bg-gray-200 font-semibold", visible:false},
-                        {title:"CD",                field:"material.hscodes.cd",
+                        {title:"CD",                field:"cd",
                         headerVertical:true,       cssClass:"bg-gray-200 font-semibold", visible:false},
-                        {title:"ST",                field:"material.hscodes.st",
+                        {title:"ST",                field:"st",
                         headerVertical:true,         cssClass:"bg-gray-200 font-semibold", visible:false},
-                        {title:"RD",                field:"material.hscodes.rd",
+                        {title:"RD",                field:"rd",
                         headerVertical:true,       cssClass:"bg-gray-200 font-semibold", visible:false},
-                        {title:"ACD",               field:"material.hscodes.acd",
+                        {title:"ACD",               field:"acd",
                         headerVertical:true,         cssClass:"bg-gray-200 font-semibold", visible:false},
-                        {title:"AST",               field:"material.hscodes.ast",
+                        {title:"AST",               field:"ast",
                         headerVertical:true,       cssClass:"bg-gray-200 font-semibold", visible:false},
-                        {title:"IT",                field:"material.hscodes.it",
+                        {title:"IT",                field:"it",
                         headerVertical:true,       cssClass:"bg-gray-200 font-semibold", visible:false},
-                        {title:"WSC",               field:"material.hscodes.wse",
+                        {title:"WSC",               field:"wsc",
                         headerVertical:true,        cssClass:"bg-gray-200 font-semibold", visible:false},
                     ]
                 },

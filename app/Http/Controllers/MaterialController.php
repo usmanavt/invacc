@@ -65,6 +65,7 @@ class MaterialController extends Controller
         $request->validate([
             // 'title'=>'required|min:3|unique:materials'
         ]);
+
         $title = $request->title;
         $dimension_id = $request->dimension_id;
         $mat = Material::where('dimension_id',$dimension_id)->where('title',$title)->first();
@@ -74,23 +75,26 @@ class MaterialController extends Controller
             Session::flash('info','Same dimension for same title exists');
             return redirect()->back();
         }
+
         DB::beginTransaction();
         try {
-            $material = new Material();
-            $material->title = $request->title;
-            $material->nick = $request->nick;
-            $material->category_id = $request->category_id;
-            $material->dimension_id = $request->dimension_id;
-            $material->source_id = $request->source_id;
-            $material->sku_id = $request->sku_id;
-            $material->brand_id = $request->brand_id;
-            $material->hscode_id = $request->hscode_id;
-            $material->category = $request->category;
-            $material->dimension = $request->dimension;
-            $material->source = $request->source;
-            $material->sku = $request->sku;
-            $material->brand = $request->brand;
-            $material->save();
+            {
+                $material = new Material();
+                $material->title = $request->title;
+                $material->nick = $request->nick;
+                $material->category_id = $request->category_id;
+                $material->dimension_id = $request->dimension_id;
+                $material->source_id = $request->source_id;
+                $material->sku_id = $request->sku_id;
+                $material->brand_id = $request->brand_id;
+                $material->hscode_id = $request->hscode_id;
+                $material->category = $request->category;
+                $material->dimension = $request->dimension;
+                $material->source = $request->source;
+                $material->sku = $request->sku;
+                $material->brand = $request->brand;
+                $material->save();
+            }
             DB::commit();
             Session::flash('success','Material created');
             return redirect()->back();
@@ -174,6 +178,6 @@ class MaterialController extends Controller
 
     public function destroy($id)
     {
-  
+
     }
 }

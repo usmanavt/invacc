@@ -11,7 +11,7 @@
 
                 {{-- Create Form --}}
                 <div class="px-6 py-2" >
-                    
+
                     <div class="flex gap-8">
                         {{-- Form Data --}}
                         <div class="flex flex-col justify-start items-center">
@@ -28,11 +28,11 @@
                                 <x-label for="title" value="Title"/>
                                 <x-input id="title" class="bg-indigo-100 w-96" type="text" name="title" :value="old('title')"  required minlength="3"/>
                                 @if($errors->has('title'))<div class="text-red-500 text-xs">{{ $errors->first('title') }}</div>@endif
-                                
+
                                 <x-label for="nick" value="Nick"/>
                                 <x-input id="nick" class="bg-indigo-100" type="text" name="nick" :value="old('nick')"  required minlength="3"/>
                                 @if($errors->has('nick'))<div class="text-red-500 text-xs">{{ $errors->first('nick') }}</div>@endif
-    
+
 
                                 <x-label for="" value="Category"/>
                                 <select required name="category_id" class="bg-indigo-100 w-full" required onchange="getHiddenValues(this)">
@@ -74,7 +74,7 @@
                                     @endforeach
                                 </select>
 
-                               
+
                                 <x-label for="" value="hscode"/>
                                 <select required name="hscode_id" class="bg-indigo-100 w-full" required onchange="getHiddenValues(this)">
                                     <option value="" selected>--hscode</option>
@@ -124,7 +124,7 @@
                     break;
                 case 'sku_id':
                     sku.value = el.options[el.selectedIndex].innerText
-                    break;  
+                    break;
                 case 'brand_id':
                     brand.value = el.options[el.selectedIndex].innerText
                     break;

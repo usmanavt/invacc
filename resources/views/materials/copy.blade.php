@@ -11,7 +11,7 @@
 
                 {{-- Create Form --}}
                 <div class="px-6 py-2" >
-                    
+
                     <div class="flex gap-8">
                         {{-- Form Data --}}
                         <div class="flex flex-col justify-start items-center">
@@ -23,22 +23,23 @@
                             <x-label for="title" :value="__('Name')"/>
                             <x-input class="" type="text" name="title" value="{{ $material->title }}"  required minlength="3"/>
                             @if($errors->has('title'))<div class="text-red-500 text-xs">{{ $errors->first('title') }}</div>@endif
-                            
+
                             <x-label for="nick" :value="__('Knick Name')"/>
                             <x-input class="" type="text" name="nick" value="{{ $material->nick }}"  required minlength="3"/>
                             @if($errors->has('nick'))<div class="text-red-500 text-xs">{{ $errors->first('nick') }}</div>@endif
-    
+
 
                             <x-label for="" value="Category"/>
                             <x-input class="" type="text"  name="category" value="{{ $material->category }}" disabled />
                             <input type="hidden" name="category_id" value="{{ $material->category_id }}">
+                            <input type="hidden" name="category" value="{{ $material->category }}">
 
                             <x-label for="" value="dimension"/>
-                            <select required name="dimension_id" class="bg-indigo-100 w-full" required onchange="getHiddenValues(this)">
+                            <select required id="dimension_id" name="dimension_id" class="bg-indigo-100 w-full" required onchange="getHiddenValues(this)">
                                 @foreach ($dimensions as $dimension)
                                     @if ($material->dimension_id == $dimension->id)
                                         <option value="{{ $dimension->id }}" selected>{{ $dimension->title }}</option>
-                                    @else                                            
+                                    @else
                                         <option value="{{ $dimension->id }}">{{ $dimension->title }}</option>
                                     @endif
                                 @endforeach
@@ -47,16 +48,19 @@
                             <x-label for="" value="Source"/>
                             <x-input class="" type="text"  name="source" value="{{ $material->source }}" disabled />
                             <input type="hidden" name="source_id" value="{{ $material->source_id }}">
+                            <input type="hidden" name="source" value="{{ $material->source }}">
 
                             <x-label for="" value="Sku"/>
                             <x-input class="" type="text"  name="sku" value="{{ $material->sku }}" disabled />
                             <input type="hidden" name="sku_id" value="{{ $material->sku_id }}">
-                        
+                            <input type="hidden" name="sku" value="{{ $material->sku }}">
+
 
                             <x-label for="" value="Brand"/>
                             <x-input class="" type="text"  name="brand" value="{{ $material->brand }}" disabled />
                             <input type="hidden" name="brand_id" value="{{ $material->brand_id }}">
-                            
+                            <input type="hidden" name="brand" value="{{ $material->brand }}">
+
                             {{-- <x-label for="" value="hscode"/>
                             <x-input class="" type="text"   value="{{ $material->hscodes->hscode }}" disabled /> --}}
                                 <input type="hidden" name="hscode_id" value="{{ $material->hscode_id }}">
@@ -80,7 +84,7 @@
 
                             </form>
                         </div>
-                        
+
                         {{-- Listing --}}
                         <div class="ml-4 pt-1 border border-slate-300 w-full p-2">
                         <span class="text-indigo-500 border-b">Existing Materials</span>
@@ -101,16 +105,12 @@
 @push('scripts')
 <script>
     const dimension = document.getElementById('dimension')
+    const dimension_id = document.getElementById('dimension_id')
+
     function getHiddenValues(el)
-        {
-            switch (el.name)
-            {
-                case 'dimension_id':
-                    dimension.value = el.options[el.selectedIndex].innerText
-                    break;
-            }
-            // var selectCategoryId = el.options[el.selectedIndex].value
-        }
+    {
+        dimension.value = dimension_id.options[dimension_id.selectedIndex].innerText
+    }
 </script>
 @endpush
 
