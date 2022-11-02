@@ -4,6 +4,7 @@ namespace App\Models;
 
 use DateTimeInterface;
 use Illuminate\Database\Eloquent\Model;
+use App\Models\CommercialInvoiceDetails;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class CommercialInvoice extends Model
@@ -16,4 +17,14 @@ class CommercialInvoice extends Model
 
 
     protected function serializeDate(DateTimeInterface $date){return $date->format('d-m-Y');}
+
+    /**
+     * Get all of the commericalInvoiceDetails for the CommercialInvoice
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function commericalInvoiceDetails()
+    {
+        return $this->hasMany(CommercialInvoiceDetails::class);
+    }
 }

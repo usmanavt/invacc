@@ -7,7 +7,7 @@
 
     <x-slot name="header">
         <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-            Create Commercial Invoice
+            Edit Commercial Invoice | {{ $i->id }}
         </h2>
     </x-slot>
 
@@ -23,17 +23,17 @@
                             <legend>Invoice Level Entries</legend>
                             <div class="grid grid-cols-12 gap-2 py-2 items-center">
 
-                                <x-input-date title="Inv. Date" name="invoicedate" req required class="col-span-2"/>
+                                <x-input-date title="Inv. Date" name="invoicedate" value="{{ $i->invoice_date->format('Y-m-d') }}" req required class="col-span-2"/>
 
-                                <x-input-text title="Invoice #" name="invoiceno" req required class=""/>
-                                <x-input-text title="Challan #" name="challanno" req required class=""/>
+                                <x-input-text title="Invoice #" name="invoiceno" value="{{ $i->invoiceno }}" req required class=""/>
+                                <x-input-text title="Challan #" name="challanno" value="{{ $i->challanno }}" req required class=""/>
 
-                                <x-input-numeric title="Conv. Rate" name="conversionrate"  req required class=""/>
-                                <x-input-numeric title="Insurance" name="insurance"  req required class=""/>
+                                <x-input-numeric title="Conv. Rate" name="conversionrate" value="{{ $i->conversionrate }}" req required class=""/>
+                                <x-input-numeric title="Insurance" name="insurance"  value="{{ $i->insurance }}" req required class=""/>
                             </div>
                             <div class="grid grid-cols-12 gap-2 py-2 items-center">
-                                <x-input-date title="Mac. Date" name="machine_date" req required class="col-span-2"/>
-                                <x-input-text title="Machine #" name="machineno" req required class="col-span-2"/>
+                                <x-input-date title="Mac. Date" name="machine_date" value="{{ $i->machine_date->format('Y-m-d') }}" req required class="col-span-2"/>
+                                <x-input-text title="Machine #" name="machineno" value="{{ $i->machineno }}" req required class="col-span-2"/>
 
                             </div>
                         </fieldset>
@@ -42,18 +42,18 @@
                             <legend>Invoice Level Expenses</legend>
                             <div class="grid grid-cols-12 gap-2 py-2 items-center">
 
-                                <x-input-numeric title="Bank Chrgs" name="bankcharges" required  onblur="calculateBankCharges()"/>
-                                <x-input-numeric title="Cust Coll" name="collofcustom" required  onblur="calculateBankCharges()"/>
-                                <x-input-numeric title="Ex Tax of" name="exataxoffie" required  onblur="calculateBankCharges()"/>
-                                <x-input-numeric title="Ship Doc Chg" name="lngnshipdochrgs" required  onblur="calculateBankCharges()"/>
-                                <x-input-numeric title="Lcl Cartage" name="localcartage" required  onblur="calculateBankCharges()"/>
-                                <x-input-numeric title="Misc Exp Lunch" name="miscexplunchetc" required  onblur="calculateBankCharges()"/>
-                                <x-input-numeric title="Custom Sepoy" name="customsepoy" required  onblur="calculateBankCharges()"/>
-                                <x-input-numeric title="Weigh Bridge" name="weighbridge" required  onblur="calculateBankCharges()"/>
-                                <x-input-numeric title="Misc Exp" name="miscexpenses" required  onblur="calculateBankCharges()"/>
-                                <x-input-numeric title="Agency Chgs" name="agencychrgs" required  onblur="calculateBankCharges()"/>
-                                <x-input-numeric title="Other Chgs" name="otherchrgs" required  onblur="calculateBankCharges()"/>
-                                <x-input-numeric title="Total" name="banktotal" disabled />
+                                <x-input-numeric title="Bank Chrgs" name="bankcharges" value="{{ $i->bankcharges }}"  required  onblur="calculateBankCharges()"/>
+                                <x-input-numeric title="Cust Coll" name="collofcustom" value="{{ $i->collofcustom }}"  required  onblur="calculateBankCharges()"/>
+                                <x-input-numeric title="Ex Tax of" name="exataxoffie" value="{{ $i->exataxoffie }}"  required  onblur="calculateBankCharges()"/>
+                                <x-input-numeric title="Ship Doc Chg" name="lngnshipdochrgs" value="{{ $i->lngnshipdochrgs }}"  required  onblur="calculateBankCharges()"/>
+                                <x-input-numeric title="Lcl Cartage" name="localcartage" value="{{ $i->localcartage }}"  required  onblur="calculateBankCharges()"/>
+                                <x-input-numeric title="Misc Exp Lunch" name="miscexplunchetc" value="{{ $i->miscexplunchetc }}"  required  onblur="calculateBankCharges()"/>
+                                <x-input-numeric title="Custom Sepoy" name="customsepoy" value="{{ $i->customsepoy }}"  required  onblur="calculateBankCharges()"/>
+                                <x-input-numeric title="Weigh Bridge" name="weighbridge" value="{{ $i->weighbridge }}"  required  onblur="calculateBankCharges()"/>
+                                <x-input-numeric title="Misc Exp" name="miscexpenses" value="{{ $i->miscexpenses }}"  required  onblur="calculateBankCharges()"/>
+                                <x-input-numeric title="Agency Chgs" name="agencychrgs" value="{{ $i->agencychrgs }}"  required  onblur="calculateBankCharges()"/>
+                                <x-input-numeric title="Other Chgs" name="otherchrgs" value="{{ $i->otherchrgs }}"  required  onblur="calculateBankCharges()"/>
+                                <x-input-numeric title="Total" name="banktotal" value="{{ $i->otherchrgs }}" disabled />
 
                             </div>
                         </fieldset>
@@ -61,7 +61,7 @@
                         {{-- Contract Details --}}
                         <div class="flex flex-row px-4 py-2 items-center">
                             <x-label value="Add Pcs & Feet Size & Press"></x-label>
-                            <x-button id="calculate" class="mx-2" onclick="calculate()">Calculate</x-button>
+                            <x-button id="calculate" class="mx-2" onclick="calculate();calculate();calculate();">Calculate</x-button>
                             <x-label value="This will prepare your commercial invoice for Submission"></x-label>
                         </div>
                         <x-tabulator-dynamic />
@@ -89,21 +89,16 @@
 
 @push('scripts')
     <script>
-        let table;
-        let searchValue = "";
-        const deleteIcon = function(cell,formatterParams){return "<i class='fa fa-trash text-red-500'></i>";};
-        const getMaster = @json(route('contracts.master'));
-        const getDetails = @json(route('cis.condet'));
+        const getDetails = @json("$i->commericalInvoiceDetails");
+        const cid = @json("$i->id");
+        // console.info(cid)
         let csrfToken = document.head.querySelector("[name~=csrf-token][content]").content;
         //
-        let modal = document.getElementById("myModal")
         let calculateButton = document.getElementById("calculate")
         let submitButton = document.getElementById("submitbutton")
 
         let dynamicTable = ""
         let dynamicTableData = []
-        let adopted = false
-        let detailsUrl = ''
 
         // Bank Charges
         let bankcharges= document.getElementById("bankcharges")
@@ -123,31 +118,8 @@
         var insurance = document.getElementById("insurance");
         //  Add Event on  Page Load
         document.addEventListener('DOMContentLoaded',()=>{
-            calculateButton.disabled = true
+            // calculateButton.disabled = true
             submitButton.disabled = true
-        })
-        // Add event handler to read keyboard key up event & conversionrate
-        document.addEventListener('keyup', (e)=>{
-
-            //  We are using ctrl key + 'ArrowUp' to show Modal
-            if(e.ctrlKey && e.keyCode == 32){
-                if(conversionrate.value <= 0)
-                {
-                    showSnackbar("Please add conversion rate before proceeding","error");
-                    conversionrate.focus();
-                    return;
-                }
-                if(insurance.value <= 0)
-                {
-                    showSnackbar("Please add insurance rate before proceeding","error");
-                    insurance.focus();
-                    return;
-                }
-                if(!adopted)
-                {
-                    showModal()
-                }
-            }
         })
         // Calculate Bank Charges [ onblur ]
         function calculateBankCharges()
@@ -159,174 +131,30 @@
         }
     </script>
 @endpush
-@push('scripts')
-    <script>
-        // -----------------FOR MODAL -------------------------------//
-        function showModal(){ modal.style.display = "block"}
-        function closeModal(){ modal.style.display = "none"}
-        //  When the user clicks anywhere outside of the modal, close it
-        window.onclick = function(event) {
-            if (event.target == modal) {
-                modal.style.display = "none";
-            }
-        }
-        //  Table Filter
-        function dataFilter(element)
-        {
-            searchValue = element.value;
-            table.setData(getMaster,{search:searchValue});
-        }
-        //  The Table for Materials Modal
-        table = new Tabulator("#tableData", {
-            autoResize:true,
-            responsiveLayout:"collapse",
-            layout:"fitData",
-            index:"id",
-            placeholder:"No Data Available",
-            pagination:true,
-            paginationMode:"remote",
-            sortMode:"remote",
-            filterMode:"remote",
-            paginationSize:10,
-            paginationSizeSelector:[10,25,50,100],
-            ajaxParams: function(){
-                return {search:searchValue};
-            },
-            ajaxURL: getMaster,
-            ajaxContentType:"json",
-            initialSort:[ {column:"id", dir:"desc"} ],
-            height:"100%",
-
-            columns:[
-                // Master Data
-                {title:"Id", field:"id" , responsive:0},
-                {title:"Invoice #", field:"number" , visible:true ,headerSort:false, responsive:0},
-                {title:"Supplier", field:"supplier.title" , visible:true ,headerSort:false, responsive:0},
-            ],
-            // Extra Pagination Data for End Users
-            ajaxResponse:function(getDataUrl, params, response){
-                remaining = response.total;
-                let doc = document.getElementById("example-table-info");
-                doc.classList.add('font-weight-bold');
-                doc.innerText = `Displaying ${response.from} - ${response.to} out of ${remaining} records`;
-                return response;
-            }
-        })
-        //  Adds New row to dynamicTable
-        table.on('rowClick',function(e,row){
-            var simple = {...row}
-            var data = simple._row.data
-
-            detailsUrl = `${getDetails}/?id=${data.id}`
-            fetchDataFromServer(detailsUrl)
-            adopted = true
-            calculateButton.disabled = false
-        })
-    </script>
-@endpush
 
 @push('scripts')
     <script>
-        //  ------------------Dynamic Table----------------------//
-        async function fetchDataFromServer(url)
-        {
-            var data =  await fetch(url,{
-                method:"GET",
-                headers: { 'Accept':'application/json','Content-type':'application/json'},
-                })
-                .then((response) => response.json()) //Transform data to json
-                .then(function(response){
-                    console.log(response);
-                    return response;
-                })
-                .catch(function(error){
-                    console.log("Error : " + error);
-            })
-            //  Stremaline Data for Tabulator
-            for (let index = 0; index < data.length; index++) {
-                const obj = data[index];
-                const mat = obj['material']
-                const hsc = mat['hscodes']
-
-                // console.log(obj.bundle1 , obj.pcspbundle1 ,obj.bundle2 , obj.pcspbundle2);
-                var vpcs = ((obj.bundle1 * obj.pcspbundle1) + (obj.bundle2 * obj.pcspbundle2)).toFixed(2)
-                // console.log(vpcs);
-                var vwinkg = ((obj.gdswt / vpcs ) * 1000).toFixed(3)
-                dynamicTable.addData([
-                    {
-                        id :                obj.id,
-                        material_title :    obj.material_title,
-                        contract_id :       obj.contract_id,
-                        material_id :       obj.material_id,
-                        supplier_id :       obj.supplier_id,
-                        user_id :           obj.user_id,
-                        category_id :       obj.category_id,
-                        sku_id :            obj.sku_id,
-                        dimension_id :      obj.dimension_id,
-                        source_id :         obj.source_id,
-                        brand_id :          obj.brand_id,
-
-                        pcs :               vpcs,
-                        gdswt :             obj.gdswt,
-                        inkg :              vwinkg,
-                        length :            0,
-
-                        gdsprice :          obj.gdsprice,
-
-                        amtindollar :       obj.gdswt * obj.gdsprice ,
-                        amtinpkr :          ( obj.gdswt *  obj.gdsprice  * conversionrate.value).toFixed(0),
-                        itmration:          0,
-
-                        insuranceperitem :  0,
-                        amountwithoutinsurance : 0,
-                        onepercentdutypkr : 0,
-                        pricevaluecostsheet : 0,
-
-                        hscode :            hsc.hscode,
-                        cd :                hsc.cd,
-                        st :                hsc.st,
-                        rd :                hsc.rd,
-                        acd :               hsc.acd,
-                        ast :               hsc.ast,
-                        it :                hsc.it,
-                        wsc :               hsc.wse,
-
-                        totallccostwexp:    0,
-                        perpc:              0,
-                        perkg:              0,
-                        perft:            0,
-                    }
-                ])
-            }
-        }
         var calculate = function(){
             calculateBankCharges()
             // alert(dynamicTable.getData())
             const data = dynamicTable.getData()
-            //  First Iteration to calculate Basic Data
-            data.forEach(e => {
-                var pcs = e.pcs
-                var gdswt = e.gdswt
-                var inkg = ((e.gdswt / e.pcs ) * 1000).toFixed(3)
-                var length = e.length
-                var gdsprice = e.gdsprice
-                //  update data element
-                e.pcs = pcs
-                e.gdswt = gdswt
-                e.inkg = inkg
-                e.length = length
-                e.gdsprice = gdsprice
-            })
             //  Get Ratio after price/length/pcs update
             var amtinpkrtotal = 0
             data.forEach(e => {
                 amtinpkrtotal += parseFloat(e.amtinpkr)
             });
             data.forEach(e => {
-                var amtinpkr = conversionrate.value * e.gdsprice * e.gdswt
+                var pcs = e.pcs
+                var gdswt = e.gdswt
+                var inkg = ((e.gdswt / e.pcs ) * 1000).toFixed(3)
+                var length = e.length
+                var gdsprice = e.gdsprice
+
+                var amtindollar = gdsprice * gdswt
+                var amtinpkr = conversionrate.value * amtindollar
                 var itmratio = amtinpkr / amtinpkrtotal * 100
                 var insuranceperitem = parseFloat(insurance.value) * itmratio / 100
-                var amountwithoutinsurance = ( e.amtindollar + insuranceperitem ) * parseFloat(conversionrate.value)
+                var amountwithoutinsurance = ( amtindollar + insuranceperitem ) * parseFloat(conversionrate.value)
                 var onepercentdutypkr = amountwithoutinsurance * 0.01
                 var pricevaluecostsheet = parseFloat(onepercentdutypkr + amountwithoutinsurance)
 
@@ -336,20 +164,29 @@
                 var sta = (pricevaluecostsheet + cda + rda + acda) * e.st / 100
                 var asta = (pricevaluecostsheet + cda + rda + acda) * e.ast / 100
                 var ita =(pricevaluecostsheet + cda + sta + rda + acda + asta) * e.it / 100
-                var wsca = (pricevaluecostsheet * e.wsc) /100
+                var wsca = (pricevaluecostsheet * e.wse) /100
                 var total = cda + rda + sta + acda + asta + ita + wsca
                 var perft = (e.perpc / e.length).toFixed(2)
                 var totallccostwexp = total + pricevaluecostsheet + (banktotal.value * itmratio / 100)
-                var perpc = (totallccostwexp / e.pcs).toFixed(2)
-                var perkg = (perpc / e.inkg).toFixed(2)
+                var perpc = (e.totallccostwexp / e.pcs).toFixed(2)
+                var perkg = (e.perpc / inkg).toFixed(2)
 
-                e.amtindollar = e.gdswt * e.gdsprice
+
+                e.pcs = pcs
+                e.gdswt = gdswt
+                e.inkg = inkg
+                e.length = length
+                e.gdsprice = gdsprice
+
+                e.amtindollar = amtindollar
                 e.amtinpkr = amtinpkr
                 e.itmratio = itmratio
                 e.insuranceperitem = insuranceperitem
                 e.amountwithoutinsurance = amountwithoutinsurance
                 e.onepercentdutypkr = (onepercentdutypkr).toFixed(2)
                 e.pricevaluecostsheet = (pricevaluecostsheet).toFixed(2)
+
+
                 e.cda = (cda).toFixed(2)
                 e.rda = (rda).toFixed(2)
                 e.acda = (acda).toFixed(2)
@@ -361,7 +198,7 @@
                 e.perkg = perkg
                 e.totallccostwexp = totallccostwexp
                 e.perpc = perpc
-                e.perft = (perpc / e.length )
+                e.perft = (perpc / length )
                 // e.inkg = inkg
             })
             dynamicTable.setData(data)
@@ -371,15 +208,16 @@
         dynamicTable = new Tabulator("#dynamicTable", {
             layout:'fitDataTable',
             responsiveLayout:"collapse",
-            reactiveData:true,
+            data:getDetails,
+            // reactiveData:true,
             columns:[
-                {title:"Del" , formatter:deleteIcon, headerSort:false, responsive:0,
-                    cellClick:function(e, cell){
-                        cell.getRow().delete();
-                    }
-                },
-                {title:"Id",           field:"id", visible:false},
-                {title:"Material",     field:"material_title"},
+                // {title:"Del" , formatter:deleteIcon, headerSort:false, responsive:0,
+                //     cellClick:function(e, cell){
+                //         cell.getRow().delete();
+                //     }
+                // },
+                {title:"Id",           field:"material_id", visible:false},
+                {title:"Material",     field:"material.title"},
                 {title:"contract_id",  field:"contract_id",visible:false},
                 {title:"material_id",  field:"material_id",visible:false},
                 {title:"supplier_id",  field:"supplier_id",visible:false},
@@ -497,21 +335,21 @@
                 {
                     title:'Duties Rate', headerHozAlign:"center",
                     columns:[
-                        {title:"Code",              field:"hscode",
+                        {title:"Code",              field:"material.hscodes.hscode",
                         headerVertical:true,       visible:false},
-                        {title:"CD",                field:"cd",
+                        {title:"CD",                field:"material.hscodes.cd",
                         headerVertical:true,        visible:false},
-                        {title:"ST",                field:"st",
+                        {title:"ST",                field:"material.hscodes.st",
                         headerVertical:true,          visible:false},
-                        {title:"RD",                field:"rd",
+                        {title:"RD",                field:"material.hscodes.rd",
                         headerVertical:true,        visible:false},
-                        {title:"ACD",               field:"acd",
+                        {title:"ACD",               field:"material.hscodes.acd",
                         headerVertical:true,          visible:false},
-                        {title:"AST",               field:"ast",
+                        {title:"AST",               field:"material.hscodes.ast",
                         headerVertical:true,        visible:false},
-                        {title:"IT",                field:"it",
+                        {title:"IT",                field:"material.hscodes.it",
                         headerVertical:true,        visible:false},
-                        {title:"WSC",               field:"wsc",
+                        {title:"WSC",               field:"material.hscodes.wsc",
                         headerVertical:true,         visible:false},
                     ]
                 },
@@ -540,68 +378,24 @@
                     title:"Total LC Cost W/InvsExp",
                     headerVertical:true,
                     field:"totallccostwexp",
-                    responsive:1,
+                    responsive:0,
                     formatter:"money",
                     formatterParams:{thousand:",",precision:2},
                 },
                 {
                     title:'Cost Rate/Unit', headerHozAlign:"center",
                     columns:[
-                        {title:"Per Pc",    field:"perpc",         responsive:0 ,formatter:"money",
+                        {title:"Per Pc",    field:"perpc",          responsive:0 ,formatter:"money",
                     formatterParams:{thousand:",",precision:2}, },
-                        {title:"Per Kg",    field:"perkg",         responsive:0 , formatter:"money",
+                        {title:"Per Kg",    field:"perkg",          responsive:0 , formatter:"money",
                     formatterParams:{thousand:",",precision:2}, },
-                        {title:"Per Feet",  field:"perft",       responsive:0 ,formatter:"money",
+                        {title:"Per Feet",  field:"perft",        responsive:0 ,formatter:"money",
                     formatterParams:{thousand:",",precision:2}, },
 
                     ]
                 },
             ],
         })
-        dynamicTable.on("dataLoaded", function(data){
-            //data - all data loaded into the table
-            // console.log('in table loaded funt');
-            // var amtinpkrtotal = 0
-            // if (!data.length <=0)
-            // {
-            //     data.forEach(e => {
-            //         amtinpkrtotal += parseFloat(e.amtinpkr)
-            //         // console.log(amtinpkrtotal);
-            //     });
-            //     data.forEach(e => {
-            //         var itmratio = e.amtinpkr / amtinpkrtotal * 100
-            //         var insuranceperitem = parseFloat(insurance.value) * itmratio / 100
-            //         var amountwithoutinsurance = ( e.amtindollar + insuranceperitem ) * parseFloat(conversionrate.value)
-            //         var onepercentdutypkr = amountwithoutinsurance * 0.01
-            //         var pricevaluecostsheet = parseFloat(onepercentdutypkr + amountwithoutinsurance)
-            //         var cda = e.cd * pricevaluecostsheet / 100
-            //         var rda = e.rd * pricevaluecostsheet / 100
-            //         var acda = e.acd * pricevaluecostsheet / 100
-            //         var sta = (pricevaluecostsheet + cda + rda + acda) * e.st / 100
-            //         var asta = (pricevaluecostsheet + cda + rda + acda) * e.ast / 100
-            //         var ita =(pricevaluecostsheet + cda + sta + rda + acda + asta) * e.it / 100
-            //         var wsca = pricevaluecostsheet / e.wsc
-            //         var total = cda + rda + sta + acda + asta + ita + wsca
-            //         var perpc = total / e.pcs
-            //         e.itmratio = itmratio
-            //         e.insuranceperitem = insuranceperitem
-            //         e.amountwithoutinsurance = parseFloat(amountwithoutinsurance).toFixed(2)
-            //         e.onepercentdutypkr = (onepercentdutypkr).toFixed(2)
-            //         e.pricevaluecostsheet = (pricevaluecostsheet).toFixed(2)
-            //         e.cda = (cda).toFixed(2)
-            //         e.rda = (rda).toFixed(2)
-            //         e.acda = (acda).toFixed(2)
-            //         e.sta = (sta).toFixed(2)
-            //         e.asta = (asta).toFixed(2)
-            //         e.ita = (ita).toFixed(2)
-            //         e.wsca = (wsca).toFixed(2)
-            //         e.total = (total).toFixed(2)
-            //         e.perpc = (perpc).toFixed(2)
-            //         e.perkg = (perpc / e.inkg).toFixed(2)
-            //         e.perft = (length == 0 ? length: perpc / length).toFixed(2)
-            //     })
-            // }
-        });
         // Validation & Post
         function validateForm()
         {
@@ -636,6 +430,7 @@
 
             // disableSubmitButton(true);
             var data = {
+                'commercial_invoice_id':@json($i->id),
                 'conversionrate' : parseFloat(conversionrate.value).toFixed(2),
                 'insurance' : parseFloat(insurance.value).toFixed(2),
                 'invoiceno' : invoiceno.value,
@@ -658,9 +453,9 @@
                 'comminvoice' : dynamicTableData
             };
             // All Ok - Proceed
-            fetch(@json(route('cis.store')),{
+            fetch(@json(route('cis.update','$i->id')),{
                 credentials: 'same-origin', // 'include', default: 'omit'
-                method: 'POST', // 'GET', 'PUT', 'DELETE', etc.
+                method: 'PUT', // 'GET', 'PUT', 'DELETE', etc.
                 // body: formData, // Coordinate the body type with 'Content-Type'
                 body:JSON.stringify(data),
                 headers: new Headers({
