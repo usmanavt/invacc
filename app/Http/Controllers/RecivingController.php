@@ -43,14 +43,15 @@ class RecivingController extends Controller
         $field = $request->sort[0]["field"];     //  Nested Array
         $dir = $request->sort[0]["dir"];         //  Nested Array
         //  With Tables
-        $cis = CommercialInvoice::where('status',1)->where(function ($query) use ($search){
-            $query->where('invoiceno','LIKE','%' . $search . '%')
-                ->orWhere('challanno','LIKE','%' . $search . '%')
-                ->orWhere('machineno','LIKE','%' . $search . '%');
-            })
-            ->orWhereHas('supplier', function($query) use($search){
-                $query->where('title','LIKE',"%$search%");
-            })
+        $cis = CommercialInvoice::where('status',1)->where('goods_received',0)
+            // ->where(function ($query) use ($search){
+            // $query->where('invoiceno','LIKE','%' . $search . '%')
+            //     ->orWhere('challanno','LIKE','%' . $search . '%')
+            //     ->orWhere('machineno','LIKE','%' . $search . '%');
+            // })
+            // ->orWhereHas('supplier', function($query) use($search){
+            //     $query->where('title','LIKE',"%$search%");
+            // })
         ->with('supplier:id,title')
         ->orderBy($field,$dir)
         ->paginate((int) $size);
@@ -113,12 +114,21 @@ class RecivingController extends Controller
                 $rd->rateperft = $receive['perft'];
                 $rd->save();
             }
+            $cis = CommercialInvoice::findOrFail($reciving->commercial_invoice_id);
+            $cis->goods_received = 1;
+            $cis->save();
+            foreach($cis->commericalInvoiceDetails as $c)
+            {
+                $c->goods_received = 1;
+                $c->save();
+            }
+
         DB::commit();
         Session::flash('success','Good Received');
-        return redirect()->route('recivings.index');
+        return response()->json(['success'],200);
         } catch (\Throwable $th) {
-        DB::rollback();
-        throw $th;
+            DB::rollback();
+            throw $th;
         }
     }
 
