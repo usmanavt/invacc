@@ -92,7 +92,7 @@ class CommercialInvoiceController extends Controller
 
                 $c->machine_date = $request->machine_date;
                 $c->machineno = $request->machineno;
-
+                $c->invoiceno = $request->invoiceno;
                 $c->commercial_invoice_id = $ci->id;
                 $c->contract_id = $cid['contract_id'];
                 $c->material_id = $cid['material_id'];

@@ -2,25 +2,21 @@
 
 namespace App\Models;
 
-use App\Models\Material;
 use App\Models\Supplier;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
-class CommercialInvoiceDetails extends Model
+class Reciving extends Model
 {
     use HasFactory;
-    public $appends = ['material_title'];
+    protected $dates = ['machine_date','reciving_date'];
+    protected $fillable = ['machine_date','machineno','supplier_id','commercial_invoice_id','invoiceno','reciving_date'];
 
-    public function getMaterialTitleAttribute()
-    {
-        return $this->material->title;
-    }
 
     /************** Relationships **************/
-    public function material()
+    public function commercialInvoice()
     {
-        return $this->belongsTo(Material::class);
+        return $this->belongsTo(CommercialInvoice::class);
     }
     public function supplier()
     {

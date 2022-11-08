@@ -61,14 +61,14 @@
                         {{-- Contract Details --}}
                         <div class="flex flex-row px-4 py-2 items-center">
                             <x-label value="Add Pcs & Feet Size & Press"></x-label>
-                            <x-button id="calculate" class="mx-2" onclick="calculate()">Calculate</x-button>
+                            <x-button id="calculate" class="mx-2" type="button" onclick="calculate()">Calculate</x-button>
                             <x-label value="This will prepare your commercial invoice for Submission"></x-label>
                         </div>
                         <x-tabulator-dynamic />
 
                         {{-- Submit Button --}}
                         <div class="pt-2">
-                            <x-button id="submitbutton" onclick="validateForm()">
+                            <x-button id="submitbutton" type="button" onclick="validateForm()">
                                 <i class="fa fa-save fa-fw"></i>
                                 Submit
                             </x-button>
@@ -221,6 +221,7 @@
             fetchDataFromServer(detailsUrl)
             adopted = true
             calculateButton.disabled = false
+            closeModal()
         })
     </script>
 @endpush

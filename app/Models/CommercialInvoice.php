@@ -13,7 +13,7 @@ class CommercialInvoice extends Model
     use HasFactory;
     protected $dates = ['invoice_date','machine_date'];
     protected $fillable = [
-       'invoice_date','invoiceno','supplier_id','machine_date','machineno','challanno','conversionrate','insurance','bankcharges','collofcustom','exataxoffie','lngnshipdochrgs','localcartage','miscexplunchetc','customsepoy','weighbridge','miscexpenses','agencychrgs','otherchrgs'
+       'invoice_date','invoiceno','supplier_id','machine_date','machineno','challanno','conversionrate','insurance','bankcharges','collofcustom','exataxoffie','lngnshipdochrgs','localcartage','miscexplunchetc','customsepoy','weighbridge','miscexpenses','agencychrgs','otherchrgs','goods_received'
     ];
 
 
