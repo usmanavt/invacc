@@ -560,47 +560,7 @@
         })
         dynamicTable.on("dataLoaded", function(data){
             //data - all data loaded into the table
-            // console.log('in table loaded funt');
-            // var amtinpkrtotal = 0
-            // if (!data.length <=0)
-            // {
-            //     data.forEach(e => {
-            //         amtinpkrtotal += parseFloat(e.amtinpkr)
-            //         // console.log(amtinpkrtotal);
-            //     });
-            //     data.forEach(e => {
-            //         var itmratio = e.amtinpkr / amtinpkrtotal * 100
-            //         var insuranceperitem = parseFloat(insurance.value) * itmratio / 100
-            //         var amountwithoutinsurance = ( e.amtindollar + insuranceperitem ) * parseFloat(conversionrate.value)
-            //         var onepercentdutypkr = amountwithoutinsurance * 0.01
-            //         var pricevaluecostsheet = parseFloat(onepercentdutypkr + amountwithoutinsurance)
-            //         var cda = e.cd * pricevaluecostsheet / 100
-            //         var rda = e.rd * pricevaluecostsheet / 100
-            //         var acda = e.acd * pricevaluecostsheet / 100
-            //         var sta = (pricevaluecostsheet + cda + rda + acda) * e.st / 100
-            //         var asta = (pricevaluecostsheet + cda + rda + acda) * e.ast / 100
-            //         var ita =(pricevaluecostsheet + cda + sta + rda + acda + asta) * e.it / 100
-            //         var wsca = pricevaluecostsheet / e.wsc
-            //         var total = cda + rda + sta + acda + asta + ita + wsca
-            //         var perpc = total / e.pcs
-            //         e.itmratio = itmratio
-            //         e.insuranceperitem = insuranceperitem
-            //         e.amountwithoutinsurance = parseFloat(amountwithoutinsurance).toFixed(2)
-            //         e.onepercentdutypkr = (onepercentdutypkr).toFixed(2)
-            //         e.pricevaluecostsheet = (pricevaluecostsheet).toFixed(2)
-            //         e.cda = (cda).toFixed(2)
-            //         e.rda = (rda).toFixed(2)
-            //         e.acda = (acda).toFixed(2)
-            //         e.sta = (sta).toFixed(2)
-            //         e.asta = (asta).toFixed(2)
-            //         e.ita = (ita).toFixed(2)
-            //         e.wsca = (wsca).toFixed(2)
-            //         e.total = (total).toFixed(2)
-            //         e.perpc = (perpc).toFixed(2)
-            //         e.perkg = (perpc / e.inkg).toFixed(2)
-            //         e.perft = (length == 0 ? length: perpc / length).toFixed(2)
-            //     })
-            // }
+
         });
         // Validation & Post
         function validateForm()

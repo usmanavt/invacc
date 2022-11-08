@@ -61,12 +61,14 @@ class CommercialInvoiceController extends Controller
     {
         // dd($request->all());
         $comminvoice = $request->comminvoice;
+        // dd($comminvoice[0]['supplier_id']);
         DB::beginTransaction();
         try {
             $ci = new CommercialInvoice();
             $ci->invoice_date = $request->invoicedate;
             $ci->invoiceno = $request->invoiceno;
             $ci->challanno = $request->challanno;
+            $ci->supplier_id = $comminvoice[0]['supplier_id'];
             $ci->machine_date = $request->machine_date;
             $ci->machineno = $request->machineno;
             $ci->conversionrate = $request->conversionrate;
@@ -138,7 +140,6 @@ class CommercialInvoiceController extends Controller
                 $c->perkg = $cid['perkg'];
                 $c->perft = $cid['perft'];
                 $c->save();
-
             }
             DB::commit();
             Session::flash('success','Commerical Invoice Created');
@@ -163,6 +164,9 @@ class CommercialInvoiceController extends Controller
     {
         // dd($request->all());
         $ci = CommercialInvoice::findOrFail($request->commercial_invoice_id);
+        //  Get Details
+        $comminvoice = $request->comminvoice;
+
         DB::beginTransaction();
         try {
             $ci->invoice_date = $request->invoicedate;
@@ -185,8 +189,7 @@ class CommercialInvoiceController extends Controller
             $ci->otherchrgs = $request->otherchrgs;
             $ci->total = $request->total;
             $ci->save();
-            //  Get Details
-            $comminvoice = $request->comminvoice;
+
 
             foreach ($comminvoice as $cid) {
                 $c = CommercialInvoiceDetails::findOrFail($cid['id']);
