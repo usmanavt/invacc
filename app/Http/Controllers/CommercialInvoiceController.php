@@ -41,7 +41,10 @@ class CommercialInvoiceController extends Controller
 
     public function getDetails(Request $request)
     {
-        $contractDetails = CommercialInvoiceDetails::where('commercial_invoice_id',$request->id)->get();
+        $search = $request->search;
+        $size = $request->size;
+        $contractDetails = CommercialInvoiceDetails::where('commercial_invoice_id',$request->id)
+        ->paginate((int) $size);
         return $contractDetails;
     }
 
@@ -139,6 +142,7 @@ class CommercialInvoiceController extends Controller
                 $c->perpc = $cid['perpc'];
                 $c->perkg = $cid['perkg'];
                 $c->perft = $cid['perft'];
+                $c->otherexpenses = $cid['otherexpenses'];
                 $c->save();
             }
             DB::commit();
@@ -243,6 +247,7 @@ class CommercialInvoiceController extends Controller
                 $c->perpc = $cid['perpc'];
                 $c->perkg = $cid['perkg'];
                 $c->perft = $cid['perft'];
+                $c->otherexpenses = $cid['otherexpenses'];
                 $c->save();
 
             }
