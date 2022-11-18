@@ -13,9 +13,9 @@ class AddOtherExpensesToCommercialInvoiceTable extends Migration
      */
     public function up()
     {
-        Schema::table('commercial_invoice_details', function (Blueprint $table) {
-            $table->decimal('otherexpenses', 15, 3)->default(00.000);
-        });
+        // Schema::table('commercial_invoice_details', function (Blueprint $table) {
+        //     $table->decimal('otherexpenses', 15, 3)->default(00.000);
+        // });
     }
 
     /**

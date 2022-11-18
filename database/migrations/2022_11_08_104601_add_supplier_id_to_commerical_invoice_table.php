@@ -13,16 +13,16 @@ class AddSupplierIdToCommericalInvoiceTable extends Migration
      */
     public function up()
     {
-        Schema::table('commercial_invoices', function (Blueprint $table) {
-            $table->bigInteger('supplier_id')->nullable();
-            $table->bigInteger('goods_received')->default(0);
-            $table->smallInteger('status')->default(1); //
-        });
-        Schema::table('commercial_invoice_details', function (Blueprint $table) {
-            $table->bigInteger('goods_received')->default(0);
-            $table->smallInteger('status')->default(1); //
-            $table->string('invoiceno', 30);
-        });
+        // Schema::table('commercial_invoices', function (Blueprint $table) {
+        //     $table->bigInteger('supplier_id')->nullable();
+        //     $table->bigInteger('goods_received')->default(0);
+        //     $table->smallInteger('status')->default(1); //
+        // });
+        // Schema::table('commercial_invoice_details', function (Blueprint $table) {
+        //     $table->bigInteger('goods_received')->default(0);
+        //     $table->smallInteger('status')->default(1); //
+        //     $table->string('invoiceno', 30);
+        // });
     }
 
     /**

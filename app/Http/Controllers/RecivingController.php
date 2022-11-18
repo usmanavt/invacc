@@ -5,175 +5,137 @@ namespace App\Http\Controllers;
 use App\Models\Location;
 use App\Models\Reciving;
 use Illuminate\Http\Request;
-use App\Models\RecivingDetails;
 use App\Models\CommercialInvoice;
 use Illuminate\Support\Facades\DB;
+use App\Models\RecivingPendingDetails;
 use Illuminate\Support\Facades\Session;
 use App\Models\CommercialInvoiceDetails;
+use App\Models\RecivingCompletedDetails;
 
 class RecivingController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function index(Request $request)
+    public function __construct(){ $this->middleware('auth'); }
+
+    public function index()
     {
-        $search = $request->search;
-        $recivings = Reciving::where(function($q) use ($search){
-            $q->where('machineno','LIKE',"%$search%")
-            ->orWhere('invoiceno','LIKE',"%$search%")
-            ->orWhereHas('supplier', function($qu) use ($search){
-                $qu->where('title','LIKE',"$search");
-            });
-        })
-        ->with('supplier')
-        ->orderBy('id','desc')
-        ->paginate(5);
-        // return $recivings;
-        return view('recivings.index')->with('recivings',$recivings);
+        return view('recivings.index');
     }
 
-    public function getCISMaster(Request $request)
+    public function getRecivingMaster(Request $request)
     {
-        // dd($request->all());
         $search = $request->search;
+        $status=$request->status;
         $size = $request->size;
         $field = $request->sort[0]["field"];     //  Nested Array
         $dir = $request->sort[0]["dir"];         //  Nested Array
-        //  With Tables
-        $cis = CommercialInvoice::where('status',1)->where('goods_received',0)
-            // ->where(function ($query) use ($search){
-            // $query->where('invoiceno','LIKE','%' . $search . '%')
-            //     ->orWhere('challanno','LIKE','%' . $search . '%')
-            //     ->orWhere('machineno','LIKE','%' . $search . '%');
-            // })
-            // ->orWhereHas('supplier', function($query) use($search){
-            //     $query->where('title','LIKE',"%$search%");
-            // })
+        $recivings = Reciving::where('status',$status)
         ->with('supplier:id,title')
+        ->with('pendingDetails')
         ->orderBy($field,$dir)
         ->paginate((int) $size);
-        return $cis;
+        return $recivings;
     }
-    public function getCISDetails(Request $request)
+    public function getRecivingDetails(Request $request)
     {
-        $contractDetails = CommercialInvoiceDetails::with('supplier')->where('commercial_invoice_id',$request->id)->where('status',1)->get();
+        $search = $request->search;
+        $size = $request->size;
+        $status = $request->status;
+        $id = $request->id;
+        $details = '';
+        if($status === "1")
+        {
+            return  RecivingPendingDetails::where('reciving_id',$id)->where('status',1)->with('material:id,title')
+            ->paginate((int) $size);
+        }else {
+            return RecivingCompletedDetails::where('reciving_id',$id)
+            ->where('status',2)->with('material:id,title')
+            ->paginate((int) $size);
+        }
+    }
+
+    public function show(Request $request)
+    {
+        $pending = RecivingPendingDetails::where('reciving_id',$request->id)->get();
+        return response()->json($pending, 200);
+    }
+
+
+    public function edit($id)
+    {
+        $reciving = Reciving::with('supplier:id,title')->findOrFail($id);
+        if($reciving->status == 2)
+        {
+            Session::flash('info','This reciving is completed. Cannot be reworked on');
+            return redirect()->back();
+        }
         $locations = Location::select('id','title')->where('status',1)->get();
-        return compact('contractDetails','locations');
+        return view('recivings.edit')->with('reciving',$reciving)->with('locations',$locations);
     }
 
-    public function create()
+    public function update(Request $request,Reciving $reciving)
     {
-        return view('recivings.create');
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request)
-    {
-        // dd($request->all());
+        // dd($request->all(),$reciving);
         DB::beginTransaction();
-        try {
-            $recivings = $request->recivings;
-
-            $reciving = new Reciving();
-            $reciving->reciving_date = $request->reciving_date;
-            $reciving->invoiceno = $request->invoiceno;
-            $reciving->machine_date = $request->machine_date;
-            $reciving->machineno = $request->machineno;
-            $reciving->supplier_id = $request->supplier_id;
-            $reciving->commercial_invoice_id = $request->commercial_invoice_id;
-            $reciving->status = 1;
-            $reciving->save();
-
-            foreach ($recivings as $receive) {
-                // dd($receive['location']);
-                $loc = Location::findOrFail($receive['location']);
-                $rd = new RecivingDetails();
-                $rd->reciving_id = $reciving->id;
-                $rd->location_id = $loc->id;
-                $rd->location = $loc->title;
-                $rd->machine_date = $reciving->machine_date;
-                $rd->machineno = $reciving->machineno;
-                $rd->supplier_id = $reciving->supplier_id;
-                $rd->commercial_invoice_id = $reciving->commercial_invoice_id;
-                $rd->invoiceno = $reciving->invoiceno;
-                $rd->reciving_date = $reciving->reciving_date;
-                $rd->status = 1;
-                $rd->qtyinpcs = $receive['pcs'];
-                $rd->qtyinkg = $receive['inkg'];
-                $rd->qtyinfeet = $receive['length'];
-                $rd->rateperpc = $receive['perpc'];
-                $rd->rateperkg = $receive['perkg'];
-                $rd->rateperft = $receive['perft'];
-                $rd->save();
-            }
-            $cis = CommercialInvoice::findOrFail($reciving->commercial_invoice_id);
-            $cis->goods_received = 1;
-            $cis->save();
-            foreach($cis->commericalInvoiceDetails as $c)
-            {
-                $c->goods_received = 1;
-                $c->save();
-            }
-
-        DB::commit();
-        Session::flash('success','Good Received');
-        return response()->json(['success'],200);
+            try {
+                foreach($request->pendings as $p)
+                {
+                    //  if we have GR Qty
+                    if($p['qtythisgr'] >= 0)
+                    {
+                        $pending = RecivingPendingDetails::where('id',$p['id'])->first();
+                        $pending->qtyinpcspending = $p['qtyinpcspending'] -$p['qtyinpcsrejected'] - $p['qtythisgr'];
+                        $pending->save();
+                        //  Close Pending if qtyinpcspending = 0
+                        if($pending->qtyinpcspending == 0)
+                        {
+                            $pending->status = 2;
+                            $pending->save();
+                        }
+                        // Create Good Received
+                        $completed = new RecivingCompletedDetails();
+                        $completed->reciving_id = $p['reciving_id'];
+                        $completed->invoiceno = $p['invoiceno'];
+                        $completed->location = $p['location'];
+                        $completed->machine_date = $p['machine_date'];
+                        $completed->machineno = $p['machineno'];
+                        $completed->supplier_id = $p['supplier_id'];
+                        $completed->commercial_invoice_id = $p['commercial_invoice_id'];
+                        $completed->material_id = $p['material_id'];
+                        $completed->material_title = $p['material']['title'];
+                        $completed->received = $p['qtyinpcsrcv'];
+                        $completed->rejected = $p['qtyinpcsrejected'];
+                        $completed->thisgr = $p['qtythisgr'];
+                        $completed->rateperft = $p['rateperft'];
+                        $completed->rateperkg = $p['rateperkg'];
+                        $completed->rateperpc = $p['rateperpc'];
+                        $completed->save();
+                    }
+                }
+                // Close Reciving
+                $closeReciving = true;
+                foreach ($reciving->pendingDetails as $pending)
+                {
+                    // dd($pending);
+                    if($pending->status === 1)
+                        $closeReciving = false;
+                }
+                if($closeReciving) {
+                    $reciving->status = 2;
+                    $reciving->save();
+                    // Close Commercial Invoice
+                    CommercialInvoice::closeCommercialInvoice($reciving->commercial_invoice_id);
+                }
+            DB::commit();
+            Session::flash('success','Goods Received');
+            return response()->json(['success'],200);
         } catch (\Throwable $th) {
             DB::rollback();
             throw $th;
         }
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\Models\Receiving  $receiving
-     * @return \Illuminate\Http\Response
-     */
-    public function show(Receiving $receiving)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Models\Receiving  $receiving
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(Receiving $receiving)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\Receiving  $receiving
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, Receiving $receiving)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \App\Models\Receiving  $receiving
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy(Receiving $receiving)
-    {
-        //
-    }
+    // public function destroy(Reciving $reciving)
+    // {
+    //     //
+    // }
 }

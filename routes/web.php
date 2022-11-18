@@ -65,7 +65,6 @@ Route::resource('materials', MaterialController::class);
 Route::resource('users',UserController::class);
 
 
-
 // Contract Controller
 Route::get('/contracts/{contract}/printcontract', [ContractController::class, 'printContract'])->name('contracts.print');
 Route::get('/contracts/getContractMaster', [ContractController::class, 'getMaster'])->name('contracts.master');
@@ -77,6 +76,6 @@ Route::get('/cis/getCisDetails', [CommercialInvoiceController::class, 'getDetail
 Route::get('/cis/getContractDetails', [CommercialInvoiceController::class, 'getContractDetails'])->name('cis.condet');
 Route::resource('cis', CommercialInvoiceController::class);
 //  Recivings
-Route::get('/recivings/cismaster', [RecivingController::class, 'getCISMaster'])->name('recivings.cismaster');
-Route::get('/recivings/cisdetails', [RecivingController::class, 'getCISDetails'])->name('recivings.cisdetails');
-Route::resource('recivings', RecivingController::class);
+Route::get('/recivings/master', [RecivingController::class, 'getRecivingMaster'])->name('recivings.master');
+Route::get('/recivings/details', [RecivingController::class, 'getRecivingDetails'])->name('recivings.details');
+Route::resource('recivings', RecivingController::class)->except(['create']);

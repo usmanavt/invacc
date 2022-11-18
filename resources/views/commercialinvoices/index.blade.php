@@ -13,6 +13,10 @@
                 <i class="fa fa-file fa-fw"></i>
                 Add New Record
             </a>
+            <span> | </span>
+            <button class="text-sm text-blue-300" onclick="setStatus(1)">Pending</button>
+            <span> | </span>
+            <button class="text-sm text-blue-300" onclick="setStatus(2)">Completed</button>
         </h2>
     </x-slot>
 
@@ -45,12 +49,18 @@
     const getDetails = @json(route('cis.details'));
     let table;
     let searchValue = "";
-
+    let statusValue="1";  // 1 = Pending, 2 - Completed
+    //  Status Setter
+    function setStatus(status)
+        {
+            statusValue = status
+            table.setData(getMaster,{search:searchValue,status:statusValue})
+        }
     //  Table Filter
     function dataFilter(element)
     {
         searchValue = element.value;
-        table.setData(getMaster,{search:searchValue});
+        table.setData(getMaster,{search:searchValue,status:statusValue});
     }
     // The Table for Items Modal
     table = new Tabulator("#tableData", {
@@ -66,7 +76,7 @@
         paginationSize:10,
         paginationSizeSelector:[10,25,50,100],
         ajaxParams: function(){
-            return {search:searchValue};
+            return {search:searchValue,status:statusValue};
         },
         ajaxURL: getMaster,
         ajaxContentType:"json",
@@ -164,11 +174,11 @@
                     window.open(window.location + "/" + cell.getRow().getData().id + "/edit" ,"_self");
                 }
             },
-            {title:"Delete" , formatter:deleteIcon, hozAlign:"center",headerSort:false, responsive:0,
-                cellClick:function(e, cell){
-                    window.open(window.location + "/" + cell.getRow().getData().id  ,"_self");
-                }
-            },
+            // {title:"Delete" , formatter:deleteIcon, hozAlign:"center",headerSort:false, responsive:0,
+            //     cellClick:function(e, cell){
+            //         window.open(window.location + "/" + cell.getRow().getData().id  ,"_self");
+            //     }
+            // },
             {title:"Print" , formatter:printIcon, hozAlign:"center",headerSort:false, responsive:0,
                 cellClick:function(e, cell){
                     window.open(window.location + "/" + cell.getRow().getData().id + "/printcontract"  ,"_self");

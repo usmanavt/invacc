@@ -13,20 +13,20 @@ class AddStatusCodeToMultipleTables extends Migration
      */
     public function up()
     {
-        Schema::table('contracts', function (Blueprint $table) {
-            $table->smallInteger('status')->default(1); //
-        });
-        Schema::table('contract_details', function (Blueprint $table) {
-            $table->smallInteger('status')->default(1); //
-        });
+        // Schema::table('contracts', function (Blueprint $table) {
+        //     $table->smallInteger('status')->default(1); //
+        // });
+        // Schema::table('contract_details', function (Blueprint $table) {
+        //     $table->smallInteger('status')->default(1); //
+        // });
 
-        Schema::table('hscodes', function (Blueprint $table) {
-            $table->smallInteger('status')->default(1); //
-        });
+        // Schema::table('hscodes', function (Blueprint $table) {
+        //     $table->smallInteger('status')->default(1); //
+        // });
 
-        Schema::table('users', function (Blueprint $table) {
-            $table->smallInteger('status')->default(1); //
-        });
+        // Schema::table('users', function (Blueprint $table) {
+        //     $table->smallInteger('status')->default(1); //
+        // });
     }
 
     /**
