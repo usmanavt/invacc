@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class AddTotalLcCostWExpToCommericalInvoiceDetailsTable extends Migration
+class AddOtherExpensesToCommercialInvoiceTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,9 +13,9 @@ class AddTotalLcCostWExpToCommericalInvoiceDetailsTable extends Migration
      */
     public function up()
     {
-        // Schema::table('commercial_invoice_details', function (Blueprint $table) {
-        //     $table->decimal('totallccostwexp', 15, 3)->default(123.45);
-        // });
+        Schema::table('commercial_invoice_details', function (Blueprint $table) {
+            $table->decimal('otherexpenses', 15, 3)->default(00.000);
+        });
     }
 
     /**

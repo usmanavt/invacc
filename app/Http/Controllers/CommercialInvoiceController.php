@@ -2,38 +2,39 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Reciving;
 use Illuminate\Http\Request;
 use App\Models\ContractDetails;
 use App\Models\CommercialInvoice;
 use Illuminate\Support\Facades\DB;
+use App\Models\RecivingPendingDetails;
 use Illuminate\Support\Facades\Session;
 use App\Models\CommercialInvoiceDetails;
+use App\Models\RecivingCompletedDetails;
 
 class CommercialInvoiceController extends Controller
 {
 
-    public function __construct(){
-        $this->middleware('auth');
-    }
+    public function __construct(){ $this->middleware('auth'); }
 
-    public function index(Request $request)
+    public function index()
     {
         return view('commercialinvoices.index');
     }
+
     public function getMaster(Request $request)
     {
-        // dd($request->all());
+        $status =$request->status ;
         $search = $request->search;
         $size = $request->size;
         $field = $request->sort[0]["field"];     //  Nested Array
         $dir = $request->sort[0]["dir"];         //  Nested Array
-        //  With Tables
-        $cis = CommercialInvoice::where(function ($query) use ($search){
+        $cis = CommercialInvoice::where('status',$status)
+        ->where(function ($query) use ($search){
                 $query->where('invoiceno','LIKE','%' . $search . '%')
                 ->orWhere('challanno','LIKE','%' . $search . '%');
             })
 
-        // ->with('user:id,name','supplier:id,title')
         ->orderBy($field,$dir)
         ->paginate((int) $size);
         return $cis;
@@ -41,7 +42,10 @@ class CommercialInvoiceController extends Controller
 
     public function getDetails(Request $request)
     {
-        $contractDetails = CommercialInvoiceDetails::where('commercial_invoice_id',$request->id)->get();
+        $search = $request->search;
+        $size = $request->size;
+        $contractDetails = CommercialInvoiceDetails::where('commercial_invoice_id',$request->id)
+        ->paginate((int) $size);
         return $contractDetails;
     }
 
@@ -59,11 +63,10 @@ class CommercialInvoiceController extends Controller
 
     public function store(Request $request)
     {
-        // dd($request->all());
         $comminvoice = $request->comminvoice;
-        // dd($comminvoice[0]['supplier_id']);
         DB::beginTransaction();
         try {
+            //  Commercial Invoice Master
             $ci = new CommercialInvoice();
             $ci->invoice_date = $request->invoicedate;
             $ci->invoiceno = $request->invoiceno;
@@ -86,10 +89,18 @@ class CommercialInvoiceController extends Controller
             $ci->otherchrgs = $request->otherchrgs;
             $ci->total = $request->total;
             $ci->save();
+            //  Create Auto Reciving
+            $reciving = new Reciving();
+            $reciving->machine_date = $ci->machine_date;
+            $reciving->machineno = $ci->machineno;
+            $reciving->supplier_id = $comminvoice[0]['supplier_id'];
+            $reciving->commercial_invoice_id = $ci->id;
+            $reciving->invoiceno = $ci->invoiceno;
+            $reciving->save();
 
+            //  Commercial Invoice Details
             foreach ($comminvoice as $cid) {
                 $c = new CommercialInvoiceDetails();
-
                 $c->machine_date = $request->machine_date;
                 $c->machineno = $request->machineno;
                 $c->invoiceno = $request->invoiceno;
@@ -139,7 +150,26 @@ class CommercialInvoiceController extends Controller
                 $c->perpc = $cid['perpc'];
                 $c->perkg = $cid['perkg'];
                 $c->perft = $cid['perft'];
+                $c->otherexpenses = $cid['otherexpenses'];
                 $c->save();
+
+                //  Create Auto Pending Reciving [Copy of CIDetails]
+                $preciving = new RecivingPendingDetails();
+                $preciving->reciving_id = $reciving->id;
+                $preciving->machine_date = $request->machine_date;
+                $preciving->machineno = $request->machineno;
+                $preciving->supplier_id = $cid['supplier_id'];
+                $preciving->commercial_invoice_id = $ci->id;
+                $preciving->invoiceno = $request->invoiceno;
+                $preciving->material_id = $cid['material_id'];
+                $preciving->qtyinpcs = $cid['pcs'];
+                $preciving->qtyinkg = $cid['gdswt'];
+                $preciving->qtyinfeet = $cid['inkg'];
+                $preciving->rateperpc = $cid['perpc'];
+                $preciving->rateperkg = $cid['perkg'];
+                $preciving->rateperft = $cid['perft'];
+                $preciving->qtyinpcspending = $preciving->qtyinpcs = $cid['pcs'];
+                $preciving->save();
             }
             DB::commit();
             Session::flash('success','Commerical Invoice Created');
@@ -157,6 +187,11 @@ class CommercialInvoiceController extends Controller
 
     public function edit($id)
     {
+        if(CommercialInvoice::hasCompletedReciving($id))
+        {
+            Session::flash('info','You cannot edit a commercial invoice, when you already have received Goods against it');
+            return redirect()->back();
+        }
         return view('commercialinvoices.edit')->with('i',CommercialInvoice::whereId($id)->with('commericalInvoiceDetails.material.hscodes')->first());
     }
 
@@ -164,11 +199,13 @@ class CommercialInvoiceController extends Controller
     {
         // dd($request->all());
         $ci = CommercialInvoice::findOrFail($request->commercial_invoice_id);
+        //  FIXME:If This commerical invoice has Completed Reciving, then don't allow edit
+        $cr = RecivingCompletedDetails::where('commercial_invoice_id',$ci->id)->first();
         //  Get Details
         $comminvoice = $request->comminvoice;
-
         DB::beginTransaction();
         try {
+            //  Update Commerical Invoice
             $ci->invoice_date = $request->invoicedate;
             $ci->invoiceno = $request->invoiceno;
             $ci->challanno = $request->challanno;
@@ -189,12 +226,17 @@ class CommercialInvoiceController extends Controller
             $ci->otherchrgs = $request->otherchrgs;
             $ci->total = $request->total;
             $ci->save();
-
+            //  Update Reciving
+            $reciving = Reciving::where('commercial_invoice_id',$ci->id)->first();
+            $reciving->machine_date = $ci->machine_date;
+            $reciving->machineno = $ci->machineno;
+            $reciving->supplier_id = $comminvoice[0]['supplier_id'];
+            $reciving->commercial_invoice_id = $ci->id;
+            $reciving->invoiceno = $ci->invoiceno;
+            $reciving->save();
 
             foreach ($comminvoice as $cid) {
                 $c = CommercialInvoiceDetails::findOrFail($cid['id']);
-                // dd($c->id);
-
                 $c->machine_date = $ci->machine_date;
                 $c->machineno = $ci->machineno;
                 $c->commercial_invoice_id = $cid['commercial_invoice_id'];
@@ -243,7 +285,26 @@ class CommercialInvoiceController extends Controller
                 $c->perpc = $cid['perpc'];
                 $c->perkg = $cid['perkg'];
                 $c->perft = $cid['perft'];
+                $c->otherexpenses = $cid['otherexpenses'];
                 $c->save();
+
+                //  Update Auto Pending Reciving [Copy of CIDetails]
+                $preciving = RecivingPendingDetails::where('commercial_invoice_id',$cid['commercial_invoice_id'])->where('material_id',$cid['material_id'])->first();
+                $preciving->reciving_id = $reciving->id;
+                $preciving->machine_date = $request->machine_date;
+                $preciving->machineno = $request->machineno;
+                $preciving->supplier_id = $cid['supplier_id'];
+                $preciving->commercial_invoice_id = $ci->id;
+                $preciving->invoiceno = $request->invoiceno;
+                $preciving->material_id = $cid['material_id'];
+                $preciving->qtyinpcs = $cid['pcs'];
+                $preciving->qtyinkg = $cid['gdswt'];
+                $preciving->qtyinfeet = $cid['inkg'];
+                $preciving->rateperpc = $cid['perpc'];
+                $preciving->rateperkg = $cid['perkg'];
+                $preciving->rateperft = $cid['perft'];
+                $preciving->qtyinpcspending = $preciving->qtyinpcs = $cid['pcs'];
+                $preciving->save();
 
             }
             DB::commit();

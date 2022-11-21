@@ -13,6 +13,10 @@
                 <i class="fa fa-file fa-fw"></i>
                 Add New Record
             </a>
+            <span> | </span>
+            <button class="text-sm text-blue-300" onclick="setStatus(1)">Pending</button>
+            <span> | </span>
+            <button class="text-sm text-blue-300" onclick="setStatus(2)">Completed</button>
         </h2>
     </x-slot>
 
@@ -45,12 +49,18 @@
     const getDetails = @json(route('cis.details'));
     let table;
     let searchValue = "";
-
+    let statusValue="1";  // 1 = Pending, 2 - Completed
+    //  Status Setter
+    function setStatus(status)
+        {
+            statusValue = status
+            table.setData(getMaster,{search:searchValue,status:statusValue})
+        }
     //  Table Filter
     function dataFilter(element)
     {
         searchValue = element.value;
-        table.setData(getMaster,{search:searchValue});
+        table.setData(getMaster,{search:searchValue,status:statusValue});
     }
     // The Table for Items Modal
     table = new Tabulator("#tableData", {
@@ -66,7 +76,7 @@
         paginationSize:10,
         paginationSizeSelector:[10,25,50,100],
         ajaxParams: function(){
-            return {search:searchValue};
+            return {search:searchValue,status:statusValue};
         },
         ajaxURL: getMaster,
         ajaxContentType:"json",
@@ -102,30 +112,31 @@
                     },
                     ajaxURL: getDetails,
                     columns: [
-                        {title: "material_id",field: "material_id"},
-                        {title: "pcs",field: "pcs"},
-                        {title: "gdswt",field: "gdswt"},
-                        {title: "inkg",field: "inkg"},
-                        {title: "gdsprice",field: "gdsprice"},
-                        {title: "amtindollar",field: "amtindollar"},
-                        {title: "amtinpkr",field: "amtinpkr"},
-                        {title: "lenght",field: "lenght"},
-                        {title: "itmratio",field: "itmratio"},
-                        {title: "insuranceperitem",field: "insuranceperitem"},
-                        {title: "amountwithoutinsurance",field: "amountwithoutinsurance"},
-                        {title: "onepercentdutypkr",field: "onepercentdutypkr"},
-                        {title: "pricevaluecostsheet",field: "pricevaluecostsheet"},
-                        {title: "cda",field: "cda"},
-                        {title: "sta",field: "sta"},
-                        {title: "rda",field: "rda"},
-                        {title: "acda",field: "acda"},
-                        {title: "asta",field: "asta"},
-                        {title: "ita",field: "ita"},
-                        {title: "wsca",field: "wsca"},
-                        {title: "total",field: "total"},
-                        {title: "perpc",field: "perpc"},
-                        {title: "perkg",field: "perkg"},
-                        {title: "perft",field: "perft"},
+                        {title: "material_title",field: "material_title" ,headerVertical:true,},
+                        {title: "pcs",field: "pcs" ,headerVertical:true,},
+                        {title: "gdswt",field: "gdswt" ,headerVertical:true,},
+                        {title: "inkg",field: "inkg" ,headerVertical:true,},
+                        {title: "gdsprice",field: "gdsprice" ,headerVertical:true,},
+                        {title: "otherexpenses",field: "otherexpenses" ,headerVertical:true,},
+                        {title: "amtindollar",field: "amtindollar" ,headerVertical:true,},
+                        {title: "amtinpkr",field: "amtinpkr" ,headerVertical:true,},
+                        {title: "length",field: "length" ,headerVertical:true,},
+                        {title: "itmratio",field: "itmratio" ,headerVertical:true,},
+                        {title: "insuranceperitem",field: "insuranceperitem" ,headerVertical:true,},
+                        {title: "amountwithoutinsurance",field: "amountwithoutinsurance" ,headerVertical:true,},
+                        {title: "onepercentdutypkr",field: "onepercentdutypkr" ,headerVertical:true,},
+                        {title: "pricevaluecostsheet",field: "pricevaluecostsheet" ,headerVertical:true,},
+                        {title: "cda",field: "cda" ,headerVertical:true,},
+                        {title: "sta",field: "sta" ,headerVertical:true,},
+                        {title: "rda",field: "rda" ,headerVertical:true,},
+                        {title: "acda",field: "acda" ,headerVertical:true,},
+                        {title: "asta",field: "asta" ,headerVertical:true,},
+                        {title: "ita",field: "ita" ,headerVertical:true,},
+                        {title: "wsca",field: "wsca" ,headerVertical:true,},
+                        {title: "total",field: "total" ,headerVertical:true,},
+                        {title: "perpc",field: "perpc" ,headerVertical:true,},
+                        {title: "perkg",field: "perkg" ,headerVertical:true,},
+                        {title: "perft",field: "perft" ,headerVertical:true,},
 
                     ],
                     ajaxResponse:function(getDetails, params, response){
@@ -163,11 +174,11 @@
                     window.open(window.location + "/" + cell.getRow().getData().id + "/edit" ,"_self");
                 }
             },
-            {title:"Delete" , formatter:deleteIcon, hozAlign:"center",headerSort:false, responsive:0,
-                cellClick:function(e, cell){
-                    window.open(window.location + "/" + cell.getRow().getData().id  ,"_self");
-                }
-            },
+            // {title:"Delete" , formatter:deleteIcon, hozAlign:"center",headerSort:false, responsive:0,
+            //     cellClick:function(e, cell){
+            //         window.open(window.location + "/" + cell.getRow().getData().id  ,"_self");
+            //     }
+            // },
             {title:"Print" , formatter:printIcon, hozAlign:"center",headerSort:false, responsive:0,
                 cellClick:function(e, cell){
                     window.open(window.location + "/" + cell.getRow().getData().id + "/printcontract"  ,"_self");

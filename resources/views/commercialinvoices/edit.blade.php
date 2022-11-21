@@ -199,6 +199,7 @@
                 e.totallccostwexp = totallccostwexp
                 e.perpc = perpc
                 e.perft = (perpc / length )
+                e.otherexpenses = e.otherexpenses
                 // e.inkg = inkg
             })
             dynamicTable.setData(data)
@@ -257,6 +258,17 @@
                         },
                         {   title:"Lng(pcs/feet)",
                             field:"length",
+                            headerVertical:true,
+                            editor:"number",
+                            cssClass:"bg-green-200 font-semibold",
+                            formatter:"money",
+                            responsive:0,
+                            formatterParams:{thousand:",",precision:2},
+                            validator:["required","numeric"],
+                            bottomCalcParams:{precision:2}  ,
+                        },
+                        {   title:"Other.Exp",
+                            field:"otherexpenses",
                             headerVertical:true,
                             editor:"number",
                             cssClass:"bg-green-200 font-semibold",
