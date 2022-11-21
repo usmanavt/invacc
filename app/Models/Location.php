@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class Location extends Model
 {
     use HasFactory;
-    protected $fillable = ['name','address','status'];
+    protected $fillable = ['title','address','status'];
 
     // Relationships
 }

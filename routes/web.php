@@ -13,6 +13,7 @@ use App\Http\Controllers\ContractController;
 use App\Http\Controllers\CustomerController;
 use App\Http\Controllers\LocationController;
 use App\Http\Controllers\MaterialController;
+use App\Http\Controllers\RecivingController;
 use App\Http\Controllers\SupplierController;
 use App\Http\Controllers\DimensionController;
 use App\Http\Controllers\CommercialInvoiceController;
@@ -75,3 +76,7 @@ Route::get('/cis/getCisMaster', [CommercialInvoiceController::class, 'getMaster'
 Route::get('/cis/getCisDetails', [CommercialInvoiceController::class, 'getDetails'])->name('cis.details');
 Route::get('/cis/getContractDetails', [CommercialInvoiceController::class, 'getContractDetails'])->name('cis.condet');
 Route::resource('cis', CommercialInvoiceController::class);
+//  Recivings
+Route::get('/recivings/cismaster', [RecivingController::class, 'getCISMaster'])->name('recivings.cismaster');
+Route::get('/recivings/cisdetails', [RecivingController::class, 'getCISDetails'])->name('recivings.cisdetails');
+Route::resource('recivings', RecivingController::class);

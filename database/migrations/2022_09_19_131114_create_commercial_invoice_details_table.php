@@ -18,6 +18,7 @@ class CreateCommercialInvoiceDetailsTable extends Migration
             $table->timestamp('machine_date')->nullable();
             $table->string('machineno', 30);
             $table->bigInteger('commercial_invoice_id');
+            $table->string('invoiceno', 30);
             $table->bigInteger('contract_id');
             $table->bigInteger('material_id');
             $table->bigInteger('supplier_id');
