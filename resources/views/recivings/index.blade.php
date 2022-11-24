@@ -42,8 +42,7 @@
             const getDetails = @json(route('recivings.details'));
             let table;
             let searchValue = "";
-            let statusValue= 1;  // 1 = Pending, 2 - Completed
-            let visibility; // Depends on Status Value
+            let statusValue = 1  // 1 = Pending, 2 - Completed
             const updateRcdUrl = @json(route('reciving.updatercd'));
             // console.info(updateRcdUrl)
 
@@ -51,9 +50,7 @@
             const setStatus = (status) => {
                 statusValue = status
                 table.setData(getMaster,{search:searchValue,status:statusValue})
-            }
-            const getStatus = () => {
-                return statusValue === 1 ? true:false
+                console.info(statusValue)
             }
             //  Table Filter
             const dataFilter = (element) =>{
@@ -174,11 +171,14 @@
                     {title: "Comm Inv #",field: "commercial_invoice_id"},
                     {title: "Inv #",field: "invoiceno"},
                     // {title: "Reciving Date",field: "reciving_date"},
-                    {title: "Status",field: "status" ,
+                    {title: "Status",field: "status",visible:false ,
                         formatter:function(cell,row)
                         {
                             if( statusValue === 2){
                                 table.hideColumn('editBtnRcv')
+                            }
+                            if(statusValue === 1) {
+                                table.showColumn('editBtnRcv')
                             }
                             return cell.getData().status === 1 ? 'Pending':'Completed'
                         }
@@ -190,13 +190,8 @@
                     // },
                     {title:"Receive Goods",field:'editBtnRcv' , formatter:editIcon, hozAlign:"center",headerSort:false, responsive:0,
                         cellClick:function(e, cell){
-                            if(cell.getRow().getData().status === 2)
-                            {
-                                showSnackbar('Completed GR cannot be edited','info');
-                            }else{
                                 window.open(window.location + "/" + cell.getRow().getData().id +
                                 "/edit" ,"_self");
-                            }
                         }
                     },
                     // {title:"Delete" , formatter:deleteIcon, hozAlign:"center",headerSort:false, responsive:0,
