@@ -78,4 +78,5 @@ Route::resource('cis', CommercialInvoiceController::class);
 //  Recivings
 Route::get('/recivings/master', [RecivingController::class, 'getRecivingMaster'])->name('recivings.master');
 Route::get('/recivings/details', [RecivingController::class, 'getRecivingDetails'])->name('recivings.details');
+Route::get('/recivings/rcd', [RecivingController::class, 'updateCompletedReciving'])->name('reciving.updatercd');
 Route::resource('recivings', RecivingController::class)->except(['create']);

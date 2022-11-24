@@ -23,16 +23,27 @@ class RecivingController extends Controller
 
     public function getRecivingMaster(Request $request)
     {
+        // dd($request->all());
         $search = $request->search;
         $status=$request->status;
         $size = $request->size;
         $field = $request->sort[0]["field"];     //  Nested Array
         $dir = $request->sort[0]["dir"];         //  Nested Array
-        $recivings = Reciving::where('status',$status)
-        ->with('supplier:id,title')
-        ->with('pendingDetails')
-        ->orderBy($field,$dir)
-        ->paginate((int) $size);
+        if($status === "1")
+        {
+            $recivings = Reciving::where('status',$status)
+            ->with('supplier:id,title')
+            ->with('pendingDetails')
+            ->orderBy($field,$dir)
+            ->paginate((int) $size);
+        }else {
+            $recivings = Reciving::where('grmade',2)
+            ->with('supplier:id,title')
+            ->with('pendingDetails')
+            ->orderBy($field,$dir)
+            ->paginate((int) $size);
+        }
+
         return $recivings;
     }
     public function getRecivingDetails(Request $request)
@@ -42,15 +53,49 @@ class RecivingController extends Controller
         $status = $request->status;
         $id = $request->id;
         $details = '';
+        // dd($request->all());
         if($status === "1")
         {
             return  RecivingPendingDetails::where('reciving_id',$id)->where('status',1)->with('material:id,title')
-            ->paginate((int) $size);
+            ->orderBy('material_id','asc')->paginate((int) $size);
         }else {
             return RecivingCompletedDetails::where('reciving_id',$id)
             ->where('status',2)->with('material:id,title')
-            ->paginate((int) $size);
+            ->orderBy('material_id','asc')->paginate((int) $size);
         }
+    }
+
+    public function updateCompletedReciving(Request $request)
+    {
+        // dd($request->all());
+        $rcd = RecivingCompletedDetails::findOrFail($request->rcdid);
+        $rcd->thisgr = $request->thisgr;
+        $rcd->save();
+
+        $rcv = Reciving::findOrFail($rcd->reciving_id);
+        $rpd = RecivingPendingDetails::where('reciving_id',$rcv->id)->where('material_id',$rcd->material_id)->first();
+
+        $rcds = RecivingCompletedDetails::where('reciving_id',$rcv->id)->where('material_id',$rcd->material_id)->sum('thisgr');
+        // return($rcds);
+
+        if($rcv->status === 2) $rcv->status = 1;
+        if($rpd->status === 2) $rpd->status = 1;
+
+
+        $rpd->qtyinpcspending = $rpd->qtyinpcs - $rcds;
+
+
+        $rpd->save();
+        $rcv->save();
+
+        return response()->json(['message' =>'success'], 200);
+        // $diff_in_mins = now()->diffInMinutes($rcd->updated_at);
+        // if($diff_in_mins < 300)
+        // {
+        //     Session::flash('warning','You cannot edit record within 5 miutes of Edit');
+        //     return response()->json($data, 200, $headers);
+        // }
+        // return $rcd;
     }
 
     public function show(Request $request)
@@ -93,7 +138,8 @@ class RecivingController extends Controller
                         }
                         // Create Good Received
                         $completed = new RecivingCompletedDetails();
-                        $completed->reciving_id = $p['reciving_id'];
+                        $completed->reciving_id = $reciving->id;
+                        $completed->reciving_date = now();
                         $completed->invoiceno = $p['invoiceno'];
                         $completed->location = $p['location'];
                         $completed->machine_date = $p['machine_date'];
@@ -125,6 +171,8 @@ class RecivingController extends Controller
                     // Close Commercial Invoice
                     CommercialInvoice::closeCommercialInvoice($reciving->commercial_invoice_id);
                 }
+                $reciving->grmade = 2;
+                $reciving->save();
             DB::commit();
             Session::flash('success','Goods Received');
             return response()->json(['success'],200);

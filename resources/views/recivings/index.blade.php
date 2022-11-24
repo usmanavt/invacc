@@ -44,12 +44,12 @@
             let searchValue = "";
             let statusValue= 1;  // 1 = Pending, 2 - Completed
             let visibility; // Depends on Status Value
+            const updateRcdUrl = @json(route('reciving.updatercd'));
+            // console.info(updateRcdUrl)
 
             //  Status Setter
             const setStatus = (status) => {
                 statusValue = status
-                visibility = ( status === 1 ? true:false )
-                console.info(visibility)
                 table.setData(getMaster,{search:searchValue,status:statusValue})
             }
             const getStatus = () => {
@@ -98,6 +98,7 @@
                         }
                         subTable = new Tabulator(tableHolder, {
                             layout:"fitData",                       //fit columns to width of table
+                            // autoColumns:true,                       //  Custom Fields
                             responsiveLayout:"collapse",            //hide columns that dont fit on the table
                             index:'id',                             //Table Row Id
                             placeholder:"No Data Available",        //Placeholder text for empty table
@@ -106,20 +107,59 @@
                             paginationSize:10,                      //starting page size
                             paginationSizeSelector:[10,25,50,100],  //  Page Size Selector
                             ajaxParams: function(){
-                                return {id:row.getData().id, status:row.getData().status};
+                                return {id:row.getData().id, status:statusValue};
                             },
                             ajaxURL: getDetails,
                             columns: [
-                                {title: "machine_date",field: "machine_date"},
-                                {title: "machineno",field: "machineno"},
-                                {title: "material_id",field: "material_id"},
-                                {title: "material.title",field: "material.title"},
-                                {title: "qtyinpcs",field: "qtyinpcs"},
-                                {title: "qtyinkg",field: "qtyinkg"},
-                                {title: "qtyinfeet",field: "qtyinfeet"},
-                                {title: "rateperpc",field: "rateperpc"},
-                                {title: "rateperkg",field: "rateperkg"},
-                                {title: "rateperft",field: "rateperft"},
+                                {title: "Detail-ID",field: "id"},
+                                {title: "status",field: "status", visible:false,formatter:function(cell,row){
+                                  if(cell.getData().status ===2 )
+                                  {
+                                    subTable.hideColumn('qtyinpcs')
+                                    subTable.hideColumn('qtyinkg')
+                                    subTable.hideColumn('qtyinfeet')
+                                    subTable.hideColumn('qtyinpcspending')
+                                  }else {
+                                    subTable.hideColumn('location')
+                                    subTable.hideColumn('received')
+                                    subTable.hideColumn('rejected')
+                                    subTable.hideColumn('thisgr')
+                                    subTable.hideColumn('reciving_date')
+                                    subTable.hideColumn('editbtn')
+                                  }
+                                }},
+                                {title: "Recv Date",field: "reciving_date"},
+                                {title: "Location",field: "location"},
+                                {title: "Mat #",field: "material.id"},
+                                {title: "Material",field: "material.title"},
+                                {title: "Qty Pending",field: "qtyinpcspending"},
+                                {title: "Recevied",field: "received"},
+                                {title: "Rejected",field: "rejected"},
+                                {title: "Accepted",field: "thisgr",cssClass:'text-green-500 font-semibold'},
+                                {title: "Qty Pcs",field: "qtyinpcs"},
+                                {title: "Qty Kg",field: "qtyinkg"},
+                                {title: "Qty Ft",field: "qtyinfeet" },
+                                {title: "Rate/Pc",field: "rateperpc"},
+                                {title: "Rate/Kg",field: "rateperkg"},
+                                {title: "Rate/Ft",field: "rateperft"},
+                                {title:"Edit" , field:'editbtn' ,formatter:editIcon, hozAlign:"center",headerSort:false, responsive:0,
+                                    cellClick:function(e, cell){
+                                        // if(cell.getRow().getData().status === 2)
+                                        // {
+                                        //     window.open(window.location + "/rcd/" + cell.getRow().getData().id +
+                                        //     "/edit" ,"_self");
+                                        // }
+                                        result =  parseInt(prompt('Add New Pcs Value',cell.getData().thisgr))
+                                        if(!isNaN(result))
+                                        {
+                                           // https://gist.github.com/justsml/529d0b1ddc5249095ff4b890aad5e801#easy-get-json-from-a-url
+                                           fetch(updateRcdUrl + "?rcdid=" + cell.getData().id +"&thisgr=" + result)
+                                           .then(response => response.json())
+                                           .then(data => { if(data.message === 'success'){ subTable.replaceData(); alert('updated') } })
+                                           .catch(error => console.error(error))
+                                        }
+                                    }
+                                },
                             ],
                             ajaxResponse:function(getDetails, params, response){
                                 return response.data;
@@ -127,7 +167,7 @@
                         })}
                     },
                     // Master Data
-                    {title: "id",field: "id"},
+                    {title: "Recv #",field: "id"},
                     {title: "Machine Date",field: "machine_date"},
                     {title: "Machine #",field: "machineno"},
                     {title: "Supplier",field: "supplier.title"},
@@ -137,6 +177,9 @@
                     {title: "Status",field: "status" ,
                         formatter:function(cell,row)
                         {
+                            if( statusValue === 2){
+                                table.hideColumn('editBtnRcv')
+                            }
                             return cell.getData().status === 1 ? 'Pending':'Completed'
                         }
                     },
@@ -145,7 +188,7 @@
                     //         window.open(window.location + "/" + cell.getRow().getData().id  ,"_self");
                     //     }
                     // },
-                    {title:"Receive Goods", visible:getStatus , formatter:editIcon, hozAlign:"center",headerSort:false, responsive:0,
+                    {title:"Receive Goods",field:'editBtnRcv' , formatter:editIcon, hozAlign:"center",headerSort:false, responsive:0,
                         cellClick:function(e, cell){
                             if(cell.getRow().getData().status === 2)
                             {
