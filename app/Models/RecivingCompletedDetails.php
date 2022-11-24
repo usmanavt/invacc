@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 class RecivingCompletedDetails extends Base
 {
     use HasFactory;
-
+    public $dates = ['reciving_date'];
     protected $fillable = ['reciving_id','location','machine_date','machineno','supplier_id','commercial_invoice_id','invoiceno','material_id','material_title','reciving_date','status','received','rejected'];
 
     /************** Relationships **************/
