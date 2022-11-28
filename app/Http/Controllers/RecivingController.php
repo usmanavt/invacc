@@ -24,8 +24,8 @@ class RecivingController extends Controller
     public function getRecivingMaster(Request $request)
     {
         // dd($request->all());
-        $search = $request->search;
         $status=$request->status;
+        $search = $request->search;
         $size = $request->size;
         $field = $request->sort[0]["field"];     //  Nested Array
         $dir = $request->sort[0]["dir"];         //  Nested Array
@@ -104,7 +104,6 @@ class RecivingController extends Controller
         return response()->json($pending, 200);
     }
 
-
     public function edit($id)
     {
         $reciving = Reciving::with('supplier:id,title')->findOrFail($id);
@@ -162,8 +161,12 @@ class RecivingController extends Controller
                 foreach ($reciving->pendingDetails as $pending)
                 {
                     // dd($pending);
-                    if($pending->status === 1)
+                    if($pending->status === 1){
                         $closeReciving = false;
+                    }else {
+                        $closeReciving = true;
+                    }
+
                 }
                 if($closeReciving) {
                     $reciving->status = 2;

@@ -15,6 +15,7 @@ use App\Http\Controllers\LocationController;
 use App\Http\Controllers\MaterialController;
 use App\Http\Controllers\RecivingController;
 use App\Http\Controllers\SupplierController;
+use App\Http\Controllers\ClearanceController;
 use App\Http\Controllers\DimensionController;
 use App\Http\Controllers\CommercialInvoiceController;
 
@@ -79,4 +80,9 @@ Route::resource('cis', CommercialInvoiceController::class);
 Route::get('/recivings/master', [RecivingController::class, 'getRecivingMaster'])->name('recivings.master');
 Route::get('/recivings/details', [RecivingController::class, 'getRecivingDetails'])->name('recivings.details');
 Route::get('/recivings/rcd', [RecivingController::class, 'updateCompletedReciving'])->name('reciving.updatercd');
-Route::resource('recivings', RecivingController::class)->except(['create']);
+Route::resource('recivings', RecivingController::class)->except(['create','store','show']);
+//  Clearance
+Route::get('/clearances/master', [ClearanceController::class, 'getMaster'])->name('clearances.master');
+Route::get('/clearances/details', [ClearanceController::class, 'getDetails'])->name('clearances.details');
+Route::get('/clearances/ccd', [ClearanceController::class, 'updateCompletedClearance'])->name('clearances.updatercd');
+Route::resource('clearances', ClearanceController::class)->except(['create','store','show']);

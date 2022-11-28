@@ -24,10 +24,12 @@
                             <i class="fa-solid fa-shop-lock fa-2xl"></i> Goods Recivings
                         </a>
 
-                        <a  class="basis-0 w-full md:basis-1/4 bg-blue-500 hover:bg-blue-700 text-white px-2 py-4 rounded-lg shadow-lg" href= "" >
+                        <a  class="basis-0 w-full md:basis-1/4 bg-blue-500 hover:bg-blue-700 text-white px-2 py-4 rounded-lg shadow-lg" href= "{{
+                            route('clearances.index')
+                        }}" >
                             <i class="fa-solid fa-shop-lock fa-2xl"></i> Duty Clearance
                         </a>
-
+{{--
                         <a  class="basis-0 w-full md:basis-1/4 bg-blue-500 hover:bg-blue-700 text-white px-2 py-4 rounded-lg shadow-lg" href= "" >
                             <i class="fa-solid fa-kitchen-set fa-2xl"></i> Purchase Return
                         </a>
@@ -62,7 +64,7 @@
 
                         <a  class="basis-0 w-full md:basis-1/4 bg-blue-500 hover:bg-blue-700 text-white px-2 py-4 rounded-lg shadow-lg" href= "" >
                             <i class="fa-solid fa-arrows-to-circle fa-2xl"></i> Journal Voucher
-                        </a>
+                        </a> --}}
 
                 </div>
             </div>

@@ -14,7 +14,7 @@ class CommercialInvoice extends Model
     use HasFactory;
     protected $dates = ['invoice_date','machine_date'];
     protected $fillable = [
-       'invoice_date','invoiceno','supplier_id','machine_date','machineno','challanno','conversionrate','insurance','bankcharges','collofcustom','exataxoffie','lngnshipdochrgs','localcartage','miscexplunchetc','customsepoy','weighbridge','miscexpenses','agencychrgs','otherchrgs','goods_received'
+       'invoice_date','invoiceno','supplier_id','machine_date','machineno','challanno','conversionrate','insurance','bankcharges','collofcustom','exataxoffie','lngnshipdochrgs','localcartage','miscexplunchetc','customsepoy','weighbridge','miscexpenses','agencychrgs','otherchrgs','goods_received','totallccostwexp'
     ];
     public $appends = ['full_total'];
 
@@ -42,13 +42,6 @@ class CommercialInvoice extends Model
         $ci->commericalInvoiceDetails()->update(['status' => 2]);
     }
     /************** Relationships **************/
-    public function commericalInvoiceDetails()
-    {
-        return $this->hasMany(CommercialInvoiceDetails::class);
-    }
-
-    public function supplier()
-    {
-        return $this->belongsTo(Supplier::class);
-    }
+    public function commericalInvoiceDetails(){return $this->hasMany(CommercialInvoiceDetails::class); }
+    public function supplier(){ return $this->belongsTo(Supplier::class); }
 }
