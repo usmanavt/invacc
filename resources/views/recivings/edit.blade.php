@@ -4,7 +4,6 @@
     <link rel="stylesheet" href="{{ asset('css/tabulator_simple.min.css') }}">
     @endpush
 
-
     <x-slot name="header">
         <h2 class="font-semibold text-xl text-gray-800 leading-tight">
             Receive Goods
@@ -46,8 +45,9 @@
                 </div>
 
             </div>
-  {{-- Submit Button --}}
-  <div class="py-2 px-4">
+
+            {{-- Submit Button --}}
+<div class="py-2 px-4">
     <x-button id="submitbutton" type="button" onclick="submitForm()">
         <i class="fa fa-save fa-fw"></i>
         Submit

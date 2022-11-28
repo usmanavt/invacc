@@ -3,11 +3,13 @@
 namespace App\Http\Controllers;
 
 use App\Models\Reciving;
+use App\Models\Clearance;
 use Illuminate\Http\Request;
 use App\Models\ContractDetails;
 use App\Models\CommercialInvoice;
 use Illuminate\Support\Facades\DB;
 use App\Models\RecivingPendingDetails;
+use App\Models\ClearancePendingDetails;
 use Illuminate\Support\Facades\Session;
 use App\Models\CommercialInvoiceDetails;
 use App\Models\RecivingCompletedDetails;
@@ -89,6 +91,29 @@ class CommercialInvoiceController extends Controller
             $ci->otherchrgs = $request->otherchrgs;
             $ci->total = $request->total;
             $ci->save();
+            //  Create Auto Clearance Document
+            $cl = new Clearance();
+            $cl->commercial_invoice_id = $ci->id;
+            $cl->invoice_date = $request->invoicedate;
+            $cl->invoiceno = $request->invoiceno;
+            $cl->supplier_id = $comminvoice[0]['supplier_id'];
+            $cl->machine_date = $request->machine_date;
+            $cl->machineno = $request->machineno;
+            $cl->conversionrate = $request->conversionrate;
+            $cl->insurance = $request->insurance;
+            $cl->bankcharges = $request->bankcharges;
+            $cl->collofcustom = $request->collofcustom;
+            $cl->exataxoffie = $request->exataxoffie;
+            $cl->lngnshipdochrgs = $request->lngnshipdochrgs;
+            $cl->localcartage = $request->localcartage;
+            $cl->miscexplunchetc = $request->miscexplunchetc;
+            $cl->customsepoy = $request->customsepoy;
+            $cl->weighbridge = $request->weighbridge;
+            $cl->miscexpenses = $request->miscexpenses;
+            $cl->agencychrgs = $request->agencychrgs;
+            $cl->otherchrgs = $request->otherchrgs;
+            $cl->total = $request->total;
+            $cl->save();
             //  Create Auto Reciving
             $reciving = new Reciving();
             $reciving->machine_date = $ci->machine_date;
@@ -153,6 +178,63 @@ class CommercialInvoiceController extends Controller
                 $c->otherexpenses = $cid['otherexpenses'];
                 $c->save();
 
+                // Create Auto Pending Clearance [COpy of CIDetails]
+                $cpd = new ClearancePendingDetails();
+                $cpd->clearance_id = $cl->id;
+                $cpd->machine_date = $cl->machine_date;
+                $cpd->machineno = $cl->machineno;
+                $cpd->invoiceno = $cl->invoiceno;
+                $cpd->commercial_invoice_id =  $c->commercial_invoice_id;
+                $cpd->contract_id = $cid['contract_id'];
+                $cpd->material_id = $cid['material_id'];
+                $cpd->supplier_id = $cid['supplier_id'];
+                $cpd->user_id = $cid['user_id'];
+                $cpd->category_id = $cid['category_id'];
+                $cpd->sku_id = $cid['sku_id'];
+                $cpd->dimension_id = $cid['dimension_id'];
+                $cpd->source_id = $cid['source_id'];
+                $cpd->brand_id = $cid['brand_id'];
+
+                $cpd->pcs = $cid['pcs'];
+                $cpd->gdswt = $cid['gdswt'];
+                $cpd->inkg = $cid['inkg'];
+                $cpd->pcs = $cid['pcs'];
+                $cpd->gdswt = $cid['gdswt'];
+                $cpd->inkg = $cid['inkg'];
+                $cpd->gdsprice = $cid['gdsprice'];
+                $cpd->amtindollar = $cid['amtindollar'];
+                $cpd->amtinpkr = $cid['amtinpkr'];
+
+                $cpd->hscode = $cid['hscode'];
+                $cpd->cd = $cid['cd'];
+                $cpd->st = $cid['st'];
+                $cpd->rd = $cid['rd'];
+                $cpd->acd = $cid['acd'];
+                $cpd->ast = $cid['ast'];
+                $cpd->it = $cid['it'];
+                $cpd->wse = $cid['wsc'];
+
+                $cpd->length = $cid['length'];
+                $cpd->itmratio = $cid['itmratio'];
+                $cpd->insuranceperitem = $cid['insuranceperitem'];
+                $cpd->amountwithoutinsurance = $cid['amountwithoutinsurance'];
+                $cpd->onepercentdutypkr = $cid['onepercentdutypkr'];
+                $cpd->pricevaluecostsheet = $cid['pricevaluecostsheet'];
+                $cpd->totallccostwexp = $cid['totallccostwexp'];
+
+                $cpd->cda = $cid['cda'];
+                $cpd->sta = $cid['sta'];
+                $cpd->rda = $cid['rda'];
+                $cpd->acda = $cid['acda'];
+                $cpd->asta = $cid['asta'];
+                $cpd->ita = $cid['ita'];
+                $cpd->wsca = $cid['wsca'];
+                $cpd->total = $cid['total'];
+                $cpd->perpc = $cid['perpc'];
+                $cpd->perkg = $cid['perkg'];
+                $cpd->perft = $cid['perft'];
+                $cpd->otherexpenses = $cid['otherexpenses'];
+                $cpd->save();
                 //  Create Auto Pending Reciving [Copy of CIDetails]
                 $preciving = new RecivingPendingDetails();
                 $preciving->reciving_id = $reciving->id;
@@ -172,7 +254,7 @@ class CommercialInvoiceController extends Controller
                 $preciving->save();
             }
             DB::commit();
-            Session::flash('success','Commerical Invoice Created');
+            Session::flash('success',"Commerical Invoice#[$ci->id] Created with Reciving#[$reciving->id] & Duty Clearance#[$cl->id]");
             return response()->json(['success'],200);
         } catch (\Throwable $th) {
             DB::rollback();
@@ -226,6 +308,28 @@ class CommercialInvoiceController extends Controller
             $ci->otherchrgs = $request->otherchrgs;
             $ci->total = $request->total;
             $ci->save();
+            //  Create Auto Clearance Document
+            $cl = Clearance::where('commercial_invoice_id',$ci->id)->first();
+            $cl->commercial_invoice_id = $ci->id;
+            $cl->invoice_date = $request->invoicedate;
+            $cl->invoiceno = $request->invoiceno;
+            $cl->machine_date = $request->machine_date;
+            $cl->machineno = $request->machineno;
+            $cl->conversionrate = $request->conversionrate;
+            $cl->insurance = $request->insurance;
+            $cl->bankcharges = $request->bankcharges;
+            $cl->collofcustom = $request->collofcustom;
+            $cl->exataxoffie = $request->exataxoffie;
+            $cl->lngnshipdochrgs = $request->lngnshipdochrgs;
+            $cl->localcartage = $request->localcartage;
+            $cl->miscexplunchetc = $request->miscexplunchetc;
+            $cl->customsepoy = $request->customsepoy;
+            $cl->weighbridge = $request->weighbridge;
+            $cl->miscexpenses = $request->miscexpenses;
+            $cl->agencychrgs = $request->agencychrgs;
+            $cl->otherchrgs = $request->otherchrgs;
+            $cl->total = $request->total;
+            $cl->save();
             //  Update Reciving
             $reciving = Reciving::where('commercial_invoice_id',$ci->id)->first();
             $reciving->machine_date = $ci->machine_date;
@@ -287,6 +391,61 @@ class CommercialInvoiceController extends Controller
                 $c->perft = $cid['perft'];
                 $c->otherexpenses = $cid['otherexpenses'];
                 $c->save();
+                // Update Auto Pending Clearance [COpy of CIDetails]
+                $cpd = ClearancePendingDetails::where('commercial_invoice_id',$cid['commercial_invoice_id'])->where('material_id',$cid['material_id'])->first();
+                $cpd->clearance_id = $cl->id;
+                $cpd->machine_date = $cl->machine_date;
+                $cpd->machineno = $cl->machineno;
+                $cpd->invoiceno = $cl->invoiceno;
+                $cpd->commercial_invoice_id =  $c->commercial_invoice_id;
+                $cpd->contract_id = $cid['contract_id'];
+                $cpd->material_id = $cid['material_id'];
+                $cpd->supplier_id = $cid['supplier_id'];
+                $cpd->user_id = $cid['user_id'];
+                $cpd->category_id = $cid['category_id'];
+                $cpd->sku_id = $cid['sku_id'];
+                $cpd->dimension_id = $cid['dimension_id'];
+                $cpd->source_id = $cid['source_id'];
+                $cpd->brand_id = $cid['brand_id'];
+
+                $cpd->pcs = $cid['pcs'];
+                $cpd->gdswt = $cid['gdswt'];
+                $cpd->inkg = $cid['inkg'];
+                $cpd->pcs_pending = $cid['pcs'];
+                $cpd->gdsprice = $cid['gdsprice'];
+                $cpd->amtindollar = $cid['amtindollar'];
+                $cpd->amtinpkr = $cid['amtinpkr'];
+
+                $cpd->hscode = $cid['hscode'];
+                $cpd->cd = $cid['cd'];
+                $cpd->st = $cid['st'];
+                $cpd->rd = $cid['rd'];
+                $cpd->acd = $cid['acd'];
+                $cpd->ast = $cid['ast'];
+                $cpd->it = $cid['it'];
+                $cpd->wse = $cid['wse'];
+
+                $cpd->length = $cid['length'];
+                $cpd->itmratio = $cid['itmratio'];
+                $cpd->insuranceperitem = $cid['insuranceperitem'];
+                $cpd->amountwithoutinsurance = $cid['amountwithoutinsurance'];
+                $cpd->onepercentdutypkr = $cid['onepercentdutypkr'];
+                $cpd->pricevaluecostsheet = $cid['pricevaluecostsheet'];
+                $cpd->totallccostwexp = $cid['totallccostwexp'];
+
+                $cpd->cda = $cid['cda'];
+                $cpd->sta = $cid['sta'];
+                $cpd->rda = $cid['rda'];
+                $cpd->acda = $cid['acda'];
+                $cpd->asta = $cid['asta'];
+                $cpd->ita = $cid['ita'];
+                $cpd->wsca = $cid['wsca'];
+                $cpd->total = $cid['total'];
+                $cpd->perpc = $cid['perpc'];
+                $cpd->perkg = $cid['perkg'];
+                $cpd->perft = $cid['perft'];
+                $cpd->otherexpenses = $cid['otherexpenses'];
+                $cpd->save();
 
                 //  Update Auto Pending Reciving [Copy of CIDetails]
                 $preciving = RecivingPendingDetails::where('commercial_invoice_id',$cid['commercial_invoice_id'])->where('material_id',$cid['material_id'])->first();
@@ -308,7 +467,7 @@ class CommercialInvoiceController extends Controller
 
             }
             DB::commit();
-            Session::flash('info','Commerical Invoice Updated');
+            Session::flash('info',"Commerical Invoice#[$ci->id] Updated with Reciving#[$reciving->id] & Duty Clearance#[$cl->id]");
             return response()->json(['success'],200);
         } catch (\Throwable $th) {
             DB::rollback();

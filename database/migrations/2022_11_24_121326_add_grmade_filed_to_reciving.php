@@ -14,7 +14,7 @@ class AddGrmadeFiledToReciving extends Migration
     public function up()
     {
         Schema::table('recivings', function (Blueprint $table) {
-            $table->smallInteger('grmade')->default(1); //
+            // $table->smallInteger('grmade')->default(1); //
         });
     }
 

@@ -13,9 +13,9 @@ class AddTotalLcCostWExpToCommericalInvoiceDetailsTable extends Migration
      */
     public function up()
     {
-        // Schema::table('commercial_invoice_details', function (Blueprint $table) {
-        //     $table->decimal('totallccostwexp', 15, 3)->default(123.45);
-        // });
+        Schema::table('commercial_invoice_details', function (Blueprint $table) {
+            $table->decimal('totallccostwexp', 15, 3)->default(123.45);
+        });
     }
 
     /**
