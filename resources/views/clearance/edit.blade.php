@@ -25,8 +25,8 @@
 
                                 <x-input-date title="Inv. Date" name="invoicedate" value="{{ $clearance->invoice_date->format('Y-m-d') }}" disabled />
                                 <x-input-text title="Invoice #" name="invoiceno" value="{{ $clearance->invoiceno }}" disabled class=""/>
-                                <x-input-numeric title="Conv. Rate" name="conversionrate" value="{{ $clearance->conversionrate }}" disabled class=""/>
-                                <x-input-numeric title="Insurance" name="insurance"  value="{{ $clearance->insurance }}" disabled class=""/>
+                                <x-input-numeric title="Conv. Rate" name="conversionrate" value="{{ $clearance->conversionrate }}" />
+                                <x-input-numeric title="Insurance" name="insurance"  value="{{ $clearance->insurance }}" />
                             </div>
                             <div class="grid grid-cols-12 gap-2 py-2 items-center">
                                 <x-input-date title="Mac. Date" name="machine_date" value="{{ $clearance->machine_date->format('Y-m-d') }}" disabled />
@@ -286,6 +286,14 @@
                             field:"inkg",
                             responsive:0,
                             headerVertical:true,
+                            editor:"number",
+                            formatter:"money",
+                            cssClass:"bg-green-200 font-semibold",
+                            validator:["required","numeric"],
+                            formatterParams:{thousand:",",precision:2},
+
+
+
                         },
                         {   title:"Lng(pcs/feet)",
                             field:"length",

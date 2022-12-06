@@ -114,7 +114,7 @@
         let otherchrgs= document.getElementById("otherchrgs")
         let banktotal= document.getElementById("banktotal")
         // Important Rates
-        var conversionrate = document.getElementById("conversionrate");
+        let conversionrate = document.getElementById("conversionrate");
         var insurance = document.getElementById("insurance");
         //  Add Event on  Page Load
         document.addEventListener('DOMContentLoaded',()=>{
@@ -296,7 +296,7 @@
                     ]
                 },
                 {
-                    title:'Amount', headerHozAlign:"center",
+                    title:'Dut Rate', headerHozAlign:"center",
                     columns:[
                         {   title:"In $",
                             field:"amtindollar",
@@ -311,6 +311,93 @@
                             bottomCalc:"sum",
                             bottomCalcFormatter:"money",
                         },
+
+                        {   title:"CDRate",
+                            field:"cd",
+                            headerVertical:true,
+                            editor:"number",
+                            cssClass:"bg-green-200 font-semibold",
+                            formatter:"money",
+                            responsive:0,
+                            formatterParams:{thousand:",",precision:2},
+                            validator:["required","numeric"],
+                            bottomCalcParams:{precision:2}  ,
+                        },
+                        {   title:"STRate",
+                            field:"st",
+                            headerVertical:true,
+                            editor:"number",
+                            cssClass:"bg-green-200 font-semibold",
+                            formatter:"money",
+                            responsive:0,
+                            formatterParams:{thousand:",",precision:2},
+                            validator:["required","numeric"],
+                            bottomCalcParams:{precision:2}  ,
+                        },
+                        {   title:"RDRate",
+                            field:"rd",
+                            headerVertical:true,
+                            editor:"number",
+                            cssClass:"bg-green-200 font-semibold",
+                            formatter:"money",
+                            responsive:0,
+                            formatterParams:{thousand:",",precision:2},
+                            validator:["required","numeric"],
+                            bottomCalcParams:{precision:2}  ,
+                        },
+                        {   title:"ACDRate",
+                            field:"acd",
+                            headerVertical:true,
+                            editor:"number",
+                            cssClass:"bg-green-200 font-semibold",
+                            formatter:"money",
+                            responsive:0,
+                            formatterParams:{thousand:",",precision:2},
+                            validator:["required","numeric"],
+                            bottomCalcParams:{precision:2}  ,
+                        },
+
+                        {   title:"ASTRate",
+                            field:"ast",
+                            headerVertical:true,
+                            editor:"number",
+                            cssClass:"bg-green-200 font-semibold",
+                            formatter:"money",
+                            responsive:0,
+                            formatterParams:{thousand:",",precision:2},
+                            validator:["required","numeric"],
+                            bottomCalcParams:{precision:2}  ,
+                        },
+                        {   title:"ITRate",
+                            field:"it",
+                            headerVertical:true,
+                            editor:"number",
+                            cssClass:"bg-green-200 font-semibold",
+                            formatter:"money",
+                            responsive:0,
+                            formatterParams:{thousand:",",precision:2},
+                            validator:["required","numeric"],
+                            bottomCalcParams:{precision:2}  ,
+                        },
+                        {   title:"WSCRate",
+                            field:"wsc",
+                            headerVertical:true,
+                            editor:"number",
+                            cssClass:"bg-green-200 font-semibold",
+                            formatter:"money",
+                            responsive:0,
+                            formatterParams:{thousand:",",precision:2},
+                            validator:["required","numeric"],
+                            bottomCalcParams:{precision:2}  ,
+                        },
+
+
+
+
+
+
+
+
                         {   title:"Item Ratio(%)",
                             field:"itmratio",
                             headerVertical:true,
