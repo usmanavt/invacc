@@ -22,7 +22,7 @@
                         <div class="flex flex-col justify-start items-center">
                             <form action="{{ route('banks.store') }}" method="post" class="flex flex-col">
                             @csrf
-                                <x-input-text title="Title" name="bank" req required class=""/>
+                                <x-input-text title="Title" name="title" req required class=""/>
                                 <x-input-text title="Nick" name="nick" req required class=""/>
                                 <x-input-text title="Account #" name="account_no" req required class=""/>
                                 <x-input-text title="Branch" name="branch" req required class=""/>
@@ -49,7 +49,7 @@
                             <span class="text-indigo-500 border-b">Existing Banks</span>
                             <ul class="h-auto overflow-y-scroll">
                                 @foreach ($banks as $brand)
-                                    <li>{{ $brand->bank }}</li>
+                                    <li>{{ $brand->title }}</li>
                                 @endforeach
                             </ul>
                         </div>

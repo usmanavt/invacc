@@ -51,7 +51,7 @@ class BankTransactionsController extends Controller
         ->orWhereHas('subhead',function($query) use($search){
             $query->where('title','LIKE',"%$search%");
         })
-        ->with('bank:id,bank')
+        ->with('bank:id,title')
         ->with('head:id,title')
         ->with('subhead:id,title')
         ->with('supplier:id,title')

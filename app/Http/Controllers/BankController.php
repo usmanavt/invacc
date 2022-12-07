@@ -15,7 +15,7 @@ class BankController extends Controller
     {
         $search = $request->search;
         $banks = Bank::where(function($q) use ($search){
-            $q->where('bank','LIKE',"%$search%");
+            $q->where('title','LIKE',"%$search%");
         })
         ->orderBy('id','desc')
         ->paginate(5);
@@ -31,7 +31,7 @@ class BankController extends Controller
         $dir = $request->sort[0]["dir"];         //  Nested Array
         //  With Tables
         $contracts = Bank::where(function ($query) use ($search){
-                $query->where('id','LIKE','%' . $search . '%')
+                $query->where('title','LIKE','%' . $search . '%')
                 ->orWhere('branch','LIKE','%' . $search . '%');
             })
         ->orderBy($field,$dir)
@@ -48,7 +48,7 @@ class BankController extends Controller
     {
         // dd($request->all());
         $this->validate($request,[
-            'bank' => 'required|min:3|unique:banks',
+            'title' => 'required|min:3|unique:banks',
             'nick' => 'required|min:3',
             'account_no' => 'required',
             'branch' => 'required',
@@ -58,7 +58,7 @@ class BankController extends Controller
         DB::beginTransaction();
         try {
             $bank = new Bank();
-            $bank->bank = $request->bank;
+            $bank->title = $request->title;
             $bank->nick = $request->nick;
             $bank->account_no = $request->account_no;
             $bank->branch = $request->branch;
@@ -83,7 +83,7 @@ class BankController extends Controller
     {
         // dd($request->all());
         $this->validate($request,[
-            'bank' => 'required|min:3|unique:banks,bank,'. $bank->id,
+            'title' => 'required|min:3|unique:banks,title,'. $bank->id,
             'nick' => 'required|min:3',
             'account_no' => 'required',
             'branch' => 'required',
@@ -91,7 +91,7 @@ class BankController extends Controller
         ]);
         DB::beginTransaction();
         try {
-            $bank->bank = $request->bank;
+            $bank->title = $request->title;
             $bank->nick = $request->nick;
             $bank->account_no = $request->account_no;
             $bank->branch = $request->branch;
@@ -109,7 +109,8 @@ class BankController extends Controller
 
     public function show($id)
     {
-        $bank = Bank::findOrFail($id);
+        // dd($id);
+        $bank = Bank::whereId($id)->first();
         if($bank->status === 1) {
             $bank->status = 2;
         }else {

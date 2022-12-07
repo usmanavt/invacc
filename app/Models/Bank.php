@@ -12,7 +12,7 @@ class Bank extends Model
     use HasFactory;
 
     public $filable=[
-        'bank',
+        'title',
         'nick',
         'account_no',
         'branch',

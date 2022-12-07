@@ -3,15 +3,18 @@
 namespace Database\Seeders;
 
 use App\Models\Sku;
+use App\Models\Bank;
 use App\Models\Care;
 use App\Models\Head;
 use App\Models\User;
 use App\Models\Brand;
+use App\Models\Hscode;
 use App\Models\Source;
 use App\Models\Subhead;
 use App\Models\Category;
 use App\Models\Customer;
 use App\Models\Location;
+use App\Models\Material;
 use App\Models\Supplier;
 use App\Models\Dimension;
 use Illuminate\Database\Seeder;
@@ -37,7 +40,10 @@ class DatabaseSeeder extends Seeder
         $this->seedSources();
         $this->seedSkus();
         $this->seedBrands();
+        $this->seedHscode();
         $this->adminSeeder();
+        $this->seedBank();
+        $this->seedMaterial();
     }
 
     public function seedCare()
@@ -53,24 +59,25 @@ class DatabaseSeeder extends Seeder
     public function seedSupplier()
     {
         Supplier::Create([
-            'title' => 'Aziz Packages',
+            'title' => 'HAIDER VALVE WALA',
             'source_id' => '1',
-            'email' => 'aziz@g.com'
+            'email' => ''
         ]);
         Supplier::Create([
-            'title' => 'Omer Jibran',
+            'title' => 'ARIF TAMBAWALA',
             'source_id' => '1',
-            'email' => 'oj@g.com'
+            'email' => ''
         ]);
         Supplier::Create([
-            'title' => 'Prime HR',
+            'title' => 'ABDULLAH BHAI',
             'source_id' => '1',
-            'email' => 'pj@g.com'
+            'email' => ''
         ]);
         Supplier::Create([
-            'title' => 'Thal Boshoko',
+            'title' => 'TIANJIN BAOLAI INTERNATIONAL TRADE 	',
             'source_id' => '2',
-            'email' => 'tb@g.com'
+            'email' => '',
+            'address' => '1-A,1ST FLOOR,PLOT NO 8-391-A, K/S 1024, ALLAN BALIK'
         ]);
     }
 
@@ -162,6 +169,14 @@ class DatabaseSeeder extends Seeder
         Head::create([
             'title' => 'TAX PAYABLE',
         ]);
+        Head::create([
+            'id' => 32,
+            'title' => 'SUPPLIER'
+        ]);
+        Head::create([
+            'id' => 33,
+            'title' => 'CUSTOMER'
+        ]);
     }
 
     public function seedSubheads()
@@ -211,32 +226,39 @@ class DatabaseSeeder extends Seeder
     public function seedCategories()
     {
         Category::create([
-            'title'=> 'Automotives',
-            'nick' => 'AUTO'
+            'title'=> 'Local Stock Item',
+            'nick' => 'LOC'
         ]);
         Category::create([
-            'title'=> 'Health Care Products',
-            'nick' => 'HCP'
+            'title'=> 'Imported Stock',
+            'nick' => 'IMP'
         ]);
         Category::create([
-            'title'=> 'Alternate Building Materials',
-            'nick' => 'ABM'
+            'title'=> 'Khokar Lahore',
+            'nick' => 'KHL'
+        ]);
+        Category::create([
+            'title'=> 'Mughal',
+            'nick' => 'MUGHAL'
         ]);
     }
 
     public function seedDimensions()
     {
         Dimension::create([
-            'title' => '2x3'
+            'title' => '6" X SCH 80 X 6M'
         ]);
         Dimension::create([
-            'title' => '14"'
+            'title' => '8" X SCH 40 X 6M'
         ]);
         Dimension::create([
-            'title' => 'Dozen Pack'
+            'title' => '1-1/4" X SCH 40 X 6.1M'
         ]);
         Dimension::create([
-            'title' => '36 each'
+            'title' => '1/2" X SCH 40 X 6.1M'
+        ]);
+        Dimension::create([
+            'title' => '3/8" X SCH 40 X 6.1M'
         ]);
     }
 
@@ -288,7 +310,6 @@ class DatabaseSeeder extends Seeder
         ]);
     }
 
-
     public function adminSeeder()
     {
         User::create([
@@ -300,6 +321,75 @@ class DatabaseSeeder extends Seeder
             'name' => 'Ali Jibran',
             'email' => 'ali.jibran@auvitronics.com',
             'password' => bcrypt('abc123')
+        ]);
+    }
+
+    public function seedHscode()
+    {
+        Hscode::Create([
+            'hscode' => '7034.3900',
+            'cd' => 15.360,
+            'st' => 17,
+            'rd' => 5,
+            'acd' => 4,
+            'ast' => 3,
+            'it' => 5.5,
+            'wse' => 1
+        ]);
+    }
+
+    public function seedBank()
+    {
+        Bank::create([
+            'title' => 'Allied Bank Limited',
+            'nick' => 'ABL',
+            'account_no' => 'ABL333232',
+            'branch' => 'Gulistan-E-Johar',
+            'address' => 'Near Munawar Chowrangi',
+            'balance' => 450755
+        ]);
+        Bank::create([
+            'title' => 'United Bank Limited',
+            'nick' => 'UBL',
+            'account_no' => '344-343-132032',
+            'branch' => 'S.I.T.E',
+            'address' => 'Near Where',
+            'balance' => 3150735
+        ]);
+    }
+
+    public function seedMaterial()
+    {
+        Material::create([
+            'title' => 'CARBON STEEL SEAMLESS PIPE',
+            'nick' => 'CSSP',
+            'category_id' => 2,
+            'brand_id' => 1,
+            'source_id' => 2,
+            'dimension_id' => 1,
+            'sku_id' => 1,
+            'hscode_id' => 1,
+            'category' => 'IMPORTED STOCK',
+            'brand' => 'AMRELLI STEEL',
+            'source' => 'IMPORTED',
+            'dimension' => '8" X SCH 40 X 6M',
+            'sku' => 'KG',
+
+        ]);
+        Material::create([
+            'title' => 'CARBON STEEL SEAMLESS PIPE',
+            'nick' => 'CSSP',
+            'category_id' => 2,
+            'brand_id' => 1,
+            'source_id' => 2,
+            'dimension_id' => 2,
+            'sku_id' => 1,
+            'hscode_id' => 1,
+            'category' => 'IMPORTED STOCK',
+            'brand' => 'AMRELLI STEEL',
+            'source' => 'IMPORTED',
+            'dimension' => '6" X SCH 80 X 6M',
+            'sku' => 'KG',
         ]);
     }
 }

@@ -28,6 +28,8 @@ class CreateCommercialInvoiceDetailsTable extends Migration
             $table->bigInteger('dimension_id');
             $table->bigInteger('source_id');
             $table->bigInteger('brand_id');
+            $table->bigInteger('goods_received')->default(0);
+            $table->smallInteger('status')->default(1); //
 
             $table->decimal('pcs', 8, 3)->default(00.000);
             $table->decimal('gdswt', 8, 3)->default(00.000);
@@ -51,6 +53,8 @@ class CreateCommercialInvoiceDetailsTable extends Migration
             $table->decimal('amountwithoutinsurance', 15, 3)->nullable();
             $table->decimal('onepercentdutypkr', 15, 3)->nullable();
             $table->decimal('pricevaluecostsheet', 15, 3)->nullable();
+            $table->decimal('totallccostwexp', 15, 3)->default(123.45);
+            $table->decimal('otherexpenses', 15, 3)->default(00.000);
 
             $table->decimal('cda', 15, 3)->default(00.000);
             $table->decimal('sta', 15, 3)->default(00.000);

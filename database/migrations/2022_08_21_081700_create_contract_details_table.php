@@ -26,7 +26,7 @@ class CreateContractDetailsTable extends Migration
             $table->bigInteger('source_id');
             $table->bigInteger('brand_id');
             $table->string('category');
-            $table->string('sku');  
+            $table->string('sku');
             $table->string('dimension');
             $table->string('source');
             $table->string('brand');
@@ -36,6 +36,8 @@ class CreateContractDetailsTable extends Migration
             $table->decimal('pcspbundle2',6,2)->nullable();
             $table->decimal('gdswt', 15,3);
             $table->decimal('gdsprice',15,3);
+            $table->smallInteger('status')->default(1); // 1=pending, 2 = completed
+            $table->smallInteger('closed')->default(1); // 1=open, 2=closed
             $table->timestamps();
         });
     }

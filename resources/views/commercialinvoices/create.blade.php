@@ -104,6 +104,7 @@
         let dynamicTableData = []
         let adopted = false
         let detailsUrl = ''
+        let contract_id = '';
 
         // Bank Charges
         let bankcharges= document.getElementById("bankcharges")
@@ -218,6 +219,8 @@
             var simple = {...row}
             var data = simple._row.data
 
+            contract_id = data.contract_id
+            // console.info(contract_id)
             detailsUrl = `${getDetails}/?id=${data.id}`
             fetchDataFromServer(detailsUrl)
             adopted = true
@@ -238,7 +241,7 @@
                 })
                 .then((response) => response.json()) //Transform data to json
                 .then(function(response){
-                    console.log(response);
+                    // console.log(response);
                     return response;
                 })
                 .catch(function(error){
@@ -246,9 +249,14 @@
             })
             //  Stremaline Data for Tabulator
             for (let index = 0; index < data.length; index++) {
+
+
                 const obj = data[index];
                 const mat = obj['material']
                 const hsc = mat['hscodes']
+
+                contract_id = obj.contract_id
+                
                 // console.log(obj.bundle1 , obj.pcspbundle1 ,obj.bundle2 , obj.pcspbundle2);
                 var vpcs = ((obj.bundle1 * obj.pcspbundle1) + (obj.bundle2 * obj.pcspbundle2)).toFixed(2)
                 // console.log(vpcs);
@@ -557,11 +565,6 @@
                             validator:["required","numeric"],
                             bottomCalcParams:{precision:2}  ,
                         },
-
-
-
-
-
                         {   title:"Item Ratio(%)",
                             field:"itmratio",
                             headerVertical:true,
@@ -595,11 +598,6 @@
                     formatter:"money",
                     formatterParams:{thousand:",",precision:2},
                 },
-
-
-
-
-
                 {
                     title:'Duties Rate', headerHozAlign:"center",
                     columns:[
@@ -710,6 +708,7 @@
             var data = {
                 'conversionrate' : parseFloat(conversionrate.value).toFixed(2),
                 'insurance' : parseFloat(insurance.value).toFixed(2),
+                'contract_id' : contract_id,
                 'invoiceno' : invoiceno.value,
                 'challanno' : challanno.value,
                 'machineno' : machineno.value,

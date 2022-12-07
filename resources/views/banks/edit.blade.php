@@ -22,7 +22,7 @@
                             <form action="{{ route('banks.update',$bank) }}" method="post" class="flex flex-col">
                                 @method('PUT')
                                 @csrf
-                                <x-input-text title="Title" name="bank" value="{{ $bank->bank }}" req required class=""/>
+                                <x-input-text title="Title" name="title" value="{{ $bank->title }}" req required class=""/>
                                 <x-input-text title="Nick" name="nick" value="{{ $bank->nick }}" req required class=""/>
                                 <x-input-text title="Account #" name="account_no" value="{{ $bank->account_no }}" req required class=""/>
                                 <x-input-text title="Branch" name="branch" value="{{ $bank->branch }}" req required class=""/>

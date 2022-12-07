@@ -24,7 +24,7 @@
                                 <select name="bank_id" required>
                                     <option disabled selected value="">--Select</option>
                                     @foreach ($banks as $bank)
-                                        <option value="{{ $bank->id }}" @if($bank->id === $bt->bank_id) selected @endif>{{ $bank->bank }}</option>
+                                        <option value="{{ $bank->id }}" @if($bank->id === $bt->bank_id) selected @endif>{{ $bank->title }}</option>
                                     @endforeach
                                 </select>
                                 {{-- Head --}}

@@ -72,45 +72,45 @@
 
         columns:[
             // Master Data
-            {title:"Id", field:"id" , responsive:0,visible:false},
-            {title:"Bank", field:"bank" , visible:true ,headerSortStartingDir:"asc" , responsive:0},
+            {title:"Id", field:"id" , responsive:0},
+            {title:"Title", field:"title" , visible:true ,headerSortStartingDir:"asc" , responsive:0},
             {title:"Nick", field:"nick" , visible:true , responsive:0},
             {title:"Account #", field:"account_no" ,  responsive:0},
             {title:"Branch", field:"branch" ,  responsive:0},
             {title:"Balance", field:"balance" ,  responsive:0},
             {title:"Address", field:"address" ,  responsive:0},
-            {title:"Status", field:"status" ,  responsive:0,
-                formatter:function(cell){
-                    if(cell.getData().status === 1)
-                    {
-                        table.hideColumn('unlock')
-                        table.showColumn('lock')
-                    }else{
-                        table.showColumn('unlock')
-                        table.hideColumn('lock')
-                    }
-                return cell.getData().status === 1 ? 'Active':'Locked';
-            }},
+            // {title:"Status", field:"status" ,  responsive:0,
+            //     formatter:function(cell){
+            //         if(cell.getData().status === 1)
+            //         {
+            //             table.hideColumn('unlock')
+            //             table.showColumn('lock')
+            //         }else{
+            //             table.showColumn('unlock')
+            //             table.hideColumn('lock')
+            //         }
+            //     return cell.getData().status === 1 ? 'Active':'Locked';
+            // }},
             {title:"Edit" , formatter:editIcon, hozAlign:"center",headerSort:false, responsive:0,
                 cellClick:function(e, cell){
                     window.open(window.location + "/" + cell.getData().id + "/edit" ,"_self");
             }},
-            {title:"Unlock",field:'unlock' , formatter:unlockIcon, hozAlign:"center",headerSort:false, responsive:0,
-                cellClick:function(e,cell){
-                    if(confirm('Do you really want to Unlock this Bank?'))
-                    {
-                        window.open(window.location + "/" + cell.getData().id  ,"_self");
-                    }
-                }
-            },
-            {title:"Lock",field:'lock' , formatter:lockIcon, hozAlign:"center",headerSort:false, responsive:0,
-                cellClick:function(e,cell){
-                    if(confirm('Do you really want to Lock this Bank?'))
-                    {
-                        window.open(window.location + "/" + cell.getData().id  ,"_self");
-                    }
-                }
-            }
+            // {title:"Unlock",field:'unlock' , formatter:unlockIcon, hozAlign:"center",headerSort:false, responsive:0,
+            //     cellClick:function(e,cell){
+            //         if(confirm('Do you really want to Unlock this Bank?'))
+            //         {
+            //             window.open(window.location + "/" + cell.getData().id  ,"_self");
+            //         }
+            //     }
+            // },
+            // {title:"Lock",field:'lock' , formatter:lockIcon, hozAlign:"center",headerSort:false, responsive:0,
+            //     cellClick:function(e,cell){
+            //         if(confirm('Do you really want to Lock this Bank?'))
+            //         {
+            //             window.open(window.location + "/" + cell.getData().id  ,"_self");
+            //         }
+            //     }
+            // }
 
         ],
         // Extra Pagination Data for End Users

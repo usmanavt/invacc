@@ -6,6 +6,7 @@ use App\Models\User;
 use DateTimeInterface;
 use App\Models\Supplier;
 use App\Models\ContractDetails;
+use App\Models\CommercialInvoice;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
@@ -23,5 +24,6 @@ class Contract extends Model
     public function user(){ return $this->belongsTo(User::class,'user_id');}
 
     public function contractDetails(){ return $this->hasMany(ContractDetails::class);}
+    public function commercialInovices(){ return $this->hasMany(CommercialInvoice::class);}
 
 }

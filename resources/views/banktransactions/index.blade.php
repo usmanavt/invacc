@@ -26,7 +26,7 @@
                                 <select name="bank_id" required>
                                     <option disabled selected value="">--Select</option>
                                     @foreach ($banks as $bank)
-                                        <option value="{{ $bank->id }}">{{ $bank->bank }}</option>
+                                        <option value="{{ $bank->id }}">{{ $bank->title }}</option>
                                     @endforeach
                                 </select>
                                 {{-- Head --}}
@@ -211,7 +211,7 @@
         columns:[
             // Master Data
             {title:"Id", field:"id" , responsive:0,visible:false},
-            {title:"Bank", field:"bank.bank" , visible:true , responsive:0},
+            {title:"Bank", field:"bank.title" , visible:true , responsive:0},
             {title:"Head", field:"head.title" , visible:true , responsive:0},
             {title:"Subhead", field:"subhead.title" , visible:true , responsive:0},
             {title:"Supplier", field:"supplier.title" , visible:true , responsive:0},
