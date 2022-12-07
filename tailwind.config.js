@@ -17,4 +17,8 @@ module.exports = {
     },
 
     plugins: [require('@tailwindcss/forms')],
+
+    variants: {
+        opacity: ({ after }) => after(['disabled'])
+      },
 };

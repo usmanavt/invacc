@@ -77,6 +77,8 @@
                             <x-dropdown-link href="{{ route('cis.index') }}">Comm Invoices</x-dropdown-link>
                             <x-dropdown-link href="{{ route('recivings.index') }}">Goods Reciving</x-dropdown-link>
                             <x-dropdown-link href="{{ route('clearances.index') }}">Duty Clearance</x-dropdown-link>
+                            <x-dropdown-link href="{{ route('banks.index') }}">Banks</x-dropdown-link>
+                            <x-dropdown-link href="{{ route('banktransactions.index') }}">Bank Transactions</x-dropdown-link>
                         </x-slot>
                     </x-dropdown>
                 </div>

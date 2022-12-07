@@ -1,7 +1,9 @@
 <?php
 
+use App\Models\BankTransactions;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\SkuController;
+use App\Http\Controllers\BankController;
 use App\Http\Controllers\HeadController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\BrandController;
@@ -17,6 +19,7 @@ use App\Http\Controllers\RecivingController;
 use App\Http\Controllers\SupplierController;
 use App\Http\Controllers\ClearanceController;
 use App\Http\Controllers\DimensionController;
+use App\Http\Controllers\BankTransactionsController;
 use App\Http\Controllers\CommercialInvoiceController;
 
 
@@ -86,3 +89,9 @@ Route::get('/clearances/master', [ClearanceController::class, 'getMaster'])->nam
 Route::get('/clearances/details', [ClearanceController::class, 'getDetails'])->name('clearances.details');
 Route::get('/clearances/ccd', [ClearanceController::class, 'updateCompletedClearance'])->name('clearances.updatercd');
 Route::resource('clearances', ClearanceController::class)->except(['create','store','show']);
+//  Bank
+Route::get('/banks/master', [BankController::class, 'getMaster'])->name('banks.master');
+Route::resource('banks',BankController::class);
+//  Bank Transactions
+Route::get('/banktransactions/master', [BankTransactionsController::class, 'getMaster'])->name('banktransactions.master');
+Route::resource('banktransactions',BankTransactionsController::class)->except(['create','show']);
