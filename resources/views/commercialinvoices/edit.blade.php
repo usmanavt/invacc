@@ -52,8 +52,8 @@
                                 <x-input-numeric title="Weigh Bridge" name="weighbridge" value="{{ $i->weighbridge }}"  required  onblur="calculateBankCharges()"/>
                                 <x-input-numeric title="Misc Exp" name="miscexpenses" value="{{ $i->miscexpenses }}"  required  onblur="calculateBankCharges()"/>
                                 <x-input-numeric title="Agency Chgs" name="agencychrgs" value="{{ $i->agencychrgs }}"  required  onblur="calculateBankCharges()"/>
-                                <x-input-numeric title="Other Chgs" name="otherchrgs" value="{{ $i->otherchrgs }}"  required  onblur="calculateBankCharges()"/>
-                                <x-input-numeric title="Total" name="banktotal" value="{{ $i->otherchrgs }}" disabled />
+                                <x-input-numeric title="Other Chgs($)" name="otherchrgs" value="{{ $i->otherchrgs }}"  required  onblur="calculateBankCharges()"/>
+                                <x-input-numeric title="Total" name="banktotal" value="{{ $i->total}}"  disabled />
 
                             </div>
                         </fieldset>
@@ -111,11 +111,13 @@
         let weighbridge= document.getElementById("weighbridge")
         let miscexpenses= document.getElementById("miscexpenses")
         let agencychrgs= document.getElementById("agencychrgs")
-        let otherchrgs= document.getElementById("otherchrgs")
+     //   let otherchrgs= document.getElementById("otherchrgs")
         let banktotal= document.getElementById("banktotal")
         // Important Rates
         let conversionrate = document.getElementById("conversionrate");
         var insurance = document.getElementById("insurance");
+        var otherchrgs = document.getElementById("otherchrgs");
+
         //  Add Event on  Page Load
         document.addEventListener('DOMContentLoaded',()=>{
             // calculateButton.disabled = true
@@ -124,7 +126,7 @@
         // Calculate Bank Charges [ onblur ]
         function calculateBankCharges()
         {
-            var t =  parseFloat(bankcharges.value) + parseFloat(collofcustom.value) + parseFloat(exataxoffie.value) + parseFloat(lngnshipdochrgs.value) + parseFloat(localcartage.value) + parseFloat(miscexplunchetc.value) + parseFloat(customsepoy.value) + parseFloat(weighbridge.value) + parseFloat(miscexpenses.value) + parseFloat(agencychrgs.value) + parseFloat(otherchrgs.value)
+            var t =  parseFloat(bankcharges.value) + parseFloat(collofcustom.value) + parseFloat(exataxoffie.value) + parseFloat(lngnshipdochrgs.value) + parseFloat(localcartage.value) + parseFloat(miscexplunchetc.value) + parseFloat(customsepoy.value) + parseFloat(weighbridge.value) + parseFloat(miscexpenses.value) + parseFloat(agencychrgs.value) //+ parseFloat(otherchrgs.value)
             // var t = parseFloat(bankcharges.value) + parseFloat(collofcustom.value)
             banktotal.value = t.toFixed(2)
             // console.log(banktotal.value);
@@ -146,7 +148,7 @@
             data.forEach(e => {
                 var pcs = e.pcs
                 var gdswt = e.gdswt
-                var inkg = ((e.gdswt / e.pcs ) * 1000).toFixed(3)
+                var inkg = ((e.gdswt / e.pcs ) ).toFixed(3)
                 var length = e.length
                 var gdsprice = e.gdsprice
 
@@ -168,7 +170,8 @@
                 var total = cda + rda + sta + acda + asta + ita + wsca
                 var perft = (e.perpc / e.length).toFixed(2)
                 var totallccostwexp = total + pricevaluecostsheet + (banktotal.value * itmratio / 100)
-                var perpc = (e.totallccostwexp / e.pcs).toFixed(2)
+                var otherexpenses = ( conversionrate.value * otherchrgs.value ) * itmratio / 100
+                var perpc = ((e.totallccostwexp+otherexpenses) / e.pcs).toFixed(2)
                 var perkg = (e.perpc / inkg).toFixed(2)
 
 

@@ -54,12 +54,12 @@
     function setStatus(status)
         {
             statusValue = status
-            table.setData(getMaster,{search:searchValue,status:statusValue})
+            table.setData(getMaster,{search:searchValue,status:statusValue});
         }
     //  Table Filter
     function dataFilter(element)
     {
-        searchValue = element.value;
+        searchValue = 'dfasdf';// element.value;
         table.setData(getMaster,{search:searchValue,status:statusValue});
     }
     // The Table for Items Modal
@@ -144,7 +144,7 @@
                     },
                 })}
             },
-            // Master Data
+      //      Master Data
             {title: "id",field: "id"},
             {title: "Dated",field: "created_at"},
             {title: "Inv Dt",field: "invoice_date"},
@@ -165,6 +165,7 @@
             // {title: "miscexpenses",field: "miscexpenses"},
             // {title: "agencychrgs",field: "agencychrgs"},
             // {title: "otherchrgs",field: "otherchrgs"},
+
             {title: "Total LC Amt",field: "full_total"},
             {title:"View" , formatter:viewIcon, hozAlign:"center",headerSort:false, responsive:0,
                 cellClick:function(e, cell){

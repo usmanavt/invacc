@@ -42,6 +42,30 @@ class CommercialInvoiceController extends Controller
         return $cis;
     }
 
+    public function getMaster123(Request $request)
+    {
+        $status =$request->status ;
+        $search = $request->search;
+        $size = $request->size;
+        $field = $request->sort[0]["field"];     //  Nested Array
+        $dir = $request->sort[0]["dir"];         //  Nested Array
+        //$cis = CommercialInvoice::where('status',$status)
+        $cis = DB::table('commercial_invoices')->get();
+        return $cis;
+
+    }
+
+
+
+
+
+
+
+
+
+
+
+
     public function getDetails(Request $request)
     {
         $search = $request->search;

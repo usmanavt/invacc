@@ -72,7 +72,10 @@ Route::get('/contracts/getContractMaster', [ContractController::class, 'getMaste
 Route::get('/contracts/getContractDetails', [ContractController::class, 'getDetails'])->name('contracts.details');
 Route::resource('contracts', ContractController::class);
 //  CommercialInvoice
-Route::get('/cis/getCisMaster', [CommercialInvoiceController::class, 'getMaster'])->name('cis.master');
+Route::get('/cis/getCisMaster', [CommercialInvoiceController::class, 'getMaster123'])->name('cis.master');
+
+
+
 Route::get('/cis/getCisDetails', [CommercialInvoiceController::class, 'getDetails'])->name('cis.details');
 Route::get('/cis/getContractDetails', [CommercialInvoiceController::class, 'getContractDetails'])->name('cis.condet');
 Route::resource('cis', CommercialInvoiceController::class);
@@ -86,3 +89,25 @@ Route::get('/clearances/master', [ClearanceController::class, 'getMaster'])->nam
 Route::get('/clearances/details', [ClearanceController::class, 'getDetails'])->name('clearances.details');
 Route::get('/clearances/ccd', [ClearanceController::class, 'updateCompletedClearance'])->name('clearances.updatercd');
 Route::resource('clearances', ClearanceController::class)->except(['create','store','show']);
+
+
+// Route::get('myproc',function(){
+//     // select procedure should be called with "call"
+//     // parameter procedure should be calle with "exec"
+//     $cis =  \DB::select('call MyProcedure');
+//     return $cis;
+// });
+
+Route::get('myproc',function(){
+    // select procedure should be called with "call"
+    // parameter procedure should be calle with "exec"
+    $cis = DB::table('commercial_invoices')
+    ->select('invoice_date', 'invoiceno', 'machine_date', 'machineno')
+    ->get();
+    return $cis;
+});
+
+
+
+
+

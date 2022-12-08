@@ -268,11 +268,11 @@
                         brand_id :          obj.brand_id,
 
                         pcs :               vpcs,
-                        gdswt :             obj.gdswt,
+                        gdswt :             obj.gdswt * 1000,
                         inkg :              vwinkg,
                         length :            0,
 
-                        gdsprice :          obj.gdsprice,
+                        gdsprice :          obj.gdsprice/1000,
 
                         amtindollar :       obj.gdswt * obj.gdsprice ,
                         amtinpkr :          ( obj.gdswt *  obj.gdsprice  * conversionrate.value).toFixed(0),
@@ -310,7 +310,7 @@
             data.forEach(e => {
                 var pcs = e.pcs
                 var gdswt = e.gdswt
-                var inkg = ((e.gdswt / e.pcs ) * 1000).toFixed(3)
+                var inkg = ((e.gdswt / e.pcs ) ).toFixed(3)
                 var length = e.length
                 var gdsprice = e.gdsprice
                 //  update data element
