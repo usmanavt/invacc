@@ -36,7 +36,7 @@ class CommercialInvoiceController extends Controller
                 $query->where('invoiceno','LIKE','%' . $search . '%')
                 ->orWhere('challanno','LIKE','%' . $search . '%');
             })
-
+        ->with('supplier:id,title')
         ->orderBy($field,$dir)
         ->paginate((int) $size);
         return $cis;
@@ -96,6 +96,7 @@ class CommercialInvoiceController extends Controller
             $ci = new CommercialInvoice();
             $ci->invoice_date = $request->invoicedate;
             $ci->invoiceno = $request->invoiceno;
+            $ci->contract_id = $request->contract_id;
             $ci->challanno = $request->challanno;
             $ci->supplier_id = $comminvoice[0]['supplier_id'];
             $ci->machine_date = $request->machine_date;

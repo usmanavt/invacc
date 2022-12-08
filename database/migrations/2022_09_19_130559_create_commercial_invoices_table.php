@@ -15,11 +15,15 @@ class CreateCommercialInvoicesTable extends Migration
     {
         Schema::create('commercial_invoices', function (Blueprint $table) {
             $table->id();
+            $table->bigInteger('contract_id');
             $table->timestamp('invoice_date');
             $table->string('invoiceno', 30);
             $table->string('challanno', 30);
             $table->timestamp('machine_date')->nullable();
             $table->string('machineno', 30);
+            $table->bigInteger('supplier_id')->nullable();
+            $table->bigInteger('goods_received')->default(0);
+            $table->smallInteger('status')->default(1); //
             $table->decimal('conversionrate', 15, 3)->default(00.000);
             $table->decimal('insurance', 15, 3)->default(00.000);
             $table->decimal('bankcharges', 15, 3)->default(00.000);

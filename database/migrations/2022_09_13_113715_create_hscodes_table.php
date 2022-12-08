@@ -23,6 +23,7 @@ class CreateHscodesTable extends Migration
             $table->decimal('ast', 8, 3)->nullable();
             $table->decimal('it', 8, 3)->nullable();
             $table->decimal('wse', 8, 3)->nullable();
+            $table->smallInteger('status')->default(1); //
             $table->timestamps();
         });
     }

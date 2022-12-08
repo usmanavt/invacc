@@ -22,6 +22,7 @@ class CreateRecivingsTable extends Migration
             $table->string('invoiceno', 30);
             $table->timestamp('reciving_date')->nullable();
             $table->smallInteger('status')->default(1); //
+            $table->smallInteger('grmade')->default(1);
             $table->timestamps();
         });
     }

@@ -21,6 +21,8 @@ class CreateContractsTable extends Migration
             $table->string('number',20);
             $table->decimal('conversion_rate', 15, 3)->nullable();
             $table->decimal('insurance', 15, 3)->nullable();
+            $table->smallInteger('status')->default(1); // 1=pending, 2 = completed
+            $table->smallInteger('closed')->default(1); // 1=open, 2=closed
             $table->timestamps();
         });
     }
