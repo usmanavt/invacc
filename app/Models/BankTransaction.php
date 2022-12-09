@@ -10,7 +10,7 @@ use App\Models\Customer;
 use App\Models\Supplier;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
-class BankTransactions extends Base
+class BankTransaction extends Base
 {
     use HasFactory;
     protected $dates = ['cheque_date'];

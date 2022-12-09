@@ -2,7 +2,7 @@
 
     <x-slot name="header">
         <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-           Edit Bank Payments/Transactions
+           Edit Bank Recivings
         </h2>
     </x-slot>
 
@@ -16,7 +16,7 @@
 
                         {{-- Form Data --}}
                         <div class="flex flex-col justify-start items-center">
-                            <form action="{{ route('banktransactions.update',$bt) }}" method="post" class="flex flex-col">
+                            <form action="{{ route('bankrecivings.update',$bt) }}" method="post" class="flex flex-col">
                                 @csrf
                                 @method('PUT')
                                 <input type="hidden" name="id" value="{{ $bt->id }}">

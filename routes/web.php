@@ -1,6 +1,6 @@
 <?php
 
-use App\Models\BankTransactions;
+use App\Models\bankpayments;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\SkuController;
 use App\Http\Controllers\BankController;
@@ -19,7 +19,8 @@ use App\Http\Controllers\RecivingController;
 use App\Http\Controllers\SupplierController;
 use App\Http\Controllers\ClearanceController;
 use App\Http\Controllers\DimensionController;
-use App\Http\Controllers\BankTransactionsController;
+use App\Http\Controllers\BankPaymentsController;
+use App\Http\Controllers\BankRecivingsController;
 use App\Http\Controllers\CommercialInvoiceController;
 
 
@@ -96,8 +97,11 @@ Route::resource('clearances', ClearanceController::class)->except(['create','sto
 Route::get('/banks/master', [BankController::class, 'getMaster'])->name('banks.master');
 Route::resource('banks',BankController::class);
 //  Bank Transactions
-Route::get('/banktransactions/master', [BankTransactionsController::class, 'getMaster'])->name('banktransactions.master');
-Route::resource('banktransactions',BankTransactionsController::class)->except(['create','show']);
+Route::get('/bankpayments/master', [BankPaymentsController::class, 'getMaster'])->name('bankpayments.master');
+Route::resource('bankpayments',BankPaymentsController::class)->except(['create','show','destroy']);
+//  Bank Recivings
+Route::get('/bankrecivings/master', [BankRecivingsController::class, 'getMaster'])->name('bankrecivings.master');
+Route::resource('bankrecivings',BankRecivingsController::class)->except(['create','show','destroy']);
 
 
 // Route::get('myproc',function(){

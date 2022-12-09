@@ -2,8 +2,7 @@
 
 namespace App\Models;
 
-use App\Models\BankPayments;
-use App\Models\BankTransactions;
+use App\Models\BankTransaction;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
@@ -22,5 +21,5 @@ class Bank extends Model
     ];
 
     /************** Relationships **************/
-    public function bankTransactions(){ return $this->belongsTo(BankTransactions::class); }
+    public function bankTransactions() { return $this->hasMany(BankTransation::class); }
 }

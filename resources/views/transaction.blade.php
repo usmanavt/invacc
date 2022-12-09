@@ -29,15 +29,16 @@
                         }}" >
                             <i class="fa-solid fa-shop-lock fa-2xl"></i> Duty Clearance
                         </a>
+
                         <a  class="basis-0 w-full md:basis-1/4 bg-blue-500 hover:bg-blue-700 text-white px-2 py-4 rounded-lg shadow-lg" href= "{{
-                            route('banks.index')
+                            route('bankpayments.index')
                         }}" >
-                            <i class="fa-solid fa-shop-lock fa-2xl"></i> Banks
+                            <i class="fa-solid fa-shop-lock fa-2xl"></i> Bank Payments
                         </a>
                         <a  class="basis-0 w-full md:basis-1/4 bg-blue-500 hover:bg-blue-700 text-white px-2 py-4 rounded-lg shadow-lg" href= "{{
-                            route('banktransactions.index')
+                            route('bankrecivings.index')
                         }}" >
-                            <i class="fa-solid fa-shop-lock fa-2xl"></i> Bank Transaction
+                            <i class="fa-solid fa-shop-lock fa-2xl"></i> Bank Recivings
                         </a>
 {{--
                         <a  class="basis-0 w-full md:basis-1/4 bg-blue-500 hover:bg-blue-700 text-white px-2 py-4 rounded-lg shadow-lg" href= "" >
