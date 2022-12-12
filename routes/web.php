@@ -1,6 +1,8 @@
 <?php
 
+use App\Models\Subhead;
 use App\Models\bankpayments;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\SkuController;
 use App\Http\Controllers\BankController;
@@ -35,8 +37,25 @@ Route::get('/transactons', function () {
     return view('transaction');
 })->middleware(['auth'])->name('transaction');
 Route::get('/reports', function () {
-    return view('reports');
+    return view('reports')
+    ->with('heads',App\Models\Head::where('status',1)->get())
+    ->with('subheads',Subhead::where('status',1)->get());
 })->middleware(['auth'])->name('reports');
+Route::get('/fetchreport',function(Request $request){
+    return $request->all();
+
+    $report_type = $request->report_type;
+    $fromdate = $request->fromdate;
+    $todate = $request->todate;
+    $head_id = $request->head_id;
+    $subhead_id = $request->subhead_id;
+    $additional; // array
+    if($request->has('additional'))
+        $additional = $request->additional;
+
+    // Process Report Here
+
+})->name('getreport');
 
 require __DIR__.'/auth.php';
 
