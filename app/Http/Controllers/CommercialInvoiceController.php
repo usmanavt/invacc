@@ -182,6 +182,10 @@ class CommercialInvoiceController extends Controller
                 $c->wse = $cid['wsc'];
 
                 $c->length = $cid['length'];
+                //// From usman 13-12-2022
+                $c->qtyinfeet = $cid['qtyinfeet'];
+                ////////
+
                 $c->itmratio = $cid['itmratio'];
                 $c->insuranceperitem = $cid['insuranceperitem'];
                 $c->amountwithoutinsurance = $cid['amountwithoutinsurance'];
@@ -271,7 +275,7 @@ class CommercialInvoiceController extends Controller
                 $preciving->material_id = $cid['material_id'];
                 $preciving->qtyinpcs = $cid['pcs'];
                 $preciving->qtyinkg = $cid['gdswt'];
-                $preciving->qtyinfeet = $cid['inkg'];
+                $preciving->qtyinfeet = $cid['qtyinfeet']; //inkg
                 $preciving->rateperpc = $cid['perpc'];
                 $preciving->rateperkg = $cid['perkg'];
                 $preciving->rateperft = $cid['perft'];
@@ -382,6 +386,7 @@ class CommercialInvoiceController extends Controller
                 $c->pcs = $cid['pcs'];
                 $c->gdswt = $cid['gdswt'];
                 $c->inkg = $cid['inkg'];
+                $c->qtyinfeet = $cid['qtyinfeet'];
                 $c->gdsprice = $cid['gdsprice'];
                 $c->amtindollar = $cid['amtindollar'];
                 $c->amtinpkr = $cid['amtinpkr'];
@@ -483,7 +488,7 @@ class CommercialInvoiceController extends Controller
                 $preciving->material_id = $cid['material_id'];
                 $preciving->qtyinpcs = $cid['pcs'];
                 $preciving->qtyinkg = $cid['gdswt'];
-                $preciving->qtyinfeet = $cid['inkg'];
+                $preciving->qtyinfeet = $cid['qtyinfeet']; //inkg
                 $preciving->rateperpc = $cid['perpc'];
                 $preciving->rateperkg = $cid['perkg'];
                 $preciving->rateperft = $cid['perft'];

@@ -123,7 +123,9 @@
                 // {title: "material_id",field: "material_id"},
                 {title: 'Pieces',headerHozAlign:"center",
                     columns:[
-                        {title: "Com.Inv Qty",field: "qtyinpcs"},
+                        {title: "QtyInPcs",field: "qtyinpcs"},
+                        {title: "QtyInKg",field: "qtyinkg"},
+                        {title: "QtyInFeet",field: "qtyinfeet"},
                         {title: "Pending",field: "qtyinpcspending"},
                             {title: "Received",field: "qtyinpcsrcv",editor:"number",
                             cssClass:"bg-green-200 font-semibold",

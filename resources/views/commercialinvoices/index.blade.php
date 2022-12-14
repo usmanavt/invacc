@@ -59,7 +59,7 @@
     //  Table Filter
     function dataFilter(element)
     {
-        searchValue = 'dfasdf';// element.value;
+        searchValue =  element.value;
         table.setData(getMaster,{search:searchValue,status:statusValue});
     }
     // The Table for Items Modal

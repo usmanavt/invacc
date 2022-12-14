@@ -75,7 +75,7 @@ Route::get('/contracts/getContractMaster', [ContractController::class, 'getMaste
 Route::get('/contracts/getContractDetails', [ContractController::class, 'getDetails'])->name('contracts.details');
 Route::resource('contracts', ContractController::class);
 //  CommercialInvoice
-Route::get('/cis/getCisMaster', [CommercialInvoiceController::class, 'getMaster123'])->name('cis.master');
+Route::get('/cis/getCisMaster', [CommercialInvoiceController::class, 'getMaster'])->name('cis.master');
 
 
 

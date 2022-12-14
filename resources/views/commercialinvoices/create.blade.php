@@ -256,7 +256,7 @@
                 const hsc = mat['hscodes']
 
                 contract_id = obj.contract_id
-                
+
                 // console.log(obj.bundle1 , obj.pcspbundle1 ,obj.bundle2 , obj.pcspbundle2);
                 var vpcs = ((obj.bundle1 * obj.pcspbundle1) + (obj.bundle2 * obj.pcspbundle2)).toFixed(2)
                 // console.log(vpcs);
@@ -305,6 +305,7 @@
                         perkg:              0,
                         perft:            0,
                         otherexpenses:    0,
+                        qtyinfeet:0,
 
                     }
                 ])
@@ -353,6 +354,7 @@
                 var otherexpenses = ( conversionrate.value * otherchrgs.value ) * itmratio / 100
                 var perpc = (( totallccostwexp+otherexpenses) / e.pcs).toFixed(2)
                 var perkg = (perpc / e.inkg).toFixed(2)
+                var qtyinfeet = (e.pcs * e.length).toFixed(2)
 
 
                 e.amtindollar = e.gdswt * e.gdsprice
@@ -375,6 +377,8 @@
                 e.perpc = perpc
                 e.perft = (perpc / e.length )
                 e.otherexpenses = otherexpenses
+                e.qtyinfeet = qtyinfeet
+
                 // e.inkg = inkg
             })
             dynamicTable.setData(data)
@@ -415,7 +419,7 @@
                             validator:["required","numeric"],
                             formatterParams:{thousand:",",precision:2},
                         },
-                        {   title:"Wt(mt)",
+                        {   title:"Wt(Kg)",
                             field:"gdswt",
                             responsive:0,
                             editor:"number",
@@ -442,6 +446,22 @@
                             validator:["required","numeric"],
                             bottomCalcParams:{precision:2}  ,
                         },
+
+                        {   title:"QtyInFeet",
+                            field:"qtyinfeet",
+                            headerVertical:true,
+                          //  editor:"number",
+                            cssClass:"bg-green-200 font-semibold",
+                            formatter:"money",
+                            responsive:0,
+                            formatterParams:{thousand:",",precision:2},
+                            validator:["required","numeric"],
+                            bottomCalcParams:{precision:2}  ,
+                        },
+
+
+
+
                         {   title:"Other.Exp(pkr)",
                             field:"otherexpenses",
                             headerVertical:true,
