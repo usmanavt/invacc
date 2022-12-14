@@ -21,7 +21,7 @@
                         <div class="grid grid-cols-12 gap-2 py-2 items-center">
                             {{-- Contract Master --}}
                             <label for="supplier_id">Supplier</label>
-                            <select class="col-span-2" name="supplier_id" id="supplier_id" required>
+                            <select  autocomplete="on" class="col-span-2" name="supplier_id" id="supplier_id" required>
                                 @foreach($suppliers as $supplier)
                                     @if ($supplier->id == $contract->supplier_id)
                                     <option value="{{$supplier->id}}" selected> {{$supplier->title}} </option>

@@ -21,7 +21,7 @@
                                 @method('PUT')
                                 <input type="hidden" name="id" value="{{ $bt->id }}">
                                 <label for="">Bank</label>
-                                <select name="bank_id" required>
+                                <select autocomplete="on" name="bank_id" required>
                                     <option disabled selected value="">--Select</option>
                                     @foreach ($banks as $bank)
                                         <option value="{{ $bank->id }}" @if($bank->id === $bt->bank_id) selected @endif>{{ $bank->title }}</option>
@@ -29,7 +29,7 @@
                                 </select>
                                 {{-- Head --}}
                                 <label for="">Head</label>
-                                <select name="head_id" id="head_id" required onchange="populateSelect()">
+                                <select autocomplete="on" name="head_id" id="head_id" required onchange="populateSelect()">
                                     <option disabled selected value="">--Select</option>
                                     @foreach ($heads as $head)
                                         <option value="{{ $head->id }}" @if($head->id === $bt->head_id) selected @endif>{{ $head->title }}</option>
@@ -37,7 +37,7 @@
                                 </select>
                                 {{-- Subhead --}}
                                 <label for="">Subead</label>
-                                <select name="subhead_id" id="subhead_id" disabled class="disabled:opacity-50">
+                                <select autocomplete="on" name="subhead_id" id="subhead_id" disabled class="disabled:opacity-50">
                                     <option disabled selected value="">--Select</option>
                                     {{-- @foreach ($heads as $head)
                                         <option value="{{ $head->id }}">{{ $head->title }}</option>
@@ -45,7 +45,7 @@
                                 </select>
                                 {{-- Supplier --}}
                                 <label for="">Supplier</label>
-                                <select name="supplier_id" id="supplier_id" disabled class="disabled:opacity-50">
+                                <select autocomplete="on" name="supplier_id" id="supplier_id" disabled class="disabled:opacity-50">
                                     <option disabled selected value="">--Select</option>
                                     @foreach ($suppliers as $supplier)
                                         <option value="{{ $supplier->id }}" @if($supplier->id === $bt->supplier_id) selected @endif>{{ $supplier->title }}</option>
@@ -53,7 +53,7 @@
                                 </select>
                                 {{-- Customer --}}
                                 <label for="">Customer</label>
-                                <select name="customer_id" id="customer_id" disabled class="disabled:opacity-50">
+                                <select autocomplete="on" name="customer_id" id="customer_id" disabled class="disabled:opacity-50">
                                     <option disabled selected value="">--Select</option>
                                     @foreach ($customers as $customer)
                                         <option value="{{ $customer->id }}" @if($customer->id === $bt->customer_id) selected @endif>{{ $customer->title }}</option>

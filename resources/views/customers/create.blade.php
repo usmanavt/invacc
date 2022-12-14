@@ -16,7 +16,7 @@
                             @csrf
 
                             <div class="flex flex-col md:flex-row justify-start flex-wrap gap-2 items-center">
-                            
+
                                 <div class="basis-0 md:basis-1/6">
                                     <x-label for="title" :value="__('Customer title')" />
                                     <x-input id="title" class="bg-indigo-100" type="text" name="title" :value="old('title')"  required/>
@@ -34,7 +34,7 @@
                                     <x-input id="phoneoff" class="bg-indigo-100" type="text" name="phoneoff" :value="old('phoneoff')"  />
                                     @if($errors->has('phoneoff'))<div class="text-red-500 text-xs">{{ $errors->first('phoneoff') }}</div>@endif
                                 </div>
-                            
+
                                 <div class="basis-0 md:basis-1/6">
                                     <x-label for="phoneres" :value="__('Tel.(Residence)')" />
                                     <x-input id="phoneres" class="bg-indigo-100" type="text" name="phoneres" :value="old('phoneres')"  />
@@ -92,16 +92,16 @@
 
                                 <div class="basis-0 md:basis-1/6">
                                     <x-label for="care_id" :value="__('Source')" />
-                                    <select required name="care_id" id="care_id" class="bg-indigo-100">
+                                    <select autocomplete="on" required name="care_id" id="care_id" class="bg-indigo-100">
                                         <option value="" selected>--Care of</option>
                                         @foreach($care as $list)
                                         <option value="{{$list->id}}" >{{$list->title}}</option>
                                         @endforeach
                                     </select>
-                                </div>  
-                            
+                                </div>
+
                             </div>
-                               
+
                             <div class="mt-2">
                                 <button class="inline-flex items-center px-4 py-2 bg-green-500 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-green-700 active:bg-green-900 focus:outline-none focus:border-green-900 focus:ring ring-gray-300 disabled:opacity-25 transition ease-in-out duration-150">
                                     <i class="fa fa-save fa-fw"></i>
@@ -111,7 +111,7 @@
 
                         </form>
 
-                        
+
                     </div>
                 </div>
             </div>

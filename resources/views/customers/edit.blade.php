@@ -16,7 +16,7 @@
                             @csrf
                             @method('PUT')
                             <div class="flex flex-col md:flex-row justify-start flex-wrap gap-2 items-center">
-                            
+
                                 <div class="basis-0 md:basis-1/6">
                                     <x-label for="title" value="Name" />
                                     <x-input id="title" class="bg-indigo-100" type="text" name="title" value="{{ $customer->title }}"  required/>
@@ -34,7 +34,7 @@
                                     <x-input id="phoneoff" class="bg-indigo-100" type="text" name="phoneoff" value="{{ $customer->phoneoff }}"  />
                                     @if($errors->has('phoneoff'))<div class="text-red-500 text-xs">{{ $errors->first('phoneoff') }}</div>@endif
                                 </div>
-                            
+
                                 <div class="basis-0 md:basis-1/6">
                                     <x-label for="phoneres" :value="__('Tel.(Residence)')" />
                                     <x-input id="phoneres" class="bg-indigo-100" type="text" name="phoneres" value="{{ $customer->phoneres }}"  />
@@ -84,7 +84,7 @@
                                 </div>
 
                                 <div class="basis-0 md:basis-1/5 self-center pt-4">
-                                    <input class="checked:bg-blue-500 checked:border-blue-500 focus:outline-none" type="checkbox" name="status" 
+                                    <input class="checked:bg-blue-500 checked:border-blue-500 focus:outline-none" type="checkbox" name="status"
                                     @if ($customer->status == 1)
                                         checked
                                     @endif
@@ -96,20 +96,20 @@
 
                                 <div class="basis-0 md:basis-1/6">
                                     <x-label for="care_id" :value="__('Care Of')" />
-                                    <select required name="care_id" id="care_id" class="bg-indigo-100">
+                                    <select autocomplete="on" required name="care_id" id="care_id" class="bg-indigo-100">
                                         <option value="" selected>--Care of</option>
                                         @foreach($care as $list)
-                                            @if ($customer->care_id == $list->id) 
-                                            <option value="{{$list->id}}" selected>{{$list->title}}</option>    
+                                            @if ($customer->care_id == $list->id)
+                                            <option value="{{$list->id}}" selected>{{$list->title}}</option>
                                             @else
-                                            <option value="{{$list->id}}">{{$list->title}}</option>    
-                                            @endif  
+                                            <option value="{{$list->id}}">{{$list->title}}</option>
+                                            @endif
                                         @endforeach
                                     </select>
-                                </div>  
-                            
+                                </div>
+
                             </div>
-                               
+
                             <div class="mt-2">
                                 <button class="inline-flex items-center px-4 py-2 bg-green-500 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-green-700 active:bg-green-900 focus:outline-none focus:border-green-900 focus:ring ring-gray-300 disabled:opacity-25 transition ease-in-out duration-150">
                                     <i class="fa fa-save fa-fw"></i>
@@ -119,7 +119,7 @@
 
                         </form>
 
-                        
+
                     </div>
                 </div>
             </div>

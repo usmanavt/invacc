@@ -11,7 +11,7 @@
 
                 {{-- Create Form --}}
                 <div class="px-6 py-2" >
-                    
+
                     <div class="flex gap-8">
                         {{-- Form Data --}}
                         <div class="flex flex-col justify-start items-center">
@@ -29,14 +29,14 @@
                                 <x-label for="title" :value="__('Name')"/>
                                 <x-input class="bg-indigo-100" type="text" name="title" value="{{ $material->title }}"  required minlength="3"/>
                                 @if($errors->has('title'))<div class="text-red-500 text-xs">{{ $errors->first('title') }}</div>@endif
-                                
+
                                 <x-label for="nick" :value="__('Knick Name')"/>
                                 <x-input class="bg-indigo-100" type="text" name="nick" value="{{ $material->nick }}"  required minlength="3"/>
                                 @if($errors->has('nick'))<div class="text-red-500 text-xs">{{ $errors->first('nick') }}</div>@endif
-    
+
 
                                 <x-label for="" value="Category"/>
-                                <select required name="category_id" class="bg-indigo-100 w-full" required onchange="getHiddenValues(this)">
+                                <select autocomplete="on" required name="category_id" class="bg-indigo-100 w-full" required onchange="getHiddenValues(this)">
                                     @foreach ($categories as $category)
                                         @if ($material->category_id == $category->id)
                                             <option value="{{ $category->id }}" selected>{{ $category->title }}</option>
@@ -47,18 +47,18 @@
                                 </select>
 
                                 <x-label for="" value="dimension"/>
-                                <select required name="dimension_id" class="bg-indigo-100 w-full" required onchange="getHiddenValues(this)">
+                                <select autocomplete="on" required name="dimension_id" class="bg-indigo-100 w-full" required onchange="getHiddenValues(this)">
                                     @foreach ($dimensions as $dimension)
                                         @if ($material->dimension_id == $dimension->id)
                                             <option value="{{ $dimension->id }}" selected>{{ $dimension->title }}</option>
-                                        @else                                            
+                                        @else
                                             <option value="{{ $dimension->id }}">{{ $dimension->title }}</option>
                                         @endif
                                     @endforeach
                                 </select>
 
                                 <x-label for="" value="Source"/>
-                                <select required name="source_id" class="bg-indigo-100 w-full" required onchange="getHiddenValues(this)">
+                                <select autocomplete="on" required name="source_id" class="bg-indigo-100 w-full" required onchange="getHiddenValues(this)">
                                     @foreach ($sources as $source)
                                         @if ($material->source_id == $source->id)
                                             <option value="{{ $source->id }}" selected>{{ $source->title }}</option>
@@ -69,7 +69,7 @@
                                 </select>
 
                                 <x-label for="" value="Sku"/>
-                                <select required name="sku_id" class="bg-indigo-100 w-full" required onchange="getHiddenValues(this)">
+                                <select autocomplete="on" required name="sku_id" class="bg-indigo-100 w-full" required onchange="getHiddenValues(this)">
                                     @foreach ($skus as $sku)
                                         @if ($material->sku_id == $sku->id)
                                             <option value="{{ $sku->id }}" selected>{{ $sku->title }}</option>
@@ -80,22 +80,22 @@
                                 </select>
 
                                 <x-label for="" value="Brand"/>
-                                <select required name="brand_id" class="bg-indigo-100 w-full" required onchange="getHiddenValues(this)">
+                                <select autocomplete="on" required name="brand_id" class="bg-indigo-100 w-full" required onchange="getHiddenValues(this)">
                                     @foreach ($brands as $brand)
                                     @if ($material->brand_id == $brand->id)
                                         <option value="{{ $brand->id }}" selected>{{ $brand->title }}</option>
-                                    @else                                    
+                                    @else
                                         <option value="{{ $brand->id }}">{{ $brand->title }}</option>
                                     @endif
                                     @endforeach
                                 </select>
 
                                 <x-label for="" value="hscode"/>
-                                <select required name="hscode_id" class="bg-indigo-100 w-full" required onchange="getHiddenValues(this)">
+                                <select autocomplete="on" required name="hscode_id" class="bg-indigo-100 w-full" required onchange="getHiddenValues(this)">
                                     @foreach ($hscodes as $hscode)
                                         @if ($material->hscode_id == $hscode->id)
                                             <option value="{{ $hscode->id }}" selected>{{ $hscode->hscode }}</option>
-                                        @else                                            
+                                        @else
                                             <option value="{{ $hscode->id }}">{{ $hscode->hscode }}</option>
                                         @endif
                                     @endforeach
@@ -119,7 +119,7 @@
                                 </div>
                             </form>
                         </div>
-                        
+
                     </div>
                 </div>
 

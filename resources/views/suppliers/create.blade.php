@@ -12,7 +12,7 @@
                 {{-- Create Form --}}
                 <div class="px-6 py-2" >
                     <div class="flex gap-8">
-                        
+
                         <form action="{{ route('suppliers.store') }}" method="post" >
                             @csrf
                             <div class="flex flex-col md:flex-row justify-start flex-wrap gap-2 items-center">
@@ -48,7 +48,7 @@
                                     <x-input id="email" class="bg-indigo-100" type="email" name="email" :value="old('email')"   />
                                     @if($errors->has('email'))<div class="text-red-500 text-xs">{{ $errors->first('email') }}</div>@endif
                                 </div>
-        
+
                                 <div class="basis-0 md:basis-1/6">
                                     <x-label for="ntn" :value="__('NTN No')" />
                                     <x-input id="ntn" class="bg-indigo-100" type="text" name="ntn" :value="old('ntn')"  />
@@ -69,13 +69,13 @@
 
                                 <div class="basis-0 md:basis-1/6">
                                     <x-label for="source_id" :value="__('Source')" />
-                                    <select required name="source_id" id="source_id" class="bg-indigo-100">
+                                    <select autocomplete="on" required name="source_id" id="source_id" class="bg-indigo-100">
                                         <option value="" selected>--Source</option>
                                         @foreach ($sources as $source)
                                             <option value="{{ $source->id }}">{{ $source->title }}</option>
                                         @endforeach
                                     </select>
-                                </div>   
+                                </div>
 
                                 <div class="basis-0 md:basis-3/5">
                                     <x-label for="spaddress" :value="__('Supplier Address')" />
