@@ -13,13 +13,13 @@
                     <div class="flex flex-col flex-wrap md:flex-row items-center gap-2 justify-center">
 
                         <a  class="basis-0 w-full md:basis-1/3 bg-blue-500 hover:bg-blue-700 text-white px-2 py-4 rounded-lg shadow-lg" href="{{ route('categories.index') }}">
-                            <i class="fa-solid fa-arrow-up-from-ground-water fa-2xl"></i> Categories 
+                            <i class="fa-solid fa-arrow-up-from-ground-water fa-2xl"></i> Categories
                         </a>
-                      
+
                         <a  class="basis-0 w-full md:basis-1/3 bg-blue-500 hover:bg-blue-700 text-white px-2 py-4 rounded-lg shadow-lg" href="{{ route('skus.index') }}">
                             <i class="fa-solid fa-arrow-up-from-ground-water fa-2xl"></i> Skus
                         </a>
-                        
+
                         <a  class="basis-0 w-full md:basis-1/3 bg-blue-500 hover:bg-blue-700 text-white px-2 py-4 rounded-lg shadow-lg" href="{{ route('dimensions.index') }}">
                             <i class="fa-solid fa-xmarks-lines fa-2xl"></i> Dimensions
                         </a>
@@ -43,11 +43,11 @@
                         <a  class="basis-0 w-full md:basis-1/3 bg-blue-500 hover:bg-blue-700 text-white px-2 py-4 rounded-lg shadow-lg" href="{{ route('locations.index') }}">
                             <i class="fa-solid fa-shop-lock fa-2xl"></i> Location
                         </a>
-                        
+
                         <a  class="basis-0 w-full md:basis-1/3 bg-blue-500 hover:bg-blue-700 text-white px-2 py-4 rounded-lg shadow-lg" href="{{ route('heads.index') }}">
                             <i class="fa-solid fa-shop-lock fa-2xl"></i> Account Heads
                         </a>
-                        
+
                         <a  class="basis-0 w-full md:basis-1/3 bg-blue-500 hover:bg-blue-700 text-white px-2 py-4 rounded-lg shadow-lg" href="{{ route('subheads.index') }}">
                             <i class="fa-solid fa-kitchen-set fa-2xl"></i> ChartOfAccount
                         </a>
@@ -58,6 +58,12 @@
 
                         <a  class="basis-0 w-full md:basis-1/3 bg-blue-500 hover:bg-blue-700 text-white px-2 py-4 rounded-lg shadow-lg" href="{{ route('materials.index') }}">
                             <i class="fa-solid fa-arrow-up-from-bracket fa-2xl"></i> Materials
+                        </a>
+
+                        <a  class="basis-0 w-full md:basis-1/4 bg-blue-500 hover:bg-blue-700 text-white px-2 py-4 rounded-lg shadow-lg" href= "{{
+                            route('banks.index')
+                        }}" >
+                            <i class="fa-solid fa-shop-lock fa-2xl"></i> Banks
                         </a>
 
                     </div>

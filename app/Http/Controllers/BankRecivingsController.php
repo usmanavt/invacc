@@ -8,16 +8,17 @@ use App\Models\Subhead;
 use App\Models\Customer;
 use App\Models\Supplier;
 use Illuminate\Http\Request;
-use App\Models\BankTransactions;
+use App\Models\BankTransaction;
 use Illuminate\Support\Facades\DB;
+use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Session;
 
-class BankTransactionsController extends Controller
+class BankRecivingsController extends Controller
 {
     public function index()
     {
-        return view('banktransactions.index')
-        ->with('bts',BankTransactions::where('status',1)->orderBy('id','desc')->limit(10)->get())
+        return view('bankrecivings.index')
+        ->with('bts',BankTransaction::where('status',1)->orderBy('id','desc')->limit(10)->get())
         ->with('banks',Bank::where('status',1)->get())
         ->with('suppliers',Supplier::where('status',1)->get())
         ->with('heads',Head::where('status',1)->get())
@@ -34,22 +35,22 @@ class BankTransactionsController extends Controller
         $field = $request->sort[0]["field"];     //  Nested Array
         $dir = $request->sort[0]["dir"];         //  Nested Array
         //  With Tables
-        $contracts = BankTransactions::where(function ($query) use ($search){
+        $transactions = BankTransaction::where('transaction_type','BRV')->where(function ($query) use ($search){
             $query->where('id','LIKE','%' . $search . '%')
             ->orWhere('description','LIKE','%' . $search . '%')
-            ->orWhereDate('cheque_date','LIKE','%' . $search . '%');
-        })
-        ->orWhereHas('supplier',function($query) use($search){
-            $query->where('title','LIKE',"%$search%");
-        })
-        ->orWhereHas('customer',function($query) use($search){
-            $query->where('title','LIKE',"%$search%");
-        })
-        ->orWhereHas('head',function($query) use($search){
-            $query->where('title','LIKE',"%$search%");
-        })
-        ->orWhereHas('subhead',function($query) use($search){
-            $query->where('title','LIKE',"%$search%");
+            ->orWhereDate('cheque_date','LIKE','%' . $search . '%')
+            ->orWhereHas('supplier',function($query) use($search){
+                $query->where('title','LIKE',"%$search%");
+            })
+            ->orWhereHas('customer',function($query) use($search){
+                $query->where('title','LIKE',"%$search%");
+            })
+            ->orWhereHas('head',function($query) use($search){
+                $query->where('title','LIKE',"%$search%");
+            })
+            ->orWhereHas('subhead',function($query) use($search){
+                $query->where('title','LIKE',"%$search%");
+            });
         })
         ->with('bank:id,title')
         ->with('head:id,title')
@@ -58,13 +59,13 @@ class BankTransactionsController extends Controller
         ->with('customer:id,title')
         ->orderBy($field,$dir)
         ->paginate((int) $size);
-        return $contracts;
+        return $transactions;
     }
 
     public function create()
     {
-        // return view('banktransactions.create')
-        // ->with('bts',BankTransactions::where('status',1)->orderBy('id','desc')->limit(10)->get())
+        // return view('bankpayments.create')
+        // ->with('bts',bankpayments::where('status',1)->orderBy('id','desc')->limit(10)->get())
         // ->with('banks',Bank::where('status',1)->get())
         // ->with('suppliers',Supplier::where('status',1)->get())
         // ->with('heads',Head::where('status',1)->get())
@@ -88,8 +89,9 @@ class BankTransactionsController extends Controller
 
         DB::beginTransaction();
         try {
-            $bt = new BankTransactions();
+            $bt = new BankTransaction();
             $bt->bank_id = $request->bank_id;
+            $bt->transaction_type = 'BRV';
             $bt->head_id = $request->head_id;
             $bt->conversion_rate = $request->conversion_rate;
             $bt->amount_fc = $request->amount_fc;
@@ -102,8 +104,8 @@ class BankTransactionsController extends Controller
             if($request->has('customer_id'))    $bt->customer_id = $request->customer_id;
             $bt->save();
             DB::commit();
-            Session::flash('success','Bank Transaction created');
-            return redirect()->route('banktransactions.index');
+            Session::flash('success','Bank Reciving created');
+            return redirect()->route('bankrecivings.index');
         } catch (\Throwable $th) {
             DB::rollback();
             throw $th;
@@ -112,8 +114,8 @@ class BankTransactionsController extends Controller
 
     public function edit($id)
     {
-        return view('banktransactions.edit')
-        ->with('bt',BankTransactions::whereId($id)->first())
+        return view('bankrecivings.edit')
+        ->with('bt',BankTransaction::whereId($id)->first())
         ->with('banks',Bank::where('status',1)->get())
         ->with('suppliers',Supplier::where('status',1)->get())
         ->with('heads',Head::where('status',1)->get())
@@ -122,7 +124,7 @@ class BankTransactionsController extends Controller
         ;
     }
 
-    public function update(Request $request, BankTransactions $bt)
+    public function update(Request $request, BankTransaction $bt)
     {
         // dd($request->all(),$bt);
         $this->validate($request,[
@@ -137,7 +139,7 @@ class BankTransactionsController extends Controller
         ]);
         DB::beginTransaction();
         try {
-            $bt = BankTransactions::findOrFail($request->id);
+            $bt = BankTransaction::findOrFail($request->id);
             $bt->bank_id = $request->bank_id;
             $bt->head_id = $request->head_id;
             $bt->conversion_rate = $request->conversion_rate;
@@ -152,23 +154,23 @@ class BankTransactionsController extends Controller
             $bt->save();
             DB::commit();
             Session::flash('info','Bank Payment/Transaction updated');
-            return redirect()->route('banktransactions.index');
+            return redirect()->route('bankrecivings.index');
         } catch (\Throwable $th) {
             DB::rollback();
             throw $th;
         }
     }
 
-    public function show($id)
-    {
-        $bank = Bank::findOrFail($id);
-        if($bank->status === 1) {
-            $bank->status = 2;
-        }else {
-            $bank->status = 1;
-        }
-        $bank->save();
-        Session::flash('info',"Bank status set");
-        return redirect()->route('banks.index');
-    }
+    // public function show($id)
+    // {
+    //     $bank = Bank::findOrFail($id);
+    //     if($bank->status === 1) {
+    //         $bank->status = 2;
+    //     }else {
+    //         $bank->status = 1;
+    //     }
+    //     $bank->save();
+    //     Session::flash('info',"Bank status set");
+    //     return redirect()->route('banks.index');
+    // }
 }

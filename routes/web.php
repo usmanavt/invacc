@@ -1,6 +1,8 @@
 <?php
 
-use App\Models\BankTransactions;
+use App\Models\Subhead;
+use App\Models\bankpayments;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\SkuController;
 use App\Http\Controllers\BankController;
@@ -19,7 +21,8 @@ use App\Http\Controllers\RecivingController;
 use App\Http\Controllers\SupplierController;
 use App\Http\Controllers\ClearanceController;
 use App\Http\Controllers\DimensionController;
-use App\Http\Controllers\BankTransactionsController;
+use App\Http\Controllers\BankPaymentsController;
+use App\Http\Controllers\BankRecivingsController;
 use App\Http\Controllers\CommercialInvoiceController;
 
 
@@ -34,8 +37,25 @@ Route::get('/transactons', function () {
     return view('transaction');
 })->middleware(['auth'])->name('transaction');
 Route::get('/reports', function () {
-    return view('reports');
+    return view('reports')
+    ->with('heads',App\Models\Head::where('status',1)->get())
+    ->with('subheads',Subhead::where('status',1)->get());
 })->middleware(['auth'])->name('reports');
+Route::get('/fetchreport',function(Request $request){
+    return $request->all();
+
+    $report_type = $request->report_type;
+    $fromdate = $request->fromdate;
+    $todate = $request->todate;
+    $head_id = $request->head_id;
+    $subhead_id = $request->subhead_id;
+    $additional; // array
+    if($request->has('additional'))
+        $additional = $request->additional;
+
+    // Process Report Here
+
+})->name('getreport');
 
 require __DIR__.'/auth.php';
 
@@ -96,8 +116,11 @@ Route::resource('clearances', ClearanceController::class)->except(['create','sto
 Route::get('/banks/master', [BankController::class, 'getMaster'])->name('banks.master');
 Route::resource('banks',BankController::class);
 //  Bank Transactions
-Route::get('/banktransactions/master', [BankTransactionsController::class, 'getMaster'])->name('banktransactions.master');
-Route::resource('banktransactions',BankTransactionsController::class)->except(['create','show']);
+Route::get('/bankpayments/master', [BankPaymentsController::class, 'getMaster'])->name('bankpayments.master');
+Route::resource('bankpayments',BankPaymentsController::class)->except(['create','show','destroy']);
+//  Bank Recivings
+Route::get('/bankrecivings/master', [BankRecivingsController::class, 'getMaster'])->name('bankrecivings.master');
+Route::resource('bankrecivings',BankRecivingsController::class)->except(['create','show','destroy']);
 
 
 // Route::get('myproc',function(){
