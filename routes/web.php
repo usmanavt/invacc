@@ -52,7 +52,10 @@ Route::get('/fetchreport',function(Request $request){
     $additional; // array
     if($request->has('additional'))
         $additional = $request->additional;
-
+    foreach($subhead_id as $si)
+    {
+        // check value and make report
+    }
     // Process Report Here
 
 })->name('getreport');

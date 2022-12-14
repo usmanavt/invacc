@@ -78,7 +78,7 @@
                             <fieldset class="border px-4 py-2 rounded w-full">
                                 <legend>Heads</legend>
                                 <div class="flex justify-between py-1">
-                                    <select name="head_id" id="head_id" required class="w-full">
+                                    <select  name="head_id" id="head_id" required class="w-full">
                                         <option value="" selected disabled>--Selected</option>
                                         @foreach ($heads as $head)
                                             <option value="{{ $head->id }}">{{ $head->title }}</option>
@@ -91,9 +91,9 @@
                         <div class="flex flex-col md:flex-row w-full gap-2 px-6 pt-4">
 
                             <fieldset class="border px-4 py-2 rounded w-full">
-                                <legend>Sub Head</legend>
+                                <legend>Sub Head <span class="text-xs text-mute">shift & click to select multiple items</span></legend>
                                 <div class="flex justify-between py-1">
-                                    <select name="subhead_id" id="subhead_id" required class="w-full disabled:opacity-50" disabled>
+                                    <select size="5" multiple class="h-full w-full" name="subhead_id[]" id="subhead_id" required class="w-full disabled:opacity-50" disabled>
                                     </select>
                                 </div>
                             </fieldset>
@@ -122,7 +122,7 @@
         let list = subheads.filter( l => l.head_id === parseInt(val))
         // if(list.length <=0) { alert('Cannot continue,No Sub Head Defined!') ; return}
         //  Setup subhead dropdown
-        addSelectElement(subhead,'','--Select')
+        // addSelectElement(subhead,'','--Select')
         list.forEach(e => {
             addSelectElement(subhead,e.id,e.title)
         });
