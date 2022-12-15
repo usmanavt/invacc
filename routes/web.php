@@ -39,6 +39,8 @@ Route::get('/transactons', function () {
 Route::get('/reports', function () {
     return view('reports')
     ->with('heads',App\Models\Head::where('status',1)->get())
+    ->with('glheads',App\Models\Head::where('status',1)->whereIn('id',[1,2,30,36,38])->get())
+    ->with('vchrheads',App\Models\Head::where('status',1)->whereIn('id',[6,7,8,9])->get())
     ->with('subheads',Subhead::where('status',1)->get());
 })->middleware(['auth'])->name('reports');
 Route::get('/fetchreport',function(Request $request){
