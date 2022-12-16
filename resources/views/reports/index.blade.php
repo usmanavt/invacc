@@ -11,7 +11,7 @@
                 <div class="p-4 bg-white border-b border-gray-200">
 
 
-                    <form action="{{ route('getreport') }}">
+                    <form action="{{ route('reports.fetch')}}" method="POST">
                         @csrf
                         <div class="flex flex-col md:flex-row flex-wrap gap-2 justify-center">
                             <fieldset class="border px-4 py-2 rounded">
@@ -94,7 +94,7 @@
                                 </div>
                             </fieldset>
 
-                            <x-button>
+                            <x-button type="submit">
                                 Submit
                             </x-button>
                         </div>
