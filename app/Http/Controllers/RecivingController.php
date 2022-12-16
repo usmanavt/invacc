@@ -124,10 +124,11 @@ class RecivingController extends Controller
                 foreach($request->pendings as $p)
                 {
                     //  if we have GR Qty
-                    if($p['qtythisgr'] >= 0)
-                    {
+             //       if($p['qtythisgr'] >= 0)
+              //      {
                         $pending = RecivingPendingDetails::where('id',$p['id'])->first();
-                        $pending->qtyinpcspending = $p['qtyinpcspending'] -$p['qtyinpcsrejected'] - $p['qtythisgr'];
+                       // $pending->qtyinpcspending = $p['qtyinpcspending'] -$p['qtyinpcsrejected'] - $p['qtythisgr'];
+                        $pending->qtyinpcspending = 0 ;
                         $pending->save();
                         //  Close Pending if qtyinpcspending = 0
                         if($pending->qtyinpcspending == 0)
@@ -147,14 +148,30 @@ class RecivingController extends Controller
                         $completed->commercial_invoice_id = $p['commercial_invoice_id'];
                         $completed->material_id = $p['material_id'];
                         $completed->material_title = $p['material']['title'];
-                        $completed->received = $p['qtyinpcsrcv'];
-                        $completed->rejected = $p['qtyinpcsrejected'];
-                        $completed->thisgr = $p['qtythisgr'];
+
+                        // OLD CODING
+                        // $completed->received = $p['qtyinpcsrcv'];
+                        // $completed->rejected = $p['qtyinpcsrejected'];
+                        //*********************** *
+                        // CHANGED FROM USMAN ON 16-12-2022
+                        $completed->received = $p['length'];
+                        $completed->rejected = $p['inkg'];
+                        //********************************* */
+
+                        //$completed->thisgr = $p['qtythisgr'];
+                        $completed->thisgr = $p['qtyinpcs'];
                         $completed->rateperft = $p['rateperft'];
                         $completed->rateperkg = $p['rateperkg'];
                         $completed->rateperpc = $p['rateperpc'];
+
+                        // Changed From Usman on 15-12-2022
+                        $completed->qtyinpcs = $p['qtyinpcs'];
+                        $completed->qtyinkg = $p['qtyinkg'];
+                        $completed->qtyinfeet = $p['qtyinfeet'];
+                        //***** */
+
                         $completed->save();
-                    }
+                   // }
                 }
                 // Close Reciving
                 $closeReciving = true;

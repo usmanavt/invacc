@@ -279,6 +279,12 @@ class CommercialInvoiceController extends Controller
                 $preciving->rateperpc = $cid['perpc'];
                 $preciving->rateperkg = $cid['perkg'];
                 $preciving->rateperft = $cid['perft'];
+
+                /// Changed from usman on 16-12-2022
+                $preciving->length = $cid['length'];
+                $preciving->inkg = $cid['inkg'];
+                //******************************** */
+
                 $preciving->qtyinpcspending = $preciving->qtyinpcs = $cid['pcs'];
                 $preciving->save();
             }
@@ -298,11 +304,13 @@ class CommercialInvoiceController extends Controller
 
     public function edit($id)
     {
-        if(CommercialInvoice::hasCompletedReciving($id))
-        {
-            Session::flash('info','You cannot edit a commercial invoice, when you already have received Goods against it');
-            return redirect()->back();
-        }
+        //// Marking From Usman on 15-12-2022
+        // if(CommercialInvoice::hasCompletedReciving($id))
+        // {
+        //     Session::flash('info','You cannot edit a commercial invoice, when you already have received Goods against it');
+        //     return redirect()->back();
+        // }
+        //** */ Marking From Usman on 15-12-2022
         return view('commercialinvoices.edit')->with('i',CommercialInvoice::whereId($id)->with('commericalInvoiceDetails.material.hscodes')->first());
     }
 
@@ -492,6 +500,13 @@ class CommercialInvoiceController extends Controller
                 $preciving->rateperpc = $cid['perpc'];
                 $preciving->rateperkg = $cid['perkg'];
                 $preciving->rateperft = $cid['perft'];
+
+                /// Changed from usman on 16-12-2022
+                $preciving->length = $cid['length'];
+                $preciving->inkg = $cid['inkg'];
+                //******************************** */
+
+
                 $preciving->qtyinpcspending = $preciving->qtyinpcs = $cid['pcs'];
                 $preciving->save();
 

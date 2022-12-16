@@ -34,9 +34,9 @@
                     </fieldset>
 
                     {{-- Contract Details --}}
-                    <div class="px-4 py-2 items-center">
+                    {{-- <div class="px-4 py-2 items-center">
                         <x-button id="calculate" type="button" onclick="calculate()">Calculate</x-button>
-                    </div>
+                    </div> --}}
 
                     <div class="px-4">
                         <x-tabulator-nosearch />
@@ -80,7 +80,9 @@
 
         let calculateButton = document.getElementById("calculate")
         let submitButton = document.getElementById("submitbutton")
-            submitButton.disabled = true
+           // changed from usman on 16-12-2022
+        //submitButton.disabled = true
+        //*************************************
 
         let tableData
         var editIcon = function(cell, formatterParams, onRendered){ return "<i class='fa fa-edit text-blue-600'></i>";}
@@ -124,26 +126,26 @@
                 {title: 'Pieces',headerHozAlign:"center",
                     columns:[
                         {title: "QtyInPcs",field: "qtyinpcs"},
-                        {title: "QtyInKg",field: "qtyinkg"},
-                        {title: "QtyInFeet",field: "qtyinfeet"},
-                        {title: "Pending",field: "qtyinpcspending"},
-                            {title: "Received",field: "qtyinpcsrcv",editor:"number",
-                            cssClass:"bg-green-200 font-semibold",
-                            validator:["required","integer"],
-                            formatterParams:{thousand:","}},
-                        {title: "Rejected",field: "qtyinpcsrejected",
-                            editor:"number",
-                            cssClass:"bg-green-200 font-semibold",
-                            validator:["required","integer"],
-                            formatterParams:{thousand:","}},
-                        {title: "This GR",field: "qtythisgr",formatter:"money"},
+                       {title: "QtyInKg",field: "qtyinkg"},
+                       {title: "QtyInFeet",field: "qtyinfeet"},
+                       // {title: "Pending",field: "qtyinpcspending"},
+                       //     {title: "Received",field: "qtyinpcsrcv",editor:"number",
+                       //     cssClass:"bg-green-200 font-semibold",
+                       //     validator:["required","integer"],
+                       //     formatterParams:{thousand:","}},
+                        // {title: "Rejected",field: "qtyinpcsrejected",
+                        //     editor:"number",
+                        //     cssClass:"bg-green-200 font-semibold",
+                        //     validator:["required","integer"],
+                        //     formatterParams:{thousand:","}},
+                        // {title: "This GR",field: "qtythisgr",formatter:"money"},
                     ]
                 },
-                {title:'Others', headerHozAlign:"center",
-                    columns:[
-                        {title: "Wt (KG)",field: "qtyinkg"},
-                        {title: "Feet",field: "qtyinfeet"},
-                ]},
+                // {title:'Others', headerHozAlign:"center",
+                //     columns:[
+                //         {title: "Wt (KG)",field: "qtyinkg"},
+                //         {title: "Feet",field: "qtyinfeet"},
+                // ]},
 
                 {title:'Rate', headerHozAlign:"center",
                 columns:[
@@ -169,7 +171,13 @@
             let allowSubmit = true
             let positivePcs = true
             let rejectMore = false
+
+            /// oldcoding
             let receivedMore = false
+            // changed from usman on 16-12-2022
+              //  let receivedMore = true
+            //**************************
+
             let moreThenAvailabel = false
             //  First Iteration to calculate Basic Data
             data.forEach(e => {
@@ -178,18 +186,21 @@
                {
                 allowSubmit = false
                }
-               if(e.qtyinpcsrcv === undefined || e.qtyinpcsrcv <= 0 )
-               {
-                positivePcs = false
-               }
-               if(e.qtyinpcsrejected > e.qtyinpcsrcv)
-               {
-                rejectMore = true
-               }
-               if(e.qtyinpcsrcv > e.qtyinpcspending)
-               {
-                receivedMore = true
-               }
+
+            //change from usman on 16-12-2022
+            //    if(e.qtyinpcsrcv === undefined || e.qtyinpcsrcv <= 0 )
+            //    {
+            //     positivePcs = false
+            //    }
+            //***************************************
+            //    if(e.qtyinpcsrejected > e.qtyinpcsrcv)
+            //    {
+            //     rejectMore = true
+            //    }
+            //    if(e.qtyinpcsrcv > e.qtyinpcspending)
+            //    {
+            //     receivedMore = true
+            //    }
             })
             // Update Data
             data.forEach(e => {
@@ -197,17 +208,18 @@
             })
 
             if(!allowSubmit) showSnackbar('add location before proceeding','error')
-            if(!positivePcs) showSnackbar('"Received" is required should be positive number only','error')
-            if(rejectMore) showSnackbar('Rejection should be less then received Quantity',)
-            if(receivedMore) showSnackbar('Cannot receive more then Pending Quantity','error')
+            // if(!positivePcs) showSnackbar('"Received" is required should be positive number only','error')
+            // if(rejectMore) showSnackbar('Rejection should be less then received Quantity',)
+            // if(receivedMore) showSnackbar('Cannot receive more then Pending Quantity','error')
 
             tableData.setData(data)
 
             if(allowSubmit && positivePcs && !rejectMore && !receivedMore) { submitButton.disabled = false }
         }
 
+        // coding from usman 16-12-2022
         const submitForm = () => {
-
+            calculate();
             const tData = tableData.getData();
             if(tData.length == 0)
             {

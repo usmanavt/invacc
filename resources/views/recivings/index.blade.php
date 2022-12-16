@@ -112,9 +112,9 @@
                                 {title: "status",field: "status", visible:false,formatter:function(cell,row){
                                   if(cell.getData().status ===2 )
                                   {
-                                    subTable.hideColumn('qtyinpcs')
-                                    subTable.hideColumn('qtyinkg')
-                                    subTable.hideColumn('qtyinfeet')
+                                   // subTable.hideColumn('qtyinpcs')
+                                   // subTable.hideColumn('qtyinkg')
+                                   // subTable.hideColumn('qtyinfeet')
                                     subTable.hideColumn('qtyinpcspending')
                                   }else {
                                     subTable.hideColumn('location')
@@ -130,9 +130,9 @@
                                 {title: "Mat #",field: "material.id"},
                                 {title: "Material",field: "material.title"},
                                 {title: "Qty Pending",field: "qtyinpcspending"},
-                                {title: "Recevied",field: "received"},
-                                {title: "Rejected",field: "rejected"},
-                                {title: "Accepted",field: "thisgr",cssClass:'text-green-500 font-semibold'},
+                                // {title: "Recevied",field: "received"},
+                                // {title: "Rejected",field: "rejected"},
+                                // {title: "Accepted",field: "thisgr",cssClass:'text-green-500 font-semibold'},
                                 {title: "Qty Pcs",field: "qtyinpcs"},
                                 {title: "Qty Kg",field: "qtyinkg"},
                                 {title: "Qty Ft",field: "qtyinfeet" },

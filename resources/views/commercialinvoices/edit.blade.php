@@ -537,11 +537,14 @@
                 return;
             }
             const dynamicTableData = dynamicTable.getData();
-            if(dynamicTableData.length == 0)
-            {
-                showSnackbar("You must have atleast 1 row of item to Proceed","info");
-                return;
-            }
+
+            //// Marking From Usman on 15-12-2022
+            // if(dynamicTableData.length == 0)
+            // {
+            //     showSnackbar("You must have atleast 1 row of item to Proceed","info");
+            //     return;
+            // }
+           // //**** Marking From Usman on 15-12-2022
 
             // disableSubmitButton(true);
             var data = {
