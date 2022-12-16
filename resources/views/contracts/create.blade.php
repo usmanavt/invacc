@@ -22,7 +22,7 @@
                         <div class="grid grid-cols-12 gap-2 py-2 items-center">
 
                             <label for="supplier_id">Supplier<x-req /></label>
-                            <select class="col-span-2" name="supplier_id" id="supplier_id" required>
+                            <select autocomplete="on" class="col-span-2" name="supplier_id" id="supplier_id" required>
                                 <option value="" selected>--Supplier</option>
                                 @foreach($suppliers as $supplier)
                                 <option value="{{$supplier->id}}"> {{$supplier->title}} </option>

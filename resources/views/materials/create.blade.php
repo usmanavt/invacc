@@ -35,7 +35,7 @@
 
 
                                 <x-label for="" value="Category"/>
-                                <select required name="category_id" class="bg-indigo-100 w-full" required onchange="getHiddenValues(this)">
+                                <select autocomplete="on" required name="category_id" class="bg-indigo-100 w-full" required onchange="getHiddenValues(this)">
                                     <option value="" selected>--Category</option>
                                     @foreach ($categories as $category)
                                         <option value="{{ $category->id }}">{{ $category->title }}</option>
@@ -43,7 +43,7 @@
                                 </select>
 
                                 <x-label for="" value="Dimension"/>
-                                <select required name="dimension_id" class="bg-indigo-100 w-full" required onchange="getHiddenValues(this)">
+                                <select autocomplete="on" required name="dimension_id" class="bg-indigo-100 w-full" required onchange="getHiddenValues(this)">
                                     <option value="" selected>--Dimension</option>
                                     @foreach ($dimensions as $dimension)
                                         <option value="{{ $dimension->id }}">{{ $dimension->title }}</option>
@@ -51,7 +51,7 @@
                                 </select>
 
                                 <x-label for="" value="Source"/>
-                                <select required name="source_id" class="bg-indigo-100 w-full" required onchange="getHiddenValues(this)">
+                                <select autocomplete="on" required name="source_id" class="bg-indigo-100 w-full" required onchange="getHiddenValues(this)">
                                     <option value="" selected>--Source</option>
                                     @foreach ($sources as $source)
                                         <option value="{{ $source->id }}">{{ $source->title }}</option>
@@ -59,7 +59,7 @@
                                 </select>
 
                                 <x-label for="" value="Sku"/>
-                                <select required name="sku_id" class="bg-indigo-100 w-full" required onchange="getHiddenValues(this)">
+                                <select autocomplete="on" required name="sku_id" class="bg-indigo-100 w-full" required onchange="getHiddenValues(this)">
                                     <option value="" selected>--Sku</option>
                                     @foreach ($skus as $sku)
                                         <option value="{{ $sku->id }}">{{ $sku->title }}</option>
@@ -67,7 +67,7 @@
                                 </select>
 
                                 <x-label for="" value="Brand"/>
-                                <select required name="brand_id" class="bg-indigo-100 w-full" required onchange="getHiddenValues(this)">
+                                <select autocomplete="on" required name="brand_id" class="bg-indigo-100 w-full" required onchange="getHiddenValues(this)">
                                     <option value="" selected>--brand</option>
                                     @foreach ($brands as $brand)
                                         <option value="{{ $brand->id }}">{{ $brand->title }}</option>
@@ -76,7 +76,7 @@
 
 
                                 <x-label for="" value="hscode"/>
-                                <select required name="hscode_id" class="bg-indigo-100 w-full" required onchange="getHiddenValues(this)">
+                                <select autocomplete="on" required name="hscode_id" class="bg-indigo-100 w-full" required onchange="getHiddenValues(this)">
                                     <option value="" selected>--hscode</option>
                                     @foreach ($hscodes as $hscode)
                                         <option value="{{ $hscode->id }}">{{ $hscode->hscode }}</option>

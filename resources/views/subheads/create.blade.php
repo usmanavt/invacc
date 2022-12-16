@@ -17,9 +17,9 @@
 
                         <form action="{{ route('subheads.store') }}" method="post" >
                             @csrf
-                              
+
                             <x-label for="head_id" :value="__('Source')" />
-                            <select required name="head_id" id="head_id" class="bg-indigo-100">
+                            <select autocomplete="on" required name="head_id" id="head_id" class="bg-indigo-100">
                                 <option value="" selected>--Account Head</option>
                                 @foreach($heads as $head)
                                     <option value="{{$head->id}}">  {{$head->title}}  </option>

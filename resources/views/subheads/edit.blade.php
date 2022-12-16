@@ -19,12 +19,12 @@
                             @csrf
                             @method('PUT')
                             <x-label for="head_id" :value="__('Source')" />
-                            <select required name="head_id" id="head_id" class="bg-indigo-100">
+                            <select autocomplete="on" required name="head_id" id="head_id" class="bg-indigo-100">
                                 <option value="" selected>--Chart of Accounts</option>
                                 @foreach($heads as $head)
                                     @if ($head->id == $subhead->head_id)
                                         <option value="{{$head->id}}" selected>{{$head->title}}</option>
-                                    @else 
+                                    @else
                                         <option value="{{$head->id}}">{{$head->title}}</option>
                                     @endif
                                 @endforeach

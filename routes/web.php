@@ -1,7 +1,5 @@
 <?php
 
-use App\Models\Subhead;
-use App\Models\bankpayments;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\SkuController;
@@ -10,6 +8,7 @@ use App\Http\Controllers\HeadController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\BrandController;
 use App\Http\Controllers\HscodeController;
+use App\Http\Controllers\ReportController;
 use App\Http\Controllers\SourceController;
 use App\Http\Controllers\SubheadController;
 use App\Http\Controllers\CategoryController;
@@ -36,29 +35,10 @@ Route::get('/mastersetup', function () {
 Route::get('/transactons', function () {
     return view('transaction');
 })->middleware(['auth'])->name('transaction');
-Route::get('/reports', function () {
-    return view('reports')
-    ->with('heads',App\Models\Head::where('status',1)->get())
-    ->with('subheads',Subhead::where('status',1)->get());
-})->middleware(['auth'])->name('reports');
-Route::get('/fetchreport',function(Request $request){
-    return $request->all();
 
-    $report_type = $request->report_type;
-    $fromdate = $request->fromdate;
-    $todate = $request->todate;
-    $head_id = $request->head_id;
-    $subhead_id = $request->subhead_id;
-    $additional; // array
-    if($request->has('additional'))
-        $additional = $request->additional;
-    foreach($subhead_id as $si)
-    {
-        // check value and make report
-    }
-    // Process Report Here
+Route::get('reports',[ReportController::class, 'index'])->name('reports.index');
+Route::post('report/fetch',[ReportController::class, 'fetch'])->name('reports.fetch');
 
-})->name('getreport');
 
 require __DIR__.'/auth.php';
 
@@ -99,9 +79,6 @@ Route::get('/contracts/getContractDetails', [ContractController::class, 'getDeta
 Route::resource('contracts', ContractController::class);
 //  CommercialInvoice
 Route::get('/cis/getCisMaster', [CommercialInvoiceController::class, 'getMaster'])->name('cis.master');
-
-
-
 Route::get('/cis/getCisDetails', [CommercialInvoiceController::class, 'getDetails'])->name('cis.details');
 Route::get('/cis/getContractDetails', [CommercialInvoiceController::class, 'getContractDetails'])->name('cis.condet');
 Route::resource('cis', CommercialInvoiceController::class);
@@ -124,7 +101,6 @@ Route::resource('bankpayments',BankPaymentsController::class)->except(['create',
 //  Bank Recivings
 Route::get('/bankrecivings/master', [BankRecivingsController::class, 'getMaster'])->name('bankrecivings.master');
 Route::resource('bankrecivings',BankRecivingsController::class)->except(['create','show','destroy']);
-
 
 // Route::get('myproc',function(){
 //     // select procedure should be called with "call"

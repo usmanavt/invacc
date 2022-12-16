@@ -11,29 +11,29 @@
                 <div class="p-4 bg-white border-b border-gray-200">
 
 
-                    <form action="{{ route('getreport') }}">
+                    <form action="{{ route('reports.fetch')}}" method="POST">
                         @csrf
                         <div class="flex flex-col md:flex-row flex-wrap gap-2 justify-center">
                             <fieldset class="border px-4 py-2 rounded">
                                 <legend>Report Type</legend>
                                 <div>
-                                    <input type="radio" name="report_type" value="tpl" required>
+                                    <input type="radio" name="report_type" value="tpl" required onchange="checkReportType('tpl')">
                                     <label for="">Transaction Prove List</label>
                                 </div>
                                 <div>
-                                    <input type="radio" name="report_type" value="gl" required>
+                                    <input type="radio" name="report_type" value="gl" required onchange="checkReportType('gl')">
                                     <label for="">General Ledger</label>
                                 </div>
                                 <div>
-                                    <input type="radio" name="report_type" value="glhw" required>
+                                    <input type="radio" name="report_type" value="glhw" required onchange="checkReportType('glhw')">
                                     <label for="">General Ledger (Head Wise)</label>
                                 </div>
                                 <div>
-                                    <input type="radio" name="report_type" value="vchr" required>
+                                    <input type="radio" name="report_type" value="vchr" required onchange="checkReportType('vchr')">
                                     <label for="">Voucher</label>
                                 </div>
                                 <div>
-                                    <input type="radio" name="report_type" value="agng" required>
+                                    <input type="radio" name="report_type" value="agng" required onchange="checkReportType('agng')">
                                     <label for="">Aging</label>
                                 </div>
                             </fieldset>
@@ -78,11 +78,7 @@
                             <fieldset class="border px-4 py-2 rounded w-full">
                                 <legend>Heads</legend>
                                 <div class="flex justify-between py-1">
-                                    <select  name="head_id" id="head_id" required class="w-full">
-                                        <option value="" selected disabled>--Selected</option>
-                                        @foreach ($heads as $head)
-                                            <option value="{{ $head->id }}">{{ $head->title }}</option>
-                                        @endforeach
+                                    <select  name="head_id" id="head_id" required class="w-full" disabled onchange="headSelected()">
                                     </select>
                                 </div>
                             </fieldset>
@@ -98,7 +94,7 @@
                                 </div>
                             </fieldset>
 
-                            <x-button>
+                            <x-button type="submit">
                                 Submit
                             </x-button>
                         </div>
@@ -112,24 +108,24 @@
 
 @push('scripts')
 <script>
+    let heads = @json($heads);
     let subheads = @json($subheads);
+    let glheads = @json($glheads);
+    let vchrheads = @json($vchrheads);
     const head = document.getElementById('head_id')
     const subhead = document.getElementById('subhead_id')
 
-    head.addEventListener('change',()=>{
+    const headSelected = ()=>{
         const val = head.value
         subhead.options.length = 0 // Reset List
         let list = subheads.filter( l => l.head_id === parseInt(val))
-        // if(list.length <=0) { alert('Cannot continue,No Sub Head Defined!') ; return}
-        //  Setup subhead dropdown
-        // addSelectElement(subhead,'','--Select')
         list.forEach(e => {
             addSelectElement(subhead,e.id,e.title)
         });
-        subhead.setAttribute('required','')
+        subhead.removeAttribute('required','')
         subhead.removeAttribute('disabled','')
-        console.info(list)
-    })
+        // console.info(list)
+    }
 
     const addSelectElement = (select,id,value) => {
         var option = document.createElement('option')
@@ -141,6 +137,74 @@
     const calculate = () =>{
         amount_pkr.value = (parseFloat(conversion_rate.value) * parseFloat(amount_fc.value)).toFixed(2)
         submitButton.disabled = false
+    }
+
+    const checkReportType = (type) => {
+        switch (type) {
+            case 'tpl':
+                head.removeAttribute('required')
+                head.disabled = true
+                subhead.removeAttribute('required')
+                subhead.disabled = true
+                break;
+
+            case 'gl':
+                //  Show Head
+                head.removeAttribute('required','')
+                head.disabled = true
+                head.length = 0
+                subhead.setAttribute('required','')
+                subhead.disabled = false
+                subhead.length = 0
+                glheads.forEach(e => {
+                    console.info(e)
+                    addSelectElement(subhead,e.id,e.title)
+                });
+                // Show subheads
+                break;
+
+            case 'glhw':
+                // Show Head
+                head.setAttribute('required','')
+                head.disabled = false
+                head.length = 0
+                subhead.length = 0
+                heads.forEach(e => {
+                    console.info(e)
+                    addSelectElement(head,e.id,e.title)
+                });
+                subhead.setAttribute('required','')
+                subhead.disabled = false
+                break;
+
+            case 'vchr':
+                //  Head Not Required
+                head.setAttribute('required','')
+                head.disabled = false
+                head.length = 0
+                subhead.removeAttribute('required')
+                subhead.disabled = true
+                subhead.length = 0
+                //  Add in Head added [6,7,8,9] RESTRICT
+                vchrheads.forEach(e => {
+                    console.info(e)
+                    addSelectElement(head,e.id,e.title)
+                });
+                break;
+
+            case 'agng':
+                // Show Head
+                head.setAttribute('required','')
+                head.disabled = false
+                head.length = 0
+                heads.forEach(e => {
+                    console.info(e)
+                    addSelectElement(head,e.id,e.title)
+                });
+                subhead.setAttribute('required','')
+                subhead.disabled = false
+                break;
+        }
     }
 </script>
 @endpush

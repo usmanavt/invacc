@@ -23,7 +23,7 @@
                             <form action="{{ route('bankrecivings.store') }}" method="post" class="flex flex-col" id="createForm">
                                 @csrf
                                 <label for="">Bank</label>
-                                <select name="bank_id" required>
+                                <select name="bank_id" required autocomplete="on">
                                     <option disabled selected value="">--Select</option>
                                     @foreach ($banks as $bank)
                                         <option value="{{ $bank->id }}">{{ $bank->title }}</option>
@@ -31,7 +31,7 @@
                                 </select>
                                 {{-- Head --}}
                                 <label for="">Head</label>
-                                <select name="head_id" id="head_id" required>
+                                <select name="head_id" id="head_id" required autocomplete="on">
                                     <option disabled selected value="">--Select</option>
                                     @foreach ($heads as $head)
                                         <option value="{{ $head->id }}">{{ $head->title }}</option>
@@ -39,7 +39,7 @@
                                 </select>
                                 {{-- Subhead --}}
                                 <label for="">Subead</label>
-                                <select name="subhead_id" id="subhead_id" disabled class="disabled:opacity-50">
+                                <select name="subhead_id" id="subhead_id" disabled class="disabled:opacity-50" autocomplete="on">
                                     <option disabled selected value="">--Select</option>
                                     {{-- @foreach ($heads as $head)
                                         <option value="{{ $head->id }}">{{ $head->title }}</option>
@@ -47,7 +47,7 @@
                                 </select>
                                 {{-- Supplier --}}
                                 <label for="">Supplier</label>
-                                <select name="supplier_id" id="supplier_id" disabled class="disabled:opacity-50">
+                                <select name="supplier_id" id="supplier_id" disabled class="disabled:opacity-50" autocomplete="on">
                                     <option disabled selected value="">--Select</option>
                                     @foreach ($suppliers as $supplier)
                                         <option value="{{ $supplier->id }}">{{ $supplier->title }}</option>
@@ -55,7 +55,7 @@
                                 </select>
                                 {{-- Customer --}}
                                 <label for="">Customer</label>
-                                <select name="customer_id" id="customer_id" disabled class="disabled:opacity-50">
+                                <select name="customer_id" id="customer_id" disabled class="disabled:opacity-50" autocomplete="on">
                                     <option disabled selected value="">--Select</option>
                                     @foreach ($customers as $customer)
                                         <option value="{{ $customer->id }}">{{ $customer->title }}</option>
