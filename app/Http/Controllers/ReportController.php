@@ -32,9 +32,13 @@ class ReportController extends Controller
         if($report_type === 'tpl'){
             $data = DB::select('call ProcTPL(?,?)',array($fromdate,$todate));
             $html =  view('reports.tpl')->with('data',$data)->with('fromdate',$fromdate)->with('todate',$todate)->render();
-            $filename = 'TransactionProveList-'.$fromdate.'-'.$todate.'.pdf';
+            $filename = 'TransactionProveLista-'.$fromdate.'-'.$todate.'.pdf';
         }
         if($report_type === 'gl'){
+            dd($request->all());
+            $subheads = $request->subhead_id;
+            // Loop over $subheads, As it can have multiple [HEADS ID]
+            // Add input for Muliple parameters in Procedure
             $data = DB::select('call ProcGL(?,?)',array($fromdate,$todate));
             $html =  view('reports.gl')->with('data',$data)->with('fromdate',$fromdate)->with('todate',$todate)->render();
             $filename = 'GeneralLedger-'.$fromdate.'-'.$todate.'.pdf';
