@@ -40,7 +40,8 @@
                             <legend>Invoice Level Expenses</legend>
                             <div class="grid grid-cols-12 gap-2 py-2 items-center">
 
-                                <x-input-numeric title="Bank Chrgs" name="bankcharges" value="{{ $clearance->bankcharges }}"  required  onblur="calculateBankCharges()"/>
+
+                                {{-- <x-input-numeric title="Bank Chrgs" name="bankcharges" value="{{ $clearance->bankcharges }}"  required  onblur="calculateBankCharges()"/>
                                 <x-input-numeric title="Cust Coll" name="collofcustom" value="{{ $clearance->collofcustom }}"  required  onblur="calculateBankCharges()"/>
                                 <x-input-numeric title="Ex Tax of" name="exataxoffie" value="{{ $clearance->exataxoffie }}"  required  onblur="calculateBankCharges()"/>
                                 <x-input-numeric title="Ship Doc Chg" name="lngnshipdochrgs" value="{{ $clearance->lngnshipdochrgs }}"  required  onblur="calculateBankCharges()"/>
@@ -51,7 +52,31 @@
                                 <x-input-numeric title="Misc Exp" name="miscexpenses" value="{{ $clearance->miscexpenses }}"  required  onblur="calculateBankCharges()"/>
                                 <x-input-numeric title="Agency Chgs" name="agencychrgs" value="{{ $clearance->agencychrgs }}"  required  onblur="calculateBankCharges()"/>
                                 <x-input-numeric title="Other Chgs" name="otherchrgs" value="{{ $clearance->otherchrgs }}"  required  onblur="calculateBankCharges()"/>
-                                <x-input-numeric title="Total" name="banktotal" value="{{ $clearance->otherchrgs }}" disabled />
+                                <x-input-numeric title="Total" name="banktotal" value="{{ $clearance->banktotal }}" disabled /> --}}
+
+                                    <x-input-numeric title="Bank Chrgs" name="bankcharges" 0  required  onblur="calculateBankCharges()"/>
+                                        <x-input-numeric title="Cust Coll" name="collofcustom" 0  required  onblur="calculateBankCharges()"/>
+                                        <x-input-numeric title="Ex Tax of" name="exataxoffie" 0  required  onblur="calculateBankCharges()"/>
+                                        <x-input-numeric title="Ship Doc Chg" name="lngnshipdochrgs" 0  required  onblur="calculateBankCharges()"/>
+                                        <x-input-numeric title="Lcl Cartage" name="localcartage" 0  required  onblur="calculateBankCharges()"/>
+                                        <x-input-numeric title="Misc Exp Lunch" name="miscexplunchetc" 0  required  onblur="calculateBankCharges()"/>
+                                        <x-input-numeric title="Custom Sepoy" name="customsepoy" 0  required  onblur="calculateBankCharges()"/>
+                                        <x-input-numeric title="Weigh Bridge" name="weighbridge" 0  required  onblur="calculateBankCharges()"/>
+                                        <x-input-numeric title="Misc Exp" name="miscexpenses" 0  required  onblur="calculateBankCharges()"/>
+                                        <x-input-numeric title="Agency Chgs" name="agencychrgs" 0  required  onblur="calculateBankCharges()"/>
+                                        <x-input-numeric title="Other Chgs" name="otherchrgs" 0  required  onblur="calculateBankCharges()"/>
+                                        <x-input-numeric title="Total" name="banktotal" value="{{ $clearance->banktotal }}" disabled />
+
+
+
+
+
+
+
+
+
+
+
 
                             </div>
                         </fieldset>
@@ -110,7 +135,7 @@
         let weighbridge= document.getElementById("weighbridge")
         let miscexpenses= document.getElementById("miscexpenses")
         let agencychrgs= document.getElementById("agencychrgs")
-        let otherchrgs= document.getElementById("otherchrgs")
+         let otherchrgs= document.getElementById("otherchrgs")
         let banktotal= document.getElementById("banktotal")
         // Important Rates
         var conversionrate = document.getElementById("conversionrate");
@@ -272,7 +297,7 @@
                             validator:["required","numeric"],
                             formatterParams:{thousand:",",precision:2},
                         },
-                        {   title:"Wt(mt)",
+                        {   title:"Wt(Kg)",
                             field:"gdswt",
                             responsive:0,
                             editor:"number",
@@ -490,7 +515,7 @@
                 'weighbridge' : parseFloat(weighbridge.value).toFixed(2),
                 'miscexpenses' : parseFloat(miscexpenses.value).toFixed(2),
                 'agencychrgs' : parseFloat(agencychrgs.value).toFixed(2),
-                'otherchrgs' : parseFloat(otherchrgs.value).toFixed(2),
+                 'otherchrgs' : parseFloat(otherchrgs.value).toFixed(2),
                 'total' : parseFloat(banktotal.value).toFixed(2),
                 'dutyclearance' : dynamicTableData
             };
