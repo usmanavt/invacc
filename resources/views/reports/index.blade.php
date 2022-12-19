@@ -144,8 +144,10 @@
             case 'tpl':
                 head.removeAttribute('required')
                 head.disabled = true
+                head.length = 0
                 subhead.removeAttribute('required')
                 subhead.disabled = true
+                subhead.length = 0
                 break;
 
             case 'gl':
