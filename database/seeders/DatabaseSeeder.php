@@ -122,102 +122,173 @@ class DatabaseSeeder extends Seeder
     public function seedHeads()
     {
         Head::create([
-            'title' => 'CAPITAL',
+            'id' => 1,
+            'title' => 'PURCHASING',
         ]);
         Head::create([
-            'title' => 'DRAWING',
+            'id' => 2,
+            'title' => 'SALE CREDIT',
         ]);
         Head::create([
+            'id' => 5,
+            'title' => 'JOURNAL VOUCHER',
+        ]);
+        Head::create([
+            'id' => 6,
+            'title' => 'CASH PAYMENT VOUCHER',
+        ]);
+        Head::create([
+            'id' => 7,
+            'title' => 'CASH RECEIVED VOUCHER',
+        ]);
+        Head::create([
+            'id' => 8,
+            'title' => 'BANK PAYMENT VOUCHER',
+        ]);
+        Head::create([
+            'id' => 9,
+            'title' => 'BANK RECEIVED VOUCHER',
+        ]);
+        Head::create([
+            'id' => 11,
+            'title' => 'SALES RETURN',
+        ]);
+        Head::create([
+            'id' => 12,
+            'title' => 'PURCHASE RETURN',
+        ]);
+        Head::create([
+            'id' => 30,
+            'title' => 'CASH IN HAND',
+        ]);
+        Head::create([
+            'id' => 31,
+            'title' => 'BANK',
+        ]);
+        Head::create([
+            'id' => 32,
+            'title' => 'SUPPLIER',
+        ]);
+        Head::create([
+            'id' => 33,
+            'title' => 'CUSTOMER',
+        ]);
+        Head::create([
+            'id' => 34,
+            'title' => 'BANK DETAIL',
+        ]);
+        Head::create([
+            'id' => 36,
+            'title' => 'IMPORT PURCHASE',
+        ]);
+        Head::create([
+            'id' => 38,
+            'title' => 'SALE CASH'
+        ]);
+        Head::create([
+            'id' => 100,
+            'title' => 'CAPITAL'
+        ]);
+        Head::create([
+            'id' => 101,
+            'title' => 'DRAWING'
+        ]);
+        Head::create([
+            'id' => 102,
             'title' => 'EXPENSES',
             'nature' => 1
         ]);
         Head::create([
-            'title' => 'FIXED ASSETS',
+            'id' => 103,
+            'title' => 'FIXED ASSETS'
         ]);
         Head::create([
+            'id' => 104,
             'title' => 'INCOME TAX',
             'nature' => 1
         ]);
         Head::create([
-            'title' => 'INVESTMENT',
+            'id' => 105,
+            'title' => 'INVESTMENT'
         ]);
         Head::create([
-            'title' => 'LOANS & ADVANCES',
+            'id' => 106,
+            'title' => 'LOANS & ADVANCES'
         ]);
         Head::create([
-            'title' => 'LONG TERM LIABILITY',
+            'id' => 107,
+            'title' => 'LONG TERM LIABILITY'
         ]);
         Head::create([
-            'title' => 'MAIN HEAD ACCOUNT',
+            'id' => 108,
+            'title' => 'MAIN HEAD COUNT'
         ]);
         Head::create([
+            'id' => 109,
             'title' => 'NEW HEAD',
             'nature' => 1
         ]);
         Head::create([
-            'title' => 'OTHER INCOME',
+            'id' => 110,
+            'title' => 'OTHER INCOME'
         ]);
         Head::create([
-            'title' => 'OTHER PAYABLE',
+            'id' => 111,
+            'title' => 'OTHER PAYABLE'
         ]);
         Head::create([
-            'title' => 'OTHER RECEIVABLE',
+            'id' => 112,
+            'title' => 'OTHER RECEIVABLE'
         ]);
         Head::create([
-            'title' => 'SALE TAX REFUNDABLE',
+            'id' => 113,
+            'title' => 'SALE TAX REFUNDABLE'
         ]);
         Head::create([
-            'title' => 'TAX PAYABLE',
-        ]);
-        Head::create([
-            'id' => 32,
-            'title' => 'SUPPLIER'
-        ]);
-        Head::create([
-            'id' => 33,
-            'title' => 'CUSTOMER'
+            'id' => 114,
+            'title' => 'TAX PAYABLE'
         ]);
     }
 
     public function seedSubheads()
     {
         Subhead::create([
-            'head_id' => 1,
+            'head_id' => 100,
             'title' => 'BAHRIA PROPERTY',
             'ob' => 5000
         ]);
         Subhead::create([
-            'head_id' => 1,
+            'head_id' => 100,
             'title' => 'PLOT# E-13 (NEW GODOWN)',
             'ob' => 3000
         ]);
         Subhead::create([
-            'head_id' => 1,
+            'head_id' => 100,
             'title' => 'EVERY VAN FRO SCHOOL',
             'ob' => 25000
         ]);
         Subhead::create([
-            'head_id' => 2,
+            'head_id' => 102,
             'title' => 'SAAD IMPORT',
             'ob' => 150000
         ]);
         Subhead::create([
-            'head_id' => 4,
+            'head_id' => 104,
             'title' => 'SALARY OFFICE/GODOWN EXPENSE',
             'ob' => 6000
         ]);
         Subhead::create([
-            'head_id' => 4,
-            'title' => 'Kamra Bhai',
+            'head_id' => 104,
+            'title' => 'KAMRA BHAI',
             'ob' => 5000
         ]);
         Subhead::create([
-            'head_id' => 6,
+            'head_id' => 106,
             'title' => 'USMAN PAKISTAN',
             'ob' => 20000
         ]);
         Subhead::create([
-            'head_id' => 4,
+            'head_id' => 104,
             'title' => 'TRANSPORT ACCOUNTS',
             'ob' => 20000
         ]);

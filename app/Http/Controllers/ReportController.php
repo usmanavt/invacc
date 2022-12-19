@@ -30,11 +30,15 @@ class ReportController extends Controller
         $data = null;
 
         if($report_type === 'tpl'){
-            $data = DB::select('call ProcGL(?,?)',array($fromdate,$todate));
+            $data = DB::select('call ProcTPL(?,?)',array($fromdate,$todate));
             $html =  view('reports.tpl')->with('data',$data)->with('fromdate',$fromdate)->with('todate',$todate)->render();
+            $filename = 'TransactionProveList-'.$fromdate.'-'.$todate.'.pdf';
+        }
+        if($report_type === 'gl'){
+            $data = DB::select('call ProcGL(?,?)',array($fromdate,$todate));
+            $html =  view('reports.gl')->with('data',$data)->with('fromdate',$fromdate)->with('todate',$todate)->render();
             $filename = 'GeneralLedger-'.$fromdate.'-'.$todate.'.pdf';
         }
-        if($report_type === 'gl'){}
         if($report_type === 'glwh'){}
         if($report_type === 'vchr'){}
         if($report_type === 'agng'){}
