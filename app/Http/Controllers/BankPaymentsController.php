@@ -75,7 +75,7 @@ class BankPaymentsController extends Controller
 
     public function store(Request $request)
     {
-        dd($request->all());
+        //dd($request->all());
         $this->validate($request,[
             'bank_id' => 'required',
             'head_id' => 'required',
