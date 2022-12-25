@@ -24,6 +24,7 @@ class ReportController extends Controller
 
     public function fetch(Request $request)
     {
+        //  https://stackoverflow.com/questions/42555512/how-to-create-temporary-table-in-laravel
         // dd($request->all());
         $report_type = $request->report_type;
         $fromdate = $request->fromdate;
