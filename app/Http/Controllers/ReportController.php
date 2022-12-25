@@ -8,6 +8,7 @@ use App\Models\Subhead;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Session;
 
 class ReportController extends Controller
 {
@@ -31,19 +32,40 @@ class ReportController extends Controller
 
         if($report_type === 'tpl'){
             $data = DB::select('call ProcTPL(?,?)',array($fromdate,$todate));
+            if(!$data)
+            {
+                Session::flash('info','No data available');
+                return redirect()->back();
+            }
             $html =  view('reports.tpl')->with('data',$data)->with('fromdate',$fromdate)->with('todate',$todate)->render();
             $filename = 'TransactionProveLista-'.$fromdate.'-'.$todate.'.pdf';
         }
         if($report_type === 'gl'){
             dd($request->all());
-            $subheads = $request->subhead_id;
+            $head_id = $request->head_id;
             // Loop over $subheads, As it can have multiple [HEADS ID]
             // Add input for Muliple parameters in Procedure
-            $data = DB::select('call ProcGL(?,?)',array($fromdate,$todate));
+            $data = DB::select('call ProcGL(?,?,?)',array($fromdate,$todate,$head_id));
+            if(!$data)
+            {
+                Session::flash('info','No data available');
+                return redirect()->back();
+            }
             $html =  view('reports.gl')->with('data',$data)->with('fromdate',$fromdate)->with('todate',$todate)->render();
             $filename = 'GeneralLedger-'.$fromdate.'-'.$todate.'.pdf';
         }
-        if($report_type === 'glwh'){}
+        if($report_type === 'glhw'){
+            dd($request->all());
+            $subheads = $request->subhead_id;
+            $data = DB::select('call ProcGLHW(?,?)',array($fromdate,$todate));
+            if(!$data)
+            {
+                Session::flash('info','No data available');
+                return redirect()->back();
+            }
+            $html =  view('reports.glhw')->with('data',$data)->with('fromdate',$fromdate)->with('todate',$todate)->render();
+            $filename = 'GeneralLedgerWithHeaders-'.$fromdate.'-'.$todate.'.pdf';
+        }
         if($report_type === 'vchr'){}
         if($report_type === 'agng'){}
         // MPDF Settings
@@ -90,39 +112,4 @@ class ReportController extends Controller
         $mpdf->Output($filename,'D');
     }
 
-    // function printPDF($filename,$html)
-    // {
-    //     ini_set('max_execution_time', '2000');
-    //     ini_set("pcre.backtrack_limit", "100000000");
-    //     ini_set("memory_limit","8000M");
-    //     ini_set('allow_url_fopen',1);
-    //     $temp = storage_path('temp');
-    //     // Create the mPDF document
-    //     $mpdf = new PDF( [
-    //         'mode' => 'utf-8',
-    //         'format' => 'A4',
-    //         'margin_header' => '3',
-    //         'margin_top' => '20',
-    //         'margin_bottom' => '20',
-    //         'margin_footer' => '2',
-    //         'default_font_size' => 9,
-    //     ]);
-    //     $mpdf->SetHTMLFooter('
-    //         <table width="100%" style="border-top:1px solid gray">
-    //             <tr>
-    //                 <td width="33%">{DATE j-m-Y}</td>
-    //                 <td width="33%" align="center">{PAGENO}/{nbpg}</td>
-    //                 <td width="33%" style="text-align: right;">' . $filename . '</td>
-    //             </tr>
-    //         </table>');
-    //     $chunks = explode("chunk", $html);
-    //     foreach($chunks as $key => $val) {
-    //         $mpdf->WriteHTML($val);
-    //     }
-    //     $mpdf->Output($filename,'I');
-    //     // 'D': download the PDF file
-    //     // 'I': serves in-line to the browser
-    //     // 'S': returns the PDF document as a string
-    //     // 'F': save as file $file_out
-    // }
 }
