@@ -120,7 +120,7 @@ class ClearanceController extends Controller
                 $dcn->source_id = $d['source_id'];
                 $dcn->brand_id = $d['brand_id'];
                 $dcn->pcs = $d['pcs_rcv'];
-                $dcn->gdswt = $d['gdswt'];
+                $dcn->gdswt = $d['kg_rcv'];
                 $dcn->inkg = $d['inkg'];
                 $dcn->gdsprice = $d['gdsprice'];
                 $dcn->amtindollar = $d['amtindollar'];
@@ -156,13 +156,15 @@ class ClearanceController extends Controller
                 $dcp = ClearancePendingDetails::findOrFail($d['id']);
                 $pending = (int) $d['pcs_pending'] -  (int) $d['pcs_rcv'];  //  Calculate Pending
                 $dcp->pcs_pending =  $pending;
-                if($pending <= 0)
+                // $dcp->save();
+                $pendingkg = (int) $d['gdswt_pending'] -  (int) $d['kg_rcv'];  //  Calculate Pending
+                $dcp->gdswt_pending =  $pendingkg;
+                if($pending <= 0 or $pendingkg <= 0 )
                 {
                     $dcp->status = 2;
                 }
                 $dcp->save();
-
-            }
+  }
             // Update & Close Clearance if Completed
             $closeClearance = true;
             foreach($clearance->clearancePendingDetails as $pending)

@@ -22,6 +22,7 @@
                         <div class="flex flex-col justify-start items-center">
                             <form action="{{ route('bankpayments.store') }}" method="post" class="flex flex-col" id="createForm">
                                 @csrf
+                                <x-input-date title="Document Date" name="documentdate" req required/>
                                 <label for="">Bank</label>
                                 <select autocomplete="on" name="bank_id" required>
                                     <option disabled selected value="">--Select</option>
@@ -210,6 +211,7 @@
         columns:[
             // Master Data
             {title:"Id", field:"id" , responsive:0,visible:false},
+            {title:"Doc.Date", field:"documentdate" ,  responsive:0},
             {title:"Bank", field:"bank.title" , visible:true , responsive:0},
             {title:"Head", field:"head.title" , visible:true , responsive:0},
             {title:"Subhead", field:"subhead.title" , visible:true , responsive:0},
@@ -219,7 +221,7 @@
             {title:"Conv. Rate", field:"conversion_rate",hozAlign:"right" ,  responsive:0,formatter:"money",formatterParams:{thousand:",",precision:2}},
             {title:"Amount $", field:"amount_fc",hozAlign:"right" ,  responsive:0,formatter:"money",formatterParams:{thousand:",",precision:2}},
             {title:"Amount Rs", field:"amount_pkr",hozAlign:"right" ,  responsive:0,formatter:"money",formatterParams:{thousand:",",precision:0}},
-            {title:"Cheque Date", field:"cheque_date" ,  responsive:0},
+            //  {title:"Cheque Date", field:"cheque_date" ,  responsive:0},
             {title:"Cheque #", field:"cheque_no" ,  responsive:0},
             {title:"Description", field:"description" ,  responsive:0},
             // {title:"Status", field:"status" ,  responsive:0,

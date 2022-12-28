@@ -99,6 +99,7 @@ class BankPaymentsController extends Controller
             $bt->cheque_no = $request->cheque_no;
             $bt->cheque_date = $request->cheque_date;
             $bt->description = $request->description;
+            $bt->documentdate = $request->documentdate;
             if($request->has('subhead_id'))     $bt->subhead_id = $request->subhead_id;
             if($request->has('supplier_id'))    $bt->supplier_id = $request->supplier_id;
             if($request->has('customer_id'))    $bt->customer_id = $request->customer_id;
@@ -135,7 +136,8 @@ class BankPaymentsController extends Controller
             // 'amount_pkr' => 'required|numeric',
             'cheque_no' => 'required|min:3',
             'cheque_date' => 'required',
-            'description' => 'required'
+            'description' => 'required',
+            'documentdate' => 'required'
         ]);
         DB::beginTransaction();
         try {
@@ -148,6 +150,7 @@ class BankPaymentsController extends Controller
             $bt->cheque_no = $request->cheque_no;
             $bt->cheque_date = $request->cheque_date;
             $bt->description = $request->description;
+            $bt->documentdate = $request->documentdate;
             if($request->has('subhead_id')){$bt->subhead_id = $request->subhead_id;}else { $bt->subhead_id= 0;}
             if($request->has('supplier_id')){ $bt->supplier_id = $request->supplier_id;} else { $bt->supplier_id = 0;}
             if($request->has('customer_id')) { $bt->customer_id = $request->customer_id;} else { $bt->customer_id = 0;}

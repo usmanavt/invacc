@@ -13,7 +13,9 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 class BankTransaction extends Base
 {
     use HasFactory;
-    protected $dates = ['cheque_date'];
+    protected $dates = ['cheque_date','documentdate'];
+    //  protected $dates = ['documentdate'];
+
     public $filable=[
         'bank_id',
         'head_id',
@@ -27,7 +29,8 @@ class BankTransaction extends Base
         'cheque_date',
         'cheque_no',
         'descripton',
-        'status'
+        'status',
+        'documentdate'
     ];
     /************** Relationships **************/
     public function bank(){ return $this->belongsTo(Bank::class); }

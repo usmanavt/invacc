@@ -20,6 +20,8 @@
                                 @csrf
                                 @method('PUT')
                                 <input type="hidden" name="id" value="{{ $bt->id }}">
+
+                                <x-input-date title="Doc.Date" name="documentdate" value="{{ $bt->documentdate->format('Y-m-d') }}" req required/>
                                 <label for="">Bank</label>
                                 <select autocomplete="on" name="bank_id" required>
                                     <option disabled selected value="">--Select</option>
@@ -27,6 +29,7 @@
                                         <option value="{{ $bank->id }}" @if($bank->id === $bt->bank_id) selected @endif>{{ $bank->title }}</option>
                                     @endforeach
                                 </select>
+
                                 {{-- Head --}}
                                 <label for="">Head</label>
                                 <select autocomplete="on" name="head_id" id="head_id" required onchange="populateSelect()">
@@ -65,6 +68,7 @@
                                 <x-input-numeric title="Amount Rs" name="amount_pkr" id="amount_pkr"  disabled required class="" value="{{ $bt->amount_pkr }}"/>
                                 <x-input-text title="Cheque #" name="cheque_no" req required class="" value="{{ $bt->cheque_no }}"/>
                                 <x-input-date title="Cheque Date" name="cheque_date" value="{{ $bt->cheque_date->format('Y-m-d') }}" req required/>
+
 
 
                                 <div class="flex flex-col">

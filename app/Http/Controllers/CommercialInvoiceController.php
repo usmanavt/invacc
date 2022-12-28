@@ -226,6 +226,13 @@ class CommercialInvoiceController extends Controller
 
                 $cpd->pcs = $cid['pcs'];
                 $cpd->gdswt = $cid['gdswt'];
+
+                /// *** From Muhammad usman on 27-12-2022
+                $cpd->pcs_pending = $cid['pcs'];
+                $cpd->gdswt_pending = $cid['gdswt'];
+                /// *********************************
+
+
                 $cpd->inkg = $cid['inkg'];
                 $cpd->pcs = $cid['pcs'];
                 $cpd->gdswt = $cid['gdswt'];

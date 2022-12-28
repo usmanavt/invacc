@@ -34,6 +34,7 @@
                                 <x-input-date title="GD Date" name="gd_date" req required />
                                     <x-input-text title="GD #" name="gdno" value="" req required />
                             </div>
+
                         </fieldset>
 
                         <fieldset class="border px-4 py-2 rounded">
@@ -66,17 +67,6 @@
                                         <x-input-numeric title="Agency Chgs" name="agencychrgs" 0  required  onblur="calculateBankCharges()"/>
                                         <x-input-numeric title="Other Chgs" name="otherchrgs" 0  required  onblur="calculateBankCharges()"/>
                                         <x-input-numeric title="Total" name="banktotal" value="{{ $clearance->banktotal }}" disabled />
-
-
-
-
-
-
-
-
-
-
-
 
                             </div>
                         </fieldset>
@@ -177,6 +167,14 @@
                     rcvIsMoreThenPending.push(true)
                     return;
                 }
+
+                if(e.kg_rcv > e.gdswt_pending || e.kg_rcv === undefined)
+                {
+                    showSnackbar("Rcv kg is Required & cannot be more then kg","error");
+                    rcvIsMoreThenPending.push(true)
+                    return;
+                }
+
                 var pcs = e.pcs
                 var gdswt = e.gdswt
                 var inkg = ((e.gdswt / e.pcs ) * 1000).toFixed(3)
@@ -230,7 +228,7 @@
                 e.totallccostwexp = totallccostwexp
                 e.perpc = perpc
                 e.perft = (perpc / length )
-                e.otherexpenses = e.otherexpenses
+                 e.otherexpenses = e.otherexpenses
             })
             dynamicTable.setData(data)
 
@@ -297,49 +295,65 @@
                             validator:["required","numeric"],
                             formatterParams:{thousand:",",precision:2},
                         },
-                        {   title:"Wt(Kg)",
+                        {   title:"Totl Wt(Kg)",
                             field:"gdswt",
                             responsive:0,
-                            editor:"number",
+                            // editor:"number",
                             headerVertical:true,
                             formatter:"money",
                             cssClass:"bg-green-200 font-semibold",
                             validator:["required","numeric"],
                             formatterParams:{thousand:",",precision:2},
                         },
-                        {   title:"Wt(pcs/kg)",
-                            field:"inkg",
-                            responsive:0,
+
+                        {   title:"WT Pending",
+                            field:"gdswt_pending",
                             headerVertical:true,
-                            editor:"number",
-                            formatter:"money",
-                            cssClass:"bg-green-200 font-semibold",
-                            validator:["required","numeric"],
-                            formatterParams:{thousand:",",precision:2},
-
-
-
-                        },
-                        {   title:"Lng(pcs/feet)",
-                            field:"length",
-                            headerVertical:true,
-                            editor:"number",
-                            cssClass:"bg-green-200 font-semibold",
+                            // editor:"number",
                             formatter:"money",
                             responsive:0,
                             formatterParams:{thousand:",",precision:2},
                             validator:["required","numeric"],
                             bottomCalcParams:{precision:2}  ,
                         },
-                        {   title:"Other.Exp",
-                            field:"otherexpenses",
+                        {   title:"kg This Doc",
+                            field:"kg_rcv",
                             headerVertical:true,
+                            editor:"number",
                             formatter:"money",
                             responsive:0,
                             formatterParams:{thousand:",",precision:2},
                             validator:["required","numeric"],
                             bottomCalcParams:{precision:2}  ,
                         },
+
+
+
+
+
+
+                        // {   title:"Wt(pcs/kg)",
+                        //     field:"inkg",
+                        //     responsive:0,
+                        //     headerVertical:true,
+                        //     editor:"number",
+                        //     formatter:"money",
+                        //     cssClass:"bg-green-200 font-semibold",
+                        //     validator:["required","numeric"],
+                        //     formatterParams:{thousand:",",precision:2},
+                        // },
+                        // {   title:"Lng(pcs/feet)",
+                        //     field:"length",
+                        //     headerVertical:true,
+                        //     editor:"number",
+                        //     cssClass:"bg-green-200 font-semibold",
+                        //     formatter:"money",
+                        //     responsive:0,
+                        //     formatterParams:{thousand:",",precision:2},
+                        //     validator:["required","numeric"],
+                        //     bottomCalcParams:{precision:2}  ,
+                        // },
+
                     ]
                 },
                 {
