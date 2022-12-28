@@ -936,6 +936,9 @@ select {
 .basis-0 {
   flex-basis: 0px;
 }
+.border-collapse {
+  border-collapse: collapse;
+}
 .origin-top-left {
   transform-origin: top left;
 }

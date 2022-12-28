@@ -170,13 +170,13 @@
                 head.setAttribute('required','')
                 head.disabled = false
                 head.length = 0
+                subhead.removeAttribute('required')
+                subhead.disabled = true
                 subhead.length = 0
                 heads.forEach(e => {
                     console.info(e)
                     addSelectElement(head,e.id,e.title)
                 });
-                subhead.setAttribute('required','')
-                subhead.disabled = false
                 break;
 
             case 'vchr':
