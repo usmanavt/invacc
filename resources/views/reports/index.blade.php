@@ -114,17 +114,26 @@
     let vchrheads = @json($vchrheads);
     const head = document.getElementById('head_id')
     const subhead = document.getElementById('subhead_id')
+    let subheadavailable = false
+    console.info(heads)
+    console.info(subheads)
 
     const headSelected = ()=>{
         const val = head.value
+        console.info(val)
         subhead.options.length = 0 // Reset List
-        let list = subheads.filter( l => l.head_id === parseInt(val))
-        list.forEach(e => {
-            addSelectElement(subhead,e.id,e.title)
-        });
-        subhead.removeAttribute('required','')
-        subhead.removeAttribute('disabled','')
-        // console.info(list)
+        let list = subheads.filter( l => l.MHEAD === val)
+        if(list.length > 0)
+        {
+            list.forEach(e => {
+                addSelectElement(subhead,e.Subhead,e.title)
+            });
+            subhead.setAttribute('required','')
+            subhead.removeAttribute('disabled','')
+        }else{
+            subhead.removeAttribute('required','')
+            subhead.setAttribute('disabled','')
+        }
     }
 
     const addSelectElement = (select,id,value) => {
@@ -148,6 +157,7 @@
                 subhead.removeAttribute('required')
                 subhead.disabled = true
                 subhead.length = 0
+                subheadavailable = false
                 break;
 
             case 'gl':
@@ -158,6 +168,7 @@
                 subhead.setAttribute('required','')
                 subhead.disabled = false
                 subhead.length = 0
+                subheadavailable = false
                 glheads.forEach(e => {
                     console.info(e)
                     addSelectElement(subhead,e.id,e.title)
@@ -177,6 +188,7 @@
                     console.info(e)
                     addSelectElement(head,e.id,e.title)
                 });
+                headSelected()
                 break;
 
             case 'vchr':

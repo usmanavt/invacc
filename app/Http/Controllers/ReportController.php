@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 use App\Models\Head;
 use \Mpdf\Mpdf as PDF;
-use App\Models\Subhead;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
@@ -19,7 +18,8 @@ class ReportController extends Controller
         ->with('heads',Head::where('status',1)->get())
         ->with('glheads',Head::where('status',1)->whereIn('id',[1,2,30,36,38])->get())
         ->with('vchrheads',Head::where('status',1)->whereIn('id',[6,7,8,9])->get())
-        ->with('subheads',Subhead::where('status',1)->get());
+        ->with('subheads',DB::table('VwCategory')->select('*')->get()->toArray())
+        ;
     }
 
     public function fetch(Request $request)
@@ -41,12 +41,20 @@ class ReportController extends Controller
             $html =  view('reports.tpl')->with('data',$data)->with('fromdate',$fromdate)->with('todate',$todate)->render();
             $filename = 'TransactionProveLista-'.$fromdate.'-'.$todate.'.pdf';
         }
+
         if($report_type === 'gl'){
-            dd($request->all());
-            $head_id = $request->head_id;
-            // Loop over $subheads, As it can have multiple [HEADS ID]
+            // dd($request->all());
+            $subhead_id = $request->subhead_id;
+            //  Truncate Table Data
+            DB::table('glparameterrpt')->truncate();
+            foreach($request->subhead_id as $id)
+            {
+                DB::table('glparameterrpt')->insert([
+                    'GLCODE' => $id
+                ]);
+            }
             // Add input for Muliple parameters in Procedure
-            $data = DB::select('call ProcGL(?,?,?)',array($fromdate,$todate,$head_id));
+            $data = DB::select('call ProcGL(?,?)',array($fromdate,$todate));
             if(!$data)
             {
                 Session::flash('info','No data available');
@@ -55,10 +63,21 @@ class ReportController extends Controller
             $html =  view('reports.gl')->with('data',$data)->with('fromdate',$fromdate)->with('todate',$todate)->render();
             $filename = 'GeneralLedger-'.$fromdate.'-'.$todate.'.pdf';
         }
+
         if($report_type === 'glhw'){
             dd($request->all());
-            $subheads = $request->subhead_id;
-            $data = DB::select('call ProcGLHW(?,?)',array($fromdate,$todate));
+            $head_id = $request->head_id;
+            if($request->has('subhead_id')){
+                $subhead_id = $request->subhead_id;
+                DB::table('glparameterrpt')->truncate();
+                foreach($request->heads as $id)
+                {
+                    DB::table('glparameterrpt')->insert([
+                        'GLCODE' => $id
+                    ]);
+                }
+            }
+            $data = DB::select('call ProcGLHW(?,?,?)',array($fromdate,$todate,$head_id));
             if(!$data)
             {
                 Session::flash('info','No data available');
@@ -67,6 +86,7 @@ class ReportController extends Controller
             $html =  view('reports.glhw')->with('data',$data)->with('fromdate',$fromdate)->with('todate',$todate)->render();
             $filename = 'GeneralLedgerWithHeaders-'.$fromdate.'-'.$todate.'.pdf';
         }
+
         if($report_type === 'vchr'){}
         if($report_type === 'agng'){}
         // MPDF Settings
