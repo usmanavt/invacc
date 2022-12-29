@@ -30,7 +30,26 @@ class ReportController extends Controller
         $fromdate = $request->fromdate;
         $todate = $request->todate;
         $data = null;
-
+        // MPDF Settings
+        ini_set('max_execution_time', '2000');
+        ini_set("pcre.backtrack_limit", "100000000");
+        ini_set("memory_limit","4000M");
+        ini_set('allow_url_fopen',1);
+        ini_set('user_agent', 'Mozilla/5.0');
+        $temp = storage_path('temp');
+        $mpdf = new PDF( [
+            'mode' => 'utf-8',
+            'format' => 'A4',
+            'margin_header' => '3',
+            'margin_top' => '10',
+            'margin_bottom' => '10',
+            'margin_footer' => '2',
+            'default_font_size' => 9,
+        ]);
+        $mpdf->showImageErrors = true;
+        $mpdf->curlAllowUnsafeSslRequests = true;
+        $mpdf->debug = true;
+        //  Get Report
         if($report_type === 'tpl'){
             $data = DB::select('call ProcTPL(?,?)',array($fromdate,$todate));
             if(!$data)
@@ -65,55 +84,53 @@ class ReportController extends Controller
         }
 
         if($report_type === 'glhw'){
-            dd($request->all());
+            // dd($request->all());
             $head_id = $request->head_id;
+            $head = Head::findOrFail($head_id);
             if($request->has('subhead_id')){
                 $subhead_id = $request->subhead_id;
+                //  Clear Data from Table
                 DB::table('glparameterrpt')->truncate();
-                foreach($request->heads as $id)
+                foreach($request->subhead_id as $id)
                 {
-                    DB::table('glparameterrpt')->insert([
-                        'GLCODE' => $id
-                    ]);
+                    DB::table('glparameterrpt')->insert([ 'GLCODE' => $id ]);
                 }
             }
+            //  Call Procedure
             $data = DB::select('call ProcGLHW(?,?,?)',array($fromdate,$todate,$head_id));
             if(!$data)
             {
                 Session::flash('info','No data available');
                 return redirect()->back();
             }
-            $html =  view('reports.glhw')->with('data',$data)->with('fromdate',$fromdate)->with('todate',$todate)->render();
-            $filename = 'GeneralLedgerWithHeaders-'.$fromdate.'-'.$todate.'.pdf';
+            $collection = collect($data);                   //  Make array a collection
+            $grouped = $collection->groupBy('SupName');       //  Sort collection by SupName
+            $grouped->values()->all();                       //  values() removes indices of array
+            foreach($grouped as $g){
+                $html =  view('reports.glhw')->with('data',$g)->with('fromdate',$fromdate)->with('todate',$todate)->with('headtype',$head->title)->render();
+                $filename = $g[0]->SupName  .'-'.$fromdate.'-'.$todate.'.pdf';
+                $mpdf->SetHTMLFooter('
+                <table width="100%" style="border-top:1px solid gray">
+                    <tr>
+                        <td width="33%">{DATE j-m-Y}</td>
+                        <td width="33%" align="center">{PAGENO}/{nbpg}</td>
+                        <td width="33%" style="text-align: right;">' . $filename . '</td>
+                    </tr>
+                </table>');
+                $chunks = explode("chunk", $html);
+                foreach($chunks as $key => $val) {
+                    $mpdf->WriteHTML($val);
+                }
+                $mpdf->AddPage();
+            }
+            $mpdf->Output($filename,'I');
+            dd('wait');
+            return;
         }
 
         if($report_type === 'vchr'){}
         if($report_type === 'agng'){}
-        // MPDF Settings
-        ini_set('max_execution_time', '2000');
-        ini_set("pcre.backtrack_limit", "100000000");
-        ini_set("memory_limit","4000M");
-        ini_set('allow_url_fopen',1);
-        ini_set('user_agent', 'Mozilla/5.0');
 
-        // Log::info("MPDF init set");
-        $temp = storage_path('temp');
-        // Log::info("Temp is " . $temp);
-        // return $html;
-        // Create the mPDF document
-        $mpdf = new PDF( [
-            'mode' => 'utf-8',
-            'format' => 'A4',
-            'margin_header' => '3',
-            'margin_top' => '10',
-            'margin_bottom' => '10',
-            'margin_footer' => '2',
-            'default_font_size' => 9,
-        ]);
-        $mpdf->showImageErrors = true;
-        $mpdf->curlAllowUnsafeSslRequests = true;
-        $mpdf->debug = true;
-        // Log::info('MPDF settings done');
         $mpdf->SetHTMLFooter('
             <table width="100%" style="border-top:1px solid gray">
                 <tr>
@@ -122,15 +139,11 @@ class ReportController extends Controller
                     <td width="33%" style="text-align: right;">' . $filename . '</td>
                 </tr>
             </table>');
-        // Log::info('MPDF SetHTMLFooter done');
         $chunks = explode("chunk", $html);
         foreach($chunks as $key => $val) {
             $mpdf->WriteHTML($val);
-            Log::info('Chunks Writen ');
         }
-        // $html = view('reports.tpl')->render();
-        // $mpdf->WriteHTML($html);
-        $mpdf->Output($filename,'D');
+        $mpdf->Output($filename,'I');
     }
 
 }
