@@ -11,6 +11,7 @@ use App\Http\Controllers\HscodeController;
 use App\Http\Controllers\ReportController;
 use App\Http\Controllers\SourceController;
 use App\Http\Controllers\SubheadController;
+use App\Http\Controllers\VoucherController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\ContractController;
 use App\Http\Controllers\CustomerController;
@@ -102,18 +103,12 @@ Route::resource('bankpayments',BankPaymentsController::class)->except(['create',
 //  Bank Recivings
 Route::get('/bankrecivings/master', [BankRecivingsController::class, 'getMaster'])->name('bankrecivings.master');
 Route::resource('bankrecivings',BankRecivingsController::class)->except(['create','show','destroy']);
-
-
-
-
 //  Cash Transactions
 Route::get('/cashpayments/master', [CashPaymentController::class, 'getMaster'])->name('cashpayments.master');
 Route::resource('cashpayments',CashPaymentController::class)->except(['create','show','destroy']);
-//  Bank Recivings
-///////Route::get('/cashrecivings/master', [BankRecivingsController::class, 'getMaster'])->name('bankrecivings.master');
-///////Route::resource('bankrecivings',BankRecivingsController::class)->except(['create','show','destroy']);
-
-
+//  Journal Vouchers
+Route::get('/jv/master', [VoucherController::class, 'getMaster'])->name('jv.master');
+Route::resource('jv',VoucherController::class)->except(['create','show','destroy']);
 
 // Route::get('myproc',function(){
 //     // select procedure should be called with "call"
