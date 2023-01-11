@@ -117,8 +117,10 @@ class RecivingController extends Controller
     }
 
     public function update(Request $request,Reciving $reciving)
+
     {
-        // dd($request->all(),$reciving);
+
+
         DB::beginTransaction();
             try {
                 foreach($request->pendings as $p)
@@ -137,6 +139,7 @@ class RecivingController extends Controller
                             $pending->save();
                         }
                         // Create Good Received
+
                         $completed = new RecivingCompletedDetails();
                         $completed->reciving_id = $reciving->id;
                         $completed->reciving_date = now();

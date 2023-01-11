@@ -89,6 +89,8 @@ class CommercialInvoiceController extends Controller
 
     public function store(Request $request)
     {
+        // dd($request->all());
+
         $comminvoice = $request->comminvoice;
         DB::beginTransaction();
         try {

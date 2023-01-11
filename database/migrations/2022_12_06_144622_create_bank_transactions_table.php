@@ -21,6 +21,7 @@ class CreateBankTransactionsTable extends Migration
             $table->bigInteger('supplier_id')->default(0);
             $table->bigInteger('customer_id')->default(0);
             $table->string('transaction_type', 5)->default('BPV');  // BPV , BRP
+            $table->timestamp('documentdate')->nullable();
             $table->decimal('conversion_rate', 15, 3)->default(1);
             $table->decimal('amount_fc', 15, 3)->default(0.000);
             $table->decimal('amount_pkr', 15, 3)->default(0.000);

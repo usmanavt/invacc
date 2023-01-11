@@ -91,14 +91,15 @@ table{
     {{-- Ledger Info --}}
     <table class="ledger">
         <tbody>
-            <tr>
+            {{-- <tr>
                 <td>
                     Ledger Type
                 </td>
                 <td>
                     {{ $data[0]->Descr }}
+                    Transaction Prove List (TPL)
                 </td>
-            </tr>
+            </tr> --}}
             <tr>
                 <td>
                     Date Period
@@ -140,7 +141,8 @@ table{
 
                 <td class="" width="5%">{{ $i+1 }}</td>
                 <td class="" width="10%">{{ $data[$i]->invoice_date }} </td>
-                <td class="" width="35%">{{ $data[$i]->Descr }}<br>invoice # {{ $data[$i]->invoiceno }} </td>
+                {{-- <td class="" width="35%">{{ $data[$i]->Descr }}<br>invoice # {{ $data[$i]->invoiceno }} </td> --}}
+                <td class="" width="35%">{{ $data[$i]->Descr }}<br> {{ $data[$i]->Description }} </td>
                 <td class="" width="10%">{{ $data[$i]->Ref }} </td>
                 <td class="" width="20%">{{ number_format($data[$i]->DebitAmtRup,2) }} : PKR<br>{{ number_format($data[$i]->DebitAmtDlr,2) }} : USD</td>
                 <td class="" width="20%">{{ number_format($data[$i]->CreditAmtRup,2) }} : PKR<br>{{ number_format($data[$i]->CreditAmtDlr,2) }} : USD</td>

@@ -181,7 +181,8 @@
                 var length = e.length
                 var gdsprice = e.gdsprice
 
-                var amtindollar = gdsprice * gdswt
+                // var amtindollar = gdsprice * gdswt
+                var amtindollar =  gdsprice * e.kg_rcv
                 var amtinpkr = conversionrate.value * amtindollar
                 var itmratio = amtinpkr / amtinpkrtotal * 100
                 var insuranceperitem = parseFloat(insurance.value) * itmratio / 100
@@ -360,6 +361,7 @@
                     title:'Price',
                     columns:[
                         {   title:"$/Ton",
+                            editor:"number",
                             field:"gdsprice",
                             formatter:"money" ,
                             responsive:0,
@@ -385,6 +387,93 @@
                             bottomCalc:"sum",
                             bottomCalcFormatter:"money",
                         },
+
+                        {   title:"CDRate",
+                            field:"cd",
+                            headerVertical:true,
+                            editor:"number",
+                            cssClass:"bg-green-200 font-semibold",
+                            formatter:"money",
+                            responsive:0,
+                            formatterParams:{thousand:",",precision:2},
+                            validator:["required","numeric"],
+                            bottomCalcParams:{precision:2}  ,
+                        },
+                        {   title:"STRate",
+                            field:"st",
+                            headerVertical:true,
+                            editor:"number",
+                            cssClass:"bg-green-200 font-semibold",
+                            formatter:"money",
+                            responsive:0,
+                            formatterParams:{thousand:",",precision:2},
+                            validator:["required","numeric"],
+                            bottomCalcParams:{precision:2}  ,
+                        },
+                        {   title:"RDRate",
+                            field:"rd",
+                            headerVertical:true,
+                            editor:"number",
+                            cssClass:"bg-green-200 font-semibold",
+                            formatter:"money",
+                            responsive:0,
+                            formatterParams:{thousand:",",precision:2},
+                            validator:["required","numeric"],
+                            bottomCalcParams:{precision:2}  ,
+                        },
+                        {   title:"ACDRate",
+                            field:"acd",
+                            headerVertical:true,
+                            editor:"number",
+                            cssClass:"bg-green-200 font-semibold",
+                            formatter:"money",
+                            responsive:0,
+                            formatterParams:{thousand:",",precision:2},
+                            validator:["required","numeric"],
+                            bottomCalcParams:{precision:2}  ,
+                        },
+
+                        {   title:"ASTRate",
+                            field:"ast",
+                            headerVertical:true,
+                            editor:"number",
+                            cssClass:"bg-green-200 font-semibold",
+                            formatter:"money",
+                            responsive:0,
+                            formatterParams:{thousand:",",precision:2},
+                            validator:["required","numeric"],
+                            bottomCalcParams:{precision:2}  ,
+                        },
+                        {   title:"ITRate",
+                            field:"it",
+                            headerVertical:true,
+                            editor:"number",
+                            cssClass:"bg-green-200 font-semibold",
+                            formatter:"money",
+                            responsive:0,
+                            formatterParams:{thousand:",",precision:2},
+                            validator:["required","numeric"],
+                            bottomCalcParams:{precision:2}  ,
+                        },
+                        {   title:"WSCRate",
+                            field:"wse",
+                            headerVertical:true,
+                            editor:"number",
+                            cssClass:"bg-green-200 font-semibold",
+                            formatter:"money",
+                            responsive:0,
+                            formatterParams:{thousand:",",precision:2},
+                            validator:["required","numeric"],
+                            bottomCalcParams:{precision:2}  ,
+                        },
+
+
+
+
+
+
+
+
                         {   title:"Item Ratio(%)",
                             field:"itmratio",
                             headerVertical:true,
@@ -468,18 +557,18 @@
                     formatter:"money",
                     formatterParams:{thousand:",",precision:2},
                 },
-                {
-                    title:'Cost Rate/Unit', headerHozAlign:"center",
-                    columns:[
-                        {title:"Per Pc",    field:"perpc",          responsive:0 ,formatter:"money",
-                    formatterParams:{thousand:",",precision:2}, },
-                        {title:"Per Kg",    field:"perkg",          responsive:0 , formatter:"money",
-                    formatterParams:{thousand:",",precision:2}, },
-                        {title:"Per Feet",  field:"perft",        responsive:0 ,formatter:"money",
-                    formatterParams:{thousand:",",precision:2}, },
+                // {
+                //     title:'Cost Rate/Unit', headerHozAlign:"center",
+                //     columns:[
+                //         {title:"Per Pc",    field:"perpc",          responsive:0 ,formatter:"money",
+                //     formatterParams:{thousand:",",precision:2}, },
+                //         {title:"Per Kg",    field:"perkg",          responsive:0 , formatter:"money",
+                //     formatterParams:{thousand:",",precision:2}, },
+                //         {title:"Per Feet",  field:"perft",        responsive:0 ,formatter:"money",
+                //     formatterParams:{thousand:",",precision:2}, },
 
-                    ]
-                },
+                //     ]
+                // },
             ],
             ajaxResponse:function(getDetails, params, response){
                 return response.data;

@@ -17,7 +17,8 @@ class Bank extends Model
         'branch',
         'address',
         'balance',
-        'status'
+        'status',
+        'docdate'
     ];
 
     /************** Relationships **************/

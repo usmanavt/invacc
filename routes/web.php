@@ -23,6 +23,7 @@ use App\Http\Controllers\DimensionController;
 use App\Http\Controllers\BankPaymentsController;
 use App\Http\Controllers\BankRecivingsController;
 use App\Http\Controllers\CommercialInvoiceController;
+use App\Http\Controllers\CashPaymentController;
 
 
 Route::get('/', function () {
@@ -101,6 +102,18 @@ Route::resource('bankpayments',BankPaymentsController::class)->except(['create',
 //  Bank Recivings
 Route::get('/bankrecivings/master', [BankRecivingsController::class, 'getMaster'])->name('bankrecivings.master');
 Route::resource('bankrecivings',BankRecivingsController::class)->except(['create','show','destroy']);
+
+
+
+
+//  Cash Transactions
+Route::get('/cashpayments/master', [CashPaymentController::class, 'getMaster'])->name('cashpayments.master');
+Route::resource('cashpayments',CashPaymentController::class)->except(['create','show','destroy']);
+//  Bank Recivings
+///////Route::get('/cashrecivings/master', [BankRecivingsController::class, 'getMaster'])->name('bankrecivings.master');
+///////Route::resource('bankrecivings',BankRecivingsController::class)->except(['create','show','destroy']);
+
+
 
 // Route::get('myproc',function(){
 //     // select procedure should be called with "call"

@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Models\Subhead;
+use App\Models\tempsubheads;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
@@ -17,4 +18,10 @@ class Head extends Model
     {
         return $this->hasMany(Subhead::class);
     }
+
+    public function tempsubheads()
+    {
+        return $this->hasMany(tempsubheads::class);
+    }
+
 }

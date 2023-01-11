@@ -16,17 +16,17 @@
 
                         {{-- Form Data --}}
                         <div class="flex flex-col justify-start items-center">
-                            <form action="{{ route('bankpayments.update',$bt) }}" method="post" class="flex flex-col">
+                            <form action="{{ route('cashpayments.update',$bt) }}" method="post" class="flex flex-col">
                                 @csrf
                                 @method('PUT')
                                 <input type="hidden" name="id" value="{{ $bt->id }}">
-                                <label for="">Bank</label>
+                                {{-- <label for="">Bank</label>
                                 <select autocomplete="on" name="bank_id" required>
                                     <option disabled selected value="">--Select</option>
                                     @foreach ($banks as $bank)
                                         <option value="{{ $bank->id }}" @if($bank->id === $bt->bank_id) selected @endif>{{ $bank->title }}</option>
                                     @endforeach
-                                </select>
+                                </select> --}}
                                 {{-- Head --}}
                                 <label for="">Head</label>
                                 <select autocomplete="on" name="head_id" id="head_id" required onchange="populateSelect()">
@@ -63,9 +63,9 @@
                                 <x-input-numeric title="Conversion Rate" name="conversion_rate" id="conversion_rate" value="1" min="1" step="0.01" req required class="" value="{{ $bt->conversion_rate }}"/>
                                 <x-input-numeric title="Amount $" name="amount_fc" id="amount_fc" min="1" req required class="" value="{{ $bt->amount_fc }}"/>
                                 <x-input-numeric title="Amount Rs" name="amount_pkr" id="amount_pkr"  disabled required class="" value="{{ $bt->amount_pkr }}"/>
-                                <x-input-text title="Cheque #" name="cheque_no" req required class="" value="{{ $bt->cheque_no }}"/>
-                                <x-input-date title="Cheque Date" name="cheque_date" value="{{ $bt->cheque_date->format('Y-m-d') }}" req required/>
-
+                                <x-input-text title="Payment to" name="receiver" req required class="" value="{{ $bt->receiver }}"/>
+                                <x-input-date title="Document Date" name="docdate" value="{{ $bt->docdate->format('Y-m-d') }}" req required/>
+                                    {{-- <x-input-date title="Doc.Date" name="documentdate" value="{{ $bt->documentdate->format('Y-m-d') }}" req required/> --}}
 
                                 <div class="flex flex-col">
                                     <label for="">
@@ -97,8 +97,8 @@
 @push('scripts')
 <script>
     let subheads = @json($subheads);
-    let supplier_id = @json($bt->supplier_id);
-    let customer_id = @json($bt->customer_id);
+     let supplier_id = @json($bt->supplier_id);
+     let customer_id = @json($bt->customer_id);
     let subhead_id = @json($bt->subhead_id);
 
     console.info(supplier_id,customer_id,subhead_id)
@@ -110,8 +110,8 @@
     const amount_pkr = document.getElementById('amount_pkr')
     const head = document.getElementById('head_id')
     const subhead = document.getElementById('subhead_id')
-    const supplier = document.getElementById('supplier_id')
-    const customer = document.getElementById('customer_id')
+     const supplier = document.getElementById('supplier_id')
+     const customer = document.getElementById('customer_id')
 
     document.addEventListener('DOMContentLoaded',()=>{
        populateSelect()
@@ -130,32 +130,34 @@
         subhead.removeAttribute('disabled','')
         console.info(list)
 
-        if(val === "32"){
-            supplier.setAttribute('required','')
-            supplier.removeAttribute('disabled','')
-            customer.setAttribute('disabled','')
-            customer.removeAttribute('required','')
-            subhead.setAttribute('disabled','')
-            subhead.removeAttribute('required','')
-            if(supplier_id > 0){ supplier.value = supplier_id}
-        }
-        else if(val === "33"){
-            customer.setAttribute('required','')
-            customer.removeAttribute('disabled','')
-            supplier.setAttribute('disabled','')
-            supplier.removeAttribute('required','')
-            subhead.setAttribute('disabled','')
-            subhead.removeAttribute('required','')
-            if(customer_id > 0){ customer.value = customer_id}
-        }else {
-            customer.setAttribute('disabled','')
-            customer.removeAttribute('required','')
-            supplier.setAttribute('disabled','')
-            supplier.removeAttribute('required','')
+          if(val === "32" ){
+              supplier.setAttribute('required','')
+              supplier.removeAttribute('disabled','')
+              customer.setAttribute('disabled','')
+              customer.removeAttribute('required','')
+              subhead.setAttribute('disabled','')
+              subhead.removeAttribute('required','')
+              if(supplier_id > 0){ supplier.value = supplier_id}
+          }
+          else if(val === "33"){
+              customer.setAttribute('required','')
+              customer.removeAttribute('disabled','')
+              supplier.setAttribute('disabled','')
+              supplier.removeAttribute('required','')
+              subhead.setAttribute('disabled','')
+              subhead.removeAttribute('required','')
+              if(customer_id > 0){ customer.value = customer_id}
+          }
+          else {
+
+             customer.setAttribute('disabled','')
+             customer.removeAttribute('required','')
+             supplier.setAttribute('disabled','')
+             supplier.removeAttribute('required','')
             subhead.removeAttribute('disabled','')
             subhead.setAttribute('required','')
             if(subhead_id > 0){ subhead.value = subhead_id}
-        }
+         }
     }
 
     const addSelectElement = (select,id,value) => {

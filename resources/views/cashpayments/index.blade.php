@@ -6,7 +6,7 @@
 
     <x-slot name="header">
         <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-            Bank Payments
+            Cash Payments
         </h2>
     </x-slot>
 
@@ -20,15 +20,15 @@
 
                         {{-- Form Data --}}
                         <div class="flex flex-col justify-start items-center">
-                            <form action="{{ route('bankpayments.store') }}" method="post" class="flex flex-col" id="createForm">
+                            <form action="{{ route('cashpayments.store') }}" method="post" class="flex flex-col" id="createForm">
                                 @csrf
-                                <label for="">Bank</label>
+                                {{-- <label for="">Bank</label>
                                 <select autocomplete="on" name="bank_id" required>
                                     <option disabled selected value="">--Select</option>
                                     @foreach ($banks as $bank)
                                         <option value="{{ $bank->id }}">{{ $bank->title }}</option>
                                     @endforeach
-                                </select>
+                                </select> --}}
                                 {{-- Head --}}
                                 <label for="">Head</label>
                                 <select autocomplete="on" name="head_id" id="head_id" required>
@@ -41,9 +41,9 @@
                                 <label for="">Subead</label>
                                 <select autocomplete="on" name="subhead_id" id="subhead_id" disabled class="disabled:opacity-50">
                                     <option disabled selected value="">--Select</option>
-                                    {{-- @foreach ($heads as $head)
+                                    @foreach ($heads as $head)
                                         <option value="{{ $head->id }}">{{ $head->title }}</option>
-                                    @endforeach --}}
+                                    @endforeach
                                 </select>
                                 {{-- Supplier --}}
                                 <label for="">Supplier</label>
@@ -65,8 +65,8 @@
                                 <x-input-numeric title="Conversion Rate" name="conversion_rate" id="conversion_rate" value="1" min="1" step="0.01" req required class=""/>
                                 <x-input-numeric title="Amount $" name="amount_fc" id="amount_fc" min="1" req required class=""/>
                                 <x-input-numeric title="Amount Rs" name="amount_pkr" id="amount_pkr"  disabled required class=""/>
-                                <x-input-text title="Cheque #" name="cheque_no" req required class=""/>
-                                <x-input-date title="Cheque Date" name="cheque_date" req required/>
+                                <x-input-text title="Payment to" name="receiver" req required class=""/>
+                                <x-input-date title="Document Date" name="docdate" req required/>
 
                                 <div class="flex flex-col">
                                     <label for="">
@@ -116,8 +116,8 @@
     const amount_pkr = document.getElementById('amount_pkr')
     const head = document.getElementById('head_id')
     const subhead = document.getElementById('subhead_id')
-    const supplier = document.getElementById('supplier_id')
-    const customer = document.getElementById('customer_id')
+   const supplier = document.getElementById('supplier_id')
+   const customer = document.getElementById('customer_id')
 
     head.addEventListener('change',()=>{
         const val = head.value
@@ -149,11 +149,11 @@
             subhead.setAttribute('disabled','')
             subhead.removeAttribute('required','')
         }else {
-            customer.setAttribute('disabled','')
-            customer.removeAttribute('required','')
-            supplier.setAttribute('disabled','')
-            supplier.removeAttribute('required','')
-        }
+           customer.setAttribute('disabled','')
+           customer.removeAttribute('required','')
+           supplier.setAttribute('disabled','')
+           supplier.removeAttribute('required','')
+       }
     })
 
     const addSelectElement = (select,id,value) => {
@@ -176,7 +176,7 @@
     var lockIcon = function(cell, formatterParams, onRendered){ return "<i class='fa fa-lock text-red-600'></i>";};
     var unlockIcon = function(cell, formatterParams, onRendered){ return "<i class='fa fa-lock text-green-600'></i>";};
 
-    const getMaster = @json(route('bankpayments.master'));
+    const getMaster = @json(route('cashpayments.master'));
     let table;
     let searchValue = "";
 
@@ -210,17 +210,17 @@
         columns:[
             // Master Data
             {title:"Id", field:"id" , responsive:0,visible:false},
-            {title:"Bank", field:"bank.title" , visible:true , responsive:0},
+            // {title:"Bank", field:"bank.title" , visible:true , responsive:0},
             {title:"Head", field:"head.title" , visible:true , responsive:0},
             {title:"Subhead", field:"subhead.title" , visible:true , responsive:0},
-            {title:"Supplier", field:"supplier.title" , visible:true , responsive:0},
-            {title:"Customer", field:"customer.title" , visible:true , responsive:0},
+             {title:"Supplier", field:"supplier.title" , visible:true , responsive:0},
+             {title:"Customer", field:"customer.title" , visible:true , responsive:0},
             {title:"Tran", field:"transaction_type" ,  responsive:0,cssClass:'text-indigo-500 font-semibold'},
             {title:"Conv. Rate", field:"conversion_rate",hozAlign:"right" ,  responsive:0,formatter:"money",formatterParams:{thousand:",",precision:2}},
             {title:"Amount $", field:"amount_fc",hozAlign:"right" ,  responsive:0,formatter:"money",formatterParams:{thousand:",",precision:2}},
             {title:"Amount Rs", field:"amount_pkr",hozAlign:"right" ,  responsive:0,formatter:"money",formatterParams:{thousand:",",precision:0}},
-            {title:"Cheque Date", field:"cheque_date" ,  responsive:0},
-            {title:"Cheque #", field:"cheque_no" ,  responsive:0},
+            {title:"Document Date", field:"docdate" ,  responsive:0},
+            {title:"Payment to", field:"receiver" ,  responsive:0},
             {title:"Description", field:"description" ,  responsive:0},
             // {title:"Status", field:"status" ,  responsive:0,
             //     formatter:function(cell){

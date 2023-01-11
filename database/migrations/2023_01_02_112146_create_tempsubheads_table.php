@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class AddDocumentdateToBANKTRANSACTIONS extends Migration
+class CreateTempsubheadsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,8 +13,13 @@ class AddDocumentdateToBANKTRANSACTIONS extends Migration
      */
     public function up()
     {
-        Schema::table('bank_transactions', function (Blueprint $table) {
-            $table->timestamp('documentdate')->nullable();
+        Schema::create('tempsubheads', function (Blueprint $table) {
+            $table->id();
+            $table->smallinteger('head_id');
+            $table->string('title',50);
+            $table->smallInteger('status')->default(1); // 1-Active , 0-Deactive
+
+
         });
     }
 
@@ -25,8 +30,6 @@ class AddDocumentdateToBANKTRANSACTIONS extends Migration
      */
     public function down()
     {
-        Schema::table('bank_transactions', function (Blueprint $table) {
-            //
-        });
+        Schema::dropIfExists('tempsubheads');
     }
 }

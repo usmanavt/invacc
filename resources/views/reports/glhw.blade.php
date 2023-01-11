@@ -122,11 +122,11 @@ table{
             <tr>
                 <th class="" width="5%">S#</th>
                 <th class="" width="10%">Date</th>
-                <th class="" width="30%">Particular</th>
-                <th class="" width="10%">Ref</th>
-                <th class="" width="12%">Debit</th>
-                <th class="" width="12%">Credit</th>
-                <th class="" width="12%">Balance</th>
+                <th class="" width="33%">Particular</th>
+                <th class="" width="7%">Ref</th>
+                <th class="" width="15%">Debit</th>
+                <th class="" width="15%">Credit</th>
+                <th class="" width="15%">Balance</th>
             </tr>
         </thead>
     </table>
@@ -148,21 +148,34 @@ table{
                 {{ $creditusd += $data[$i]->CreditAmtRup }}
                 {{ $balpkr += $data[$i]->BalanceAmtRup }}
                 {{ $balusd += $data[$i]->BalanceAmtDlr }}
+
                 <td class="" width="5%">{{ $i+1 }}</td>
                 <td class="" width="10%">{{ $data[$i]->invoice_date }} </td>
-                <td class="" width="30%">{{ $data[$i]->SupName }}<br>invoice # {{ $data[$i]->invoiceno }} </td>
-                <td class="" width="5%">{{ $data[$i]->Ref }} </td>
-                <td class="" width="12%">{{ number_format($data[$i]->DebitAmtRup,2) }} : R<br>{{ number_format($data[$i]->DebitAmtDlr,2) }} : $</td>
-                <td class="" width="12%">{{ number_format($data[$i]->CreditAmtRup,2) }}: R<br>{{ number_format($data[$i]->CreditAmtDlr,2) }} : $</td>
-                <td class="" width="12%">{{ number_format($data[$i]->BalanceAmtRup,2) }}: R<br>{{ number_format($data[$i]->BalanceAmtDlr,2) }} : $</td>
+                <td class="" width="33%">{{ $data[$i]->Descr }}<br> {{ $data[$i]->DESCRIPTION }} </td>
+                <td class="" width="7%">{{ $data[$i]->Ref }} </td>
+                <td class="" width="15%">{{ number_format($data[$i]->DebitAmtRup,2) }} : R<br>{{ number_format($data[$i]->DebitAmtDlr,2) }} : $</td>
+                <td class="" width="15%">{{ number_format($data[$i]->CreditAmtRup,2) }}: R<br>{{ number_format($data[$i]->CreditAmtDlr,2) }} : $</td>
+                <td class="" width="15%">{{ number_format($data[$i]->BalanceAmtRup,2) }}: R<br>{{ number_format($data[$i]->BalanceAmtDlr,2) }} : $</td>
             </tr>
             @endfor
-            <tr>
+            {{-- <tr>
                 <td colspan="4" width="55%" style="text-align: right;border-bottom: 1px solid lightgray;">Total(s)</td>
                 <td class="" width="12%" style="text-align: right;border-bottom: 1px solid lightgray;">{{ number_format($debitpkr,2) }} : R<br>{{ number_format($debitusd,2) }} : $</td>
                 <td class="" width="12%" style="text-align: right;border-bottom: 1px solid lightgray;">{{ number_format($creditpkr,2) }}: R<br>{{ number_format($creditusd,2) }} : $</td>
                 <td class="" width="12%" style="text-align: right;border-bottom: 1px solid lightgray;">{{ number_format($balpkr,2) }}: R<br>{{ number_format($balusd,2) }} : $</td>
+            </tr> --}}
+
+            <tr>
+                <td colspan="7" width="100%" style="text-align: right;border-bottom: 1px solid lightgray;"></td>
+                {{-- <td class="" width="12%" style="text-align: right;border-bottom: 1px solid lightgray;">{{ number_format($debitpkr,2) }} : R<br>{{ number_format($debitusd,2) }} : $</td>
+                <td class="" width="12%" style="text-align: right;border-bottom: 1px solid lightgray;">{{ number_format($creditpkr,2) }}: R<br>{{ number_format($creditusd,2) }} : $</td>
+                <td class="" width="12%" style="text-align: right;border-bottom: 1px solid lightgray;">{{ number_format($balpkr,2) }}: R<br>{{ number_format($balusd,2) }} : $</td> --}}
             </tr>
+
+
+
+
+
         </tbody>
     </table>
 

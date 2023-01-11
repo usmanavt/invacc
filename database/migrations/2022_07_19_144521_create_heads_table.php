@@ -18,6 +18,10 @@ class CreateHeadsTable extends Migration
             $table->string('title',75);
             $table->smallInteger('nature')->default(0);
             $table->smallInteger('status')->default(1); // 1-Active , 0-Deactive
+            $table->smallInteger('forcr')->default(0);
+            $table->smallInteger('forcp')->default(0);
+            $table->smallInteger('forbr')->default(0);
+            $table->smallInteger('forbp')->default(0);
             $table->timestamps();
         });
     }
