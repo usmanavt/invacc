@@ -45,8 +45,8 @@
                             <x-dropdown-link href="{{ route('hscodes.index') }}">Hscode</x-dropdown-link>
                             <x-dropdown-link href="{{ route('materials.index') }}">Materials</x-dropdown-link>
                             @if (auth()->user()->email == 'ali.jibran@auvitronics.com')
-                            <x-dropdown-link href="{{ route('users.index') }}">Users</x-dropdown-link>
-                            <x-dropdown-link href="{{ route('banks.index') }}">Banks</x-dropdown-link>
+                                <x-dropdown-link href="{{ route('users.index') }}">Users</x-dropdown-link>
+                                <x-dropdown-link href="{{ route('banks.index') }}">Banks</x-dropdown-link>
                             @endif
                         </x-slot>
                     </x-dropdown>
@@ -80,6 +80,7 @@
                             <x-dropdown-link href="{{ route('clearances.index') }}">Duty Clearance</x-dropdown-link>
                             <x-dropdown-link href="{{ route('bankpayments.index') }}">Bank Payments</x-dropdown-link>
                             <x-dropdown-link href="{{ route('bankrecivings.index') }}">Bank Recivings</x-dropdown-link>
+                            <x-dropdown-link href="{{ route('jv.index') }}">Journal Vouchers</x-dropdown-link>
                         </x-slot>
                     </x-dropdown>
                 </div>

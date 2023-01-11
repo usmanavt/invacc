@@ -40,6 +40,11 @@
                         }}" >
                             <i class="fa-solid fa-shop-lock fa-2xl"></i> Bank Recivings
                         </a>
+                        <a  class="basis-0 w-full md:basis-1/4 bg-blue-500 hover:bg-blue-700 text-white px-2 py-4 rounded-lg shadow-lg" href= "{{
+                            route('jv.index')
+                        }}" >
+                            <i class="fa-solid fa-shop-lock fa-2xl"></i> Journal Vouchers
+                        </a>
 {{--
                         <a  class="basis-0 w-full md:basis-1/4 bg-blue-500 hover:bg-blue-700 text-white px-2 py-4 rounded-lg shadow-lg" href= "" >
                             <i class="fa-solid fa-kitchen-set fa-2xl"></i> Purchase Return
