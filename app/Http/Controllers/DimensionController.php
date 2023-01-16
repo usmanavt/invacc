@@ -12,19 +12,25 @@ class DimensionController extends Controller
 
     public function index(Request $request)
     {
-        $search = $request->search;
-        $dimensions = Dimension::where(function($q) use ($search){
-            $q->where('title','LIKE',"%$search%");
-        })
-        ->orderBy('id','desc')
-        ->paginate(5);
-        return view('dimensions.index')->with('dimensions',$dimensions);
+        return view('dimensions.index');
     }
 
-    public function create()
+    public function getMaster(Request $request)
     {
-        return view('dimensions.create')->with('dimensions',Dimension::all());
+        $search = $request->search;
+        $size = $request->size;
+        $field = $request->sort[0]["field"];     //  Nested Array
+        $dir = $request->sort[0]["dir"];         //  Nested Array
+        //  With Tables
+        $dimensions = Dimension::where(function ($query) use ($search){
+            $query->where('id','LIKE','%' . $search . '%')
+            ->orWhere('title','LIKE','%' . $search . '%');
+        })
+        ->orderBy($field,$dir)
+        ->paginate((int) $size);
+        return $dimensions;
     }
+
 
     public function store(Request $request)
     {
@@ -46,17 +52,10 @@ class DimensionController extends Controller
         }
     }
 
-
-    public function show(Dimension $dimension)
-    {
-        //
-    }
-
     public function edit(Dimension $dimension)
     {
         return view('dimensions.edit')->with('dimension',$dimension);
     }
-
 
     public function update(Dimension $dimension,Request $request)
     {
@@ -79,11 +78,5 @@ class DimensionController extends Controller
             DB::rollback();
             throw $th;
         }
-    }
-
-  
-    public function destroy($id)
-    {
-      
     }
 }

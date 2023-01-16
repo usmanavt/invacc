@@ -12,19 +12,23 @@ class HscodeController extends Controller
 
     public function index(Request $request)
     {
-        $search = $request->search;
-        $hscodes = Hscode::where(function($q) use ($search){
-            $q->where('hscode','LIKE',"%$search%");
-        })
-        ->orderBy('id','desc')
-        ->paginate(5);
-         return view('hscodes.index')->with('hscodes',$hscodes);
+        return view('hscodes.index');
     }
 
-  
-    public function create()
+    public function getMaster(Request $request)
     {
-        return view('hscodes.create')->with('hscodes',Hscode::select('id','hscode')->get());
+        $search = $request->search;
+        $size = $request->size;
+        $field = $request->sort[0]["field"];     //  Nested Array
+        $dir = $request->sort[0]["dir"];         //  Nested Array
+        //  With Tables
+        $hscodes = Hscode::where(function ($query) use ($search){
+            $query->where('id','LIKE','%' . $search . '%')
+            ->orWhere('hscode','LIKE','%' . $search . '%');
+        })
+        ->orderBy($field,$dir)
+        ->paginate((int) $size);
+        return $hscodes;
     }
 
     public function store(Request $request)
@@ -62,17 +66,10 @@ class HscodeController extends Controller
         }
     }
 
-    public function show(Hscode $hscode)
-    {
-        //
-    }
-
-
     public function edit(Hscode $hscode)
     {
         return view('hscodes.edit')->with('hscode',$hscode)->with('hscodes',Hscode::select('id','hscode')->get());
     }
-
 
     public function update(Request $request, Hscode $hscode)
     {
@@ -105,11 +102,5 @@ class HscodeController extends Controller
             DB::rollback();
             throw $th;
         }
-    }
-
-  
-    public function destroy(Hscode $hscode)
-    {
-        return redirect()->back();
     }
 }

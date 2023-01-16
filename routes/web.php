@@ -37,7 +37,6 @@ Route::get('/mastersetup', function () {
 Route::get('/transactons', function () {
     return view('transaction');
 })->middleware(['auth'])->name('transaction');
-
 Route::get('reports',[ReportController::class, 'index'])->name('reports.index');
 Route::post('report/fetch',[ReportController::class, 'fetch'])->name('reports.fetch');
 
@@ -45,26 +44,35 @@ Route::post('report/fetch',[ReportController::class, 'fetch'])->name('reports.fe
 require __DIR__.'/auth.php';
 
 //  Category Controller
-Route::resource('categories', CategoryController::class);
+Route::get('/categories/master', [CategoryController::class, 'getMaster'])->name('categories.master');
+Route::resource('categories', CategoryController::class)->except(['create','show','destroy']);
 //  Sku Controller
-Route::resource('skus', SkuController::class);
+Route::get('/skus/master', [SkuController::class, 'getMaster'])->name('skus.master');
+Route::resource('skus', SkuController::class)->except(['create','show','destroy']);
 //  Dimension Controller
-Route::resource('dimensions', DimensionController::class);
+Route::get('/dimensions/master', [DimensionController::class, 'getMaster'])->name('dimensions.master');
+Route::resource('dimensions', DimensionController::class)->except(['create','show','destroy']);
 //  Brand Controller
-Route::resource('brands',BrandController::class);
+Route::get('/brands/master', [BrandController::class, 'getMaster'])->name('brands.master');
+Route::resource('brands',BrandController::class)->except(['create','show','destroy']);
 //  Source Controller
+Route::get('/sources/master', [SourceController::class, 'getMaster'])->name('sources.master');
 Route::resource('sources',SourceController::class);
 //  Supplier Controller
 Route::resource('suppliers', SupplierController::class);
 //  Customer Controller
 Route::resource('customers', CustomerController::class);
 //  Location Controller
-Route::resource('locations', LocationController::class);
+Route::get('/locations/master', [LocationController::class, 'getMaster'])->name('locations.master');
+Route::resource('locations', LocationController::class)->except(['create','show','destroy']);
 //  Head Controller
-Route::resource('heads', HeadController::class);
+Route::get('/heads/master', [HeadController::class, 'getMaster'])->name('heads.master');
+Route::resource('heads', HeadController::class)->except(['create','show','destroy']);
 //  Subhead Controller
-Route::resource('subheads', SubheadController::class);
+Route::get('/subheads/master', [SubheadController::class, 'getMaster'])->name('subheads.master');
+Route::resource('subheads', SubheadController::class)->except(['create','show','destroy']);
 //  HSE Controller
+Route::get('/hscodes/master', [HscodeController::class, 'getMaster'])->name('hscodes.master');
 Route::resource('hscodes', HscodeController::class);
 //  Material Controller
 Route::get('/materials/getMaterialMaster', [MaterialController::class, 'getMaster'])->name('materials.master');

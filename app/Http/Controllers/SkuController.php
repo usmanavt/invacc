@@ -12,18 +12,23 @@ class SkuController extends Controller
 
     public function index(Request $request)
     {
-        $search = $request->search;
-        $skus = Sku::where(function($q) use ($search){
-            $q->where('title','LIKE',"%$search%");
-        })
-        ->orderBy('id','desc')
-        ->paginate(5);
-        return view('skus.index')->with('skus',$skus);
+        return view('skus.index');
     }
 
-    public function create()
+    public function getMaster(Request $request)
     {
-        return view('skus.create')->with('skus',Sku::all());
+        $search = $request->search;
+        $size = $request->size;
+        $field = $request->sort[0]["field"];     //  Nested Array
+        $dir = $request->sort[0]["dir"];         //  Nested Array
+        //  With Tables
+        $skus = Sku::where(function ($query) use ($search){
+            $query->where('id','LIKE','%' . $search . '%')
+            ->orWhere('title','LIKE','%' . $search . '%');
+        })
+        ->orderBy($field,$dir)
+        ->paginate((int) $size);
+        return $skus;
     }
 
     public function store(Request $request)
@@ -46,7 +51,7 @@ class SkuController extends Controller
             throw $th;
         }
     }
-   
+
     public function edit(Sku $sku)
     {
         return view('skus.edit')->with('sku',$sku);
@@ -79,8 +84,4 @@ class SkuController extends Controller
         }
     }
 
-    public function destroy($id)
-    {
-        return redirect()->back();
-    }
 }

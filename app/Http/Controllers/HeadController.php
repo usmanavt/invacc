@@ -11,18 +11,23 @@ class HeadController extends Controller
 {
     public function index(Request $request)
     {
-        $search = $request->search;
-        $heads = Head::where(function($q) use ($search){
-            $q->where('title','LIKE',"%$search%");
-        })
-        ->orderBy('id','desc')
-        ->paginate(5);
-         return view('heads.index')->with('heads',$heads);
+        return view('heads.index');
     }
 
-    public function create()
+    public function getMaster(Request $request)
     {
-        return view('heads.create')->with('heads',Head::all());
+        $search = $request->search;
+        $size = $request->size;
+        $field = $request->sort[0]["field"];     //  Nested Array
+        $dir = $request->sort[0]["dir"];         //  Nested Array
+        //  With Tables
+        $heads = Head::where(function ($query) use ($search){
+            $query->where('id','LIKE','%' . $search . '%')
+            ->orWhere('title','LIKE','%' . $search . '%');
+        })
+        ->orderBy($field,$dir)
+        ->paginate((int) $size);
+        return $heads;
     }
 
     public function store(Request $request)
@@ -77,10 +82,5 @@ class HeadController extends Controller
             DB::rollback();
             throw $th;
         }
-    }
-
-    public function destroy($id)
-    {
-        return redirect()->back();
     }
 }

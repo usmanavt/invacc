@@ -12,18 +12,23 @@ class SourceController extends Controller
 
     public function index(Request $request)
     {
-        $search = $request->search;
-        $sources = Source::where(function($q) use ($search){
-            $q->where('title','LIKE',"%$search%");
-        })
-        ->orderBy('id','desc')
-        ->paginate(5);
-        return view('sources.index')->with('sources',$sources);
+        return view('sources.index');
     }
 
-    public function create()
+    public function getMaster(Request $request)
     {
-        return view('sources.create')->with('sources',Source::all());
+        $search = $request->search;
+        $size = $request->size;
+        $field = $request->sort[0]["field"];     //  Nested Array
+        $dir = $request->sort[0]["dir"];         //  Nested Array
+        //  With Tables
+        $sources = Source::where(function ($query) use ($search){
+            $query->where('id','LIKE','%' . $search . '%')
+            ->orWhere('title','LIKE','%' . $search . '%');
+        })
+        ->orderBy($field,$dir)
+        ->paginate((int) $size);
+        return $sources;
     }
 
     public function store(Request $request)
@@ -46,7 +51,7 @@ class SourceController extends Controller
             throw $th;
         }
     }
-   
+
     public function edit(Source $source)
     {
         return view('sources.edit')->with('source',$source);
@@ -79,8 +84,4 @@ class SourceController extends Controller
         }
     }
 
-    public function destroy($id)
-    {
-        return redirect()->back();
-    }
 }

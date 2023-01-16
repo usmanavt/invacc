@@ -12,18 +12,23 @@ class BrandController extends Controller
 
     public function index(Request $request)
     {
-        $search = $request->search;
-        $brands = Brand::where(function($q) use ($search){
-            $q->where('title','LIKE',"%$search%");
-        })
-        ->orderBy('id','desc')
-        ->paginate(5);
-        return view('brands.index')->with('brands',$brands);
+        return view('brands.index');
     }
 
-    public function create()
+    public function getMaster(Request $request)
     {
-        return view('brands.create')->with('brands',Brand::all());
+        $search = $request->search;
+        $size = $request->size;
+        $field = $request->sort[0]["field"];     //  Nested Array
+        $dir = $request->sort[0]["dir"];         //  Nested Array
+        //  With Tables
+        $brands = Brand::where(function ($query) use ($search){
+            $query->where('id','LIKE','%' . $search . '%')
+            ->orWhere('title','LIKE','%' . $search . '%');
+        })
+        ->orderBy($field,$dir)
+        ->paginate((int) $size);
+        return $brands;
     }
 
     public function store(Request $request)
@@ -53,7 +58,7 @@ class BrandController extends Controller
             throw $th;
         }
     }
-   
+
     public function edit(Brand $brand)
     {
         return view('brands.edit')->with('brand',$brand);
@@ -87,8 +92,4 @@ class BrandController extends Controller
         }
     }
 
-    public function destroy($id)
-    {
-        return redirect()->back();
-    }
 }

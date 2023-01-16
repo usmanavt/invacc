@@ -1,72 +1,118 @@
 <x-app-layout>
+
+    @push('styles')
+    <link rel="stylesheet" href="{{ asset('css/tabulator_simple.min.css') }}">
+    @endpush
+
     <x-slot name="header">
         <h2 class="font-semibold text-xl text-gray-800 leading-tight">
             Account Heads
-            {{-- Create New Customer --}}
-            <a class="text-sm text-green-500 hover:text-gray-900" href="{{route('heads.create')}}">
-                {{-- Add Icon --}}
-                <i class="fa fa-file fa-fw"></i>
-                Add New Record
-            </a>
         </h2>
     </x-slot>
+
     <div class="py-6">
-        <div class="max-w-7xl mx-auto sm:px-2 lg:px-4">
-            <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
+        <div class="max-w-5xl mx-auto sm:px-2 lg:px-4">
+            <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg p4">
+            {{-- Create Form --}}
+            <div class="p-6" >
+                <div class="flex gap-4">
 
-                {{-- Search Form --}}
-                <x-search >
-                    {{ route('heads.index') }}
-                </x-search>
+                    {{-- Form Data --}}
+                    <div class="flex flex-col justify-start items-center border rounded-md px-2">
+                        <form action="{{ route('heads.store') }}" method="post" >
+                            @csrf
+                            <p class="font-semibold pb-6">Create New Head</p>
+                            <x-label for="title" value="Title"/>
+                            <x-input id="title" type="text" name="title"  required minlength="3" :value="old('title')"/>
+                            @if($errors->has('title'))<div class="text-red-500 text-xs">{{ $errors->first('title') }}</div>@endif
 
-                {{-- Table --}}
-                <div class="flex flex-col">
-                    <div class="-my-2 overflow-x-auto">
-						<div class="px-4 bg-white border-b border-gray-200">
-                            <table class="min-w-full divided-y divide-gray-500">
-								<thead>
-									<tr>
-										<td class="px-6 py-3 bg-gray-100 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Title</td>
-										<td class="px-6 py-3 bg-gray-100 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Nature</td>
-										<td class="px-6 py-3 bg-gray-100 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</td>
-										<td class="px-6 py-3 bg-gray-100 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</td>
+                            <x-label for="nature" value="Nature"/>
+                            <select required name="nature" id="nature" >
+                                <option value="" selected>--Source</option>
+                                <option value="0" selected>0</option>
+                                <option value="1" selected>1</option>
+                            </select>
 
-									</tr>
-								</thead>
-								<tbody class="bg-white divide-y divide-gray-200">
-									@foreach($heads as $head)
-										<tr class="border-b">
-											<td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{$head->title}}</td>
-											<td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{$head->nature}}</td>
-                                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{$head->status == 1 ? 'Active':'Deactive'}}</td>
-                                  
+                            <div class="mt-2">
+                                <x-button  id="submitButton">
+                                    <i class="fa fa-save fa-fw"></i>
+                                        Submit
+                                </x-button>
+                            </div>
+                        </form>
 
-											<td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-											    <a class="text-sm text-indigo-500 hover:text-gray-900" href="{{route('heads.edit',$head->id)}}">
-                                                    <i class="fa fa-edit fa-fw"></i>
-                                                    Edit
-                                                </a>
-                                                <a class="text-sm text-indigo-500 hover:text-red-900" href="{{route('heads.destroy',$head->id)}}" >
-                                                    <i class="fa fa-trash text-red-600 fa-fw "></i>
-                                                    Delete
-                                                </a>
-                                            </td>
-										</tr>
-									@endforeach.
-								</tbody>
-							</table>
-
-						</div>
-					</div>
+                    </div>
+                    {{-- Listing --}}
+                    <div class="px-4 pb-14 border rounded-md w-full">
+                        {{-- tabulator component --}}
+                        <x-tabulator />
+                    </div>
                 </div>
-
-                {{-- Pagination --}}
-                <x-pagination>
-                    {{ $heads->links() }}
-                </x-pagination>
-
             </div>
         </div>
     </div>
-</x-app-layout>
 
+@push('scripts')
+    <script src="{{ asset('js/tabulator.min.js') }}"></script>
+@endpush
+@push('scripts')
+<script>
+    var editIcon = function(cell, formatterParams, onRendered){ return "<i class='fa fa-edit text-blue-600'></i>";};
+    const getMaster = @json(route('heads.master'));
+    let table;
+    let searchValue = "";
+    //  Table Filter
+    function dataFilter(element)
+    {
+        searchValue = element.value;
+        table.setData(getMaster,{search:searchValue});
+    }
+    // The Table for Items Modal
+    table = new Tabulator("#tableData", {
+        autoResize:true,
+        responsiveLayout:"collapse",
+        layout:"fitData",
+        index:"id",
+        placeholder:"No Data Available",
+        pagination:true,
+        paginationMode:"remote",
+        sortMode:"remote",
+        filterMode:"remote",
+        paginationSize:10,
+        paginationSizeSelector:[10,25,50],
+        ajaxParams: function(){
+            return {search:searchValue};
+        },
+        ajaxURL: getMaster,
+        ajaxContentType:"json",
+        initialSort:[ {column:"id", dir:"desc"} ],
+        height:"100%",
+
+        columns:[
+            // Master Data
+            {title:"Id", field:"id" , responsive:0,visible:false},
+            {title:"Title", field:"title", responsive:0},
+            {title:"Nature", field:"nature", responsive:0},
+            {title:"Status", field:"status", responsive:0,
+                formatter:function(cell){
+                    return cell.getData().status === 1 ? '<span class="text-green-500">Active</span>':'<span class="text-gray-500">Deactive</span>'
+                }
+            },
+            {title:"Edit" , formatter:editIcon, hozAlign:"center",headerSort:false, responsive:0,
+                cellClick:function(e, cell){
+                    window.open(window.location + "/" + cell.getData().id + "/edit" ,"_self");
+            }},
+
+        ],
+        // Extra Pagination Data for End Users
+        ajaxResponse:function(getDataUrl, params, response){
+            remaining = response.total;
+            let doc = document.getElementById("example-table-info");
+            doc.classList.add('font-weight-bold');
+            doc.innerText = `Displaying ${response.from} - ${response.to} out of ${remaining} records`;
+            return response;
+        },
+    })
+</script>
+@endpush
+</x-app-layout>

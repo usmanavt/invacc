@@ -12,19 +12,23 @@ class LocationController extends Controller
 
     public function index(Request $request)
     {
-        $search = $request->search;
-        $locations = Location::where(function($q) use ($search){
-            $q->where('title','LIKE',"%$search%")
-            ->orWhere('address','LIKE',"%$search%");
-        })
-        ->orderBy('id','desc')
-        ->paginate(6);
-        return view('locations.index')->with('locations',$locations);
+        return view('locations.index');
     }
 
-    public function create()
+    public function getMaster(Request $request)
     {
-        return view('locations.create')->with('locations',Location::all());
+        $search = $request->search;
+        $size = $request->size;
+        $field = $request->sort[0]["field"];     //  Nested Array
+        $dir = $request->sort[0]["dir"];         //  Nested Array
+        //  With Tables
+        $locations = Location::where(function ($query) use ($search){
+            $query->where('id','LIKE','%' . $search . '%')
+            ->orWhere('title','LIKE','%' . $search . '%');
+        })
+        ->orderBy($field,$dir)
+        ->paginate((int) $size);
+        return $locations;
     }
 
     public function store(Request $request)
@@ -55,19 +59,12 @@ class LocationController extends Controller
 
     }
 
-   
-    public function show(Location $location)
-    {
-        //
-    }
-
-
     public function edit(Location $location)
     {
         return view('locations.edit')->with('location',$location);
     }
 
- 
+
     public function update(Location $location,Request $request)
     {
         $request->validate([
@@ -91,11 +88,6 @@ class LocationController extends Controller
             DB::rollback();
             throw $th;
         }
-   
-    }
 
-    public function destroy($id)
-    {
-        return redirect()->back();
     }
 }

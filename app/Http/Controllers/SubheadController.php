@@ -15,23 +15,24 @@ class SubheadController extends Controller
 
     public function index(Request $request)
     {
-        $search = $request->search;
-        $subheads = Subhead::where(function($q) use ($search){
-            $q->where('title','LIKE',"%$search%")
-              ->orWhereHas('head', function($qu) use($search){
-                $qu->where('title','like',"%$search%");
-            });
-        })
-        ->with('head')
-        ->orderBy('id','desc')
-        ->paginate(5);
-         return view('subheads.index')->with('subheads',$subheads);
-
+        return view('subheads.index')->with('heads',Head::all());
     }
 
-    public function create()
+    public function getMaster(Request $request)
     {
-        return view('subheads.create')->with('heads',Head::all())->with('subheads',Subhead::all());
+        $search = $request->search;
+        $size = $request->size;
+        $field = $request->sort[0]["field"];     //  Nested Array
+        $dir = $request->sort[0]["dir"];         //  Nested Array
+        //  With Tables
+        $subhead = Subhead::where(function ($query) use ($search){
+            $query->where('id','LIKE','%' . $search . '%')
+            ->orWhere('title','LIKE','%' . $search . '%')
+            ->orWhere('ob','LIKE','%' . $search . '%');
+        })
+        ->orderBy($field,$dir)
+        ->paginate((int) $size);
+        return $subhead;
     }
 
     public function store(Request $request)
@@ -46,7 +47,12 @@ class SubheadController extends Controller
             $subhead = new Subhead();
             $subhead->head_id = $request->head_id;
             $subhead->title = $request->title;
-            $subhead->ob = $request->ob;
+            if($request->has('ob'))
+            {
+                $subhead->ob = $request->ob;
+            }else {
+                $subhead->ob = 0;
+            }
             if($request->has('status'))
             {
                 $subhead->status = 1;

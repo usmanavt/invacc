@@ -12,19 +12,23 @@ class CategoryController extends Controller
 
     public function index(Request $request)
     {
-        $search = $request->search;
-        $categories = Category::where(function($q) use ($search){
-            $q->where('title','LIKE',"%$search%")
-            ->orWhere('nick','LIKE',"%$search%");
-        })
-        ->orderBy('id','desc')
-        ->paginate(5);
-        return view('categories.index')->with('categories',$categories);
+        return view('categories.index');
     }
- 
-    public function create()
+
+    public function getMaster(Request $request)
     {
-        return view('categories.create')->with('categories',Category::select('id','title')->get());
+        $search = $request->search;
+        $size = $request->size;
+        $field = $request->sort[0]["field"];     //  Nested Array
+        $dir = $request->sort[0]["dir"];         //  Nested Array
+        //  With Tables
+        $categories = Category::where(function ($query) use ($search){
+            $query->where('id','LIKE','%' . $search . '%')
+            ->orWhere('title','LIKE','%' . $search . '%');
+        })
+        ->orderBy($field,$dir)
+        ->paginate((int) $size);
+        return $categories;
     }
 
     public function store(Request $request)
@@ -34,7 +38,7 @@ class CategoryController extends Controller
                 'title' => 'required|min:3|unique:categories',
                 'nick' => 'required|min:3'
             ]);
-        
+
         DB::beginTransaction();
         try {
             $category = new Category();
@@ -48,12 +52,6 @@ class CategoryController extends Controller
             DB::rollback();
             throw $th;
         }
-    }
-
-
-    public function show(Itemcategory $itemcategory)
-    {
-        //
     }
 
     public function edit($id)
@@ -89,13 +87,7 @@ class CategoryController extends Controller
             DB::rollback();
             throw $th;
         }
-       
+
     }
 
-
-    public function destroy(Category $category)
-    {
-        dd($category);
-        return redirect()->back();
-    }
 }
