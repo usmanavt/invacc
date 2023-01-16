@@ -1,13 +1,17 @@
 <x-app-layout>
 
+    @push('styles')
+    <link rel="stylesheet" href="{{ asset('css/tabulator_simple.min.css') }}">
+    @endpush
+
     <x-slot name="header">
         <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-           Edit Journal Voucher
+           Edit Journal Voucher {{ $transaction }}
         </h2>
     </x-slot>
 
     <div class="py-6">
-        <div class="max-w-xl mx-auto sm:px-2 lg:px-4">
+        <div class="max-w-7xl mx-auto sm:px-2 lg:px-4">
             <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg p-4">
 
                  {{-- Create Form --}}
@@ -16,48 +20,20 @@
 
                         {{-- Form Data --}}
                         <div class="flex flex-col justify-start items-center">
-                            <form action="{{ route('jv.edit',$jv) }}" method="post" class="flex flex-col">
+                            <form action="{{ route('jv.edit',$transaction) }}" method="post" class="flex flex-col">
                                 @csrf
                                 @method('PUT')
-                                <input type="hidden" name="id" value="{{ $jv->id }}">
-                                <x-input-date title="Dcoument Date" name="document_date" req required/>
-                                <label for="">Transaction Type</label>
-                                <div>
-                                    <input type="radio" name="transaction_type" id="transaction_type" value="DEBIT" @if($jv->transaction_type === 'DEBIT') checked @endif>
-                                    <label for="">DEBIT</label>
-                                    <input type="radio" name="transaction_type" id="transaction_type" value="CREDIT"  @if($jv->transaction_type === 'CREDIT') checked @endif >
-                                    <label for="">CREDIT</label>
-                                </div>
-                                {{-- Head --}}
-                                <label for="">Head</label>
-                                <select autocomplete="on" name="head_id" id="head_id" required onchange="populateSelect()">
-                                    <option disabled selected value="">--Select</option>
-                                    @foreach ($heads as $head)
-                                        <option value="{{ $head->id }}" @if($head->id === $jv->head_id) selected @endif>{{ $head->title }}</option>
-                                    @endforeach
-                                </select>
-                                {{-- Subhead --}}
-                                <label for="">Subead</label>
-                                <select autocomplete="on" name="subhead_id" id="subhead_id" disabled class="disabled:opacity-50">
-                                    <option disabled selected value="">--Select</option>
-                                </select>
+                                <input type="hidden" name="id" value="{{ $transaction }}">
 
-                                <x-input-numeric title="Amount" name="amount" id="amount" min="1" req required class="" value="{{ $jv->amount }}"/>
-                                <x-input-text title="JV #" name="jvno" id="amount" req required class="" value="{{ $jv->jvno }}"/>
-
-                                <div class="flex flex-col">
-                                    <label for="">
-                                        Description <span class="text-red-500 font-semibold">(*)</span>
-                                    </label>
-                                    <textarea name="description" id="description" cols="30" rows="3" maxlength="255" required class="rounded">{{ $jv->description }}</textarea>
-                                </div>
-
+                                {{-- Dynamic Tabulator --}}
+                                <x-tabulator-dynamic />
+                                {{--
                                 <div class="mt-2">
                                     <x-button id="submitButton">
                                         <i class="fa fa-save fa-fw"></i>
                                             Submit
                                     </x-button>
-                                </div>
+                                </div> --}}
                             </form>
 
                         </div>
@@ -69,15 +45,73 @@
     </div>
 
 @push('scripts')
+    <script src="{{ asset('js/tabulator.min.js') }}"></script>
+@endpush
+
+
+@push('scripts')
 <script>
+    const deleteIcon = function(cell,formatterParams){return "<i class='fa fa-trash text-red-500'></i>";};
+    let csrfToken = document.head.querySelector("[name~=csrf-token][content]").content;
+    const heads = @json($heads);
     const subheads = @json($subheads);
-    const jv = @json($jv);
-    const head = document.getElementById('head_id')
-    const subhead = document.getElementById('subhead_id')
+    const jvs = @json($jvs);
+    const headsList = []    //  To get Value / Label Objects
+    const subheadsList = []    //  To get Value / Label Objects
+
+    //  Dynamic Table [User data]
+    dynamicTable = new Tabulator("#dynamicTable", {
+        layout:'fitDataTable',
+        responsiveLayout:"collapse",
+        data:jvs,
+        reactiveData:true,
+        columns:[
+            {title:"Del" , formatter:deleteIcon, headerSort:false, responsive:0,
+                cellClick:function(e, cell){
+                    cell.getRow().delete();
+                    const rowCount = dynamicTable.getDataCount()
+                    if(rowCount <=0 ) { submitButton.setAttribute('disabled','') }
+                }
+            },
+            {title:'Type',field:'transaction_type',editor:"list",validator:['required'],editorParams:{ values:['DEBIT','CREDIT']}, width:70} ,
+            {title:"Head",  field:"head_id",headerSort: false, width:200,validator:['required'],editor:"list",  editorParams:{
+                    values: headsList,
+                    emptyValue:null,
+                },
+                cellEdited:function(cell){
+                    // console.info(cell.getData())
+                    const head_id = cell.getData().head_id  // Note, we are using head_title append to populate subheads
+                    // console.info(head_id)
+                    const subs = subheads.filter( s => s.head_title=== head_id)
+                    // console.info(subs)
+                    subheadsList.length = 0
+                    subheadsList.push({value:'-->select',label:'-->select',item:0})
+                    //  Setup Heads
+                    subs.forEach(e => {
+                        subheadsList.push({value:e.title, label:e.id + " " + e.title, item:e.id})
+                    })
+                    // var id = cell.getRow().getIndex()
+                    // console.info(cell.get)
+                    // console.info("row id : ",id )
+                    // dynamicTable.updateRow(id,{subhead_id:''})
+                }
+            },
+            {title:"Subhead", width:150, field:"subhead_id",headerSort: false, editor:"list",validator:['required'], editorParams:{
+                values: subheadsList
+            }},
+            {title:"JV #", width:100,validator:['required'],  field:"jvno",headerSort: false, editor:"input",cssClass:"bg-green-200 font-semibold"},
+            {title:"Amount (PKR)", field:"amount",headerSort: false, editor:"number",cssClass:"bg-green-200 font-semibold",validator:['required','numeric']},
+            {title:"Description", width:300, field:"description",headerSort: false,validator:['required'],  editor:"input",cssClass:"bg-green-200 font-semibold"},
+        ],
+    })
 
     document.addEventListener('DOMContentLoaded',()=>{
-       populateSelect()
-       setSelectedSubHead()
+        //  Iterate heads and populate heads[] for tabulator
+        heads.forEach(e => {headsList.push({value:e.title, label:e.id + " " + e.title ,item:e.id})})
+        console.info(jvs)
+        // dynamicTable.setData(jvs)
+        // populateSelect()
+        // setSelectedSubHead()
     })
 
     const populateSelect = ()=>{
