@@ -11,6 +11,13 @@ class Subhead extends Model
 {
     use HasFactory;
     protected $fillable = ['head_id','title','status','ob'];
+    public $appends = ['head_title'];
+
+
+    public function getHeadTitleAttribute()
+    {
+        return $this->head->title;
+    }
 
     //  Relationship
     public function head()

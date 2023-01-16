@@ -108,7 +108,7 @@ Route::get('/cashpayments/master', [CashPaymentController::class, 'getMaster'])-
 Route::resource('cashpayments',CashPaymentController::class)->except(['create','show','destroy']);
 //  Journal Vouchers
 Route::get('/jv/master', [VoucherController::class, 'getMaster'])->name('jv.master');
-Route::resource('jv',VoucherController::class)->except(['create','show','destroy']);
+Route::resource('jv',VoucherController::class);
 
 // Route::get('myproc',function(){
 //     // select procedure should be called with "call"

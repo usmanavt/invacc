@@ -116,8 +116,8 @@
     const amount_pkr = document.getElementById('amount_pkr')
     const head = document.getElementById('head_id')
     const subhead = document.getElementById('subhead_id')
-   const supplier = document.getElementById('supplier_id')
-   const customer = document.getElementById('customer_id')
+    const supplier = document.getElementById('supplier_id')
+    const customer = document.getElementById('customer_id')
 
     head.addEventListener('change',()=>{
         const val = head.value

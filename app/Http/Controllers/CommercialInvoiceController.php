@@ -55,17 +55,6 @@ class CommercialInvoiceController extends Controller
 
     }
 
-
-
-
-
-
-
-
-
-
-
-
     public function getDetails(Request $request)
     {
         $search = $request->search;
@@ -90,7 +79,6 @@ class CommercialInvoiceController extends Controller
     public function store(Request $request)
     {
         // dd($request->all());
-
         $comminvoice = $request->comminvoice;
         DB::beginTransaction();
         try {
@@ -233,7 +221,6 @@ class CommercialInvoiceController extends Controller
                 $cpd->pcs_pending = $cid['pcs'];
                 $cpd->gdswt_pending = $cid['gdswt'];
                 /// *********************************
-
 
                 $cpd->inkg = $cid['inkg'];
                 $cpd->pcs = $cid['pcs'];
