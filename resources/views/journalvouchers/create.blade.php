@@ -60,11 +60,9 @@
     const submitButton = document.getElementById('submitButton')
 
     document.addEventListener('DOMContentLoaded', () => {
-        //  Iterate heads and populate heads[] for tabulator
-        heads.forEach(e => {headsList.push({value:e.title, label:e.id + " " + e.title ,item:e.id})})
+        heads.forEach(e => {headsList.push({value:e.title, label:e.title})})
     })
     document.addEventListener('keyup', (e)=>{
-        //  We are using ctrl key + 'ArrowUp'
         if(e.ctrlKey && e.keyCode == 32){
             addRow()
         }
@@ -89,29 +87,22 @@
                 }
             },
             {title:'Type',field:'transaction_type',editor:"list",validator:['required'],editorParams:{ values:['DEBIT','CREDIT']}, width:70} ,
-            {title:"Head",  field:"head_id",headerSort: false, width:200,validator:['required'],editor:"list",  editorParams:{
+            {title:"Head",  field:"head_title",headerSort: false, width:200,validator:['required'],editor:"list",  editorParams:{
                     values: headsList,
-                    emptyValue:null,
                 },
                 cellEdited:function(cell){
-                    // console.info(cell.getData())
-                    const head_id = cell.getData().head_id  // Note, we are using head_title append to populate subheads
-                    // console.info(head_id)
-                    const subs = subheads.filter( s => s.head_title=== head_id)
-                    // console.info(subs)
+                    const head_title = cell.getData().head_title
+                    const subs = subheads.filter( s => s.mtitle === head_title)
+                    console.info(subs)
                     subheadsList.length = 0
-                    subheadsList.push({value:'-->select',label:'-->select',item:0})
+                    subheadsList.push({value:'-->select',label:'-->select'})
                     //  Setup Heads
                     subs.forEach(e => {
-                        subheadsList.push({value:e.title, label:e.id + " " + e.title, item:e.id})
+                        subheadsList.push({value:e.title, label:e.title})
                     })
-                    // var id = cell.getRow().getIndex()
-                    // console.info(cell.get)
-                    // console.info("row id : ",id )
-                    // dynamicTable.updateRow(id,{subhead_id:''})
                }
             },
-            {title:"Subhead", width:150, field:"subhead_id",headerSort: false, editor:"list",validator:['required'], editorParams:{
+            {title:"Subhead", width:150, field:"subhead_title",headerSort: false, editor:"list",validator:['required'], editorParams:{
                 values: subheadsList
             }},
             {title:"JV #", width:100,validator:['required'],  field:"jvno",headerSort: false, editor:"input",cssClass:"bg-green-200 font-semibold"},
@@ -157,14 +148,14 @@
         document.getElementById('balance').value = valid
         if(valid != 0) { alert('Debit/Credit should be settled before procedding'); return }
         //  Correct Data
-        data.forEach(e => {
-            var head = e.head_id
-            var dHead = heads.filter(h => h.title === head)
-            e.head_id = dHead[0].id
-            var subhead = e.subhead_id
-            var sHead = subheads.filter(h => h.title === subhead)
-            e.subhead_id = sHead[0].id
-        })
+        // data.forEach(e => {
+        //     var head = e.head_id
+        //     var dHead = heads.filter(h => h.title === head)
+        //     e.head_id = dHead[0].id
+        //     var subhead = e.subhead_id
+        //     var sHead = subheads.filter(h => h.title === subhead)
+        //     e.subhead_id = sHead[0].id
+        // })
         //  Now Post Data
         var mydata = {
             'document_date': document.getElementById('document_date').value,

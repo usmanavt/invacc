@@ -19,7 +19,7 @@
         <div class="max-w-full mx-auto sm:px-2 lg:px-4">
             <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg p-4">
 
-                        <div class="p-2 pb-2 border border-slate-300 w-full">
+                        <div class="p-2 pb-2 border border-slate-300 w-full rounded-md">
                             {{-- tabulator component --}}
                             <x-tabulator />
                         </div>
@@ -71,7 +71,7 @@
         ajaxContentType:"json",
         initialSort:[ {column:"id", dir:"desc"} ],
         height:"100%",
-
+        groupBy:'transaction',
         columns:[
             // Master Data
             {title:"Id", field:"id" , responsive:0,visible:false},
@@ -82,8 +82,8 @@
                     return cell.getData().transaction_type === 'DEBIT'? '<span class="text-green-500">DEBIT</span>':'<span class="text-red-500">CREDIT</span>'
                     console.info(cell.getData())
                 }},
-            {title:"Head", field:"head.title" , visible:true , responsive:0 },
-            {title:"Subhead", field:"subhead.title" , visible:true , responsive:0},
+            {title:"Head", field:"head_title" , visible:true , responsive:0 },
+            {title:"Subhead", field:"subhead_title" , visible:true , responsive:0},
             // {title:"Supplier", field:"supplier_id" , visible:true , responsive:0},
             // {title:"Customer", field:"customer_id" , visible:true , responsive:0},
             {title:"JV#", field:"jvno",hozAlign:"right" ,  responsive:0},
@@ -91,7 +91,7 @@
             {title:"Description", field:"description" ,  responsive:0},
             {title:"Edit" , formatter:editIcon, hozAlign:"center",headerSort:false, responsive:0,
                 cellClick:function(e, cell){
-                    window.open(window.location + "/" + cell.getData().id + "/edit" ,"_self");
+                    window.open(window.location + "/" + cell.getData().transaction + "/edit" ,"_self");
             }},
         ],
         // Extra Pagination Data for End Users
