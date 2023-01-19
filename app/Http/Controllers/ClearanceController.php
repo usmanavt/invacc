@@ -110,6 +110,12 @@ class ClearanceController extends Controller
                 $dcn->machineno = $request->machineno;
                 $dcn->commercial_invoice_id = $request->commercial_invoice_id;
                 $dcn->invoiceno = $request->invoiceno;
+
+                // From Usman on 19-01-2023
+                $dcn->conrate = $request->conversionrate;
+                $dcn->insrnce = $request->insurance;
+                //**********************
+
                 $dcn->contract_id = $d['contract_id'];
                 $dcn->material_id = $d['material_id'];
                 $dcn->supplier_id = $d['supplier_id'];
@@ -165,16 +171,21 @@ class ClearanceController extends Controller
                 }
                 $dcp->save();
   }
+
+
             // Update & Close Clearance if Completed
             $closeClearance = true;
             foreach($clearance->clearancePendingDetails as $pending)
+
             {
+
                 if($pending->status === 1)
                     $closeClearance = false;
             }
             if($closeClearance){
                 $clearance->status = 2;
             }
+
             $clearance->gd_date = $request->gd_date;
             $clearance->gdno = $request->gdno;
             $clearance->conversionrate = $request->conversionrate;

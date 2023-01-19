@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class AddSupplierIdToCashTransaction extends Migration
+class AddColumnToClearanceCompletedDetails extends Migration
 {
     /**
      * Run the migrations.
@@ -13,9 +13,12 @@ class AddSupplierIdToCashTransaction extends Migration
      */
     public function up()
     {
-        Schema::table('cash_transactions', function (Blueprint $table) {
-            // $table->smallInteger('supplier_id')->default(0);
-            // $table->ssmallInteger('customer_id')->default(0);
+        Schema::table('clearance_completed_details', function (Blueprint $table) {
+            $table->decimal('conrate', 15, 3)->default(00.000);
+            $table->decimal('insrnce', 15, 3)->default(00.000);
+
+
+
         });
     }
 
@@ -26,7 +29,7 @@ class AddSupplierIdToCashTransaction extends Migration
      */
     public function down()
     {
-        Schema::table('cash_transactions', function (Blueprint $table) {
+        Schema::table('_clearance_completed_details', function (Blueprint $table) {
             //
         });
     }

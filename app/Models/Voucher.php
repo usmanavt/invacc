@@ -31,7 +31,7 @@ class Voucher extends Base
             return  $input;
         }
         //  If Empty, Create New One - Separate for Both Plants
-        return '1000000000000000';
+        return '1';
     }
     /************** Relationships **************/
     public function head(){ return $this->belongsTo(Head::class); }
