@@ -14,8 +14,8 @@ class AddSupplierIdToCashTransaction extends Migration
     public function up()
     {
         Schema::table('cash_transactions', function (Blueprint $table) {
-            // $table->smallInteger('supplier_id')->default(0);
-            // $table->ssmallInteger('customer_id')->default(0);
+            $table->smallInteger('supplier_id')->default(0);
+            $table->smallInteger('customer_id')->default(0);
         });
     }
 

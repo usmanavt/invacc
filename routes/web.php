@@ -38,6 +38,7 @@ Route::get('/transactons', function () {
     return view('transaction');
 })->middleware(['auth'])->name('transaction');
 Route::get('reports',[ReportController::class, 'index'])->name('reports.index');
+Route::get('vouchers',[ReportController::class, 'vouchers'])->name('reports.vouchers');
 Route::post('report/fetch',[ReportController::class, 'fetch'])->name('reports.fetch');
 
 

@@ -99,6 +99,7 @@ class BankRecivingsController extends Controller
             $bt->cheque_no = $request->cheque_no;
             $bt->cheque_date = $request->cheque_date;
             $bt->description = $request->description;
+            $bt->documentdate = $request->documentdate;
             if($request->has('subhead_id'))     $bt->subhead_id = $request->subhead_id;
             if($request->has('supplier_id'))    $bt->supplier_id = $request->supplier_id;
             if($request->has('customer_id'))    $bt->customer_id = $request->customer_id;

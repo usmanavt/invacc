@@ -19,7 +19,18 @@ class ReportController extends Controller
         ->with('glheads',Head::where('status',1)->whereIn('id',[1,2,30,36,38])->get())
         ->with('vchrheads',Head::where('status',1)->whereIn('id',[6,7,8,9])->get())
         ->with('subheads',DB::table('VwCategory')->select('*')->get()->toArray())
+        // ->with('vchrcats',DB::table('vwvouchercategory')->select('*')->get()->toArray())
         ;
+    }
+
+    public function vouchers(Request $request)
+    {
+        // dd($request->all());
+        $fromdate = $request->fromdate;
+        $todate = $request->todate;
+        $head = $request->head;
+        // FIXME: correct this call and send back vouchers to function
+        return DB::table('vwvouchercategory')->select('*')->whereBetween('docdate',[$todate,$fromdate])->where('mheadid',$head)->get()->toArray();
     }
 
     public function fetch(Request $request)
@@ -128,7 +139,12 @@ class ReportController extends Controller
             return;
         }
 
-        if($report_type === 'vchr'){}
+        if($report_type === 'vchr'){
+            dd($request->all());
+            $head_id = $request->head_id;
+            $subhead_id = $request->subhead_id;
+            //  TODO: How to fetch Data now? Shall we call vwvocherreport with mehadid , but where is subhead_id to get?
+        }
         if($report_type === 'agng'){}
 
         $mpdf->SetHTMLFooter('

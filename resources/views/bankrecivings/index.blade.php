@@ -22,6 +22,7 @@
                         <div class="flex flex-col justify-start items-center">
                             <form action="{{ route('bankrecivings.store') }}" method="post" class="flex flex-col" id="createForm">
                                 @csrf
+                                <x-input-date title="Document Date" name="documentdate" req required/>
                                 <label for="">Bank</label>
                                 <select name="bank_id" required autocomplete="on">
                                     <option disabled selected value="">--Select</option>

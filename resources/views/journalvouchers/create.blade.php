@@ -86,8 +86,8 @@
                     if(rowCount <=0 ) { submitButton.setAttribute('disabled','') }
                 }
             },
-            {title:'Type',field:'transaction_type',editor:"list",validator:['required'],editorParams:{ values:['DEBIT','CREDIT']}, width:70} ,
-            {title:"Head",  field:"head_title",headerSort: false, width:200,validator:['required'],editor:"list",  editorParams:{
+            {title:'Type',field:'transaction_type',editor:"list",validator:['required'],editorParams:{ values:['DEBIT','CREDIT']}, width:70 , responsive:0} ,
+            {title:"Head",  field:"head_title",headerSort: false, width:200,validator:['required'],editor:"list", responsive:0,  editorParams:{
                     values: headsList,
                 },
                 cellEdited:function(cell){
@@ -102,12 +102,12 @@
                     })
                }
             },
-            {title:"Subhead", width:150, field:"subhead_title",headerSort: false, editor:"list",validator:['required'], editorParams:{
+            {title:"Subhead", width:150, field:"subhead_title",headerSort: false, editor:"list", responsive:0,validator:['required'], editorParams:{
                 values: subheadsList
             }},
-            {title:"JV #", width:100,validator:['required'],  field:"jvno",headerSort: false, editor:"input",cssClass:"bg-green-200 font-semibold"},
-            {title:"Amount (PKR)", field:"amount",headerSort: false, editor:"number",cssClass:"bg-green-200 font-semibold",validator:['required','numeric']},
-            {title:"Description", width:300, field:"description",headerSort: false,validator:['required'],  editor:"input",cssClass:"bg-green-200 font-semibold"},
+            {title:"JV #", width:100,validator:['required'],  field:"jvno",headerSort: false, responsive:0, editor:"input",cssClass:"bg-green-200 font-semibold"},
+            {title:"Amount (PKR)", field:"amount",headerSort: false, editor:"number", responsive:0,cssClass:"bg-green-200 font-semibold",validator:['required','numeric']},
+            {title:"Description", width:300, field:"description",headerSort: false, responsive:0,validator:['required'],  editor:"input",cssClass:"bg-green-200 font-semibold"},
         ],
     })
     // dynamicTable.on("cellEdited", (cell) => {
