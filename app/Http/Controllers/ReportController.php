@@ -30,7 +30,7 @@ class ReportController extends Controller
         $todate = $request->todate;
         $head = $request->head;
         // FIXME: correct this call and send back vouchers to function
-        return DB::table('vwvouchercategory')->select('*')->whereBetween('docdate',[$todate,$fromdate])->where('mheadid',$head)->get()->toArray();
+        return DB::table('vwvouchercategory')->select('*')->whereBetween('docdate',[$fromdate,$todate])->where('mheadid',$head)->get()->toArray();
     }
 
     public function fetch(Request $request)
