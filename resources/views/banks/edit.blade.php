@@ -26,7 +26,7 @@
                                 <x-input-text title="Nick" name="nick" value="{{ $bank->nick }}" req required class=""/>
                                 <x-input-text title="Account #" name="account_no" value="{{ $bank->account_no }}" req required class=""/>
                                 <x-input-text title="Branch" name="branch" value="{{ $bank->branch }}" req required class=""/>
-                                <x-input-numeric title="Balance" name="balance"  req required class=""/>
+                                <x-input-numeric title="Balance" name="balance" value="{{ $bank->balance }}"  req required class=""/>
 
                                 <div class="flex flex-col">
                                     <label for="">

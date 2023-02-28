@@ -6,7 +6,7 @@
 
     <x-slot name="header">
         <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-            Bank Recivings
+            Cash Receivings
         </h2>
     </x-slot>
 
@@ -20,18 +20,18 @@
 
                         {{-- Form Data --}}
                         <div class="flex flex-col justify-start items-center">
-                            <form action="{{ route('bankrecivings.store') }}" method="post" class="flex flex-col" id="createForm">
+                            <form action="{{ route('cashrecivings.store') }}" method="post" class="flex flex-col" id="createForm">
                                 @csrf
-                                <label for="">Bank</label>
-                                <select name="bank_id" required autocomplete="on">
+                                {{-- <label for="">Bank</label>
+                                <select autocomplete="on" name="bank_id" required>
                                     <option disabled selected value="">--Select</option>
                                     @foreach ($banks as $bank)
                                         <option value="{{ $bank->id }}">{{ $bank->title }}</option>
                                     @endforeach
-                                </select>
+                                </select> --}}
                                 {{-- Head --}}
                                 <label for="">Head</label>
-                                <select name="head_id" id="head_id" required autocomplete="on">
+                                <select autocomplete="on" name="head_id" id="head_id" required>
                                     <option disabled selected value="">--Select</option>
                                     @foreach ($heads as $head)
                                         <option value="{{ $head->id }}">{{ $head->title }}</option>
@@ -39,15 +39,15 @@
                                 </select>
                                 {{-- Subhead --}}
                                 <label for="">Subead</label>
-                                <select name="subhead_id" id="subhead_id" disabled class="disabled:opacity-50" autocomplete="on">
+                                <select autocomplete="on" name="subhead_id" id="subhead_id" disabled class="disabled:opacity-50">
                                     <option disabled selected value="">--Select</option>
-                                    {{-- @foreach ($heads as $head)
+                                    @foreach ($heads as $head)
                                         <option value="{{ $head->id }}">{{ $head->title }}</option>
-                                    @endforeach --}}
+                                    @endforeach
                                 </select>
                                 {{-- Supplier --}}
                                 <label for="">Supplier</label>
-                                <select name="supplier_id" id="supplier_id" disabled class="disabled:opacity-50" autocomplete="on">
+                                <select autocomplete="on" name="supplier_id" id="supplier_id" disabled class="disabled:opacity-50">
                                     <option disabled selected value="">--Select</option>
                                     @foreach ($suppliers as $supplier)
                                         <option value="{{ $supplier->id }}">{{ $supplier->title }}</option>
@@ -55,7 +55,7 @@
                                 </select>
                                 {{-- Customer --}}
                                 <label for="">Customer</label>
-                                <select name="customer_id" id="customer_id" disabled class="disabled:opacity-50" autocomplete="on">
+                                <select autocomplete="on" name="customer_id" id="customer_id" disabled class="disabled:opacity-50">
                                     <option disabled selected value="">--Select</option>
                                     @foreach ($customers as $customer)
                                         <option value="{{ $customer->id }}">{{ $customer->title }}</option>
@@ -65,9 +65,8 @@
                                 <x-input-numeric title="Conversion Rate" name="conversion_rate" id="conversion_rate" value="1" min="1" step="0.01" req required class=""/>
                                 <x-input-numeric title="Amount $" name="amount_fc" id="amount_fc" min="1" req required class=""/>
                                 <x-input-numeric title="Amount Rs" name="amount_pkr" id="amount_pkr"  disabled required class=""/>
-                                <x-input-text title="Cheque #" name="cheque_no" req required class=""/>
-                                <x-input-date title="Cheque Date" name="cheque_date" req required/>
-
+                                <x-input-text title="Payment to" name="receiver" req required class=""/>
+                                <x-input-date title="Document Date" name="docdate" req required/>
 
                                 <div class="flex flex-col">
                                     <label for="">
@@ -150,11 +149,11 @@
             subhead.setAttribute('disabled','')
             subhead.removeAttribute('required','')
         }else {
-            customer.setAttribute('disabled','')
-            customer.removeAttribute('required','')
-            supplier.setAttribute('disabled','')
-            supplier.removeAttribute('required','')
-        }
+           customer.setAttribute('disabled','')
+           customer.removeAttribute('required','')
+           supplier.setAttribute('disabled','')
+           supplier.removeAttribute('required','')
+       }
     })
 
     const addSelectElement = (select,id,value) => {
@@ -177,7 +176,7 @@
     var lockIcon = function(cell, formatterParams, onRendered){ return "<i class='fa fa-lock text-red-600'></i>";};
     var unlockIcon = function(cell, formatterParams, onRendered){ return "<i class='fa fa-lock text-green-600'></i>";};
 
-    const getMaster = @json(route('bankrecivings.master'));
+    const getMaster = @json(route('cashrecivings.master'));
     let table;
     let searchValue = "";
 
@@ -207,21 +206,21 @@
         ajaxContentType:"json",
         initialSort:[ {column:"id", dir:"desc"} ],
         height:"100%",
-
+        // ->format('Y-m-d')
         columns:[
             // Master Data
             {title:"Id", field:"id" , responsive:0,visible:false},
-            {title:"Bank", field:"bank.title" , visible:true , responsive:0},
+            // {title:"Bank", field:"bank.title" , visible:true , responsive:0},
             {title:"Head", field:"head.title" , visible:true , responsive:0},
             {title:"Subhead", field:"subhead.title" , visible:true , responsive:0},
-            {title:"Supplier", field:"supplier.title" , visible:true , responsive:0},
-            {title:"Customer", field:"customer.title" , visible:true , responsive:0},
-            {title:"Tran", field:"transaction_type" ,  responsive:0,cssClass:'text-green-500 font-semibold'},
+             {title:"Supplier", field:"supplier.title" , visible:true , responsive:0},
+             {title:"Customer", field:"customer.title" , visible:true , responsive:0},
+            {title:"Tran", field:"transaction_type" ,  responsive:0,cssClass:'text-indigo-500 font-semibold'},
             {title:"Conv. Rate", field:"conversion_rate",hozAlign:"right" ,  responsive:0,formatter:"money",formatterParams:{thousand:",",precision:2}},
             {title:"Amount $", field:"amount_fc",hozAlign:"right" ,  responsive:0,formatter:"money",formatterParams:{thousand:",",precision:2}},
             {title:"Amount Rs", field:"amount_pkr",hozAlign:"right" ,  responsive:0,formatter:"money",formatterParams:{thousand:",",precision:0}},
-            {title:"Cheque Date", field:"cheque_date" ,  responsive:0},
-            {title:"Cheque #", field:"cheque_no" ,  responsive:0},
+            {title:"Document Date", field:"docdate" ,  responsive:0},
+            {title:"Payment to", field:"receiver" ,  responsive:0},
             {title:"Description", field:"description" ,  responsive:0},
             // {title:"Status", field:"status" ,  responsive:0,
             //     formatter:function(cell){

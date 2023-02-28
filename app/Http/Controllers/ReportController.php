@@ -95,7 +95,7 @@ class ReportController extends Controller
         }
 
         if($report_type === 'glhw'){
-            // dd($request->all());
+            //  dd($request->all());
             $head_id = $request->head_id;
             $head = Head::findOrFail($head_id);
             if($request->has('subhead_id')){

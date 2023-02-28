@@ -21,7 +21,8 @@ class Head extends Model
 
     public function tempsubheads()
     {
-        return $this->hasMany(tempsubheads::class);
+         return $this->hasMany(tempsubheads::class);
+
     }
 
 }

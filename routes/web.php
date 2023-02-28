@@ -24,7 +24,9 @@ use App\Http\Controllers\DimensionController;
 use App\Http\Controllers\BankPaymentsController;
 use App\Http\Controllers\BankRecivingsController;
 use App\Http\Controllers\CommercialInvoiceController;
+use App\Http\Controllers\CommercialInvoiceControllerlocal;
 use App\Http\Controllers\CashPaymentController;
+use App\Http\Controllers\CashRecivingsController;
 
 
 Route::get('/', function () {
@@ -86,6 +88,11 @@ Route::resource('users',UserController::class);
 // Contract Controller
 Route::get('/contracts/{contract}/printcontract', [ContractController::class, 'printContract'])->name('contracts.print');
 Route::get('/contracts/getContractMaster', [ContractController::class, 'getMaster'])->name('contracts.master');
+
+Route::get('/contracts/getContractMaster', [ContractController::class, 'getMasterImp'])->name('contracts.masterI');
+Route::get('/contracts/getContractMaster', [ContractController::class, 'getMasterLoc'])->name('contracts.masterL');
+
+
 Route::get('/contracts/getContractDetails', [ContractController::class, 'getDetails'])->name('contracts.details');
 Route::resource('contracts', ContractController::class);
 //  CommercialInvoice
@@ -93,6 +100,18 @@ Route::get('/cis/getCisMaster', [CommercialInvoiceController::class, 'getMaster'
 Route::get('/cis/getCisDetails', [CommercialInvoiceController::class, 'getDetails'])->name('cis.details');
 Route::get('/cis/getContractDetails', [CommercialInvoiceController::class, 'getContractDetails'])->name('cis.condet');
 Route::resource('cis', CommercialInvoiceController::class);
+
+//  CommercialInvoice - LOCAL
+Route::get('/cisl/getCisMaster', [CommercialInvoiceControllerlocal::class, 'getMaster'])->name('cisl.master');
+ Route::get('/cisl/getCisDetails', [CommercialInvoiceControllerlocal::class, 'getDetails'])->name('cisl.details');
+  Route::get('/cisl/getContractDetails', [CommercialInvoiceControllerlocal::class, 'getContractDetails'])->name('cisl.condet');
+   Route::resource('cisl', CommercialInvoiceControllerlocal::class);
+
+
+
+
+
+
 //  Recivings
 Route::get('/recivings/master', [RecivingController::class, 'getRecivingMaster'])->name('recivings.master');
 Route::get('/recivings/details', [RecivingController::class, 'getRecivingDetails'])->name('recivings.details');
@@ -112,9 +131,16 @@ Route::resource('bankpayments',BankPaymentsController::class)->except(['create',
 //  Bank Recivings
 Route::get('/bankrecivings/master', [BankRecivingsController::class, 'getMaster'])->name('bankrecivings.master');
 Route::resource('bankrecivings',BankRecivingsController::class)->except(['create','show','destroy']);
-//  Cash Transactions
+//  Cash Payment
 Route::get('/cashpayments/master', [CashPaymentController::class, 'getMaster'])->name('cashpayments.master');
 Route::resource('cashpayments',CashPaymentController::class)->except(['create','show','destroy']);
+
+//  Cash Recivings
+Route::get('/cashrecivings/master', [CashRecivingsController::class, 'getMaster'])->name('cashrecivings.master');
+Route::resource('cashrecivings',CashRecivingsController::class)->except(['create','show','destroy']);
+
+
+
 //  Journal Vouchers
 Route::get('/jv/master', [VoucherController::class, 'getMaster'])->name('jv.master');
 Route::resource('jv',VoucherController::class);

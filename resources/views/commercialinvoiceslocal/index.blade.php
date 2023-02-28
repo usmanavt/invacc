@@ -6,9 +6,9 @@
 
     <x-slot name="header">
         <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-            Commercial Invoices ( Imported )
+            Commercial Invoices ( Local)
             {{-- Create New Customer --}}
-            <a class="text-sm text-green-500 hover:text-gray-900" href="{{route('cis.create')}}">
+            <a class="text-sm text-green-500 hover:text-gray-900" href="{{route('cisl.create')}}">
                 {{-- Add Icon --}}
                 <i class="fa fa-file fa-fw"></i>
                 Add New Record
@@ -45,8 +45,8 @@
     var deleteIcon = function(cell, formatterParams, onRendered){ return "<i class='fa fa-trash text-red-600'></i>";};
     var printIcon = function(cell, formatterParams, onRendered){ return "<i class='fa fa-print text-pink-500'></i>";};
 
-    const getMaster = @json(route('cis.master'));
-    const getDetails = @json(route('cis.details'));
+    const getMaster = @json(route('cisl.master'));
+    const getDetails = @json(route('cisl.details'));
     let table;
     let searchValue = "";
     let statusValue="1";  // 1 = Pending, 2 - Completed
@@ -152,8 +152,8 @@
             {title: "Contract#",field: "contract_id"},
             {title: "Supplier",field: "supplier.title"},
             {title: "Challan#",field: "challanno"},
-            {title: "Mach Date",field: "machine_date"},
-            {title: "Machine #",field: "machineno"},
+            // {title: "Mach Date",field: "machine_date"},
+            {title: "Description",field: "machineno"},
             // {title: "conversionrate",field: "conversionrate"},
             // {title: "insurance",field: "insurance"},
             // {title: "bankcharges",field: "bankcharges"},

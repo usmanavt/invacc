@@ -17,15 +17,23 @@ class CommercialInvoice extends Model
     protected $fillable = [
        'invoice_date','invoiceno','contract_id','supplier_id','machine_date','machineno','challanno','conversionrate','insurance','bankcharges','collofcustom','exataxoffie','lngnshipdochrgs','localcartage','miscexplunchetc','customsepoy','weighbridge','miscexpenses','agencychrgs','otherchrgs','goods_received','totallccostwexp'
     ];
-    public $appends = ['full_total'];
+    public $appends = ['full_total'] ;
+
 
     /************** Methods **************/
     protected function serializeDate(DateTimeInterface $date){return $date->format('d-m-Y');}
 
     public function getFullTotalAttribute()
     {
-        return $this->commericalInvoiceDetails()->sum('total');
+        return $this->commericalInvoiceDetails()->sum('totallccostwexp');
     }
+
+
+    public function getFullTotallAttributeLocal()
+    {
+        return $this->commericalInvoiceDetails()->sum('totallccostwexp');
+    }
+
 
     public static function hasCompletedReciving($id)
     {

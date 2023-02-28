@@ -36,6 +36,9 @@ class CommercialInvoiceController extends Controller
                 $query->where('invoiceno','LIKE','%' . $search . '%')
                 ->orWhere('challanno','LIKE','%' . $search . '%');
             })
+            ->whereHas('supplier', function ($query) {
+                $query->where('source_id','=','2');
+            })
         ->with('supplier:id,title')
         ->orderBy($field,$dir)
         ->paginate((int) $size);

@@ -206,7 +206,7 @@
         ajaxContentType:"json",
         initialSort:[ {column:"id", dir:"desc"} ],
         height:"100%",
-
+        // ->format('Y-m-d')
         columns:[
             // Master Data
             {title:"Id", field:"id" , responsive:0,visible:false},

@@ -31,14 +31,83 @@ class ContractController extends Controller
                 $query->where('id','LIKE','%' . $search . '%')
                 ->orWhere('number','LIKE','%' . $search . '%');
             })
+
+            // ->whereHas('supplier', function ($query) {
+            //     $query->where('source_id','=','2');
+            //     // ->orWhere('title','LIKE','%' . $search . '%');
+            // })
+
             ->orWherehas('supplier',function($query) use($search){
                 $query->where('title','LIKE',"%$search%");
             })
+
         ->with('user:id,name','supplier:id,title')
         ->orderBy($field,$dir)
         ->paginate((int) $size);
         return $contracts;
     }
+
+    public function getMasterImp(Request $request)
+    {
+        // dd($request->all());
+        $search = $request->search;
+        $size = $request->size;
+        $field = $request->sort[0]["field"];     //  Nested Array
+        $dir = $request->sort[0]["dir"];         //  Nested Array
+        //  With Tables
+        $contracts = Contract::where(function ($query) use ($search){
+                $query->where('id','LIKE','%' . $search . '%')
+                ->orWhere('number','LIKE','%' . $search . '%');
+            })
+            // ->orWherehas('supplier',function($query) use($search){
+            //     $query->where('title','LIKE',"%$search%");
+            // })
+            ->whereHas('supplier', function ($query) {
+                $query->where('source_id','=','2');
+                // ->orWhere('source_id',1);
+            })
+
+        ->with('user:id,name','supplier:id,title')
+        ->orderBy($field,$dir)
+        ->paginate((int) $size);
+        return $contracts;
+    }
+
+
+    public function getMasterLoc(Request $request)
+    {
+        // dd($request->all());
+        $search = $request->search;
+        $size = $request->size;
+        $field = $request->sort[0]["field"];     //  Nested Array
+        $dir = $request->sort[0]["dir"];         //  Nested Array
+        //  With Tables
+        $contracts = Contract::where(function ($query) use ($search){
+                $query->where('id','LIKE','%' . $search . '%')
+                ->orWhere('number','LIKE','%' . $search . '%');
+            })
+            // ->orWherehas('supplier',function($query) use($search){
+            //     $query->where('title','LIKE',"%$search%");
+            // })
+            ->whereHas('supplier', function ($query) {
+                $query->where('source_id','=','1');
+                // ->orWhere('source_id',1);
+            })
+
+        ->with('user:id,name','supplier:id,title')
+        ->orderBy($field,$dir)
+        ->paginate((int) $size);
+        return $contracts;
+    }
+
+
+
+
+
+
+
+
+
 
     public function getDetails(Request $request)
     {

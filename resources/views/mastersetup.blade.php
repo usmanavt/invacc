@@ -60,9 +60,8 @@
                             <i class="fa-solid fa-arrow-up-from-bracket fa-2xl"></i> Materials
                         </a>
 
-                        <a  class="basis-0 w-full md:basis-1/4 bg-blue-500 hover:bg-blue-700 text-white px-2 py-4 rounded-lg shadow-lg" href= "{{
-                            route('banks.index')
-                        }}" >
+                        <a  class="basis-0 w-full md:basis-1/4 bg-blue-500 hover:bg-blue-700 text-white px-2 py-4 rounded-lg shadow-lg"
+                        href= "{{ route('banks.index') }}" >
                             <i class="fa-solid fa-shop-lock fa-2xl"></i> Banks
                         </a>
 
