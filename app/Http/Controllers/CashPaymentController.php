@@ -81,9 +81,9 @@ class CashPaymentController extends Controller
             'head_id' => 'required',
             'conversion_rate' => 'required|numeric',
             'amount_fc' => 'required|numeric',
-            'receiver' => 'required|min:3',
-            'docdate' => 'required',
-            'description' => 'required'
+            // 'receiver' => 'required|min:3',
+            'docdate' => 'required'
+            // 'description' => 'required'
         ]);
 
         DB::beginTransaction();

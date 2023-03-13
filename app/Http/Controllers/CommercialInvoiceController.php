@@ -13,6 +13,8 @@ use App\Models\ClearancePendingDetails;
 use Illuminate\Support\Facades\Session;
 use App\Models\CommercialInvoiceDetails;
 use App\Models\RecivingCompletedDetails;
+use App\Models\Subhead;
+
 
 class CommercialInvoiceController extends Controller
 {
@@ -81,7 +83,7 @@ class CommercialInvoiceController extends Controller
 
     public function store(Request $request)
     {
-        // dd($request->all());
+        //  dd($request->all());
         $comminvoice = $request->comminvoice;
         DB::beginTransaction();
         try {
@@ -140,6 +142,23 @@ class CommercialInvoiceController extends Controller
             $reciving->commercial_invoice_id = $ci->id;
             $reciving->invoiceno = $ci->invoiceno;
             $reciving->save();
+
+
+            $vartxt = 'Tonage';
+            $varmac = $reciving->machineno;
+            $vardta = $vartxt . ' ' . $varmac;
+
+            $subhead = new Subhead();
+            $subhead->head_id = 111;
+            $subhead->title =  $vardta;
+            $subhead->commercial_invoice_id = $reciving->commercial_invoice_id;
+            $subhead->status = 1;
+            $subhead->ob = 0;
+            $subhead->save();
+
+
+
+
 
             //  Commercial Invoice Details
             foreach ($comminvoice as $cid) {
@@ -374,6 +393,25 @@ class CommercialInvoiceController extends Controller
             $reciving->commercial_invoice_id = $ci->id;
             $reciving->invoiceno = $ci->invoiceno;
             $reciving->save();
+
+            //  Update Subhead
+            $vartxt = 'Tonage';
+            $varmac = $reciving->machineno;
+            $vardta = $vartxt . ' ' . $varmac;
+            $subhead = Subhead::where('commercial_invoice_id',$ci->id)->first();
+            // $subhead = new Subhead();
+            // $subhead->head_id = 111;
+            $subhead->title =  $vardta;
+            // $subhead->commercial_invoice_id = $reciving->commercial_invoice_id;
+            // $subhead->status = 1;
+            // $subhead->ob = 0;
+            $subhead->save();
+
+
+
+
+
+
 
             foreach ($comminvoice as $cid) {
                 $c = CommercialInvoiceDetails::findOrFail($cid['id']);

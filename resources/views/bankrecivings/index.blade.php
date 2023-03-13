@@ -63,8 +63,8 @@
                                     @endforeach
                                 </select>
 
-                                <x-input-numeric title="Conversion Rate" name="conversion_rate" id="conversion_rate" value="1" min="1" step="0.01" req required class=""/>
-                                <x-input-numeric title="Amount $" name="amount_fc" id="amount_fc" min="1" req required class=""/>
+                                <x-input-numeric title="Conversion Rate" name="conversion_rate" id="conversion_rate" value="1" min="1" step="0.01" required  onblur="convamounttodlr()"/>
+                                <x-input-numeric title="Amount $" name="amount_fc" id="amount_fc" min="1" required  onblur="convamounttodlr()"/>
                                 <x-input-numeric title="Amount Rs" name="amount_pkr" id="amount_pkr"  disabled required class=""/>
                                 <x-input-text title="Cheque #" name="cheque_no" req required class=""/>
                                 <x-input-date title="Cheque Date" name="cheque_date" req required/>
@@ -78,11 +78,11 @@
                                 </div>
 
                                 <div class="mt-2">
-                                    <x-button type="button" onclick="calculate()">
+                                    {{-- <x-button type="button" onclick="calculate()">
                                         <i class="fa fa-save fa-fw"></i>
                                             Calculate
-                                    </x-button>
-                                    <x-button disabled id="submitButton">
+                                    </x-button> --}}
+                                    <x-button  id="submitButton">
                                         <i class="fa fa-save fa-fw"></i>
                                             Submit
                                     </x-button>
@@ -267,6 +267,11 @@
             return response;
         },
     })
+
+    function convamounttodlr()
+        {
+            amount_pkr.value = (parseFloat(conversion_rate.value) * parseFloat(amount_fc.value)).toFixed(2)
+        }
 
 </script>
 @endpush

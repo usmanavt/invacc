@@ -32,8 +32,8 @@
                                 <x-input-numeric title="Insurance" name="insurance"  req required class=""/>
                             </div>
                             <div class="grid grid-cols-12 gap-2 py-2 items-center">
-                                <x-input-date title="Mac. Date" name="machine_date" req required class="col-span-2"/>
-                                <x-input-text title="Machine #" name="machineno" req required class="col-span-2"/>
+                                <x-input-date title="G.D Date" name="machine_date" req required class="col-span-2"/>
+                                <x-input-text title="G.D #" name="machineno" req required class="col-span-2"/>
 
                             </div>
                         </fieldset>
