@@ -281,9 +281,14 @@
                         length :            0,
 
                         gdsprice :          obj.gdsprice/1000,
+                        dtyrate :          obj.dtyrate/1000,
 
                         amtindollar :       obj.gdswt * obj.gdsprice ,
+                        dtyamtindollar :       obj.gdswt * obj.dtyrate,
+
                         amtinpkr :          ( obj.gdswt *  obj.gdsprice  * conversionrate.value).toFixed(0),
+                        dtyamtinpkr :        ( obj.gdswt *  obj.dtyrate  * conversionrate.value).toFixed(0),
+
                         itmration:          0,
 
                         insuranceperitem :  0,
@@ -306,6 +311,7 @@
                         perft:            0,
                         otherexpenses:    0,
                         qtyinfeet:0,
+                        tmpcda : 0,
 
                     }
                 ])
@@ -322,36 +328,60 @@
                 var inkg = ((e.gdswt / e.pcs ) ).toFixed(3)
                 var length = e.length
                 var gdsprice = e.gdsprice
+                var dtyrate = e.dtyrate
+
+                var tmpcda = e.tmpcda
                 //  update data element
                 e.pcs = pcs
                 e.gdswt = gdswt
                 e.inkg = inkg
                 e.length = length
                 e.gdsprice = gdsprice
+                e.dtyrate = dtyrate
             })
             //  Get Ratio after price/length/pcs update
             var amtinpkrtotal = 0
+            var dtyamtinpkrtotal = 0
             data.forEach(e => {
                 amtinpkrtotal += parseFloat(e.amtinpkr)
+                dtyamtinpkrtotal += parseFloat(e.dtyamtinpkr)
             });
+
+
+
             data.forEach(e => {
+                var dtyamtinpkr = conversionrate.value * e.dtyrate * e.gdswt
                 var amtinpkr = conversionrate.value * e.gdsprice * e.gdswt
+
+
                 var itmratio = amtinpkr / amtinpkrtotal * 100
+                var dtyitmratio = dtyamtinpkr / dtyamtinpkrtotal * 100
+
                 var insuranceperitem = parseFloat(insurance.value) * itmratio / 100
+                var dtyinsuranceperitem = parseFloat(insurance.value) * dtyitmratio / 100
+
                 var amountwithoutinsurance = ( e.amtindollar + insuranceperitem ) * parseFloat(conversionrate.value)
+                var dtyamountwithoutinsurance = ( e.dtyamtindollar + dtyinsuranceperitem ) * parseFloat(conversionrate.value)
+
+
                 var onepercentdutypkr = amountwithoutinsurance * 0.01
+                var dtyonepercentdutypkr = dtyamountwithoutinsurance * 0.01
+
                 var pricevaluecostsheet = parseFloat(onepercentdutypkr + amountwithoutinsurance)
-                var cda = e.cd * pricevaluecostsheet / 100
-                var rda = e.rd * pricevaluecostsheet / 100
-                var acda = e.acd * pricevaluecostsheet / 100
-                var sta = (pricevaluecostsheet + cda + rda + acda) * e.st / 100
-                var asta = (pricevaluecostsheet + cda + rda + acda) * e.ast / 100
-                var ita =(pricevaluecostsheet + cda + sta + rda + acda + asta) * e.it / 100
-                var wsca = (pricevaluecostsheet * e.wsc) /100
+                var dtypricevaluecostsheet = parseFloat(dtyonepercentdutypkr + dtyamountwithoutinsurance)
+
+                var cda = e.cd * dtypricevaluecostsheet / 100
+                var tmpcda =  dtyamtinpkrtotal
+                var rda = e.rd * dtypricevaluecostsheet / 100
+                var acda = e.acd * dtypricevaluecostsheet / 100
+                var sta = (dtypricevaluecostsheet + cda + rda + acda) * e.st / 100
+                var asta = (dtypricevaluecostsheet + cda + rda + acda) * e.ast / 100
+                var ita =(dtypricevaluecostsheet + cda + sta + rda + acda + asta) * e.it / 100
+                var wsca = (dtypricevaluecostsheet * e.wsc) /100
                 var total = cda + rda + sta + acda + asta + ita + wsca
                 var perft = (e.perpc / e.length).toFixed(2)
-                var totallccostwexp = total + pricevaluecostsheet + (banktotal.value * itmratio / 100)
-                var otherexpenses = ( conversionrate.value * otherchrgs.value ) * itmratio / 100
+                var totallccostwexp = total + dtypricevaluecostsheet + (banktotal.value * dtyitmratio / 100)
+                var otherexpenses = ( conversionrate.value * otherchrgs.value ) * dtyitmratio / 100
                 var perpc = (( totallccostwexp+otherexpenses) / e.pcs).toFixed(2)
                 var perkg = (perpc / e.inkg).toFixed(2)
                 var qtyinfeet = (e.pcs * e.length).toFixed(2)
@@ -364,6 +394,7 @@
                 e.amountwithoutinsurance = amountwithoutinsurance
                 e.onepercentdutypkr = (onepercentdutypkr).toFixed(2)
                 e.pricevaluecostsheet = (pricevaluecostsheet).toFixed(2)
+                e.tmpcda = (tmpcda).toFixed(2)
                 e.cda = (cda).toFixed(2)
                 e.rda = (rda).toFixed(2)
                 e.acda = (acda).toFixed(2)
@@ -507,6 +538,34 @@
                             bottomCalc:"sum",
                             bottomCalcFormatter:"money",
                         },
+
+                        {   title:"dutyrate",
+                            field:"dtyrate",
+                            headerVertical:true,
+                            editor:"number",
+                            cssClass:"bg-green-200 font-semibold",
+                            formatter:"money",
+                            responsive:0,
+                            formatterParams:{thousand:",",precision:2},
+                            validator:["required","numeric"],
+                            bottomCalcParams:{precision:2}  ,
+                        },
+                        {   title:"tmpcdaa",
+                            field:"tmpcda",
+                            headerVertical:true,
+                            editor:"number",
+                            cssClass:"bg-green-200 font-semibold",
+                            formatter:"money",
+                            responsive:0,
+                            formatterParams:{thousand:",",precision:2},
+                            validator:["required","numeric"],
+                            bottomCalcParams:{precision:2}  ,
+                        },
+
+
+
+
+
                         {   title:"CDRate",
                             field:"cd",
                             headerVertical:true,

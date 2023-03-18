@@ -166,6 +166,9 @@ class ContractController extends Controller
                 $cd->pcspbundle2 = $cont['pcspbundle2'];
                 $cd->gdswt = $cont['gdswt'];
                 $cd->gdsprice = $cont['gdsprice'];
+                $cd->dtyrate = $cont['dtyrate'];
+                $cd->invsrate = $cont['invsrate'];
+
                 $cd->save();
             }
             DB::commit();
@@ -229,6 +232,9 @@ class ContractController extends Controller
                     $cds->pcspbundle2 = $cd->pcspbundle2;
                     $cds->gdswt = $cd->gdswt;
                     $cds->gdsprice = $cd->gdsprice;
+                    $cds->dtyrate = $cd->dtyrate;
+                    $cds->invsrate = $cd->invsrate;
+
                     $cds->save();
                 }else
                 {

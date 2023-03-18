@@ -141,9 +141,18 @@
             // alert(dynamicTable.getData())
             const data = dynamicTable.getData()
             //  Get Ratio after price/length/pcs update
+
+            //   var dtyrate = e.dtyrate
+            //   var dtyamtindollar = gdswt * dtyrate
+            //   var dtyamtinpkr = ( gdswt *  dtyrate  * conversionrate.value).toFixed(0),
+
+
             var amtinpkrtotal = 0
+            var dtyamtinpkrtotal = 0
+
             data.forEach(e => {
                 amtinpkrtotal += parseFloat(e.amtinpkr)
+                dtyamtinpkrtotal +=   conversionrate.value * e.dtyrate * e.gdswt
             });
             data.forEach(e => {
                 var pcs = e.pcs
@@ -151,26 +160,46 @@
                 var inkg = ((e.gdswt / e.pcs ) ).toFixed(3)
                 var length = e.length
                 var gdsprice = e.gdsprice
+                var dtyrate = e.dtyrate
 
                 var amtindollar = gdsprice * gdswt
-                var amtinpkr = conversionrate.value * amtindollar
-                var itmratio = amtinpkr / amtinpkrtotal * 100
-                var insuranceperitem = parseFloat(insurance.value) * itmratio / 100
-                var amountwithoutinsurance = ( amtindollar + insuranceperitem ) * parseFloat(conversionrate.value)
-                var onepercentdutypkr = amountwithoutinsurance * 0.01
-                var pricevaluecostsheet = parseFloat(onepercentdutypkr + amountwithoutinsurance)
+                var dtyamtindollar = dtyrate * gdswt
 
-                var cda = e.cd * pricevaluecostsheet / 100
-                var rda = e.rd * pricevaluecostsheet / 100
-                var acda = e.acd * pricevaluecostsheet / 100
-                var sta = (pricevaluecostsheet + cda + rda + acda) * e.st / 100
-                var asta = (pricevaluecostsheet + cda + rda + acda) * e.ast / 100
-                var ita =(pricevaluecostsheet + cda + sta + rda + acda + asta) * e.it / 100
-                var wsca = (pricevaluecostsheet * e.wse) /100
+
+
+                var amtinpkr = conversionrate.value * amtindollar
+                var dtyamtinpkr = conversionrate.value * dtyamtindollar
+
+                var itmratio = amtinpkr / amtinpkrtotal * 100
+                 var dtyitmratio = dtyamtinpkr / dtyamtinpkrtotal * 100
+
+
+                var insuranceperitem = parseFloat(insurance.value) * itmratio / 100
+                var dtyinsuranceperitem = parseFloat(insurance.value) * dtyitmratio / 100
+
+                var amountwithoutinsurance = ( amtindollar + insuranceperitem ) * parseFloat(conversionrate.value)
+                var dtyamountwithoutinsurance = ( dtyamtindollar + dtyinsuranceperitem ) * parseFloat(conversionrate.value)
+
+
+                var onepercentdutypkr = amountwithoutinsurance * 0.01
+                var dtyonepercentdutypkr = dtyamountwithoutinsurance * 0.01
+
+
+                var pricevaluecostsheet = parseFloat(onepercentdutypkr + amountwithoutinsurance)
+                var dtypricevaluecostsheet = parseFloat(dtyonepercentdutypkr + dtyamountwithoutinsurance)
+
+
+                var cda = e.cd * dtypricevaluecostsheet / 100
+                var rda = e.rd * dtypricevaluecostsheet / 100
+                var acda = e.acd * dtypricevaluecostsheet / 100
+                var sta = (dtypricevaluecostsheet + cda + rda + acda) * e.st / 100
+                var asta = (dtypricevaluecostsheet + cda + rda + acda) * e.ast / 100
+                var ita =(dtypricevaluecostsheet + cda + sta + rda + acda + asta) * e.it / 100
+                var wsca = (dtypricevaluecostsheet * e.wse) /100
                 var total = cda + rda + sta + acda + asta + ita + wsca
                 var perft = (e.perpc / e.length).toFixed(2)
-                var totallccostwexp = total + pricevaluecostsheet + (banktotal.value * itmratio / 100)
-                var otherexpenses = ( conversionrate.value * otherchrgs.value ) * itmratio / 100
+                var totallccostwexp = total + dtypricevaluecostsheet + (banktotal.value * dtyitmratio / 100)
+                var otherexpenses = ( conversionrate.value * otherchrgs.value ) * dtyitmratio / 100
                 var perpc = ((e.totallccostwexp+otherexpenses) / e.pcs).toFixed(2)
                 var perkg = (e.perpc / inkg).toFixed(2)
                 var qtyinfeet = (e.pcs * e.length).toFixed(2)
@@ -180,9 +209,11 @@
                 e.inkg = inkg
                 e.length = length
                 e.gdsprice = gdsprice
+                e.dtyrate = dtyrate
 
                 e.amtindollar = amtindollar
                 e.amtinpkr = amtinpkr
+                // e.dtyrate = dtyrate
                 e.itmratio = itmratio
                 e.insuranceperitem = insuranceperitem
                 e.amountwithoutinsurance = amountwithoutinsurance
@@ -309,6 +340,7 @@
                             validator:["required","numeric"],
                             formatterParams:{thousand:",",precision:2}
                         },
+
                     ]
                 },
                 {
@@ -327,6 +359,25 @@
                             bottomCalc:"sum",
                             bottomCalcFormatter:"money",
                         },
+                        {   title:"dutyrate",
+                            field:"dtyrate",
+                            headerVertical:true,
+                            editor:"number",
+                            cssClass:"bg-green-200 font-semibold",
+                            formatter:"money",
+
+                            responsive:0,
+                            formatterParams:{thousand:",",precision:2},
+                            validator:["required","numeric"],
+                            bottomCalcParams:{precision:2}  ,
+                        },
+
+
+
+
+
+
+
 
                         {   title:"CDRate",
                             field:"cd",

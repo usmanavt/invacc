@@ -311,6 +311,31 @@ dynamicTable = new Tabulator("#dynamicTable", {
             cellEdited:updateValues,
         },
 
+        {   title:"DutyRs($)",
+            field:"dtyrate",
+            editor:"number",
+            cssClass:"bg-green-200 font-semibold",
+            formatter:"money",
+            formatterParams:{thousand:",",precision:3},
+            validator:["required","numeric"],
+            cellEdited:updateValues,
+        },
+
+        {   title:"ComInvRs($)",
+            field:"invsrate",
+            editor:"number",
+            cssClass:"bg-green-200 font-semibold",
+            formatter:"money",
+            formatterParams:{thousand:",",precision:3},
+            validator:["required","numeric"],
+            cellEdited:updateValues,
+        },
+
+
+
+
+
+
         {   title:"Val($)",
             field:"gdspricetot",
             cssClass:"bg-gray-200 font-semibold",

@@ -141,6 +141,8 @@
                 pcspbundle2:0,
                 gdswt:0,
                 gdsprice:0,
+                dtyrate:0,
+                invsrate:0,
                 gdspricetot:0
             }
         ])
@@ -330,6 +332,32 @@
                 validator:["required","numeric"],
                 cellEdited:updateValues,
             },
+
+            {   title:"DutyRs($)",
+                field:"dtyrate",
+                editor:"number",
+                cssClass:"bg-green-200 font-semibold",
+                formatter:"money",
+                formatterParams:{thousand:",",precision:3},
+                validator:["required","numeric"],
+                cellEdited:updateValues,
+            },
+
+            {   title:"ComInvRs($)",
+                field:"invsrate",
+                editor:"number",
+                cssClass:"bg-green-200 font-semibold",
+                formatter:"money",
+                formatterParams:{thousand:",",precision:3},
+                validator:["required","numeric"],
+                cellEdited:updateValues,
+            },
+
+
+
+
+
+
 
             {   title:"Val($)",
                 field:"gdspricetot",

@@ -181,6 +181,7 @@ class CommercialInvoiceController extends Controller
                 $c->gdswt = $cid['gdswt'];
                 $c->inkg = $cid['inkg'];
                 $c->gdsprice = $cid['gdsprice'];
+                $c->dtyrate = $cid['dtyrate'];
                 $c->amtindollar = $cid['amtindollar'];
                 $c->amtinpkr = $cid['amtinpkr'];
 
@@ -248,7 +249,8 @@ class CommercialInvoiceController extends Controller
                 $cpd->pcs = $cid['pcs'];
                 $cpd->gdswt = $cid['gdswt'];
                 $cpd->inkg = $cid['inkg'];
-                $cpd->gdsprice = $cid['gdsprice'];
+                $cpd->gdsprice = $cid['dtyrate'];
+                // $cpd->dtyrate = $cid['dtyrate'];
                 $cpd->amtindollar = $cid['amtindollar'];
                 $cpd->amtinpkr = $cid['amtinpkr'];
 
@@ -433,6 +435,7 @@ class CommercialInvoiceController extends Controller
                 $c->inkg = $cid['inkg'];
                 $c->qtyinfeet = $cid['qtyinfeet'];
                 $c->gdsprice = $cid['gdsprice'];
+                $c->dtyrate = $cid['dtyrate'];
                 $c->amtindollar = $cid['amtindollar'];
                 $c->amtinpkr = $cid['amtinpkr'];
 
@@ -487,7 +490,8 @@ class CommercialInvoiceController extends Controller
                 $cpd->gdswt = $cid['gdswt'];
                 $cpd->inkg = $cid['inkg'];
                 $cpd->pcs_pending = $cid['pcs'];
-                $cpd->gdsprice = $cid['gdsprice'];
+                $cpd->gdsprice = $cid['dtyrate'];
+                // $cpd->dtyrate = $cid['dtyrate'];
                 $cpd->amtindollar = $cid['amtindollar'];
                 $cpd->amtinpkr = $cid['amtinpkr'];
 

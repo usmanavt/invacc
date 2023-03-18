@@ -126,6 +126,7 @@
                         {title: "amountwithoutinsurance",field: "amountwithoutinsurance" ,headerVertical:true,},
                         {title: "onepercentdutypkr",field: "onepercentdutypkr" ,headerVertical:true,},
                         {title: "pricevaluecostsheet",field: "pricevaluecostsheet" ,headerVertical:true,},
+                        {title: "DutyRate",field: "dtyrate" ,headerVertical:true,},
                         {title: "cda",field: "cda" ,headerVertical:true,},
                         {title: "sta",field: "sta" ,headerVertical:true,},
                         {title: "rda",field: "rda" ,headerVertical:true,},
