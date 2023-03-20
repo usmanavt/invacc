@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Models\BankTransaction;
+use App\Models\Clearance;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
@@ -23,4 +24,5 @@ class Bank extends Model
 
     /************** Relationships **************/
     public function bankTransactions() { return $this->hasMany(BankTransation::class); }
+    public function clearances() { return $this->hasMany(Clearance::class); }
 }

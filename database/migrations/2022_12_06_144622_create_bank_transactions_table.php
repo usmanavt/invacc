@@ -33,6 +33,7 @@ class CreateBankTransactionsTable extends Migration
         });
     }
 
+
     /**
      * Reverse the migrations.
      *

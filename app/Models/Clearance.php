@@ -5,6 +5,7 @@ namespace App\Models;
 use DateTimeInterface;
 use App\Models\Supplier;
 use App\Models\Clearance;
+use App\Models\Bank;
 use App\Models\CommercialInvoice;
 use App\Models\ClearancePendingDetails;
 use Illuminate\Database\Eloquent\Model;
@@ -34,5 +35,5 @@ class Clearance extends Model
     public function supplier(){return $this->belongsTo(Supplier::class);}
     public function clearancePendingDetails(){ return $this->hasMany(ClearancePendingDetails::class); }
     public function clearanceCompletedDetails(){ return $this->hasMany(ClearanceCompletedDetails::class); }
-
+    public function bank(){ return $this->belongsTo(Bank::class); }
 }

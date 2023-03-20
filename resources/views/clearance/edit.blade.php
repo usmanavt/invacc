@@ -27,13 +27,28 @@
                                 <x-input-text title="Invoice #" name="invoiceno" value="{{ $clearance->invoiceno }}" disabled class=""/>
                                 <x-input-numeric title="Conv. Rate" name="conversionrate" value="{{ $clearance->conversionrate }}" />
                                 <x-input-numeric title="Insurance" name="insurance"  value="{{ $clearance->insurance }}" />
-                            </div>
+
+                                </div>
                             <div class="grid grid-cols-12 gap-2 py-2 items-center">
                                 <x-input-date title="Mac. Date" name="machine_date" value="{{ $clearance->machine_date->format('Y-m-d') }}" disabled />
                                 <x-input-text title="Machine #" name="machineno" value="{{ $clearance->machineno }}" disabled />
                                 <x-input-date title="GD Date" name="gd_date" req required />
                                     <x-input-text title="GD #" name="gdno" value="" req required />
                             </div>
+
+                            <div class="grid grid-cols-12 gap-2 py-2 items-center">
+                                <label for="">Debit to </label>
+                                <select autocomplete="on" name="bank_id" required>
+                                    <option disabled selected value="">--Select</option>
+                                    @foreach ($banks as $bank)
+                                        <option value="{{ $bank->id }}">{{ $bank->title }}</option>
+                                    @endforeach
+                                </select>
+                                <x-input-date title="cheque date" name="cheque_date" req required />
+                                <x-input-numeric title="cheque no" name="cheque_no" req required    />
+
+                            </div>
+
 
                         </fieldset>
 
@@ -466,13 +481,6 @@
                             validator:["required","numeric"],
                             bottomCalcParams:{precision:2}  ,
                         },
-
-
-
-
-
-
-
 
                         {   title:"Item Ratio(%)",
                             field:"itmratio",

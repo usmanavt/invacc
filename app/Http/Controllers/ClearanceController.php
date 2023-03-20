@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Clearance;
+use App\Models\Bank;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\Models\ClearancePendingDetails;
@@ -14,7 +15,9 @@ class ClearanceController extends Controller
 {
 
     public function __construct(){ $this->middleware('auth'); }
-    public function index(){   return view('clearance.index'); }
+    public function index(){   return view('clearance.index')
+
+        ; }
 
     public function getMaster(Request $request)
     {
@@ -87,7 +90,9 @@ class ClearanceController extends Controller
 
     public function edit($id)
     {
-        return view('clearance.edit')->with('clearance',Clearance::where('id',$id)->first());
+        return view('clearance.edit')->with('clearance',Clearance::where('id',$id)->first())
+        ->with('banks',Bank::where('status',1)->get())
+        ;
     }
 
     public function update(Request $request)

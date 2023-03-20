@@ -548,7 +548,7 @@
                             responsive:0,
                             formatterParams:{thousand:",",precision:2},
                             validator:["required","numeric"],
-                            bottomCalcParams:{precision:2}  ,
+                            bottomCalcParams:{precision:6}  ,
                         },
                         {   title:"tmpcdaa",
                             field:"tmpcda",
