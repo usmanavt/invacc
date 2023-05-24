@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class AddColumnToSalesInvoicesDetails extends Migration
+class AddColumnToSaleInvoicesDetail extends Migration
 {
     /**
      * Run the migrations.
@@ -13,7 +13,7 @@ class AddColumnToSalesInvoicesDetails extends Migration
      */
     public function up()
     {
-        Schema::table('sales_invoices_details', function (Blueprint $table) {
+        Schema::table('sale_invoices_detail', function (Blueprint $table) {
             $table->smallInteger('locid')->default(0);
             $table->smallInteger('salunitid')->default(0);
         });
@@ -26,7 +26,7 @@ class AddColumnToSalesInvoicesDetails extends Migration
      */
     public function down()
     {
-        Schema::table('_sales_invoices_details', function (Blueprint $table) {
+        Schema::table('sale_invoices_detail', function (Blueprint $table) {
             //
         });
     }
