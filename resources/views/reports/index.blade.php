@@ -89,7 +89,7 @@
                             <fieldset class="border px-4 py-2 rounded w-full">
                                 <legend>Sub Head <span class="text-xs text-mute">shift & click to select multiple items</span></legend>
                                 <div class="flex justify-between py-1">
-                                    <select size="5" multiple class="h-full w-full" name="subhead_id[]" id="subhead_id" required class="w-full disabled:opacity-50" disabled>
+                                    <select size="12" multiple class="h-full w-full" name="subhead_id[]" id="subhead_id" required class="w-full disabled:opacity-50" disabled>
                                     </select>
                                 </div>
                             </fieldset>

@@ -120,7 +120,7 @@ class ContractController extends Controller
 
     public function create()
     {
-        return view('contracts.create')->with('suppliers',Supplier::select('id','title')->get());
+        return view('contracts.create')->with('suppliers',Supplier::select('id','title')->where('source_id',2)->get());
     }
 
     /** Function Complete*/
@@ -183,7 +183,9 @@ class ContractController extends Controller
 
     public function edit(Contract $contract)
     {
-        return view('contracts.edit')->with('suppliers',Supplier::select('id','title')->get())->with('contract',$contract)->with('cd',ContractDetails::where('contract_id',$contract->id)->get());
+
+        return view('contracts.edit')->with('suppliers',Supplier::select('id','title')->where('source_id',2)->get())->with('contract',$contract)
+        ->with('cd',ContractDetails::where('contract_id',$contract->id)->get());
     }
 
     public function update(Request $request, Contract $contract)

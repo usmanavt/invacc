@@ -1,7 +1,12 @@
 <x-app-layout>
+
+    @push('styles')
+    <link rel="stylesheet" href="{{ asset('css/tabulator_simple.min.css') }}">
+    @endpush
+
     <x-slot name="header">
         <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-            {{ __('Customers') }}
+            C u s t o m e r s
             {{-- Create New Customer --}}
             <a class="text-sm text-green-500 hover:text-gray-900" href="{{route('customers.create')}}">
                 {{-- Add Icon --}}
@@ -10,71 +15,117 @@
             </a>
         </h2>
     </x-slot>
+
+    {{-- Tabulator --}}
     <div class="py-6">
         <div class="max-w-7xl mx-auto sm:px-2 lg:px-4">
-            <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
+            <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg p-4">
 
-                {{-- Search Form --}}
-                <x-search >
-                    {{ route('customers.index') }}
-                </x-search>
-
-                {{-- Table --}}
-                <div class="flex flex-col">
-                    <div class="-my-2 overflow-x-auto">
-						<div class="px-4 bg-white border-b border-gray-200">
-                            <table class="min-w-full divided-y divide-gray-500">
-								<thead>
-									<tr>
-										<td class="px-6 py-3 bg-gray-100 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Name</td>
-										<td class="px-6 py-3 bg-gray-100 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Email</td>
-										<td class="px-6 py-3 bg-gray-100 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">O/Balance</td>
-										
-										<td class="px-6 py-3 bg-gray-100 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Address</td>
-										<td class="px-6 py-3 bg-gray-100 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">NTN.No</td>
-										<td class="px-6 py-3 bg-gray-100 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</td>
-										<td class="px-6 py-3 bg-gray-100 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Care of</td>
-										<td class="px-6 py-3 bg-gray-100 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</td>
-
-									</tr>
-								</thead>
-								<tbody class="bg-white divide-y divide-gray-200">
-									@foreach($customers as $customer)
-										<tr class="border-b">
-											<td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{$customer->title}}</td>
-											<td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{$customer->email}}</td>
-											<td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{$customer->obalance}}</td>
-											<td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{$customer->address}}</td>
-											<td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{$customer->ntn}}</td>
-									        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{$customer->status == 1 ? 'Active':'Deactive'}}</td>
-											<td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{$customer->care->title}}</td>
-											</td>
-											<td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-											    <a class="text-sm text-indigo-500 hover:text-gray-900" href="{{route('customers.edit',$customer->id)}}">
-                                                    <i class="fa fa-edit fa-fw"></i>
-                                                    Edit
-                                                </a>
-                                                <a class="text-sm text-indigo-500 hover:text-red-900" href="{{route('customers.destroy',$customer->id)}}" >
-                                                    <i class="fa fa-trash text-red-600 fa-fw "></i>
-                                                    Delete
-                                                </a>
-                                            </td>
-										</tr>
-									@endforeach.
-								</tbody>
-							</table>
-
-						</div>
-					</div>
-                </div>
-
-                {{-- Pagination --}}
-                <x-pagination>
-                    {{ $customers->links() }}
-                </x-pagination>
+                {{-- tabulator component --}}
+                <x-tabulator />
 
             </div>
         </div>
     </div>
+
+
+@push('scripts')
+<script src="{{ asset('js/tabulator.min.js') }}"></script>
+@endpush
+
+@push('scripts')
+<script>
+    var editIcon = function(cell, formatterParams, onRendered){ return "<i class='fa fa-edit text-blue-600'></i>";};
+    var lockIcon = function(cell, formatterParams, onRendered){ return "<i class='fa fa-lock text-red-600'></i>";};
+    var unlockIcon = function(cell, formatterParams, onRendered){ return "<i class='fa fa-lock text-green-600'></i>";};
+
+     const getMaster = @json(route('customers.master'));
+    // const getMaster = @json('suppliers.index');
+    let table;
+    let searchValue = "";
+
+    //  Table Filter
+    function dataFilter(element)
+    {
+        searchValue = element.value;
+        table.setData(getMaster,{search:searchValue});
+    }
+    // The Table for Items Modal
+    table = new Tabulator("#tableData", {
+        autoResize:true,
+        responsiveLayout:"collapse",
+        layout:"fitData",
+        index:"id",
+        placeholder:"No Data Available",
+        pagination:true,
+        paginationMode:"remote",
+        sortMode:"remote",
+        filterMode:"remote",
+        paginationSize:20,
+        paginationSizeSelector:[10,25,50,100],
+        ajaxParams: function(){
+            return {search:searchValue};
+        },
+        ajaxURL: getMaster,
+        ajaxContentType:"json",
+        initialSort:[ {column:"id", dir:"desc"} ],
+        height:"100%",
+
+        columns:[
+            // Master Data
+            {title:"Id", field:"id" , responsive:0},
+            {title:"Title", field:"title" , visible:true ,headerSortStartingDir:"asc" , responsive:0},
+            {title:"Address", field:"address2" , visible:true , responsive:0},
+             {title:"Tel.", field:"phoneoff" , visible:true , responsive:0},
+            {title:"Email", field:"email" ,  responsive:0},
+            {title:"NTN No", field:"ntn" ,  responsive:0},
+            {title:"S.Tax Regis. No", field:"stax" ,  responsive:0},
+            // {title:"Status", field:"status" ,  responsive:0,
+            //     formatter:function(cell){
+            //         if(cell.getData().status === 1)
+            //         {
+            //             table.hideColumn('unlock')
+            //             table.showColumn('lock')
+            //         }else{
+            //             table.showColumn('unlock')
+            //             table.hideColumn('lock')
+            //         }
+            //     return cell.getData().status === 1 ? 'Active':'Locked';
+            // }},
+            {title:"Edit" , formatter:editIcon, hozAlign:"center",headerSort:false, responsive:0,
+                cellClick:function(e, cell){
+                    window.open(window.location + "/" + cell.getData().id + "/edit" ,"_self");
+            }},
+            // {title:"Unlock",field:'unlock' , formatter:unlockIcon, hozAlign:"center",headerSort:false, responsive:0,
+            //     cellClick:function(e,cell){
+            //         if(confirm('Do you really want to Unlock this Bank?'))
+            //         {
+            //             window.open(window.location + "/" + cell.getData().id  ,"_self");
+            //         }
+            //     }
+            // },
+            // {title:"Lock",field:'lock' , formatter:lockIcon, hozAlign:"center",headerSort:false, responsive:0,
+            //     cellClick:function(e,cell){
+            //         if(confirm('Do you really want to Lock this Bank?'))
+            //         {
+            //             window.open(window.location + "/" + cell.getData().id  ,"_self");
+            //         }
+            //     }
+            // }
+
+        ],
+        // Extra Pagination Data for End Users
+        ajaxResponse:function(getDataUrl, params, response){
+            remaining = response.total;
+            let doc = document.getElementById("example-table-info");
+            doc.classList.add('font-weight-bold');
+            doc.innerText = `Displaying ${response.from} - ${response.to} out of ${remaining} records`;
+            return response;
+        },
+    })
+
+</script>
+@endpush
+
 </x-app-layout>
 

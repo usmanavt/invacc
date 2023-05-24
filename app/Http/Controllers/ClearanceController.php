@@ -113,8 +113,14 @@ class ClearanceController extends Controller
                 $dcn->gd_date = $request->gd_date;
                 $dcn->machine_date = $request->machine_date;
                 $dcn->machineno = $request->machineno;
+
+                // $dcn->cheque_date = $request->cheque_date;
+                // $dcn->cheque_no = $request->cheque_no;
+
+
                 $dcn->commercial_invoice_id = $request->commercial_invoice_id;
                 $dcn->invoiceno = $request->invoiceno;
+
 
                 // From Usman on 19-01-2023
                 $dcn->conrate = $request->conversionrate;
@@ -193,6 +199,12 @@ class ClearanceController extends Controller
 
             $clearance->gd_date = $request->gd_date;
             $clearance->gdno = $request->gdno;
+
+            $clearance->bank_id = $request->bank_id;
+            $clearance->cheque_date = $request->cheque_date;
+            $clearance->cheque_no = $request->cheque_no;
+
+
             $clearance->conversionrate = $request->conversionrate;
             $clearance->insurance = $request->insurance;
             $clearance->bankcharges = $request->bankcharges;
@@ -208,6 +220,7 @@ class ClearanceController extends Controller
             $clearance->otherchrgs = $request->otherchrgs;
             $clearance->total = $request->total;
             $clearance->cleared = 2;
+
             $clearance->save();
             DB::commit();
             Session::flash('success',"Clearance Updated");

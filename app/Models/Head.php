@@ -11,7 +11,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 class Head extends Model
 {
     use HasFactory;
-    protected $fillable = ['title','nature','status'];
+    protected $fillable = ['title','nature','status','forinput'];
 
     // Relationship
     public function subheads()

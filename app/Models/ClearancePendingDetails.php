@@ -9,6 +9,16 @@ use App\Models\CommercialInvoice;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
+
+
+
+
+
+
+
+
+
+
 class ClearancePendingDetails extends Model
 {
     use HasFactory;

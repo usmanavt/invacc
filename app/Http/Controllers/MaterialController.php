@@ -39,7 +39,8 @@ class MaterialController extends Controller
         $dir = $request->sort[0]["dir"];         //  Nested Array
         //  With Tables
         $materials = Material::where(function ($query) use ($search){
-            $query->where('title','LIKE','%' . $search . '%');
+            $query->where('title','LIKE','%' . $search . '%')
+            ->orWhere('dimension','LIKE','%' . $search . '%');
         })
         ->orderBy($field,$dir)
         ->paginate((int) $size);
@@ -63,7 +64,7 @@ class MaterialController extends Controller
     {
         // dd($request->all());
         $request->validate([
-            // 'title'=>'required|min:3|unique:materials'
+            //  'title'=>'required|min:3|unique:materials'
         ]);
 
         $title = $request->title;
@@ -93,11 +94,23 @@ class MaterialController extends Controller
                 $material->source = $request->source;
                 $material->sku = $request->sku;
                 $material->brand = $request->brand;
+
+                $material->qtykg = $request->qtykg;
+                $material->qtykgrt = $request->qtykgrt;
+
+                $material->qtypcs = $request->qtypcs;
+                $material->qtypcsrt = $request->qtypcsrt;
+
+                $material->qtyfeet = $request->qtyfeet;
+                $material->qtyfeetrt = $request->qtyfeetrt;
+
+
                 $material->save();
             }
             DB::commit();
             Session::flash('success','Material created');
-            return redirect()->back();
+               return redirect()->back();
+
         } catch (\Throwable $th) {
             DB::rollback();
             throw $th;
@@ -121,7 +134,7 @@ class MaterialController extends Controller
         // ->with('brands',Brand::all())
         // ->with('hscodes',Hscode::all())
         ->with('material',$material)
-        ->with('materials',Material::select('id','title')->get())
+        ->with('materials',Material::select('id','title','dimension')->get())
         ;
     }
 
@@ -159,6 +172,16 @@ class MaterialController extends Controller
             $material->source = $request->source;
             $material->sku = $request->sku;
             $material->brand = $request->brand;
+
+            $material->qtykg = $request->qtykg;
+            $material->qtykgrt = $request->qtykgrt;
+
+            $material->qtypcs = $request->qtypcs;
+            $material->qtypcsrt = $request->qtypcsrt;
+
+            $material->qtyfeet = $request->qtyfeet;
+            $material->qtyfeetrt = $request->qtyfeetrt;
+
             if($request->has('status'))
             {
                 $material->status = 1;

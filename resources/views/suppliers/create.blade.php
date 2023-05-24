@@ -18,7 +18,7 @@
                             <div class="flex flex-col md:flex-row justify-start flex-wrap gap-2 items-center">
                                 <div class="basis-0 md:basis-1/6">
                                     <x-label for="name" value="Name" />
-                                    <x-input id="name" class="bg-indigo-100" type="text" name="name" :value="old('name')"  />
+                                    <x-input id="name" class="bg-indigo-100" type="text" name="title" :value="old('name')"  />
                                     @if($errors->has('name'))<div class="text-red-500 text-xs">{{ $errors->first('name') }}</div>@endif
                                 </div>
                                 <div class="basis-0 md:basis-1/6">
@@ -78,8 +78,8 @@
                                 </div>
 
                                 <div class="basis-0 md:basis-3/5">
-                                    <x-label for="spaddress" :value="__('Supplier Address')" />
-                                    <x-input id="spaddress" class="bg-indigo-100 w-full" type="text" name="spaddress" :value="old('spaddress')"  />
+                                    <x-label for="address" :value="__('Supplier Address')" />
+                                    <x-input id="address" class="bg-indigo-100 w-full" type="text" name="address" :value="old('address')"  />
                                 </div>
 
                                 <div class="basis-0 md:basis-1/5 self-center pt-4">

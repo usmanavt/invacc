@@ -101,6 +101,66 @@
                                     @endforeach
                                 </select>
 
+
+                                <x-label for="Qty(Kg)" :value="__('Qty(Kg)')"/>
+                                <x-input class="bg-indigo-100" type="text" name="qtykg" value="{{ $material->qtykg }}"  />
+                                @if($errors->has('qtykg'))<div class="text-red-500 text-xs">{{ $errors->first('qtykg') }}</div>@endif
+
+                                <x-label for="Cost(Kg)" :value="__('Cost(Kg)')"/>
+                                <x-input class="bg-indigo-100" type="text" name="qtykgrt" value="{{ $material->qtykgrt }}"  />
+                                @if($errors->has('qtykgrt'))<div class="text-red-500 text-xs">{{ $errors->first('qtykgrt') }}</div>@endif
+
+
+
+                                <x-label for="Qty(pcs)" :value="__('Qty(pcs)')"/>
+                                <x-input class="bg-indigo-100" type="text" name="qtypcs" value="{{ $material->qtypcs }}"  />
+                                @if($errors->has('qtypcs'))<div class="text-red-500 text-xs">{{ $errors->first('qtypcs') }}</div>@endif
+
+                                <x-label for="Cost(pcs)" :value="__('Cost(pcs)')"/>
+                                <x-input class="bg-indigo-100" type="text" name="qtypcsrt" value="{{ $material->qtypcsrt }}"  />
+                                @if($errors->has('qtypcsrt'))<div class="text-red-500 text-xs">{{ $errors->first('qtypcsrt') }}</div>@endif
+
+
+
+                                <x-label for="Qty(feet)" :value="__('Qty(feet)')"/>
+                                <x-input class="bg-indigo-100" type="text" name="qtyfeet" value="{{ $material->qtyfeet }}"  />
+                                @if($errors->has('qtyfeet'))<div class="text-red-500 text-xs">{{ $errors->first('qtyfeet') }}</div>@endif
+
+                                <x-label for="Cost(feet)" :value="__('Cost(feet)')"/>
+                                <x-input class="bg-indigo-100" type="text" name="qtyfeetrt" value="{{ $material->qtyfeetrt }}"  />
+                                @if($errors->has('qtyfeetrt'))<div class="text-red-500 text-xs">{{ $errors->first('qtyfeetrt') }}</div>@endif
+
+
+                                {{-- <div >
+                                    <x-label for="Qty(Kg)" value="Qty(Kg)"/>
+                                    <x-input id="qtykg" class="bg-indigo-100" type="text" name="qtykg"  >
+
+                                    <x-label for="Cost(Kg)" value="Cost(Kg)"/>
+                                    <x-input id="qtykgrt" class="bg-indigo-100" type="text" name="qtykgrt"  >
+                                </div> --}}
+
+                                {{-- <div >
+                                    <x-label for="Qty(pcs)" value="Qty(pcs)"/>
+                                    <x-input id="qtypcs" class="bg-indigo-100" type="text" name="qtypcs" value="{{ $material->qtypcs }}"   >
+
+                                    <x-label for="Cost(pcs)" value="Cost(pcs)"/>
+                                    <x-input id="qtypcsrt" class="bg-indigo-100" type="text" name="qtypcsrt" value="{{ $material->qtypcsrt }}"   >
+                                </div>
+
+                                <div >
+                                    <x-label for="Qty(feet)" value="Qty(feet)"/>
+                                    <x-input id="qtyfeet" class="bg-indigo-100" type="text" name="qtyfeet" value="{{ $material->qtyfeet }}"   >
+
+                                    <x-label for="Cost(feet)" value="Cost(feet)"/>
+                                    <x-input id="qtyfeetrt" class="bg-indigo-100" type="text" name="qtyfeetrt" value="{{ $material->qtyfeetrt }}"   >
+                                </div> --}}
+
+
+
+
+
+
+
                                 <input class="checked:bg-blue-500 checked:border-blue-500 focus:outline-none" type="checkbox" name="status"
                                 @if ($material->status == 1)
                                     checked

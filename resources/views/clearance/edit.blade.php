@@ -38,7 +38,7 @@
 
                             <div class="grid grid-cols-12 gap-2 py-2 items-center">
                                 <label for="">Debit to </label>
-                                <select autocomplete="on" name="bank_id" required>
+                                <select autocomplete="on" name="bank_id" id="bank_id" required>
                                     <option disabled selected value="">--Select</option>
                                     @foreach ($banks as $bank)
                                         <option value="{{ $bank->id }}">{{ $bank->title }}</option>
@@ -591,6 +591,20 @@
             var machine_date = document.getElementById("machine_date")
             var gdno = document.getElementById("gdno")
             var gd_date = document.getElementById("gd_date")
+            var cheque_date = document.getElementById("cheque_date")
+            var cheque_no = document.getElementById("cheque_no")
+
+            var sid = document.getElementById("bank_id");
+            var bank_id = sid.options[sid.selectedIndex];
+
+            if(bank_id.value <= 0)
+            {
+                showSnackbar("Please select From Bank");
+                bank_id.focus();
+                return;
+            }
+
+
 
             if(gdno.value === ''){
                 showSnackbar("gdno # required ","error");
@@ -615,6 +629,12 @@
                 'machine_date' :machine_date.value,
                 'gdno' : gdno.value,
                 'gd_date' :gd_date.value,
+
+                'cheque_no' : cheque_no.value,
+                'cheque_date' :cheque_date.value,
+
+                'bank_id' :bank_id.value,
+
                 'invoicedate' : invoicedate.value,
                 'bankcharges' : parseFloat(bankcharges.value).toFixed(2),
                 'collofcustom' : parseFloat(collofcustom.value).toFixed(2),

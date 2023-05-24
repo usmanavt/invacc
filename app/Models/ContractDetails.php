@@ -20,8 +20,31 @@ class ContractDetails extends Model
     // protected $dates = false;
     // protected $primaryKey = 'invid';
     // public $incrementing = false; // If no autoincrement
+
+    protected $appends = ['ttpcs','gdspricetot'];
+
+
     protected $table= "contract_details";
     protected $fillable = ['contract_id','material_id','material_title','supplier_id','user_id','category_id','sku_id','dimension_id','source_id','brand_id','bundle1','pcspbundle1','bundle2','pcspbundle2','gdswt','gdsprice','category','sku','dimension','source','brand'];
+
+    public function getTtpcsAttribute()
+    {
+
+        $calc = ( $this->bundle1 * $this->pcspbundle1 )+( $this->bundle2 * $this->pcspbundle2 ) ;
+        return $calc;
+
+    }
+
+    public function getGdspricetotAttribute()
+    {
+
+
+        $calc = $this->gdswt * $this->gdsprice ;
+        return $calc;
+
+    }
+
+
 
     public function contract(){ return $this->belongsTo(Contract::class); }
     public function supplier(){ return $this->belongsTo(Supplier::class); }

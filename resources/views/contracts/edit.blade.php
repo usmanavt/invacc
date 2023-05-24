@@ -189,8 +189,9 @@ function pushDynamicData(data)
 
 var updateValues = (cell) => {
     var data = cell.getData();
+
     var sum = (Number(data.bundle1) * Number(data.pcspbundle1)) + (Number(data.bundle2) * Number(data.pcspbundle2))
-    var sum2 =  Number(data.gdswt) * Number(data.gdsprice)
+    var sum2 = Number(Number(data.gdswt) * Number(data.gdsprice))
     var row = cell.getRow();
     row.update({
         "ttpcs": sum,
@@ -202,13 +203,15 @@ var totalVal = function(values, data, calcParams){
     //values - array of column values
     //data - all table data
     //calcParams - params passed from the column definition object
-    // console.log(data);
+    console.log(values,data,calcParams)
     var calc = 0;
     values.forEach(function(value){
         calc += value ;
     });
     return calc;
 }
+
+
 
 //  Dynamic Table [User data]
 dynamicTable = new Tabulator("#dynamicTable", {
@@ -288,7 +291,7 @@ dynamicTable = new Tabulator("#dynamicTable", {
             {
                 return (cell.getData().bundle1 * cell.getData().pcspbundle1) + (cell.getData().bundle2 * cell.getData().pcspbundle2)
             },
-            bottomCalc:totalVal   },
+            bottomCalc:"sum"   },
 
         {   title:"Wt(MT)",
             field:"gdswt",
@@ -339,7 +342,7 @@ dynamicTable = new Tabulator("#dynamicTable", {
         {   title:"Val($)",
             field:"gdspricetot",
             cssClass:"bg-gray-200 font-semibold",
-            bottomCalc:totalVal,
+            bottomCalc:"sum",
             bottomCalcParams:{precision:3} ,
             formatter:"money",
             formatterParams:{
@@ -349,7 +352,7 @@ dynamicTable = new Tabulator("#dynamicTable", {
                 precision:3     },
             formatter:function(cell,row)
             {
-                return (cell.getData().gdswt * cell.getData().gdsprice)
+                return ( Number(cell.getData().gdswt) * Number(cell.getData().gdsprice))
             }
         },
 
@@ -434,7 +437,7 @@ function validateForm()
     .then( response => {
         if (response == 'success')
         {
-            window.open(window.location.origin + "/contracts","_self" );
+            // window.open(window.location.origin + "/contracts","_self" );
         }
     })
     .catch(error => {

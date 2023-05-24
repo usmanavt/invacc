@@ -33,7 +33,7 @@
                         <x-slot name="content">
                             {{-- <x-dropdown-link href="{{ route('mastersetup') }}">Master</x-dropdown-link> --}}
                             <x-dropdown-link href="{{ route('categories.index') }}">Categories</x-dropdown-link>
-                            <x-dropdown-link href="{{ route('skus.index') }}">Skus</x-dropdown-link>
+                            {{-- <x-dropdown-link href="{{ route('skus.index') }}">Skus</x-dropdown-link> --}}
                             <x-dropdown-link href="{{ route('dimensions.index') }}">Dimensions</x-dropdown-link>
                             <x-dropdown-link href="{{ route('brands.index') }}">Brands</x-dropdown-link>
                             <x-dropdown-link href="{{ route('sources.index') }}">Sources</x-dropdown-link>
@@ -77,9 +77,11 @@
                             {{-- <x-dropdown-link href="{{ route('transaction') }}">Transaction</x-dropdown-link> --}}
                             <x-dropdown-link href="{{ route('contracts.index') }}">Contracts</x-dropdown-link>
                             <x-dropdown-link href="{{ route('cis.index') }}">Comm Invoices Imported</x-dropdown-link>
-                            <x-dropdown-link href="{{ route('cisl.index') }}">Comm Invoices Local</x-dropdown-link>
+                            {{-- <x-dropdown-link href="{{ route('cisl.index') }}">Comm Invoices Local</x-dropdown-link> --}}
+                            <x-dropdown-link href="{{ route('localpurchase.index') }}">Comm Invoices Local</x-dropdown-link>
                             <x-dropdown-link href="{{ route('recivings.index') }}">Goods Reciving</x-dropdown-link>
                             <x-dropdown-link href="{{ route('clearances.index') }}">Duty Clearance</x-dropdown-link>
+                            <x-dropdown-link href="{{ route('sales.index') }}">Sales Invoice</x-dropdown-link>
                             <x-dropdown-link href="{{ route('bankpayments.index') }}">Bank Payments</x-dropdown-link>
                             <x-dropdown-link href="{{ route('bankrecivings.index') }}">Bank Recivings</x-dropdown-link>
                             <x-dropdown-link href="{{ route('cashpayments.index') }}">Cash Payments</x-dropdown-link>
@@ -89,7 +91,52 @@
                     </x-dropdown>
                 </div>
 
+
                 {{-- Reports --}}
+                <div class="hidden sm:flex sm:items-center sm:ml-6">
+                    <x-dropdown align="left" width="48">
+                        <x-slot name="trigger">
+                            <button
+                                class="flex items-center text-sm font-medium text-gray-500 hover:text-gray-700 hover:border-gray-300 focus:outline-none focus:text-gray-700 focus:border-gray-300 transition duration-150 ease-in-out">
+                                <x-dropdown-link href="{{ route('transaction') }}">Reports</x-dropdown-link>
+
+                                <div class="ml-1">
+                                    <svg class="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg"
+                                        viewBox="0 0 20 20">
+                                        <path fill-rule="evenodd"
+                                            d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
+                                            clip-rule="evenodd" />
+                                    </svg>
+                                </div>
+                            </button>
+                        </x-slot>
+
+                        <x-slot name="content">
+
+                            {{-- <x-dropdown-link href="{{ route('transaction') }}">Transaction</x-dropdown-link> --}}
+
+                            <x-dropdown-link href="{{ route('purrpt.index') }}">Purchase</x-dropdown-link>
+                            <x-dropdown-link href="{{ route('dutyclearance.index') }}">Duty Clearance</x-dropdown-link>
+                            <x-dropdown-link href="{{ route('salerpt.index') }}">Sale</x-dropdown-link>
+                            <x-dropdown-link href="{{ route('reports.index') }}">Financial</x-dropdown-link>
+                            <x-dropdown-link href="{{ route('stockledgers.index') }}">Material Stock Ledgers</x-dropdown-link>
+
+
+                            {{-- <x-dropdown-link href="{{ route('cisl.index') }}">Comm Invoices Local</x-dropdown-link> --}}
+                            {{-- <x-dropdown-link href="{{ route('localpurchase.index') }}">Comm Invoices Local</x-dropdown-link>
+                            <x-dropdown-link href="{{ route('recivings.index') }}">Goods Reciving</x-dropdown-link>
+                            <x-dropdown-link href="{{ route('clearances.index') }}">Duty Clearance</x-dropdown-link>
+                            <x-dropdown-link href="{{ route('sales.index') }}">Sales Invoice</x-dropdown-link>
+                            <x-dropdown-link href="{{ route('bankpayments.index') }}">Bank Payments</x-dropdown-link>
+                            <x-dropdown-link href="{{ route('bankrecivings.index') }}">Bank Recivings</x-dropdown-link>
+                            <x-dropdown-link href="{{ route('cashpayments.index') }}">Cash Payments</x-dropdown-link>
+                            <x-dropdown-link href="{{ route('cashrecivings.index') }}">Cash Receiving</x-dropdown-link>
+                            <x-dropdown-link href="{{ route('jv.index') }}">Journal Vouchers</x-dropdown-link> --}}
+                        </x-slot>
+                    </x-dropdown>
+                </div>
+
+
                 <div class="hidden sm:flex sm:items-center sm:ml-6">
                     {{-- <x-dropdown align="left" width="48">
                         <x-slot name="trigger">
@@ -109,7 +156,7 @@
                         </x-slot>
 
                     </x-dropdown> --}}
-                    <x-nav-link href="{{ route('reports.index') }}">Reports</x-nav-link>
+                    {{-- <x-nav-link href="{{ route('reports.index') }}">Reports</x-nav-link> --}}
                 </div>
 
             </div>

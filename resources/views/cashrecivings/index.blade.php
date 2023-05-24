@@ -148,7 +148,8 @@
             supplier.removeAttribute('required','')
             subhead.setAttribute('disabled','')
             subhead.removeAttribute('required','')
-        }else {
+        }
+        else {
            customer.setAttribute('disabled','')
            customer.removeAttribute('required','')
            supplier.setAttribute('disabled','')

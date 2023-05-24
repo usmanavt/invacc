@@ -16,7 +16,7 @@ class Subhead extends Model
 
     public function getHeadTitleAttribute()
     {
-        // return $this->head->title;
+         return $this->head->title;
     }
 
     //  Relationship

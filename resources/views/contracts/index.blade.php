@@ -20,7 +20,7 @@
     <div class="py-6">
         <div class="max-w-7xl mx-auto sm:px-2 lg:px-4">
             <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg p-4">
-                
+
                 {{-- tabulator component --}}
                 <x-tabulator />
 
@@ -28,7 +28,7 @@
         </div>
     </div>
 
-    
+
 @push('scripts')
 <script src="{{ asset('js/tabulator.min.js') }}"></script>
 @endpush
@@ -55,23 +55,23 @@
     table = new Tabulator("#tableData", {
         autoResize:true,
         responsiveLayout:"collapse",
-        layout:"fitData",    	
-        index:"id",                                 
-        placeholder:"No Data Available",            
-        pagination:true,                            
-        paginationMode:"remote",                    
+        layout:"fitData",
+        index:"id",
+        placeholder:"No Data Available",
+        pagination:true,
+        paginationMode:"remote",
         sortMode:"remote",
         filterMode:"remote",
-        paginationSize:20,                      
-        paginationSizeSelector:[10,25,50,100],  
+        paginationSize:20,
+        paginationSizeSelector:[10,25,50,100],
         ajaxParams: function(){
             return {search:searchValue};
         },
         ajaxURL: getMaster,
-        ajaxContentType:"json", 
+        ajaxContentType:"json",
         initialSort:[ {column:"id", dir:"desc"} ],
         height:"100%",
-                    
+
         columns:[
             //  Detail Data
             {formatter:hideIcon, hozAlign:"center", title:"Details",headerSort:false, cellClick:function(e, row, formatterParams){
@@ -120,7 +120,7 @@
                         //     formatter:function(cell, onRendered){
                         //         return (cell.getRow().getData().type === 1 && cell.getRow().getData().locked === 0) ? "<i class='fa fa-thumbs-up text-green-500'></i>":"";
                         //     },
-                        //     cellClick:function(e, cell){ 
+                        //     cellClick:function(e, cell){
                         //         (cell.getRow().getData().type === 2 || cell.getRow().getData().locked == 1) ? "":
                         //         //  Fetch the Data from Rest Api
                         //         fetch(window.location + `/approveall?gp=2&id=${cell.getRow().getData().id}`,{
@@ -151,17 +151,17 @@
             {title:"Supplier", field:"supplier.title" ,  responsive:0},
             {title:"Created By", field:"user.name" ,  responsive:0},
             {title:"Edit" , formatter:editIcon, hozAlign:"center",headerSort:false, responsive:0,
-                cellClick:function(e, cell){ 
+                cellClick:function(e, cell){
                     window.open(window.location + "/" + cell.getRow().getData().id + "/edit" ,"_self");
                 }
             },
             {title:"Delete" , formatter:deleteIcon, hozAlign:"center",headerSort:false, responsive:0,
-                cellClick:function(e, cell){ 
+                cellClick:function(e, cell){
                     window.open(window.location + "/" + cell.getRow().getData().id  ,"_self");
                 }
             },
             {title:"Print" , formatter:printIcon, hozAlign:"center",headerSort:false, responsive:0,
-                cellClick:function(e, cell){ 
+                cellClick:function(e, cell){
                     window.open(window.location + "/" + cell.getRow().getData().id + "/printcontract"  ,"_self");
                 }
             },

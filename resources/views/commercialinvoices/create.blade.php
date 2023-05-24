@@ -260,7 +260,8 @@
                 // console.log(obj.bundle1 , obj.pcspbundle1 ,obj.bundle2 , obj.pcspbundle2);
                 var vpcs = ((obj.bundle1 * obj.pcspbundle1) + (obj.bundle2 * obj.pcspbundle2)).toFixed(2)
                 // console.log(vpcs);
-                var vwinkg = ((obj.gdswt / vpcs ) * 1000).toFixed(3)
+                // var vwinkg = ((obj.gdswt / vpcs ) * 1000).toFixed(3)
+                var vwinkg = ((obj.gdswt / vpcs ) ).toFixed(3)
                 dynamicTable.addData([
                     {
                         id :                obj.id,
@@ -276,12 +277,16 @@
                         brand_id :          obj.brand_id,
 
                         pcs :               vpcs,
-                        gdswt :             obj.gdswt * 1000,
+                        // gdswt :             obj.gdswt * 1000,
+                        gdswt :             obj.gdswt ,
                         inkg :              vwinkg,
                         length :            0,
 
-                        gdsprice :          obj.gdsprice/1000,
-                        dtyrate :          obj.dtyrate/1000,
+                        // gdsprice :          obj.gdsprice/1000,
+                        gdsprice :          obj.gdsprice,
+
+                        // dtyrate :          obj.dtyrate/1000,
+                        dtyrate :          obj.dtyrate,
 
                         amtindollar :       obj.gdswt * obj.gdsprice ,
                         dtyamtindollar :       obj.gdswt * obj.dtyrate,
@@ -542,7 +547,7 @@
                         {   title:"dutyrate",
                             field:"dtyrate",
                             headerVertical:true,
-                            editor:"number",
+                            // editor:"number",
                             cssClass:"bg-green-200 font-semibold",
                             formatter:"money",
                             responsive:0,

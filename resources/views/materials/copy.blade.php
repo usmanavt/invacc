@@ -61,9 +61,39 @@
                             <input type="hidden" name="brand_id" value="{{ $material->brand_id }}">
                             <input type="hidden" name="brand" value="{{ $material->brand }}">
 
-                            {{-- <x-label for="" value="hscode"/>
-                            <x-input class="" type="text"   value="{{ $material->hscodes->hscode }}" disabled /> --}}
+                            <x-label for="" value="hscode"/>
+                            <x-input class="" type="text"   value="{{ $material->hscodes->hscode }}" disabled />
                                 <input type="hidden" name="hscode_id" value="{{ $material->hscode_id }}">
+
+                                <div >
+                                    <x-label for="Qty(Kg)" value="Qty(Kg)"/>
+                                    <x-input id="qtykg" class="bg-indigo-100" type="text" name="qtykg" :value="old('qtykg')"   />
+
+                                    <x-label for="Cost(Kg)" value="Cost(Kg)"/>
+                                    <x-input id="qtykgrt" class="bg-indigo-100" type="text" name="qtykgrt" :value="old('qtykgrt')"   />
+                                </div>
+
+                                <div >
+                                    <x-label for="Qty(pcs)" value="Qty(pcs)"/>
+                                    <x-input id="qtypcs" class="bg-indigo-100" type="text" name="qtypcs" :value="old('qtypcs')"   />
+
+                                    <x-label for="Cost(pcs)" value="Cost(pcs)"/>
+                                    <x-input id="qtypcsrt" class="bg-indigo-100" type="text" name="qtypcsrt" :value="old('qtypcsrt')"   />
+                                </div>
+
+                                <div >
+                                    <x-label for="Qty(feet)" value="Qty(feet)"/>
+                                    <x-input id="qtyfeet" class="bg-indigo-100" type="text" name="qtyfeet" :value="old('qtyfeet')"   />
+
+                                    <x-label for="Cost(feet)" value="Cost(feet)"/>
+                                    <x-input id="qtyfeetrt" class="bg-indigo-100" type="text" name="qtyfeetrt" :value="old('qtyfeetrt')"   />
+                                </div>
+
+
+
+
+
+
 
                             <input class="checked:bg-blue-500 checked:border-blue-500 focus:outline-none" type="checkbox" name="status"
                             @if ($material->status == 1)
@@ -89,11 +119,15 @@
                         <div class="ml-4 pt-1 border border-slate-300 w-full p-2">
                         <span class="text-indigo-500 border-b">Existing Materials</span>
                         <ul class="h-auto overflow-y-scroll">
-                            @foreach ($materials as $material)
+                            {{-- @foreach ($materials as $material)
                                 <li>{{ $material->title }} | {{ $material->dimension }}</li>
-                            @endforeach
+                            @endforeach --}}
+                            <ul class="h-auto overflow-y-scroll">
+                                @foreach ($materials as $material)
+                                    <li>{{ $material->title }} | {{ $material->dimension }}</li>
+                                @endforeach
+                            </ul>
                         </ul>
-
                     </div>
                     </div>
                 </div>

@@ -16,6 +16,10 @@
                             <i class="fa-solid fa-truck-field fa-2xl"></i> Contracts
                         </a>
 
+                        <a class="basis-0 w-full md:basis-1/4 bg-blue-500 hover:bg-blue-700 text-white px-2 py-4 rounded-lg shadow-lg"  href="{{ route('localpurchase.index') }}" >
+                            <i class="fa-solid fa-truck-field fa-2xl"></i> Local Purchase
+                        </a>
+
                         <a  class="basis-0 w-full md:basis-1/4 bg-blue-500 hover:bg-blue-700 text-white px-2 py-4 rounded-lg shadow-lg" href="{{ route('cis.index') }}" >
                             <i class="fa-solid fa-person-military-pointing fa-2xl"></i> Comm Invoice
                         </a>

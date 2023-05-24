@@ -12,6 +12,9 @@ class CommercialInvoiceDetails extends Model
     use HasFactory;
     public $appends = ['material_title'];
 
+
+
+
     public function getMaterialTitleAttribute()
     {
         return $this->material->title;

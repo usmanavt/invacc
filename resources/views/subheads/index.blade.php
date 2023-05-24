@@ -22,7 +22,7 @@
                         <form action="{{ route('subheads.store') }}" method="post" >
                             @csrf
                             <p class="font-semibold pb-6">Create New Acct Head</p>
-                            <x-label for="head_id" :value="__('Source')" />
+                            <x-label for="head_id" :value="__('Master Head')" />
                             <select autocomplete="on" required name="head_id" id="head_id" class="bg-indigo-100">
                                 <option value="" selected>--Account Head</option>
                                 @foreach($heads as $head)

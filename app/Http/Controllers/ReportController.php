@@ -16,7 +16,7 @@ class ReportController extends Controller
     {
         return view('reports.index')
         ->with('heads',Head::where('status',1)->get())
-        ->with('glheads',Head::where('status',1)->whereIn('id',[1,2,30,36,38])->get())
+        ->with('glheads',Head::where('status',1)->whereIn('id',[1,2,30,31,36,37,38])->get())
         ->with('vchrheads',Head::where('status',1)->whereIn('id',[6,7,8,9])->get())
         ->with('subheads',DB::table('VwCategory')->select('*')->get()->toArray())
         // ->with('vchrcats',DB::table('vwvouchercategory')->select('*')->get()->toArray())
@@ -62,7 +62,7 @@ class ReportController extends Controller
         $mpdf->debug = true;
         //  Get Report
         if($report_type === 'tpl'){
-            $data = DB::select('call ProcTPL(?,?)',array($fromdate,$todate));
+            $data = DB::select('call ProcTPL(?,?,1)',array($fromdate,$todate));
             if(!$data)
             {
                 Session::flash('info','No data available');
@@ -123,7 +123,7 @@ class ReportController extends Controller
                 $mpdf->SetHTMLFooter('
                 <table width="100%" style="border-top:1px solid gray">
                     <tr>
-                        <td width="33%">{DATE j-m-Y}</td>
+                        <td width="33%">{DATE d-m-Y}</td>
                         <td width="33%" align="center">{PAGENO}/{nbpg}</td>
                         <td width="33%" style="text-align: right;">' . $filename . '</td>
                     </tr>

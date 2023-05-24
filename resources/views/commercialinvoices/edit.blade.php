@@ -233,7 +233,7 @@
                 e.totallccostwexp = totallccostwexp
                 e.perpc = perpc
                 e.perft = (perpc / length )
-                e.otherexpenses = e.otherexpenses
+                e.otherexpenses = otherexpenses
                 e.qtyinfeet = qtyinfeet
                 // e.inkg = inkg
             })

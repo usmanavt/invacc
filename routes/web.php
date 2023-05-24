@@ -27,6 +27,14 @@ use App\Http\Controllers\CommercialInvoiceController;
 use App\Http\Controllers\CommercialInvoiceControllerlocal;
 use App\Http\Controllers\CashPaymentController;
 use App\Http\Controllers\CashRecivingsController;
+use App\Http\Controllers\LocalPurchaseController;
+use App\Http\Controllers\SalesInvoicesController;
+use App\Http\Controllers\PurchaseRptController;
+use App\Http\Controllers\SaleRptController;
+use App\Http\Controllers\StockLedgerController;
+
+
+
 
 
 Route::get('/', function () {
@@ -39,9 +47,32 @@ Route::get('/mastersetup', function () {
 Route::get('/transactons', function () {
     return view('transaction');
 })->middleware(['auth'])->name('transaction');
+
+
+
+// Financial Report
 Route::get('reports',[ReportController::class, 'index'])->name('reports.index');
 Route::get('vouchers',[ReportController::class, 'vouchers'])->name('reports.vouchers');
 Route::post('report/fetch',[ReportController::class, 'fetch'])->name('reports.fetch');
+
+// Purchase Reports
+Route::get('purrpt',[PurchaseRptController::class, 'index'])->name('purrpt.index');
+Route::get('xyz',[PurchaseRptController::class, 'xyz'])->name('purrpt.xyz');
+Route::post('purrpt/fetch',[PurchaseRptController::class, 'fetch'])->name('purrpt.fetch');
+
+// dutyclearance Reports
+Route::get('dutyclearance',[DutyRptController::class, 'index'])->name('dutyclearance.index');
+// Route::get('xyz',[PurchaseRptController::class, 'xyz'])->name('purrpt.xyz');
+// Route::post('purrpt/fetch',[PurchaseRptController::class, 'fetch'])->name('purrpt.fetch');
+
+// Sales Reports
+Route::get('salerpt',[SaleRptController::class, 'index'])->name('salerpt.index');
+Route::post('salerpt/fetch',[SaleRptController::class, 'fetch'])->name('salerpt.fetch');
+
+// Material Stock Reports
+ Route::get('stockledgers',[StockLedgerController::class, 'index'])->name('stockledgers.index');
+ Route::post('stockledgers/fetch',[StockLedgerController::class, 'fetch'])->name('stockledgers.fetch');
+
 
 
 require __DIR__.'/auth.php';
@@ -62,8 +93,13 @@ Route::resource('brands',BrandController::class)->except(['create','show','destr
 Route::get('/sources/master', [SourceController::class, 'getMaster'])->name('sources.master');
 Route::resource('sources',SourceController::class);
 //  Supplier Controller
+Route::get('/suppliers/master', [SupplierController::class, 'getMaster'])->name('suppliers.master');
 Route::resource('suppliers', SupplierController::class);
+
+
+
 //  Customer Controller
+Route::get('/customers/master', [CustomerController::class, 'getMaster'])->name('customers.master');
 Route::resource('customers', CustomerController::class);
 //  Location Controller
 Route::get('/locations/master', [LocationController::class, 'getMaster'])->name('locations.master');
@@ -100,6 +136,25 @@ Route::get('/cis/getCisMaster', [CommercialInvoiceController::class, 'getMaster'
 Route::get('/cis/getCisDetails', [CommercialInvoiceController::class, 'getDetails'])->name('cis.details');
 Route::get('/cis/getContractDetails', [CommercialInvoiceController::class, 'getContractDetails'])->name('cis.condet');
 Route::resource('cis', CommercialInvoiceController::class);
+
+//  CommercialInvoice - LOCAL NEW
+
+Route::get('/localpurchase/getPurchaseMaster', [LocalPurchaseController::class, 'getMaster'])->name('localpurchase.master');
+Route::get('/localpurchase/getPurchaseDetails', [LocalPurchaseController::class, 'getDetail'])->name('localpurchase.details');
+Route::resource('localpurchase', LocalPurchaseController::class);
+
+
+//  Sales Invoices
+
+Route::get('/sales/getSalesMaster', [SalesInvoicesController::class, 'getMaster'])->name('sales.master');
+Route::get('/sales/getSalesDetails', [SalesInvoicesController::class, 'getDetail'])->name('sales.details');
+Route::resource('sales', SalesInvoicesController::class);
+
+
+
+
+
+
 
 //  CommercialInvoice - LOCAL
 Route::get('/cisl/getCisMaster', [CommercialInvoiceControllerlocal::class, 'getMaster'])->name('cisl.master');

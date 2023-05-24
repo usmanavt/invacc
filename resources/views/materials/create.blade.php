@@ -12,7 +12,7 @@
                 {{-- Create Form --}}
                 <div class="px-6 py-2" >
 
-                    <div class="flex gap-8">
+                    <div class="flex gap-4">
                         {{-- Form Data --}}
                         <div class="flex flex-col justify-start items-center">
                             <form action="{{ route('materials.store') }}" method="post" >
@@ -26,11 +26,11 @@
 
 
                                 <x-label for="title" value="Title"/>
-                                <x-input id="title" class="bg-indigo-100 w-96" type="text" name="title" :value="old('title')"  required minlength="3"/>
+                                <x-input id="title" class="bg-indigo-100 w-96" type="text" name="title" id="title"  value="{{request()->input('title')}}"   />
                                 @if($errors->has('title'))<div class="text-red-500 text-xs">{{ $errors->first('title') }}</div>@endif
 
                                 <x-label for="nick" value="Nick"/>
-                                <x-input id="nick" class="bg-indigo-100" type="text" name="nick" :value="old('nick')"  required minlength="3"/>
+                                <x-input id="nick" class="bg-indigo-100" type="text" name="nick" :value="old('nick')"  />
                                 @if($errors->has('nick'))<div class="text-red-500 text-xs">{{ $errors->first('nick') }}</div>@endif
 
 
@@ -83,6 +83,30 @@
                                     @endforeach
                                 </select>
 
+                                <div >
+                                    <x-label for="Qty(Kg)" value="Qty(Kg)"/>
+                                    <x-input id="qtykg" class="bg-indigo-100" type="text" name="qtykg" :value="old('qtykg')"   />
+
+                                    <x-label for="Cost(Kg)" value="Cost(Kg)"/>
+                                    <x-input id="qtykgrt" class="bg-indigo-100" type="text" name="qtykgrt" :value="old('qtykgrt')"   />
+                                </div>
+
+                                <div >
+                                    <x-label for="Qty(pcs)" value="Qty(pcs)"/>
+                                    <x-input id="qtypcs" class="bg-indigo-100" type="text" name="qtypcs" :value="old('qtypcs')"   />
+
+                                    <x-label for="Cost(pcs)" value="Cost(pcs)"/>
+                                    <x-input id="qtypcsrt" class="bg-indigo-100" type="text" name="qtypcsrt" :value="old('qtypcsrt')"   />
+                                </div>
+
+                                <div >
+                                    <x-label for="Qty(feet)" value="Qty(feet)"/>
+                                    <x-input id="qtyfeet" class="bg-indigo-100" type="text" name="qtyfeet" :value="old('qtyfeet')"   />
+
+                                    <x-label for="Cost(feet)" value="Cost(feet)"/>
+                                    <x-input id="qtyfeetrt" class="bg-indigo-100" type="text" name="qtyfeetrt" :value="old('qtyfeetrt')"   />
+                                </div>
+
                                 <div class="mt-2">
                                     <button class="inline-flex items-center px-4 py-2 bg-green-500 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-green-700 active:bg-green-900 focus:outline-none focus:border-green-900 focus:ring ring-gray-300 disabled:opacity-25 transition ease-in-out duration-150">
                                         <i class="fa fa-save fa-fw"></i>
@@ -97,6 +121,7 @@
                             <ul class="h-auto overflow-y-scroll">
                                 @foreach ($materials as $material)
                                     <li>{{ $material->title }} | {{ $material->dimension }}</li>
+
                                 @endforeach
                             </ul>
                         </div>

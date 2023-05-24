@@ -15,7 +15,8 @@ class SubheadController extends Controller
 
     public function index(Request $request)
     {
-        return view('subheads.index')->with('heads',Head::all());
+        // return view('subheads.index')->with('heads',Head::all());
+        return view('subheads.index')->with('heads',Head::where('forinput',1)->get());
     }
 
     public function getMaster(Request $request)
@@ -53,12 +54,13 @@ class SubheadController extends Controller
             }else {
                 $subhead->ob = 0;
             }
-            if($request->has('status'))
-            {
-                $subhead->status = 1;
-            }else {
-                $subhead->status = 0;
-            }
+            $subhead->status = 1;
+            // if($request->has('status'))
+            // {
+            //     $subhead->status = 1;
+            // }else {
+            //     $subhead->status = 0;
+            // }
             $subhead->save();
             DB::commit();
             Session::flash('success','Subhead opened');
@@ -71,7 +73,8 @@ class SubheadController extends Controller
 
     public function edit(Subhead $subhead)
     {
-        return view('subheads.edit')->with('heads',Head::all())->with('subhead',$subhead);
+        return view('subheads.edit')->with('heads',Head::where('forinput',1)->get())->with('subhead',$subhead);
+        // with('heads',Head::all())->with('subhead',$subhead);
     }
 
     public function update(Subhead $subhead,Request $request)

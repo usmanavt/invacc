@@ -23,9 +23,32 @@ class SupplierController extends Controller
             ->orWhere('address','LIKE',"%$search%");
         })
         ->orderBy('id','desc')
-        ->paginate(5);
+        ->paginate(4);
         return view('suppliers.index')->with('suppliers',$suppliers);
     }
+
+    public function getMaster(Request $request)
+    {
+        $search = $request->search;
+        $size = $request->size;
+        $field = $request->sort[0]["field"];     //  Nested Array
+        $dir = $request->sort[0]["dir"];         //  Nested Array
+        //  With Tables
+        $suppliers = Supplier::where(function ($query) use ($search){
+            $query->where('title','LIKE','%' . $search . '%')
+            ->orWhere('address','LIKE','%' . $search . '%');
+
+        })
+        // ->with('Source:id,title')
+        ->orderBy($field,$dir)
+        ->paginate((int) $size);
+        return $suppliers;
+    }
+
+
+
+
+
 
     public function create()
     {
@@ -36,10 +59,12 @@ class SupplierController extends Controller
     {
         $request->validate(
         [
-            'title'=>'required|min:3|unique:suppliers'
+             'title'=>'required|min:3|unique:suppliers'
         ]);
-        
+
         DB::beginTransaction();
+        //  dd($request->all());
+
         try {
             $supplier = new Supplier();
             $supplier->title = $request->title;
@@ -83,7 +108,7 @@ class SupplierController extends Controller
     {
         $request->validate(
             [
-                'title'=>'required|min:3|unique:suppliers,title,'.$supplier->id 
+                // 'title'=>'required|min:3|unique:suppliers,title,'.$supplier->id
             ]);
         DB::beginTransaction();
         try {
@@ -101,7 +126,7 @@ class SupplierController extends Controller
                 $supplier->status = 0;
             }
             $supplier->obalance = $request->obalance;
-            $supplier->ntn = $request->ntnno;
+            $supplier->ntn = $request->ntn;
             $supplier->stax = $request->stax;
             $supplier->source_id = $request->source_id;
             $supplier->save();
@@ -116,6 +141,6 @@ class SupplierController extends Controller
 
     public function destroy(Supplier $supplier)
     {
-        
+
     }
 }
