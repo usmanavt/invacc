@@ -227,7 +227,7 @@ dynamicTable = new Tabulator("#dynamicTable", {
                 // disableSubmitButton();
             }
         },
-        {title:"Id",                field:"material_id",    cssClass:"bg-gray-200 font-semibold"},
+        {title:"Id",                field:"id",    cssClass:"bg-gray-200 font-semibold"},
         {title:"Material",          field:"material_title", cssClass:"bg-gray-200 font-semibold"},
         {title:"Category_id",       field:"category_id",    cssClass:"bg-gray-200 font-semibold",visible:false},
         {title:"Category",          field:"category",       cssClass:"bg-gray-200 font-semibold"},
@@ -352,7 +352,20 @@ dynamicTable = new Tabulator("#dynamicTable", {
                 precision:3     },
             formatter:function(cell,row)
             {
-                return ( Number(cell.getData().gdswt) * Number(cell.getData().gdsprice))
+                // return ( Number(cell.getData().gdswt) * Number(cell.getData().gdsprice))
+                if(cell.getData().sku_id==2)
+                    {
+                        return (cell.getData().gdswt * cell.getData().gdsprice)
+                    }
+                    else if (cell.getData().sku_id==1)
+                    {
+                        return ((cell.getData().bundle1 * cell.getData().pcspbundle1) + (cell.getData().bundle2 * cell.getData().pcspbundle2)) * (cell.getData().gdsprice)
+                    }
+
+                    else {
+
+                    }
+
             }
         },
 
@@ -412,11 +425,30 @@ function validateForm()
     // Qty Required
     for (let index = 0; index < dynamicTableData.length; index++) {
         const element = dynamicTableData[index];
-        if(element.bundle1 == 0 || element.pcspbundle1 == 0 || element.gdsprice == 0 || element.gdswt == 0)
-        {
-            showSnackbar("Please fill Bundle,PcsBundle,Weight & Price all rows to proceed","info");
-            return;
-        }
+        // if(element.bundle1 == 0 || element.pcspbundle1 == 0 || element.gdsprice == 0 || element.gdswt == 0)
+        // {
+        //     showSnackbar("Please fill Bundle,PcsBundle,Weight & Price all rows to proceed","info");
+        //     return;
+        // }
+        if (element.sku_id==2)
+            {
+                if(element.gdsprice == 0 || element.gdswt == 0  )
+                    {
+                        showSnackbar("Please fill Weight & Price all rows to proceed","info");
+                        return;
+                    }
+            }
+            if (element.sku_id==1)
+            {
+                if(element.bundle1 == 0 || element.pcspbundle1 == 0 || element.gdsprice == 0 )
+                {
+                    showSnackbar("Please fill Bundle,PcsBundle & Price all rows to proceed","info");
+                    return;
+                }
+            }
+
+
+
     }
     disableSubmitButton(true);
     var data = { 'contracts' : dynamicTableData ,'supplier_id': supplier_id.value,'invoice_date':invoice_date.value,'number':number.value};

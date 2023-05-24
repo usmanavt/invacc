@@ -69,10 +69,10 @@
     let table;
     let searchValue = "";
     const deleteIcon = function(cell,formatterParams){return "<i class='fa fa-trash text-red-500'></i>";};
-    const getMasterData = @json(route('materials.master'));
+    const getMaster = @json(route('materials.master'));
     let csrfToken = document.head.querySelector("[name~=csrf-token][content]").content;
     let modal = document.getElementById("myModal")
-    console.log(getMasterData);
+    // console.log(getMaster);
 
     let dyanmicTable = ""; // Tabulator
     let dynamicTableData = [];
@@ -174,7 +174,7 @@
         ajaxParams: function(){
             return {search:searchValue};
         },
-        ajaxURL: getMasterData,
+        ajaxURL: getMaster,
         ajaxContentType:"json",
         initialSort:[ {column:"id", dir:"desc"} ],
         height:"100%",
@@ -187,6 +187,7 @@
             {title:"Dimesion", field:"dimension" ,  responsive:0},
             {title:"Source", field:"source" ,  responsive:0},
             {title:"Sku", field:"sku" ,  responsive:0},
+            {title:"Sku_id", field:"sku_id" ,  responsive:0},
             {title:"Brand", field:"brand" ,  responsive:0},
         ],
         // Extra Pagination Data for End Users
@@ -213,11 +214,24 @@
     var updateValues = (cell) => {
         var data = cell.getData();
         var sum = (Number(data.bundle1) * Number(data.pcspbundle1)) + (Number(data.bundle2) * Number(data.pcspbundle2))
-        var sum2 =  Number(data.gdswt) * Number(data.gdsprice)
+
+        // if(cell.getData().sku_id=2)
+        // {
+             var sum2 =  Number(data.gdswt) * Number(data.gdsprice)
+        // }
+        // if(cell.getData().sku_id=1)
+        // {
+        //     var sum2 =  ( (Number(data.bundle1) * Number(data.pcspbundle1)) + (Number(data.bundle2) * Number(data.pcspbundle2)) ) * Number(data.gdsprice)
+        // }
+
+
+
+        // var sum2 =  sum *  Number(data.gdsprice)
         var row = cell.getRow();
         row.update({
             "ttpcs": sum,
             "gdspricetot": sum2
+
         });
     }
 
@@ -252,11 +266,11 @@
             {title:"Category",          field:"category",       cssClass:"bg-gray-200 font-semibold"},
             {title:"Dimension",         field:"dimension_id",   cssClass:"bg-gray-200 font-semibold",visible:false},
             {title:"Dimension",         field:"dimension",      cssClass:"bg-gray-200 font-semibold"},
-            {title:"Source",            field:"source_id",      cssClass:"bg-gray-200 font-semibold",visible:false},
+            {title:"source_id",         field:"source_id",      cssClass:"bg-gray-200 font-semibold",visible:false},
             {title:"Source",            field:"source",         cssClass:"bg-gray-200 font-semibold"},
-            {title:"Sku",               field:"sku_id",         cssClass:"bg-gray-200 font-semibold",visible:false},
+            {title:"sku_id",            field:"sku_id",         cssClass:"bg-gray-200 font-semibold"},
             {title:"Sku",               field:"sku",            cssClass:"bg-gray-200 font-semibold"},
-            {title:"Brand",             field:"brand_id",       cssClass:"bg-gray-200 font-semibold",visible:false},
+            {title:"brand_id",          field:"brand_id",       cssClass:"bg-gray-200 font-semibold",visible:false},
             {title:"Brand",             field:"brand",          cssClass:"bg-gray-200 font-semibold"},
 
             {   title:"Bundle1",
@@ -372,7 +386,24 @@
                     precision:3     },
                 formatter:function(cell,row)
                 {
-                    return (cell.getData().gdswt * cell.getData().gdsprice)
+
+
+                    if(cell.getData().sku_id==1)
+                    {
+
+                        //  return (cell.getData().gdswt * cell.getData().gdsprice)
+                        console.info(cell.getData().sku_id)
+
+                    }
+                    if (cell.getData().sku_id==2)
+                    {
+                        //   return ((cell.getData().bundle1 * cell.getData().pcspbundle1) + (cell.getData().bundle2 * cell.getData().pcspbundle2)) * (cell.getData().gdsprice)
+                        console.info(cell.getData().sku_id)
+                    }
+
+                    else {
+
+                    }
                 }
             },
 
@@ -415,11 +446,25 @@
         // Qty Required
         for (let index = 0; index < dynamicTableData.length; index++) {
             const element = dynamicTableData[index];
-            if(element.bundle1 == 0 || element.pcspbundle1 == 0 || element.gdsprice == 0 || element.gdswt == 0)
+            // if(element.bundle1 == 0 || element.pcspbundle1 == 0 || element.gdsprice == 0 || element.gdswt == 0 and element.sku_id==2  )
+
+            if (element.sku_id==2)
             {
-                showSnackbar("Please fill Bundle,PcsBundle,Weight & Price all rows to proceed","info");
-                return;
+                if(element.gdsprice == 0 || element.gdswt == 0  )
+                    {
+                        showSnackbar("Please fill Weight & Price all rows to proceed","info");
+                        return;
+                    }
             }
+            if (element.sku_id==1)
+            {
+                if(element.bundle1 == 0 || element.pcspbundle1 == 0 || element.gdsprice == 0 )
+                {
+                    showSnackbar("Please fill Bundle,PcsBundle & Price all rows to proceed","info");
+                    return;
+                }
+            }
+
         }
         disableSubmitButton(true);
         var data = { 'contracts' : dynamicTableData ,'supplier_id': supplier_id.value,'invoice_date':invoice_date.value,'number':number.value};
@@ -448,6 +493,11 @@
             disableSubmitButton(false);
         })
     }
+
+
+
+
+
 </script>
 @endpush
 

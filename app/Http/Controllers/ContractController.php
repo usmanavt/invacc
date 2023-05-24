@@ -238,15 +238,37 @@ class ContractController extends Controller
                     $cds->invsrate = $cd->invsrate;
 
                     $cds->save();
-                }else
+                }
+                else
                 {
                     //  The item is new, Add it
                     $cds = new ContractDetails();
-                    $cds->contract_id = $contract->id;
+                    // $cds->contract_id = $contract->id;
+                    // $cds->material_id = $cd->material_id;
+                    // $cds->material_title = $cd->material_title;
+                    // $cds->supplier_id = $contract->supplier_id;
+                    // $cds->user_id = auth()->id();
+                    // $cds->category_id = $cd->category_id;
+                    // $cds->sku_id = $cd->sku_id;
+                    // $cds->dimension_id = $cd->dimension_id;
+                    // $cds->source_id = $cd->source_id;
+                    // $cds->brand_id = $cd->brand_id;
+                    // $cds->category = $cd->category;
+                    // $cds->sku = $cd->sku;
+                    // $cds->dimension = $cd->dimension;
+                    // $cds->source = $cd->source;
+                    // $cds->brand = $cd->brand;
+                    // $cds->bundle1 = $cd->bundle1;
+                    // $cds->pcspbundle1 = $cd->pcspbundle1;
+                    // $cds->bundle2 = $cd->bundle2;
+                    // $cds->pcspbundle2 = $cd->pcspbundle2;
+                    // $cds->gdswt = $cd->gdswt;
+                    // $cds->gdsprice = $cd->gdsprice;
+                    $cds->contract_id = $cd->contract_id;
                     $cds->material_id = $cd->material_id;
                     $cds->material_title = $cd->material_title;
-                    $cds->supplier_id = $contract->supplier_id;
-                    $cds->user_id = auth()->id();
+                    $cds->supplier_id = $cd->supplier_id;
+                    $cds->user_id = $cd->user_id;
                     $cds->category_id = $cd->category_id;
                     $cds->sku_id = $cd->sku_id;
                     $cds->dimension_id = $cd->dimension_id;
@@ -263,6 +285,12 @@ class ContractController extends Controller
                     $cds->pcspbundle2 = $cd->pcspbundle2;
                     $cds->gdswt = $cd->gdswt;
                     $cds->gdsprice = $cd->gdsprice;
+                    $cds->dtyrate = $cd->dtyrate;
+                    $cds->invsrate = $cd->invsrate;
+
+
+
+
                     $cds->save();
                 }
             }

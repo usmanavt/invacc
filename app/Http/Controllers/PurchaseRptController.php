@@ -19,13 +19,13 @@ class PurchaseRptController extends Controller
          $fromdate = $request->fromdate;
          $todate = $request->todate;
 
-         $fromdate = '2023/03/01';
-         $todate = '2023/05/20';
+         $fromdate = '2023/05/01';
+         $todate = '2023/05/30';
 
         return view('purrpt.index')
         ->with('heads',Supplier::where('status',1)->get())
-        ->with('glheads',Supplier::where('status',1)->whereIn('id',[1,2,3,4,5,6,7,8,9,10])->get())
-        ->with('vchrheads',Supplier::where('status',1)->whereIn('id',[6,7,8,9])->get())
+        ->with('glheads',Supplier::where('status',1)->get())
+        ->with('vchrheads',Supplier::where('status',1)->get())
         ->with('subheads',DB::table('vwsupcategory')->select('*')->whereBetween('invoice_date',[$fromdate,$todate])->get()->toArray())
         ->with('subheadsci',DB::table('vwsupcategorycominv')->select('*')->whereBetween('invoice_date',[$fromdate,$todate])->get()->toArray())
         ->with('subheadsciloc',DB::table('vwsupcategoryloccominv')->select('*')->whereBetween('invoice_date',[$fromdate,$todate])->get()->toArray())

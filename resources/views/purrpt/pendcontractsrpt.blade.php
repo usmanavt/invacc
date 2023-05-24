@@ -19,16 +19,20 @@ table{
 }
 .column-headers{
     border:1px solid lightgray;
+    border-left: 1px solid lightgray;
+    border-right: 1px solid lightgray;
     background: #e3e3e3;
+    font-size: 1rem;
     margin-top:5px;
     margin-bottom:5px;
-    border-bottom: 2px double gray;
+    border-collapse: collapse;
 }
 .column-headers th{
     text-align: center;
 }
 .data {
     border-collapse: collapse;
+    font-size: 1rem;
 }
 .data tr td{
     border-left: 1px solid lightgray;
@@ -115,15 +119,15 @@ table{
     <table class="column-headers">
         <thead>
             <tr>
-                <th class="" width="3%">S#</th>
-                <th class="" width="5%">Contract ID</th>
-                <th class="" width="10%">Invoice Date</th>
-                <th class="" width="8%">Invoice No</th>
-                <th class="" width="45%">Material Name</th>
-                <th class="" width="3%">Unit</th>
-                <th class="" width="8%">Contract Qty</th>
-                <th class="" width="8%">Received Qty</th>
-                <th class="" width="8%">Pending Qty</th>
+                <th class="column-headers" width="3%">S#</th>
+                <th class="column-headers" width="8%">Contract ID</th>
+                <th class="column-headers" width="10%">Invoice Date</th>
+                <th class="column-headers" width="10%">Invoice No</th>
+                <th class="column-headers" width="40%">Material Name</th>
+                <th class="column-headers" width="5%">Unit</th>
+                <th class="column-headers" width="8%">Contract Qty</th>
+                <th class="column-headers" width="8%">Received Qty</th>
+                <th class="column-headers" width="8%">Pending Qty</th>
 
 
 
@@ -150,15 +154,15 @@ table{
 
 
 
-                <td class="" width="3%">{{ $i+1 }}</td>
-                <td class="" width="5%">{{ $data[$i]->contract_id }} </td>
-                <td class="" width="10%">{{ $data[$i]->invoicedate }} </td>
-                <td class="" width="10%">{{ $data[$i]->invoiceno }} </td>
-                <td class="" width="43%">{{ $data[$i]->mattitle }} </td>
-                <td class="" width="5%">{{ $data[$i]->unit }} </td>
-                <td class="" width="8%">{{ number_format($data[$i]->contractqty,0) }} </td>
-                <td class="" width="8%">{{ number_format($data[$i]->purqty,0) }} </td>
-                <td class="" width="8%">{{ number_format($data[$i]->balqty,0) }} </td>
+                <td style="text-align:center" width="3%">{{ $i+1 }}</td>
+                <td style="text-align:center" width="8%">{{ $data[$i]->contract_id }} </td>
+                <td style="text-align:center" width="10%">{{ $data[$i]->invoicedate }} </td>
+                <td style="text-align:center" width="10%">{{ $data[$i]->invoiceno }} </td>
+                <td style="text-align:left" width="40%">{{ $data[$i]->mattitle }} </td>
+                <td style="text-align:center" width="5%">{{ $data[$i]->unit }} </td>
+                <td style="text-align:right" width="8%">{{ number_format($data[$i]->contractqty,0) }} </td>
+                <td style="text-align:right" width="8%">{{ number_format($data[$i]->purqty,0) }} </td>
+                <td style="text-align:right" width="8%">{{ number_format($data[$i]->balqty,0) }} </td>
                 {{-- <td class="" width="20%">{{ number_format($data[$i]->DebitAmtDlr,2) }}  : {{($data[$i]->cur) }}</td> --}}
                 {{-- <td class="" width="20%">{{ number_format($data[$i]->CreditAmtDlr,2) }} : {{($data[$i]->cur) }}<br></td> --}}
 
@@ -175,10 +179,10 @@ table{
 
             @endfor
             <tr>
-                <td colspan="5" width="43%" style="text-align: right;border-bottom: 1px solid lightgray;"> Total</td>
-                <td colspan="2" width="8%" style="text-align: right;border-bottom: 1px solid lightgray;">{{ number_format($varcontqty,0) }} </td>
-                <td class="3" width="8%" style="text-align: right;border-bottom: 1px solid lightgray;">{{ number_format($varpurqty,2) }} </td>
-                <td class="1" width="8%" style="text-align: right;border-bottom: 1px solid lightgray;">{{ number_format($varbalqty,2) }} </td>
+                <td class="column-headers" colspan="5" width="43%" style="text-align: right;font-weight: bold;border-bottom: 1px solid lightgray;"> Total</td>
+                <td class="column-headers" colspan="2" width="8%" style="text-align: right;font-weight: bold;border-bottom: 1px solid lightgray;">{{ number_format($varcontqty,0) }} </td>
+                <td class="column-headers" colspan="1" width="8%" style="text-align: right;font-weight: bold;border-bottom: 1px solid lightgray;">{{ number_format($varpurqty,2) }} </td>
+                <td class="column-headers" colspan="1" width="8%" style="text-align: right;font-weight: bold;border-bottom: 1px solid lightgray;">{{ number_format($varbalqty,2) }} </td>
 
             </tr>
         </tbody>
