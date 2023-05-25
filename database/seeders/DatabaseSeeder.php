@@ -349,6 +349,9 @@ class DatabaseSeeder extends Seeder
             'title' => 'KG'
         ]);
         Sku::create([
+            'title' => 'PCS'
+        ]);
+        Sku::create([
             'title' => 'METER'
         ]);
         Sku::create([
@@ -454,13 +457,13 @@ class DatabaseSeeder extends Seeder
             'brand_id' => 1,
             'source_id' => 2,
             'dimension_id' => 2,
-            'sku_id' => 1,
+            'sku_id' => 2,
             'hscode_id' => 1,
             'category' => 'IMPORTED STOCK',
             'brand' => 'AMRELLI STEEL',
             'source' => 'IMPORTED',
             'dimension' => '6" X SCH 80 X 6M',
-            'sku' => 'KG',
+            'sku' => 'PCS',
         ]);
     }
 }

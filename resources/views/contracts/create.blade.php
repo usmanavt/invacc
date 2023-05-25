@@ -367,12 +367,6 @@
                 cellEdited:updateValues,
             },
 
-
-
-
-
-
-
             {   title:"Val($)",
                 field:"gdspricetot",
                 cssClass:"bg-gray-200 font-semibold",
@@ -386,24 +380,21 @@
                     precision:3     },
                 formatter:function(cell,row)
                 {
-
-
-                    if(cell.getData().sku_id==1)
+                    console.log(cell.getData().sku_id)
+                    if(cell.getData().sku_id == 1)
                     {
 
-                        //  return (cell.getData().gdswt * cell.getData().gdsprice)
-                        console.info(cell.getData().sku_id)
+                        return (cell.getData().gdswt * cell.getData().gdsprice)
 
                     }
-                    if (cell.getData().sku_id==2)
+                    else if (cell.getData().sku_id == 2)
                     {
-                        //   return ((cell.getData().bundle1 * cell.getData().pcspbundle1) + (cell.getData().bundle2 * cell.getData().pcspbundle2)) * (cell.getData().gdsprice)
-                        console.info(cell.getData().sku_id)
+                        return ((cell.getData().bundle1 * cell.getData().pcspbundle1) + (cell.getData().bundle2 * cell.getData().pcspbundle2)) * (cell.getData().gdsprice)
                     }
-
                     else {
-
+                        // Add for other types
                     }
+
                 }
             },
 
