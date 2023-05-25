@@ -352,6 +352,9 @@ class DatabaseSeeder extends Seeder
             'title' => 'PCS'
         ]);
         Sku::create([
+            'title' => 'FEET'
+        ]);
+        Sku::create([
             'title' => 'METER'
         ]);
         Sku::create([
