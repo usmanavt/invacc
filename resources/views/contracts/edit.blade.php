@@ -352,21 +352,22 @@ dynamicTable = new Tabulator("#dynamicTable", {
                 precision:3     },
             formatter:function(cell,row)
             {
-                // return ( Number(cell.getData().gdswt) * Number(cell.getData().gdsprice))
-                if(cell.getData().sku_id==2)
+                    console.log(cell.getData().sku_id)
+                    if(cell.getData().sku_id == 1)
                     {
+
                         return (cell.getData().gdswt * cell.getData().gdsprice)
+
                     }
-                    else if (cell.getData().sku_id==1)
+                    else if (cell.getData().sku_id == 2)
                     {
                         return ((cell.getData().bundle1 * cell.getData().pcspbundle1) + (cell.getData().bundle2 * cell.getData().pcspbundle2)) * (cell.getData().gdsprice)
                     }
-
                     else {
-
+                        // Add for other types
                     }
 
-            }
+                }
         },
 
     ],
@@ -430,7 +431,7 @@ function validateForm()
         //     showSnackbar("Please fill Bundle,PcsBundle,Weight & Price all rows to proceed","info");
         //     return;
         // }
-        if (element.sku_id==2)
+        if (element.sku_id==1)
             {
                 if(element.gdsprice == 0 || element.gdswt == 0  )
                     {
@@ -438,7 +439,7 @@ function validateForm()
                         return;
                     }
             }
-            if (element.sku_id==1)
+            if (element.sku_id==2)
             {
                 if(element.bundle1 == 0 || element.pcspbundle1 == 0 || element.gdsprice == 0 )
                 {
@@ -469,7 +470,7 @@ function validateForm()
     .then( response => {
         if (response == 'success')
         {
-            // window.open(window.location.origin + "/contracts","_self" );
+             window.open(window.location.origin + "/contracts","_self" );
         }
     })
     .catch(error => {

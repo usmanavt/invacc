@@ -439,7 +439,7 @@
             const element = dynamicTableData[index];
             // if(element.bundle1 == 0 || element.pcspbundle1 == 0 || element.gdsprice == 0 || element.gdswt == 0 and element.sku_id==2  )
 
-            if (element.sku_id==2)
+            if (element.sku_id==1)
             {
                 if(element.gdsprice == 0 || element.gdswt == 0  )
                     {
@@ -447,7 +447,7 @@
                         return;
                     }
             }
-            if (element.sku_id==1)
+            if (element.sku_id==2)
             {
                 if(element.bundle1 == 0 || element.pcspbundle1 == 0 || element.gdsprice == 0 )
                 {
