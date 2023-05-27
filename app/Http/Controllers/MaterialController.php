@@ -123,7 +123,7 @@ class MaterialController extends Controller
         //
     }
 
-    public function copyMaterial(Material $material)
+    public function copyMaterial($id)
     {
         // dd($material);
         return view('materials.copy')
@@ -133,7 +133,7 @@ class MaterialController extends Controller
         // ->with('sources',Source::all())
         // ->with('brands',Brand::all())
         // ->with('hscodes',Hscode::all())
-        ->with('material',$material)
+        ->with('material',Material::findOrFail($id))
         ->with('materials',Material::select('id','title','dimension')->get())
         ;
     }

@@ -115,7 +115,7 @@ Route::get('/hscodes/master', [HscodeController::class, 'getMaster'])->name('hsc
 Route::resource('hscodes', HscodeController::class);
 //  Material Controller
 Route::get('/materials/getMaterialMaster', [MaterialController::class, 'getMaster'])->name('materials.master');
-Route::get('/materials/copymaterial/copy/{material}', [MaterialController::class, 'copyMaterial'])->name('materials.copy');
+Route::get('/materials/{id}/copyMaterial', [MaterialController::class, 'copyMaterial'])->name('materials.copy');
 Route::resource('materials', MaterialController::class);
 //  Users Controller
 Route::resource('users',UserController::class);

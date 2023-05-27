@@ -30,7 +30,7 @@
                                 @endforeach
                             </select>
 
-                            Purchase Master - Invoice Date
+
                             <label for="invoice_date">Invoice Date</label>
                             <input type="date" class="col-span-2" id="invoice_date" name="invoice_date" value="{{ $commercialInvoice->invoice_date->format('Y-m-d') }}"  required>
                             {{-- ->format('Y-m-d') --}}
@@ -222,7 +222,6 @@ var updateValues = (cell) => {
     var sum = (Number(data.gdswt) * Number(data.perkg)).toFixed(0)
     var sum2 =  (Number(data.gdswt) * Number(data.gdsprice)).toFixed(0)
     var row = cell.getRow();
-    abc=sum;
     //  console.info(abc);
     row.update({
 
@@ -232,21 +231,16 @@ var updateValues = (cell) => {
 
 }
 
-// var tamount=0;
+//  var tamount=0;
     function tnetamount()
         {
-            //  var crtg=0;
             //  crtg=parseFloat(exataxoffie.value).toFixed(0);
-             collofcustom.value=0;
-             bankntotal.value=0;
 
-            // var discAmnt =  parseFloat(exataxoffie.value)*parseFloat(bankcharges.value)/100
-            // collofcustom.value = discAmnt.toFixed(0)
-            tamount=abc;
-             collofcustom.value=(tamount*bankcharges.value/100).toFixed(0);
-            //  collofcustom.value=abc;
+            collofcustom.value=0;
+            bankntotal.value=0;
+            collofcustom.value=(tamount*bankcharges.value/100).toFixed(0);
             bankntotal.value= ( Number(tamount)-Number(collofcustom.value))+Number(exataxoffie.value)   ;
-            // bankntotal.value=parseFloat( bankntotal.value ) + parseFloat(exataxoffie.values);
+
         }
 
 
@@ -260,13 +254,35 @@ var totalVal = function(values, data, calcParams){
 
     var calc = 0;
     values.forEach(function(value){
-        calc=amtinpkr;
+        // calc=amtinpkr;
         calc += value ;
     });
-     tamount = calc;
-     tnetamount();
+    // console.log(calc);
+    // tamount = calc;
+    //  tnetamount();
      return calc;
 }
+
+var totval = function(values, data, calcParams){
+    //values - array of column values
+    //data - all table data
+    //calcParams - params passed from the column definition object
+
+    var calc = 0;
+    // var abc=0;
+    values.forEach(function(value){
+        // if(value > 18){
+            calc += Number(value) ;
+            // abc += Number(value) ;
+        // }
+
+    });
+     tamount = calc;
+      tnetamount();
+    // console.info(abc);
+    return calc;
+}
+
 
 //  Dynamic Table [User data]
 dynamicTable = new Tabulator("#dynamicTable", {
@@ -315,6 +331,9 @@ dynamicTable = new Tabulator("#dynamicTable", {
             formatterParams:{thousand:",",precision:2},
             validator:["required","integer"],
             cellEdited: updateValues,
+            bottomCalc:"sum"
+
+
             },
 
         {   title:"Rate",
@@ -339,83 +358,8 @@ dynamicTable = new Tabulator("#dynamicTable", {
                 //   return (cell.getData().gdswt * cell.getData().perkg)
                 return (cell.getData().amtinpkr )
             },
-            bottomCalc:"sum" },
-
-
-        // {   title:"Amount",
-        //     field:"amtinpkr",
-        //     cssClass:"bg-gray-200 font-semibold",
-        //     formatter:"money",
-        //     formatterParams:{thousand:",",precision:3},
-        //     validator:["required","numeric"],
-        //     formatter:function(cell,row)
-        //     {
-        //         // return (cell.getData().bundle1 * cell.getData().pcspbundle1) + (cell.getData().bundle2 * cell.getData().pcspbundle2)
-        //     },
-        //     bottomCalc:totalVal   },
-
-        // {   title:"Wt(MT)",
-        //     field:"gdswt",
-        //     editor:"number",
-        //     cssClass:"bg-green-200 font-semibold",
-        //     formatter:"money",
-        //     formatterParams:{thousand:",",precision:3},
-        //     validator:["required","numeric"],
-        //     cellEdited:updateValues,
-        //     bottomCalc:"sum",
-        //     bottomCalcParams:{precision:3}  },
-
-        // {   title:"Rs($)",
-        //     field:"gdsprice",
-        //     editor:"number",
-        //     cssClass:"bg-green-200 font-semibold",
-        //     formatter:"money",
-        //     formatterParams:{thousand:",",precision:3},
-        //     validator:["required","numeric"],
-        //     cellEdited:updateValues,
-        // },
-
-        // {   title:"DutyRs($)",
-        //     field:"dtyrate",
-        //     editor:"number",
-        //     cssClass:"bg-green-200 font-semibold",
-        //     formatter:"money",
-        //     formatterParams:{thousand:",",precision:3},
-        //     validator:["required","numeric"],
-        //     cellEdited:updateValues,
-        // },
-
-        // {   title:"ComInvRs($)",
-        //     field:"invsrate",
-        //     editor:"number",
-        //     cssClass:"bg-green-200 font-semibold",
-        //     formatter:"money",
-        //     formatterParams:{thousand:",",precision:3},
-        //     validator:["required","numeric"],
-        //     cellEdited:updateValues,
-        // },
-
-
-
-
-
-
-            // {   title:"Val($)",
-            //     field:"amtinpkr",
-            //     cssClass:"bg-gray-200 font-semibold",
-            //     bottomCalc:totalVal,
-            //     bottomCalcParams:{precision:3} ,
-            //     formatter:"money",
-            //     formatterParams:{
-            //         decimal:".",
-            //         thousand:",",
-            //         symbol:"$",
-            //         precision:3     },
-            //     formatter:function(cell,row)
-            //     {
-            //         return (cell.getData().amtinpkr )
-            //     }
-            // },
+            bottomCalc:totval
+        },
 
     ],
 })
@@ -473,6 +417,17 @@ function validateForm()
     // Qty Required
     for (let index = 0; index < dynamicTableData.length; index++) {
         const element = dynamicTableData[index];
+
+
+               if(element.location === undefined)
+               {
+                showSnackbar("Location must be Enter","info");
+                return;
+               }
+
+
+
+
         if(element.bundle1 == 0 || element.pcspbundle1 == 0  || element.gdswt == 0)
         {
             showSnackbar("Please fill Bundle,PcsBundle,Weight & Price all rows to proceed","info");

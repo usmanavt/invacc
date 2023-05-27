@@ -19,8 +19,8 @@
                                 <x-input class="bg-indigo-100" type="text" name="title" value="{{$brand->title}}" />
                                 @if($errors->has('title'))<div class="text-red-500 text-xs">{{ $errors->first('title') }}</div>@endif
 
-                                
-                                
+
+
                                 <input class="checked:bg-blue-500 checked:border-blue-500 focus:outline-none" type="checkbox" name="status" @if ($brand->status == 1)
                                         checked
                                     @endif >

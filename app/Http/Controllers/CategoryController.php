@@ -44,6 +44,7 @@ class CategoryController extends Controller
             $category = new Category();
             $category->title = $request->title;
             $category->nick = $request->nick;
+            $category->status=1;
             $category->save();
             DB::commit();
             Session::flash('success','Category created');

@@ -215,14 +215,14 @@
         var data = cell.getData();
         var sum = (Number(data.bundle1) * Number(data.pcspbundle1)) + (Number(data.bundle2) * Number(data.pcspbundle2))
 
-        // if(cell.getData().sku_id=2)
-        // {
+         if(cell.getData().sku_id==1)
+         {
              var sum2 =  Number(data.gdswt) * Number(data.gdsprice)
-        // }
-        // if(cell.getData().sku_id=1)
-        // {
-        //     var sum2 =  ( (Number(data.bundle1) * Number(data.pcspbundle1)) + (Number(data.bundle2) * Number(data.pcspbundle2)) ) * Number(data.gdsprice)
-        // }
+         }
+         if(cell.getData().sku_id==2)
+         {
+             var sum2 =  ( (Number(data.bundle1) * Number(data.pcspbundle1)) + (Number(data.bundle2) * Number(data.pcspbundle2)) ) * Number(data.gdsprice)
+         }
 
 
 
@@ -380,7 +380,7 @@
                     precision:3     },
                 formatter:function(cell,row)
                 {
-                    console.log(cell.getData().sku_id)
+                    // console.log(cell.getData().sku_id)
                     if(cell.getData().sku_id == 1)
                     {
 

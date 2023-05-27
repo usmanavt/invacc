@@ -37,9 +37,10 @@
 <script>
     var editIcon = function(cell, formatterParams, onRendered){ return "<i class='fa fa-edit text-blue-600'></i>";};
     var copyIcon = function(cell, formatterParams, onRendered){ return "<i class='fa fa-copy text-red-600'></i>";};
-    // var unlockIcon = function(cell, formatterParams, onRendered){ return "<i class='fa fa-lock text-green-600'></i>";};
+
 
     const getMaster = @json(route('materials.master'));
+
     let table;
     let searchValue = "";
 
@@ -97,10 +98,8 @@
             }},
             {title:"Copy",formatter:copyIcon, hozAlign:"center",headerSort:false, responsive:0,
                 cellClick:function(e,cell){
-                    // if(confirm('Do you really want to Unlock this Bank?'))
-                    // {
-                        window.open(window.location + "/" + cell.getData().id + "/copy"  ,"_self");
-                    // }
+                          window.open(window.location + "/" + cell.getData().id + "/copyMaterial"  ,"_self");
+
                 }
             },
             // {title:"Lock",field:'lock' , formatter:lockIcon, hozAlign:"center",headerSort:false, responsive:0,
@@ -113,6 +112,11 @@
             // }
 
         ],
+
+
+
+
+
         // Extra Pagination Data for End Users
         ajaxResponse:function(getDataUrl, params, response){
             remaining = response.total;

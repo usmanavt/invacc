@@ -42,6 +42,7 @@ class DimensionController extends Controller
         try {
             $dimension = new Dimension();
             $dimension->title = $request->title;
+            $dimension->status = 1;
             $dimension->save();
             DB::commit();
             Session::flash('success','Dimension created');

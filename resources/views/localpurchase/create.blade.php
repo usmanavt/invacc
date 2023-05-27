@@ -497,6 +497,16 @@
         // Qty Required
         for (let index = 0; index < dynamicTableData.length; index++) {
             const element = dynamicTableData[index];
+
+            if(element.location === undefined)
+               {
+                showSnackbar("Location must be Enter","info");
+                return;
+               }
+
+
+
+
             if(element.bundle1 == 0 || element.pcspbundle1 == 0 || element.ttpcs == 0 )
             // || element.gdsprice == 0 || element.gdswt == 0 ttpcs
             {

@@ -191,7 +191,21 @@ var updateValues = (cell) => {
     var data = cell.getData();
 
     var sum = (Number(data.bundle1) * Number(data.pcspbundle1)) + (Number(data.bundle2) * Number(data.pcspbundle2))
-    var sum2 = Number(Number(data.gdswt) * Number(data.gdsprice))
+    // var sum2 = Number(Number(data.gdswt) * Number(data.gdsprice))
+
+        if(cell.getData().sku_id==1)
+         {
+             var sum2 =  Number(data.gdswt) * Number(data.gdsprice)
+         }
+         if(cell.getData().sku_id==2)
+         {
+             var sum2 =  ( (Number(data.bundle1) * Number(data.pcspbundle1)) + (Number(data.bundle2) * Number(data.pcspbundle2)) ) * Number(data.gdsprice)
+         }
+
+
+
+
+
     var row = cell.getRow();
     row.update({
         "ttpcs": sum,
@@ -199,17 +213,50 @@ var updateValues = (cell) => {
     });
 }
 
-var totalVal = function(values, data, calcParams){
+// var totalVal = function(values, data, calcParams){
+//     //values - array of column values
+//     //data - all table data
+//     //calcParams - params passed from the column definition object
+//     console.log(values,data,calcParams)
+//     var calc = 0;
+//     values.forEach(function(value){
+//         calc += value ;
+//     });
+//     return calc;
+// }
+
+var totval = function(values, data, calcParams){
     //values - array of column values
     //data - all table data
     //calcParams - params passed from the column definition object
-    console.log(values,data,calcParams)
+
     var calc = 0;
+    // var abc=0;
     values.forEach(function(value){
-        calc += value ;
+        // if(value > 18){
+
+            calc += Number(value) ;
+            // abc += Number(value) ;
+
+
     });
+
+    // console.info(abc);
     return calc;
 }
+
+var customMutator = function(value, data, type, params, component){
+    //value - original value of the cell
+    //data - the data for the row
+    //type - the type of mutation occurring  (data|edit)
+    //params - the mutatorParams object from the column definition
+    //component - when the "type" argument is "edit", this contains the cell component for the edited cell, otherwise it is the column component for the column
+
+    return data.gdswt + data.gdsprice ; //return the sum of the other two columns.
+}
+
+
+
 
 
 
@@ -249,6 +296,7 @@ dynamicTable = new Tabulator("#dynamicTable", {
             formatterParams:{thousand:",",precision:2},
             validator:["required","integer"],
             cellEdited: updateValues,
+
             },
 
         {   title:"Pcs/Bnd1",
@@ -291,7 +339,7 @@ dynamicTable = new Tabulator("#dynamicTable", {
             {
                 return (cell.getData().bundle1 * cell.getData().pcspbundle1) + (cell.getData().bundle2 * cell.getData().pcspbundle2)
             },
-            bottomCalc:"sum"   },
+            bottomCalc:"sum" },
 
         {   title:"Wt(MT)",
             field:"gdswt",
@@ -301,7 +349,7 @@ dynamicTable = new Tabulator("#dynamicTable", {
             formatterParams:{thousand:",",precision:3},
             validator:["required","numeric"],
             cellEdited:updateValues,
-            bottomCalc:"sum",
+             bottomCalc:"sum",
             bottomCalcParams:{precision:3}  },
 
         {   title:"Rs($)",
@@ -349,29 +397,49 @@ dynamicTable = new Tabulator("#dynamicTable", {
                 decimal:".",
                 thousand:",",
                 symbol:"$",
+
                 precision:3     },
             formatter:function(cell,row)
             {
-                    console.log(cell.getData().sku_id)
+                    // console.log(cell.getData().sku_id)
+                    var xyz1=0;
+                    var xyz2=0;
+                    var xyz3=0;
                     if(cell.getData().sku_id == 1)
                     {
 
-                        return (cell.getData().gdswt * cell.getData().gdsprice)
+                        xyz1 = (cell.getData().gdswt * cell.getData().gdsprice)
 
                     }
-                    else if (cell.getData().sku_id == 2)
+                    // if (cell.getData().sku_id == 2)
+                    else
                     {
-                        return ((cell.getData().bundle1 * cell.getData().pcspbundle1) + (cell.getData().bundle2 * cell.getData().pcspbundle2)) * (cell.getData().gdsprice)
-                    }
-                    else {
-                        // Add for other types
+                        xyz2 = ((cell.getData().bundle1 * cell.getData().pcspbundle1) + (cell.getData().bundle2 * cell.getData().pcspbundle2)) * (cell.getData().gdsprice)
                     }
 
-                }
-        },
+                    xyz3=xyz1+xyz2
+                    return xyz3
+                    // consolse.log("xyz")
+
+                }, bottomCalc:totval
+        }
 
     ],
 })
+
+// ("#dynamicTable").tabulator({
+//     rowFormatter:function(row){
+//         var data = row.getData(); //get data object for row
+
+//         if(data.col == "green"){
+//             row.getElement().css({"background-color":"#A6A6DF"}); //apply css change to row element
+//         }
+//     },
+
+// });
+
+
+
 
 // Add event handler to read keyboard key up event
 document.addEventListener('keyup', (e)=>{
