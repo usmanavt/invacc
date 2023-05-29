@@ -185,6 +185,9 @@
     const vchrheads = @json($vchrheads);
     const contlistfill = @json(route('purrpt.contlistfill'));
     const cominvsloc = @json(route('purrpt.cominvsloc'));
+    const cominvsimp = @json(route('purrpt.cominvsimp'));
+
+
 
 
     const head = document.getElementById('head_id')
@@ -220,20 +223,20 @@
 
 
         // switch (rptType){
-            case 'impcominvs':
-                list = subheadsci.filter( l => l.MHEAD === Number(value)  )
-                if(list.length > 0)
-                {
-                    list.forEach(e => {
-                        addSelectElement(subhead,e.Subhead,e.title)
-                    });
-                    subhead.setAttribute('required','')
-                    subhead.removeAttribute('disabled','')
-                }else{
-                    subhead.removeAttribute('required','')
-                    subhead.setAttribute('disabled','')
-                }
-                break;
+            // case 'impcominvs':
+            //     list = subheadsci.filter( l => l.MHEAD === Number(value)  )
+            //     if(list.length > 0)
+            //     {
+            //         list.forEach(e => {
+            //             addSelectElement(subhead,e.Subhead,e.title)
+            //         });
+            //         subhead.setAttribute('required','')
+            //         subhead.removeAttribute('disabled','')
+            //     }else{
+            //         subhead.removeAttribute('required','')
+            //         subhead.setAttribute('disabled','')
+            //     }
+            //     break;
 
                 // case 'loccominvs':
                 // list = subheadsciloc.filter( l => l.MHEAD === Number(value)  )
@@ -315,6 +318,34 @@
                     })
                     .catch(error => console.error(error))
                 break;
+
+                case 'impcominvs':
+            // console.log(value)
+            fetch(cominvsimp + `?todate=${todate.value}&fromdate=${fromdate.value}&head=${value}`,{
+                    method:"GET",
+                    headers: { 'Accept':'application/json','Content-type':'application/json'},
+                    })
+                    .then(response => response.json())
+                    .then( data => {
+                        if(data.length > 0)
+                        {
+                            data.forEach(e => {
+                                addSelectElement(subhead,e.Subhead,e.title)
+                            });
+                            subhead.setAttribute('required','')
+                            subhead.removeAttribute('disabled','')
+                        }else{
+                            subhead.removeAttribute('required','')
+                            subhead.setAttribute('disabled','')
+                        }
+                    })
+                    .catch(error => console.error(error))
+                break;
+
+
+
+
+
             }
     }
 
@@ -364,15 +395,35 @@
 
 
 
-
-
-
-
-
-    const calculate = () =>{
-        amount_pkr.value = (parseFloat(conversion_rate.value) * parseFloat(amount_fc.value)).toFixed(2)
-        submitButton.disabled = false
+// FOR IMPORTED INVOICE FILL
+const getCominvsimpVoucherData = async (value) =>{
+        let data = await fetch(cominvsimp + `?todate=${todate.value}&fromdate=${fromdate.value}&head=${value}`,{
+            method:"GET",
+            headers: { 'Accept':'application/json','Content-type':'application/json'},
+            })
+            .then(response => response.json())
+            .then( data => { return data })
+            .catch(error => console.error(error))
     }
+    const getCominvsimp =async  (value) => {
+        const cominvsimp = await getCominvsimpVoucherData(value)
+        return cominvsimp
+    }
+
+    const addSelectElement2 = (select,id,value) => {
+        var option = document.createElement('option')
+        option.value = id
+        option.text  = value
+        select.appendChild(option)
+    }
+
+
+
+
+    // const calculate = () =>{
+    //     amount_pkr.value = (parseFloat(conversion_rate.value) * parseFloat(amount_fc.value)).toFixed(2)
+    //     submitButton.disabled = false
+    // }
 
     const checkReportType = (type) => {
         switch (type) {

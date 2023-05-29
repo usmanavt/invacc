@@ -21,8 +21,8 @@ class PurchaseRptController extends Controller
  //dd($request->all());
 
 
-         $fromdate = '2023/05/01';
-         $todate = '2023/05/30';
+          $fromdate = '2023/05/01';
+          $todate = '2023/05/30';
 
         return view('purrpt.index')
         ->with('heads',Supplier::where('status',1)->get())
@@ -38,14 +38,10 @@ class PurchaseRptController extends Controller
     public function contlistfill(Request $request)
     {
                 //  dd($request->all());
-
              $fromdate = $request->fromdate;
              $todate = $request->todate;
         $head = $request->head;
-        // FIXME: correct this call and send back vouchers to function
-        // return DB::table('vwvouchercategory')->select('*')->whereBetween('docdate',[$fromdate,$todate])->where('mheadid',$head)->get()->toArray();
           return DB::table('vwsupcategory')->select('*')->whereBetween('invoice_date',[$fromdate,$todate])->where('MHEAD',$head)->get()->toArray();
-        //  return DB::table('vwsupcategory')->select('*')->where('MHEAD',$head)->get()->toArray();
     }
 
 
@@ -56,14 +52,19 @@ class PurchaseRptController extends Controller
              $fromdate = $request->fromdate;
              $todate = $request->todate;
         $head = $request->head;
-        // FIXME: correct this call and send back vouchers to function
-        // return DB::table('vwvouchercategory')->select('*')->whereBetween('docdate',[$fromdate,$todate])->where('mheadid',$head)->get()->toArray();
           return DB::table('vwsupcategoryloccominv')->select('*')->whereBetween('invoice_date',[$fromdate,$todate])->where('MHEAD',$head)->get()->toArray();
-        //  return DB::table('vwsupcategory')->select('*')->where('MHEAD',$head)->get()->toArray();
     }
 
 
+    public function cominvsimp(Request $request)
+    {
+                //  dd($request->all());
 
+             $fromdate = $request->fromdate;
+             $todate = $request->todate;
+        $head = $request->head;
+          return DB::table('vwsupcategorycominv')->select('*')->whereBetween('invoice_date',[$fromdate,$todate])->where('MHEAD',$head)->get()->toArray();
+    }
 
 
 
