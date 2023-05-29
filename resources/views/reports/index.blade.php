@@ -143,7 +143,8 @@
                 }
                 break;
             case 'vchr':
-                fetch(vouchers + `?todate=${todate.value}&fromdate=${fromdate.value}&head=${value}`,{
+            // console.log(subhead);
+            fetch(vouchers + `?todate=${todate.value}&fromdate=${fromdate.value}&head=${value}`,{
                     method:"GET",
                     headers: { 'Accept':'application/json','Content-type':'application/json'},
                     })

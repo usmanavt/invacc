@@ -16,8 +16,10 @@ class PurchaseRptController extends Controller
     public function index(Request $request)
     {
 
-         $fromdate = $request->fromdate;
-         $todate = $request->todate;
+        //  $fromdate = $request->fromdate;
+        //  $todate = $request->todate;
+ //dd($request->all());
+
 
          $fromdate = '2023/05/01';
          $todate = '2023/05/30';
@@ -33,22 +35,43 @@ class PurchaseRptController extends Controller
         ;
     }
 
-    public function vouchers(Request $request)
+    public function contlistfill(Request $request)
     {
-        // dd($request->all());
-        $fromdate = $request->fromdate;
-        $todate = $request->todate;
+                //  dd($request->all());
+
+             $fromdate = $request->fromdate;
+             $todate = $request->todate;
         $head = $request->head;
         // FIXME: correct this call and send back vouchers to function
         // return DB::table('vwvouchercategory')->select('*')->whereBetween('docdate',[$fromdate,$todate])->where('mheadid',$head)->get()->toArray();
-        return DB::table('vwsupcategory')->select('*')->whereBetween('docdate',[$fromdate,$todate])->where('mheadid',$head)->get()->toArray();
+          return DB::table('vwsupcategory')->select('*')->whereBetween('invoice_date',[$fromdate,$todate])->where('MHEAD',$head)->get()->toArray();
+        //  return DB::table('vwsupcategory')->select('*')->where('MHEAD',$head)->get()->toArray();
     }
+
+
+    public function cominvsloc(Request $request)
+    {
+                //  dd($request->all());
+
+             $fromdate = $request->fromdate;
+             $todate = $request->todate;
+        $head = $request->head;
+        // FIXME: correct this call and send back vouchers to function
+        // return DB::table('vwvouchercategory')->select('*')->whereBetween('docdate',[$fromdate,$todate])->where('mheadid',$head)->get()->toArray();
+          return DB::table('vwsupcategoryloccominv')->select('*')->whereBetween('invoice_date',[$fromdate,$todate])->where('MHEAD',$head)->get()->toArray();
+        //  return DB::table('vwsupcategory')->select('*')->where('MHEAD',$head)->get()->toArray();
+    }
+
+
+
+
+
 
 
     public function fetch(Request $request)
     {
         //  https://stackoverflow.com/questions/42555512/how-to-create-temporary-table-in-laravel
-        // dd($request->all());
+        //  dd($request->all());
         $report_type = $request->report_type;
         $fromdate = $request->fromdate;
         $todate = $request->todate;

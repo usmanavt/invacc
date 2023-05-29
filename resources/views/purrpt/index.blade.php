@@ -183,6 +183,8 @@
     const glheads = @json($glheads);
     const subheadspend = @json($subheadspend);
     const vchrheads = @json($vchrheads);
+    const contlistfill = @json(route('purrpt.contlistfill'));
+    const cominvsloc = @json(route('purrpt.cominvsloc'));
 
 
     const head = document.getElementById('head_id')
@@ -193,28 +195,28 @@
     let rptType = ''
     let list;
     // console.info(heads)
-        console.info(subheadsci)
+        // console.info(subheadsci)
     // console.info(vchrcats)
     const headSelected = ()=>{
           const value = head.value
         //  const value = 6
         subhead.options.length = 0 // Reset List
-        //  console.info(rptType)
+        //   console.info(value)
         switch (rptType){
-            case 'glhw':
-                list = subheads.filter( l => l.MHEAD === Number(value)  )
-                if(list.length > 0)
-                {
-                    list.forEach(e => {
-                        addSelectElement(subhead,e.Subhead,e.title)
-                    });
-                    subhead.setAttribute('required','')
-                    subhead.removeAttribute('disabled','')
-                }else{
-                    subhead.removeAttribute('required','')
-                    subhead.setAttribute('disabled','')
-                }
-                break;
+            // case 'glhw':
+                // list = subheads.filter( l => l.MHEAD === Number(value)  )
+                // if(list.length > 0)
+                // {
+                //     list.forEach(e => {
+                //         addSelectElement(subhead,e.Subhead,e.title)
+                //     });
+                //     subhead.setAttribute('required','')
+                //     subhead.removeAttribute('disabled','')
+                // }else{
+                //     subhead.removeAttribute('required','')
+                //     subhead.setAttribute('disabled','')
+                // }
+                // break;
 
 
         // switch (rptType){
@@ -233,20 +235,20 @@
                 }
                 break;
 
-                case 'loccominvs':
-                list = subheadsciloc.filter( l => l.MHEAD === Number(value)  )
-                if(list.length > 0)
-                {
-                    list.forEach(e => {
-                        addSelectElement(subhead,e.Subhead,e.title)
-                    });
-                    subhead.setAttribute('required','')
-                    subhead.removeAttribute('disabled','')
-                }else{
-                    subhead.removeAttribute('required','')
-                    subhead.setAttribute('disabled','')
-                }
-                break;
+                // case 'loccominvs':
+                // list = subheadsciloc.filter( l => l.MHEAD === Number(value)  )
+                // if(list.length > 0)
+                // {
+                //     list.forEach(e => {
+                //         addSelectElement(subhead,e.Subhead,e.title)
+                //     });
+                //     subhead.setAttribute('required','')
+                //     subhead.removeAttribute('disabled','')
+                // }else{
+                //     subhead.removeAttribute('required','')
+                //     subhead.setAttribute('disabled','')
+                // }
+                // break;
 
                 case 'gl':
                 // list = subheads.filter( l => l.MHEAD === value  )
@@ -267,17 +269,9 @@
                 }
                 break;
 
-
-
-
-
-
-
-
-
-
-            case 'vchr':m
-                fetch(vouchers + `?todate=${todate.value}&fromdate=${fromdate.value}&head=${value}`,{
+            case 'glhw':
+            // console.log(value)
+            fetch(contlistfill + `?todate=${todate.value}&fromdate=${fromdate.value}&head=${value}`,{
                     method:"GET",
                     headers: { 'Accept':'application/json','Content-type':'application/json'},
                     })
@@ -286,7 +280,7 @@
                         if(data.length > 0)
                         {
                             data.forEach(e => {
-                                addSelectElement(subhead,e.id,e.Title)
+                                addSelectElement(subhead,e.Subhead,e.title)
                             });
                             subhead.setAttribute('required','')
                             subhead.removeAttribute('disabled','')
@@ -297,12 +291,36 @@
                     })
                     .catch(error => console.error(error))
                 break;
-        }
 
+
+                case 'loccominvs':
+            // console.log(value)
+            fetch(cominvsloc + `?todate=${todate.value}&fromdate=${fromdate.value}&head=${value}`,{
+                    method:"GET",
+                    headers: { 'Accept':'application/json','Content-type':'application/json'},
+                    })
+                    .then(response => response.json())
+                    .then( data => {
+                        if(data.length > 0)
+                        {
+                            data.forEach(e => {
+                                addSelectElement(subhead,e.Subhead,e.title)
+                            });
+                            subhead.setAttribute('required','')
+                            subhead.removeAttribute('disabled','')
+                        }else{
+                            subhead.removeAttribute('required','')
+                            subhead.setAttribute('disabled','')
+                        }
+                    })
+                    .catch(error => console.error(error))
+                break;
+            }
     }
 
+    // FOR CONTRACT FILL
     const getSubheadVoucherData = async (value) =>{
-        let data = await fetch(vouchers + `?todate=${todate.value}&fromdate=${fromdate.value}&head=${value}`,{
+        let data = await fetch(contlistfill + `?todate=${todate.value}&fromdate=${fromdate.value}&head=${value}`,{
             method:"GET",
             headers: { 'Accept':'application/json','Content-type':'application/json'},
             })
@@ -310,9 +328,9 @@
             .then( data => { return data })
             .catch(error => console.error(error))
     }
-    const getVchr =async  (value) => {
-        const vchr = await getSubheadVoucherData(value)
-        return vchr
+    const getGlhw =async  (value) => {
+        const glhw = await getSubheadVoucherData(value)
+        return glhw
     }
 
     const addSelectElement = (select,id,value) => {
@@ -321,6 +339,35 @@
         option.text  = value
         select.appendChild(option)
     }
+
+    // FOR LOCAL INVOICE FILL
+    const getCominvslocVoucherData = async (value) =>{
+        let data = await fetch(cominvsloc + `?todate=${todate.value}&fromdate=${fromdate.value}&head=${value}`,{
+            method:"GET",
+            headers: { 'Accept':'application/json','Content-type':'application/json'},
+            })
+            .then(response => response.json())
+            .then( data => { return data })
+            .catch(error => console.error(error))
+    }
+    const getCominvsloc =async  (value) => {
+        const cominvsloc = await getCominvslocVoucherData(value)
+        return cominvsloc
+    }
+
+    const addSelectElement1 = (select,id,value) => {
+        var option = document.createElement('option')
+        option.value = id
+        option.text  = value
+        select.appendChild(option)
+    }
+
+
+
+
+
+
+
 
     const calculate = () =>{
         amount_pkr.value = (parseFloat(conversion_rate.value) * parseFloat(amount_fc.value)).toFixed(2)
@@ -372,20 +419,25 @@
 
 
 
-            case 'glhw':
-                // Show Head
-                rptType = 'glhw'
-                head.setAttribute('required','')
-                head.disabled = false
-                head.length = 0
-                subhead.removeAttribute('required')
-                subhead.disabled = true
-                subhead.length = 0
-                heads.forEach(e => {
-                    addSelectElement(head,e.id,e.title)
-                });
-                headSelected()
-                break;
+            // case 'glhw':
+            //     // Show Head
+            //     rptType = 'glhw'
+            //     head.setAttribute('required','')
+            //     head.disabled = false
+            //     head.length = 0
+            //     subhead.removeAttribute('required')
+            //     subhead.disabled = true
+            //     subhead.length = 0
+            //     heads.forEach(e => {
+            //         addSelectElement(head,e.id,e.title)
+            //     });
+            //     headSelected()
+            //     break;
+
+
+
+
+
 
             case 'impcominvs':
                 // Show Head
@@ -419,9 +471,9 @@
 
 
 
-                case 'vchr':
+                case 'glhw':
                 //  Head Not Required
-                rptType = 'vchr'
+                rptType = 'glhw'
                 head.setAttribute('required','')
                 head.disabled = false
                 head.length = 0

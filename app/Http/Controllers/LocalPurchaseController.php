@@ -79,11 +79,6 @@ class LocalPurchaseController  extends Controller
     }
 
 
-
-
-
-
-
     // public function getDetails(Request $request)
     // {
     //     $search = $request->search;

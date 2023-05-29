@@ -25,7 +25,7 @@ class ReportController extends Controller
 
     public function vouchers(Request $request)
     {
-        // dd($request->all());
+        //  dd($request->all());
         $fromdate = $request->fromdate;
         $todate = $request->todate;
         $head = $request->head;

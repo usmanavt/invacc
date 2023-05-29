@@ -52,13 +52,17 @@ Route::get('/transactons', function () {
 
 // Financial Report
 Route::get('reports',[ReportController::class, 'index'])->name('reports.index');
-Route::get('vouchers',[ReportController::class, 'vouchers'])->name('reports.vouchers');
+ Route::get('vouchers',[ReportController::class, 'vouchers'])->name('reports.vouchers');
 Route::post('report/fetch',[ReportController::class, 'fetch'])->name('reports.fetch');
 
 // Purchase Reports
 Route::get('purrpt',[PurchaseRptController::class, 'index'])->name('purrpt.index');
+Route::get('contlistfill',[PurchaseRptController::class, 'contlistfill'])->name('purrpt.contlistfill');
+Route::get('cominvsloc',[PurchaseRptController::class, 'cominvsloc'])->name('purrpt.cominvsloc');
+
 Route::get('xyz',[PurchaseRptController::class, 'xyz'])->name('purrpt.xyz');
 Route::post('purrpt/fetch',[PurchaseRptController::class, 'fetch'])->name('purrpt.fetch');
+
 
 // dutyclearance Reports
 Route::get('dutyclearance',[DutyRptController::class, 'index'])->name('dutyclearance.index');
