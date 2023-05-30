@@ -242,7 +242,7 @@
             {title:"Id", field:"id" , responsive:0},
             {title:"Material", field:"title" , visible:true ,headerSort:false, responsive:0},
             {title:"Category", field:"category" , visible:true ,headerSortStartingDir:"asc" , responsive:0},
-            {title:"Dimesion", field:"dimension" ,  responsive:0},
+            {title:"Dimesion", field:"dimension" ,   responsive:0},
             {title:"Source", field:"source" ,  responsive:0},
             {title:"Sku", field:"sku" ,  responsive:0},
             {title:"Brand", field:"brand" ,  responsive:0},

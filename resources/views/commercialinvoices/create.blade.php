@@ -58,6 +58,9 @@
                             </div>
                         </fieldset>
 
+
+
+
                         {{-- Contract Details --}}
                         <div class="flex flex-row px-4 py-2 items-center">
                             <x-label value="Add Pcs & Feet Size & Press"></x-label>
@@ -822,6 +825,28 @@
                 showSnackbar("You must have atleast 1 row of item to Proceed","info");
                 return;
             }
+
+
+
+            for (let index = 0; index < dynamicTableData.length; index++) {
+            const element = dynamicTableData[index];
+
+            if(element.location === undefined)
+               {
+                showSnackbar("Location must be Enter","info");
+                return;
+               }
+        }
+
+
+
+
+
+
+
+
+
+
 
             // disableSubmitButton(true);
             var data = {

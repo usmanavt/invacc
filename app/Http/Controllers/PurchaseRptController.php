@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Head;
 use App\Models\Supplier;
-use \Mpdf\Mpdf as PDF;
+use \Mpdf\mpdf as PDF;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
