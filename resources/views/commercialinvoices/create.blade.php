@@ -232,6 +232,19 @@
 
 @push('scripts')
     <script>
+
+        // Populate Locations in Tabulator
+    const locations = @json($locations);
+        var newList=[]
+        locations.forEach(e => {
+            newList.push({value:e.title,label:e.title , id:e.id})
+
+        });
+
+
+
+
+
         //  ------------------Dynamic Table----------------------//
         async function fetchDataFromServer(url)
         {
@@ -328,6 +341,9 @@
             const data = dynamicTable.getData()
             //  First Iteration to calculate Basic Data
             data.forEach(e => {
+
+
+
                 var pcs = e.pcs
                 var gdswt = e.gdswt
                 var inkg = ((e.gdswt / e.pcs ) ).toFixed(3)
@@ -337,6 +353,10 @@
 
                 var tmpcda = e.tmpcda
                 //  update data element
+
+
+
+
                 e.pcs = pcs
                 e.gdswt = gdswt
                 e.inkg = inkg
@@ -445,7 +465,22 @@
                 {
                     title:'Quantity', headerHozAlign:"center",
                     columns:[
-                        {   title:"Pcs",headerHozAlign :'center',
+
+                    {title: "id",field: "myid",visible:false},
+                    {title:"Location", field:"location" ,editor:"list" , editorParams:   {
+                            values:newList,
+                            cssClass:"bg-green-200 font-semibold",
+                            validator:["required"]
+                        }
+                    },
+
+
+
+
+
+
+
+                    {   title:"Pcs",headerHozAlign :'center',
                             responsive:0,
                             field:"pcs",
                             editor:"number",

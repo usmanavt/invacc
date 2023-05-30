@@ -91,6 +91,19 @@
     <script>
         const getDetails = @json("$i->commericalInvoiceDetails");
         const cid = @json("$i->id");
+
+        // Populate Locations in Tabulator
+        const locations = @json($locations);
+        var newList=[]
+        locations.forEach(e => {
+            newList.push({value:e.title,label:e.title , id:e.id})
+
+        });
+
+
+
+
+
         // console.info(cid)
         let csrfToken = document.head.querySelector("[name~=csrf-token][content]").content;
         //
@@ -136,6 +149,7 @@
 
 @push('scripts')
     <script>
+
         var calculate = function(){
             calculateBankCharges()
             // alert(dynamicTable.getData())
@@ -252,6 +266,15 @@
                 //         cell.getRow().delete();
                 //     }
                 // },
+
+                {title: "id",field: "myid",visible:false},
+                {title:"Location", field:"location" ,editor:"list" , editorParams:   {
+                        values:newList,
+                        cssClass:"bg-green-200 font-semibold",
+                        validator:["required"]
+                    }
+                },
+
                 {title:"Id",           field:"material_id", visible:false},
                 {title:"Material",     field:"material.title"},
                 {title:"contract_id",  field:"contract_id",visible:false},

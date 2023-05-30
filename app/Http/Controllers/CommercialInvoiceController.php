@@ -220,6 +220,14 @@ class CommercialInvoiceController extends Controller
                 $c->perkg = $cid['perkg'];
                 $c->perft = $cid['perft'];
                 $c->otherexpenses = $cid['otherexpenses'];
+
+                $c->location = $cid['location'];
+                $location = Location::where("title", $cid['location'])->first();
+                $c->locid = $location->id;
+
+
+
+
                 $c->save();
 
                 // Create Auto Pending Clearance [COpy of CIDetails]
@@ -333,7 +341,9 @@ class CommercialInvoiceController extends Controller
         //     return redirect()->back();
         // }
         //** */ Marking From Usman on 15-12-2022
-        return view('commercialinvoices.edit')->with('i',CommercialInvoice::whereId($id)->with('commericalInvoiceDetails.material.hscodes')->first());
+        return view('commercialinvoices.edit')
+        ->with('i',CommercialInvoice::whereId($id)->with('commericalInvoiceDetails.material.hscodes')->first())
+        ->with('locations',Location::select('id','title')->get());
     }
 
     public function update(Request $request, CommercialInvoice $commercialInvoice)
@@ -469,7 +479,16 @@ class CommercialInvoiceController extends Controller
                 $c->perpc = $cid['perpc'];
                 $c->perkg = $cid['perkg'];
                 $c->perft = $cid['perft'];
-                $c->otherexpenses = $cid['otherexpenses'];
+                $c->otherexpenses =  $cid['otherexpenses'];
+
+                $c->location = $cid['location'];
+                $location = Location::where("title", $cid['location'])->first();
+                $c->locid = $location->id;
+
+
+
+
+
                 $c->save();
                 // Update Auto Pending Clearance [COpy of CIDetails]
                 $cpd = ClearancePendingDetails::where('commercial_invoice_id',$cid['commercial_invoice_id'])->where('material_id',$cid['material_id'])->first();
