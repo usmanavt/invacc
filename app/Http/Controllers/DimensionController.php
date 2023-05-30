@@ -36,7 +36,7 @@ class DimensionController extends Controller
     {
         // dd($request->all());
         $request->validate([
-            'title'=>'required|min:3|unique:dimensions'
+            'title'=>'required|min:1|unique:dimensions'
         ]);
         DB::beginTransaction();
         try {
@@ -61,7 +61,7 @@ class DimensionController extends Controller
     public function update(Dimension $dimension,Request $request)
     {
         $request->validate([
-            'title'=>'required|min:3|unique:dimensions,title,'.$dimension->id
+            'title'=>'required|min:1|unique:dimensions,title,'.$dimension->id
         ]);
         DB::beginTransaction();
         try {

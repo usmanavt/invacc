@@ -89,12 +89,6 @@
                                     <x-input id="qtyfeetrt" class="bg-indigo-100" type="text" name="qtyfeetrt" :value="old('qtyfeetrt')"   />
                                 </div>
 
-
-
-
-
-
-
                             <input class="checked:bg-blue-500 checked:border-blue-500 focus:outline-none" type="checkbox" name="status"
                             @if ($material->status == 1)
                                 checked

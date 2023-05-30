@@ -192,6 +192,7 @@ class MaterialController extends Controller
             DB::commit();
             Session::flash('info','Material updated');
             return redirect()->route('materials.index');
+
         } catch (\Throwable $th) {
             DB::rollback();
             throw $th;

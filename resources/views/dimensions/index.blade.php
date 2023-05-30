@@ -22,7 +22,7 @@
                                     @csrf
                                     <p class="font-semibold pb-6">Create New Dimension</p>
                                     <x-label for="title" value="Title"/>
-                                    <x-input id="title" type="text" name="title"  required minlength="3" :value="old('title')"/>
+                                    <x-input id="title" type="text" name="title"  required minlength="1" :value="old('title')"/>
                                     @if($errors->has('title'))<div class="text-red-500 text-xs">{{ $errors->first('title') }}</div>@endif
 
                                     <div class="mt-2">

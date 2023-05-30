@@ -35,7 +35,7 @@
                             @if($errors->has('title'))<div class="text-red-500 text-xs">{{ $errors->first('title') }}</div>@endif
 
                             <x-label for="ob" :value="__('O/Balance')"/>
-                            <x-input id="ob" class="bg-indigo-100" type="text" name="ob" value="{{ $subhead->ob }}"  required minlength="3"/>
+                            <x-input id="ob" class="bg-indigo-100" type="text" name="ob" value="{{ $subhead->ob }}"  />
                             @if($errors->has('ob'))<div class="text-red-500 text-xs">{{ $errors->first('ob') }}</div>@endif
 
                             <input class="checked:bg-blue-500 checked:border-blue-500 focus:outline-none" type="checkbox" name="status"

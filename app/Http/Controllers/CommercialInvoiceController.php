@@ -14,6 +14,7 @@ use Illuminate\Support\Facades\Session;
 use App\Models\CommercialInvoiceDetails;
 use App\Models\RecivingCompletedDetails;
 use App\Models\Subhead;
+use App\Models\Location;
 
 
 class CommercialInvoiceController extends Controller
@@ -78,7 +79,8 @@ class CommercialInvoiceController extends Controller
 
     public function create()
     {
-        return view('commercialinvoices.create');
+        return view('commercialinvoices.create')->with('locations',Location::select('id','title')->get());;
+
     }
 
     public function store(Request $request)

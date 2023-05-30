@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class AddColumnToSubheads extends Migration
+class CreateTmpstockrptpar extends Migration
 {
     /**
      * Run the migrations.
@@ -13,9 +13,9 @@ class AddColumnToSubheads extends Migration
      */
     public function up()
     {
-        Schema::table('subheads', function (Blueprint $table) {
-            $table->smallInteger('commercial_invoice_id')->default(0);
-            $table->string('forinput',1)->default(0);
+        Schema::create('tmpstockrptpar', function (Blueprint $table) {
+            $table->id();
+            $table->smallInteger('GLCODE')->default(0);
         });
     }
 
@@ -26,8 +26,6 @@ class AddColumnToSubheads extends Migration
      */
     public function down()
     {
-        Schema::table('subheads', function (Blueprint $table) {
-            //
-        });
+        Schema::dropIfExists('tmpstockrptpar');
     }
 }
