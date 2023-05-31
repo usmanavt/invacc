@@ -99,10 +99,10 @@
         // value="{{$supplier->id}}"> {{$supplier->title}}
 
 
-    const getMasterData = @json(route('materials.master'));
+    const getMaster = @json(route('materials.master'));
     let csrfToken = document.head.querySelector("[name~=csrf-token][content]").content;
     let modal = document.getElementById("myModal")
-    console.log(getMasterData);
+    console.log(getMaster);
 
     let dyanmicTable = ""; // Tabulator
     let dynamicTableData = [];
@@ -140,17 +140,6 @@
             bankntotal.value= ( Number(tamount)-Number(collofcustom.value))+Number(exataxoffie.value)   ;
             // bankntotal.value=parseFloat( bankntotal.value ) + parseFloat(exataxoffie.values);
         }
-
-        // function DiscAmount()
-        // {
-        //     bankcharges.value=0
-        //     var discper =  parseFloat(collofcustom.value)/parseFloat(exataxoffie.value)*100
-        //     bankcharges.value = discper.toFixed(1)
-        //     // console.log(banktotal.value);
-        // }
-
-
-
 
 </script>
 @endpush
@@ -232,7 +221,7 @@
         ajaxParams: function(){
             return {search:searchValue};
         },
-        ajaxURL: getMasterData,
+        ajaxURL: getMaster,
         ajaxContentType:"json",
         initialSort:[ {column:"id", dir:"desc"} ],
         height:"100%",
@@ -322,12 +311,16 @@
 
 
 
+
+
+
             {title:"Id",                field:"id",    cssClass:"bg-gray-200 font-semibold"},
             {title:"Material",          field:"title", cssClass:"bg-gray-200 font-semibold"},
             {title:"Category_id",       field:"category_id",    cssClass:"bg-gray-200 font-semibold",visible:false},
             {title:"Category",          field:"category",       cssClass:"bg-gray-200 font-semibold"},
             {title:"Dimension",         field:"dimension_id",   cssClass:"bg-gray-200 font-semibold",visible:false},
             {title:"Dimension",         field:"dimension",      cssClass:"bg-gray-200 font-semibold"},
+            {title:"Replace Description",field:"repname",       cssClass:"bg-gray-200 font-semibold",editor:true},
             {title:"Source",            field:"source_id",      cssClass:"bg-gray-200 font-semibold",visible:false},
             {title:"Source",            field:"source",         cssClass:"bg-gray-200 font-semibold"},
             {title:"Sku",               field:"sku_id",         cssClass:"bg-gray-200 font-semibold",visible:false},

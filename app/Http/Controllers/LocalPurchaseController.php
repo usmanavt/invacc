@@ -151,6 +151,9 @@ class LocalPurchaseController  extends Controller
                 $lpd->commercial_invoice_id = $ci->id;
                 $lpd->contract_id = 0;
                 $lpd->material_id = $material->id;
+                $lpd->repname = $cont['repname'];
+
+
                 $lpd->supplier_id = $ci->supplier_id;
                 $lpd->user_id = auth()->id();
                 $lpd->category_id = $material->category_id;
@@ -243,6 +246,7 @@ class LocalPurchaseController  extends Controller
                     $cds->contract_id = 0;
                     $cds->material_id = $cd->material_id;
                     // $cds->material_title = $cd->material_title;
+                    $cds->repname = $cd->repname;
                     $cds->supplier_id = $cd->supplier_id;
                     $cds->user_id = $cd->user_id;
                     $cds->category_id = $cd->category_id;
@@ -263,6 +267,7 @@ class LocalPurchaseController  extends Controller
                     $cds = new CommercialInvoiceDetails();
                     $cds->contract_id = $contract->id;
                     $cds->material_id = $cd->material_id;
+                    $cds->repname = $cd->repname;
                     // $cds->material_title = $cd->material_title;
                     $cds->supplier_id = $contract->supplier_id;
                     $cds->user_id = auth()->id();

@@ -144,6 +144,8 @@ class SalesInvoicesController  extends Controller
                 $lpd->material_id = $material->id;
                 $lpd->sku_id = $material->sku_id;
 
+                $lpd->repname = $cont['repname'];
+
                 $lpd->qtykg = $cont['bundle1'];
                 $lpd->qtypcs = $cont['bundle2'];
                 $lpd->qtyfeet = $cont['pcspbundle2'];
@@ -231,26 +233,26 @@ class SalesInvoicesController  extends Controller
                     $cds->sale_invoice_id = $saleinvoices->id;
                     $cds->material_id = $cd->material_id;
                     $cds->sku_id = $cd->sku_id;
-
+                    $cds->repname = $cd['repname'];
                     $cds->qtykg = $cd['qtykg'];
                     $cds->qtypcs = $cd['qtypcs'];
                     $cds->qtyfeet = $cd['qtyfeet'];
                     $cds->price = $cd['price'];
                     $cds->saleamnt = $cd['saleamnt'];
 
-                $location = Location::where("title", $cd['location'])->first();
-                $cds->locid = $location->id;
-                $cds->location = $cd['location'];
+                     $location = Location::where("title", $cd['location'])->first();
+                     $cds->locid = $location->id;
+                      $cds->location = $cd['location'];
 
-                $unit = Sku::where("title", $cd['sku'])->first();
-                $cds->salunitid = $unit->id;
-                $cds->sku = $cd['sku'];
+                     $unit = Sku::where("title", $cd['sku'])->first();
+                     $cds->salunitid = $unit->id;
+                     $cds->sku = $cd['sku'];
 
                  $cds->save();
                 }else
                 {
                     //  The item is new, Add it
-                    // $cds = new SaleInvoicesDetails();
+                     $cds = new SaleInvoicesDetails();
                     // $cds->sale_invoice_id = $saleinvoices->id;
                     // $cds->material_id = $cd->material_id;
                     // $cds->sku_id = $cd->sku_id;
@@ -262,6 +264,26 @@ class SalesInvoicesController  extends Controller
                     // $cds->saleamnt = $cd['ttpcs'];
                     // $cds->locid = $cd['location'];
                     // $cds->salunitid = $cd['sku'];
+
+                    $cds->sale_invoice_id = $saleinvoices->id;
+                    $cds->material_id = $cd->material_id;
+                    $cds->sku_id = $cd->sku_id;
+                    $cds->repname = $cd['repname'];
+                    $cds->qtykg = $cd['qtykg'];
+                    $cds->qtypcs = $cd['qtypcs'];
+                    $cds->qtyfeet = $cd['qtyfeet'];
+                    $cds->price = $cd['price'];
+                    $cds->saleamnt = $cd['saleamnt'];
+
+                     $location = Location::where("title", $cd['location'])->first();
+                     $cds->locid = $location->id;
+                      $cds->location = $cd['location'];
+
+                     $unit = Sku::where("title", $cd['sku'])->first();
+                     $cds->salunitid = $unit->id;
+                     $cds->sku = $cd['sku'];
+
+
                     $cds->save();
                 }
             }

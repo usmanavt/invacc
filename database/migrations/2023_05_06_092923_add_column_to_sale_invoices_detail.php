@@ -16,6 +16,8 @@ class AddColumnToSaleInvoicesDetail extends Migration
         Schema::table('sale_invoices_detail', function (Blueprint $table) {
             $table->smallInteger('locid')->default(0);
             $table->smallInteger('salunitid')->default(0);
+            $table->string('location`', 25)->nullable();
+            $table->string('sku`', 10)->nullable();
         });
     }
 

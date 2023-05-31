@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class AddColumnToAddColumnToCommercialInvoiceDetails extends Migration
+class AbcAddColumnToCommercialInvoiceDetails extends Migration
 {
     /**
      * Run the migrations.
@@ -14,15 +14,8 @@ class AddColumnToAddColumnToCommercialInvoiceDetails extends Migration
     public function up()
     {
         Schema::table('commercial_invoice_details', function (Blueprint $table) {
-
-            Schema::table('commercial_invoice_details', function (Blueprint $table) {
-                $table->smallInteger('locid')->default(0);
-
-            });
+            $table->string('repname',75)->nullable();
         });
-
-
-
     }
 
     /**
@@ -32,7 +25,7 @@ class AddColumnToAddColumnToCommercialInvoiceDetails extends Migration
      */
     public function down()
     {
-        Schema::table('add_column_to_commercial_invoice_details', function (Blueprint $table) {
+        Schema::table('commercial_invoice_details', function (Blueprint $table) {
             //
         });
     }

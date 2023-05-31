@@ -19,8 +19,8 @@ class SaleRptController extends Controller
          $fromdate = $request->fromdate;
          $todate = $request->todate;
 
-         $fromdate = '2023/03/01';
-         $todate = '2023/05/30';
+         $fromdate = '2023/05/01';
+         $todate = '2023/05/31';
 
         return view('salerpt.index')
         ->with('heads',Customer::where('status',1)->get())

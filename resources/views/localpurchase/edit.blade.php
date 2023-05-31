@@ -168,10 +168,13 @@ const locations = @json($locations);
         var simple = {...row}
         var data = simple._row.data
         //  Filter Data here .
+
+        // console.info(data)
         var result = dynamicTableData.filter( dt => dt.material_id == data.id)
         if(result.length <= 0)
         {
-            pushDynamicData(data)
+             pushDynamicData(data)
+
         }
     })
     function showModal(){ modal.style.display = "block"}
@@ -187,11 +190,13 @@ let abc=0;
 //  Adds actual data to row - EDIT Special
 function pushDynamicData(data)
 {
+
+
     dynamicTableData.push({
         material_id:data.id,
-        material_title:data.title,
-        category_id:data.category_id,
-        category:data.category,
+         material_title:data.title,
+         category_id:data.category_id,
+         category:data.category,
 
         source_id:data.source_id,
         source:data.source,
@@ -309,13 +314,14 @@ dynamicTable = new Tabulator("#dynamicTable", {
 
 
         //  {title: "Location",field: "locid"},
-        {title:"Id",                field:"material_id",    cssClass:"bg-gray-200 font-semibold"},
-        {title:"Material",          field:"material_title", cssClass:"bg-gray-200 font-semibold"},
+        {title:"Id",                field:"material_id",            cssClass:"bg-gray-200 font-semibold"},
+        {title:"Material",          field:"material_title",         cssClass:"bg-gray-200 font-semibold"},
         {title:"Category_id",       field:"material.category_id",    cssClass:"bg-gray-200 font-semibold",visible:false},
         {title:"Category",          field:"material.category",       cssClass:"bg-gray-200 font-semibold"},
-        {title:"Dimension",         field:"dimension_id",   cssClass:"bg-gray-200 font-semibold",visible:false},
+        {title:"Dimension",         field:"dimension_id",            cssClass:"bg-gray-200 font-semibold",visible:false},
         {title:"Dimension",         field:"material.dimension",      cssClass:"bg-gray-200 font-semibold"},
-         {title:"Source",            field:"material.source_id",      cssClass:"bg-gray-200 font-semibold",visible:false},
+        {title:"Replace Description",       field:"repname",                 cssClass:"bg-gray-200 font-semibold",editor:true},
+        {title:"Source",            field:"material.source_id",      cssClass:"bg-gray-200 font-semibold",visible:false},
          {title:"Source",            field:"material.source",         cssClass:"bg-gray-200 font-semibold"},
         {title:"Sku",               field:"material.sku_id",         cssClass:"bg-gray-200 font-semibold",visible:false},
         {title:"Sku",               field:"material.sku",            cssClass:"bg-gray-200 font-semibold"},

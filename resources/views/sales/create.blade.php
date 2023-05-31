@@ -120,10 +120,10 @@ const skus = @json($skus);
 
 
 
-    const getMasterData = @json(route('materials.master'));
+    const getMaster = @json(route('materials.master'));
     let csrfToken = document.head.querySelector("[name~=csrf-token][content]").content;
     let modal = document.getElementById("myModal")
-    console.log(getMasterData);
+    console.log(getMaster);
 
     let dyanmicTable = ""; // Tabulator
     let dynamicTableData = [];
@@ -256,7 +256,7 @@ const skus = @json($skus);
         ajaxParams: function(){
             return {search:searchValue};
         },
-        ajaxURL: getMasterData,
+        ajaxURL: getMaster,
         ajaxContentType:"json",
         initialSort:[ {column:"id", dir:"desc"} ],
         height:"100%",
@@ -378,6 +378,7 @@ const skus = @json($skus);
             {title:"Category",          field:"category",       cssClass:"bg-gray-200 font-semibold"},
             {title:"Dimension",         field:"dimension_id",   cssClass:"bg-gray-200 font-semibold",visible:false},
             {title:"Dimension",         field:"dimension",      cssClass:"bg-gray-200 font-semibold"},
+            {title:"Replace Description",field:"repname",       cssClass:"bg-gray-200 font-semibold",editor:true},
             // {title:"Source",            field:"source_id",      cssClass:"bg-gray-200 font-semibold",visible:false},
             // {title:"Source",            field:"source",         cssClass:"bg-gray-200 font-semibold"},
             {title:"Sku",               field:"sku_id",         cssClass:"bg-gray-200 font-semibold",visible:false},
@@ -387,16 +388,16 @@ const skus = @json($skus);
 
 
 
-            {   title:"Replace Description",
-                field:"repname",
-                editor:"number",
-                cssClass:"bg-green-200 font-semibold",
-                // validator:"required",
-                // formatter:"money",
-                // formatterParams:{thousand:",",precision:2},
-                // validator:["required","integer"],
-                // cellEdited: updateValues,
-               },
+            // {   title:"Replace Description",
+            //     field:"repname",
+            //     editor:"number",
+            //     cssClass:"bg-green-200 font-semibold",
+            //     // validator:"required",
+            //     // formatter:"money",
+            //     // formatterParams:{thousand:",",precision:2},
+            //     // validator:["required","integer"],
+            //     // cellEdited: updateValues,
+            //    },
 
 
 

@@ -80,7 +80,7 @@
         },
         ajaxURL: getMaster,
         ajaxContentType:"json",
-        initialSort:[ {column:"invoiceno", dir:"desc"} ],
+        initialSort:[ {column:"id", dir:"desc"} ],
         height:"100%",
 
         columns:[

@@ -336,6 +336,7 @@ dynamicTable = new Tabulator("#dynamicTable", {
         {title:"Category",          field:"material.category",       cssClass:"bg-gray-200 font-semibold"},
         {title:"Dimension",         field:"dimension_id",   cssClass:"bg-gray-200 font-semibold",visible:false},
         {title:"Dimension",         field:"material.dimension",      cssClass:"bg-gray-200 font-semibold"},
+        {title:"Replace Description",field:"repname",       cssClass:"bg-gray-200 font-semibold",editor:true},
         // {title:"Source",            field:"material.source_id",      cssClass:"bg-gray-200 font-semibold",visible:false},
         // {title:"Source",            field:"material.source",         cssClass:"bg-gray-200 font-semibold"},
         {title:"Sku",               field:"material.sku_id",         cssClass:"bg-gray-200 font-semibold",visible:false},
