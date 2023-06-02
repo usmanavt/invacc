@@ -80,6 +80,7 @@
             {title:"Email", field:"email" ,  responsive:0},
             {title:"NTN No", field:"ntn" ,  responsive:0},
             {title:"S.Tax Regis. No", field:"stax" ,  responsive:0},
+            {title:"Care Of", field:"care.title" ,  responsive:0},
             // {title:"Status", field:"status" ,  responsive:0,
             //     formatter:function(cell){
             //         if(cell.getData().status === 1)

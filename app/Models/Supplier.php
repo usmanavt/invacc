@@ -44,7 +44,12 @@ class Supplier extends Model
         return $this->hasMany(Contract::class);
     }
 
-    public function source(){ return $this->belongsTo(Source::class); }
+    // public function source(){ return $this->belongsTo(Source::class); }
+
+    public function source()
+    {
+        return $this->belongsTo(Source::class,'source_id');
+    }
 
 
 

@@ -76,7 +76,7 @@
             {title:"Id", field:"id" , responsive:0},
             {title:"Title", field:"title" , visible:true ,headerSortStartingDir:"asc" , responsive:0},
             {title:"Address", field:"address" , visible:true , responsive:0},
-            {title:"Source", field:"source_title" , visible:true , responsive:0},
+            {title:"Source", field:"source.title" , visible:true , responsive:0},
             {title:"Email", field:"email" ,  responsive:0},
             {title:"NTN No", field:"ntn" ,  responsive:0},
             {title:"S.Tax Regis. No", field:"stax" ,  responsive:0},

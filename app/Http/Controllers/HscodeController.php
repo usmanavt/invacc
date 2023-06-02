@@ -35,7 +35,7 @@ class HscodeController extends Controller
     {
         // dd($request->all());
         $this->validate($request,[
-            'hscode' => 'required|min:9|unique:hscodes',
+            'hscode' => 'required|min:3|unique:hscodes',
             'cd' => 'required|numeric',
             'st' => 'required|numeric',
             'rd' => 'required|numeric',

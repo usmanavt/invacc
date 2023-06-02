@@ -13,15 +13,19 @@ class CustomerController extends Controller
 
     public function index(Request $request)
     {
+
         $search = $request->search;
         $customers = Customer::where(function($q) use ($search){
             $q->where('title','LIKE',"%$search%")
             ->orWhere('email','LIKE',"%$search%");
         })
-        ->with('care')
+        // ->with('care')
+        ->with('care:id,title')
         ->orderBy('id','desc')
         ->paginate(5);
-        return view('customers.index')->with('customers',$customers);
+        return view('customers.index')
+        ->with('customers',$customers);
+
     }
 
 
@@ -38,6 +42,7 @@ class CustomerController extends Controller
 
         })
         // ->with('Source:id,title')
+        ->with('care:id,title')
         ->orderBy($field,$dir)
         ->paginate((int) $size);
         return $customers;

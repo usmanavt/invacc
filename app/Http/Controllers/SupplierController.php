@@ -38,8 +38,9 @@ class SupplierController extends Controller
             $query->where('title','LIKE','%' . $search . '%')
             ->orWhere('address','LIKE','%' . $search . '%');
 
+
         })
-        // ->with('Source:id,title')
+        ->with('source:id,title')
         ->orderBy($field,$dir)
         ->paginate((int) $size);
         return $suppliers;

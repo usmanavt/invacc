@@ -126,7 +126,7 @@ class ContractController extends Controller
     /** Function Complete*/
     public function store(Request $request)
     {
-        // dd($request->all());
+        //   dd($request->all());
         $this->validate($request,[
             'invoice_date' => 'required|min:3|date',
             'number' => 'required|min:3',
@@ -135,6 +135,8 @@ class ContractController extends Controller
         DB::beginTransaction();
         try {
             // Create Master Record
+
+
             $contract = new Contract();
             $contract->supplier_id = $request->supplier_id;
             $contract->user_id = auth()->id();
@@ -168,8 +170,23 @@ class ContractController extends Controller
                 $cd->gdsprice = $cont['gdsprice'];
                 $cd->dtyrate = $cont['dtyrate'];
                 $cd->invsrate = $cont['invsrate'];
-
+                $cd->purval = $cont['gdspricetot'];
+                $cd->totpcs = $cont['ttpcs'];
                 $cd->save();
+
+                //  $sumqty = DB::table('vwcontsum')->where('contract_id',$contract->id)->sum('contqty');
+                //  $sumval = DB::table('vwcontsum')->where('contract_id',$contract->id)->sum('contamount');
+
+                 $sumwt = ContractDetails::where('contract_id',$contract->id)->sum('gdswt');
+                 $sumpcs = ContractDetails::where('contract_id',$contract->id)->sum('totpcs');
+                 $sumval = ContractDetails::where('contract_id',$contract->id)->sum('purval');
+
+
+                 $contract->conversion_rate = $sumwt;
+                 $contract->totalpcs = $sumpcs;
+                 $contract->insurance = $sumval;
+                 $contract->save();
+
             }
             DB::commit();
             Session::flash('success','Contract Information Saved');
@@ -236,6 +253,10 @@ class ContractController extends Controller
                     $cds->gdsprice = $cd->gdsprice;
                     $cds->dtyrate = $cd->dtyrate;
                     $cds->invsrate = $cd->invsrate;
+                    $cds->purval = $cd->purval;
+                    $cds->totpcs = $cd->ttpcs;
+
+
 
                     $cds->save();
                 }
@@ -264,11 +285,11 @@ class ContractController extends Controller
                     // $cds->pcspbundle2 = $cd->pcspbundle2;
                     // $cds->gdswt = $cd->gdswt;
                     // $cds->gdsprice = $cd->gdsprice;
-                    $cds->contract_id = $cd->contract_id;
+                    $cds->contract_id = $contract->id;
                     $cds->material_id = $cd->material_id;
                     $cds->material_title = $cd->material_title;
-                    $cds->supplier_id = $cd->supplier_id;
-                    $cds->user_id = $cd->user_id;
+                    $cds->supplier_id = $contract->supplier_id;
+                    $cds->user_id = auth()->id();
                     $cds->category_id = $cd->category_id;
                     $cds->sku_id = $cd->sku_id;
                     $cds->dimension_id = $cd->dimension_id;
@@ -287,12 +308,24 @@ class ContractController extends Controller
                     $cds->gdsprice = $cd->gdsprice;
                     $cds->dtyrate = $cd->dtyrate;
                     $cds->invsrate = $cd->invsrate;
-
-
-
+                    $cds->purval = $cd->purval;
+                    $cds->totpcs = $cd->ttpcs;
 
                     $cds->save();
                 }
+
+                    // $sumqty = DB::table('vwcontsum')->where('contract_id',$contract->id)->sum('contqty');
+                    // $sumval = DB::table('vwcontsum')->where('contract_id',$contract->id)->sum('contamount');
+
+
+                    $sumwt = ContractDetails::where('contract_id',$contract->id)->sum('gdswt');
+                    $sumpcs = ContractDetails::where('contract_id',$contract->id)->sum('totpcs');
+                    $sumval = ContractDetails::where('contract_id',$contract->id)->sum('purval');
+
+                    $contract->conversion_rate = $sumwt;
+                    $contract->insurance = $sumval;
+                    $contract->totalpcs = $sumpcs;
+                    $contract->save();
             }
             DB::commit();
             Session::flash('success','Contract Information Saved');

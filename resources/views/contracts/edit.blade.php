@@ -209,7 +209,8 @@ var updateValues = (cell) => {
     var row = cell.getRow();
     row.update({
         "ttpcs": sum,
-        "gdspricetot": sum2
+        "gdspricetot": sum2,
+        "purval": sum2
     });
 }
 
@@ -388,10 +389,10 @@ dynamicTable = new Tabulator("#dynamicTable", {
 
 
         {   title:"Val($)",
-            field:"gdspricetot",
+            field:"purval",
             cssClass:"bg-gray-200 font-semibold",
-            bottomCalc:"sum",
-            bottomCalcParams:{precision:3} ,
+             bottomCalc:"sum",
+            bottomCalcParams:{precision:0} ,
             formatter:"money",
             formatterParams:{
                 decimal:".",
@@ -402,26 +403,21 @@ dynamicTable = new Tabulator("#dynamicTable", {
             formatter:function(cell,row)
             {
                     // console.log(cell.getData().sku_id)
-                    var xyz1=0;
-                    var xyz2=0;
-                    var xyz3=0;
                     if(cell.getData().sku_id == 1)
                     {
 
-                        xyz1 = (cell.getData().gdswt * cell.getData().gdsprice)
+                        return (cell.getData().gdswt * cell.getData().gdsprice)
 
                     }
-                    // if (cell.getData().sku_id == 2)
-                    else
+                    else if (cell.getData().sku_id == 2)
                     {
-                        xyz2 = ((cell.getData().bundle1 * cell.getData().pcspbundle1) + (cell.getData().bundle2 * cell.getData().pcspbundle2)) * (cell.getData().gdsprice)
+                        return ((cell.getData().bundle1 * cell.getData().pcspbundle1) + (cell.getData().bundle2 * cell.getData().pcspbundle2)) * (cell.getData().gdsprice)
                     }
+                    else {
+                        // Add for other types
+                    } bottomCalc:"sum2"
 
-                    xyz3=xyz1+xyz2
-                    return xyz3
-                    // consolse.log("xyz")
-
-                }, bottomCalc:totval
+                }
         }
 
     ],

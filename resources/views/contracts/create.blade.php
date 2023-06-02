@@ -36,6 +36,7 @@
                             <input type="text" class="col-span-2" id="number" name="number" placeholder="Invoice No"
                                 minlength="3" title="minimum 3 characters required" required>
 
+
                         </div>
 
                         {{-- Contract Details --}}
@@ -243,7 +244,9 @@
         var calc = 0;
         values.forEach(function(value){
             calc += value ;
+            // totwt+= value ;
         });
+        totwt=calc;
         return calc;
     }
     //  Dynamic Table [User data]
@@ -324,7 +327,7 @@
                 {
                     return (cell.getData().bundle1 * cell.getData().pcspbundle1) + (cell.getData().bundle2 * cell.getData().pcspbundle2)
                 },
-                bottomCalc:totalVal },
+                bottomCalc:"sum" },
 
             {   title:"Wt(MT)",
                 field:"gdswt",

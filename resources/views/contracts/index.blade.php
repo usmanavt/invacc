@@ -149,6 +149,15 @@
             {title:"Invoice #", field:"number" , visible:true ,headerSortStartingDir:"asc" , responsive:0},
             {title:"Dated", field:"invoice_date" , visible:true , responsive:0},
             {title:"Supplier", field:"supplier.title" ,  responsive:0},
+            {title: "Weight",field: "conversion_rate" ,formatter:"money",
+                formatterParams:{thousand:",",precision:0}},
+
+            {title: "Pcs",field: "totalpcs" ,formatter:"money",
+                formatterParams:{thousand:",",precision:0}},
+
+            {title: "Amount",field: "insurance" ,formatter:"money",
+                formatterParams:{thousand:",",precision:0}},
+
             {title:"Created By", field:"user.name" ,  responsive:0},
             {title:"Edit" , formatter:editIcon, hozAlign:"center",headerSort:false, responsive:0,
                 cellClick:function(e, cell){

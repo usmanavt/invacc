@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Models;
+use App\Models\Care;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -16,7 +17,14 @@ class Customer extends Model
     //  Relationship
     public function care()
     {
-        return $this->belongsTo(Care::class);
+        return $this->belongsTo(Care::class,'care_id');
     }
+
+
+
+
+
+
+
 }
 
