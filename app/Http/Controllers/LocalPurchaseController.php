@@ -151,7 +151,7 @@ class LocalPurchaseController  extends Controller
                 $lpd->commercial_invoice_id = $ci->id;
                 $lpd->contract_id = 0;
                 $lpd->material_id = $material->id;
-                $lpd->repname = $cont['repname'];
+                $lpd->repname = $material->repname;
 
 
                 $lpd->supplier_id = $ci->supplier_id;
