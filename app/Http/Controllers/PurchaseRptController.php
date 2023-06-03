@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Head;
 use App\Models\Supplier;
-use \Mpdf\mpdf as PDF;
+use \Mpdf\Mpdf as PDF;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
@@ -140,16 +140,17 @@ class PurchaseRptController extends Controller
                     DB::table('contparameterrpt')->insert([ 'GLCODE' => $id ]);
                 }
 
-            // Add input for Muliple parameters in Procedure
-            $data = DB::select('call procpendcontacts()');
-            if(!$data)
-            {
-                Session::flash('info','No data available');
-                return redirect()->back();
-            }
+                // Add input for Muliple parameters in Procedure
+                $data = DB::select('call procpendcontacts()');
+                if(!$data)
+                {
+                    Session::flash('info','No data available');
+                    return redirect()->back();
+                }
             }
             $html =  view('purrpt.pendcontractsrpt')->with('data',$data)->render();
             $filename = 'PendingContracts-'.$fromdate.'-'.$todate.'.pdf';
+            // dd('working');
         }
 
         if($report_type === 'glhw'){
@@ -201,9 +202,6 @@ class PurchaseRptController extends Controller
             dd('wait');
             return;
         }
-
-
-
 
         if($report_type === 'loccominvs'){
             //  dd($request->all());
@@ -271,20 +269,6 @@ class PurchaseRptController extends Controller
             return;
         }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
         if($report_type === 'impcominvs'){
             //  dd($request->all());
             $head_id = $request->head_id;
@@ -336,7 +320,6 @@ class PurchaseRptController extends Controller
         }
 
 
-
         if($report_type === 'vchr'){
             // dd($request->all());
             $head_id = $request->head_id;
@@ -357,7 +340,10 @@ class PurchaseRptController extends Controller
         foreach($chunks as $key => $val) {
             $mpdf->WriteHTML($val);
         }
-        $mpdf->Output($filename,'I');
+        // return ('wait');
+        return response($mpdf->Output($filename,'D'),200)->header('Content-Type','application/pdf');
+        // dd('wait');
+        // return;
     }
 
 }
