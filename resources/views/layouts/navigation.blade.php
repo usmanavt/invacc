@@ -39,6 +39,7 @@
                             {{-- <x-dropdown-link href="{{ route('sources.index') }}">Sources</x-dropdown-link> --}}
                             <x-dropdown-link href="{{ route('suppliers.index') }}">Suppliers</x-dropdown-link>
                             <x-dropdown-link href="{{ route('customers.index') }}">Customers</x-dropdown-link>
+                            <x-dropdown-link href="{{ route('cares.index') }}">CareOf</x-dropdown-link>
                             <x-dropdown-link href="{{ route('locations.index') }}">Locations</x-dropdown-link>
                             <x-dropdown-link href="{{ route('heads.index') }}">Account Heads</x-dropdown-link>
                             <x-dropdown-link href="{{ route('subheads.index') }}">Chart of Accounts</x-dropdown-link>

@@ -32,8 +32,7 @@ use App\Http\Controllers\SalesInvoicesController;
 use App\Http\Controllers\PurchaseRptController;
 use App\Http\Controllers\SaleRptController;
 use App\Http\Controllers\StockLedgerController;
-
-
+use App\Http\Controllers\CareController;
 
 
 
@@ -88,9 +87,20 @@ Route::resource('categories', CategoryController::class)->except(['create','show
 //  Sku Controller
 Route::get('/skus/master', [SkuController::class, 'getMaster'])->name('skus.master');
 Route::resource('skus', SkuController::class)->except(['create','show','destroy']);
+
 //  Dimension Controller
 Route::get('/dimensions/master', [DimensionController::class, 'getMaster'])->name('dimensions.master');
 Route::resource('dimensions', DimensionController::class)->except(['create','show','destroy']);
+
+
+//  careof Controller
+Route::get('/cares/master', [CareController::class, 'getMaster'])->name('cares.master');
+Route::resource('cares', CareController::class)->except(['create','show','destroy']);
+
+
+
+
+
 //  Brand Controller
 Route::get('/brands/master', [BrandController::class, 'getMaster'])->name('brands.master');
 Route::resource('brands',BrandController::class)->except(['create','show','destroy']);

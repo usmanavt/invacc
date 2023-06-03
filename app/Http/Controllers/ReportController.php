@@ -18,7 +18,7 @@ class ReportController extends Controller
         ->with('heads',Head::where('status',1)->get())
         ->with('glheads',Head::where('status',1)->whereIn('id',[1,2,30,31,36,37,38])->get())
         ->with('vchrheads',Head::where('status',1)->whereIn('id',[6,7,8,9])->get())
-        ->with('subheads',DB::table('VwCategory')->select('*')->get()->toArray())
+        ->with('subheads',DB::table('vwcategory')->select('*')->get()->toArray())
         // ->with('vchrcats',DB::table('vwvouchercategory')->select('*')->get()->toArray())
         ;
     }
