@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use DB;
 use App\Models\Dimension;
+use App\Models\Material;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Session;
 
@@ -72,6 +73,13 @@ class DimensionController extends Controller
                 $dimension->status = 0;
             }
             $dimension->save();
+
+            $cl = Material::where('dimension_id',$dimension->id)->first();
+            $cl->dimension = $request->title;
+            $cl->save();
+
+
+
             DB::commit();
             Session::flash('info','Dimension updated');
             return redirect()->route('dimensions.index');
