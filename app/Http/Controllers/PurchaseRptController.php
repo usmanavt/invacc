@@ -16,13 +16,13 @@ class PurchaseRptController extends Controller
     public function index(Request $request)
     {
 
-        //  $fromdate = $request->fromdate;
-        //  $todate = $request->todate;
+          $fromdate = $request->fromdate;
+          $todate = $request->todate;
  //dd($request->all());
 
 
-          $fromdate = '2023/05/01';
-          $todate = '2023/05/30';
+        //   $fromdate = '2023-05-01';
+        //   $todate = '2023-06-30';
 
         return view('purrpt.index')
         ->with('heads',Supplier::where('status',1)->get())

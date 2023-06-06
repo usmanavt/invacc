@@ -92,7 +92,7 @@ class LocalPurchaseController  extends Controller
     {
         // $locations = Location::select('id','title')->where('status',1)->get();
         return view('localpurchase.create')
-        ->with('suppliers',Supplier::select('id','title')->get())
+        ->with('suppliers',Supplier::select('id','title')->where('source_id',1)->get())
         ->with('locations',Location::select('id','title')->get());
     }
 
@@ -191,15 +191,31 @@ class LocalPurchaseController  extends Controller
     public function edit($id)
     {
 
-        //    dd(('locations'));
-        return view('localpurchase.edit')
-        ->with('suppliers',Supplier::select('id','title')->get())
-        //->with('materials',Material::select('id','category')->get())
-        ->with('commercialInvoice',CommercialInvoice::findOrFail($id))
-        ->with('cd',CommercialInvoiceDetails::where('commercial_invoice_id',$id)->get())
-        ->with('locations',Location::select('id','title')->get());
 
-        // return view('contracts.edit')->with('suppliers',Supplier::select('id','title')->get())->with('contract',$contract)->with('cd',ContractDetails::where('contract_id',$contract->id)->get());
+        $cd = DB::table('commercial_invoices as a')
+        ->join('commercial_invoice_details as b', 'a.id', '=', 'b.commercial_invoice_id')
+        // ->join('suppliers', 'suppliers.id', '=', 'commercial_invoices.supplier_id')
+        ->join('materials as c', 'c.id', '=', 'b.material_id')
+        // ->select('commercial_invoices.*' , 'commercial_invoice_details.*','suppliers.*','materials.*' )
+        ->select('c.id as material_id','c.title','c.category_id','c.category','c.dimension_id','c.dimension','c.sku_id','c.sku','c.brand_id','c.brand'
+        ,'b.user_id','b.supplier_id','b.id','b.gdswt','b.gdsprice','b.amtinpkr','b.perkg','b.purval','b.repname','b.locid','b.location','b.contract_id')
+        ->where('a.id',$id)->get();
+
+        $data=compact('cd');
+
+
+            //  dd($data);
+
+
+
+
+         return view('localpurchase.edit')
+        ->with('suppliers',Supplier::select('id','title')->get())
+        ->with('commercialInvoice',CommercialInvoice::findOrFail($id))
+        // ->with('cd',CommercialInvoiceDetails::where('commercial_invoice_id',$id)->get())
+        ->with('locations',Location::select('id','title')->get())
+        ->with($data);
+
     }
 
 
@@ -264,26 +280,43 @@ class LocalPurchaseController  extends Controller
                 }else
                 {
                     //  The item is new, Add it
+
                     $cds = new CommercialInvoiceDetails();
-                    $cds->contract_id = $contract->id;
-                    $cds->material_id = $cd->material_id;
+                    // $cds->contract_id = 0;
+                    // $cds->material_id = $cd->material_id;
+                    // $cds->repname = $cd->repname;
+                    // // $cds->material_title = $cd->material_title;
+                    // $cds->supplier_id = $contract->supplier_id;
+                    // $cds->user_id = auth()->id();
+                    // $cds->category_id = $cd->category_id;
+                    // $cds->sku_id = $cd->sku_id;
+                    // $cds->dimension_id = $cd->dimension_id;
+                    // $cds->source_id = $cd->source_id;
+                    // $cds->brand_id = $cd->brand_id;
+                    // $cds->gdswt = $cd->gdswt;
+                    // $cds->perkg = $cd->perkg;
+                    // $cds->amtinpkr = $cd->amtinpkr;
+                    $cds->commercial_invoice_id = $commercialinvoice->id;
                     $cds->repname = $cd->repname;
-                    // $cds->material_title = $cd->material_title;
-                    $cds->supplier_id = $contract->supplier_id;
-                    $cds->user_id = auth()->id();
+                    $cds->supplier_id = $request->supplier_id;
+                    $cds->user_id =  auth()->id();
+                    $cds->material_id = $cd->material_id;
                     $cds->category_id = $cd->category_id;
                     $cds->sku_id = $cd->sku_id;
                     $cds->dimension_id = $cd->dimension_id;
                     $cds->source_id = $cd->source_id;
                     $cds->brand_id = $cd->brand_id;
-                    // $cds->category = $cd->category;
-                    // $cds->sku = $cd->sku;
-                    // $cds->dimension = $cd->dimension;
-                    // $cds->source = $cd->source;
-                    // $cds->brand = $cd->brand;
                     $cds->gdswt = $cd->gdswt;
                     $cds->perkg = $cd->perkg;
                     $cds->amtinpkr = $cd->amtinpkr;
+                    $cds->location = $cd->location;
+                    $location = Location::where("title", $cd['location'])->first();
+                    $cds->locid = $location->id;
+
+
+
+
+
                     $cds->save();
                 }
             }
