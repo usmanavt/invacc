@@ -161,8 +161,8 @@ class PurchaseRptController extends Controller
                     return redirect()->back();
                 }
             }
-            $html =  view('purrpt.pendcontractsrpt')->with('data',$data)->render();
-            $filename = 'PendingContracts-'.$fromdate.'-'.$todate.'.pdf';
+            $html =  view('purrpt.compcontractsrpt')->with('data',$data)->render();
+            $filename = 'completedContracts-'.$fromdate.'-'.$todate.'.pdf';
             // dd('working');
         }
 
