@@ -25,7 +25,9 @@
                             <select autocomplete="on" class="col-span-2" name="supplier_id" id="supplier_id" required>
                                 <option value="" selected>--Supplier</option>
                                 @foreach($suppliers as $supplier)
-                                <option value="{{$supplier->id}}"> {{$supplier->title}} </option>
+                                @if ($supplier->id>1)
+                                    <option value="{{$supplier->id}}"> {{$supplier->title}} </option>
+                                @endif
                                 @endforeach
                             </select>
 
@@ -270,9 +272,9 @@
             {title:"Dimension",         field:"dimension_id",   cssClass:"bg-gray-200 font-semibold",visible:false},
             {title:"Dimension",         field:"dimension",      cssClass:"bg-gray-200 font-semibold"},
             {title:"source_id",         field:"source_id",      cssClass:"bg-gray-200 font-semibold",visible:false},
-            {title:"Source",            field:"source",         cssClass:"bg-gray-200 font-semibold"},
-            {title:"sku_id",            field:"sku_id",         cssClass:"bg-gray-200 font-semibold"},
-            {title:"Sku",               field:"sku",            cssClass:"bg-gray-200 font-semibold"},
+            {title:"Source",            field:"source",         cssClass:"bg-gray-200 font-semibold",visible:false},
+            {title:"sku_id",            field:"sku_id",         cssClass:"bg-gray-200 font-semibold",visible:false},
+            {title:"Unit",               field:"sku",            cssClass:"bg-gray-200 font-semibold"},
             {title:"brand_id",          field:"brand_id",       cssClass:"bg-gray-200 font-semibold",visible:false},
             {title:"Brand",             field:"brand",          cssClass:"bg-gray-200 font-semibold"},
 

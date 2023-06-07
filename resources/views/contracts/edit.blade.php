@@ -24,8 +24,8 @@
                             <select  autocomplete="on" class="col-span-2" name="supplier_id" id="supplier_id" required>
                                 @foreach($suppliers as $supplier)
                                     @if ($supplier->id == $contract->supplier_id)
-                                    <option value="{{$supplier->id}}" selected> {{$supplier->title}} </option>
-                                @endif
+                                        <option value="{{$supplier->id}}" selected> {{$supplier->title}} </option>
+                                    @endif
                                     <option value="{{$supplier->id}}"> {{$supplier->title}} </option>
                                 @endforeach
                             </select>
@@ -282,11 +282,11 @@ dynamicTable = new Tabulator("#dynamicTable", {
         {title:"Dimension",         field:"dimension_id",   cssClass:"bg-gray-200 font-semibold",visible:false},
         {title:"Dimension",         field:"dimension",      cssClass:"bg-gray-200 font-semibold"},
         {title:"Source",            field:"source_id",      cssClass:"bg-gray-200 font-semibold",visible:false},
-        {title:"Source",            field:"source",         cssClass:"bg-gray-200 font-semibold"},
+        {title:"Source",            field:"source",         cssClass:"bg-gray-200 font-semibold",visible:false},
         {title:"Sku",               field:"sku_id",         cssClass:"bg-gray-200 font-semibold",visible:false},
-        {title:"Sku",               field:"sku",            cssClass:"bg-gray-200 font-semibold"},
+        {title:"Unit",               field:"sku",            cssClass:"bg-gray-200 font-semibold"},
         {title:"Brand",             field:"brand_id",       cssClass:"bg-gray-200 font-semibold",visible:false},
-        {title:"Brand",             field:"brand",          cssClass:"bg-gray-200 font-semibold"},
+        {title:"Brand",             field:"brand",          cssClass:"bg-gray-200 font-semibold",visible:false},
 
         {   title:"Bundle1",
             field:"bundle1",

@@ -32,6 +32,10 @@ class PurchaseRptController extends Controller
         ->with('subheadsci',DB::table('vwsupcategorycominv')->select('*')->whereBetween('invoice_date',[$fromdate,$todate])->get()->toArray())
         ->with('subheadsciloc',DB::table('vwsupcategoryloccominv')->select('*')->whereBetween('invoice_date',[$fromdate,$todate])->get()->toArray())
         ->with('subheadspend',DB::table('vwpendcontinvs')->select('*')->get()->toArray())
+        ->with('subheadscomp',DB::table('vwcompcontinvs')->select('*')->get()->toArray())
+
+
+
         ;
     }
 
@@ -111,23 +115,6 @@ class PurchaseRptController extends Controller
         }
 
         if($report_type === 'gl'){
-            // dd($request->all());
-            // $subhead_id = $request->subhead_id;
-            // //  Truncate Table Data
-            // DB::table('glparameterrpt')->truncate();
-            // foreach($request->subhead_id as $id)
-            // {
-            //     DB::table('glparameterrpt')->insert([
-            //         'GLCODE' => $id
-            //     ]);
-            // }
-            // // Add input for Muliple parameters in Procedure
-            // $data = DB::select('call ProcGL(?,?)',array($fromdate,$todate));
-            // if(!$data)
-            // {
-            //     Session::flash('info','No data available');
-            //     return redirect()->back();
-            // }
             $head_id = $request->head_id;
             // $head = Head::findOrFail($head_id);
             $head = Supplier::findOrFail($head_id);
@@ -152,6 +139,37 @@ class PurchaseRptController extends Controller
             $filename = 'PendingContracts-'.$fromdate.'-'.$todate.'.pdf';
             // dd('working');
         }
+
+        if($report_type === 'cc'){
+            $head_id = $request->head_id;
+            // $head = Head::findOrFail($head_id);
+            $head = Supplier::findOrFail($head_id);
+            if($request->has('subhead_id')){
+                $subhead_id = $request->subhead_id;
+                //  Clear Data from Table
+                DB::table('contparameterrpt')->truncate();
+                foreach($request->subhead_id as $id)
+                {
+                    DB::table('contparameterrpt')->insert([ 'GLCODE' => $id ]);
+                }
+
+                // Add input for Muliple parameters in Procedure
+                $data = DB::select('call procpendcontacts()');
+                if(!$data)
+                {
+                    Session::flash('info','No data available');
+                    return redirect()->back();
+                }
+            }
+            $html =  view('purrpt.pendcontractsrpt')->with('data',$data)->render();
+            $filename = 'PendingContracts-'.$fromdate.'-'.$todate.'.pdf';
+            // dd('working');
+        }
+
+
+
+
+
 
         if($report_type === 'glhw'){
             //  dd($request->all());

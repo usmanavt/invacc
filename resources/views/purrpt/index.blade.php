@@ -27,6 +27,12 @@
                                 </div>
 
                                 <div>
+                                    <input type="radio" name="report_type" value="cc" required onchange="checkReportType('cc')">
+                                    <label for="">Completed Contracts</label>
+                                </div>
+
+
+                                <div>
                                     <input type="radio" name="report_type" value="impcominvs" required onchange="checkReportType('impcominvs')">
                                     <label for="">Imported Commercial Invoices </label>
                                 </div>
@@ -43,7 +49,7 @@
 
                                 <div>
                                     <input type="radio" name="report_type" value="tpl" required onchange="checkReportType('tpl')">
-                                    <label for="">Contact History</label>
+                                    <label for="">Contract History</label>
                                 </div>
 
                                 <div>
@@ -182,6 +188,10 @@
     const subheadsciloc = @json($subheadsciloc);
     const glheads = @json($glheads);
     const subheadspend = @json($subheadspend);
+    const subheadscomp = @json($subheadscomp);
+
+
+
     const vchrheads = @json($vchrheads);
     const contlistfill = @json(route('purrpt.contlistfill'));
     const cominvsloc = @json(route('purrpt.cominvsloc'));
@@ -253,9 +263,7 @@
                 // }
                 // break;
 
-                case 'gl':
-                // list = subheads.filter( l => l.MHEAD === value  )
-
+                case  'gl' :
                 list = subheadspend.filter( l => l.MHEAD === value  )
                 // console.info(value)
                 if(list.length > 0)
@@ -271,6 +279,27 @@
                     subhead.setAttribute('disabled','')
                 }
                 break;
+
+                case  'cc' :
+                list = subheadscomp.filter( l => l.MHEAD === value  )
+                // console.info(value)
+                if(list.length > 0)
+                {
+                    list.forEach(e => {
+                        // addSelectElement(subhead,e.Subhead,e.title)
+                        addSelectElement(subhead,e.Subhead,e.title)
+                    });
+                    subhead.setAttribute('required','')
+                    subhead.removeAttribute('disabled','')
+                }else{
+                    subhead.removeAttribute('required','')
+                    subhead.setAttribute('disabled','')
+                }
+                break;
+
+
+
+
 
             case 'glhw':
             // console.log(value)
@@ -441,20 +470,6 @@ const getCominvsimpVoucherData = async (value) =>{
             case 'gl':
                 //  Show Head
                  rptType = 'gl'
-                // head.removeAttribute('required','')
-                // head.disabled = true
-                // head.length = 0
-                // subhead.setAttribute('required','')
-                // subhead.disabled = false
-                // subhead.length = 0
-                // subheadavailable = false
-                // glheads.forEach(e => {
-                //     // console.info(e)
-                //     addSelectElement(subhead,e.id,e.title)
-                // });
-                // // Show subheads
-                // break;
-
                 head.setAttribute('required','')
                 head.disabled = false
                 head.length = 0
@@ -466,6 +481,23 @@ const getCominvsimpVoucherData = async (value) =>{
                 });
                 headSelected()
                 break;
+                case 'cc':
+                //  Show Head
+                 rptType = 'cc'
+                head.setAttribute('required','')
+                head.disabled = false
+                head.length = 0
+                subhead.removeAttribute('required')
+                subhead.disabled = true
+                subhead.length = 0
+                heads.forEach(e => {
+                    addSelectElement(head,e.id,e.title)
+                });
+                headSelected()
+                break;
+
+
+
 
 
 
