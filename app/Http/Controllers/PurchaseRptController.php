@@ -137,7 +137,8 @@ class PurchaseRptController extends Controller
             }
             $html =  view('purrpt.pendcontractsrpt')->with('data',$data)->render();
             $filename = 'PendingContracts-'.$fromdate.'-'.$todate.'.pdf';
-            // dd('working');
+
+
         }
 
         if($report_type === 'cc'){
@@ -163,7 +164,7 @@ class PurchaseRptController extends Controller
             }
             $html =  view('purrpt.compcontractsrpt')->with('data',$data)->render();
             $filename = 'completedContracts-'.$fromdate.'-'.$todate.'.pdf';
-            // dd('working');
+
         }
 
 
@@ -216,9 +217,9 @@ class PurchaseRptController extends Controller
                 }
                 $mpdf->AddPage();
             }
-            $mpdf->Output($filename,'I');
-            dd('wait');
-            return;
+            // $mpdf->Output($filename,'I');
+            return response($mpdf->Output($filename,'I'),200)->header('Content-Type','application/pdf');
+            // return;
         }
 
         if($report_type === 'loccominvs'){
@@ -282,9 +283,9 @@ class PurchaseRptController extends Controller
                 }
                 $mpdf->AddPage();
             }
-            $mpdf->Output($filename,'I');
-            dd('wait');
-            return;
+            // $mpdf->Output($filename,'I');
+            return response($mpdf->Output($filename,'I'),200)->header('Content-Type','application/pdf');
+
         }
 
         if($report_type === 'impcominvs'){
@@ -332,9 +333,10 @@ class PurchaseRptController extends Controller
                 }
                 $mpdf->AddPage();
             }
-            $mpdf->Output($filename,'I');
-            dd('wait');
-            return;
+            // $mpdf->Output($filename,'I');
+            return response($mpdf->Output($filename,'I'),200)->header('Content-Type','application/pdf');
+
+            // return;
         }
 
 
@@ -359,7 +361,7 @@ class PurchaseRptController extends Controller
             $mpdf->WriteHTML($val);
         }
         // return ('wait');
-        return response($mpdf->Output($filename,'D'),200)->header('Content-Type','application/pdf');
+        return response($mpdf->Output($filename,'I'),200)->header('Content-Type','application/pdf');
         // dd('wait');
         // return;
     }

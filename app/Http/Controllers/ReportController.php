@@ -47,7 +47,7 @@ class ReportController extends Controller
         ini_set("memory_limit","4000M");
         ini_set('allow_url_fopen',1);
         ini_set('user_agent', 'Mozilla/5.0');
-        $temp = storage_path('temp');
+        // $temp = storage_path('temp');
         $mpdf = new PDF( [
             'mode' => 'utf-8',
             'format' => 'A4',
@@ -70,7 +70,26 @@ class ReportController extends Controller
             }
             $html =  view('reports.tpl')->with('data',$data)->with('fromdate',$fromdate)->with('todate',$todate)->render();
             $filename = 'TransactionProveLista-'.$fromdate.'-'.$todate.'.pdf';
-        }
+
+            $mpdf->SetHTMLFooter('
+            <table width="100%" style="border-top:1px solid gray">
+                <tr>
+                    <td width="33%">{DATE d-m-Y}</td>
+                    <td width="33%" align="center">{PAGENO}/{nbpg}</td>
+                    <td width="33%" style="text-align: right;">' . $filename . '</td>
+                </tr>
+            </table>');
+            $chunks = explode("chunk", $html);
+            foreach($chunks as $key => $val) {
+                $mpdf->WriteHTML($val);
+            }
+            $mpdf->AddPage();
+
+          return response($mpdf->Output($filename,'I'),200)->header('Content-Type','application/pdf');
+
+
+    }
+
 
         if($report_type === 'gl'){
             // dd($request->all());
@@ -92,6 +111,7 @@ class ReportController extends Controller
             }
             $html =  view('reports.gl')->with('data',$data)->with('fromdate',$fromdate)->with('todate',$todate)->render();
             $filename = 'GeneralLedger-'.$fromdate.'-'.$todate.'.pdf';
+            // return response($mpdf->Output($filename,'I'),200)->header('Content-Type','application/pdf');
         }
 
         if($report_type === 'glhw'){
@@ -134,9 +154,10 @@ class ReportController extends Controller
                 }
                 $mpdf->AddPage();
             }
-            $mpdf->Output($filename,'I');
-            dd('wait');
-            return;
+            //  $mpdf->Output($filename,'I');
+            return response($mpdf->Output($filename,'I'),200)->header('Content-Type','application/pdf');
+
+            // return;
         }
 
         if($report_type === 'vchr'){

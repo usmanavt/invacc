@@ -75,12 +75,12 @@ class SupplierController extends Controller
             $supplier->phoneres = $request->phoneres;
             $supplier->fax = $request->fax;
             $supplier->email = $request->email;
-            if($request->has('status'))
-            {
+            // if($request->has('status'))
+            // {
                 $supplier->status = 1;
-            }else {
-                $supplier->status = 0;
-            }
+            // }else {
+                // $supplier->status = 0;
+            // }
             $supplier->obalance = $request->obalance;
             $supplier->ntn = $request->ntn;
             $supplier->stax = $request->stax;
