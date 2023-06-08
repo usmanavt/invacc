@@ -111,7 +111,7 @@ class ReportController extends Controller
             }
             $html =  view('reports.gl')->with('data',$data)->with('fromdate',$fromdate)->with('todate',$todate)->render();
             $filename = 'GeneralLedger-'.$fromdate.'-'.$todate.'.pdf';
-            // return response($mpdf->Output($filename,'I'),200)->header('Content-Type','application/pdf');
+             return response($mpdf->Output($filename,'I'),200)->header('Content-Type','application/pdf');
         }
 
         if($report_type === 'glhw'){
