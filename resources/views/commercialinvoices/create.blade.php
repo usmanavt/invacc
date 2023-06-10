@@ -520,7 +520,7 @@
                     columns:[
 
                     {title: "id",field: "myid",visible:false},
-                    {title:"Location", field:"location" ,editor:"list" , editorParams:   {
+                    {title:"Location", field:"location" ,editor:"list", responsive:0 , editorParams:   {
                             values:newList,
                             cssClass:"bg-green-200 font-semibold",
                             validator:["required"]
