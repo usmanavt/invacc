@@ -7,7 +7,7 @@
 
     <x-slot name="header">
         <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-            {{ __('Create Local Purchasing') }}
+            {{ __('Create Contract') }}
         </h2>
     </x-slot>
 
@@ -25,7 +25,9 @@
                             <select autocomplete="on" class="col-span-2" name="supplier_id" id="supplier_id" required>
                                 <option value="" selected>--Supplier</option>
                                 @foreach($suppliers as $supplier)
-                                <option value="{{$supplier->id}}"> {{$supplier->title}} </option>
+                                @if ($supplier->id>1)
+                                    <option value="{{$supplier->id}}"> {{$supplier->title}} </option>
+                                @endif
                                 @endforeach
                             </select>
 
@@ -36,25 +38,8 @@
                             <input type="text" class="col-span-2" id="number" name="number" placeholder="Invoice No"
                                 minlength="3" title="minimum 3 characters required" required>
 
+
                         </div>
-
-                        <div class="grid grid-cols-1">
-                            {{-- Contract Master --}}
-
-                            <fieldset class="border px-4 py-2 rounded">
-                                <legend>Invoice Level Expenses</legend>
-                                <div class="grid grid-cols-12 gap-2 py-2 items-center">
-                                    <x-input-numeric title="Discou(%)" name="bankcharges" id="bankcharges" required  onblur="tnetamount()" />
-                                    <x-input-numeric title="Discount(Amount)" name="collofcustom" disabled   />
-                                    <x-input-numeric title="Cartage" name="exataxoffie" required  onblur="tnetamount()"  />
-                                    <x-input-numeric title="Payble Amount" name="bankntotal" disabled />
-                                </div>
-                            </fieldset>
-
-
-
-
-
 
                         {{-- Contract Details --}}
                         <x-tabulator-dynamic />
@@ -87,15 +72,13 @@
     let table;
     let searchValue = "";
     const deleteIcon = function(cell,formatterParams){return "<i class='fa fa-trash text-red-500'></i>";};
-    const getMasterData = @json(route('materials.master'));
+    const getMaster = @json(route('materials.master'));
     let csrfToken = document.head.querySelector("[name~=csrf-token][content]").content;
     let modal = document.getElementById("myModal")
-    //  console.log( getMasterData);
+    // console.log(getMaster);
 
     let dyanmicTable = ""; // Tabulator
-    // let dynamicTableData = @json($cd);
-     let dynamicTableData = [];
-
+    let dynamicTableData = [];
 
     // Add event handler to read keyboard key up event
     document.addEventListener('keyup', (e)=>{
@@ -114,34 +97,6 @@
             document.getElementById("submitbutton").disabled = false;
         }
     }
-
-    var tamount=0;
-    function tnetamount()
-        {
-            //  var crtg=0;
-            //  crtg=parseFloat(exataxoffie.value).toFixed(0);
-             collofcustom.value=0;
-             bankntotal.value=0;
-
-            // var discAmnt =  parseFloat(exataxoffie.value)*parseFloat(bankcharges.value)/100
-            // collofcustom.value = discAmnt.toFixed(0)
-
-            collofcustom.value=(tamount*bankcharges.value/100).toFixed(0);
-            bankntotal.value= ( parseFloat(tamount)-parseFloat(collofcustom.value)).toFixed(0)   ;
-            // bankntotal.value=parseFloat( bankntotal.value ) + parseFloat(exataxoffie.values);
-        }
-
-        // function DiscAmount()
-        // {
-        //     bankcharges.value=0
-        //     var discper =  parseFloat(collofcustom.value)/parseFloat(exataxoffie.value)*100
-        //     bankcharges.value = discper.toFixed(1)
-        //     // console.log(banktotal.value);
-        // }
-
-
-
-
 </script>
 @endpush
 
@@ -204,8 +159,7 @@
     function dataFilter(element)
     {
         searchValue = element.value;
-        table.setData(getMasterData,{search:searchValue});
-
+        table.setData(getMaster,{search:searchValue});
     }
     //  The Table for Materials Modal
     table = new Tabulator("#tableData", {
@@ -223,7 +177,7 @@
         ajaxParams: function(){
             return {search:searchValue};
         },
-        ajaxURL: getMasterData,
+        ajaxURL: getMaster,
         ajaxContentType:"json",
         initialSort:[ {column:"id", dir:"desc"} ],
         height:"100%",
@@ -236,6 +190,7 @@
             {title:"Dimesion", field:"dimension" ,  responsive:0},
             {title:"Source", field:"source" ,  responsive:0},
             {title:"Sku", field:"sku" ,  responsive:0},
+            {title:"Sku_id", field:"sku_id" ,  responsive:0},
             {title:"Brand", field:"brand" ,  responsive:0},
         ],
         // Extra Pagination Data for End Users
@@ -262,11 +217,27 @@
     var updateValues = (cell) => {
         var data = cell.getData();
         var sum = (Number(data.bundle1) * Number(data.pcspbundle1)) + (Number(data.bundle2) * Number(data.pcspbundle2))
-        var sum2 =  Number(data.gdswt) * Number(data.gdsprice)
+
+         if(cell.getData().sku_id==1)
+         {
+             var sum2 =  Number(data.gdswt) * Number(data.gdsprice)
+             var sum3 =  Number(data.gdswt) * Number(data.dtyrate)
+         }
+         if(cell.getData().sku_id==2)
+         {
+             var sum2 =  ( (Number(data.bundle1) * Number(data.pcspbundle1)) + (Number(data.bundle2) * Number(data.pcspbundle2)) ) * Number(data.gdsprice)
+             var sum3 =  ( (Number(data.bundle1) * Number(data.pcspbundle1)) + (Number(data.bundle2) * Number(data.pcspbundle2)) ) * Number(data.dtyrate)
+         }
+
+
+
+        // var sum2 =  sum *  Number(data.gdsprice)
         var row = cell.getRow();
         row.update({
             "ttpcs": sum,
-            "gdspricetot": sum2
+            "gdspricetot": sum2,
+            "gdspricedtytot":sum3
+
         });
     }
 
@@ -278,162 +249,175 @@
         var calc = 0;
         values.forEach(function(value){
             calc += value ;
-
+            // totwt+= value ;
         });
-        tamount = calc;
-        tnetamount();
-        // collofcustom.value=(calc*bankcharges.value/100).toFixed(0);
-        // bankntotal.value=calc - collofcustom.value ;
+        totwt=calc;
         return calc;
-
     }
     //  Dynamic Table [User data]
-    dynamicTable = new Tabulator("#dynamicTable", {
-        layout:'fitData',
-        // data:dynamicTableData,
-        reactiveData:true,
-        columns:[
-            {title:"Delete" , formatter:deleteIcon, headerSort:false, responsive:0,
-                cellClick:function(e, cell){
-                    cell.getRow().delete();
-                    dynamicTableData = dynamicTable.getData(); // Ensure that our data is clean
-                    dynamicTable.redraw();
-                    // disableSubmitButton();
+    var tableDataNested = [{
+    id: 1,
+    name: "BalanceOil",
+    _children: [{
+        id: 11,
+        name: "BalanceOil+",
+        cena: 31,
+        mn: 1,
+        cena_1: 159
+      },
+      {
+        id: 12,
+        name: "BalanceOil Aqua",
+        cena: 41,
+        mn: 1,
+        cena_1: 159
+      },
+    ]
+  },
+  {
+    id: 2,
+    name: "Xtend",
+    cena: 23,
+    mn: 1
+  },
+  {
+    id: 2,
+    name: "Xtend",
+    cena: 23,
+    mn: 1
+  },
+  {
+    id: 2,
+    name: "Xtend",
+    cena: 23,
+    mn: 1
+  },
+  {
+    id: 3,
+    name: "Zinobiotic",
+    cena: 24,
+    mn: 1
+  }
+];
+
+var table = new Tabulator("#example-table", {
+  movableColumns: true,
+  data: tableDataNested,
+  dataTree: true,
+  selectable: true,
+  columns: [{
+      title: "Name",
+      field: "name",
+      headerSort: false,
+      width: 200
+    },
+    {
+      title: "Cena",
+      field: "cena",
+      headerSort: false
+    },
+    {
+      formatter: function(cell, formatterParams, onRendered) {
+        const data = cell.getRow().getData();
+        if (do_not_show_checkbox_ids.indexOf(data['id']) == -1) {
+          var checkbox = document.createElement("input");
+
+          checkbox.type = 'checkbox';
+
+          if (this.table.modExists("selectRow", true)) {
+
+            checkbox.addEventListener("click", (e) => {
+              e.stopPropagation();
+            });
+
+            if (typeof cell.getRow == 'function') {
+              var row = cell.getRow();
+              if (row._getSelf().type == "row") {
+
+                checkbox.addEventListener("change", (e) => {
+                  row.toggleSelect();
+                });
+
+                checkbox.checked = row.isSelected && row.isSelected();
+                this.table.modules.selectRow.registerRowSelectCheckbox(row, checkbox);
+              } else {
+                checkbox = "";
+              }
+            } else {
+              checkbox.addEventListener("change", (e) => {
+                if (this.table.modules.selectRow.selectedRows.length) {
+                  this.table.deselectRow();
+                } else {
+                  this.table.selectRow(formatterParams.rowRange);
                 }
-            },
-            {title:"Id",                field:"id",    cssClass:"bg-gray-200 font-semibold"},
-            {title:"Material",          field:"title", cssClass:"bg-gray-200 font-semibold"},
-            {title:"Category_id",       field:"category_id",    cssClass:"bg-gray-200 font-semibold",visible:false},
-            {title:"Category",          field:"category",       cssClass:"bg-gray-200 font-semibold"},
-            {title:"Dimension",         field:"dimension_id",   cssClass:"bg-gray-200 font-semibold",visible:false},
-            {title:"Dimension",         field:"dimension",      cssClass:"bg-gray-200 font-semibold"},
-            {title:"Source",            field:"source_id",      cssClass:"bg-gray-200 font-semibold",visible:false},
-            {title:"Source",            field:"source",         cssClass:"bg-gray-200 font-semibold"},
-            {title:"Sku",               field:"sku_id",         cssClass:"bg-gray-200 font-semibold",visible:false},
-            {title:"Sku",               field:"sku",            cssClass:"bg-gray-200 font-semibold"},
-            {title:"Brand",             field:"brand_id",       cssClass:"bg-gray-200 font-semibold",visible:false},
-            {title:"Brand",             field:"brand",          cssClass:"bg-gray-200 font-semibold"},
+              });
+              this.table.modules.selectRow.registerHeaderSelectCheckbox(checkbox);
+            }
+          }
+          return checkbox;
+        }
+        return null;
+      },
+      titleFormatter: "rowSelection",
+      hozAlign: "center",
+      headerSort: false,
+      cellClick: function(e, cell) {
+        this.recalc();
+      }
+    },
+    {
+      title: "mn",
+      field: "mn",
+      editor: "number",
+      headerSort: false,
+      cellEdited: function(cell) {
+        updateSum(cell);
+      }
+    },
+    {
+      title: "Sum",
+      field: "sum",
+      headerSort: false
+    }
+  ],
+  rowClick: function(e, row) {
+    // console.log(table.getRows().length);
+  },
+  renderComplete: function(t) {
+    this.getRows().forEach(function(value, index) {
+      console.log(value.isSelected());
+      var children = value.getTreeChildren();
+      for (let j = 0; j < children.length; j++) {
+        const name = children[j].getData().name;
+      }
+      children.forEach(function(value, index) {
+        // console.log("cena");
+        var cena = value.getData().cena; //price
 
-            {   title:"Quantity",
-                field:"bundle1",
-                editor:"number",
-                cssClass:"bg-green-200 font-semibold",
-                validator:"required",
-                formatter:"money",
-                formatterParams:{thousand:",",precision:2},
-                validator:["required","integer"],
-                cellEdited: updateValues,
-               },
+        // console.log(cena);
+        var mnozstvi = value.getData().mn; //amount
+        value.update({
+          sum: cena * mnozstvi
+        });
+      });
+      updateSum(value.getCell("mn"));
+    });
+  },
+  selectableCheck: function(row) {
+    //row - row component
+    return row.getData().cena > 0; //allow selection of rows where the age is greater than 18
+  },
+});
 
-            {   title:"Rate",
-                field:"pcspbundle1",
-                editor:"number",
-                cssClass:"bg-green-200 font-semibold",
-                validator:"required" ,
-                formatter:"money",
-                formatterParams:{thousand:",",precision:2},
-                validator:["required","integer"] ,
-                cellEdited: updateValues   ,
-            },
-
-            // {   title:"Bundle2",
-            //     field:"bundle2",
-            //     editor:"number",
-            //     cssClass:"bg-yellow-200 font-semibold",
-            //     formatter:"money",
-            //     formatterParams:{thousand:",",precision:2},
-            //     validator:["required","integer"],
-            //     cellEdited: updateValues   ,
-            // },
-
-            // {   title:"Pcs/Bnd2",
-            //     field:"pcspbundle2",
-            //     editor:"number",
-            //     cssClass:"bg-yellow-200 font-semibold",
-            //     formatter:"money",
-            //     formatterParams:{thousand:",",precision:2},
-            //     validator:["required","integer"],
-            //     cellEdited: updateValues  ,
-            // },
-
-            {   title:"Amount",
-                field:"ttpcs",
-                cssClass:"bg-gray-200 font-semibold",
-                formatter:"money",
-                formatterParams:{thousand:",",precision:3},
-                formatter:function(cell,row)
-                {
-                    return (cell.getData().bundle1 * cell.getData().pcspbundle1) + (cell.getData().bundle2 * cell.getData().pcspbundle2)
-                },
-                bottomCalc:totalVal  },
-
-            // {   title:"Wt(MT)",
-            //     field:"gdswt",
-            //     editor:"number",
-            //     cssClass:"bg-green-200 font-semibold",
-            //     formatter:"money",
-            //     formatterParams:{thousand:",",precision:3},
-            //     validator:["required","numeric"],
-            //     cellEdited:updateValues,
-            //     bottomCalc:"sum",
-            //     bottomCalcParams:{precision:3}  },
-
-            // {   title:"Rs($)",
-            //     field:"gdsprice",
-            //     editor:"number",
-            //     cssClass:"bg-green-200 font-semibold",
-            //     formatter:"money",
-            //     formatterParams:{thousand:",",precision:3},
-            //     validator:["required","numeric"],
-            //     cellEdited:updateValues,
-            // },
-
-            // {   title:"DutyRs($)",
-            //     field:"dtyrate",
-            //     editor:"number",
-            //     cssClass:"bg-green-200 font-semibold",
-            //     formatter:"money",
-            //     formatterParams:{thousand:",",precision:3},
-            //     validator:["required","numeric"],
-            //     cellEdited:updateValues,
-            // },
-
-            // {   title:"ComInvRs($)",
-            //     field:"invsrate",
-            //     editor:"number",
-            //     cssClass:"bg-green-200 font-semibold",
-            //     formatter:"money",
-            //     formatterParams:{thousand:",",precision:3},
-            //     validator:["required","numeric"],
-            //     cellEdited:updateValues,
-            // },
-
-
-
-
-
-
-
-            // {   title:"Val($)",
-            //     field:"gdspricetot",
-            //     cssClass:"bg-gray-200 font-semibold",
-            //     bottomCalc:totalVal,
-            //     bottomCalcParams:{precision:3} ,
-            //     formatter:"money",
-            //     formatterParams:{
-            //         decimal:".",
-            //         thousand:",",
-            //         symbol:"$",
-            //         precision:3     },
-            //     formatter:function(cell,row)
-            //     {
-            //         return (cell.getData().gdswt * cell.getData().gdsprice)
-            //     }
-            // },
-
-        ],
-    })
-
+function updateSum(cell) {
+  var cena = cell.getData().cena; //price
+  var mnozstvi = cell.getValue(); //amount
+  if (mnozstvi) {
+    cell.getRow().update({
+      sum: cena * mnozstvi
+    });
+  }
+}
     // Validation & Post
     function validateForm()
     {
@@ -441,12 +425,6 @@
         var supplier_id = sid.options[sid.selectedIndex];
         var invoice_date = document.getElementById("invoice_date");
         var number = document.getElementById("number");
-        var bankcharges= document.getElementById("bankcharges")
-        var exataxoffie= document.getElementById("exataxoffie")
-        var collofcustom= document.getElementById("collofcustom")
-        var bankntotal= document.getElementById("bankntotal")
-
-
 
         // Required
         if(supplier_id.value <= 0)
@@ -476,17 +454,30 @@
         // Qty Required
         for (let index = 0; index < dynamicTableData.length; index++) {
             const element = dynamicTableData[index];
-            if(element.bundle1 == 0 || element.pcspbundle1 == 0 || element.ttpcs == 0 )
-            // || element.gdsprice == 0 || element.gdswt == 0 ttpcs
+            // if(element.bundle1 == 0 || element.pcspbundle1 == 0 || element.gdsprice == 0 || element.gdswt == 0 and element.sku_id==2  )
+
+            if (element.sku_id==1)
             {
-                showSnackbar("Please fill Bundle,PcsBundle,Weight & Price all rows to proceed","info");
-                return;
+                if(element.gdsprice == 0 || element.gdswt == 0  )
+                    {
+                        showSnackbar("Please fill Weight & Price all rows to proceed","info");
+                        return;
+                    }
             }
+            if (element.sku_id==2)
+            {
+                if(element.bundle1 == 0 || element.pcspbundle1 == 0 || element.gdsprice == 0 )
+                {
+                    showSnackbar("Please fill Bundle,PcsBundle & Price all rows to proceed","info");
+                    return;
+                }
+            }
+
         }
         disableSubmitButton(true);
-        var data = { 'contracts' : dynamicTableData,'bankntotal':bankntotal.value,'exataxoffie':exataxoffie.value,'collofcustom':collofcustom.value,'bankcharges':bankcharges.value ,'supplier_id': supplier_id.value,'invoice_date':invoice_date.value,'number':number.value};
+        var data = { 'contracts' : dynamicTableData ,'supplier_id': supplier_id.value,'invoice_date':invoice_date.value,'number':number.value};
         // All Ok - Proceed
-        fetch(@json(route('localpurchase.store')),{
+        fetch(@json(route('contracts.store')),{
             credentials: 'same-origin', // 'include', default: 'omit'
             method: 'POST', // 'GET', 'PUT', 'DELETE', etc.
             // body: formData, // Coordinate the body type with 'Content-Type'
@@ -502,8 +493,7 @@
         .then( response => {
             if (response == 'success')
             {
-                 window.open(window.location.origin + "/contracts","_self" );
-
+                window.open(window.location.origin + "/contracts","_self" );
             }
         })
         .catch(error => {
@@ -511,23 +501,12 @@
             disableSubmitButton(false);
         })
     }
+
+
+
+
+
 </script>
-
-
-@endpush/
-
-{{-- required  onblur="Discper()" --}}
-{{-- required  onblur="DiscAmount()" --}}
-
-
-
-
-
+@endpush
 
 </x-app-layout>
-
-
-
-
-
-

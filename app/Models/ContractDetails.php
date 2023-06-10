@@ -21,7 +21,7 @@ class ContractDetails extends Model
     // protected $primaryKey = 'invid';
     // public $incrementing = false; // If no autoincrement
 
-    protected $appends = ['ttpcs','gdspricetot'];
+    protected $appends = ['ttpcs','gdspricetot','gdspricedtytot'];
 
 
     protected $table= "contract_details";
@@ -43,6 +43,16 @@ class ContractDetails extends Model
         return $calc;
 
     }
+
+    public function getGdspricedtytotAttribute()
+    {
+
+
+        $calc = $this->gdswt * $this->gdsprice ;
+        return $calc;
+
+    }
+
 
 
 

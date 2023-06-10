@@ -221,10 +221,12 @@
          if(cell.getData().sku_id==1)
          {
              var sum2 =  Number(data.gdswt) * Number(data.gdsprice)
+             var sum3 =  Number(data.gdswt) * Number(data.dtyrate)
          }
          if(cell.getData().sku_id==2)
          {
              var sum2 =  ( (Number(data.bundle1) * Number(data.pcspbundle1)) + (Number(data.bundle2) * Number(data.pcspbundle2)) ) * Number(data.gdsprice)
+             var sum3 =  ( (Number(data.bundle1) * Number(data.pcspbundle1)) + (Number(data.bundle2) * Number(data.pcspbundle2)) ) * Number(data.dtyrate)
          }
 
 
@@ -233,7 +235,8 @@
         var row = cell.getRow();
         row.update({
             "ttpcs": sum,
-            "gdspricetot": sum2
+            "gdspricetot": sum2,
+            "gdspricedtytot":sum3
 
         });
     }
@@ -276,7 +279,7 @@
             {title:"sku_id",            field:"sku_id",         cssClass:"bg-gray-200 font-semibold",visible:false},
             {title:"Unit",               field:"sku",            cssClass:"bg-gray-200 font-semibold"},
             {title:"brand_id",          field:"brand_id",       cssClass:"bg-gray-200 font-semibold",visible:false},
-            {title:"Brand",             field:"brand",          cssClass:"bg-gray-200 font-semibold"},
+            {title:"Brand",             field:"brand",          cssClass:"bg-gray-200 font-semibold",visible:false},
 
             {   title:"Bundle1",
                 field:"bundle1",
@@ -331,7 +334,7 @@
                 },
                 bottomCalc:"sum" },
 
-            {   title:"Wt(MT)",
+            {   title:"Wt(Kg)",
                 field:"gdswt",
                 editor:"number",
                 cssClass:"bg-green-200 font-semibold",
@@ -342,7 +345,7 @@
                 bottomCalc:"sum",
                 bottomCalcParams:{precision:3}  },
 
-            {   title:"Rs($)",
+            {   title:"Supp.Price($)",
                 field:"gdsprice",
                 editor:"number",
                 cssClass:"bg-green-200 font-semibold",
@@ -352,7 +355,7 @@
                 cellEdited:updateValues,
             },
 
-            {   title:"DutyRs($)",
+            {   title:"Duty.Price($)",
                 field:"dtyrate",
                 editor:"number",
                 cssClass:"bg-green-200 font-semibold",
@@ -372,7 +375,7 @@
                 cellEdited:updateValues,
             },
 
-            {   title:"Val($)",
+            {   title:"Supp.Val($)",
                 field:"gdspricetot",
                 cssClass:"bg-gray-200 font-semibold",
                 bottomCalc:totalVal,
@@ -400,8 +403,50 @@
                         // Add for other types
                     }
 
+
+
+
                 }
             },
+
+
+
+            {   title:"Duty.Val($)",
+                field:"gdspricedtytot",
+                cssClass:"bg-gray-200 font-semibold",
+                bottomCalc:totalVal,
+                bottomCalcParams:{precision:3} ,
+                formatter:"money",
+                formatterParams:{
+                    decimal:".",
+                    thousand:",",
+                    symbol:"$",
+                    precision:3     },
+                formatter:function(cell,row)
+                {
+                    // console.log(cell.getData().sku_id)
+                    if(cell.getData().sku_id == 1)
+                    {
+
+                        return (cell.getData().gdswt * cell.getData().dtyrate)
+
+                    }
+                    else if (cell.getData().sku_id == 2)
+                    {
+                        return ((cell.getData().bundle1 * cell.getData().pcspbundle1) + (cell.getData().bundle2 * cell.getData().pcspbundle2)) * (cell.getData().dtyrate)
+                    }
+                    else {
+                        // Add for other types
+                    }
+
+
+
+
+                }
+            },
+
+
+
 
         ],
     })

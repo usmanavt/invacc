@@ -155,10 +155,14 @@
             {title: "Pcs",field: "totalpcs" ,formatter:"money",
                 formatterParams:{thousand:",",precision:0}},
 
-            {title: "Amount",field: "insurance" ,formatter:"money",
+            {title: "Supp.Val($)",field: "insurance" ,formatter:"money",
                 formatterParams:{thousand:",",precision:0}},
 
-            {title:"Created By", field:"user.name" ,  responsive:0},
+            {title: "Duty.Val($)",field: "dutyval" ,formatter:"money",
+                formatterParams:{thousand:",",precision:0}},
+
+
+                {title:"Created By", field:"user.name" ,  responsive:0},
             {title:"Edit" , formatter:editIcon, hozAlign:"center",headerSort:false, responsive:0,
                 cellClick:function(e, cell){
                     window.open(window.location + "/" + cell.getRow().getData().id + "/edit" ,"_self");

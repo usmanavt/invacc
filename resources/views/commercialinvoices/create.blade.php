@@ -23,10 +23,10 @@
                             <legend>Invoice Level Entries</legend>
                             <div class="grid grid-cols-12 gap-2 py-2 items-center">
 
-                                <x-input-date title="Inv. Date" name="invoicedate" req required class="col-span-2"/>
+                                <x-input-date title="Inv. Date" id="invoicedate" name="invoicedate" req required class="col-span-2"/>
 
                                 <x-input-text title="Invoice #" name="invoiceno" req required class=""/>
-                                <x-input-text title="Challan #" name="challanno" req required class=""/>
+                                {{-- <x-input-text title="Challan #" name="challanno" req required class=""/> --}}
 
                                 <x-input-numeric title="Conv. Rate" name="conversionrate"  req required class=""/>
                                 <x-input-numeric title="Insurance" name="insurance"  req required class=""/>
@@ -155,6 +155,14 @@
             }
         })
         // Calculate Bank Charges [ onblur ]
+
+
+
+
+
+
+
+
         function calculateBankCharges()
         {
             var t =  parseFloat(bankcharges.value) + parseFloat(collofcustom.value) + parseFloat(exataxoffie.value) + parseFloat(lngnshipdochrgs.value) + parseFloat(localcartage.value) + parseFloat(miscexplunchetc.value) + parseFloat(customsepoy.value) + parseFloat(weighbridge.value) + parseFloat(miscexpenses.value) + parseFloat(agencychrgs.value) //+ parseFloat(otherchrgs.value)
@@ -166,6 +174,10 @@
 @endpush
 @push('scripts')
     <script>
+                window.onload = function() {
+                var input = document.getElementById("invoicedate").focus();
+                                            }
+
         // -----------------FOR MODAL -------------------------------//
         function showModal(){ modal.style.display = "block"}
         function closeModal(){ modal.style.display = "none"}
@@ -206,7 +218,15 @@
                 // Master Data
                 {title:"Id", field:"id" , responsive:0},
                 {title:"Invoice #", field:"number" , visible:true ,headerSort:false, responsive:0},
-                {title:"Supplier", field:"supplier.title" , visible:true ,headerSort:false, responsive:0},
+                {title:"Supplier", field:"supplier.title", visible:true ,headerSort:false, responsive:0},
+
+                {title:"Weight", field:"conversion_rate" , visible:true ,headerSort:false, responsive:0},
+                {title:"TotalPcs", field:"totalpcs" , visible:true ,headerSort:false, responsive:0},
+                {title:"TotalVal($)", field:"insurance" , visible:true ,headerSort:false, responsive:0},
+
+
+
+
             ],
             // Extra Pagination Data for End Users
             ajaxResponse:function(getDataUrl, params, response){
@@ -288,10 +308,13 @@
                         user_id :           obj.user_id,
                         category_id :       obj.category_id,
                         sku_id :            obj.sku_id,
+                        sku:                obj.sku,
+                        totpcs:             obj.totpcs,
+                        purval:             obj.purval,
+                        dutval:             obj.dutval,
                         dimension_id :      obj.dimension_id,
                         source_id :         obj.source_id,
                         brand_id :          obj.brand_id,
-
                         pcs :               vpcs,
                         // gdswt :             obj.gdswt * 1000,
                         gdswt :             obj.gdswt ,
@@ -304,18 +327,28 @@
                         // dtyrate :          obj.dtyrate/1000,
                         dtyrate :          obj.dtyrate,
 
-                        amtindollar :       obj.gdswt * obj.gdsprice ,
-                        dtyamtindollar :       obj.gdswt * obj.dtyrate,
+                        // amtindollar :       obj.gdswt * obj.gdsprice ,
+                        amtindollar :       obj.purval ,
 
-                        amtinpkr :          ( obj.gdswt *  obj.gdsprice  * conversionrate.value).toFixed(0),
-                        dtyamtinpkr :        ( obj.gdswt *  obj.dtyrate  * conversionrate.value).toFixed(0),
+                        // dtyamtindollar :       obj.gdswt * obj.dtyrate,
+                        dtyamtindollar :       obj.dutval,
 
-                        itmration:          0,
+                        // amtinpkr :          ( obj.gdswt *  obj.gdsprice  * conversionrate.value).toFixed(0),
+                        amtinpkr :          ( obj.purval  * conversionrate.value).toFixed(0),
+                        // dtyamtinpkr :        ( obj.gdswt *  obj.dtyrate  * conversionrate.value).toFixed(0),
+                        dtyamtinpkr :        ( obj.dutval  * conversionrate.value).toFixed(0),
+
+                        itmratio:          0,
+                        dtyitmratio:0,
 
                         insuranceperitem :  0,
+                        dtyinsuranceperitem :  0,
                         amountwithoutinsurance : 0,
+                        dtyamountwithoutinsurance : 0,
                         onepercentdutypkr : 0,
+                        dtyonepercentdutypkr : 0,
                         pricevaluecostsheet : 0,
+                        dtypricevaluecostsheet : 0,
 
                         hscode :            hsc.hscode,
                         cd :                hsc.cd,
@@ -353,12 +386,12 @@
                 var length = e.length
                 var gdsprice = e.gdsprice
                 var dtyrate = e.dtyrate
-
                 var tmpcda = e.tmpcda
+                var totpcs=e.totpcs
+                var purval=e.purval
+                var dutval=e.dutval
+
                 //  update data element
-
-
-
 
                 e.pcs = pcs
                 e.gdswt = gdswt
@@ -366,6 +399,11 @@
                 e.length = length
                 e.gdsprice = gdsprice
                 e.dtyrate = dtyrate
+                e.totpcs=totpcs
+                e.purval=purval
+                e.dutval=dutval
+
+
             })
             //  Get Ratio after price/length/pcs update
             var amtinpkrtotal = 0
@@ -378,18 +416,22 @@
 
 
             data.forEach(e => {
-                var dtyamtinpkr = conversionrate.value * e.dtyrate * e.gdswt
-                var amtinpkr = conversionrate.value * e.gdsprice * e.gdswt
-
+                // var dtyamtinpkr = conversionrate.value * e.dtyrate * e.gdswt
+                // var amtinpkr = conversionrate.value * e.gdsprice * e.gdswt
+                var dtyamtinpkr = parseFloat(conversionrate.value) * parseFloat(e.dutval)
+                var amtinpkr = conversionrate.value * e.purval
 
                 var itmratio = amtinpkr / amtinpkrtotal * 100
-                var dtyitmratio = dtyamtinpkr / dtyamtinpkrtotal * 100
+                 var dtyitmratio = ( parseFloat(dtyamtinpkr) / parseFloat(dtyamtinpkrtotal) ) * 100
+
+                // console.info(dtyitmratio)
 
                 var insuranceperitem = parseFloat(insurance.value) * itmratio / 100
                 var dtyinsuranceperitem = parseFloat(insurance.value) * dtyitmratio / 100
 
-                var amountwithoutinsurance = ( e.amtindollar + insuranceperitem ) * parseFloat(conversionrate.value)
-                var dtyamountwithoutinsurance = ( e.dtyamtindollar + dtyinsuranceperitem ) * parseFloat(conversionrate.value)
+                // var amountwithoutinsurance = ( e.amtindollar + insuranceperitem ) * (parseFloat(conversionrate.value))
+                var amountwithoutinsurance = (parseFloat(e.amtindollar) + parseFloat(insuranceperitem)) * parseFloat(conversionrate.value)
+                var dtyamountwithoutinsurance = ( parseFloat(e.dtyamtindollar) + parseFloat(dtyinsuranceperitem) ) * parseFloat(conversionrate.value)
 
 
                 var onepercentdutypkr = amountwithoutinsurance * 0.01
@@ -415,13 +457,19 @@
                 var qtyinfeet = (e.pcs * e.length).toFixed(2)
 
 
-                e.amtindollar = e.gdswt * e.gdsprice
+                // e.amtindollar = e.gdswt * e.gdsprice
+                 e.amtindollar = e.purval
                 e.amtinpkr = amtinpkr
                 e.itmratio = itmratio
+                e.dtyitmratio = dtyitmratio
                 e.insuranceperitem = insuranceperitem
+                e.dtyinsuranceperitem = dtyinsuranceperitem
                 e.amountwithoutinsurance = amountwithoutinsurance
+                e.dtyamountwithoutinsurance = dtyamountwithoutinsurance
                 e.onepercentdutypkr = (onepercentdutypkr).toFixed(2)
+                e.dtyonepercentdutypkr = (dtyonepercentdutypkr).toFixed(2)
                 e.pricevaluecostsheet = (pricevaluecostsheet).toFixed(2)
+                e.dtypricevaluecostsheet = (dtypricevaluecostsheet).toFixed(2)
                 e.tmpcda = (tmpcda).toFixed(2)
                 e.cda = (cda).toFixed(2)
                 e.rda = (rda).toFixed(2)
@@ -456,6 +504,8 @@
                 },
                 {title:"Id",           field:"id", visible:false},
                 {title:"Material",     field:"material_title"},
+                {title:"Unit",         field:"sku"},
+                {title:"Unitid",  field:"sku_id"},
                 {title:"contract_id",  field:"contract_id",visible:false},
                 {title:"material_id",  field:"material_id",visible:false},
                 {title:"supplier_id",  field:"supplier_id",visible:false},
@@ -477,11 +527,19 @@
                         }
                     },
 
-
-
-
-
-
+                    // {title:"Code",              field:"hscode",
+                    //     headerVertical:true,       visible:true},
+                        {   title:"HS / Code",headerHozAlign :'center',
+                            responsive:0,
+                            field:"Code",
+                            // type='checkbox',
+                            // editor:"number",
+                            // headerVertical:true,
+                            // formatter:"money",
+                            cssClass:"bg-green-200 font-semibold",editor:true
+                            // validator:["required","numeric"],
+                            // formatterParams:{thousand:",",precision:2},
+                        },
 
                     {   title:"Pcs",headerHozAlign :'center',
                             responsive:0,
@@ -545,14 +603,14 @@
                             responsive:0,
                             formatterParams:{thousand:",",precision:2},
                             validator:["required","numeric"],
-                            bottomCalcParams:{precision:2}  ,
+                            bottomCalcParams:{precision:0}  ,
                         },
                     ]
                 },
                 {
                     title:'Price',
                     columns:[
-                        {   title:"$/Ton",
+                        {   title:"Supp.Price($)",
                             field:"gdsprice",
                             formatter:"money" ,
                             editor:"number",
@@ -568,21 +626,41 @@
                 {
                     title:'Amount', headerHozAlign:"center",
                     columns:[
-                        {   title:"In $",
+                        {   title:"Supp.Val($)",
                             field:"amtindollar",
                             formatter:"money",
                             bottomCalc:"sum",
                             bottomCalcFormatter:"money",
                             formatterParams:{thousand:",",precision:2},
                         },
-                        {   title:"In Pkr",
+                        {   title:"Supp.Val(Rs)",
                             field:"amtinpkr",
                             formatter:"money",
                             bottomCalc:"sum",
                             bottomCalcFormatter:"money",
+                            formatterParams:{thousand:",",precision:0},
                         },
 
-                        {   title:"dutyrate",
+                        {   title:"Duty.Val($)",
+                            field:"dtyamtindollar",
+                            formatter:"money",
+                            bottomCalc:"sum",
+                            bottomCalcFormatter:"money",
+                            formatterParams:{thousand:",",precision:2},
+                        },
+                        {   title:"Duty.Val(Rs)",
+                            field:"dtyamtinpkr",
+                            formatter:"money",
+                            bottomCalc:"sum",
+                            bottomCalcFormatter:"money",
+                            formatterParams:{thousand:",",precision:0},
+                        },
+
+
+
+
+
+                        {   title:"Duty.Price($)",
                             field:"dtyrate",
                             headerVertical:true,
                             // editor:"number",
@@ -591,19 +669,19 @@
                             responsive:0,
                             formatterParams:{thousand:",",precision:2},
                             validator:["required","numeric"],
-                            bottomCalcParams:{precision:6}  ,
-                        },
-                        {   title:"tmpcdaa",
-                            field:"tmpcda",
-                            headerVertical:true,
-                            editor:"number",
-                            cssClass:"bg-green-200 font-semibold",
-                            formatter:"money",
-                            responsive:0,
-                            formatterParams:{thousand:",",precision:2},
-                            validator:["required","numeric"],
                             bottomCalcParams:{precision:2}  ,
                         },
+                        // {   title:"tmpcdaa",
+                        //     field:"tmpcda",
+                        //     headerVertical:true,
+                        //     editor:"number",
+                        //     cssClass:"bg-green-200 font-semibold",
+                        //     formatter:"money",
+                        //     responsive:0,
+                        //     formatterParams:{thousand:",",precision:2},
+                        //     validator:["required","numeric"],
+                        //     bottomCalcParams:{precision:2}  ,
+                        // },
 
 
 
@@ -688,7 +766,7 @@
                             bottomCalcParams:{precision:2}  ,
                         },
                         {   title:"Item Ratio(%)",
-                            field:"itmratio",
+                            field:"dtyitmratio",
                             headerVertical:true,
                             formatter:"money",
                             formatterParams:{thousand:",",precision:2},
@@ -696,37 +774,33 @@
                     ]
                 },
                 {
-                    title:"Insur/Item",
-                    field:"insuranceperitem",
+                    title:"Insur/Item($)",
+                    field:"dtyinsuranceperitem",
                     headerVertical:true,
                     formatter:"money",
                 },
                 {
                     title:"Amt W/Insur (PKR)",
-                    field:"amountwithoutinsurance",
+                    field:"dtyamountwithoutinsurance",
                     headerVertical:true,
                     formatter:"money",
                 },
                 {
                     title:"1% Duty (PKR)",
-                    field:"onepercentdutypkr",
+                    field:"dtyonepercentdutypkr",
                     headerVertical:true,
                     formatter:"money",
                 },
                 {
                     title:"Price value (CS)",
                     headerVertical:true,
-                    field:"pricevaluecostsheet",
+                    field:"dtypricevaluecostsheet",
                     formatter:"money",
                     formatterParams:{thousand:",",precision:2},
                 },
                 {
                     title:'Duties Rate', headerHozAlign:"center",
                     columns:[
-                        {title:"Code",              field:"hscode",
-                        headerVertical:true,       visible:true},
-
-
                         {title:"CD",                field:"cd",
                         headerVertical:true,        visible:false},
                         {title:"ST",                field:"st",
@@ -751,21 +825,21 @@
 
 
                  {title:"CD",                field:"cda", formatter:"money",
-                    formatterParams:{thousand:",",precision:2},             responsive:0},
+                    formatterParams:{thousand:",",precision:0},             responsive:0},
                         {title:"ST",                field:"sta", formatter:"money",
-                    formatterParams:{thousand:",",precision:2},             responsive:0},
+                    formatterParams:{thousand:",",precision:0},             responsive:0},
                         {title:"RD",                field:"rda", formatter:"money",
-                    formatterParams:{thousand:",",precision:2},             responsive:0},
+                    formatterParams:{thousand:",",precision:0},             responsive:0},
                         {title:"ACD",               field:"acda", formatter:"money",
-                    formatterParams:{thousand:",",precision:2},            responsive:0},
+                    formatterParams:{thousand:",",precision:0},            responsive:0},
                         {title:"AST",               field:"asta",  formatter:"money",
-                    formatterParams:{thousand:",",precision:2},           responsive:0},
+                    formatterParams:{thousand:",",precision:0},           responsive:0},
                         {title:"IT",                field:"ita",  formatter:"money",
-                    formatterParams:{thousand:",",precision:2},            responsive:0},
+                    formatterParams:{thousand:",",precision:0},            responsive:0},
                         {title:"WSC",               field:"wsca",  formatter:"money",
-                    formatterParams:{thousand:",",precision:2},           responsive:0},
+                    formatterParams:{thousand:",",precision:0},           responsive:0},
                         {title:"Total",             field:"total",   formatter:"money",
-                    formatterParams:{thousand:",",precision:2},          responsive:0},
+                    formatterParams:{thousand:",",precision:0},          responsive:0},
                     ]
                 },
                 {
@@ -795,12 +869,23 @@
 
         });
         // Validation & Post
+
+        $("dynamicTable").tabulator({
+        columns:[
+            { title:"<input id='select-all' type='checkbox'/>"},
+                ]      ,
+        });
+
+
+
+
+
         function validateForm()
         {
 
             var invoicedate = document.getElementById("invoicedate")
             var invoiceno = document.getElementById("invoiceno")
-            var challanno = document.getElementById("challanno")
+            // var challanno = document.getElementById("challanno")
             var machineno = document.getElementById("machineno")
             var machine_date = document.getElementById("machine_date")
 
@@ -809,14 +894,14 @@
                 invoiceno.focus()
                 return;
             }
-            if(challanno.value === ''){
-                showSnackbar("challanno # required ","error");
-                challanno.focus()
-                return;
-            }
+            // if(challanno.value === ''){
+            //     showSnackbar("challanno # required ","error");
+            //     challanno.focus()
+            //     return;
+            // }
             if(machineno.value === ''){
                 showSnackbar("machineno # required ","error");
-                challanno.focus()
+                machineno.focus()
                 return;
             }
             const dynamicTableData = dynamicTable.getData();
@@ -854,7 +939,7 @@
                 'insurance' : parseFloat(insurance.value).toFixed(2),
                 'contract_id' : contract_id,
                 'invoiceno' : invoiceno.value,
-                'challanno' : challanno.value,
+                // 'challanno' : challanno.value,
                 'machineno' : machineno.value,
                 'machine_date' :machine_date.value,
                 'invoicedate' : invoicedate.value,

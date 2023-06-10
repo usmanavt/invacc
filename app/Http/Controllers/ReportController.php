@@ -50,6 +50,7 @@ class ReportController extends Controller
         // $temp = storage_path('temp');
         $mpdf = new PDF( [
             'mode' => 'utf-8',
+            // 'format' => 'A4-L',
             'format' => 'A4',
             'margin_header' => '3',
             'margin_top' => '10',

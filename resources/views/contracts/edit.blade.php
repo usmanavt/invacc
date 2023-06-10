@@ -196,10 +196,12 @@ var updateValues = (cell) => {
         if(cell.getData().sku_id==1)
          {
              var sum2 =  Number(data.gdswt) * Number(data.gdsprice)
+             var sum3 =  Number(data.gdswt) * Number(data.dtyrate)
          }
          if(cell.getData().sku_id==2)
          {
              var sum2 =  ( (Number(data.bundle1) * Number(data.pcspbundle1)) + (Number(data.bundle2) * Number(data.pcspbundle2)) ) * Number(data.gdsprice)
+             var sum3 =  ( (Number(data.bundle1) * Number(data.pcspbundle1)) + (Number(data.bundle2) * Number(data.pcspbundle2)) ) * Number(data.dtyrate)
          }
 
 
@@ -210,7 +212,8 @@ var updateValues = (cell) => {
     row.update({
         "ttpcs": sum,
         "gdspricetot": sum2,
-        "purval": sum2
+        "purval": sum2,
+        "dutval":sum3
     });
 }
 
@@ -353,7 +356,7 @@ dynamicTable = new Tabulator("#dynamicTable", {
              bottomCalc:"sum",
             bottomCalcParams:{precision:3}  },
 
-        {   title:"Rs($)",
+        {   title:"Supp.Price($)",
             field:"gdsprice",
             editor:"number",
             cssClass:"bg-green-200 font-semibold",
@@ -363,7 +366,7 @@ dynamicTable = new Tabulator("#dynamicTable", {
             cellEdited:updateValues,
         },
 
-        {   title:"DutyRs($)",
+        {   title:"DutyPrice($)",
             field:"dtyrate",
             editor:"number",
             cssClass:"bg-green-200 font-semibold",
@@ -388,7 +391,7 @@ dynamicTable = new Tabulator("#dynamicTable", {
 
 
 
-        {   title:"Val($)",
+        {   title:"Supp.Val($)",
             field:"purval",
             cssClass:"bg-gray-200 font-semibold",
              bottomCalc:"sum",
@@ -418,7 +421,49 @@ dynamicTable = new Tabulator("#dynamicTable", {
                     } bottomCalc:"sum2"
 
                 }
+        },
+
+
+        {   title:"Duty.Val($)",
+            field:"dutval",
+            cssClass:"bg-gray-200 font-semibold",
+             bottomCalc:"sum",
+            bottomCalcParams:{precision:0} ,
+            formatter:"money",
+            formatterParams:{
+                decimal:".",
+                thousand:",",
+                symbol:"$",
+                precision:3     },
+            formatter:function(cell,row)
+            {
+                    // console.log(cell.getData().sku_id)
+                    if(cell.getData().sku_id == 1)
+                    {
+
+                        return (cell.getData().gdswt * cell.getData().dtyrate)
+
+                    }
+                    else if (cell.getData().sku_id == 2)
+                    {
+                        return ((cell.getData().bundle1 * cell.getData().pcspbundle1) + (cell.getData().bundle2 * cell.getData().pcspbundle2)) * (cell.getData().dtyrate)
+                    }
+                    else {
+                        // Add for other types
+                    } bottomCalc:"sum3"
+
+                }
         }
+
+
+
+
+
+
+
+
+
+
 
     ],
 })

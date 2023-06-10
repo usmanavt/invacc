@@ -171,6 +171,7 @@ class ContractController extends Controller
                 $cd->dtyrate = $cont['dtyrate'];
                 $cd->invsrate = $cont['invsrate'];
                 $cd->purval = $cont['gdspricetot'];
+                $cd->dutval = $cont['gdspricedtytot'];
                 $cd->totpcs = $cont['ttpcs'];
                 $cd->save();
 
@@ -180,11 +181,12 @@ class ContractController extends Controller
                  $sumwt = ContractDetails::where('contract_id',$contract->id)->sum('gdswt');
                  $sumpcs = ContractDetails::where('contract_id',$contract->id)->sum('totpcs');
                  $sumval = ContractDetails::where('contract_id',$contract->id)->sum('purval');
-
+                 $sumdtyval = ContractDetails::where('contract_id',$contract->id)->sum('dutval');
 
                  $contract->conversion_rate = $sumwt;
                  $contract->totalpcs = $sumpcs;
                  $contract->insurance = $sumval;
+                 $contract->dutyval = $sumdtyval;
                  $contract->save();
 
             }
@@ -254,6 +256,7 @@ class ContractController extends Controller
                     $cds->dtyrate = $cd->dtyrate;
                     $cds->invsrate = $cd->invsrate;
                     $cds->purval = $cd->purval;
+                    $cds->dutval = $cd->dutval;
                     $cds->totpcs = $cd->ttpcs;
 
 
@@ -309,6 +312,7 @@ class ContractController extends Controller
                     $cds->dtyrate = $cd->dtyrate;
                     $cds->invsrate = $cd->invsrate;
                     $cds->purval = $cd->purval;
+                    $cds->dutval = $cd->dutval;
                     $cds->totpcs = $cd->ttpcs;
 
                     $cds->save();
@@ -321,10 +325,12 @@ class ContractController extends Controller
                     $sumwt = ContractDetails::where('contract_id',$contract->id)->sum('gdswt');
                     $sumpcs = ContractDetails::where('contract_id',$contract->id)->sum('totpcs');
                     $sumval = ContractDetails::where('contract_id',$contract->id)->sum('purval');
+                    $sumdtyval = ContractDetails::where('contract_id',$contract->id)->sum('dutval');
 
                     $contract->conversion_rate = $sumwt;
                     $contract->insurance = $sumval;
                     $contract->totalpcs = $sumpcs;
+                    $contract->dutyval = $sumdtyval;
                     $contract->save();
             }
             DB::commit();
