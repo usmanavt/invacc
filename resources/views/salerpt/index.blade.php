@@ -11,7 +11,7 @@
                 <div class="p-6 bg-white border-b border-gray-200">
 
 
-                    <form action="{{ route('salerpt.fetch')}}" method="POST">
+                    <form action="{{ route('salerpt.fetch')}}" method="POST" target="_blank">
                         @csrf
                         <div class="flex flex-col md:flex-row flex-wrap gap-2 justify-center">
                             <fieldset class="border px-4 py-2 rounded">

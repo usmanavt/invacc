@@ -28,7 +28,14 @@ class MaterialController extends Controller
         ->orderBy('id','desc')
         ->paginate(5);
         // return $materials;
-        return view('materials.index')->with('materials',$materials);
+        return view('materials.index')
+        ->with('materials',$materials)
+        ->with('skus',Sku::all())
+        ->with('categories',Category::all())
+        ->with('dimensions',Dimension::all())
+        ->with('sources',Source::all())
+        ->with('brands',Brand::all())
+        ->with('hscodes',Hscode::select('id','hscode')->get());
     }
 
     public function getMaster(Request $request)
@@ -49,15 +56,15 @@ class MaterialController extends Controller
 
     public function create()
     {
-        return view('materials.create')
-            ->with('skus',Sku::all())
-            ->with('categories',Category::all())
-            ->with('dimensions',Dimension::all())
-            ->with('sources',Source::all())
-            ->with('brands',Brand::all())
-            ->with('hscodes',Hscode::select('id','hscode')->get())
-            ->with('materials',Material::all())
-            ;
+        // return view('materials.create')
+        //     ->with('skus',Sku::all())
+        //     ->with('categories',Category::all())
+        //     ->with('dimensions',Dimension::all())
+        //     ->with('sources',Source::all())
+        //     ->with('brands',Brand::all())
+        //     ->with('hscodes',Hscode::select('id','hscode')->get())
+        //     ->with('materials',Material::all())
+        //     ;
     }
 
     public function store(Request $request)

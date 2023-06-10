@@ -87,20 +87,12 @@ Route::resource('categories', CategoryController::class)->except(['create','show
 //  Sku Controller
 Route::get('/skus/master', [SkuController::class, 'getMaster'])->name('skus.master');
 Route::resource('skus', SkuController::class)->except(['create','show','destroy']);
-
 //  Dimension Controller
 Route::get('/dimensions/master', [DimensionController::class, 'getMaster'])->name('dimensions.master');
 Route::resource('dimensions', DimensionController::class)->except(['create','show','destroy']);
-
-
 //  careof Controller
 Route::get('/cares/master', [CareController::class, 'getMaster'])->name('cares.master');
 Route::resource('cares', CareController::class)->except(['create','show','destroy']);
-
-
-
-
-
 //  Brand Controller
 Route::get('/brands/master', [BrandController::class, 'getMaster'])->name('brands.master');
 Route::resource('brands',BrandController::class)->except(['create','show','destroy']);
@@ -110,9 +102,6 @@ Route::resource('sources',SourceController::class);
 //  Supplier Controller
 Route::get('/suppliers/master', [SupplierController::class, 'getMaster'])->name('suppliers.master');
 Route::resource('suppliers', SupplierController::class);
-
-
-
 //  Customer Controller
 Route::get('/customers/master', [CustomerController::class, 'getMaster'])->name('customers.master');
 Route::resource('customers', CustomerController::class);
@@ -134,16 +123,11 @@ Route::get('/materials/{id}/copyMaterial', [MaterialController::class, 'copyMate
 Route::resource('materials', MaterialController::class);
 //  Users Controller
 Route::resource('users',UserController::class);
-
-
 // Contract Controller
 Route::get('/contracts/{contract}/printcontract', [ContractController::class, 'printContract'])->name('contracts.print');
- Route::get('/contracts/getContractMaster', [ContractController::class, 'getMaster'])->name('contracts.master');
-
- Route::get('/contracts/getContractMasterI', [ContractController::class, 'getMasterImp'])->name('contracts.masterI');
- Route::get('/contracts/getContractMasterL', [ContractController::class, 'getMasterLoc'])->name('contracts.masterL');
-
-
+Route::get('/contracts/getContractMaster', [ContractController::class, 'getMaster'])->name('contracts.master');
+Route::get('/contracts/getContractMasterI', [ContractController::class, 'getMasterImp'])->name('contracts.masterI');
+Route::get('/contracts/getContractMasterL', [ContractController::class, 'getMasterLoc'])->name('contracts.masterL');
 Route::get('/contracts/getContractDetails', [ContractController::class, 'getDetails'])->name('contracts.details');
 Route::resource('contracts', ContractController::class);
 //  CommercialInvoice
@@ -153,7 +137,6 @@ Route::get('/cis/getContractDetails', [CommercialInvoiceController::class, 'getC
 Route::resource('cis', CommercialInvoiceController::class);
 
 //  CommercialInvoice - LOCAL NEW
-
 Route::get('/localpurchase/getPurchaseMaster', [LocalPurchaseController::class, 'getMaster'])->name('localpurchase.master');
 Route::get('/localpurchase/getPurchaseDetails', [LocalPurchaseController::class, 'getDetail'])->name('localpurchase.details');
 Route::resource('localpurchase', LocalPurchaseController::class);
