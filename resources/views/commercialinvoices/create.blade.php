@@ -7,7 +7,7 @@
 
     <x-slot name="header">
         <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-            Create Commercial Invoice
+            Create Commercial Invoice Imported
         </h2>
     </x-slot>
 
@@ -57,10 +57,6 @@
 
                             </div>
                         </fieldset>
-
-
-
-
                         {{-- Contract Details --}}
                         <div class="flex flex-row px-4 py-2 items-center">
                             <x-label value="Add Pcs & Feet Size & Press"></x-label>
@@ -156,13 +152,6 @@
         })
         // Calculate Bank Charges [ onblur ]
 
-
-
-
-
-
-
-
         function calculateBankCharges()
         {
             var t =  parseFloat(bankcharges.value) + parseFloat(collofcustom.value) + parseFloat(exataxoffie.value) + parseFloat(lngnshipdochrgs.value) + parseFloat(localcartage.value) + parseFloat(miscexplunchetc.value) + parseFloat(customsepoy.value) + parseFloat(weighbridge.value) + parseFloat(miscexpenses.value) + parseFloat(agencychrgs.value) //+ parseFloat(otherchrgs.value)
@@ -172,11 +161,12 @@
         }
     </script>
 @endpush
+
 @push('scripts')
     <script>
-                window.onload = function() {
-                var input = document.getElementById("invoicedate").focus();
-                                            }
+        window.onload = function() {
+            var input = document.getElementById("invoicedate").focus();
+        }
 
         // -----------------FOR MODAL -------------------------------//
         function showModal(){ modal.style.display = "block"}
@@ -224,9 +214,6 @@
                 {title:"TotalPcs", field:"totalpcs" , visible:true ,headerSort:false, responsive:0},
                 {title:"TotalVal($)", field:"insurance" , visible:true ,headerSort:false, responsive:0},
 
-
-
-
             ],
             // Extra Pagination Data for End Users
             ajaxResponse:function(getDataUrl, params, response){
@@ -255,19 +242,19 @@
 
 @push('scripts')
     <script>
-
         // Populate Locations in Tabulator
-    const locations = @json($locations);
+        const locations = @json($locations);
+        const hscodes = @json($hscodes);
+        // Hscode List
+        var hscodeList=[]
+        hscodes.forEach(e => {
+            hscodeList.push({ value:e.hscode, label:e.hscode, id:e.hscode})
+        })
+        // Locations List
         var newList=[]
         locations.forEach(e => {
             newList.push({value:e.title,label:e.title , id:e.id})
-
         });
-
-
-
-
-
         //  ------------------Dynamic Table----------------------//
         async function fetchDataFromServer(url)
         {
@@ -286,13 +273,11 @@
             //  Stremaline Data for Tabulator
             for (let index = 0; index < data.length; index++) {
 
-
                 const obj = data[index];
                 const mat = obj['material']
-                const hsc = mat['hscodes']
+                // const hsc = mat['hscodes']
 
                 contract_id = obj.contract_id
-
                 // console.log(obj.bundle1 , obj.pcspbundle1 ,obj.bundle2 , obj.pcspbundle2);
                 var vpcs = ((obj.bundle1 * obj.pcspbundle1) + (obj.bundle2 * obj.pcspbundle2)).toFixed(2)
                 // console.log(vpcs);
@@ -350,15 +335,6 @@
                         pricevaluecostsheet : 0,
                         dtypricevaluecostsheet : 0,
 
-                        hscode :            hsc.hscode,
-                        cd :                hsc.cd,
-                        st :                hsc.st,
-                        rd :                hsc.rd,
-                        acd :               hsc.acd,
-                        ast :               hsc.ast,
-                        it :                hsc.it,
-                        wsc :               hsc.wse,
-
                         totallccostwexp:    0,
                         perpc:              0,
                         perkg:              0,
@@ -375,10 +351,10 @@
             calculateBankCharges()
             // alert(dynamicTable.getData())
             const data = dynamicTable.getData()
+            // Get Selected HSCode Value
+            var hscode;
             //  First Iteration to calculate Basic Data
             data.forEach(e => {
-
-
 
                 var pcs = e.pcs
                 var gdswt = e.gdswt
@@ -387,12 +363,23 @@
                 var gdsprice = e.gdsprice
                 var dtyrate = e.dtyrate
                 var tmpcda = e.tmpcda
-                var totpcs=e.totpcs
-                var purval=e.purval
-                var dutval=e.dutval
+                var totpcs = e.totpcs
+                var purval = e.purval
+                var dutval = e.dutval
+
+                ////////////////////////////////////////////////////////////////////////
+                // Get Values of HSCode Selected in List and Populate Data
+                ///////////////////////////////////////////////////////////////////////
+                hscode = hscodes.find(  function(el) { return el.hscode === e.hscode })
+                e.cd = hscode.cd
+                e.st = hscode.st
+                e.rd = hscode.rd
+                e.acd = hscode.acd
+                e.ast = hscode.ast
+                e.it = hscode.it
+                e.wsc = hscode.wse
 
                 //  update data element
-
                 e.pcs = pcs
                 e.gdswt = gdswt
                 e.inkg = inkg
@@ -403,7 +390,6 @@
                 e.purval=purval
                 e.dutval=dutval
 
-
             })
             //  Get Ratio after price/length/pcs update
             var amtinpkrtotal = 0
@@ -413,23 +399,17 @@
                 dtyamtinpkrtotal += parseFloat(e.dtyamtinpkr)
             });
 
-
-
             data.forEach(e => {
-                // var dtyamtinpkr = conversionrate.value * e.dtyrate * e.gdswt
-                // var amtinpkr = conversionrate.value * e.gdsprice * e.gdswt
+
                 var dtyamtinpkr = parseFloat(conversionrate.value) * parseFloat(e.dutval)
                 var amtinpkr = conversionrate.value * e.purval
 
                 var itmratio = amtinpkr / amtinpkrtotal * 100
-                 var dtyitmratio = ( parseFloat(dtyamtinpkr) / parseFloat(dtyamtinpkrtotal) ) * 100
-
-                // console.info(dtyitmratio)
+                var dtyitmratio = ( parseFloat(dtyamtinpkr) / parseFloat(dtyamtinpkrtotal) ) * 100
 
                 var insuranceperitem = parseFloat(insurance.value) * itmratio / 100
                 var dtyinsuranceperitem = parseFloat(insurance.value) * dtyitmratio / 100
 
-                // var amountwithoutinsurance = ( e.amtindollar + insuranceperitem ) * (parseFloat(conversionrate.value))
                 var amountwithoutinsurance = (parseFloat(e.amtindollar) + parseFloat(insuranceperitem)) * parseFloat(conversionrate.value)
                 var dtyamountwithoutinsurance = ( parseFloat(e.dtyamtindollar) + parseFloat(dtyinsuranceperitem) ) * parseFloat(conversionrate.value)
 
@@ -440,14 +420,15 @@
                 var pricevaluecostsheet = parseFloat(onepercentdutypkr + amountwithoutinsurance)
                 var dtypricevaluecostsheet = parseFloat(dtyonepercentdutypkr + dtyamountwithoutinsurance)
 
-                var cda = e.cd * dtypricevaluecostsheet / 100
+                var cda = parseFloat(hscode.cd) * dtypricevaluecostsheet / 100
+                console.log(cda ,parseFloat(hscode.cd), dtypricevaluecostsheet)
                 var tmpcda =  dtyamtinpkrtotal
-                var rda = e.rd * dtypricevaluecostsheet / 100
-                var acda = e.acd * dtypricevaluecostsheet / 100
-                var sta = (dtypricevaluecostsheet + cda + rda + acda) * e.st / 100
-                var asta = (dtypricevaluecostsheet + cda + rda + acda) * e.ast / 100
-                var ita =(dtypricevaluecostsheet + cda + sta + rda + acda + asta) * e.it / 100
-                var wsca = (dtypricevaluecostsheet * e.wsc) /100
+                var rda = parseFloat(hscode.rd) * dtypricevaluecostsheet / 100
+                var acda = parseFloat(hscode.acd) * dtypricevaluecostsheet / 100
+                var sta = (dtypricevaluecostsheet + cda + rda + acda) * parseFloat(hscode.st) / 100
+                var asta = (dtypricevaluecostsheet + cda + rda + acda) * parseFloat(hscode.ast) / 100
+                var ita =(dtypricevaluecostsheet + cda + sta + rda + acda + asta) * parseFloat(hscode.it) / 100
+                var wsca = (dtypricevaluecostsheet * parseFloat(hscode.wsc)) /100
                 var total = cda + rda + sta + acda + asta + ita + wsca
                 var perft = (e.perpc / e.length).toFixed(2)
                 var totallccostwexp = total + dtypricevaluecostsheet + (banktotal.value * dtyitmratio / 100)
@@ -456,9 +437,7 @@
                 var perkg = (perpc / e.inkg).toFixed(2)
                 var qtyinfeet = (e.pcs * e.length).toFixed(2)
 
-
-                // e.amtindollar = e.gdswt * e.gdsprice
-                 e.amtindollar = e.purval
+                e.amtindollar = e.purval
                 e.amtinpkr = amtinpkr
                 e.itmratio = itmratio
                 e.dtyitmratio = dtyitmratio
@@ -505,7 +484,7 @@
                 {title:"Id",           field:"id", visible:false},
                 {title:"Material",     field:"material_title"},
                 {title:"Unit",         field:"sku"},
-                {title:"Unitid",  field:"sku_id"},
+                {title:"Unitid",       field:"sku_id"},
                 {title:"contract_id",  field:"contract_id",visible:false},
                 {title:"material_id",  field:"material_id",visible:false},
                 {title:"supplier_id",  field:"supplier_id",visible:false},
@@ -518,30 +497,31 @@
                 {
                     title:'Quantity', headerHozAlign:"center",
                     columns:[
-
-                    {title: "id",field: "myid",visible:false},
-                    {title:"Location", field:"location" ,editor:"list", responsive:0 , editorParams:   {
-                            values:newList,
+                        {title: "id",field: "myid",visible:false},
+                        {   title:"Location",headerHozAlign :'center',
+                            field:"location" ,
+                            editor:"list",
+                            responsive:0 ,
+                            headerVertical:true,
                             cssClass:"bg-green-200 font-semibold",
-                            validator:["required"]
-                        }
-                    },
-
-                    // {title:"Code",              field:"hscode",
-                    //     headerVertical:true,       visible:true},
-                        {   title:"HS / Code",headerHozAlign :'center',
+                            editorParams:   {
+                                values:newList,
+                                validator:["required"]
+                            }
+                        },
+                        {   title:"HS code",headerHozAlign :'center',
+                            field:"hscode",
+                            editor:"list",
                             responsive:0,
-                            field:"Code",
-                            // type='checkbox',
-                            // editor:"number",
-                            // headerVertical:true,
-                            // formatter:"money",
-                            cssClass:"bg-green-200 font-semibold",editor:true
-                            // validator:["required","numeric"],
-                            // formatterParams:{thousand:",",precision:2},
+                            headerVertical:true,
+                            cssClass:"bg-green-200 font-semibold",
+                            editorParams:   {
+                                values:hscodeList,
+                                validator:["required"]
+                            }
                         },
 
-                    {   title:"Pcs",headerHozAlign :'center',
+                        {   title:"Pcs",headerHozAlign :'center',
                             responsive:0,
                             field:"pcs",
                             editor:"number",
@@ -582,7 +562,6 @@
                         {   title:"QtyInFeet",
                             field:"qtyinfeet",
                             headerVertical:true,
-                          //  editor:"number",
                             cssClass:"bg-green-200 font-semibold",
                             formatter:"money",
                             responsive:0,
@@ -591,13 +570,9 @@
                             bottomCalcParams:{precision:2}  ,
                         },
 
-
-
-
                         {   title:"Other.Exp(pkr)",
                             field:"otherexpenses",
                             headerVertical:true,
-                          //  editor:"number",
                             cssClass:"bg-green-200 font-semibold",
                             formatter:"money",
                             responsive:0,
@@ -640,7 +615,6 @@
                             bottomCalcFormatter:"money",
                             formatterParams:{thousand:",",precision:0},
                         },
-
                         {   title:"Duty.Val($)",
                             field:"dtyamtindollar",
                             formatter:"money",
@@ -656,26 +630,62 @@
                             formatterParams:{thousand:",",precision:0},
                         },
 
-
-
-
-
                         {   title:"Duty.Price($)",
                             field:"dtyrate",
                             headerVertical:true,
-                            // editor:"number",
-                            cssClass:"bg-green-200 font-semibold",
                             formatter:"money",
                             responsive:0,
                             formatterParams:{thousand:",",precision:2},
                             validator:["required","numeric"],
                             bottomCalcParams:{precision:2}  ,
                         },
-                        // {   title:"tmpcdaa",
-                        //     field:"tmpcda",
+                        {title:"CD",                field:"cda", formatter:"money",
+                        formatterParams:{thousand:",",precision:0},             responsive:0},
+                            {title:"ST",                field:"sta", formatter:"money",
+                        formatterParams:{thousand:",",precision:0},             responsive:0},
+                            {title:"RD",                field:"rda", formatter:"money",
+                        formatterParams:{thousand:",",precision:0},             responsive:0},
+                            {title:"ACD",               field:"acda", formatter:"money",
+                        formatterParams:{thousand:",",precision:0},            responsive:0},
+                            {title:"AST",               field:"asta",  formatter:"money",
+                        formatterParams:{thousand:",",precision:0},           responsive:0},
+                            {title:"IT",                field:"ita",  formatter:"money",
+                        formatterParams:{thousand:",",precision:0},            responsive:0},
+                            {title:"WSC",               field:"wsca",  formatter:"money",
+                        formatterParams:{thousand:",",precision:0},           responsive:0},
+                            {title:"Total",             field:"total",   formatter:"money",
+                        formatterParams:{thousand:",",precision:0},          responsive:0},
+
+                        // {   title:"CDRate",
+                        //     field:"cd",
                         //     headerVertical:true,
-                        //     editor:"number",
-                        //     cssClass:"bg-green-200 font-semibold",
+                        //     formatter:"money",
+                        //     responsive:0,
+                        //     formatterParams:{thousand:",",precision:2},
+                        //     validator:["required","numeric"],
+                        //     bottomCalcParams:{precision:2}  ,
+                        // },
+                        // {   title:"STRate",
+                        //     field:"st",
+                        //     headerVertical:true,
+                        //     formatter:"money",
+                        //     responsive:0,
+                        //     formatterParams:{thousand:",",precision:2},
+                        //     validator:["required","numeric"],
+                        //     bottomCalcParams:{precision:2}  ,
+                        // },
+                        // {   title:"RDRate",
+                        //     field:"rd",
+                        //     headerVertical:true,
+                        //     formatter:"money",
+                        //     responsive:0,
+                        //     formatterParams:{thousand:",",precision:2},
+                        //     validator:["required","numeric"],
+                        //     bottomCalcParams:{precision:2}  ,
+                        // },
+                        // {   title:"ACDRate",
+                        //     field:"acd",
+                        //     headerVertical:true,
                         //     formatter:"money",
                         //     responsive:0,
                         //     formatterParams:{thousand:",",precision:2},
@@ -683,88 +693,33 @@
                         //     bottomCalcParams:{precision:2}  ,
                         // },
 
-
-
-
-
-                        {   title:"CDRate",
-                            field:"cd",
-                            headerVertical:true,
-                            editor:"number",
-                            cssClass:"bg-green-200 font-semibold",
-                            formatter:"money",
-                            responsive:0,
-                            formatterParams:{thousand:",",precision:2},
-                            validator:["required","numeric"],
-                            bottomCalcParams:{precision:2}  ,
-                        },
-                        {   title:"STRate",
-                            field:"st",
-                            headerVertical:true,
-                            editor:"number",
-                            cssClass:"bg-green-200 font-semibold",
-                            formatter:"money",
-                            responsive:0,
-                            formatterParams:{thousand:",",precision:2},
-                            validator:["required","numeric"],
-                            bottomCalcParams:{precision:2}  ,
-                        },
-                        {   title:"RDRate",
-                            field:"rd",
-                            headerVertical:true,
-                            editor:"number",
-                            cssClass:"bg-green-200 font-semibold",
-                            formatter:"money",
-                            responsive:0,
-                            formatterParams:{thousand:",",precision:2},
-                            validator:["required","numeric"],
-                            bottomCalcParams:{precision:2}  ,
-                        },
-                        {   title:"ACDRate",
-                            field:"acd",
-                            headerVertical:true,
-                            editor:"number",
-                            cssClass:"bg-green-200 font-semibold",
-                            formatter:"money",
-                            responsive:0,
-                            formatterParams:{thousand:",",precision:2},
-                            validator:["required","numeric"],
-                            bottomCalcParams:{precision:2}  ,
-                        },
-
-                        {   title:"ASTRate",
-                            field:"ast",
-                            headerVertical:true,
-                            editor:"number",
-                            cssClass:"bg-green-200 font-semibold",
-                            formatter:"money",
-                            responsive:0,
-                            formatterParams:{thousand:",",precision:2},
-                            validator:["required","numeric"],
-                            bottomCalcParams:{precision:2}  ,
-                        },
-                        {   title:"ITRate",
-                            field:"it",
-                            headerVertical:true,
-                            editor:"number",
-                            cssClass:"bg-green-200 font-semibold",
-                            formatter:"money",
-                            responsive:0,
-                            formatterParams:{thousand:",",precision:2},
-                            validator:["required","numeric"],
-                            bottomCalcParams:{precision:2}  ,
-                        },
-                        {   title:"WSCRate",
-                            field:"wsc",
-                            headerVertical:true,
-                            editor:"number",
-                            cssClass:"bg-green-200 font-semibold",
-                            formatter:"money",
-                            responsive:0,
-                            formatterParams:{thousand:",",precision:2},
-                            validator:["required","numeric"],
-                            bottomCalcParams:{precision:2}  ,
-                        },
+                        // {   title:"ASTRate",
+                        //     field:"ast",
+                        //     headerVertical:true,
+                        //     formatter:"money",
+                        //     responsive:0,
+                        //     formatterParams:{thousand:",",precision:2},
+                        //     validator:["required","numeric"],
+                        //     bottomCalcParams:{precision:2}  ,
+                        // },
+                        // {   title:"ITRate",
+                        //     field:"it",
+                        //     headerVertical:true,
+                        //     formatter:"money",
+                        //     responsive:0,
+                        //     formatterParams:{thousand:",",precision:2},
+                        //     validator:["required","numeric"],
+                        //     bottomCalcParams:{precision:2}  ,
+                        // },
+                        // {   title:"WSCRate",
+                        //     field:"wsc",
+                        //     headerVertical:true,
+                        //     formatter:"money",
+                        //     responsive:0,
+                        //     formatterParams:{thousand:",",precision:2},
+                        //     validator:["required","numeric"],
+                        //     bottomCalcParams:{precision:2}  ,
+                        // },
                         {   title:"Item Ratio(%)",
                             field:"dtyitmratio",
                             headerVertical:true,
@@ -798,50 +753,44 @@
                     formatter:"money",
                     formatterParams:{thousand:",",precision:2},
                 },
-                {
-                    title:'Duties Rate', headerHozAlign:"center",
-                    columns:[
-                        {title:"CD",                field:"cd",
-                        headerVertical:true,        visible:false},
-                        {title:"ST",                field:"st",
-                        headerVertical:true,          visible:false},
-                        {title:"RD",                field:"rd",
-                        headerVertical:true,        visible:false},
-                        {title:"ACD",               field:"acd",
-                        headerVertical:true,          visible:false},
-                        {title:"AST",               field:"ast",
-                        headerVertical:true,        visible:false},
-                        {title:"IT",                field:"it",
-                        headerVertical:true,        visible:false},
-                        {title:"WSC",               field:"wsc",
-                        headerVertical:true,         visible:false},
-                    ]
-                },
-                {
-                    title:'Duties Amount (PKR)', headerHozAlign:"center",
-                    columns:[
-                 //       {title:"CDrate",                field:"cdrt", formatter:"money",
-                 //   formatterParams:{thousand:",",precision:2},             responsive:0},
 
+                {title:"CD",                field:"cd",
+                headerVertical:true,        visible:true},
+                {title:"ST",                field:"st",
+                headerVertical:true,          visible:true},
+                {title:"RD",                field:"rd",
+                headerVertical:true,        visible:true},
+                {title:"ACD",               field:"acd",
+                headerVertical:true,          visible:true},
+                {title:"AST",               field:"ast",
+                headerVertical:true,        visible:true},
+                {title:"IT",                field:"it",
+                headerVertical:true,        visible:true},
+                {title:"WSC",               field:"wsc",
+                headerVertical:true,         visible:true},
 
-                 {title:"CD",                field:"cda", formatter:"money",
-                    formatterParams:{thousand:",",precision:0},             responsive:0},
-                        {title:"ST",                field:"sta", formatter:"money",
-                    formatterParams:{thousand:",",precision:0},             responsive:0},
-                        {title:"RD",                field:"rda", formatter:"money",
-                    formatterParams:{thousand:",",precision:0},             responsive:0},
-                        {title:"ACD",               field:"acda", formatter:"money",
-                    formatterParams:{thousand:",",precision:0},            responsive:0},
-                        {title:"AST",               field:"asta",  formatter:"money",
-                    formatterParams:{thousand:",",precision:0},           responsive:0},
-                        {title:"IT",                field:"ita",  formatter:"money",
-                    formatterParams:{thousand:",",precision:0},            responsive:0},
-                        {title:"WSC",               field:"wsca",  formatter:"money",
-                    formatterParams:{thousand:",",precision:0},           responsive:0},
-                        {title:"Total",             field:"total",   formatter:"money",
-                    formatterParams:{thousand:",",precision:0},          responsive:0},
-                    ]
-                },
+                // {
+                //     title:'Duties Amount (PKR)', headerHozAlign:"center",
+                //     columns:[
+
+                //         {title:"CD",                field:"cda", formatter:"money",
+                //         formatterParams:{thousand:",",precision:0},             responsive:0},
+                //             {title:"ST",                field:"sta", formatter:"money",
+                //         formatterParams:{thousand:",",precision:0},             responsive:0},
+                //             {title:"RD",                field:"rda", formatter:"money",
+                //         formatterParams:{thousand:",",precision:0},             responsive:0},
+                //             {title:"ACD",               field:"acda", formatter:"money",
+                //         formatterParams:{thousand:",",precision:0},            responsive:0},
+                //             {title:"AST",               field:"asta",  formatter:"money",
+                //         formatterParams:{thousand:",",precision:0},           responsive:0},
+                //             {title:"IT",                field:"ita",  formatter:"money",
+                //         formatterParams:{thousand:",",precision:0},            responsive:0},
+                //             {title:"WSC",               field:"wsca",  formatter:"money",
+                //         formatterParams:{thousand:",",precision:0},           responsive:0},
+                //             {title:"Total",             field:"total",   formatter:"money",
+                //         formatterParams:{thousand:",",precision:0},          responsive:0},
+                //     ]
+                // },
                 {
                     title:"Total LC Cost W/InvsExp",
                     headerVertical:true,
@@ -854,32 +803,19 @@
                     title:'Cost Rate/Unit', headerHozAlign:"center",
                     columns:[
                         {title:"Per Pc",    field:"perpc",         responsive:0 ,formatter:"money",
-                    formatterParams:{thousand:",",precision:2}, },
+                            formatterParams:{thousand:",",precision:2}, },
                         {title:"Per Kg",    field:"perkg",         responsive:0 , formatter:"money",
-                    formatterParams:{thousand:",",precision:2}, },
+                            formatterParams:{thousand:",",precision:2}, },
                         {title:"Per Feet",  field:"perft",       responsive:0 ,formatter:"money",
-                    formatterParams:{thousand:",",precision:2}, },
-
+                            formatterParams:{thousand:",",precision:2}, },
                     ]
                 },
             ],
         })
         dynamicTable.on("dataLoaded", function(data){
             //data - all data loaded into the table
-
         });
         // Validation & Post
-
-        $("dynamicTable").tabulator({
-        columns:[
-            { title:"<input id='select-all' type='checkbox'/>"},
-                ]      ,
-        });
-
-
-
-
-
         function validateForm()
         {
 
@@ -894,11 +830,6 @@
                 invoiceno.focus()
                 return;
             }
-            // if(challanno.value === ''){
-            //     showSnackbar("challanno # required ","error");
-            //     challanno.focus()
-            //     return;
-            // }
             if(machineno.value === ''){
                 showSnackbar("machineno # required ","error");
                 machineno.focus()
@@ -911,27 +842,15 @@
                 return;
             }
 
-
-
             for (let index = 0; index < dynamicTableData.length; index++) {
-            const element = dynamicTableData[index];
+                const element = dynamicTableData[index];
 
-            if(element.location === undefined)
-               {
-                showSnackbar("Location must be Enter","info");
-                return;
-               }
-        }
-
-
-
-
-
-
-
-
-
-
+                if(element.location === undefined)
+                {
+                    showSnackbar("Location must be Enter","info");
+                    return;
+                }
+            }
 
             // disableSubmitButton(true);
             var data = {

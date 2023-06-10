@@ -85,10 +85,7 @@ class ReportController extends Controller
                 $mpdf->WriteHTML($val);
             }
             $mpdf->AddPage();
-
-          return response($mpdf->Output($filename,'I'),200)->header('Content-Type','application/pdf');
-
-
+            return response($mpdf->Output($filename,'I'),200)->header('Content-Type','application/pdf');
     }
 
 

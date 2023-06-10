@@ -16,11 +16,11 @@ class SaleRptController extends Controller
     public function index(Request $request)
     {
 
-         $fromdate = $request->fromdate;
-         $todate = $request->todate;
+        $fromdate = $request->fromdate;
+        $todate = $request->todate;
 
-         $fromdate = '2023/05/01';
-         $todate = '2023/05/31';
+        $fromdate = '2023/05/01';
+        $todate = '2023/05/31';
 
         return view('salerpt.index')
         ->with('heads',Customer::where('status',1)->get())
@@ -32,6 +32,29 @@ class SaleRptController extends Controller
         ->with('subheadspend',DB::table('vwpendcontinvs')->select('*')->get()->toArray())
         ;
     }
+
+    public function getMPDFSettings($orientation = 'A4')
+    {
+        $format;
+        $orientation == 'L' ? $format = 'A4L': 'A4';
+
+        $mpdf = new PDF( [
+            'mode' => 'utf-8',
+            'format' => $orientation,
+            'margin_header' => '2',
+            'margin_top' => '5',
+            'margin_bottom' => '5',
+            'margin_footer' => '2',
+            'default_font_size' => 9,
+            'margin_left' => '3',
+            'margin_right' => '3',
+        ]);
+        $mpdf->showImageErrors = true;
+        $mpdf->curlAllowUnsafeSslRequests = true;
+        $mpdf->debug = true;
+        return $mpdf;
+    }
+
 
     public function vouchers(Request $request)
     {
@@ -60,20 +83,7 @@ class SaleRptController extends Controller
         ini_set('allow_url_fopen',1);
         ini_set('user_agent', 'Mozilla/5.0');
         $temp = storage_path('temp');
-        $mpdf = new PDF( [
-            'mode' => 'utf-8',
-            'format' => 'A4',
-            'margin_header' => '2',
-            'margin_top' => '5',
-            'margin_bottom' => '5',
-            'margin_footer' => '2',
-            'default_font_size' => 9,
-            'margin_left' => '3',
-            'margin_right' => '3',
-        ]);
-        $mpdf->showImageErrors = true;
-        $mpdf->curlAllowUnsafeSslRequests = true;
-        $mpdf->debug = true;
+        $mpdf = $this->getMPDFSettings();
         //  Get Report
         if($report_type === 'tpl'){
             $data = DB::select('call ProcTPL(?,?,1)',array($fromdate,$todate));
@@ -87,23 +97,6 @@ class SaleRptController extends Controller
         }
 
         if($report_type === 'gl'){
-            // dd($request->all());
-            // $subhead_id = $request->subhead_id;
-            // //  Truncate Table Data
-            // DB::table('glparameterrpt')->truncate();
-            // foreach($request->subhead_id as $id)
-            // {
-            //     DB::table('glparameterrpt')->insert([
-            //         'GLCODE' => $id
-            //     ]);
-            // }
-            // // Add input for Muliple parameters in Procedure
-            // $data = DB::select('call ProcGL(?,?)',array($fromdate,$todate));
-            // if(!$data)
-            // {
-            //     Session::flash('info','No data available');
-            //     return redirect()->back();
-            // }
             $head_id = $request->head_id;
             // $head = Head::findOrFail($head_id);
             $head = Customer::findOrFail($head_id);
@@ -143,25 +136,7 @@ class SaleRptController extends Controller
                 }
             }
             //  Call Procedure
-            // $data = DB::select('call ProcGLHW(?,?,?)',array($fromdate,$todate,$head_id));
-            // $data = DB::select('call procpurinvc(?,?,?)',array($fromdate,$todate,$head_id));
-
-            $mpdf = new PDF( [
-                'mode' => 'utf-8',
-                'format' => 'A4',
-                'margin_header' => '2',
-                'margin_top' => '5',
-                'margin_bottom' => '5',
-                'margin_footer' => '2',
-                'default_font_size' => 9,
-                'margin_left' => '15',
-                'margin_right' => '15',
-                'setPaper'=>'landscap',
-            ]);
-            // $mpdf->setPaper('A4','landscape') ;
-
-
-
+            $mpdf = $this->getMPDFSettings();
             $data = DB::select('call Procdlvrchln()');
             if(!$data)
             {
@@ -190,11 +165,8 @@ class SaleRptController extends Controller
                 }
                 $mpdf->AddPage();
             }
-            $mpdf->Output($filename,'I');
-            dd('wait');
-            return;
+            return response($mpdf->Output($filename,'I'),200)->header('Content-Type','application/pdf');
         }
-
 
 
         if($report_type === 'salinvs'){
@@ -212,23 +184,7 @@ class SaleRptController extends Controller
                 }
             }
             //  Call Procedure
-            // $data = DB::select('call ProcGLHW(?,?,?)',array($fromdate,$todate,$head_id));
-            // $data = DB::select('call procpurinvc(?,?,?)',array($fromdate,$todate,$head_id));
-
-            $mpdf = new PDF( [
-                'mode' => 'utf-8',
-                'format' => 'A4',
-                'margin_header' => '2',
-                'margin_top' => '5',
-                'margin_bottom' => '5',
-                'margin_footer' => '2',
-                'default_font_size' => 9,
-                'margin_left' => '15',
-                'margin_right' => '15',
-            ]);
-
-
-
+            $mpdf = $this->getMPDFSettings();
 
             $data = DB::select('call procsalinv()');
             if(!$data)
@@ -258,12 +214,8 @@ class SaleRptController extends Controller
                 }
                 $mpdf->AddPage();
             }
-            $mpdf->Output($filename,'I');
-            dd('wait');
-            return;
+            return response($mpdf->Output($filename,'I'),200)->header('Content-Type','application/pdf');
         }
-
-
 
         if($report_type === 'loccominvs'){
             //  dd($request->all());
@@ -280,8 +232,6 @@ class SaleRptController extends Controller
                 }
             }
             //  Call Procedure
-            // $data = DB::select('call ProcGLHW(?,?,?)',array($fromdate,$todate,$head_id));
-            // $data = DB::select('call procpurinvc(?,?,?)',array($fromdate,$todate,$head_id));
             $data = DB::select('call procpurinvcloc()');
             if(!$data)
             {
@@ -290,19 +240,7 @@ class SaleRptController extends Controller
             }
             $collection = collect($data);                   //  Make array a collection
 
-            $mpdf = new PDF( [
-                'mode' => 'utf-8',
-                'format' => 'A4',
-                'margin_header' => '2',
-                'margin_top' => '5',
-                'margin_bottom' => '5',
-                'margin_footer' => '2',
-                'default_font_size' => 10,
-                'margin_left' => '15',
-                'margin_right' => '15',
-
-            ]);
-
+            $mpdf = $this->getMPDFSettings();
 
             // $grouped = $collection->groupBy('SupName');       //  Sort collection by SupName
             $grouped = $collection->groupBy('purid');       //  Sort collection by SupName
@@ -326,9 +264,7 @@ class SaleRptController extends Controller
                 }
                 $mpdf->AddPage();
             }
-            $mpdf->Output($filename,'I');
-            dd('wait');
-            return;
+            return response($mpdf->Output($filename,'I'),200)->header('Content-Type','application/pdf');
         }
 
 

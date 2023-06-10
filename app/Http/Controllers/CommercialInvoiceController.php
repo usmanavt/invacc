@@ -2,6 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Hscode;
+use App\Models\Subhead;
+use App\Models\Location;
 use App\Models\Reciving;
 use App\Models\Clearance;
 use Illuminate\Http\Request;
@@ -13,8 +16,6 @@ use App\Models\ClearancePendingDetails;
 use Illuminate\Support\Facades\Session;
 use App\Models\CommercialInvoiceDetails;
 use App\Models\RecivingCompletedDetails;
-use App\Models\Subhead;
-use App\Models\Location;
 
 
 class CommercialInvoiceController extends Controller
@@ -79,7 +80,10 @@ class CommercialInvoiceController extends Controller
 
     public function create()
     {
-        return view('commercialinvoices.create')->with('locations',Location::select('id','title')->get());;
+        return view('commercialinvoices.create')
+        ->with('hscodes',Hscode::all())
+        ->with('locations',Location::select('id','title')
+        ->get());
 
     }
 
