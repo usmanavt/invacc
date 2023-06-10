@@ -78,13 +78,13 @@
                                 </select>
 
 
-                                <x-label for="" value="hscode"/>
+                                {{-- <x-label for="" value="hscode"/>
                                 <select autocomplete="on" required name="hscode_id" class="bg-indigo-100 w-full" required onchange="getHiddenValues(this)">
                                     <option value="" selected>--hscode</option>
                                     @foreach ($hscodes as $hscode)
                                         <option value="{{ $hscode->id }}">{{ $hscode->hscode }}</option>
                                     @endforeach
-                                </select>
+                                </select> --}}
 
                                 <div >
                                     <x-label for="Qty(Kg)" value="Qty(Kg)"/>

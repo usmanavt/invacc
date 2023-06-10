@@ -61,9 +61,9 @@
                             <input type="hidden" name="brand_id" value="{{ $material->brand_id }}">
                             <input type="hidden" name="brand" value="{{ $material->brand }}">
 
-                            <x-label for="" value="hscode"/>
+                            {{-- <x-label for="" value="hscode"/>
                             <x-input class="" type="text"   value="{{ $material->hscodes->hscode }}" disabled />
-                                <input type="hidden" name="hscode_id" value="{{ $material->hscode_id }}">
+                                <input type="hidden" name="hscode_id" value="{{ $material->hscode_id }}"> --}}
 
                                 <div >
                                     <x-label for="Qty(Kg)" value="Qty(Kg)"/>
@@ -110,19 +110,17 @@
                         </div>
 
                         {{-- Listing --}}
-                        <div class="ml-4 pt-1 border border-slate-300 w-full p-2">
-                        <span class="text-indigo-500 border-b">Existing Materials</span>
-                        <ul class="h-auto overflow-y-scroll">
-                            {{-- @foreach ($materials as $material)
-                                <li>{{ $material->title }} | {{ $material->dimension }}</li>
-                            @endforeach --}}
+                        {{-- <div class="ml-4 pt-1 border border-slate-300 w-full p-2">
+                            <span class="text-indigo-500 border-b">Existing Materials</span>
                             <ul class="h-auto overflow-y-scroll">
-                                @foreach ($materials as $material)
-                                    <li>{{ $material->title }} | {{ $material->dimension }}</li>
-                                @endforeach
+
+                                <ul class="h-auto overflow-y-scroll">
+                                    @foreach ($materials as $material)
+                                        <li>{{ $material->title }} | {{ $material->dimension }}</li>
+                                    @endforeach
+                                </ul>
                             </ul>
-                        </ul>
-                    </div>
+                        </div> --}}
                     </div>
                 </div>
 

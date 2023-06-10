@@ -95,7 +95,7 @@ class MaterialController extends Controller
                 $material->source_id = $request->source_id;
                 $material->sku_id = $request->sku_id;
                 $material->brand_id = $request->brand_id;
-                $material->hscode_id = $request->hscode_id;
+                $material->hscode_id = 0;
                 $material->category = $request->category;
                 $material->dimension = $request->dimension;
                 $material->source = $request->source;
@@ -153,7 +153,7 @@ class MaterialController extends Controller
         ->with('dimensions',Dimension::all())
         ->with('sources',Source::all())
         ->with('brands',Brand::all())
-        ->with('hscodes',Hscode::select('id','hscode')->get())
+        // ->with('hscodes',Hscode::select('id','hscode')->get())
         ->with('material',$material)
         ;
     }
@@ -173,7 +173,7 @@ class MaterialController extends Controller
             $material->source_id = $request->source_id;
             $material->sku_id = $request->sku_id;
             $material->brand_id = $request->brand_id;
-            $material->hscode_id = $request->hscode_id;
+            // $material->hscode_id = $request->hscode_id;
             $material->category = $request->category;
             $material->dimension = $request->dimension;
             $material->source = $request->source;
