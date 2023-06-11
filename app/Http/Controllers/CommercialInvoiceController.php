@@ -38,7 +38,7 @@ class CommercialInvoiceController extends Controller
         $cis = CommercialInvoice::where('status',$status)
         ->where(function ($query) use ($search){
                 $query->where('invoiceno','LIKE','%' . $search . '%')
-                ->orWhere('challanno','LIKE','%' . $search . '%');
+                ->orWhere('invoiceno','LIKE','%' . $search . '%');
             })
             ->whereHas('supplier', function ($query) {
                 $query->where('source_id','=','2');
@@ -98,7 +98,7 @@ class CommercialInvoiceController extends Controller
             $ci->invoice_date = $request->invoicedate;
             $ci->invoiceno = $request->invoiceno;
             $ci->contract_id = $request->contract_id;
-            $ci->challanno = $request->challanno;
+            // $ci->challanno = $request->challanno;
             $ci->supplier_id = $comminvoice[0]['supplier_id'];
             $ci->machine_date = $request->machine_date;
             $ci->machineno = $request->machineno;
@@ -191,6 +191,10 @@ class CommercialInvoiceController extends Controller
                 $c->amtindollar = $cid['amtindollar'];
                 $c->amtinpkr = $cid['amtinpkr'];
 
+                $c->dtyamtindollar = $cid['dtyamtindollar'];
+                $c->dtyamtinpkr = $cid['dtyamtinpkr'];
+
+
                 $c->hscode = $cid['hscode'];
                 $c->cd = $cid['cd'];
                 $c->st = $cid['st'];
@@ -198,7 +202,7 @@ class CommercialInvoiceController extends Controller
                 $c->acd = $cid['acd'];
                 $c->ast = $cid['ast'];
                 $c->it = $cid['it'];
-                $c->wse = $cid['wsc'];
+                $c->wse = $cid['wse'];
 
                 $c->length = $cid['length'];
                 //// From usman 13-12-2022
@@ -275,7 +279,7 @@ class CommercialInvoiceController extends Controller
                 $cpd->acd = $cid['acd'];
                 $cpd->ast = $cid['ast'];
                 $cpd->it = $cid['it'];
-                $cpd->wse = $cid['wsc'];
+                $cpd->wse = $cid['wse'];
 
                 $cpd->length = $cid['length'];
                 $cpd->itmratio = $cid['itmratio'];
@@ -347,7 +351,8 @@ class CommercialInvoiceController extends Controller
         //** */ Marking From Usman on 15-12-2022
         return view('commercialinvoices.edit')
         ->with('i',CommercialInvoice::whereId($id)->with('commericalInvoiceDetails.material.hscodes')->first())
-        ->with('locations',Location::select('id','title')->get());
+        ->with('locations',Location::select('id','title')->get())
+        ->with('hscodes',Hscode::all());
     }
 
     public function update(Request $request, CommercialInvoice $commercialInvoice)
@@ -363,7 +368,7 @@ class CommercialInvoiceController extends Controller
             //  Update Commerical Invoice
             $ci->invoice_date = $request->invoicedate;
             $ci->invoiceno = $request->invoiceno;
-            $ci->challanno = $request->challanno;
+            // $ci->challanno = $request->challanno;
             $ci->machine_date = $request->machine_date;
             $ci->machineno = $request->machineno;
             $ci->conversionrate = $request->conversionrate;
@@ -425,12 +430,6 @@ class CommercialInvoiceController extends Controller
             // $subhead->ob = 0;
             $subhead->save();
 
-
-
-
-
-
-
             foreach ($comminvoice as $cid) {
                 $c = CommercialInvoiceDetails::findOrFail($cid['id']);
                 $c->machine_date = $ci->machine_date;
@@ -454,6 +453,9 @@ class CommercialInvoiceController extends Controller
                 $c->dtyrate = $cid['dtyrate'];
                 $c->amtindollar = $cid['amtindollar'];
                 $c->amtinpkr = $cid['amtinpkr'];
+
+                $c->dtyamtindollar = $cid['dtyamtindollar'];
+                $c->dtyamtinpkr = $cid['dtyamtinpkr'];
 
                 $c->hscode = $cid['hscode'];
                 $c->cd = $cid['cd'];

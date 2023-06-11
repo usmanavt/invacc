@@ -136,7 +136,7 @@ class LocalPurchaseController  extends Controller
             $ci->weighbridge = 0;
             $ci->miscexpenses = 0;
             $ci->agencychrgs = 0;
-            $ci->otherchrgs = 0;
+            $ci->otherchrgs = $request->otherchrgs;
             $ci->total = $request->bankntotal;
             $ci->save();
 
@@ -241,6 +241,7 @@ class LocalPurchaseController  extends Controller
             $commercialinvoice->bankcharges = $request->bankcharges;
             $commercialinvoice->collofcustom = $request->collofcustom;;
             $commercialinvoice->exataxoffie = $request->exataxoffie;
+            $commercialinvoice->otherchrgs = $request->otherchrgs;
             $commercialinvoice->total = $request->bankntotal;
 
             $commercialinvoice->save();

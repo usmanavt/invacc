@@ -45,8 +45,9 @@
                                 <legend>Invoice Level Expenses</legend>
                                 <div class="grid grid-cols-12 gap-2 py-2 items-center">
                                     <x-input-numeric title="Discou(%)" name="bankcharges" id="bankcharges" required  onblur="tnetamount()" />
-                                    <x-input-numeric title="Discount(Amount)" name="collofcustom" disabled   />
+                                    <x-input-numeric title="Discount(Amount)" name="collofcustom" onblur="tnetamount()"    />
                                     <x-input-numeric title="Cartage" name="exataxoffie" required  onblur="tnetamount()"  />
+                                    <x-input-numeric title="Loading Charges" name="otherchrgs" required  onblur="tnetamount()"  />
                                     <x-input-numeric title="Payble Amount" name="bankntotal" disabled />
                                 </div>
                             </fieldset>
@@ -128,6 +129,9 @@
     var tamount=0;
     function tnetamount()
         {
+
+
+
             //  var crtg=0;
             //  crtg=parseFloat(exataxoffie.value).toFixed(0);
              collofcustom.value=0;
@@ -137,9 +141,14 @@
             // collofcustom.value = discAmnt.toFixed(0)
 
             collofcustom.value=(tamount*bankcharges.value/100).toFixed(0);
-            bankntotal.value= ( Number(tamount)-Number(collofcustom.value))+Number(exataxoffie.value)   ;
+
+
+            bankntotal.value= ( Number(tamount)-Number(collofcustom.value))+Number(exataxoffie.value) +Number(otherchrgs.value)  ;
             // bankntotal.value=parseFloat( bankntotal.value ) + parseFloat(exataxoffie.values);
         }
+
+
+
 
 </script>
 @endpush
@@ -457,6 +466,7 @@
         var number = document.getElementById("number");
         var bankcharges= document.getElementById("bankcharges")
         var exataxoffie= document.getElementById("exataxoffie")
+        var otherchrgs= document.getElementById("otherchrgs")
         var collofcustom= document.getElementById("collofcustom")
         var bankntotal= document.getElementById("bankntotal")
 
@@ -508,7 +518,7 @@
             }
         }
         disableSubmitButton(true);
-        var data = { 'contracts' : dynamicTableData,'bankntotal':bankntotal.value,'exataxoffie':exataxoffie.value,'collofcustom':collofcustom.value,'bankcharges':bankcharges.value ,'supplier_id': supplier_id.value,'invoice_date':invoice_date.value,'number':number.value};
+        var data = { 'contracts' : dynamicTableData,'bankntotal':bankntotal.value,'otherchrgs':otherchrgs.value,'exataxoffie':exataxoffie.value,'collofcustom':collofcustom.value,'bankcharges':bankcharges.value ,'supplier_id': supplier_id.value,'invoice_date':invoice_date.value,'number':number.value};
         // All Ok - Proceed
         fetch(@json(route('localpurchase.store')),{
             credentials: 'same-origin', // 'include', default: 'omit'
@@ -534,7 +544,10 @@
             disableSubmitButton(false);
         })
     }
+
+
 </script>
+
 
 
 @endpush/

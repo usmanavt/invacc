@@ -341,12 +341,21 @@
                         perft:            0,
                         otherexpenses:    0,
                         qtyinfeet:0,
-                        tmpcda : 0,
+                        // tmpcda : 0,
+                        cd      : 0
+
 
                     }
                 ])
             }
         }
+
+
+
+
+
+
+
         var calculate = function(){
             calculateBankCharges()
             // alert(dynamicTable.getData())
@@ -362,22 +371,33 @@
                 var length = e.length
                 var gdsprice = e.gdsprice
                 var dtyrate = e.dtyrate
-                var tmpcda = e.tmpcda
+                // var tmpcda = e.tmpcda
                 var totpcs = e.totpcs
                 var purval = e.purval
                 var dutval = e.dutval
+                // var cd =e.cd
 
                 ////////////////////////////////////////////////////////////////////////
                 // Get Values of HSCode Selected in List and Populate Data
                 ///////////////////////////////////////////////////////////////////////
                 hscode = hscodes.find(  function(el) { return el.hscode === e.hscode })
-                e.cd = hscode.cd
-                e.st = hscode.st
-                e.rd = hscode.rd
-                e.acd = hscode.acd
-                e.ast = hscode.ast
-                e.it = hscode.it
-                e.wsc = hscode.wse
+                // e.cd = hscode.cd
+                // e.st = hscode.st
+                // e.rd = hscode.rd
+                // e.acd = hscode.acd
+                // e.ast = hscode.ast
+                // e.it = hscode.it
+                // e.wsc = hscode.wse
+
+                var cd = hscode.cd
+                var st = hscode.st
+                var rd = hscode.rd
+                var acd = hscode.acd
+                var ast = hscode.ast
+                var it = hscode.it
+                var wse = hscode.wse
+
+
 
                 //  update data element
                 e.pcs = pcs
@@ -390,10 +410,19 @@
                 e.purval=purval
                 e.dutval=dutval
 
+                e.cd=cd
+                e.st=st
+                e.rd=rd
+                e.acd=acd
+                e.ast=ast
+                e.it=it
+                e.wse=wse
             })
+
             //  Get Ratio after price/length/pcs update
             var amtinpkrtotal = 0
             var dtyamtinpkrtotal = 0
+
             data.forEach(e => {
                 amtinpkrtotal += parseFloat(e.amtinpkr)
                 dtyamtinpkrtotal += parseFloat(e.dtyamtinpkr)
@@ -420,22 +449,34 @@
                 var pricevaluecostsheet = parseFloat(onepercentdutypkr + amountwithoutinsurance)
                 var dtypricevaluecostsheet = parseFloat(dtyonepercentdutypkr + dtyamountwithoutinsurance)
 
-                var cda = parseFloat(hscode.cd) * dtypricevaluecostsheet / 100
-                console.log(cda ,parseFloat(hscode.cd), dtypricevaluecostsheet)
-                var tmpcda =  dtyamtinpkrtotal
-                var rda = parseFloat(hscode.rd) * dtypricevaluecostsheet / 100
-                var acda = parseFloat(hscode.acd) * dtypricevaluecostsheet / 100
-                var sta = (dtypricevaluecostsheet + cda + rda + acda) * parseFloat(hscode.st) / 100
-                var asta = (dtypricevaluecostsheet + cda + rda + acda) * parseFloat(hscode.ast) / 100
-                var ita =(dtypricevaluecostsheet + cda + sta + rda + acda + asta) * parseFloat(hscode.it) / 100
-                var wsca = (dtypricevaluecostsheet * parseFloat(hscode.wsc)) /100
+
+                var cda = parseFloat(e.cd) * dtypricevaluecostsheet / 100
+
+                // console.log(cda ,parseFloat(hscode.cd), dtypricevaluecostsheet)
+                //  var tmpcda =  dtyamtinpkrtotal
+                var rda = parseFloat(e.rd) * dtypricevaluecostsheet / 100
+                //  console.log(rda)
+
+                var acda = parseFloat(e.acd) * dtypricevaluecostsheet / 100
+                var sta = (dtypricevaluecostsheet + cda + rda + acda) * parseFloat(e.st) / 100
+                var asta = (dtypricevaluecostsheet + cda + rda + acda) * parseFloat(e.ast) / 100
+                var ita =(dtypricevaluecostsheet + cda + sta + rda + acda + asta) * parseFloat(e.it) / 100
+                var wsca = (dtypricevaluecostsheet * parseFloat(e.wse)) /100
                 var total = cda + rda + sta + acda + asta + ita + wsca
                 var perft = (e.perpc / e.length).toFixed(2)
                 var totallccostwexp = total + dtypricevaluecostsheet + (banktotal.value * dtyitmratio / 100)
                 var otherexpenses = ( conversionrate.value * otherchrgs.value ) * dtyitmratio / 100
-                var perpc = (( totallccostwexp+otherexpenses) / e.pcs).toFixed(2)
+                var perpc =  (( totallccostwexp+otherexpenses) / e.pcs).toFixed(2)
+
+
                 var perkg = (perpc / e.inkg).toFixed(2)
                 var qtyinfeet = (e.pcs * e.length).toFixed(2)
+
+
+
+
+
+
 
                 e.amtindollar = e.purval
                 e.amtinpkr = amtinpkr
@@ -449,7 +490,7 @@
                 e.dtyonepercentdutypkr = (dtyonepercentdutypkr).toFixed(2)
                 e.pricevaluecostsheet = (pricevaluecostsheet).toFixed(2)
                 e.dtypricevaluecostsheet = (dtypricevaluecostsheet).toFixed(2)
-                e.tmpcda = (tmpcda).toFixed(2)
+                // e.tmpcda = (tmpcda).toFixed(2)
                 e.cda = (cda).toFixed(2)
                 e.rda = (rda).toFixed(2)
                 e.acda = (acda).toFixed(2)
@@ -461,7 +502,7 @@
                 e.perkg = perkg
                 e.totallccostwexp = totallccostwexp
                 e.perpc = perpc
-                e.perft = (perpc / e.length )
+                e.perft = (perpc / parseFloat(e.length)  )
                 e.otherexpenses = otherexpenses
                 e.qtyinfeet = qtyinfeet
 
@@ -484,7 +525,7 @@
                 {title:"Id",           field:"id", visible:false},
                 {title:"Material",     field:"material_title"},
                 {title:"Unit",         field:"sku"},
-                {title:"Unitid",       field:"sku_id"},
+                {title:"Unitid",       field:"sku_id",visible:false},
                 {title:"contract_id",  field:"contract_id",visible:false},
                 {title:"material_id",  field:"material_id",visible:false},
                 {title:"supplier_id",  field:"supplier_id",visible:false},
@@ -651,7 +692,7 @@
                         formatterParams:{thousand:",",precision:0},           responsive:0},
                             {title:"IT",                field:"ita",  formatter:"money",
                         formatterParams:{thousand:",",precision:0},            responsive:0},
-                            {title:"WSC",               field:"wsca",  formatter:"money",
+                            {title:"WSE",               field:"wsca",  formatter:"money",
                         formatterParams:{thousand:",",precision:0},           responsive:0},
                             {title:"Total",             field:"total",   formatter:"money",
                         formatterParams:{thousand:",",precision:0},          responsive:0},
@@ -766,7 +807,7 @@
                 headerVertical:true,        visible:true},
                 {title:"IT",                field:"it",
                 headerVertical:true,        visible:true},
-                {title:"WSC",               field:"wsc",
+                {title:"WSE",               field:"wse",
                 headerVertical:true,         visible:true},
 
                 // {

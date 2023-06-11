@@ -47,6 +47,7 @@
                                 <x-input-numeric title="Discou(%)" name="bankcharges" value="{{ $commercialInvoice->bankcharges }}" required  onblur="tnetamount()" />
                                 <x-input-numeric title="Discount(Amount)" name="collofcustom" value="{{ $commercialInvoice->collofcustom }}" disabled   />
                                 <x-input-numeric title="Cartage" name="exataxoffie" value="{{ $commercialInvoice->exataxoffie }}"  required  onblur="tnetamount()"  />
+                                <x-input-numeric title="Loading Charges" name="otherchrgs" required  onblur="tnetamount()"  />
                                 <x-input-numeric title="Payble Amount" name="bankntotal" value="{{ $commercialInvoice->total }}" disabled />
                                 <x-input-numeric title="" name="contract_id" value="{{ $commercialInvoice->id }}" hidden />
                             </div>
@@ -244,7 +245,7 @@ var updateValues = (cell) => {
             collofcustom.value=0;
             bankntotal.value=0;
             collofcustom.value=(tamount*bankcharges.value/100).toFixed(0);
-            bankntotal.value= ( Number(tamount)-Number(collofcustom.value))+Number(exataxoffie.value)   ;
+            bankntotal.value= ( Number(tamount)-Number(collofcustom.value))+Number(exataxoffie.value) +Number(otherchrgs.value)  ;
 
         }
 
@@ -442,7 +443,7 @@ function validateForm()
     }
     // 'total' : parseFloat(banktotal.value).toFixed(2),
     disableSubmitButton(true);
-     var data = { 'localpurchase' : dynamicTableData,'contract_id':parseFloat(contract_id.value).toFixed(0),'bankntotal':parseFloat(bankntotal.value).toFixed(0),'collofcustom':parseFloat(exataxoffie.value).toFixed(0),'exataxoffie':parseFloat(exataxoffie.value).toFixed(0) ,'bankcharges':parseFloat(bankcharges.value).toFixed(0) ,'supplier_id': supplier_id.value,'invoice_date':invoice_date.value,'invoiceno':invoiceno.value};
+     var data = { 'localpurchase' : dynamicTableData,'contract_id':parseFloat(contract_id.value).toFixed(0),'bankntotal':parseFloat(bankntotal.value).toFixed(0),'collofcustom':parseFloat(exataxoffie.value).toFixed(0),'exataxoffie':parseFloat(exataxoffie.value).toFixed(0) ,'bankcharges':parseFloat(bankcharges.value).toFixed(0) ,'supplier_id': supplier_id.value,'invoice_date':invoice_date.value,'invoiceno':invoiceno.value,'otherchrgs':otherchrgs.value};
     // var data = { 'contracts' : dynamicTableData,'banktotal':parseFloat(total.value).toFixed(2),'exataxoffie':parseFloat(exataxoffie.value).toFixed(2),'collofcustom':parseFloat(collofcustom.value).toFixed(2),'bankcharges':parseFloat(bankcharges.value).toFixed(2) ,'supplier_id': supplier_id.value,'invoice_date':invoice_date.value,'invoiceno':number.value};
     // All Ok - Proceed
     fetch(@json(route('localpurchase.update',$commercialInvoice)),{
