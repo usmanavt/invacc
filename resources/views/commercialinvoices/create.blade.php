@@ -452,10 +452,10 @@
 
                 var cda = parseFloat(e.cd) * dtypricevaluecostsheet / 100
 
-                // console.log(cda ,parseFloat(hscode.cd), dtypricevaluecostsheet)
+                 console.log(cda ,parseFloat(e.cd), dtypricevaluecostsheet)
                 //  var tmpcda =  dtyamtinpkrtotal
                 var rda = parseFloat(e.rd) * dtypricevaluecostsheet / 100
-                //  console.log(rda)
+                // console.log(rda)
 
                 var acda = parseFloat(e.acd) * dtypricevaluecostsheet / 100
                 var sta = (dtypricevaluecostsheet + cda + rda + acda) * parseFloat(e.st) / 100

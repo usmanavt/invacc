@@ -44,7 +44,7 @@
                             <fieldset class="border px-4 py-2 rounded">
                                 <legend>Invoice Level Expenses</legend>
                                 <div class="grid grid-cols-12 gap-2 py-2 items-center">
-                                    <x-input-numeric title="Discou(%)" name="bankcharges" id="bankcharges" disabled required  onblur="tnetamount()" />
+                                    <x-input-numeric title="Discou(%)" name="bankcharges" id="bankcharges" disabled  />
                                     <x-input-numeric title="Discount(Amount)" name="collofcustom" onblur="tnetamount()"    />
                                     <x-input-numeric title="Cartage" name="exataxoffie" required  onblur="tnetamount()"  />
                                     <x-input-numeric title="Loading Charges" name="otherchrgs" required  onblur="tnetamount()"  />
