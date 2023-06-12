@@ -575,7 +575,7 @@
                     formatterParams:{thousand:",",precision:0},           responsive:0},
                         {title:"IT",                field:"ita",  formatter:"money",
                     formatterParams:{thousand:",",precision:0},            responsive:0},
-                        {title:"WSC",               field:"wsca",  formatter:"money",
+                        {title:"WSE",               field:"wsca",  formatter:"money",
                     formatterParams:{thousand:",",precision:0},           responsive:0},
                         {title:"Total",             field:"total",   formatter:"money",
                     formatterParams:{thousand:",",precision:0},          responsive:0},

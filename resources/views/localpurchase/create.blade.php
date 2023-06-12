@@ -44,7 +44,7 @@
                             <fieldset class="border px-4 py-2 rounded">
                                 <legend>Invoice Level Expenses</legend>
                                 <div class="grid grid-cols-12 gap-2 py-2 items-center">
-                                    <x-input-numeric title="Discou(%)" name="bankcharges" id="bankcharges" required  onblur="tnetamount()" />
+                                    <x-input-numeric title="Discou(%)" name="bankcharges" id="bankcharges" disabled required  onblur="tnetamount()" />
                                     <x-input-numeric title="Discount(Amount)" name="collofcustom" onblur="tnetamount()"    />
                                     <x-input-numeric title="Cartage" name="exataxoffie" required  onblur="tnetamount()"  />
                                     <x-input-numeric title="Loading Charges" name="otherchrgs" required  onblur="tnetamount()"  />
@@ -134,12 +134,12 @@
             // console.log(per)
             //  var crtg=0;
             //  crtg=parseFloat(exataxoffie.value).toFixed(0);
-             collofcustom.value=0;
-             bankntotal.value=0;
+            //  collofcustom.value=0;
+            //  bankntotal.value=0;
 
             // var discAmnt =  parseFloat(exataxoffie.value)*parseFloat(bankcharges.value)/100
             // collofcustom.value = discAmnt.toFixed(0)
-              collofcustom.value=(tamount*bankcharges.value/100).toFixed(0);
+            //   collofcustom.value=(tamount*bankcharges.value/100).toFixed(0);
 
             bankntotal.value= ( Number(tamount)-Number(collofcustom.value))+Number(exataxoffie.value) +Number(otherchrgs.value)  ;
             // bankntotal.value=parseFloat( bankntotal.value ) + parseFloat(exataxoffie.values);
