@@ -131,7 +131,7 @@
         {
 
 
-
+            // console.log(per)
             //  var crtg=0;
             //  crtg=parseFloat(exataxoffie.value).toFixed(0);
              collofcustom.value=0;
@@ -139,9 +139,7 @@
 
             // var discAmnt =  parseFloat(exataxoffie.value)*parseFloat(bankcharges.value)/100
             // collofcustom.value = discAmnt.toFixed(0)
-
-            collofcustom.value=(tamount*bankcharges.value/100).toFixed(0);
-
+              collofcustom.value=(tamount*bankcharges.value/100).toFixed(0);
 
             bankntotal.value= ( Number(tamount)-Number(collofcustom.value))+Number(exataxoffie.value) +Number(otherchrgs.value)  ;
             // bankntotal.value=parseFloat( bankntotal.value ) + parseFloat(exataxoffie.values);
@@ -545,12 +543,21 @@
         })
     }
 
+// var per=false;
+// let input=document.getElementById('bankcharges')
+// input.onfocus=function(){
+//     per=true
+// }
+
+// input.onblur=function(){
+//     per=false
+// }
 
 </script>
 
 
 
-@endpush/
+@endpush
 
 {{-- required  onblur="Discper()" --}}
 {{-- required  onblur="DiscAmount()" --}}
