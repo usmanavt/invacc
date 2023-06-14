@@ -92,9 +92,9 @@ class MaterialController extends Controller
                 $material->nick = $request->nick;
                 $material->category_id = $request->category_id;
                 $material->dimension_id = $request->dimension_id;
-                // $material->source_id = $request->source_id;
+                $material->source_id = 0;
                 $material->sku_id = $request->sku_id;
-                // $material->brand_id = $request->brand_id;
+                $material->brand_id = 0;
                 $material->hscode_id = 0;
                 $material->category = $request->category;
                 $material->dimension = $request->dimension;
