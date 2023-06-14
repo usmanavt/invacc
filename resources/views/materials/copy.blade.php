@@ -45,21 +45,21 @@
                                 @endforeach
                             </select>
 
-                            <x-label for="" value="Source"/>
+                            {{-- <x-label for="" value="Source"/>
                             <x-input class="" type="text"  name="source" value="{{ $material->source }}" disabled />
                             <input type="hidden" name="source_id" value="{{ $material->source_id }}">
-                            <input type="hidden" name="source" value="{{ $material->source }}">
+                            <input type="hidden" name="source" value="{{ $material->source }}"> --}}
 
-                            <x-label for="" value="Sku"/>
+                            <x-label for="" value="Unit"/>
                             <x-input class="" type="text"  name="sku" value="{{ $material->sku }}" disabled />
                             <input type="hidden" name="sku_id" value="{{ $material->sku_id }}">
                             <input type="hidden" name="sku" value="{{ $material->sku }}">
 
 
-                            <x-label for="" value="Brand"/>
+                            {{-- <x-label for="" value="Brand"/>
                             <x-input class="" type="text"  name="brand" value="{{ $material->brand }}" disabled />
                             <input type="hidden" name="brand_id" value="{{ $material->brand_id }}">
-                            <input type="hidden" name="brand" value="{{ $material->brand }}">
+                            <input type="hidden" name="brand" value="{{ $material->brand }}"> --}}
 
                             {{-- <x-label for="" value="hscode"/>
                             <x-input class="" type="text"   value="{{ $material->hscodes->hscode }}" disabled />

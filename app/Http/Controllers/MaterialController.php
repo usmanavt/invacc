@@ -69,7 +69,7 @@ class MaterialController extends Controller
 
     public function store(Request $request)
     {
-        // dd($request->all());
+        //  dd($request->all());
         $request->validate([
             //  'title'=>'required|min:3|unique:materials'
         ]);
@@ -92,15 +92,15 @@ class MaterialController extends Controller
                 $material->nick = $request->nick;
                 $material->category_id = $request->category_id;
                 $material->dimension_id = $request->dimension_id;
-                $material->source_id = $request->source_id;
+                // $material->source_id = $request->source_id;
                 $material->sku_id = $request->sku_id;
-                $material->brand_id = $request->brand_id;
+                // $material->brand_id = $request->brand_id;
                 $material->hscode_id = 0;
                 $material->category = $request->category;
                 $material->dimension = $request->dimension;
-                $material->source = $request->source;
+                // $material->source = $request->source;
                 $material->sku = $request->sku;
-                $material->brand = $request->brand;
+                // $material->brand = $request->brand;
 
                 $material->qtykg = $request->qtykg;
                 $material->qtykgrt = $request->qtykgrt;
@@ -170,15 +170,15 @@ class MaterialController extends Controller
             $material->nick = $request->nick;
             $material->category_id = $request->category_id;
             $material->dimension_id = $request->dimension_id;
-            $material->source_id = $request->source_id;
+            // $material->source_id = $request->source_id;
             $material->sku_id = $request->sku_id;
-            $material->brand_id = $request->brand_id;
+            // $material->brand_id = $request->brand_id;
             // $material->hscode_id = $request->hscode_id;
             $material->category = $request->category;
             $material->dimension = $request->dimension;
-            $material->source = $request->source;
+            // $material->source = $request->source;
             $material->sku = $request->sku;
-            $material->brand = $request->brand;
+            // $material->brand = $request->brand;
 
             $material->qtykg = $request->qtykg;
             $material->qtykgrt = $request->qtykgrt;

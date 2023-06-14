@@ -103,6 +103,7 @@ class CommercialInvoiceController extends Controller
             $ci->machine_date = $request->machine_date;
             $ci->machineno = $request->machineno;
             $ci->conversionrate = $request->conversionrate;
+            $ci->sconversionrate = $request->sconversionrate;
             $ci->insurance = $request->insurance;
             $ci->bankcharges = $request->bankcharges;
             $ci->collofcustom = $request->collofcustom;
@@ -372,6 +373,7 @@ class CommercialInvoiceController extends Controller
             $ci->machine_date = $request->machine_date;
             $ci->machineno = $request->machineno;
             $ci->conversionrate = $request->conversionrate;
+            $ci->sconversionrate = $request->sconversionrate;
             $ci->insurance = $request->insurance;
             $ci->bankcharges = $request->bankcharges;
             $ci->collofcustom = $request->collofcustom;

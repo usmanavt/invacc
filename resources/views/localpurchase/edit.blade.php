@@ -39,13 +39,21 @@
                             <input type="text" class="col-span-2" id="invoiceno" name="invoiceno" placeholder="Invoice No"
                                 minlength="3" title="minimum 3 characters required" value="{{ $commercialInvoice->invoiceno }}" required>
 
+                                <label for="gpassno">GatePass #<x-req /></label>
+                                <input type="text" class="col-span-2" id="gpassno" name="gpassno" value="{{ $commercialInvoice->gpassno }}"   placeholder="gpassno"
+                                    minlength="1" title="minimum 1 characters required" required>
+
+
+
+
+
                         </div>
 
                         <fieldset class="border px-4 py-2 rounded">
                             <legend>Invoice Level Expenses</legend>
                             <div class="grid grid-cols-12 gap-2 py-2 items-center">
-                                <x-input-numeric title="Discou(%)" name="bankcharges" value="{{ $commercialInvoice->bankcharges }}" disabled required  onblur="tnetamount()" />
-                                <x-input-numeric title="Discount(Amount)" name="collofcustom" value="{{ $commercialInvoice->collofcustom }}" required  onblur="tnetamount()"   />
+                                <x-input-numeric title="Discou(%)" name="insurance" value="{{ $commercialInvoice->insurance }}"  />
+                                <x-input-numeric title="Discount(Amount)" name="collofcustom" value="{{ $commercialInvoice->collofcustom }}"    />
                                 <x-input-numeric title="Cartage" name="exataxoffie" value="{{ $commercialInvoice->exataxoffie }}"  required  onblur="tnetamount()"  />
                                 <x-input-numeric title="Loading Charges" name="otherchrgs" value="{{ $commercialInvoice->otherchrgs }}" required  onblur="tnetamount()"  />
                                 <x-input-numeric title="Payble Amount" name="bankntotal" value="{{ $commercialInvoice->total }}"  />
@@ -195,29 +203,33 @@ function pushDynamicData(data)
 
     dynamicTableData.push({
         material_id:data.id,
-         title:data.title,
-         category_id:data.category_id,
-         category:data.category,
+        title:data.title,
+                category_id:data.category_id,
+                category:data.category,
 
-        source_id:data.source_id,
-        source:data.source,
+                source_id:data.source_id,
+                source:data.source,
 
-        brand_id:data.brand_id,
-        brand:data.brand,
+                brand_id:data.brand_id,
+                brand:data.brand,
 
-        sku_id:data.sku_id,
-        sku:data.sku,
+                sku_id:data.sku_id,
+                sku:data.sku,
 
-        dimension_id:data.dimension_id,
-        dimension:data.dimension,
+                dimension_id:data.dimension_id,
+                dimension:data.dimension,
+                // purunit:'',
+                machineno:'',
+                repname:'',
+                forcust:'',
+                purunit:'',
 
-        bundle1:0,
-        bundle2:0,
-        pcspbundle1:0,
-        pcspbundle2:0,
-        gdswt:0,
-        gdsprice:0,
-        gdspricetot:0
+                 gdswt:0,
+                 pcs:0,
+                 qtyinfeet:0,
+                 gdsprice:0,
+                 length:0,
+                 amtinpkr:0
     })
     //  dyanmicTable.setData()
      dynamicTable.setData(dynamicTableData);
@@ -225,14 +237,35 @@ function pushDynamicData(data)
 var updateValues = (cell) => {
 
     var data = cell.getData();
-    var sum = (Number(data.gdswt) * Number(data.perkg)).toFixed(0)
-    var sum2 =  (Number(data.gdswt) * Number(data.gdsprice)).toFixed(0)
+
+
+         if(data.purunit=='k')
+            {
+                var sum =  Number(data.gdswt) * Number(data.gdsprice)
+                var sum2 =  Number(data.gdswt) * Number(data.gdsprice)
+
+            }
+         if(data.purunit=='p')
+            {
+                var sum =  Number(data.pcs) * Number(data.gdsprice)
+                var sum2 =  Number(data.pcs) * Number(data.gdsprice)
+            }
+         if(data.purunit=='f')
+            {
+                var sum =  Number(data.qtyinfeet) * Number(data.gdsprice)
+                var sum2 =  Number(data.qtyinfeet) * Number(data.gdsprice)
+            }
+
+
+    // var sum = (Number(data.gdswt) * Number(data.perkg)).toFixed(0)
+    // var sum2 =  (Number(data.gdswt) * Number(data.gdsprice)).toFixed(0)
     var row = cell.getRow();
     //  console.info(abc);
     row.update({
 
         "amtinpkr": sum,
         "gdspricetot": sum2,
+        "qtyinfeet":sum,
     });
 
 }
@@ -240,11 +273,9 @@ var updateValues = (cell) => {
 //  var tamount=0;
     function tnetamount()
         {
-            //  crtg=parseFloat(exataxoffie.value).toFixed(0);
 
-            // collofcustom.value=0;
-            // bankntotal.value=0;
-            // collofcustom.value=(tamount*bankcharges.value/100).toFixed(0);
+            // bankntotal.value= ( Number(tamount)-Number(collofcustom.value))+Number(exataxoffie.value) +Number(otherchrgs.value)  ;
+            collofcustom.value=(tamount*insurance.value/100).toFixed(0);
             bankntotal.value= ( Number(tamount)-Number(collofcustom.value))+Number(exataxoffie.value) +Number(otherchrgs.value)  ;
 
         }
@@ -252,27 +283,19 @@ var updateValues = (cell) => {
 
 
 
-var totalVal = function(values, data, calcParams){
-    //values - array of column values
-    //data - all table data
-    //calcParams - params passed from the column definition object
-    // console.log(data);
-
-    var calc = 0;
-    values.forEach(function(value){
-        // calc=amtinpkr;
-        calc += value ;
-    });
-    // console.log(calc);
-    // tamount = calc;
-    //  tnetamount();
-     return calc;
-}
+// var totalVal = function(values, data, calcParams){
+//     var calc = 0;
+//     values.forEach(function(value){
+//         // calc=amtinpkr;
+//         calc += Number(value);
+//     });
+//     // console.log(calc);
+//      tamount = calc;
+//     //  tnetamount();
+//      return calc;
+// }
 
 var totval = function(values, data, calcParams){
-    //values - array of column values
-    //data - all table data
-    //calcParams - params passed from the column definition object
 
     var calc = 0;
     // var abc=0;
@@ -304,6 +327,15 @@ dynamicTable = new Tabulator("#dynamicTable", {
                 // disableSubmitButton();
             }
         },
+        //  {title: "Location",field: "locid"},
+        {title:"Id",                field:"id",            cssClass:"bg-gray-200 font-semibold"},
+        {title:"Material",          field:"title",         cssClass:"bg-gray-200 font-semibold"},
+        {title:"Category_id",       field:"category_id",    cssClass:"bg-gray-200 font-semibold",visible:false},
+        {title:"Category",          field:"category",       cssClass:"bg-gray-200 font-semibold"},
+        {title:"Dimension",         field:"dimension_id",   cssClass:"bg-gray-200 font-semibold",visible:false},
+        {title:"Dimension",         field:"dimension",      cssClass:"bg-gray-200 font-semibold"},
+        {title:"Sku",               field:"sku_id",         cssClass:"bg-gray-200 font-semibold",visible:false},
+        {title:"M/Unit",            field:"sku",            cssClass:"bg-gray-200 font-semibold"},
 
         {title: "id",field: "myid",visible:false},
                 {title:"Location", field:"location" ,editor:"list" , editorParams:   {
@@ -313,23 +345,13 @@ dynamicTable = new Tabulator("#dynamicTable", {
                     }
                 },
 
+        {title:"PurUnit",           field:"purunit",        cssClass:"bg-gray-200 font-semibold",validator:"in:p|k|f",editor:true},
+        {title:"Replace Description",field:"repname",       cssClass:"bg-gray-200 font-semibold",editor:true},
+        {title:"Brand",              field:"machineno",     cssClass:"bg-gray-200 font-semibold",editor:true},
+        {title:"ForCustomer",        field:"forcust",       cssClass:"bg-gray-200 font-semibold",editor:true},
 
-        //  {title: "Location",field: "locid"},
-        {title:"Id",                field:"id",            cssClass:"bg-gray-200 font-semibold"},
-        {title:"Material",          field:"title",         cssClass:"bg-gray-200 font-semibold"},
-        {title:"Category_id",       field:"category_id",    cssClass:"bg-gray-200 font-semibold",visible:false},
-        {title:"Category",          field:"category",       cssClass:"bg-gray-200 font-semibold"},
-        {title:"Dimension",         field:"dimension_id",   cssClass:"bg-gray-200 font-semibold",visible:false},
-        {title:"Dimension",         field:"dimension",      cssClass:"bg-gray-200 font-semibold"},
-        {title:"Replace Description",  field:"repname",     cssClass:"bg-gray-200 font-semibold",editor:true},
-        // {title:"Source",            field:"source_id",      cssClass:"bg-gray-200 font-semibold",visible:false},
-        //  {title:"Source",            field:"source",         cssClass:"bg-gray-200 font-semibold"},
-        {title:"Sku",               field:"sku_id",         cssClass:"bg-gray-200 font-semibold",visible:false},
-        {title:"Sku",               field:"sku",            cssClass:"bg-gray-200 font-semibold"},
-         {title:"Brand",             field:"brand_id",       cssClass:"bg-gray-200 font-semibold",visible:false},
-         {title:"Brand",             field:"brand",          cssClass:"bg-gray-200 font-semibold"},
 
-        {   title:"Qunaity",
+        {   title:"Qty(Kg)",
             field: "gdswt",
             editor:"number",
             cssClass:"bg-green-200 font-semibold",
@@ -343,8 +365,8 @@ dynamicTable = new Tabulator("#dynamicTable", {
 
             },
 
-        {   title:"Rate",
-            field:"perkg",
+        {   title:"Qty(Pcs)",
+            field:"pcs",
             editor:"number",
             cssClass:"bg-green-200 font-semibold",
             validator:"required" ,
@@ -354,19 +376,56 @@ dynamicTable = new Tabulator("#dynamicTable", {
             cellEdited: updateValues  ,
             },
 
+            {title:"Length",
+                field:"length",
+                editor:"number",
+                cssClass:"bg-green-200 font-semibold",
+                validator:"required",
+                formatter:"money",
+                formatterParams:{thousand:",",precision:2},
+                validator:["required","integer"],
+                cellEdited: updateValues,
+               },
 
-        {   title:"Amount",
-            field:"amtinpkr",
-            cssClass:"bg-gray-200 font-semibold",
-            formatter:"integer",
-             formatterParams:{thousand:",",precision:0},
-               formatter:function(cell,row)
-            {
-                //   return (cell.getData().gdswt * cell.getData().perkg)
-                return (cell.getData().amtinpkr )
+               {title:"Qty(Feet)",
+                field:"qtyinfeet",
+                editor:"number",
+                cssClass:"bg-green-200 font-semibold",
+                validator:"required",
+                formatter:"money",
+                formatterParams:{thousand:",",precision:2},
+                 validator:["required","integer"],
+                 cellEdited: updateValues,
+               },
+
+               {title:"Price",
+                field:"gdsprice",
+                editor:"number",
+                cssClass:"bg-green-200 font-semibold",
+                validator:"required" ,
+                formatter:"money",
+                formatterParams:{thousand:",",precision:2},
+                validator:["required","decimal(10,2)"] ,
+                cellEdited: updateValues   ,
             },
-            bottomCalc:totval
-        },
+
+            {   title:"Amount",
+                field:"amtinpkr",
+                cssClass:"bg-gray-200 font-semibold",
+                formatter:"money",
+                formatterParams:{thousand:",",precision:0},
+                // formatter:function(cell,row)
+                // {
+                //     // return (cell.getData().bundle1 * cell.getData().pcspbundle1) + (cell.getData().bundle2 * cell.getData().pcspbundle2)
+
+                //     return console.log(cell.getData().skuid.sku_id)
+
+
+                // },
+                bottomCalc:totval  },
+
+
+
 
     ],
 })
@@ -431,20 +490,18 @@ function validateForm()
                 showSnackbar("Location must be Enter","info");
                 return;
                }
+               if(element.gdswt == 0 || element.pcs == 0 || element.qtyinfeet == 0 || element.gdsprice == 0 )
 
+                {
+                    showSnackbar("Please fill all Weight,Length,Pcs & Price all rows to proceed","info");
+                    return;
+                }
 
-
-
-        if(element.perkg == 0 || element.amtinpkr == 0  || element.gdswt == 0)
-        {
-            showSnackbar("Please fill Bundle,PcsBundle,Weight & Price all rows to proceed","info");
-            return;
-        }
     }
     // 'total' : parseFloat(banktotal.value).toFixed(2),
     disableSubmitButton(true);
-     var data = { 'localpurchase' : dynamicTableData,'contract_id':parseFloat(contract_id.value).toFixed(0),'bankntotal':parseFloat(bankntotal.value).toFixed(0),'collofcustom':parseFloat(exataxoffie.value).toFixed(0),'exataxoffie':parseFloat(exataxoffie.value).toFixed(0) ,'bankcharges':parseFloat(bankcharges.value).toFixed(0) ,'supplier_id': supplier_id.value,'invoice_date':invoice_date.value,'invoiceno':invoiceno.value,'otherchrgs':otherchrgs.value};
-    // var data = { 'contracts' : dynamicTableData,'banktotal':parseFloat(total.value).toFixed(2),'exataxoffie':parseFloat(exataxoffie.value).toFixed(2),'collofcustom':parseFloat(collofcustom.value).toFixed(2),'bankcharges':parseFloat(bankcharges.value).toFixed(2) ,'supplier_id': supplier_id.value,'invoice_date':invoice_date.value,'invoiceno':number.value};
+     var data = { 'localpurchase' : dynamicTableData,'contract_id':parseFloat(contract_id.value).toFixed(0),'bankntotal':parseFloat(bankntotal.value).toFixed(0),'collofcustom':parseFloat(exataxoffie.value).toFixed(0),'exataxoffie':parseFloat(exataxoffie.value).toFixed(0) ,'insurance':parseFloat(insurance.value).toFixed(2) ,'supplier_id': supplier_id.value,'invoice_date':invoice_date.value,'invoiceno':invoiceno.value,'otherchrgs':otherchrgs.value,'gpassno':gpassno.value};
+    // var data = { 'contracts' : dynamicTableData,'banktotal':parseFloat(total.value).toFixed(2),'exataxoffie':parseFloat(exataxoffie.value).toFixed(2),'collofcustom':parseFloat(collofcustom.value).toFixed(2),'insurance':parseFloat(insurance.value).toFixed(2) ,'supplier_id': supplier_id.value,'invoice_date':invoice_date.value,'invoiceno':number.value};
     // All Ok - Proceed
     fetch(@json(route('localpurchase.update',$commercialInvoice)),{
         credentials: 'same-origin', // 'include', default: 'omit'
@@ -471,7 +528,16 @@ function validateForm()
     })
 }
 
+insurance.onblur=function(){
+    per=false
+    collofcustom.value=(tamount * insurance.value/100).toFixed(0);
+    bankntotal.value= ( Number(tamount)-Number(collofcustom.value))+Number(exataxoffie.value) +Number(otherchrgs.value)  ;
+}
 
+collofcustom.onblur=function(){
+    insurance.value=(collofcustom.value/tamount * 100).toFixed(2);
+    bankntotal.value= ( Number(tamount)-Number(collofcustom.value))+Number(exataxoffie.value) +Number(otherchrgs.value)  ;
+}
 
 </script>
 

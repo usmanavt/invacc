@@ -11,6 +11,7 @@
         </h2>
     </x-slot>
 
+
     <div class="py-6">
         <div class="max-w-full mx-auto sm:px-2 lg:px-4">
             <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
@@ -36,6 +37,13 @@
                             <input type="text" class="col-span-2" id="number" name="number" placeholder="Invoice No"
                                 minlength="3" title="minimum 3 characters required" required>
 
+                                <label for="gpassno">GatePass #<x-req /></label>
+                                <input type="text" class="col-span-2" id="gpassno" name="gpassno" value="{{$maxgpno}}"  placeholder="gpassno"
+                                    minlength="1" title="minimum 1 characters required" required>
+
+
+
+
                         </div>
 
                         <div class="grid grid-cols-1">
@@ -44,8 +52,8 @@
                             <fieldset class="border px-4 py-2 rounded">
                                 <legend>Invoice Level Expenses</legend>
                                 <div class="grid grid-cols-12 gap-2 py-2 items-center">
-                                    <x-input-numeric title="Discou(%)" name="bankcharges" id="bankcharges" disabled  />
-                                    <x-input-numeric title="Discount(Amount)" name="collofcustom" onblur="tnetamount()"    />
+                                    <x-input-numeric title="Discou(%)" name="insurance" id="insurance"    />
+                                    <x-input-numeric title="Discount(Amount)" name="collofcustom"     />
                                     <x-input-numeric title="Cartage" name="exataxoffie" required  onblur="tnetamount()"  />
                                     <x-input-numeric title="Loading Charges" name="otherchrgs" required  onblur="tnetamount()"  />
                                     <x-input-numeric title="Payble Amount" name="bankntotal" disabled />
@@ -97,7 +105,8 @@
 
         });
 
-        // value="{{$supplier->id}}"> {{$supplier->title}}
+
+
 
 
     const getMaster = @json(route('materials.master'));
@@ -130,17 +139,7 @@
     function tnetamount()
         {
 
-
-            // console.log(per)
-            //  var crtg=0;
-            //  crtg=parseFloat(exataxoffie.value).toFixed(0);
-            //  collofcustom.value=0;
-            //  bankntotal.value=0;
-
-            // var discAmnt =  parseFloat(exataxoffie.value)*parseFloat(bankcharges.value)/100
-            // collofcustom.value = discAmnt.toFixed(0)
-            //   collofcustom.value=(tamount*bankcharges.value/100).toFixed(0);
-
+            collofcustom.value=(tamount*insurance.value/100).toFixed(0);
             bankntotal.value= ( Number(tamount)-Number(collofcustom.value))+Number(exataxoffie.value) +Number(otherchrgs.value)  ;
             // bankntotal.value=parseFloat( bankntotal.value ) + parseFloat(exataxoffie.values);
         }
@@ -188,16 +187,20 @@
 
                 dimension_id:data.dimension_id,
                 dimension:data.dimension,
+                // purunit:'',
+                machineno:'',
+                repname:'',
+                forcust:'',
+                purunit:'',
 
-                bundle1:0,
-                bundle2:0,
-                pcspbundle1:0,
-                pcspbundle2:0,
-                gdswt:0,
-                gdsprice:0,
-                dtyrate:0,
-                invsrate:0,
-                gdspricetot:0
+                 gdswt:0,
+                 pcs:0,
+                 qtyinfeet:0,
+                 gdsprice:0,
+                 length:0,
+                 amtinpkr:0
+
+
             }
         ])
     }
@@ -266,12 +269,29 @@
     })
     var updateValues = (cell) => {
         var data = cell.getData();
-        var sum = (Number(data.bundle1) * Number(data.pcspbundle1)) + (Number(data.bundle2) * Number(data.pcspbundle2))
-        var sum2 =  Number(data.gdswt) * Number(data.gdsprice)
+        var leninft = Number(data.pcs) * Number(data.length)
+        if(data.purunit=='k')
+         {
+             var sum =  Number(data.gdswt) * Number(data.gdsprice)
+             var sum2 =  Number(data.gdswt) * Number(data.gdsprice)
+         }
+         if(data.purunit=='p')
+         {
+             var sum =  Number(data.pcs) * Number(data.gdsprice)
+             var sum2 =  Number(data.pcs) * Number(data.gdsprice)
+         }
+         if(data.purunit=='f')
+         {
+             var sum =  Number(data.qtyinfeet) * Number(data.gdsprice)
+             var sum2 =  Number(data.qtyinfeet) * Number(data.gdsprice)
+         }
+        // var sum = Number(data.gdswt) * Number(data.gdsprice)
+        // var sum2 =  Number(data.gdswt) * Number(data.gdsprice)
         var row = cell.getRow();
         row.update({
-            "ttpcs": sum,
-            "gdspricetot": sum2
+            "amtinpkr": sum,
+            "gdspricetot": sum2,
+            "qtyinfeet":leninft
         });
     }
 
@@ -287,7 +307,7 @@
         });
         tamount = calc;
         tnetamount();
-        // collofcustom.value=(calc*bankcharges.value/100).toFixed(0);
+        // collofcustom.value=(calc*insurance.value/100).toFixed(0);
         // bankntotal.value=calc - collofcustom.value ;
         return calc;
 
@@ -307,6 +327,15 @@
                 }
             },
 
+            // {title:"Id",                field:"id",    cssClass:"bg-gray-200 font-semibold"},
+            {title:"Material",          field:"title", cssClass:"bg-gray-200 font-semibold"},
+            {title:"Category_id",       field:"category_id",    cssClass:"bg-gray-200 font-semibold",visible:false},
+            {title:"Category",          field:"category",       cssClass:"bg-gray-200 font-semibold"},
+            {title:"Dimension",         field:"dimension_id",   cssClass:"bg-gray-200 font-semibold",visible:false},
+            {title:"Dimension",         field:"dimension",      cssClass:"bg-gray-200 font-semibold"},
+            {title:"Sku",               field:"sku_id",         cssClass:"bg-gray-200 font-semibold",visible:false},
+            {title:"M/Unit",            field:"sku",            cssClass:"bg-gray-200 font-semibold"},
+
             {title: "id",field: "myid",visible:false},
                 {title:"Location", field:"location" ,editor:"list" , editorParams:   {
                         values:newList,
@@ -316,27 +345,23 @@
                 },
 
 
+            {title:"PurUnit",           field:"purunit",        cssClass:"bg-gray-200 font-semibold",validator:"in:p|k|f",editor:true},
 
 
-
-
-
-            {title:"Id",                field:"id",    cssClass:"bg-gray-200 font-semibold"},
-            {title:"Material",          field:"title", cssClass:"bg-gray-200 font-semibold"},
-            {title:"Category_id",       field:"category_id",    cssClass:"bg-gray-200 font-semibold",visible:false},
-            {title:"Category",          field:"category",       cssClass:"bg-gray-200 font-semibold"},
-            {title:"Dimension",         field:"dimension_id",   cssClass:"bg-gray-200 font-semibold",visible:false},
-            {title:"Dimension",         field:"dimension",      cssClass:"bg-gray-200 font-semibold"},
             {title:"Replace Description",field:"repname",       cssClass:"bg-gray-200 font-semibold",editor:true},
-            {title:"Source",            field:"source_id",      cssClass:"bg-gray-200 font-semibold",visible:false},
-            {title:"Source",            field:"source",         cssClass:"bg-gray-200 font-semibold"},
-            {title:"Sku",               field:"sku_id",         cssClass:"bg-gray-200 font-semibold",visible:false},
-            {title:"Sku",               field:"sku",            cssClass:"bg-gray-200 font-semibold"},
-            {title:"Brand",             field:"brand_id",       cssClass:"bg-gray-200 font-semibold",visible:false},
-            {title:"Brand",             field:"brand",          cssClass:"bg-gray-200 font-semibold"},
+            {title:"Brand",              field:"machineno",     cssClass:"bg-gray-200 font-semibold",editor:true},
+            {title:"ForCustomer",        field:"forcust",       cssClass:"bg-gray-200 font-semibold",editor:true},
+            // {title:"Source",            field:"source_id",      cssClass:"bg-gray-200 font-semibold",visible:false},
+            // {title:"Source",            field:"source",         cssClass:"bg-gray-200 font-semibold",visible:false},
 
-            {   title:"Quantity",
-                field:"bundle1",
+            // {title:"Brand",             field:"brand_id",       cssClass:"bg-gray-200 font-semibold",visible:false},
+            // {title:"Brand",             field:"brand",          cssClass:"bg-gray-200 font-semibold"},
+
+
+
+
+            {   title:"Qty(Kg)",
+                field:"gdswt",
                 editor:"number",
                 cssClass:"bg-green-200 font-semibold",
                 validator:"required",
@@ -346,8 +371,45 @@
                 cellEdited: updateValues,
                },
 
-            {   title:"Rate",
-                field:"pcspbundle1",
+               {title:"Qty(Pcs)",
+                field:"pcs",
+                editor:"number",
+                cssClass:"bg-green-200 font-semibold",
+                validator:"required",
+                formatter:"money",
+                formatterParams:{thousand:",",precision:2},
+                validator:["required","integer"],
+                cellEdited: updateValues,
+               },
+
+               {title:"Length",
+                field:"length",
+                editor:"number",
+                cssClass:"bg-green-200 font-semibold",
+                validator:"required",
+                formatter:"money",
+                formatterParams:{thousand:",",precision:2},
+                validator:["required","integer"],
+                cellEdited: updateValues,
+               },
+
+
+
+               {title:"Qty(Feet)",
+                field:"qtyinfeet",
+                editor:"number",
+                cssClass:"bg-green-200 font-semibold",
+                validator:"required",
+                formatter:"money",
+                formatterParams:{thousand:",",precision:2},
+                validator:["required","integer"],
+                cellEdited: updateValues,
+               },
+
+
+
+               {title:"Price",
+                field:"gdsprice",
                 editor:"number",
                 cssClass:"bg-green-200 font-semibold",
                 validator:"required" ,
@@ -357,100 +419,22 @@
                 cellEdited: updateValues   ,
             },
 
-            // {   title:"Bundle2",
-            //     field:"bundle2",
-            //     editor:"number",
-            //     cssClass:"bg-yellow-200 font-semibold",
-            //     formatter:"money",
-            //     formatterParams:{thousand:",",precision:2},
-            //     validator:["required","integer"],
-            //     cellEdited: updateValues   ,
-            // },
-
-            // {   title:"Pcs/Bnd2",
-            //     field:"pcspbundle2",
-            //     editor:"number",
-            //     cssClass:"bg-yellow-200 font-semibold",
-            //     formatter:"money",
-            //     formatterParams:{thousand:",",precision:2},
-            //     validator:["required","integer"],
-            //     cellEdited: updateValues  ,
-            // },
 
             {   title:"Amount",
-                field:"ttpcs",
+                field:"amtinpkr",
                 cssClass:"bg-gray-200 font-semibold",
                 formatter:"money",
-                formatterParams:{thousand:",",precision:3},
-                formatter:function(cell,row)
-                {
-                    return (cell.getData().bundle1 * cell.getData().pcspbundle1) + (cell.getData().bundle2 * cell.getData().pcspbundle2)
-                },
+                formatterParams:{thousand:",",precision:0},
+                // formatter:function(cell,row)
+                // {
+                //     // return (cell.getData().bundle1 * cell.getData().pcspbundle1) + (cell.getData().bundle2 * cell.getData().pcspbundle2)
+
+                //     return console.log(cell.getData().skuid.sku_id)
+
+
+                // },
                 bottomCalc:totalVal  },
 
-            // {   title:"Wt(MT)",
-            //     field:"gdswt",
-            //     editor:"number",
-            //     cssClass:"bg-green-200 font-semibold",
-            //     formatter:"money",
-            //     formatterParams:{thousand:",",precision:3},
-            //     validator:["required","numeric"],
-            //     cellEdited:updateValues,
-            //     bottomCalc:"sum",
-            //     bottomCalcParams:{precision:3}  },
-
-            // {   title:"Rs($)",
-            //     field:"gdsprice",
-            //     editor:"number",
-            //     cssClass:"bg-green-200 font-semibold",
-            //     formatter:"money",
-            //     formatterParams:{thousand:",",precision:3},
-            //     validator:["required","numeric"],
-            //     cellEdited:updateValues,
-            // },
-
-            // {   title:"DutyRs($)",
-            //     field:"dtyrate",
-            //     editor:"number",
-            //     cssClass:"bg-green-200 font-semibold",
-            //     formatter:"money",
-            //     formatterParams:{thousand:",",precision:3},
-            //     validator:["required","numeric"],
-            //     cellEdited:updateValues,
-            // },
-
-            // {   title:"ComInvRs($)",
-            //     field:"invsrate",
-            //     editor:"number",
-            //     cssClass:"bg-green-200 font-semibold",
-            //     formatter:"money",
-            //     formatterParams:{thousand:",",precision:3},
-            //     validator:["required","numeric"],
-            //     cellEdited:updateValues,
-            // },
-
-
-
-
-
-
-
-            // {   title:"Val($)",
-            //     field:"gdspricetot",
-            //     cssClass:"bg-gray-200 font-semibold",
-            //     bottomCalc:totalVal,
-            //     bottomCalcParams:{precision:3} ,
-            //     formatter:"money",
-            //     formatterParams:{
-            //         decimal:".",
-            //         thousand:",",
-            //         symbol:"$",
-            //         precision:3     },
-            //     formatter:function(cell,row)
-            //     {
-            //         return (cell.getData().gdswt * cell.getData().gdsprice)
-            //     }
-            // },
 
         ],
     })
@@ -462,7 +446,7 @@
         var supplier_id = sid.options[sid.selectedIndex];
         var invoice_date = document.getElementById("invoice_date");
         var number = document.getElementById("number");
-        var bankcharges= document.getElementById("bankcharges")
+        var insurance= document.getElementById("insurance")
         var exataxoffie= document.getElementById("exataxoffie")
         var otherchrgs= document.getElementById("otherchrgs")
         var collofcustom= document.getElementById("collofcustom")
@@ -499,24 +483,21 @@
         for (let index = 0; index < dynamicTableData.length; index++) {
             const element = dynamicTableData[index];
 
-            if(element.location === undefined)
+            if(element.location === undefined || element.purunit==undefined)
                {
                 showSnackbar("Location must be Enter","info");
                 return;
                }
 
+            if(element.gdswt == 0 || element.pcs == 0 || element.qtyinfeet == 0 || element.gdsprice == 0 )
 
-
-
-            if(element.bundle1 == 0 || element.pcspbundle1 == 0 || element.ttpcs == 0 )
-            // || element.gdsprice == 0 || element.gdswt == 0 ttpcs
             {
-                showSnackbar("Please fill Bundle,PcsBundle,Weight & Price all rows to proceed","info");
+                showSnackbar("Please fill all Weight,Length,Pcs & Price all rows to proceed","info");
                 return;
             }
         }
         disableSubmitButton(true);
-        var data = { 'contracts' : dynamicTableData,'bankntotal':bankntotal.value,'otherchrgs':otherchrgs.value,'exataxoffie':exataxoffie.value,'collofcustom':collofcustom.value,'bankcharges':bankcharges.value ,'supplier_id': supplier_id.value,'invoice_date':invoice_date.value,'number':number.value};
+        var data = { 'contracts' : dynamicTableData,'bankntotal':bankntotal.value,'otherchrgs':otherchrgs.value,'exataxoffie':exataxoffie.value,'collofcustom':collofcustom.value,'insurance':insurance.value ,'supplier_id': supplier_id.value,'invoice_date':invoice_date.value,'number':number.value,'gpassno':gpassno.value};
         // All Ok - Proceed
         fetch(@json(route('localpurchase.store')),{
             credentials: 'same-origin', // 'include', default: 'omit'
@@ -543,16 +524,21 @@
         })
     }
 
-// var per=false;
-// let input=document.getElementById('bankcharges')
-// input.onfocus=function(){
-//     per=true
-// }
 
-// input.onblur=function(){
-//     per=false
-// }
+    window.onload = function() {
+            var input = document.getElementById("supplier_id").focus();
+        }
 
+insurance.onblur=function(){
+    per=false
+    collofcustom.value=(tamount * insurance.value/100).toFixed(0);
+    bankntotal.value= ( Number(tamount)-Number(collofcustom.value))+Number(exataxoffie.value) +Number(otherchrgs.value)  ;
+}
+
+collofcustom.onblur=function(){
+    insurance.value=(collofcustom.value/tamount * 100).toFixed(2);
+    bankntotal.value= ( Number(tamount)-Number(collofcustom.value))+Number(exataxoffie.value) +Number(otherchrgs.value)  ;
+}
 </script>
 
 

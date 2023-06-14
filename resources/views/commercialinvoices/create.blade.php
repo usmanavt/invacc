@@ -28,7 +28,8 @@
                                 <x-input-text title="Invoice #" name="invoiceno" req required class=""/>
                                 {{-- <x-input-text title="Challan #" name="challanno" req required class=""/> --}}
 
-                                <x-input-numeric title="Conv. Rate" name="conversionrate"  req required class=""/>
+                                <x-input-numeric title="Duty.Conv. Rate" name="conversionrate"  req required class=""/>
+                                <x-input-numeric title="Supp.Conv. Rate" name="sconversionrate"  req required class=""/>
                                 <x-input-numeric title="Insurance" name="insurance"  req required class=""/>
                             </div>
                             <div class="grid grid-cols-12 gap-2 py-2 items-center">
@@ -120,6 +121,7 @@
         let banktotal= document.getElementById("banktotal")
         // Important Rates
         var conversionrate = document.getElementById("conversionrate");
+        var sconversionrate = document.getElementById("sconversionrate");
         var insurance = document.getElementById("insurance");
         var otherchrgs = document.getElementById("otherchrgs");
         //  Add Event on  Page Load
@@ -132,7 +134,7 @@
 
             //  We are using ctrl key + 'ArrowUp' to show Modal
             if(e.ctrlKey && e.keyCode == 32){
-                if(conversionrate.value <= 0)
+                if(conversionrate.value <= 0 || sconversionrate.value <= 0 )
                 {
                     showSnackbar("Please add conversion rate before proceeding","error");
                     conversionrate.focus();
@@ -319,7 +321,7 @@
                         dtyamtindollar :       obj.dutval,
 
                         // amtinpkr :          ( obj.gdswt *  obj.gdsprice  * conversionrate.value).toFixed(0),
-                        amtinpkr :          ( obj.purval  * conversionrate.value).toFixed(0),
+                        amtinpkr :          ( obj.purval  * sconversionrate.value).toFixed(0),
                         // dtyamtinpkr :        ( obj.gdswt *  obj.dtyrate  * conversionrate.value).toFixed(0),
                         dtyamtinpkr :        ( obj.dutval  * conversionrate.value).toFixed(0),
 
@@ -431,7 +433,7 @@
             data.forEach(e => {
 
                 var dtyamtinpkr = parseFloat(conversionrate.value) * parseFloat(e.dutval)
-                var amtinpkr = conversionrate.value * e.purval
+                var amtinpkr = sconversionrate.value * e.purval
 
                 var itmratio = amtinpkr / amtinpkrtotal * 100
                 var dtyitmratio = ( parseFloat(dtyamtinpkr) / parseFloat(dtyamtinpkrtotal) ) * 100
@@ -465,7 +467,7 @@
                 var total = cda + rda + sta + acda + asta + ita + wsca
                 var perft = (e.perpc / e.length).toFixed(2)
                 var totallccostwexp = total + dtypricevaluecostsheet + (banktotal.value * dtyitmratio / 100)
-                var otherexpenses = ( conversionrate.value * otherchrgs.value ) * dtyitmratio / 100
+                var otherexpenses = ( sconversionrate.value * otherchrgs.value ) * itmratio / 100
                 var perpc =  (( totallccostwexp+otherexpenses) / e.pcs).toFixed(2)
 
 
@@ -639,7 +641,14 @@
 
                     ]
                 },
-                {
+
+                // {
+                // title:'Revise WSE', headerHozAlign:"center",
+                //     columns:[
+                // {title:"WSE",  field:"wse",   formatter:"money",editor:"number",
+                //         formatterParams:{thousand:",",precision:2},          responsive:0}]},
+
+                 {
                     title:'Amount', headerHozAlign:"center",
                     columns:[
                         {   title:"Supp.Val($)",
@@ -697,70 +706,7 @@
                             {title:"Total",             field:"total",   formatter:"money",
                         formatterParams:{thousand:",",precision:0},          responsive:0},
 
-                        // {   title:"CDRate",
-                        //     field:"cd",
-                        //     headerVertical:true,
-                        //     formatter:"money",
-                        //     responsive:0,
-                        //     formatterParams:{thousand:",",precision:2},
-                        //     validator:["required","numeric"],
-                        //     bottomCalcParams:{precision:2}  ,
-                        // },
-                        // {   title:"STRate",
-                        //     field:"st",
-                        //     headerVertical:true,
-                        //     formatter:"money",
-                        //     responsive:0,
-                        //     formatterParams:{thousand:",",precision:2},
-                        //     validator:["required","numeric"],
-                        //     bottomCalcParams:{precision:2}  ,
-                        // },
-                        // {   title:"RDRate",
-                        //     field:"rd",
-                        //     headerVertical:true,
-                        //     formatter:"money",
-                        //     responsive:0,
-                        //     formatterParams:{thousand:",",precision:2},
-                        //     validator:["required","numeric"],
-                        //     bottomCalcParams:{precision:2}  ,
-                        // },
-                        // {   title:"ACDRate",
-                        //     field:"acd",
-                        //     headerVertical:true,
-                        //     formatter:"money",
-                        //     responsive:0,
-                        //     formatterParams:{thousand:",",precision:2},
-                        //     validator:["required","numeric"],
-                        //     bottomCalcParams:{precision:2}  ,
-                        // },
 
-                        // {   title:"ASTRate",
-                        //     field:"ast",
-                        //     headerVertical:true,
-                        //     formatter:"money",
-                        //     responsive:0,
-                        //     formatterParams:{thousand:",",precision:2},
-                        //     validator:["required","numeric"],
-                        //     bottomCalcParams:{precision:2}  ,
-                        // },
-                        // {   title:"ITRate",
-                        //     field:"it",
-                        //     headerVertical:true,
-                        //     formatter:"money",
-                        //     responsive:0,
-                        //     formatterParams:{thousand:",",precision:2},
-                        //     validator:["required","numeric"],
-                        //     bottomCalcParams:{precision:2}  ,
-                        // },
-                        // {   title:"WSCRate",
-                        //     field:"wsc",
-                        //     headerVertical:true,
-                        //     formatter:"money",
-                        //     responsive:0,
-                        //     formatterParams:{thousand:",",precision:2},
-                        //     validator:["required","numeric"],
-                        //     bottomCalcParams:{precision:2}  ,
-                        // },
                         {   title:"Item Ratio(%)",
                             field:"dtyitmratio",
                             headerVertical:true,
@@ -809,6 +755,7 @@
                 headerVertical:true,        visible:true},
                 {title:"WSE",               field:"wse",
                 headerVertical:true,         visible:true},
+
 
                 // {
                 //     title:'Duties Amount (PKR)', headerHozAlign:"center",
@@ -896,6 +843,7 @@
             // disableSubmitButton(true);
             var data = {
                 'conversionrate' : parseFloat(conversionrate.value).toFixed(2),
+                'sconversionrate' : parseFloat(sconversionrate.value).toFixed(2),
                 'insurance' : parseFloat(insurance.value).toFixed(2),
                 'contract_id' : contract_id,
                 'invoiceno' : invoiceno.value,

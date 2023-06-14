@@ -28,7 +28,8 @@
                                 <x-input-text title="Invoice #" name="invoiceno" value="{{ $i->invoiceno }}" req required class=""/>
                                 {{-- <x-input-text title="Challan #" name="challanno" value="{{ $i->challanno }}" req required class=""/> --}}
 
-                                <x-input-numeric title="Conv. Rate" name="conversionrate" value="{{ $i->conversionrate }}" req required class=""/>
+                                <x-input-numeric title="Duty.Conv.Rate" name="conversionrate" value="{{ $i->conversionrate }}" req required class=""/>
+                                <x-input-numeric title="Supp.Conv.Rate" name="sconversionrate" value="{{ $i->sconversionrate }}"  req required class=""/>
                                 <x-input-numeric title="Insurance" name="insurance"  value="{{ $i->insurance }}" req required class=""/>
                             </div>
                             <div class="grid grid-cols-12 gap-2 py-2 items-center">
@@ -136,6 +137,8 @@
         let banktotal= document.getElementById("banktotal")
         // Important Rates
         let conversionrate = document.getElementById("conversionrate");
+        let sconversionrate = document.getElementById("sconversionrate");
+
         var insurance = document.getElementById("insurance");
         var otherchrgs = document.getElementById("otherchrgs");
 
@@ -215,7 +218,7 @@
 
 
 
-                var amtinpkr = conversionrate.value * amtindollar
+                var amtinpkr = sconversionrate.value * amtindollar
                 var dtyamtinpkr = conversionrate.value * dtyamtindollar
 
                 var itmratio = parseFloat(dtyamtinpkr) / parseFloat(dtyamtinpkrtotal) * 100
@@ -249,7 +252,7 @@
                 var total = cda + rda + sta + acda + asta + ita + wsca
                 var perft = (e.perpc / e.length).toFixed(2)
                 var totallccostwexp = total + pricevaluecostsheet + (banktotal.value * itmratio / 100)
-                var otherexpenses = ( conversionrate.value * otherchrgs.value ) * itmratio / 100
+                var otherexpenses = ( sconversionrate.value * otherchrgs.value ) * itmratio / 100
                 var perpc = ((e.totallccostwexp+otherexpenses) / e.pcs).toFixed(2)
                 var perkg = (e.perpc / inkg).toFixed(2)
                 var qtyinfeet = (e.pcs * e.length).toFixed(2)
@@ -699,6 +702,7 @@
             var data = {
                 'commercial_invoice_id':@json($i->id),
                 'conversionrate' : parseFloat(conversionrate.value).toFixed(2),
+                'sconversionrate' : parseFloat(sconversionrate.value).toFixed(2),
                 'insurance' : parseFloat(insurance.value).toFixed(2),
                 'invoiceno' : invoiceno.value,
                 // 'challanno' : challanno.value,

@@ -57,7 +57,7 @@
                                     @endforeach
                                 </select>
 
-                                <x-label for="" value="Source"/>
+                                {{-- <x-label for="" value="Source"/>
                                 <select autocomplete="on" required name="source_id" class="bg-indigo-100 w-full" required onchange="getHiddenValues(this)">
                                     @foreach ($sources as $source)
                                         @if ($material->source_id == $source->id)
@@ -66,7 +66,7 @@
                                             <option value="{{ $source->id }}">{{ $source->title }}</option>
                                         @endif
                                     @endforeach
-                                </select>
+                                </select> --}}
 
                                 <x-label for="" value="Sku"/>
                                 <select autocomplete="on" required name="sku_id" class="bg-indigo-100 w-full" required onchange="getHiddenValues(this)">
@@ -79,7 +79,7 @@
                                     @endforeach
                                 </select>
 
-                                <x-label for="" value="Brand"/>
+                                {{-- <x-label for="" value="Brand"/>
                                 <select autocomplete="on" required name="brand_id" class="bg-indigo-100 w-full" required onchange="getHiddenValues(this)">
                                     @foreach ($brands as $brand)
                                     @if ($material->brand_id == $brand->id)
@@ -88,8 +88,8 @@
                                         <option value="{{ $brand->id }}">{{ $brand->title }}</option>
                                     @endif
                                     @endforeach
-                                </select>
-{{-- 
+                                </select> --}}
+{{--
                                 <x-label for="" value="hscode"/>
                                 <select autocomplete="on" required name="hscode_id" class="bg-indigo-100 w-full" required onchange="getHiddenValues(this)">
                                     @foreach ($hscodes as $hscode)

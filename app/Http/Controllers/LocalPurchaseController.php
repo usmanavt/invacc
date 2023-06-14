@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use DB;
 use App\Models\Contract;
+use App\Models\Sku;
 use App\Models\CommercialInvoice;
 use App\Models\CommercialInvoiceDetails;
 use App\Models\Material;
@@ -91,19 +92,23 @@ class LocalPurchaseController  extends Controller
     public function create()
     {
         // $locations = Location::select('id','title')->where('status',1)->get();
-        return view('localpurchase.create')
+        $maxgpno = DB::table('commercial_invoices')->select('gpassno')->max('gpassno')+1;
+        return view('localpurchase.create',compact('maxgpno'))
+        // return \view ('sales.create',compact('maxdcno','maxblno','maxgpno'))
         ->with('suppliers',Supplier::select('id','title')->where('source_id',1)->get())
         ->with('locations',Location::select('id','title')->get());
+        // ->with('purunit',Sku::select('id','title')->get());
     }
 
     /** Function Complete*/
     public function store(Request $request)
     {
-            //   dd($request->all());
+            //    dd($request->all());
         $this->validate($request,[
             'invoice_date' => 'required|min:3|date',
             'number' => 'required|min:3',
-            'supplier_id' => 'required'
+            'supplier_id' => 'required',
+            'gpassno' => 'required|min:1|unique:commercial_invoices',
         ]);
         DB::beginTransaction();
         try {
@@ -115,18 +120,19 @@ class LocalPurchaseController  extends Controller
             // $contract->invoice_date = $request->invoice_date;
             // $contract->number =$request->number;
             // $contract->save();
-            // bankcharges,collofcustom,exataxoffie,bankntotal
+            // insurance,collofcustom,exataxoffie,bankntotal
             $ci = new CommercialInvoice();
             $ci->invoice_date = $request->invoice_date;
             $ci->invoiceno = $request->number;
+            $ci->gpassno = $request->gpassno;
             $ci->contract_id = 0;
             $ci->challanno = $request->number;
             $ci->supplier_id = $request->supplier_id;
             $ci->machine_date = $request->invoice_date;
-            $ci->machineno = $request->number;
+            // $ci->machineno = $request->number;
             $ci->conversionrate = 0;
-            $ci->insurance = 0;
-            $ci->bankcharges = $request->bankcharges;
+
+            $ci->insurance = $request->insurance;
             $ci->collofcustom = $request->collofcustom;
             $ci->exataxoffie = $request->exataxoffie;
             $ci->lngnshipdochrgs = 0;
@@ -146,33 +152,37 @@ class LocalPurchaseController  extends Controller
                 $material = Material::findOrFail($cont['id']);
                 $lpd = new CommercialInvoiceDetails();
                 $lpd->machine_date = $ci->invoice_date;
-                $lpd->machineno = $ci->invoiceno;
                 $lpd->invoiceno = $ci->invoiceno;
                 $lpd->commercial_invoice_id = $ci->id;
                 $lpd->contract_id = 0;
                 $lpd->material_id = $material->id;
-                $lpd->repname = $material->repname;
-
-
                 $lpd->supplier_id = $ci->supplier_id;
                 $lpd->user_id = auth()->id();
                 $lpd->category_id = $material->category_id;
                 $lpd->sku_id = $material->sku_id;
                 $lpd->dimension_id = $material->dimension_id;
-                $lpd->source_id = $material->source_id;
-                $lpd->brand_id = $material->brand_id;
                 $lpd->hscode = '12314';
                 $lpd->itmratio = 0;
 
-                $lpd->gdswt = $cont['bundle1'];
-                $lpd->perkg = $cont['pcspbundle1'];
-                $lpd->amtinpkr = $cont['ttpcs'];
+                $lpd->machineno =  $cont['machineno'];
+                $lpd->repname = $cont['repname'];
+                $lpd->forcust = $cont['forcust'];
+                $lpd->purunit = $cont['purunit'];
+
+                $lpd->gdswt = $cont['gdswt'];
+                $lpd->pcs = $cont['pcs'];
+                $lpd->qtyinfeet = $cont['qtyinfeet'];
+                $lpd->length = $cont['length'];;
+                $lpd->gdsprice = $cont['gdsprice'];
+                $lpd->amtinpkr = $cont['amtinpkr'];
                 $lpd->location = $cont['location'];
                 $location = Location::where("title", $cont['location'])->first();
                 $lpd->locid = $location->id;
 
-                $lpd->qtyinfeet = 0;
-                $lpd->perft = 0;
+
+
+
+                // $lpd->perft = 0;
 
                 $lpd->save();
             }
@@ -198,16 +208,10 @@ class LocalPurchaseController  extends Controller
         ->join('materials as c', 'c.id', '=', 'b.material_id')
         // ->select('commercial_invoices.*' , 'commercial_invoice_details.*','suppliers.*','materials.*' )
         ->select('c.id as material_id','c.title','c.category_id','c.category','c.dimension_id','c.dimension','c.sku_id','c.sku','c.brand_id','c.brand'
-        ,'b.user_id','b.supplier_id','b.id','b.gdswt','b.gdsprice','b.amtinpkr','b.perkg','b.purval','b.repname','b.locid','b.location','b.contract_id')
+        ,'b.user_id','b.supplier_id','b.id','b.gdswt','b.pcs','b.length','b.qtyinfeet','b.gdsprice','b.amtinpkr','b.perkg','b.purval','b.repname','b.machineno','b.forcust','b.purunit','b.locid','b.location','b.contract_id')
         ->where('a.id',$id)->get();
 
         $data=compact('cd');
-
-
-            //  dd($data);
-
-
-
 
          return view('localpurchase.edit')
         ->with('suppliers',Supplier::select('id','title')->get())
@@ -238,12 +242,12 @@ class LocalPurchaseController  extends Controller
             $commercialinvoice->challanno = $request->invoiceno;
             $commercialinvoice->machine_date = $request->invoice_date;
             $commercialinvoice->machineno = $request->invoiceno;
-            $commercialinvoice->bankcharges = $request->bankcharges;
+            $commercialinvoice->insurance = $request->insurance;
             $commercialinvoice->collofcustom = $request->collofcustom;;
             $commercialinvoice->exataxoffie = $request->exataxoffie;
             $commercialinvoice->otherchrgs = $request->otherchrgs;
             $commercialinvoice->total = $request->bankntotal;
-
+            $commercialinvoice->gpassno = $request->gpassno;
             $commercialinvoice->save();
             // Get Data
             $cds = $request->localpurchase; // This is array
@@ -260,19 +264,48 @@ class LocalPurchaseController  extends Controller
                 if($cd->id)
                 {
                     $cds = CommercialInvoiceDetails::where('id',$cd->id)->first();
+                    // $cds->contract_id = 0;
+                    // $cds->material_id = $cd->material_id;
+                    // // $cds->material_title = $cd->material_title;
+                    // $cds->repname = $cd->repname;
+                    // $cds->supplier_id = $cd->supplier_id;
+                    // $cds->user_id = $cd->user_id;
+                    // $cds->category_id = $cd->category_id;
+                    // $cds->sku_id = $cd->sku_id;
+                    // $cds->dimension_id = $cd->dimension_id;
+                    // $cds->source_id = $cd->source_id;
+                    // $cds->brand_id = $cd->brand_id;
+                    // $cds->gdswt = $cd->gdswt;
+                    // $cds->perkg = $cd->perkg;
+                    // $cds->amtinpkr = $cd->amtinpkr;
+                    // $cds->location = $cd->location;
+                    // $location = Location::where("title", $cd['location'])->first();
+                    // $cds->locid = $location->id;
+
+
+                    $cds->machine_date = $cd->invoice_date;
+                    $cds->invoiceno = $cd->invoiceno;
+                    // $cds->commercial_invoice_id = $cd->id;
                     $cds->contract_id = 0;
                     $cds->material_id = $cd->material_id;
-                    // $cds->material_title = $cd->material_title;
-                    $cds->repname = $cd->repname;
                     $cds->supplier_id = $cd->supplier_id;
-                    $cds->user_id = $cd->user_id;
+                    $cds->user_id = auth()->id();
                     $cds->category_id = $cd->category_id;
                     $cds->sku_id = $cd->sku_id;
                     $cds->dimension_id = $cd->dimension_id;
-                    $cds->source_id = $cd->source_id;
-                    $cds->brand_id = $cd->brand_id;
+                    $cds->hscode = '12314';
+                    $cds->itmratio = 0;
+
+                    $cds->machineno = $cd->machineno;
+                    $cds->repname = $cd->repname;
+                    $cds->forcust = $cd->forcust;
+                    $cds->purunit = $cd->purunit;
+
                     $cds->gdswt = $cd->gdswt;
-                    $cds->perkg = $cd->perkg;
+                    $cds->pcs = $cd->pcs;
+                    $cds->qtyinfeet = $cd->qtyinfeet;
+                    $cds->length = $cd->length;
+                    $cds->gdsprice = $cd->gdsprice;
                     $cds->amtinpkr = $cd->amtinpkr;
                     $cds->location = $cd->location;
                     $location = Location::where("title", $cd['location'])->first();
@@ -283,20 +316,7 @@ class LocalPurchaseController  extends Controller
                     //  The item is new, Add it
 
                     $cds = new CommercialInvoiceDetails();
-                    // $cds->contract_id = 0;
-                    // $cds->material_id = $cd->material_id;
-                    // $cds->repname = $cd->repname;
-                    // // $cds->material_title = $cd->material_title;
-                    // $cds->supplier_id = $contract->supplier_id;
-                    // $cds->user_id = auth()->id();
-                    // $cds->category_id = $cd->category_id;
-                    // $cds->sku_id = $cd->sku_id;
-                    // $cds->dimension_id = $cd->dimension_id;
-                    // $cds->source_id = $cd->source_id;
-                    // $cds->brand_id = $cd->brand_id;
-                    // $cds->gdswt = $cd->gdswt;
-                    // $cds->perkg = $cd->perkg;
-                    // $cds->amtinpkr = $cd->amtinpkr;
+
                     $cds->commercial_invoice_id = $commercialinvoice->id;
                     $cds->repname = $cd->repname;
                     $cds->supplier_id = $request->supplier_id;

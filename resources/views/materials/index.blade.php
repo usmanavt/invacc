@@ -23,8 +23,8 @@
 
                             <input type="hidden" id="dimension" name="dimension" value="">
                             <input type="hidden" id="category" name="category" value="">
-                            <input type="hidden" id="source" name="source" value="">
-                            <input type="hidden" id="brand" name="brand" value="">
+                            {{-- <input type="hidden" id="source" name="source" value=""> --}}
+                            {{-- <input type="hidden" id="brand" name="brand" value=""> --}}
                             <input type="hidden" id="sku" name="sku" value="">
 
 
@@ -35,6 +35,9 @@
                                 <x-label for="nick" value="Nick"/>
                                 <x-input id="nick" class="bg-indigo-100" type="text" name="nick" :value="old('nick')"  />
                                 @if($errors->has('nick'))<div class="text-red-500 text-xs">{{ $errors->first('nick') }}</div>@endif
+
+
+
 
 
                                 <x-label for="" value="Category"/>
@@ -53,29 +56,29 @@
                                     @endforeach
                                 </select>
 
-                                <x-label for="" value="Source"/>
+                                {{-- <x-label for="" value="Source"/>
                                 <select autocomplete="on" required name="source_id" class="bg-indigo-100 w-full" required onchange="getHiddenValues(this)">
                                     <option value="" selected>--Source</option>
                                     @foreach ($sources as $source)
                                         <option value="{{ $source->id }}">{{ $source->title }}</option>
                                     @endforeach
-                                </select>
+                                </select> --}}
 
-                                <x-label for="" value="Sku"/>
+                                <x-label for="" value="Unit"/>
                                 <select autocomplete="on" required name="sku_id" class="bg-indigo-100 w-full" required onchange="getHiddenValues(this)">
-                                    <option value="" selected>--Sku</option>
+                                    <option value="" selected>--Unit</option>
                                     @foreach ($skus as $sku)
                                         <option value="{{ $sku->id }}">{{ $sku->title }}</option>
                                     @endforeach
                                 </select>
 
-                                <x-label for="" value="Brand"/>
+                                {{-- <x-label for="" value="Brand"/>
                                 <select autocomplete="on" required name="brand_id" class="bg-indigo-100 w-full" required onchange="getHiddenValues(this)">
                                     <option value="" selected>--brand</option>
                                     @foreach ($brands as $brand)
                                         <option value="{{ $brand->id }}">{{ $brand->title }}</option>
                                     @endforeach
-                                </select>
+                                </select> --}}
 
 
                                 {{-- <x-label for="" value="hscode"/>
@@ -181,8 +184,8 @@
             {title:"Title", field:"title" , visible:true ,headerSortStartingDir:"asc" , responsive:0},
             //  {title:"Nick", field:"nick" , visible:true , responsive:0},
             {title:"Dimension", field:"dimension" ,  responsive:0},
-            {title:"source", field:"source" ,  responsive:0},
-            {title:"brand", field:"brand" ,  responsive:0},
+            // {title:"source", field:"source" ,  responsive:0},
+            // {title:"brand", field:"brand" ,  responsive:0},
             // {title:"Status", field:"status" ,  responsive:0,
             //     formatter:function(cell){
             //         if(cell.getData().status === 1)
