@@ -36,10 +36,6 @@
                                 <x-input id="nick" class="bg-indigo-100" type="text" name="nick" :value="old('nick')"  />
                                 @if($errors->has('nick'))<div class="text-red-500 text-xs">{{ $errors->first('nick') }}</div>@endif
 
-
-
-
-
                                 <x-label for="" value="Category"/>
                                 <select autocomplete="on" required name="category_id" class="bg-indigo-100 w-full" required onchange="getHiddenValues(this)">
                                     <option value="" selected>--Category</option>
@@ -229,6 +225,38 @@
         },
     })
 
+</script>
+@endpush
+
+@push('scripts')
+<script>
+    const category = document.getElementById('category')
+    const source = document.getElementById('source')
+    const brand = document.getElementById('brand')
+    const dimension = document.getElementById('dimension')
+    const sku = document.getElementById('sku')
+
+    function getHiddenValues(el)
+    {
+        switch (el.name)
+        {
+            case 'category_id':
+                category.value = el.options[el.selectedIndex].innerText
+                break;
+            case 'sku_id':
+                sku.value = el.options[el.selectedIndex].innerText
+                break;
+            case 'brand_id':
+                brand.value = el.options[el.selectedIndex].innerText
+                break;
+            case 'source_id':
+                source.value = el.options[el.selectedIndex].innerText
+                break;
+            case 'dimension_id':
+                dimension.value = el.options[el.selectedIndex].innerText
+                break;
+        }
+    }
 </script>
 @endpush
 
