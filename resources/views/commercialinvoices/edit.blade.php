@@ -181,20 +181,67 @@
                 dtyamtinpkrtotal +=  parseFloat(e.dtyamtinpkr)
             });
             data.forEach(e => {
-                var pcs = e.pcs
-                var gdswt = e.gdswt
-                var inkg = ((e.gdswt / e.pcs ) ).toFixed(3)
-                var length = e.length
-                var gdsprice = e.gdsprice
-                var dtyrate = e.dtyrate
-
-                var totpcs = e.totpcs
-                var purval = e.purval
-                var dutval = e.dutval
+        /// before edit
+                // var pcs = e.pcs
+                // var gdswt = e.gdswt
+                // var inkg = ((e.gdswt / e.pcs ) ).toFixed(3)
+                // var length = e.length
+                // var gdsprice = e.gdsprice
+                // var dtyrate = e.dtyrate
+                // var totpcs = e.totpcs
+                // var purval = e.purval
+                // var dutval = e.dutval
 
 
                 // var amtindollar = gdsprice * gdswt
                 // var dtyamtindollar = dtyrate * gdswt
+
+                var pcs = e.pcs
+                var gdswt = e.gdswt
+                var dutygdswt = e.dutygdswt
+                var inkg = ((e.gdswt / e.pcs ) ).toFixed(3)
+                var length = e.length
+                var gdsprice = e.gdsprice
+                var dtyrate = e.dtyrate
+                var totpcs = e.totpcs
+                var amtindollar=e.amtindollar
+                var dtyamtindollar=e.dtyamtindollar
+                var amtinpkr=e.amtinpkr
+                var dtyamtinpkr=e.dtyamtinpkr
+                var dutval=e.dutval
+                var purval=e.purval
+                var wse=e.wse
+
+
+                e.pcs = pcs
+                 e.gdswt = gdswt
+                 e.inkg = inkg
+                 e.length = length
+                 e.dutygdswt=dutygdswt
+                 e.gdsprice = gdsprice
+                 e.dtyrate = dtyrate
+                 e.purval=purval
+                 e.dutval=dutval
+                 e.amtinpkr=amtinpkr
+                 e.dtyamtinpkr=dtyamtinpkr
+                 e.wse=wse
+
+                 if(e.sku_id==1)
+                   {
+                     e.dutval = parseFloat(e.dutygdswt) * parseFloat(e.dtyrate)
+                     e.purval = parseFloat(e.gdswt) * parseFloat(e.gdsprice)
+                 }
+                 else
+                     {
+                         e.dutval = parseFloat(e.pcs) * parseFloat(e.dtyrate)
+                         e.purval = parseFloat(e.pcs) * parseFloat(e.gdsprice)
+                    }
+                e.amtindollar=e.purval
+                e.dtyamtindollar=e.dutval
+                e.amtinpkr=e.amtindollar * sconversionrate.value
+                e.dtyamtinpkr=e.dtyamtindollar * conversionrate.value
+
+
                 hscode = hscodes.find(  function(el) { return el.hscode === e.hscode })
 
                 var cd = hscode.cd
@@ -203,7 +250,7 @@
                 var acd = hscode.acd
                 var ast = hscode.ast
                 var it = hscode.it
-                var wse = hscode.wse
+                // var wse = hscode.wse
 
                 e.cd=cd
                 e.st=st
@@ -211,35 +258,23 @@
                 e.acd=acd
                 e.ast=ast
                 e.it=it
-                e.wse=wse
+                // e.wse=wse
 
-                var amtindollar = e.amtindollar
-                var dtyamtindollar = e.dtyamtindollar
+                // var amtindollar = e.amtindollar
+                // var dtyamtindollar = e.dtyamtindollar
 
 
 
-                var amtinpkr = sconversionrate.value * amtindollar
-                var dtyamtinpkr = conversionrate.value * dtyamtindollar
+                // var amtinpkr = sconversionrate.value * amtindollar
+                // var dtyamtinpkr = conversionrate.value * dtyamtindollar
 
                 var itmratio = parseFloat(dtyamtinpkr) / parseFloat(dtyamtinpkrtotal) * 100
                 //  var dtyitmratio =parseFloat(dtyamtinpkr) / parseFloat(dtyamtinpkrtotal) * 100
-                console.log(dtyamtinpkrtotal)
+                // console.log(dtyamtinpkrtotal)
                 var insuranceperitem = parseFloat(insurance.value) * itmratio / 100
-                // var dtyinsuranceperitem = parseFloat(insurance.value) * dtyitmratio / 100
-
                 var amountwithoutinsurance = ( parseFloat(dtyamtindollar) + parseFloat(insuranceperitem )) * parseFloat(conversionrate.value)
-
-
-                // var dtyamountwithoutinsurance = ( parseFloat(dtyamtindollar) + parseFloat(dtyinsuranceperitem) ) * parseFloat(conversionrate.value)
-
-
                 var onepercentdutypkr = parseFloat(amountwithoutinsurance) * 0.01
-                // var dtyonepercentdutypkr = parseFloat(dtyamountwithoutinsurance) * 0.01
-
-
                 var pricevaluecostsheet = parseFloat(onepercentdutypkr) + parseFloat(amountwithoutinsurance)
-                // var dtypricevaluecostsheet = parseFloat(dtyonepercentdutypkr) + parseFloat(dtyamountwithoutinsurance)
-
 
                 var cda = (parseFloat(e.cd) * parseFloat(pricevaluecostsheet)) / 100
 
@@ -257,15 +292,15 @@
                 var perkg = (e.perpc / inkg).toFixed(2)
                 var qtyinfeet = (e.pcs * e.length).toFixed(2)
 
-                e.pcs = pcs
-                e.gdswt = gdswt
-                e.inkg = inkg
-                e.length = length
-                e.gdsprice = gdsprice
-                e.dtyrate = dtyrate
+                // e.pcs = pcs
+                // e.gdswt = gdswt
+                // e.inkg = inkg
+                // e.length = length
+                // e.gdsprice = gdsprice
+                // e.dtyrate = dtyrate
 
-                e.amtindollar = amtindollar
-                e.amtinpkr = amtinpkr
+                // e.amtindollar = amtindollar
+                // e.amtinpkr = amtinpkr
                 // e.dtyrate = dtyrate
                 e.itmratio = itmratio
                 e.insuranceperitem = insuranceperitem
@@ -364,7 +399,7 @@
                             validator:["required","numeric"],
                             formatterParams:{thousand:",",precision:2},
                         },
-                        {   title:"Wt(Kg)",
+                        {   title:"Supp.Wt(Kg)",
                             field:"gdswt",
                             responsive:0,
                             editor:"number",
@@ -374,6 +409,17 @@
                             validator:["required","numeric"],
                             formatterParams:{thousand:",",precision:2},
                         },
+                        {   title:"Duty.Wt(Kg)",
+                            field:"dutygdswt",
+                            responsive:0,
+                            editor:"number",
+                            headerVertical:true,
+                            formatter:"money",
+                            cssClass:"bg-green-200 font-semibold",
+                            validator:["required","numeric"],
+                            formatterParams:{thousand:",",precision:2},
+                        },
+
                         {   title:"Wt(pcs/kg)",
                             field:"inkg",
                             responsive:0,
@@ -421,7 +467,7 @@
                         {   title:"Supp.Price($)",
                             field:"gdsprice",
                             formatter:"money" ,
-                            editor:"number",
+                            // editor:"number",
                             responsive:0,
                             headerVertical:true,
                             cssClass:"bg-green-200 font-semibold",
@@ -431,6 +477,16 @@
 
                     ]
                 },
+
+                {
+                title:'Revise WSE', headerHozAlign:"center",
+                    columns:[
+                {title:"WSE",  field:"wse",   formatter:"money",editor:"number",
+                        formatterParams:{thousand:",",precision:2},          responsive:0}]},
+
+
+
+
                 {
                     title:'Amount', headerHozAlign:"center",
                     columns:[
@@ -637,8 +693,8 @@
                         headerVertical:true,        visible:true},
                         {title:"IT",                field:"it",
                         headerVertical:true,        visible:true},
-                        {title:"WSE",               field:"wse",
-                        headerVertical:true,         visible:true},
+                        // {title:"WSE",               field:"wse",
+                        // headerVertical:true,         visible:true},
 
 
                 {

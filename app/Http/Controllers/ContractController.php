@@ -167,6 +167,7 @@ class ContractController extends Controller
                 $cd->bundle2 = $cont['bundle2'];
                 $cd->pcspbundle2 = $cont['pcspbundle2'];
                 $cd->gdswt = $cont['gdswt'];
+                $cd->dutygdswt = $cont['gdswt'];
                 $cd->gdsprice = $cont['gdsprice'];
                 $cd->dtyrate = $cont['dtyrate'];
                 $cd->invsrate = $cont['invsrate'];
@@ -252,6 +253,7 @@ class ContractController extends Controller
                     $cds->bundle2 = $cd->bundle2;
                     $cds->pcspbundle2 = $cd->pcspbundle2;
                     $cds->gdswt = $cd->gdswt;
+                    $cds->dutygdswt = $cd->gdswt;
                     $cds->gdsprice = $cd->gdsprice;
                     $cds->dtyrate = $cd->dtyrate;
                     $cds->invsrate = $cd->invsrate;
@@ -308,6 +310,7 @@ class ContractController extends Controller
                     $cds->bundle2 = $cd->bundle2;
                     $cds->pcspbundle2 = $cd->pcspbundle2;
                     $cds->gdswt = $cd->gdswt;
+                    $cds->dutygdswt = $cd->gdswt;
                     $cds->gdsprice = $cd->gdsprice;
                     $cds->dtyrate = $cd->dtyrate;
                     $cds->invsrate = $cd->invsrate;

@@ -297,33 +297,27 @@
                         sku_id :            obj.sku_id,
                         sku:                obj.sku,
                         totpcs:             obj.totpcs,
-                        purval:             obj.purval,
-                        dutval:             obj.dutval,
+
+
+                        purval:             0,
+                        dutval:             0,
+
+
+
                         dimension_id :      obj.dimension_id,
                         source_id :         obj.source_id,
                         brand_id :          obj.brand_id,
                         pcs :               vpcs,
-                        // gdswt :             obj.gdswt * 1000,
                         gdswt :             obj.gdswt ,
+                        dutygdswt :         obj.dutygdswt ,
                         inkg :              vwinkg,
                         length :            0,
-
-                        // gdsprice :          obj.gdsprice/1000,
                         gdsprice :          obj.gdsprice,
-
-                        // dtyrate :          obj.dtyrate/1000,
                         dtyrate :          obj.dtyrate,
-
-                        // amtindollar :       obj.gdswt * obj.gdsprice ,
-                        amtindollar :       obj.purval ,
-
-                        // dtyamtindollar :       obj.gdswt * obj.dtyrate,
-                        dtyamtindollar :       obj.dutval,
-
-                        // amtinpkr :          ( obj.gdswt *  obj.gdsprice  * conversionrate.value).toFixed(0),
-                        amtinpkr :          ( obj.purval  * sconversionrate.value).toFixed(0),
-                        // dtyamtinpkr :        ( obj.gdswt *  obj.dtyrate  * conversionrate.value).toFixed(0),
-                        dtyamtinpkr :        ( obj.dutval  * conversionrate.value).toFixed(0),
+                        amtindollar :       obj.purval  ,
+                        dtyamtindollar :       0,
+                         amtinpkr :          ( obj.gdswt *  obj.gdsprice  * conversionrate.value).toFixed(0),
+                         dtyamtinpkr :        ( obj.gdswt *  obj.dtyrate  * conversionrate.value).toFixed(0),
 
                         itmratio:          0,
                         dtyitmratio:0,
@@ -343,19 +337,13 @@
                         perft:            0,
                         otherexpenses:    0,
                         qtyinfeet:0,
-                        // tmpcda : 0,
-                        cd      : 0
+                        wse      : 0
 
 
                     }
                 ])
             }
         }
-
-
-
-
-
 
 
         var calculate = function(){
@@ -369,16 +357,61 @@
 
                 var pcs = e.pcs
                 var gdswt = e.gdswt
+                var dutygdswt = e.dutygdswt
                 var inkg = ((e.gdswt / e.pcs ) ).toFixed(3)
                 var length = e.length
                 var gdsprice = e.gdsprice
                 var dtyrate = e.dtyrate
-                // var tmpcda = e.tmpcda
                 var totpcs = e.totpcs
-                var purval = e.purval
-                var dutval = e.dutval
-                // var cd =e.cd
+                var amtindollar=e.amtindollar
+                var dtyamtindollar=e.dtyamtindollar
+                var amtinpkr=e.amtinpkr
+                var dtyamtinpkr=e.dtyamtinpkr
+                var dutval=e.dutval
+                var purval=e.purval
+                var wse=e.wse
 
+
+
+                e.pcs = pcs
+                 e.gdswt = gdswt
+                 e.inkg = inkg
+                 e.length = length
+                 e.dutygdswt=dutygdswt
+                 e.gdsprice = gdsprice
+                 e.dtyrate = dtyrate
+                 e.purval=purval
+                 e.dutval=dutval
+                 e.amtinpkr=amtinpkr
+                 e.dtyamtinpkr=dtyamtinpkr
+                 e.wse=wse
+console.log(e.dtyrate)
+
+                if(e.sku_id==1)
+                   {
+                     e.dutval = parseFloat(e.dutygdswt) * parseFloat(e.dtyrate)
+                     e.purval = parseFloat(e.gdswt) * parseFloat(e.gdsprice)
+                   }
+                 else
+                     {
+                         e.dutval = parseFloat(e.pcs) * parseFloat(e.dtyrate)
+                         e.purval = parseFloat(e.pcs) * parseFloat(e.gdsprice)
+                    }
+              e.amtindollar=e.purval
+                e.dtyamtindollar=e.dutval
+                e.amtinpkr=e.amtindollar * sconversionrate.value
+                e.dtyamtinpkr=e.dtyamtindollar * conversionrate.value
+
+                // console.log(e.dtyamtinpkr)
+
+
+
+
+
+
+
+
+                //   break
                 ////////////////////////////////////////////////////////////////////////
                 // Get Values of HSCode Selected in List and Populate Data
                 ///////////////////////////////////////////////////////////////////////
@@ -397,20 +430,8 @@
                 var acd = hscode.acd
                 var ast = hscode.ast
                 var it = hscode.it
-                var wse = hscode.wse
+                // var wse = wse
 
-
-
-                //  update data element
-                e.pcs = pcs
-                e.gdswt = gdswt
-                e.inkg = inkg
-                e.length = length
-                e.gdsprice = gdsprice
-                e.dtyrate = dtyrate
-                e.totpcs=totpcs
-                e.purval=purval
-                e.dutval=dutval
 
                 e.cd=cd
                 e.st=st
@@ -418,7 +439,7 @@
                 e.acd=acd
                 e.ast=ast
                 e.it=it
-                e.wse=wse
+                // e.wse=wse
             })
 
             //  Get Ratio after price/length/pcs update
@@ -454,7 +475,7 @@
 
                 var cda = parseFloat(e.cd) * dtypricevaluecostsheet / 100
 
-                 console.log(cda ,parseFloat(e.cd), dtypricevaluecostsheet)
+                //  console.log(cda ,parseFloat(e.cd), dtypricevaluecostsheet)
                 //  var tmpcda =  dtyamtinpkrtotal
                 var rda = parseFloat(e.rd) * dtypricevaluecostsheet / 100
                 // console.log(rda)
@@ -574,7 +595,7 @@
                             validator:["required","numeric"],
                             formatterParams:{thousand:",",precision:2},
                         },
-                        {   title:"Wt(Kg)",
+                        {   title:"Supp.Wt(Kg)",
                             field:"gdswt",
                             responsive:0,
                             editor:"number",
@@ -584,6 +605,21 @@
                             validator:["required","numeric"],
                             formatterParams:{thousand:",",precision:2},
                         },
+
+                        {   title:"Duty.Wt(Kg)",
+                            field:"dutygdswt",
+                            responsive:0,
+                            editor:"number",
+                            headerVertical:true,
+                            formatter:"money",
+                            cssClass:"bg-green-200 font-semibold",
+                            validator:["required","numeric"],
+                            formatterParams:{thousand:",",precision:2},
+                        },
+
+
+
+
                         {   title:"Wt(pcs/kg)",
                             field:"inkg",
                             responsive:0,
@@ -631,7 +667,7 @@
                         {   title:"Supp.Price($)",
                             field:"gdsprice",
                             formatter:"money" ,
-                            editor:"number",
+                            // editor:"number",
                             responsive:0,
                             headerVertical:true,
                             cssClass:"bg-green-200 font-semibold",
@@ -642,11 +678,11 @@
                     ]
                 },
 
-                // {
-                // title:'Revise WSE', headerHozAlign:"center",
-                //     columns:[
-                // {title:"WSE",  field:"wse",   formatter:"money",editor:"number",
-                //         formatterParams:{thousand:",",precision:2},          responsive:0}]},
+                {
+                title:'Revise WSE', headerHozAlign:"center",
+                    columns:[
+                {title:"WSE",  field:"wse",   formatter:"money",editor:"number",
+                        formatterParams:{thousand:",",precision:2},          responsive:0}]},
 
                  {
                     title:'Amount', headerHozAlign:"center",
@@ -684,6 +720,7 @@
                             field:"dtyrate",
                             headerVertical:true,
                             formatter:"money",
+                            editor:"number",
                             responsive:0,
                             formatterParams:{thousand:",",precision:2},
                             validator:["required","numeric"],
@@ -753,8 +790,8 @@
                 headerVertical:true,        visible:true},
                 {title:"IT",                field:"it",
                 headerVertical:true,        visible:true},
-                {title:"WSE",               field:"wse",
-                headerVertical:true,         visible:true},
+                // {title:"WSE",               field:"wse",
+                // headerVertical:true,         visible:true},
 
 
                 // {

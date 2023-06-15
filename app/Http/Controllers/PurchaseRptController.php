@@ -65,8 +65,9 @@ class PurchaseRptController extends Controller
 
     public function getMPDFSettings($orientation = 'A4')
     {
+
         $format;
-        $orientation == 'L' ? $format = 'A4L': 'A4';
+        $orientation == 'L' ? $format = 'A4': 'A4';
 
         $mpdf = new PDF( [
             'mode' => 'utf-8',
@@ -84,6 +85,38 @@ class PurchaseRptController extends Controller
         $mpdf->debug = true;
         return $mpdf;
     }
+
+    public function getMPDFSettingsLI($orientation = 'A4-L')
+    {
+
+        $format;
+        $orientation == 'L' ? $format = 'A4': 'A4';
+
+        $mpdf = new PDF( [
+            'mode' => 'utf-8',
+            'format' => $orientation,
+            'margin_header' => '2',
+            'margin_top' => '5',
+            'margin_bottom' => '5',
+            'margin_footer' => '2',
+            'default_font_size' => 9,
+            'margin_left' => '3',
+            'margin_right' => '3',
+        ]);
+        $mpdf->showImageErrors = true;
+        $mpdf->curlAllowUnsafeSslRequests = true;
+        $mpdf->debug = true;
+        return $mpdf;
+    }
+
+
+
+
+
+
+
+
+
 
     public function fetch(Request $request)
     {
@@ -231,7 +264,7 @@ class PurchaseRptController extends Controller
             }
             $collection = collect($data);                   //  Make array a collection
 
-            $mpdf = $this->getMPDFSettings('L');
+            $mpdf = $this->getMPDFSettingsLI();
             $grouped = $collection->groupBy('purid');       //  Sort collection by SupName
             $grouped->values()->all();                       //  values() removes indices of array
             foreach($grouped as $g){

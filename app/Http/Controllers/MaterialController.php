@@ -69,7 +69,7 @@ class MaterialController extends Controller
 
     public function store(Request $request)
     {
-        //  dd($request->all());
+          dd($request->all());
         $request->validate([
             //  'title'=>'required|min:3|unique:materials'
         ]);

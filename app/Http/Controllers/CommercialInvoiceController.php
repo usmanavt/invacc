@@ -186,6 +186,7 @@ class CommercialInvoiceController extends Controller
 
                 $c->pcs = $cid['pcs'];
                 $c->gdswt = $cid['gdswt'];
+                $c->dutygdswt = $cid['dutygdswt'];
                 $c->inkg = $cid['inkg'];
                 $c->gdsprice = $cid['gdsprice'];
                 $c->dtyrate = $cid['dtyrate'];
@@ -449,6 +450,7 @@ class CommercialInvoiceController extends Controller
 
                 $c->pcs = $cid['pcs'];
                 $c->gdswt = $cid['gdswt'];
+                $c->dutygdswt = $cid['dutygdswt'];
                 $c->inkg = $cid['inkg'];
                 $c->qtyinfeet = $cid['qtyinfeet'];
                 $c->gdsprice = $cid['gdsprice'];

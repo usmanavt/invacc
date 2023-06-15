@@ -132,13 +132,17 @@ table{
         <thead >
             <tr>
                 {{-- <td  style="text-align: center font-size:0.5rem;font-weight: bold"> --}}
-                    <th class="column-headers" width="4%">S#</th>
-                    <th class="column-headers" width="20%">Category</th>
-                    <th class="column-headers" width="40%">Material Name</th>
-                    <th class="column-headers" width="4%">Unit</th>
-                    <th class="column-headers" width="10%">Quanity</th>
-                    <th class="column-headers" width="10%">Price</th>
-                    <th class="column-headers" width="12%">Value</th>
+                    <th class="column-headers" width="3%">S#</th>
+                    {{-- <th class="column-headers" width="20%">Category</th> --}}
+                    <th class="column-headers" width="25%">Material Name</th>
+                    <th class="column-headers" width="3%">Unit</th>
+                    <th class="column-headers" width="15%">Brand</th>
+                    <th class="column-headers" width="18%">ForCustomer</th>
+                    <th class="column-headers" width="7%">Qty(Pcs)</th>
+                    <th class="column-headers" width="7%">Qty(Kg)</th>
+                    <th class="column-headers" width="7%">Qty(Feet)</th>
+                    <th class="column-headers" width="7%">Price</th>
+                    <th class="column-headers" width="8%">Value</th>
                 {{-- </td> --}}
             </tr>
         </thead>
@@ -159,21 +163,29 @@ table{
                 {{ $vvlues += $data[$i]->vlues }}
 
 
-                <td style="text-align:center" width="4%">{{ $i+1 }}</td>
-                <td style="text-align:left" width="20%">{{ $data[$i]->category }} </td>
-                <td style="text-align:left" width="40%">{{ $data[$i]->material_title }} </td>
-                <td style="text-align:center" width="4%">{{ $data[$i]->unit }} </td>
-                <td style="text-align:right" width="10%">{{ number_format($data[$i]->wt,1) }} </td>
-                <td style="text-align:right" width="10%">{{ number_format($data[$i]->price,1) }} </td>
-                <td style="text-align:right" width="12%">{{ number_format($data[$i]->vlues,0) }} </td>
+                <td style="text-align:center" width="3%">{{ $i+1 }}</td>
+                {{-- <td style="text-align:left" width="20%">{{ $data[$i]->category }} </td> --}}
+                <td style="text-align:left" width="25%">{{ $data[$i]->material_title }} </td>
+                <td style="text-align:center" width="3%">{{ $data[$i]->unit }} </td>
+
+                <td style="text-align:center" width="15%">{{ $data[$i]->brand }} </td>
+                <td style="text-align:center" width="18%">{{ $data[$i]->forcust }} </td>
+
+                <td style="text-align:right" width="7%">{{ number_format($data[$i]->pcs,1) }} </td>
+                <td style="text-align:right" width="7%">{{ number_format($data[$i]->wt,1) }} </td>
+                <td style="text-align:right" width="7%">{{ number_format($data[$i]->feet,1) }} </td>
+
+
+                <td style="text-align:right" width="7%">{{ number_format($data[$i]->price,1) }} </td>
+                <td style="text-align:right" width="8%">{{ number_format($data[$i]->vlues,0) }} </td>
 
        </tr>
             @endfor
 
             <tr>
-                <td class="column-headers" colspan="3" width="40%" style="text-align: right;font-weight: bold;border-bottom: 1px solid lightgray;">Total</td>
-                <td class="column-headers" colspan="2" width="10%" style="text-align: right;font-weight: bold;border-bottom: 1px solid lightgray;">{{ number_format($vwt,0) }} </td>
-                <td class="column-headers" colspan="2" width="12%" style="text-align: right;font-weight: bold;border-bottom: 1px solid lightgray;">{{ number_format($vvlues,0) }} </td>
+                <td class="column-headers" colspan="2" width="40%" style="text-align: right;font-weight: bold;border-bottom: 1px solid lightgray;">Total</td>
+                <td class="column-headers" colspan="5" width="10%" style="text-align: right;font-weight: bold;border-bottom: 1px solid lightgray;">{{ number_format($vwt,0) }} </td>
+                <td class="column-headers" colspan="8" width="12%" style="text-align: right;font-weight: bold;border-bottom: 1px solid lightgray;">{{ number_format($vvlues,0) }} </td>
            </tr>
 
         </tbody>

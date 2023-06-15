@@ -132,7 +132,13 @@ class LocalPurchaseController  extends Controller
             // $ci->machineno = $request->number;
             $ci->conversionrate = 0;
 
-            $ci->insurance = $request->insurance;
+            if (!empty($request->insurance)) {
+                $ci->insurance = $request->insurance;
+              }
+              else{
+                $ci->insurance =  0;
+              }
+
             $ci->collofcustom = $request->collofcustom;
             $ci->exataxoffie = $request->exataxoffie;
             $ci->lngnshipdochrgs = 0;
@@ -242,7 +248,13 @@ class LocalPurchaseController  extends Controller
             $commercialinvoice->challanno = $request->invoiceno;
             $commercialinvoice->machine_date = $request->invoice_date;
             $commercialinvoice->machineno = $request->invoiceno;
-            $commercialinvoice->insurance = $request->insurance;
+
+            if (!empty($commercialinvoice->insurance)) {
+                $commercialinvoice->insurance = $request->insurance;
+              }
+              else{
+                $commercialinvoice->insurance = 0;
+              }
             $commercialinvoice->collofcustom = $request->collofcustom;;
             $commercialinvoice->exataxoffie = $request->exataxoffie;
             $commercialinvoice->otherchrgs = $request->otherchrgs;
