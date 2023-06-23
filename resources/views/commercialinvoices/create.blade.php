@@ -94,6 +94,7 @@
         const deleteIcon = function(cell,formatterParams){return "<i class='fa fa-trash text-red-500'></i>";};
         const getMaster = @json(route('contracts.masterI'));
         const getDetails = @json(route('cis.condet'));
+        console.log(getMaster)
         let csrfToken = document.head.querySelector("[name~=csrf-token][content]").content;
         //
         let modal = document.getElementById("myModal")
@@ -206,17 +207,31 @@
             initialSort:[ {column:"id", dir:"desc"} ],
             height:"100%",
 
-            columns:[
+            // {
+            //     title:'Revise WSE', headerHozAlign:"center",
+            //         columns:[
+            //     {title:"WSE",  field:"wse",   formatter:"money",editor:"number",
+            //             formatterParams:{thousand:",",precision:2},          responsive:0}]},
+
+            //      {
+
+
+          //      {
+                //  title:'Revise WSE', headerHozAlign:"center",
+
+             columns:[
                 // Master Data
                 {title:"Id", field:"id" , responsive:0},
                 {title:"Invoice #", field:"number" , visible:true ,headerSort:false, responsive:0},
+                {title:"Date", field:"invoice_date" , visible:true ,headerSort:false, responsive:0},
                 {title:"Supplier", field:"supplier.title", visible:true ,headerSort:false, responsive:0},
 
-                {title:"Weight", field:"conversion_rate" , visible:true ,headerSort:false, responsive:0},
-                {title:"TotalPcs", field:"totalpcs" , visible:true ,headerSort:false, responsive:0},
-                {title:"TotalVal($)", field:"insurance" , visible:true ,headerSort:false, responsive:0},
+                 {title:"Weight", field:"conversion_rate" , visible:true ,headerSort:false, responsive:0},
+                 {title:"TotalPcs", field:"totalpcs" , visible:true ,headerSort:false, responsive:0},
+                 {title:"TotalVal($)", field:"insurance" , visible:true ,headerSort:false, responsive:0},
 
             ],
+        // },
             // Extra Pagination Data for End Users
             ajaxResponse:function(getDataUrl, params, response){
                 remaining = response.total;
@@ -305,6 +320,7 @@
 
 
                         dimension_id :      obj.dimension_id,
+                        dimension :         obj.dimension,
                         source_id :         obj.source_id,
                         brand_id :          obj.brand_id,
                         pcs :               vpcs,
@@ -385,7 +401,7 @@
                  e.amtinpkr=amtinpkr
                  e.dtyamtinpkr=dtyamtinpkr
                  e.wse=wse
-console.log(e.dtyrate)
+                 console.log(e.dtyrate)
 
                 if(e.sku_id==1)
                    {
@@ -487,7 +503,8 @@ console.log(e.dtyrate)
                 var wsca = (dtypricevaluecostsheet * parseFloat(e.wse)) /100
                 var total = cda + rda + sta + acda + asta + ita + wsca
                 var perft = (e.perpc / e.length).toFixed(2)
-                var totallccostwexp = total + dtypricevaluecostsheet + (banktotal.value * dtyitmratio / 100)
+                // var totallccostwexp = total + dtypricevaluecostsheet + (banktotal.value * dtyitmratio / 100)
+                var totallccostwexp = total + dtyamtinpkr + (banktotal.value * dtyitmratio / 100)
                 var otherexpenses = ( sconversionrate.value * otherchrgs.value ) * itmratio / 100
                 var perpc =  (( totallccostwexp+otherexpenses) / e.pcs).toFixed(2)
 
@@ -535,10 +552,103 @@ console.log(e.dtyrate)
             submitButton.disabled = false
         }
         //  Dynamic Table [User data]
+
+
+
+
+
+
+
+
+        var rowMenu = [
+    {
+        label:"<i class='fas fa-user'></i> Change Name",
+        action:function(e, row){
+            row.update({name:"Steve Bobberson"});
+        }
+    },
+    {
+        label:"<i class='fas fa-check-square'></i> Select Row",
+        action:function(e, row){
+            row.select();
+        }
+    },
+    {
+        separator:true,
+    },
+    {
+        label:"Admin Functions",
+        menu:[
+            {
+                label:"<i class='fas fa-trash'></i> Delete Row",
+                action:function(e, row){
+                    row.delete();
+                }
+            },
+            {
+                label:"<i class='fas fa-ban'></i> Disabled Option",
+                disabled:true,
+            },
+        ]
+    }
+]
+
+var headerMenu = function(){
+    var menu = [];
+    var columns = this.getColumns();
+
+    for(let column of columns){
+
+        //create checkbox element using font awesome icons
+        let icon = document.createElement("i");
+        icon.classList.add("fas");
+        icon.classList.add(column.isVisible() ? "fa-check-square" : "fa-square");
+
+        //build label
+        let label = document.createElement("span");
+        let title = document.createElement("span");
+
+        title.textContent = " " + column.getDefinition().title;
+
+        label.appendChild(icon);
+        label.appendChild(title);
+
+        //create menu item
+        menu.push({
+            label:label,
+            action:function(e){
+                //prevent menu closing
+                e.stopPropagation();
+
+                //toggle current column visibility
+                column.toggle();
+
+                //change menu item icon
+                if(column.isVisible()){
+                    icon.classList.remove("fa-square");
+                    icon.classList.add("fa-check-square");
+                }else{
+                    icon.classList.remove("fa-check-square");
+                    icon.classList.add("fa-square");
+                }
+            }
+        });
+    }
+
+   return menu;
+};
+
+
+
         dynamicTable = new Tabulator("#dynamicTable", {
+            height:"550px",
+            width:"1000px",
+            rowContextMenu: rowMenu,
             layout:'fitDataTable',
-            responsiveLayout:"collapse",
+            // responsiveLayout:"collapse",
             reactiveData:true,
+            movableRows:true,
+            groupBy:"material_title",
             columns:[
                 {title:"Del" , formatter:deleteIcon, headerSort:false, responsive:0,
                     cellClick:function(e, cell){
@@ -546,8 +656,9 @@ console.log(e.dtyrate)
                     }
                 },
                 {title:"Id",           field:"id", visible:false},
-                {title:"Material",     field:"material_title"},
-                {title:"Unit",         field:"sku"},
+                // {title:"Material",     field:"material_title",responsive:0},
+                {title:"dimension",         field:"dimension",responsive:0,frozen:true, headerMenu:headerMenu},
+                {title:"Unit",         field:"sku",responsive:0},
                 {title:"Unitid",       field:"sku_id",visible:false},
                 {title:"contract_id",  field:"contract_id",visible:false},
                 {title:"material_id",  field:"material_id",visible:false},
@@ -590,16 +701,18 @@ console.log(e.dtyrate)
                             field:"pcs",
                             editor:"number",
                             headerVertical:true,
+                            bottomCalc:"sum",
                             formatter:"money",
                             cssClass:"bg-green-200 font-semibold",
                             validator:["required","numeric"],
-                            formatterParams:{thousand:",",precision:2},
+                            formatterParams:{thousand:",",precision:0},
                         },
                         {   title:"Supp.Wt(Kg)",
                             field:"gdswt",
                             responsive:0,
                             editor:"number",
                             headerVertical:true,
+                            bottomCalc:"sum",
                             formatter:"money",
                             cssClass:"bg-green-200 font-semibold",
                             validator:["required","numeric"],
@@ -609,6 +722,7 @@ console.log(e.dtyrate)
                         {   title:"Duty.Wt(Kg)",
                             field:"dutygdswt",
                             responsive:0,
+                            bottomCalc:"sum",
                             editor:"number",
                             headerVertical:true,
                             formatter:"money",
@@ -643,24 +757,24 @@ console.log(e.dtyrate)
                             headerVertical:true,
                             cssClass:"bg-green-200 font-semibold",
                             formatter:"money",
+                            bottomCalc:"sum",bottomCalcParams:{precision:0},
                             responsive:0,
-                            formatterParams:{thousand:",",precision:2},
-                            validator:["required","numeric"],
-                            bottomCalcParams:{precision:2}  ,
-                        },
-
-                        {   title:"Other.Exp(pkr)",
-                            field:"otherexpenses",
-                            headerVertical:true,
-                            cssClass:"bg-green-200 font-semibold",
-                            formatter:"money",
-                            responsive:0,
-                            formatterParams:{thousand:",",precision:2},
+                            formatterParams:{thousand:",",precision:0},
                             validator:["required","numeric"],
                             bottomCalcParams:{precision:0}  ,
                         },
+
+
                     ]
                 },
+
+                {
+                title:'Revise WSE', headerHozAlign:"center",
+                    columns:[
+                {title:"WSE",  field:"wse",   formatter:"money",editor:"number",
+                        formatterParams:{thousand:",",precision:2},          responsive:0}]
+                },
+
                 {
                     title:'Price',
                     columns:[
@@ -678,41 +792,25 @@ console.log(e.dtyrate)
                     ]
                 },
 
-                {
-                title:'Revise WSE', headerHozAlign:"center",
-                    columns:[
-                {title:"WSE",  field:"wse",   formatter:"money",editor:"number",
-                        formatterParams:{thousand:",",precision:2},          responsive:0}]},
-
                  {
                     title:'Amount', headerHozAlign:"center",
                     columns:[
                         {   title:"Supp.Val($)",
                             field:"amtindollar",
+                            responsive:0,
+                            headerVertical:true,
                             formatter:"money",
-                            bottomCalc:"sum",
-                            bottomCalcFormatter:"money",
+                            // bottomCalcFormatter:"money",
                             formatterParams:{thousand:",",precision:2},
+                            bottomCalc:"sum",bottomCalcParams:{precision:0},
                         },
                         {   title:"Supp.Val(Rs)",
                             field:"amtinpkr",
+                            responsive:0,
+                            headerVertical:true,
                             formatter:"money",
-                            bottomCalc:"sum",
-                            bottomCalcFormatter:"money",
-                            formatterParams:{thousand:",",precision:0},
-                        },
-                        {   title:"Duty.Val($)",
-                            field:"dtyamtindollar",
-                            formatter:"money",
-                            bottomCalc:"sum",
-                            bottomCalcFormatter:"money",
-                            formatterParams:{thousand:",",precision:2},
-                        },
-                        {   title:"Duty.Val(Rs)",
-                            field:"dtyamtinpkr",
-                            formatter:"money",
-                            bottomCalc:"sum",
-                            bottomCalcFormatter:"money",
+                            bottomCalc:"sum",bottomCalcParams:{precision:0},
+                            // bottomCalcFormatter:"money",
                             formatterParams:{thousand:",",precision:0},
                         },
 
@@ -726,26 +824,66 @@ console.log(e.dtyrate)
                             validator:["required","numeric"],
                             bottomCalcParams:{precision:2}  ,
                         },
-                        {title:"CD",                field:"cda", formatter:"money",
-                        formatterParams:{thousand:",",precision:0},             responsive:0},
-                            {title:"ST",                field:"sta", formatter:"money",
-                        formatterParams:{thousand:",",precision:0},             responsive:0},
-                            {title:"RD",                field:"rda", formatter:"money",
-                        formatterParams:{thousand:",",precision:0},             responsive:0},
-                            {title:"ACD",               field:"acda", formatter:"money",
-                        formatterParams:{thousand:",",precision:0},            responsive:0},
-                            {title:"AST",               field:"asta",  formatter:"money",
-                        formatterParams:{thousand:",",precision:0},           responsive:0},
-                            {title:"IT",                field:"ita",  formatter:"money",
-                        formatterParams:{thousand:",",precision:0},            responsive:0},
-                            {title:"WSE",               field:"wsca",  formatter:"money",
-                        formatterParams:{thousand:",",precision:0},           responsive:0},
-                            {title:"Total",             field:"total",   formatter:"money",
-                        formatterParams:{thousand:",",precision:0},          responsive:0},
 
+                        {   title:"Duty.Val($)",
+                            field:"dtyamtindollar",
+                            responsive:0,
+                            headerVertical:true,
+                            formatter:"money",
+                            bottomCalc:"sum",bottomCalcParams:{precision:0},
+                            // bottomCalcFormatter:"money",
+                            formatterParams:{thousand:",",precision:2},
+                        },
+                        {   title:"Duty.Val(Rs)",
+                            field:"dtyamtinpkr",
+                            responsive:0,
+                            headerVertical:true,
+                            formatter:"money",
+                            bottomCalc:"sum",bottomCalcParams:{precision:0},
+                            // bottomCalcFormatter:"money",
+                            formatterParams:{thousand:",",precision:0},
+                        },
+
+
+                        {title:"CD",                field:"cda", formatter:"money",
+                        formatterParams:{thousand:",",precision:0},             responsive:0,bottomCalc:"sum",bottomCalcParams:{precision:0}},
+                            {title:"ST",                field:"sta", formatter:"money",
+                        formatterParams:{thousand:",",precision:0},             responsive:0,bottomCalc:"sum",bottomCalcParams:{precision:0}},
+                            {title:"RD",                field:"rda", formatter:"money",
+                        formatterParams:{thousand:",",precision:0},             responsive:0,bottomCalc:"sum",bottomCalcParams:{precision:0}},
+                            {title:"ACD",               field:"acda", formatter:"money",
+                        formatterParams:{thousand:",",precision:0},            responsive:0,bottomCalc:"sum",bottomCalcParams:{precision:0}},
+                            {title:"AST",               field:"asta",  formatter:"money",
+                        formatterParams:{thousand:",",precision:0},           responsive:0,bottomCalc:"sum",bottomCalcParams:{precision:0}},
+                            {title:"IT",                field:"ita",  formatter:"money",
+                        formatterParams:{thousand:",",precision:0},            responsive:0,bottomCalc:"sum",bottomCalcParams:{precision:0}},
+                            {title:"WSE",               field:"wsca",  formatter:"money",
+                        formatterParams:{thousand:",",precision:0},           responsive:0,bottomCalc:"sum",bottomCalcParams:{precision:0}},
+                            {title:"Total Duty",             field:"total", headerVertical:true,  formatter:"money",formatterParams:{thousand:",",precision:0},
+                         responsive:0,bottomCalc:"sum",bottomCalcParams:{precision:0}},
+
+                        {
+                    title:"Tot Cost(Rs)",
+                    headerVertical:true,
+                    field:"totallccostwexp",
+                    bottomCalc:"sum",bottomCalcParams:{precision:0},
+                    responsive:0,
+                    formatter:"money",
+                    formatterParams:{thousand:",",precision:0},
+                },
+
+                {
+                    title:"1% Duty (PKR)",
+                    field:"dtyonepercentdutypkr",
+                    responsive:0,
+                    bottomCalc:"sum",bottomCalcParams:{precision:0},
+                    headerVertical:true,
+                    formatter:"money",
+                },
 
                         {   title:"Item Ratio(%)",
                             field:"dtyitmratio",
+                            responsive:0,
                             headerVertical:true,
                             formatter:"money",
                             formatterParams:{thousand:",",precision:2},
@@ -755,40 +893,60 @@ console.log(e.dtyrate)
                 {
                     title:"Insur/Item($)",
                     field:"dtyinsuranceperitem",
+                    responsive:0,
                     headerVertical:true,
                     formatter:"money",
                 },
                 {
                     title:"Amt W/Insur (PKR)",
                     field:"dtyamountwithoutinsurance",
+                    responsive:0,
                     headerVertical:true,
                     formatter:"money",
                 },
-                {
-                    title:"1% Duty (PKR)",
-                    field:"dtyonepercentdutypkr",
-                    headerVertical:true,
-                    formatter:"money",
-                },
-                {
-                    title:"Price value (CS)",
-                    headerVertical:true,
-                    field:"dtypricevaluecostsheet",
-                    formatter:"money",
-                    formatterParams:{thousand:",",precision:2},
-                },
+                // {
+                //     title:"1% Duty (PKR)",
+                //     field:"dtyonepercentdutypkr",
+                //     responsive:2,
+                //     headerVertical:true,
+                //     formatter:"money",
+                // },
+                // {
+                //     title:"Price value (CS)",
+                //     headerVertical:true,
+                //     field:"dtypricevaluecostsheet",
+                //     responsive:2,
+                //     formatter:"money",
+                //     formatterParams:{thousand:",",precision:2},
+                // },
 
-                {title:"CD",                field:"cd",
+                {   title:"Other.Exp(pkr)",
+                            field:"otherexpenses",
+                            headerVertical:true,
+                            cssClass:"bg-green-200 font-semibold",
+                            formatter:"money",
+                            responsive:0,
+                            bottomCalc:"sum",bottomCalcParams:{precision:0},
+                            formatterParams:{thousand:",",precision:0},
+                            validator:["required","numeric"],
+                            bottomCalcParams:{precision:0}  ,
+                        },
+
+
+
+
+
+                {title:"CD",                field:"cd",responsive:0,
                 headerVertical:true,        visible:true},
-                {title:"ST",                field:"st",
+                {title:"ST",                field:"st",responsive:0,
                 headerVertical:true,          visible:true},
-                {title:"RD",                field:"rd",
+                {title:"RD",                field:"rd",responsive:0,
                 headerVertical:true,        visible:true},
-                {title:"ACD",               field:"acd",
+                {title:"ACD",               field:"acd",responsive:0,
                 headerVertical:true,          visible:true},
-                {title:"AST",               field:"ast",
+                {title:"AST",               field:"ast",responsive:0,
                 headerVertical:true,        visible:true},
-                {title:"IT",                field:"it",
+                {title:"IT",                field:"it",responsive:0,
                 headerVertical:true,        visible:true},
                 // {title:"WSE",               field:"wse",
                 // headerVertical:true,         visible:true},
@@ -816,14 +974,14 @@ console.log(e.dtyrate)
                 //         formatterParams:{thousand:",",precision:0},          responsive:0},
                 //     ]
                 // },
-                {
-                    title:"Total LC Cost W/InvsExp",
-                    headerVertical:true,
-                    field:"totallccostwexp",
-                    responsive:1,
-                    formatter:"money",
-                    formatterParams:{thousand:",",precision:2},
-                },
+                // {
+                //     title:"Total LC Cost W/InvsExp",
+                //     headerVertical:true,
+                //     field:"totallccostwexp",
+                //     responsive:2,
+                //     formatter:"money",
+                //     formatterParams:{thousand:",",precision:0},
+                // },
                 {
                     title:'Cost Rate/Unit', headerHozAlign:"center",
                     columns:[
@@ -835,6 +993,9 @@ console.log(e.dtyrate)
                             formatterParams:{thousand:",",precision:2}, },
                     ]
                 },
+                // {title:"Material",     field:"material_title",responsive:2},
+                // {title:"Size",         field:"dimension",responsive:2},
+                // {title:"Unit",         field:"sku",responsive:2},
             ],
         })
         dynamicTable.on("dataLoaded", function(data){
@@ -927,6 +1088,21 @@ console.log(e.dtyrate)
                 // disableSubmitButton(false);
             })
         }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
     </script>
 @endpush
 

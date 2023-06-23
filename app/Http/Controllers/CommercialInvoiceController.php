@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Hscode;
+use App\Models\Pcontract;
 use App\Models\Subhead;
 use App\Models\Location;
 use App\Models\Reciving;

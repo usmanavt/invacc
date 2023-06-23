@@ -1,9 +1,11 @@
 <x-app-layout>
     <x-slot name="header">
         <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-            Create Material
+
         </h2>
     </x-slot>
+
+
 
     <div class="py-6">
         <div class="max-w-3xl mx-auto sm:px-2 lg:px-4">
@@ -164,6 +166,10 @@
                     break;
             }
         }
+
+
+
+
     </script>
     @endpush
 

@@ -6,12 +6,13 @@ use App\Models\User;
 use DateTimeInterface;
 use App\Models\Supplier;
 use App\Models\ContractDetails;
-use App\Models\Pcontracts;
 use App\Models\CommercialInvoice;
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
 
-class Contract extends Model
+
+
+class Pcontract extends Model
 {
     use HasFactory;
     public $dates = ['invoice_date'];
@@ -20,12 +21,10 @@ class Contract extends Model
     protected function serializeDate(DateTimeInterface $date){return $date->format('d-m-Y');}
 
 
-    // Relationships - Kis ka bacha hai
+    // Relationships
     public function supplier(){ return $this->belongsTo(Supplier::class,'supplier_id');}
     public function user(){ return $this->belongsTo(User::class,'user_id');}
 
-
-    // Is kay kitnay bachay hain
     public function contractDetails(){ return $this->hasMany(ContractDetails::class);}
     public function commercialInovices(){ return $this->hasMany(CommercialInvoice::class);}
 

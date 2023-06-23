@@ -2,13 +2,21 @@
 
     @push('styles')
     <link rel="stylesheet" href="{{ asset('css/tabulator_simple.min.css') }}">
+
+
+
+
     @endpush
 
     <x-slot name="header">
+
         <h2 class="font-semibold text-xl text-gray-800 leading-tight">
             Materials
         </h2>
     </x-slot>
+
+
+
     <div class="py-6">
         <div class="max-w-7xl mx-auto sm:px-2 lg:px-4">
             <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg p4">
@@ -130,9 +138,9 @@
 
 
 
-
 @push('scripts')
 <script src="{{ asset('js/tabulator.min.js') }}"></script>
+
 @endpush
 
 @push('scripts')
@@ -257,8 +265,17 @@
                 break;
         }
     }
+    $(document).ready(function(){
+    $('.dimension').select2({
+        theme: "classic"
+    });
+});
+
 </script>
 @endpush
+
+
+
 
 </x-app-layout>
 

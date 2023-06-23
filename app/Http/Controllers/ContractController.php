@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use DB;
 use App\Models\Contract;
+use App\Models\Pcontract;
 use App\Models\Material;
 use App\Models\Supplier;
 use Illuminate\Http\Request;
@@ -74,6 +75,49 @@ class ContractController extends Controller
     }
 
 
+    // $contracts =DB::table('contracts')
+    // ->join('suppliers', 'suppliers.id', '=', 'contracts.supplier_id')
+    // ->select('contracts.*','suppliers.title')
+
+
+    public function getMasterImpfc(Request $request)
+    {
+
+        $search = $request->search;
+        $size = $request->size;
+        $field = $request->sort[0]["field"];     //  Nested Array
+        $dir = $request->sort[0]["dir"];         //  Nested Array
+        //  With Tables
+        // $contracts = Contract::where(function ($query) use ($search){
+        //         $query->where('id','LIKE','%' . $search . '%')
+        //         ->orWhere('number','LIKE','%' . $search . '%');
+        //     })
+        //     // ->orWherehas('supplier',function($query) use($search){
+        //     //     $query->where('title','LIKE',"%$search%");
+        //     // })
+        //     ->whereHas('supplier', function ($query) {
+        //         $query->where('source_id','=','2');
+        //         // ->orWhere('source_id',1);
+        //     })
+
+        $contracts = DB::table('vwfrmpendcontracts')
+        // ->join('suppliers', 'contracts.supplier_id', '=', 'suppliers.id')
+        // ->select('contracts.*', 'suppliers.title')
+        ->where('supname', 'like', "%$search%")
+        ->orderBy($field,$dir)
+        ->paginate((int) $size);
+        // ->paginate(5);
+
+
+        // ->with('user:id,name','supplier:id,title')
+        // ->orderBy($field,$dir)
+        // ->paginate((int) $size);
+        return $contracts;
+
+
+    }
+
+
     public function getMasterLoc(Request $request)
     {
         // dd($request->all());
@@ -99,15 +143,6 @@ class ContractController extends Controller
         ->paginate((int) $size);
         return $contracts;
     }
-
-
-
-
-
-
-
-
-
 
     public function getDetails(Request $request)
     {
@@ -144,6 +179,14 @@ class ContractController extends Controller
             $contract->number =$request->number;
             $contract->save();
             // Add Details
+            $pcontract = new Pcontract();
+            $pcontract->id=$contract->id;
+            $pcontract->supplier_id = $request->supplier_id;
+            $pcontract->user_id = auth()->id();
+            $pcontract->invoice_date = $request->invoice_date;
+            $pcontract->number =$request->number;
+            $pcontract->save();
+
             foreach ($request->contracts as $cont) {
                 $material = Material::findOrFail($cont['id']);
                 $cd = new ContractDetails();
@@ -190,6 +233,14 @@ class ContractController extends Controller
                  $contract->dutyval = $sumdtyval;
                  $contract->save();
 
+                 $pcontract->conversion_rate = $sumwt;
+                 $pcontract->totalpcs = $sumpcs;
+                 $pcontract->insurance = $sumval;
+                 $pcontract->dutyval = $sumdtyval;
+                 $pcontract->save();
+
+
+
             }
             DB::commit();
             Session::flash('success','Contract Information Saved');
@@ -204,13 +255,14 @@ class ContractController extends Controller
     public function edit(Contract $contract)
     {
 
-        return view('contracts.edit')->with('suppliers',Supplier::select('id','title')->where('source_id',2)->get())->with('contract',$contract)
+        return view('contracts.edit')->with('suppliers',Supplier::select('id','title')->where('source_id',2)->get())
+        ->with('contract',$contract)
         ->with('cd',ContractDetails::where('contract_id',$contract->id)->get());
     }
 
     public function update(Request $request, Contract $contract)
     {
-        // dd($request->all());
+        //  dd($request->all());
         DB::beginTransaction();
         try {
             // Save Contract Data First : If changed
@@ -218,6 +270,13 @@ class ContractController extends Controller
             $contract->invoice_date = $request->invoice_date;
             $contract->supplier_id = $request->supplier_id;
             $contract->save();
+
+            // $pcontract = Pcontract::where('id',$contract->id)->first();
+            // $pcontract->number = 'abc';
+            // $pcontract->invoice_date = $request->invoice_date;
+            // $pcontract->supplier_id = $request->supplier_id;
+            // $pcontract->save();
+
             // Get Data
             $cds = $request->contracts; // This is array
             $cds = ContractDetails::hydrate($cds); // Convert it into Model Collection
@@ -335,7 +394,16 @@ class ContractController extends Controller
                     $contract->totalpcs = $sumpcs;
                     $contract->dutyval = $sumdtyval;
                     $contract->save();
-            }
+
+                    // $pcontract->conversion_rate = $sumwt;
+                    // $pcontract->insurance = $sumval;
+                    // $pcontract->totalpcs = $sumpcs;
+                    // $pcontract->dutyval = $sumdtyval;
+                    // $pcontract->save();
+
+
+
+                }
             DB::commit();
             Session::flash('success','Contract Information Saved');
             return response()->json(['success'],200);
