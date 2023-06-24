@@ -1,7 +1,10 @@
 <x-app-layout>
 
     @push('styles')
-    <link rel="stylesheet" href="{{ asset('css/tabulator_simple.min.css') }}">
+    {{-- <link rel="stylesheet" href="{{ asset('css/tabulator_simple.min.css') }}"> --}}
+    <link href="https://unpkg.com/tabulator-tables/dist/css/tabulator.min.css" rel="stylesheet">
+    <script type="text/javascript" src="https://unpkg.com/tabulator-tables/dist/js/tabulator.min.js"></script>
+
     @endpush
 
 
@@ -554,12 +557,6 @@
         //  Dynamic Table [User data]
 
 
-
-
-
-
-
-
         var rowMenu = [
     {
         label:"<i class='fas fa-user'></i> Change Name",
@@ -640,12 +637,13 @@ var headerMenu = function(){
 
 
 
+
         dynamicTable = new Tabulator("#dynamicTable", {
             height:"550px",
             width:"1000px",
             rowContextMenu: rowMenu,
             layout:'fitDataTable',
-            // responsiveLayout:"collapse",
+            responsiveLayout:"collapse",
             reactiveData:true,
             movableRows:true,
             groupBy:"material_title",
@@ -657,7 +655,7 @@ var headerMenu = function(){
                 },
                 {title:"Id",           field:"id", visible:false},
                 // {title:"Material",     field:"material_title",responsive:0},
-                {title:"dimension",         field:"dimension",responsive:0,frozen:true, headerMenu:headerMenu},
+                {title:"dimension",    field:"dimension",responsive:0,frozen:true, headerMenu:headerMenu},
                 {title:"Unit",         field:"sku",responsive:0},
                 {title:"Unitid",       field:"sku_id",visible:false},
                 {title:"contract_id",  field:"contract_id",visible:false},
@@ -678,7 +676,7 @@ var headerMenu = function(){
                             editor:"list",
                             responsive:0 ,
                             headerVertical:true,
-                            cssClass:"bg-green-200 font-semibold",
+                            // cssClass:"bg-green-200 font-semibold",
                             editorParams:   {
                                 values:newList,
                                 validator:["required"]
@@ -689,7 +687,7 @@ var headerMenu = function(){
                             editor:"list",
                             responsive:0,
                             headerVertical:true,
-                            cssClass:"bg-green-200 font-semibold",
+                            // cssClass:"bg-green-200 font-semibold",
                             editorParams:   {
                                 values:hscodeList,
                                 validator:["required"]
@@ -703,7 +701,7 @@ var headerMenu = function(){
                             headerVertical:true,
                             bottomCalc:"sum",
                             formatter:"money",
-                            cssClass:"bg-green-200 font-semibold",
+                            // cssClass:"bg-green-200 font-semibold",
                             validator:["required","numeric"],
                             formatterParams:{thousand:",",precision:0},
                         },
@@ -714,7 +712,7 @@ var headerMenu = function(){
                             headerVertical:true,
                             bottomCalc:"sum",
                             formatter:"money",
-                            cssClass:"bg-green-200 font-semibold",
+                            // cssClass:"bg-green-200 font-semibold",
                             validator:["required","numeric"],
                             formatterParams:{thousand:",",precision:2},
                         },
@@ -726,7 +724,7 @@ var headerMenu = function(){
                             editor:"number",
                             headerVertical:true,
                             formatter:"money",
-                            cssClass:"bg-green-200 font-semibold",
+                            // cssClass:"bg-green-200 font-semibold",
                             validator:["required","numeric"],
                             formatterParams:{thousand:",",precision:2},
                         },
@@ -744,7 +742,6 @@ var headerMenu = function(){
                             field:"length",
                             headerVertical:true,
                             editor:"number",
-                            cssClass:"bg-green-200 font-semibold",
                             formatter:"money",
                             responsive:0,
                             formatterParams:{thousand:",",precision:2},
@@ -755,7 +752,7 @@ var headerMenu = function(){
                         {   title:"QtyInFeet",
                             field:"qtyinfeet",
                             headerVertical:true,
-                            cssClass:"bg-green-200 font-semibold",
+                            // cssClass:"bg-green-200 font-semibold",
                             formatter:"money",
                             bottomCalc:"sum",bottomCalcParams:{precision:0},
                             responsive:0,
@@ -784,7 +781,7 @@ var headerMenu = function(){
                             // editor:"number",
                             responsive:0,
                             headerVertical:true,
-                            cssClass:"bg-green-200 font-semibold",
+                            // cssClass:"bg-green-200 font-semibold",
                             validator:["required","numeric"],
                             formatterParams:{thousand:",",precision:2}
                         },
@@ -859,27 +856,20 @@ var headerMenu = function(){
                         formatterParams:{thousand:",",precision:0},            responsive:0,bottomCalc:"sum",bottomCalcParams:{precision:0}},
                             {title:"WSE",               field:"wsca",  formatter:"money",
                         formatterParams:{thousand:",",precision:0},           responsive:0,bottomCalc:"sum",bottomCalcParams:{precision:0}},
-                            {title:"Total Duty",             field:"total", headerVertical:true,  formatter:"money",formatterParams:{thousand:",",precision:0},
+                            {title:"Total Duty", cssClass:"bg-green-200 font-semibold",  field:"total", headerVertical:true,  formatter:"money",formatterParams:{thousand:",",precision:0},
                          responsive:0,bottomCalc:"sum",bottomCalcParams:{precision:0}},
 
                         {
                     title:"Tot Cost(Rs)",
                     headerVertical:true,
                     field:"totallccostwexp",
+                    cssClass:"bg-green-200 font-semibold",
                     bottomCalc:"sum",bottomCalcParams:{precision:0},
                     responsive:0,
                     formatter:"money",
                     formatterParams:{thousand:",",precision:0},
                 },
 
-                {
-                    title:"1% Duty (PKR)",
-                    field:"dtyonepercentdutypkr",
-                    responsive:0,
-                    bottomCalc:"sum",bottomCalcParams:{precision:0},
-                    headerVertical:true,
-                    formatter:"money",
-                },
 
                         {   title:"Item Ratio(%)",
                             field:"dtyitmratio",
@@ -919,6 +909,15 @@ var headerMenu = function(){
                 //     formatter:"money",
                 //     formatterParams:{thousand:",",precision:2},
                 // },
+
+                 {
+                    title:"1% Duty (PKR)",
+                    field:"dtyonepercentdutypkr",
+                    responsive:0,
+                    bottomCalc:"sum",bottomCalcParams:{precision:0},
+                    headerVertical:true,
+                    formatter:"money",
+                },
 
                 {   title:"Other.Exp(pkr)",
                             field:"otherexpenses",
