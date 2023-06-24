@@ -61,6 +61,8 @@ class DimensionController extends Controller
 
     public function update(Dimension $dimension,Request $request)
     {
+
+    //    dd($request->all(),$dimension);
         $request->validate([
             'title'=>'required|min:1|unique:dimensions,title,'.$dimension->id
         ]);
@@ -73,11 +75,13 @@ class DimensionController extends Controller
                 $dimension->status = 0;
             }
             $dimension->save();
-
-            $cl = Material::where('dimension_id',$dimension->id)->first();
-            $cl->dimension = $request->title;
-            $cl->save();
-
+            // dd($dimension->id);
+            $cl = Material::where('dimension_id',$dimension->id)->get();
+            if (!count($cl) <= 0)
+            {
+                $cl->dimension = $request->title;
+                $cl->save();
+            }
 
 
             DB::commit();
