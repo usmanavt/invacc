@@ -352,6 +352,7 @@ class CommercialInvoiceController extends Controller
         //     return redirect()->back();
         // }
         //** */ Marking From Usman on 15-12-2022
+        //  dd($request->all());
         return view('commercialinvoices.edit')
         ->with('i',CommercialInvoice::whereId($id)->with('commericalInvoiceDetails.material.hscodes')->first())
         ->with('locations',Location::select('id','title')->get())

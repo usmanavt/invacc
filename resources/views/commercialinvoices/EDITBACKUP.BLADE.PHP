@@ -271,7 +271,7 @@
                 // var dtyamtinpkr = conversionrate.value * dtyamtindollar
 
                 var itmratio = parseFloat(dtyamtinpkr) / parseFloat(dtyamtinpkrtotal) * 100
-                //   var dtyitmratio =parseFloat(dtyamtinpkr) / parseFloat(dtyamtinpkrtotal) * 100
+                //  var dtyitmratio =parseFloat(dtyamtinpkr) / parseFloat(dtyamtinpkrtotal) * 100
                 // console.log(dtyamtinpkrtotal)
                 var insuranceperitem = parseFloat(insurance.value) * itmratio / 100
                 var amountwithoutinsurance = ( parseFloat(dtyamtindollar) + parseFloat(insuranceperitem )) * parseFloat(conversionrate.value)
@@ -289,7 +289,7 @@
                 var total = cda + rda + sta + acda + asta + ita + wsca
                 var perft = (e.perpc / e.length).toFixed(2)
                 // var totallccostwexp = total + pricevaluecostsheet + (banktotal.value * itmratio / 100)
-                var totallccostwexp = total + dtyamtinpkr + (banktotal.value * itmratio / 100)
+                var totallccostwexp = total + dtyamtinpkr + (banktotal.value * dtyitmratio / 100)
                 var otherexpenses = ( sconversionrate.value * otherchrgs.value ) * itmratio / 100
                 var perpc = ((e.totallccostwexp+otherexpenses) / e.pcs).toFixed(2)
                 var perkg = (e.perpc / inkg).toFixed(2)
@@ -414,6 +414,30 @@ var headerMenu = function(){
 };
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
         dynamicTable = new Tabulator("#dynamicTable", {
             height:"550px",
             width:"1000px",
@@ -423,7 +447,6 @@ var headerMenu = function(){
             reactiveData:true,
             movableRows:true,
             groupBy:"material_title",
-            data:getDetails,
             // reactiveData:true,
             columns:[
                 // {title:"Del" , formatter:deleteIcon, headerSort:false, responsive:0,
@@ -442,8 +465,8 @@ var headerMenu = function(){
 
                 {title:"Id",           field:"material_id", visible:false},
                 // {title:"Material",     field:"material.title"},
-                {title:"dimension",    field:"material.dimension",responsive:0,frozen:true, headerMenu:headerMenu},
-                {title:"Unit",         field:"material.sku",responsive:0},
+                {title:"dimension",    field:"dimension",responsive:0,frozen:true, headerMenu:headerMenu},
+                {title:"Unit",         field:"sku",responsive:0},
                 {title:"contract_id",  field:"contract_id",visible:false},
                 {title:"material_id",  field:"material_id",visible:false},
                 {title:"supplier_id",  field:"supplier_id",visible:false},
@@ -543,13 +566,12 @@ var headerMenu = function(){
                     ]
                 },
 
-                // {
-                // title:'Revise WSE', headerHozAlign:"center",
-                    // columns:[
-                {title:"Rvs WSE Rate",  field:"wse",headerVertical:true,   formatter:"money",editor:"number",
-                        formatterParams:{thousand:",",precision:2},          responsive:0},
-                    // ]
-                // },
+                {
+                title:'Revise WSE', headerHozAlign:"center",
+                    columns:[
+                {title:"WSE",  field:"wse",   formatter:"money",editor:"number",
+                        formatterParams:{thousand:",",precision:2},          responsive:0}]
+                },
 
                 {
                     title:'Price',
@@ -574,18 +596,14 @@ var headerMenu = function(){
                     columns:[
                         {   title:"Supp.Val($)",
                             field:"amtindollar",
-                            headerVertical:true,
                             formatter:"money",
-                            responsive:0,
                             // bottomCalcFormatter:"money",
                             formatterParams:{thousand:",",precision:2},
                             bottomCalc:"sum",bottomCalcParams:{precision:0},
                         },
                         {   title:"Supp.Val(Rs)",
                             field:"amtinpkr",
-                            headerVertical:true,
                             formatter:"money",
-                            responsive:0,
                             bottomCalc:"sum",bottomCalcParams:{precision:0},
                             // bottomCalcFormatter:"money",
                         },
@@ -605,17 +623,13 @@ var headerMenu = function(){
                         {   title:"Duty.Val($)",
                             field:"dtyamtindollar",
                             formatter:"money",
-                            headerVertical:true,
-                            responsive:0,
                             bottomCalcFormatter:"money",
                             formatterParams:{thousand:",",precision:2},
                             bottomCalc:"sum",bottomCalcParams:{precision:0},
                         },
                         {   title:"Duty.Val(Rs)",
                             field:"dtyamtinpkr",
-                            headerVertical:true,
                             formatter:"money",
-                            responsive:0,
                             // bottomCalcFormatter:"money",
                             formatterParams:{thousand:",",precision:0},
                             bottomCalc:"sum",bottomCalcParams:{precision:0},
@@ -640,7 +654,7 @@ var headerMenu = function(){
                     formatterParams:{thousand:",",precision:0,responsive:0,bottomCalc:"sum",bottomCalcParams:{precision:0}},            responsive:0},
                         {title:"WSE",               field:"wsca",  formatter:"money",
                     formatterParams:{thousand:",",precision:0,responsive:0,bottomCalc:"sum",bottomCalcParams:{precision:0}},           responsive:0},
-                        {title:"Total Duty",cssClass:"bg-green-200 font-semibold",             field:"total", headerVertical:true,  formatter:"money",
+                        {title:"Total",             field:"total",   formatter:"money",
                     formatterParams:{thousand:",",precision:0,responsive:0,bottomCalc:"sum",bottomCalcParams:{precision:0}},          responsive:0},
                     ]
                 },
