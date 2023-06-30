@@ -171,10 +171,18 @@ Route::get('/recivings/details', [RecivingController::class, 'getRecivingDetails
 Route::get('/recivings/rcd', [RecivingController::class, 'updateCompletedReciving'])->name('reciving.updatercd');
 Route::resource('recivings', RecivingController::class)->except(['create','store','show']);
 //  Clearance
-Route::get('/clearances/master', [ClearanceController::class, 'getMaster'])->name('clearances.master');
-Route::get('/clearances/details', [ClearanceController::class, 'getDetails'])->name('clearances.details');
-Route::get('/clearances/ccd', [ClearanceController::class, 'updateCompletedClearance'])->name('clearances.updatercd');
-Route::resource('clearances', ClearanceController::class)->except(['create','store','show']);
+// Route::get('/clearances/master', [ClearanceController::class, 'getMaster'])->name('clearances.master');
+// Route::get('/clearances/details', [ClearanceController::class, 'getDetails'])->name('clearances.details');
+// Route::get('/clearances/ccd', [ClearanceController::class, 'updateCompletedClearance'])->name('clearances.updatercd');
+
+Route::get('/clearance/getCisclrMaster', [ClearanceController::class, 'getMaster'])->name('cisclr.master');
+Route::get('/clearance/getCisclrDetails', [ClearanceController::class, 'getDetails'])->name('cisclr.details');
+Route::resource('clearance', ClearanceController::class);
+// ->except(['create','store','show']);
+
+
+
+
 //  Bank
 Route::get('/banks/master', [BankController::class, 'getMaster'])->name('banks.master');
 Route::resource('banks',BankController::class);
