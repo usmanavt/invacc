@@ -93,6 +93,8 @@ class CommercialInvoiceControllerlocal extends Controller
         $comminvoice = $request->comminvoice;
         DB::beginTransaction();
         try {
+
+
             //  Commercial Invoice Master
             $ci = new CommercialInvoice();
             $ci->invoice_date = $request->invoicedate;
@@ -106,17 +108,25 @@ class CommercialInvoiceControllerlocal extends Controller
             $ci->insurance = 0;
             $ci->bankcharges = $request->bankcharges;
             $ci->collofcustom = $request->collofcustom;
-                $ci->exataxoffie = 0;
-                $ci->lngnshipdochrgs = 0;
-                $ci->localcartage = 0;
-                $ci->miscexplunchetc = 0;
-                $ci->customsepoy = 0;
-                $ci->weighbridge = 0;
-                $ci->miscexpenses = 0;
-                $ci->agencychrgs = 0;
-                $ci->otherchrgs = 0;
-            $ci->total = $request->total;;
+            $ci->exataxoffie = 0;
+            $ci->lngnshipdochrgs = 0;
+            $ci->localcartage = 0;
+            $ci->miscexplunchetc = 0;
+            $ci->customsepoy = 0;
+            $ci->weighbridge = 0;
+            $ci->miscexpenses = 0;
+            $ci->agencychrgs = 0;
+            $ci->otherchrgs = 0;
+            $ci->total = $request->total;
             $ci->save();
+
+
+
+
+
+
+
+
             //  Create Auto Clearance Document
                     // $cl = new Clearance();
                     // $cl->commercial_invoice_id = $ci->id;

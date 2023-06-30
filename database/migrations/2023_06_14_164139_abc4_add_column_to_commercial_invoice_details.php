@@ -15,6 +15,9 @@ class Abc4AddColumnToCommercialInvoiceDetails extends Migration
     {
         Schema::table('commercial_invoice_details', function (Blueprint $table) {
             $table->decimal('dutygdswt', 8, 3)->nullable();
+            $table->decimal('comamtindollar', 15, 3)->default(00.000);
+            $table->Integer('comamtinpkr')->default(00.000);
+            $table->Integer('invlvlchrgs')->default(00.000);
         });
     }
 

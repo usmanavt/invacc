@@ -14,9 +14,9 @@
                 Add New Record
             </a>
             <span> | </span>
-            <button class="text-sm text-blue-300" onclick="setStatus(1)">Pending</button>
+            <button class="text-sm text-blue-300" onclick="setStatus(1)">Transaction</button>
             <span> | </span>
-            <button class="text-sm text-blue-300" onclick="setStatus(2)">Completed</button>
+            <button class="text-sm text-blue-300" onclick="setStatus(2)">Status</button>
         </h2>
     </x-slot>
 

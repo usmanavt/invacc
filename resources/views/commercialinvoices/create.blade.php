@@ -191,9 +191,13 @@
         }
         //  The Table for Materials Modal
         table = new Tabulator("#tableData", {
+            width:"1000px",
+            height:"600px",
             autoResize:true,
             responsiveLayout:"collapse",
-            layout:"fitData",
+            // layout:"fitData",
+            layout:'fitDataTable',
+
             index:"id",
             placeholder:"No Data Available",
             pagination:true,
@@ -208,7 +212,7 @@
             ajaxURL: getMaster,
             ajaxContentType:"json",
             initialSort:[ {column:"id", dir:"desc"} ],
-            height:"100%",
+            // height:"100%",
 
             // {
             //     title:'Revise WSE', headerHozAlign:"center",
@@ -225,15 +229,28 @@
              columns:[
                 // Master Data
                 {title:"Id", field:"id" , responsive:0},
-                {title:"Invoice #", field:"number" , visible:true ,headerSort:false, responsive:0},
+                {title:"Invoice #", field:"invoiceno" , visible:true ,headerSort:false, responsive:0},
                 {title:"Date", field:"invoice_date" , visible:true ,headerSort:false, responsive:0},
-                {title:"Supplier", field:"supplier.title", visible:true ,headerSort:false, responsive:0},
+                {title:"Supplier", field:"supname", visible:true ,headerSort:false, responsive:0},
 
-                 {title:"Weight", field:"conversion_rate" , visible:true ,headerSort:false, responsive:0},
-                 {title:"TotalPcs", field:"totalpcs" , visible:true ,headerSort:false, responsive:0},
-                 {title:"TotalVal($)", field:"insurance" , visible:true ,headerSort:false, responsive:0},
+                {
+                 title:'Total Contract Data', headerHozAlign:"center",
+                 columns:[
+                 {title:"Weight", field:"tweight" , visible:true ,headerSort:false, responsive:0},
+                 {title:"TotalPcs", field:"ttotalpcs" , visible:true ,headerSort:false, responsive:0},
+                 {title:"TotalVal($)", field:"tvalue" , visible:true ,headerSort:false, responsive:0},
 
-            ],
+                ]},
+
+                {
+                 title:'Pending Contract Data', headerHozAlign:"center",
+                 columns:[
+                 {title:"Weight", field:"pweight" , visible:true ,headerSort:false, responsive:0},
+                 {title:"TotalPcs", field:"ptotalpcs" , visible:true ,headerSort:false, responsive:0},
+                 {title:"TotalVal($)", field:"ptvalue" , visible:true ,headerSort:false, responsive:0},
+
+                ]}
+           ],
         // },
             // Extra Pagination Data for End Users
             ajaxResponse:function(getDataUrl, params, response){
@@ -299,7 +316,8 @@
 
                 contract_id = obj.contract_id
                 // console.log(obj.bundle1 , obj.pcspbundle1 ,obj.bundle2 , obj.pcspbundle2);
-                var vpcs = ((obj.bundle1 * obj.pcspbundle1) + (obj.bundle2 * obj.pcspbundle2)).toFixed(2)
+                // var vpcs = ((obj.bundle1 * obj.pcspbundle1) + (obj.bundle2 * obj.pcspbundle2)).toFixed(2)
+                var vpcs = obj.totpcs
                 // console.log(vpcs);
                 // var vwinkg = ((obj.gdswt / vpcs ) * 1000).toFixed(3)
                 var vwinkg = ((obj.gdswt / vpcs ) ).toFixed(3)
@@ -319,7 +337,8 @@
 
                         purval:             0,
                         dutval:             0,
-
+                        comval:             0,
+                        invlvlchrgs:        0,
 
 
                         dimension_id :      obj.dimension_id,
@@ -332,12 +351,15 @@
                         inkg :              vwinkg,
                         length :            0,
                         gdsprice :          obj.gdsprice,
-                        dtyrate :          obj.dtyrate,
+                        dtyrate :           obj.dtyrate,
+                        invsrate:           obj.invsrate,
                         amtindollar :       obj.purval  ,
                         dtyamtindollar :       0,
-                         amtinpkr :          ( obj.gdswt *  obj.gdsprice  * conversionrate.value).toFixed(0),
-                         dtyamtinpkr :        ( obj.gdswt *  obj.dtyrate  * conversionrate.value).toFixed(0),
+                        comamtindollar :       0,
 
+                        amtinpkr :          ( obj.gdswt *  obj.gdsprice  * conversionrate.value).toFixed(0),
+                        dtyamtinpkr :        ( obj.gdswt *  obj.dtyrate  * conversionrate.value).toFixed(0),
+                        comamtinpkr :        0,
                         itmratio:          0,
                         dtyitmratio:0,
 
@@ -381,13 +403,19 @@
                 var length = e.length
                 var gdsprice = e.gdsprice
                 var dtyrate = e.dtyrate
+                var invsrate = e.invsrate
                 var totpcs = e.totpcs
                 var amtindollar=e.amtindollar
                 var dtyamtindollar=e.dtyamtindollar
+                var comamtindollar=e.comamtindollar
+
                 var amtinpkr=e.amtinpkr
                 var dtyamtinpkr=e.dtyamtinpkr
+                var comamtinpkr=e.comamtinpkr
+
                 var dutval=e.dutval
                 var purval=e.purval
+                var comval=e.comval
                 var wse=e.wse
 
 
@@ -401,25 +429,33 @@
                  e.dtyrate = dtyrate
                  e.purval=purval
                  e.dutval=dutval
+                 e.comval=comval
                  e.amtinpkr=amtinpkr
                  e.dtyamtinpkr=dtyamtinpkr
+                 e.comamtinpkr=comamtinpkr
+
                  e.wse=wse
                  console.log(e.dtyrate)
 
                 if(e.sku_id==1)
                    {
-                     e.dutval = parseFloat(e.dutygdswt) * parseFloat(e.dtyrate)
-                     e.purval = parseFloat(e.gdswt) * parseFloat(e.gdsprice)
+                        e.dutval = parseFloat(e.dutygdswt) * parseFloat(e.dtyrate)
+                        e.purval = parseFloat(e.gdswt) * parseFloat(e.gdsprice)
+                        e.comval = parseFloat(e.gdswt) * parseFloat(e.invsrate)
                    }
                  else
                      {
                          e.dutval = parseFloat(e.pcs) * parseFloat(e.dtyrate)
                          e.purval = parseFloat(e.pcs) * parseFloat(e.gdsprice)
+                         e.comval = parseFloat(e.pcs) * parseFloat(e.invsrate)
                     }
-              e.amtindollar=e.purval
-                e.dtyamtindollar=e.dutval
-                e.amtinpkr=e.amtindollar * sconversionrate.value
-                e.dtyamtinpkr=e.dtyamtindollar * conversionrate.value
+                        e.amtindollar=e.purval
+                        e.dtyamtindollar=e.dutval
+                        e.comamtindollar=e.comval
+
+                        e.amtinpkr=e.amtindollar * sconversionrate.value
+                        e.dtyamtinpkr=e.dtyamtindollar * conversionrate.value
+                        e.comamtinpkr=e.comamtindollar * sconversionrate.value
 
                 // console.log(e.dtyamtinpkr)
 
@@ -507,7 +543,8 @@
                 var total = cda + rda + sta + acda + asta + ita + wsca
                 var perft = (e.perpc / e.length).toFixed(2)
                 // var totallccostwexp = total + dtypricevaluecostsheet + (banktotal.value * dtyitmratio / 100)
-                var totallccostwexp = total + dtyamtinpkr + (banktotal.value * dtyitmratio / 100)
+                var totallccostwexp = total + amtinpkr + (banktotal.value * itmratio / 100)
+                var invlvlchrgs =(banktotal.value * itmratio / 100)
                 var otherexpenses = ( sconversionrate.value * otherchrgs.value ) * itmratio / 100
                 var perpc =  (( totallccostwexp+otherexpenses) / e.pcs).toFixed(2)
 
@@ -527,6 +564,7 @@
                 e.dtyitmratio = dtyitmratio
                 e.insuranceperitem = insuranceperitem
                 e.dtyinsuranceperitem = dtyinsuranceperitem
+                e.invlvlchrgs=invlvlchrgs
                 e.amountwithoutinsurance = amountwithoutinsurance
                 e.dtyamountwithoutinsurance = dtyamountwithoutinsurance
                 e.onepercentdutypkr = (onepercentdutypkr).toFixed(2)
@@ -665,8 +703,13 @@ var headerMenu = function(){
                 {title:"category_id",  field:"category_id",visible:false},
                 {title:"sku_id",       field:"sku_id",visible:false},
                 {title:"dimension_id", field:"dimension_id",visible:false},
-                {title:"source_id",    field:"source_id",visible:false},
-                {title:"brand_id",     field:"brand_id",visible:false},
+                // {title:"source_id",    field:"source_id",visible:false},
+                // {title:"brand_id",     field:"brand_id",visible:false},
+
+                // {title:"totpcs",     field:"pcs",visible:true},
+                // {title:"totwt",     field:"gdswt",visible:true},
+
+
                 {
                     title:'Quantity', headerHozAlign:"center",
                     columns:[
@@ -811,6 +854,7 @@ var headerMenu = function(){
                             formatterParams:{thousand:",",precision:0},
                         },
 
+
                         {   title:"Duty.Price($)",
                             field:"dtyrate",
                             headerVertical:true,
@@ -841,6 +885,38 @@ var headerMenu = function(){
                             formatterParams:{thousand:",",precision:0},
                         },
 
+                        {   title:"Com.Invs.Price",
+                            field:"invsrate",
+                            responsive:0,
+                            headerVertical:true,
+                            formatter:"money",
+                            // bottomCalc:"sum",bottomCalcParams:{precision:0},
+                            // bottomCalcFormatter:"money",
+                            formatterParams:{thousand:",",precision:2},
+                        },
+
+                        {   title:"Com.Invs.Val($)",
+                            field:"comamtindollar",
+                            responsive:0,
+                            headerVertical:true,
+                            formatter:"money",
+                             bottomCalc:"sum",bottomCalcParams:{precision:0},
+                            // bottomCalcFormatter:"money",
+                            formatterParams:{thousand:",",precision:2},
+                        },
+
+                        {   title:"Com.Invs.Val(Rs)",
+                            field:"comamtinpkr",
+                            responsive:0,
+                            headerVertical:true,
+                            formatter:"money",
+                             bottomCalc:"sum",bottomCalcParams:{precision:0},
+                            // bottomCalcFormatter:"money",
+                            formatterParams:{thousand:",",precision:0},
+                        },
+
+
+
 
                         {title:"CD",                field:"cda", formatter:"money",
                         formatterParams:{thousand:",",precision:0},             responsive:0,bottomCalc:"sum",bottomCalcParams:{precision:0}},
@@ -859,7 +935,23 @@ var headerMenu = function(){
                             {title:"Total Duty", cssClass:"bg-green-200 font-semibold",  field:"total", headerVertical:true,  formatter:"money",formatterParams:{thousand:",",precision:0},
                          responsive:0,bottomCalc:"sum",bottomCalcParams:{precision:0}},
 
-                        {
+
+
+                {
+                    title:"Invoice Level Exp.",
+                    headerVertical:true,
+                    field:"invlvlchrgs",
+                    cssClass:"bg-green-200 font-semibold",
+                    bottomCalc:"sum",bottomCalcParams:{precision:0},
+                    responsive:0,
+                    formatter:"money",
+                    formatterParams:{thousand:",",precision:0},
+                },
+
+
+
+
+                {
                     title:"Tot Cost(Rs)",
                     headerVertical:true,
                     field:"totallccostwexp",
@@ -884,6 +976,7 @@ var headerMenu = function(){
                     title:"Insur/Item($)",
                     field:"dtyinsuranceperitem",
                     responsive:0,
+                    bottomCalc:"sum",bottomCalcParams:{precision:0},
                     headerVertical:true,
                     formatter:"money",
                 },
@@ -891,25 +984,10 @@ var headerMenu = function(){
                     title:"Amt W/Insur (PKR)",
                     field:"dtyamountwithoutinsurance",
                     responsive:0,
+                    bottomCalc:"sum",bottomCalcParams:{precision:0},
                     headerVertical:true,
                     formatter:"money",
                 },
-                // {
-                //     title:"1% Duty (PKR)",
-                //     field:"dtyonepercentdutypkr",
-                //     responsive:2,
-                //     headerVertical:true,
-                //     formatter:"money",
-                // },
-                // {
-                //     title:"Price value (CS)",
-                //     headerVertical:true,
-                //     field:"dtypricevaluecostsheet",
-                //     responsive:2,
-                //     formatter:"money",
-                //     formatterParams:{thousand:",",precision:2},
-                // },
-
                  {
                     title:"1% Duty (PKR)",
                     field:"dtyonepercentdutypkr",
@@ -919,7 +997,7 @@ var headerMenu = function(){
                     formatter:"money",
                 },
 
-                {   title:"Other.Exp(pkr)",
+                {   title:"OtherExpFrPaym.",
                             field:"otherexpenses",
                             headerVertical:true,
                             cssClass:"bg-green-200 font-semibold",

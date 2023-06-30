@@ -205,10 +205,17 @@
                 var length = e.length
                 var gdsprice = e.gdsprice
                 var dtyrate = e.dtyrate
+                var invsrate = e.invsrate
                 var totpcs = e.totpcs
                 var amtindollar=e.amtindollar
+                var comamtindollar=e.comamtindollar
+                var invlvlchrgs=e.invlvlchrgs
+
+
+
                 var dtyamtindollar=e.dtyamtindollar
                 var amtinpkr=e.amtinpkr
+                var comamtinpkr=e.comamtinpkr
                 var dtyamtinpkr=e.dtyamtinpkr
                 var dutval=e.dutval
                 var purval=e.purval
@@ -222,27 +229,37 @@
                  e.dutygdswt=dutygdswt
                  e.gdsprice = gdsprice
                  e.dtyrate = dtyrate
+                 e.invsrate = invsrate
+
                  e.purval=purval
                  e.dutval=dutval
                  e.amtinpkr=amtinpkr
+                 e.comamtinpkr=comamtinpkr
+
+                 e.invlvlchrgs=invlvlchrgs
+
+
                  e.dtyamtinpkr=dtyamtinpkr
                  e.wse=wse
 
                  if(e.sku_id==1)
                    {
-                     e.dutval = parseFloat(e.dutygdswt) * parseFloat(e.dtyrate)
-                     e.purval = parseFloat(e.gdswt) * parseFloat(e.gdsprice)
+                        e.dutval = parseFloat(e.dutygdswt) * parseFloat(e.dtyrate)
+                        e.purval = parseFloat(e.gdswt) * parseFloat(e.gdsprice)
+                        e.comamtindollar = parseFloat(e.gdswt) * parseFloat(e.invsrate)
                  }
                  else
                      {
                          e.dutval = parseFloat(e.pcs) * parseFloat(e.dtyrate)
                          e.purval = parseFloat(e.pcs) * parseFloat(e.gdsprice)
+                         e.comamtindollar = parseFloat(e.pcs) * parseFloat(e.invsrate)
                     }
                 e.amtindollar=e.purval
                 e.dtyamtindollar=e.dutval
+
                 e.amtinpkr=e.amtindollar * sconversionrate.value
                 e.dtyamtinpkr=e.dtyamtindollar * conversionrate.value
-
+                e.comamtinpkr=e.comamtindollar * conversionrate.value
 
                 hscode = hscodes.find(  function(el) { return el.hscode === e.hscode })
 
@@ -289,7 +306,8 @@
                 var total = cda + rda + sta + acda + asta + ita + wsca
                 var perft = (e.perpc / e.length).toFixed(2)
                 // var totallccostwexp = total + pricevaluecostsheet + (banktotal.value * itmratio / 100)
-                var totallccostwexp = total + dtyamtinpkr + (banktotal.value * itmratio / 100)
+                var totallccostwexp = total + amtinpkr + (banktotal.value * itmratio / 100)
+                var invlvlchrgs =(banktotal.value * itmratio / 100)
                 var otherexpenses = ( sconversionrate.value * otherchrgs.value ) * itmratio / 100
                 var perpc = ((e.totallccostwexp+otherexpenses) / e.pcs).toFixed(2)
                 var perkg = (e.perpc / inkg).toFixed(2)
@@ -320,7 +338,7 @@
                 e.ita = (ita).toFixed(2)
                 e.wsca = (wsca).toFixed(2)
                 e.total = (total).toFixed(2)
-                e.perkg = perkg
+                // e.perkg = perkg
                 e.totallccostwexp = totallccostwexp
                 e.perpc = perpc
                 e.perft = (perpc / length )
@@ -521,11 +539,12 @@ var headerMenu = function(){
                             field:"length",
                             headerVertical:true,
                             editor:"number",
+                            // selectContents:true,
                             formatter:"money",
                             responsive:0,
                             formatterParams:{thousand:",",precision:2},
                             validator:["required","numeric"],
-                            bottomCalcParams:{precision:2}  ,
+                            // bottomCalcParams:{precision:2}  ,
                         },
                         {   title:"QtyInFeet",
                             field:"qtyinfeet",
@@ -621,29 +640,69 @@ var headerMenu = function(){
                             bottomCalc:"sum",bottomCalcParams:{precision:0},
                         },
 
+                        {   title:"Com.Invs.Price",
+                            field:"invsrate",
+                            responsive:0,
+                            headerVertical:true,
+                            formatter:"money",
+                            // bottomCalc:"sum",bottomCalcParams:{precision:0},
+                            // bottomCalcFormatter:"money",
+                            formatterParams:{thousand:",",precision:2},
+                        },
 
+                        {   title:"Com.Invs.Val($)",
+                            field:"comamtindollar",
+                            responsive:0,
+                            headerVertical:true,
+                            formatter:"money",
+                            bottomCalc:"sum",bottomCalcParams:{precision:2},
+                            // bottomCalcFormatter:"money",
+                            formatterParams:{thousand:",",precision:0},
+                        },
+
+                        {   title:"Com.Invs.Val(Rs)",
+                            field:"comamtinpkr",
+                            responsive:0,
+                            headerVertical:true,
+                            formatter:"money",
+                            bottomCalc:"sum",bottomCalcParams:{precision:0},
+                            // bottomCalcFormatter:"money",
+                            formatterParams:{thousand:",",precision:0},
+                        },
 
                         {
                     title:'Duties Amount (PKR)', headerHozAlign:"center",
                     columns:[
                         {title:"CD",                field:"cda", formatter:"money",
-                    formatterParams:{thousand:",",precision:0,responsive:0,bottomCalc:"sum",bottomCalcParams:{precision:0}},             responsive:0},
-                        {title:"ST",                field:"sta", formatter:"money",
-                    formatterParams:{thousand:",",precision:0,responsive:0,bottomCalc:"sum",bottomCalcParams:{precision:0}},             responsive:0},
-                        {title:"RD",                field:"rda", formatter:"money",
-                    formatterParams:{thousand:",",precision:0,responsive:0,bottomCalc:"sum",bottomCalcParams:{precision:0}},             responsive:0},
-                        {title:"ACD",               field:"acda", formatter:"money",
-                    formatterParams:{thousand:",",precision:0,responsive:0,bottomCalc:"sum",bottomCalcParams:{precision:0}},            responsive:0},
-                        {title:"AST",               field:"asta",  formatter:"money",
-                    formatterParams:{thousand:",",precision:0,responsive:0,bottomCalc:"sum",bottomCalcParams:{precision:0}},           responsive:0},
-                        {title:"IT",                field:"ita",  formatter:"money",
-                    formatterParams:{thousand:",",precision:0,responsive:0,bottomCalc:"sum",bottomCalcParams:{precision:0}},            responsive:0},
-                        {title:"WSE",               field:"wsca",  formatter:"money",
-                    formatterParams:{thousand:",",precision:0,responsive:0,bottomCalc:"sum",bottomCalcParams:{precision:0}},           responsive:0},
-                        {title:"Total Duty",cssClass:"bg-green-200 font-semibold",             field:"total", headerVertical:true,  formatter:"money",
-                    formatterParams:{thousand:",",precision:0,responsive:0,bottomCalc:"sum",bottomCalcParams:{precision:0}},          responsive:0},
+                        formatterParams:{thousand:",",precision:0},             responsive:0,bottomCalc:"sum",bottomCalcParams:{precision:0}},
+                            {title:"ST",                field:"sta", formatter:"money",
+                        formatterParams:{thousand:",",precision:0},             responsive:0,bottomCalc:"sum",bottomCalcParams:{precision:0}},
+                            {title:"RD",                field:"rda", formatter:"money",
+                        formatterParams:{thousand:",",precision:0},             responsive:0,bottomCalc:"sum",bottomCalcParams:{precision:0}},
+                            {title:"ACD",               field:"acda", formatter:"money",
+                        formatterParams:{thousand:",",precision:0},            responsive:0,bottomCalc:"sum",bottomCalcParams:{precision:0}},
+                            {title:"AST",               field:"asta",  formatter:"money",
+                        formatterParams:{thousand:",",precision:0},           responsive:0,bottomCalc:"sum",bottomCalcParams:{precision:0}},
+                            {title:"IT",                field:"ita",  formatter:"money",
+                        formatterParams:{thousand:",",precision:0},            responsive:0,bottomCalc:"sum",bottomCalcParams:{precision:0}},
+                            {title:"WSE",               field:"wsca",  formatter:"money",
+                        formatterParams:{thousand:",",precision:0},           responsive:0,bottomCalc:"sum",bottomCalcParams:{precision:0}},
+                            {title:"Total Duty", cssClass:"bg-green-200 font-semibold",  field:"total", headerVertical:true,  formatter:"money",formatterParams:{thousand:",",precision:0},
+                         responsive:0,bottomCalc:"sum",bottomCalcParams:{precision:0}},
                     ]
                 },
+
+                {
+                    title:"Invoice Level Exp.",
+                    headerVertical:true,
+                    field:"invlvlchrgs",
+                    cssClass:"bg-green-200 font-semibold",
+                    bottomCalc:"sum",bottomCalcParams:{precision:0},
+                    responsive:0,
+                    formatter:"money",
+                    formatterParams:{thousand:",",precision:0},
+                },
+
 
                 {
                     title:"Tot Cost(Rs)",
@@ -668,8 +727,9 @@ var headerMenu = function(){
                     ]
                 },
                 {
-                    title:"Insur/Item",
+                    title:"Insurance Val($)",
                     field:"insuranceperitem",
+                    bottomCalc:"sum",bottomCalcParams:{precision:0},
                     responsive:0,
                     headerVertical:true,
                     formatter:"money",
@@ -677,6 +737,7 @@ var headerMenu = function(){
                 {
                     title:"Amt W/Insur (PKR)",
                     field:"amountwithoutinsurance",
+                    bottomCalc:"sum",bottomCalcParams:{precision:0},
                     responsive:0,
                     headerVertical:true,
                     formatter:"money",

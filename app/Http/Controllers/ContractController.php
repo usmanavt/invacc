@@ -9,6 +9,7 @@ use App\Models\Material;
 use App\Models\Supplier;
 use Illuminate\Http\Request;
 use App\Models\ContractDetails;
+use App\Models\PcontractDetails;
 use \Mpdf\Mpdf as PDF;
 use Illuminate\Support\Facades\Session;
 
@@ -48,7 +49,7 @@ class ContractController extends Controller
         return $contracts;
     }
 
-    public function getMasterImp(Request $request)
+    public function getMasterImpold(Request $request)
     {
         // dd($request->all());
         $search = $request->search;
@@ -80,26 +81,13 @@ class ContractController extends Controller
     // ->select('contracts.*','suppliers.title')
 
 
-    public function getMasterImpfc(Request $request)
+    public function getMasterImp(Request $request)
     {
 
         $search = $request->search;
         $size = $request->size;
         $field = $request->sort[0]["field"];     //  Nested Array
         $dir = $request->sort[0]["dir"];         //  Nested Array
-        //  With Tables
-        // $contracts = Contract::where(function ($query) use ($search){
-        //         $query->where('id','LIKE','%' . $search . '%')
-        //         ->orWhere('number','LIKE','%' . $search . '%');
-        //     })
-        //     // ->orWherehas('supplier',function($query) use($search){
-        //     //     $query->where('title','LIKE',"%$search%");
-        //     // })
-        //     ->whereHas('supplier', function ($query) {
-        //         $query->where('source_id','=','2');
-        //         // ->orWhere('source_id',1);
-        //     })
-
         $contracts = DB::table('vwfrmpendcontracts')
         // ->join('suppliers', 'contracts.supplier_id', '=', 'suppliers.id')
         // ->select('contracts.*', 'suppliers.title')
@@ -180,7 +168,7 @@ class ContractController extends Controller
             $contract->save();
             // Add Details
             $pcontract = new Pcontract();
-            $pcontract->id=$contract->id;
+            $pcontract->contract_id=$contract->id;
             $pcontract->supplier_id = $request->supplier_id;
             $pcontract->user_id = auth()->id();
             $pcontract->invoice_date = $request->invoice_date;
@@ -219,6 +207,28 @@ class ContractController extends Controller
                 $cd->totpcs = $cont['ttpcs'];
                 $cd->save();
 
+                $cd = new PcontractDetails();
+                $cd->id = $cd->id;
+                $cd->contract_id = $contract->id;
+                $cd->material_id = $material->id;
+                $cd->user_id = auth()->id();
+                $cd->bundle1 = $cont['bundle1'];
+                $cd->pcspbundle1 = $cont['pcspbundle1'];
+                $cd->bundle2 = $cont['bundle2'];
+                $cd->pcspbundle2 = $cont['pcspbundle2'];
+                $cd->gdswt = $cont['gdswt'];
+                $cd->gdsprice = $cont['gdsprice'];
+                $cd->purval = $cont['gdspricetot'];
+                $cd->totpcs = $cont['ttpcs'];
+                $cd->status = 1;
+                $cd->closed = 1;
+                $cd->save();
+
+
+
+
+
+
                 //  $sumqty = DB::table('vwcontsum')->where('contract_id',$contract->id)->sum('contqty');
                 //  $sumval = DB::table('vwcontsum')->where('contract_id',$contract->id)->sum('contamount');
 
@@ -252,17 +262,18 @@ class ContractController extends Controller
 
     }
 
-    public function edit(Contract $contract)
+    public function edit(Contract $contract, Pcontract $pcontract )
     {
 
         return view('contracts.edit')->with('suppliers',Supplier::select('id','title')->where('source_id',2)->get())
         ->with('contract',$contract)
+        ->with('pcontract',$pcontract)
         ->with('cd',ContractDetails::where('contract_id',$contract->id)->get());
     }
 
-    public function update(Request $request, Contract $contract)
+    public function update(Request $request, Contract $contract,Pcontract $pcontract)
     {
-        //  dd($request->all());
+        //   dd($request->all());
         DB::beginTransaction();
         try {
             // Save Contract Data First : If changed
@@ -271,13 +282,15 @@ class ContractController extends Controller
             $contract->supplier_id = $request->supplier_id;
             $contract->save();
 
-            // $pcontract = Pcontract::where('id',$contract->id)->first();
-            // $pcontract->number = 'abc';
-            // $pcontract->invoice_date = $request->invoice_date;
-            // $pcontract->supplier_id = $request->supplier_id;
-            // $pcontract->save();
+            $pcontract = Pcontract::where('contract_id',$contract->id)->first();
+            $pcontract->number = $request->number;
+            $pcontract->invoice_date = $request->invoice_date;
+            $pcontract->supplier_id = $request->supplier_id;
+            $pcontract->save();
+
 
             // Get Data
+
             $cds = $request->contracts; // This is array
             $cds = ContractDetails::hydrate($cds); // Convert it into Model Collection
             // Now get old ContractDetails and then get the difference and delete difference
@@ -319,36 +332,13 @@ class ContractController extends Controller
                     $cds->purval = $cd->purval;
                     $cds->dutval = $cd->dutval;
                     $cds->totpcs = $cd->ttpcs;
-
-
-
                     $cds->save();
+
                 }
                 else
                 {
                     //  The item is new, Add it
                     $cds = new ContractDetails();
-                    // $cds->contract_id = $contract->id;
-                    // $cds->material_id = $cd->material_id;
-                    // $cds->material_title = $cd->material_title;
-                    // $cds->supplier_id = $contract->supplier_id;
-                    // $cds->user_id = auth()->id();
-                    // $cds->category_id = $cd->category_id;
-                    // $cds->sku_id = $cd->sku_id;
-                    // $cds->dimension_id = $cd->dimension_id;
-                    // $cds->source_id = $cd->source_id;
-                    // $cds->brand_id = $cd->brand_id;
-                    // $cds->category = $cd->category;
-                    // $cds->sku = $cd->sku;
-                    // $cds->dimension = $cd->dimension;
-                    // $cds->source = $cd->source;
-                    // $cds->brand = $cd->brand;
-                    // $cds->bundle1 = $cd->bundle1;
-                    // $cds->pcspbundle1 = $cd->pcspbundle1;
-                    // $cds->bundle2 = $cd->bundle2;
-                    // $cds->pcspbundle2 = $cd->pcspbundle2;
-                    // $cds->gdswt = $cd->gdswt;
-                    // $cds->gdsprice = $cd->gdsprice;
                     $cds->contract_id = $contract->id;
                     $cds->material_id = $cd->material_id;
                     $cds->material_title = $cd->material_title;
@@ -378,10 +368,60 @@ class ContractController extends Controller
                     $cds->totpcs = $cd->ttpcs;
 
                     $cds->save();
-                }
+                }}
 
-                    // $sumqty = DB::table('vwcontsum')->where('contract_id',$contract->id)->sum('contqty');
-                    // $sumval = DB::table('vwcontsum')->where('contract_id',$contract->id)->sum('contamount');
+
+
+
+
+            // Get Data
+            // dd($request->pcontracts());
+            $cds = $request->contracts; // This is array
+            $cds = PcontractDetails::hydrate($cds); // Convert it into Model Collection
+            // Now get old ContractDetails and then get the difference and delete difference
+            $oldcd = PcontractDetails::where('contract_id',$pcontract->id)->get();
+            $deleted = $oldcd->diff($cds);
+            //  Delete contract details if marked for deletion
+            foreach ($deleted as $d) {
+                $d->delete();
+            }
+            // Now update existing and add new
+            // dd($cds->all());
+            foreach ($cds as $cd) {
+                if($cd->id)
+                {
+                    $cds = PcontractDetails::where('id',$cd->id)->first();
+                    $cds->contract_id = $cd->contract_id;
+                    $cds->material_id = $cd->material_id;
+                    $cds->user_id = $cd->user_id;
+                    $cds->bundle1 = $cd->bundle1;
+                    $cds->pcspbundle1 = $cd->pcspbundle1;
+                    $cds->bundle2 = $cd->bundle2;
+                    $cds->pcspbundle2 = $cd->pcspbundle2;
+                    $cds->gdswt = $cd->gdswt;
+                    $cds->gdsprice = $cd->gdsprice;
+                    $cds->purval = $cd->purval;
+                    $cds->totpcs = $cd->ttpcs;
+                    $cds->save();
+                }
+                else
+                {
+                    //  The item is new, Add it
+                    $cds = new PcontractDetails();
+                    $cds->contract_id = $contract->id;
+                    $cds->material_id = $cd->material_id;
+                    $cds->user_id = auth()->id();
+                    $cds->bundle1 = $cd->bundle1;
+                    $cds->pcspbundle1 = $cd->pcspbundle1;
+                    $cds->bundle2 = $cd->bundle2;
+                    $cds->pcspbundle2 = $cd->pcspbundle2;
+                    $cds->gdswt = $cd->gdswt;
+                    $cds->gdsprice = $cd->gdsprice;
+                    $cds->purval = $cd->purval;
+                    $cds->totpcs = $cd->ttpcs;
+                    $cds->save();
+                }}
+
 
 
                     $sumwt = ContractDetails::where('contract_id',$contract->id)->sum('gdswt');
@@ -395,15 +435,15 @@ class ContractController extends Controller
                     $contract->dutyval = $sumdtyval;
                     $contract->save();
 
-                    // $pcontract->conversion_rate = $sumwt;
-                    // $pcontract->insurance = $sumval;
-                    // $pcontract->totalpcs = $sumpcs;
-                    // $pcontract->dutyval = $sumdtyval;
-                    // $pcontract->save();
+                    $pcontract->conversion_rate = $sumwt;
+                    $pcontract->insurance = $sumval;
+                    $pcontract->totalpcs = $sumpcs;
+                    $pcontract->dutyval = $sumdtyval;
+                    $pcontract->save();
 
 
 
-                }
+
             DB::commit();
             Session::flash('success','Contract Information Saved');
             return response()->json(['success'],200);
