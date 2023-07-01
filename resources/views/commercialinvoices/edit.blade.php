@@ -340,6 +340,7 @@
                 e.total = (total).toFixed(2)
                 // e.perkg = perkg
                 e.totallccostwexp = totallccostwexp
+                e.invlvlchrgs=invlvlchrgs
                 e.perpc = perpc
                 e.perft = (perpc / length )
                 e.otherexpenses = otherexpenses
@@ -613,7 +614,7 @@ var headerMenu = function(){
                             field:"dtyrate",
                             headerVertical:true,
                             editor:"number",
-                            cssClass:"bg-green-200 font-semibold",
+                            // cssClass:"bg-green-200 font-semibold",
                             formatter:"money",
                             responsive:0,
                             formatterParams:{thousand:",",precision:2},
@@ -643,6 +644,7 @@ var headerMenu = function(){
                         {   title:"Com.Invs.Price",
                             field:"invsrate",
                             responsive:0,
+                            editor:"number",
                             headerVertical:true,
                             formatter:"money",
                             // bottomCalc:"sum",bottomCalcParams:{precision:0},
@@ -696,7 +698,7 @@ var headerMenu = function(){
                     title:"Invoice Level Exp.",
                     headerVertical:true,
                     field:"invlvlchrgs",
-                    cssClass:"bg-green-200 font-semibold",
+                     cssClass:"bg-green-200 font-semibold",
                     bottomCalc:"sum",bottomCalcParams:{precision:0},
                     responsive:0,
                     formatter:"money",
