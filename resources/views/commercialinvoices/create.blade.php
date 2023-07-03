@@ -38,6 +38,20 @@
                             <div class="grid grid-cols-12 gap-2 py-2 items-center">
                                 <x-input-date title="G.D Date" name="machine_date" req required class="col-span-2"/>
                                 <x-input-text title="G.D #" name="machineno" req required class="col-span-2"/>
+                                {{-- <div class="col-sm-3 mt-3">
+                                    <input class="radio" type="radio" checked="checked" name="unt" value="kg" > Duty as Per kg
+                                    <input class="radio" type="radio" name="unt" value="pc" > Duty as Per Pc
+                                </div> --}}
+                                <x-label for="" value="Unit as Per Duty Calculation"/>
+                                <select autocomplete="on" required name="dunitid" id ="dunitid"  required >
+                                    <option value="" selected>--Unit</option>
+                                    @foreach ($cd as $sku)
+                                        <option value="{{ $sku->dunitid }}">{{ $sku->dunit }}</option>
+                                    @endforeach
+                                    {{-- <option value="1" selected>{{$sku->dunit}}</option> --}}
+                                </select>
+
+
 
                             </div>
                         </fieldset>
@@ -97,7 +111,7 @@
         const deleteIcon = function(cell,formatterParams){return "<i class='fa fa-trash text-red-500'></i>";};
         const getMaster = @json(route('contracts.masterI'));
         const getDetails = @json(route('cis.condet'));
-        console.log(getMaster)
+        // console.log(getMaster)
         let csrfToken = document.head.querySelector("[name~=csrf-token][content]").content;
         //
         let modal = document.getElementById("myModal")
@@ -121,7 +135,7 @@
         let weighbridge= document.getElementById("weighbridge")
         let miscexpenses= document.getElementById("miscexpenses")
         let agencychrgs= document.getElementById("agencychrgs")
-     //   let otherchrgs= document.getElementById("otherchrgs")
+
         let banktotal= document.getElementById("banktotal")
         // Important Rates
         var conversionrate = document.getElementById("conversionrate");
@@ -150,6 +164,7 @@
                     insurance.focus();
                     return;
                 }
+
                 if(!adopted)
                 {
                     showModal()
@@ -332,6 +347,9 @@
                         category_id :       obj.category_id,
                         sku_id :            obj.sku_id,
                         sku:                obj.sku,
+
+
+
                         totpcs:             obj.totpcs,
 
 
@@ -388,7 +406,18 @@
 
 
         var calculate = function(){
+
+            if(dunitid.value <= 0)
+                {
+                    showSnackbar("Please select Duty Unit","error");
+                    dunitid.focus();
+                    return;
+                }
+
+
+
             calculateBankCharges()
+            //  console.log($unt)
             // alert(dynamicTable.getData())
             const data = dynamicTable.getData()
             // Get Selected HSCode Value
@@ -420,7 +449,7 @@
 
 
 
-                e.pcs = pcs
+                 e.pcs = pcs
                  e.gdswt = gdswt
                  e.inkg = inkg
                  e.length = length
@@ -433,19 +462,30 @@
                  e.amtinpkr=amtinpkr
                  e.dtyamtinpkr=dtyamtinpkr
                  e.comamtinpkr=comamtinpkr
-
                  e.wse=wse
-                 console.log(e.dtyrate)
+                //  console.log(e.dtyrate)
 
-                if(e.sku_id==1)
+            var sid = document.getElementById("dunitid");
+            var dunitid = sid.options[sid.selectedIndex];
+
+
+            if(dunitid.value==1)
                    {
                         e.dutval = parseFloat(e.dutygdswt) * parseFloat(e.dtyrate)
+                   }
+                 else
+                     {
+                         e.dutval = parseFloat(e.pcs) * parseFloat(e.dtyrate)
+                    }
+                if(e.sku_id==1)
+                   {
+                        // e.dutval = parseFloat(e.dutygdswt) * parseFloat(e.dtyrate)
                         e.purval = parseFloat(e.gdswt) * parseFloat(e.gdsprice)
                         e.comval = parseFloat(e.gdswt) * parseFloat(e.invsrate)
                    }
                  else
                      {
-                         e.dutval = parseFloat(e.pcs) * parseFloat(e.dtyrate)
+                        //  e.dutval = parseFloat(e.pcs) * parseFloat(e.dtyrate)
                          e.purval = parseFloat(e.pcs) * parseFloat(e.gdsprice)
                          e.comval = parseFloat(e.pcs) * parseFloat(e.invsrate)
                     }
@@ -889,6 +929,7 @@ var headerMenu = function(){
                             field:"invsrate",
                             responsive:0,
                             headerVertical:true,
+                            editor:"number",
                             formatter:"money",
                             // bottomCalc:"sum",bottomCalcParams:{precision:0},
                             // bottomCalcFormatter:"money",
@@ -1029,36 +1070,6 @@ var headerMenu = function(){
                 // headerVertical:true,         visible:true},
 
 
-                // {
-                //     title:'Duties Amount (PKR)', headerHozAlign:"center",
-                //     columns:[
-
-                //         {title:"CD",                field:"cda", formatter:"money",
-                //         formatterParams:{thousand:",",precision:0},             responsive:0},
-                //             {title:"ST",                field:"sta", formatter:"money",
-                //         formatterParams:{thousand:",",precision:0},             responsive:0},
-                //             {title:"RD",                field:"rda", formatter:"money",
-                //         formatterParams:{thousand:",",precision:0},             responsive:0},
-                //             {title:"ACD",               field:"acda", formatter:"money",
-                //         formatterParams:{thousand:",",precision:0},            responsive:0},
-                //             {title:"AST",               field:"asta",  formatter:"money",
-                //         formatterParams:{thousand:",",precision:0},           responsive:0},
-                //             {title:"IT",                field:"ita",  formatter:"money",
-                //         formatterParams:{thousand:",",precision:0},            responsive:0},
-                //             {title:"WSC",               field:"wsca",  formatter:"money",
-                //         formatterParams:{thousand:",",precision:0},           responsive:0},
-                //             {title:"Total",             field:"total",   formatter:"money",
-                //         formatterParams:{thousand:",",precision:0},          responsive:0},
-                //     ]
-                // },
-                // {
-                //     title:"Total LC Cost W/InvsExp",
-                //     headerVertical:true,
-                //     field:"totallccostwexp",
-                //     responsive:2,
-                //     formatter:"money",
-                //     formatterParams:{thousand:",",precision:0},
-                // },
                 {
                     title:'Cost Rate/Unit', headerHozAlign:"center",
                     columns:[
@@ -1087,6 +1098,7 @@ var headerMenu = function(){
             // var challanno = document.getElementById("challanno")
             var machineno = document.getElementById("machineno")
             var machine_date = document.getElementById("machine_date")
+
 
             if(invoiceno.value === ''){
                 showSnackbar("Invoice # required ","error");
@@ -1137,6 +1149,7 @@ var headerMenu = function(){
                 'miscexpenses' : parseFloat(miscexpenses.value).toFixed(2),
                 'agencychrgs' : parseFloat(agencychrgs.value).toFixed(2),
                 'otherchrgs' : parseFloat(otherchrgs.value).toFixed(2),
+                'dunitid' : parseFloat(dunitid.value).toFixed(0),
                 'total' : parseFloat(banktotal.value).toFixed(2),
                 'comminvoice' : dynamicTableData
             };
@@ -1165,18 +1178,6 @@ var headerMenu = function(){
                 // disableSubmitButton(false);
             })
         }
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 

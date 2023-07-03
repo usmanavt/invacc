@@ -17,9 +17,10 @@ use App\Models\RecivingPendingDetails;
 use App\Models\ClearancePendingDetails;
 use Illuminate\Support\Facades\Session;
 use App\Models\CommercialInvoiceDetails;
+use App\Models\PcommercialInvoiceDetails;
 use App\Models\RecivingCompletedDetails;
 use App\Models\PcommercialInvoice;
-
+use App\Models\Sku;
 
 
 class CommercialInvoiceController extends Controller
@@ -86,16 +87,19 @@ class CommercialInvoiceController extends Controller
 
     public function create()
     {
+         $cd = DB::table('skus')->select('id AS dunitid','title AS dunit')
+         ->whereIn('id',[1,2])->get();
+        $data=compact('cd');
         return view('commercialinvoices.create')
         ->with('hscodes',Hscode::all())
-        ->with('locations',Location::select('id','title')
-        ->get());
+        ->with('locations',Location::select('id','title')->get())
+        ->with($data);
 
     }
 
     public function store(Request $request)
     {
-        //  dd($request->all());
+        //   dd($request->all());
         $comminvoice = $request->comminvoice;
         DB::beginTransaction();
         try {
@@ -122,6 +126,7 @@ class CommercialInvoiceController extends Controller
             $ci->miscexpenses = $request->miscexpenses;
             $ci->agencychrgs = $request->agencychrgs;
             $ci->otherchrgs = $request->otherchrgs;
+            $ci->dunitid = $request->dunitid;
             $ci->total = $request->total;
             $ci->save();
 
@@ -193,11 +198,6 @@ class CommercialInvoiceController extends Controller
                 $c->category_id = $cid['category_id'];
                 $c->sku_id = $cid['sku_id'];
                 $c->dimension_id = $cid['dimension_id'];
-                // $c->source_id = $cid['source_id'];
-                // $c->brand_id = $cid['brand_id'];
-
-
-
                 $c->pcs = $cid['pcs'];
                 $c->gdswt = $cid['gdswt'];
                 $c->dutygdswt = $cid['dutygdswt'];
@@ -207,15 +207,10 @@ class CommercialInvoiceController extends Controller
                 $c->invsrate = $cid['invsrate'];
                 $c->amtindollar = $cid['amtindollar'];
                 $c->amtinpkr = $cid['amtinpkr'];
-
                 $c->comamtindollar = $cid['comamtindollar'];
                 $c->comamtinpkr = $cid['comamtinpkr'];
-
-
                 $c->dtyamtindollar = $cid['dtyamtindollar'];
                 $c->dtyamtinpkr = $cid['dtyamtinpkr'];
-
-
                 $c->hscode = $cid['hscode'];
                 $c->cd = $cid['cd'];
                 $c->st = $cid['st'];
@@ -224,19 +219,16 @@ class CommercialInvoiceController extends Controller
                 $c->ast = $cid['ast'];
                 $c->it = $cid['it'];
                 $c->wse = $cid['wse'];
-
                 $c->length = $cid['length'];
                 //// From usman 13-12-2022
                 $c->qtyinfeet = $cid['qtyinfeet'];
                 ////////
-
                 $c->itmratio = $cid['itmratio'];
                 $c->insuranceperitem = $cid['insuranceperitem'];
                 $c->amountwithoutinsurance = $cid['amountwithoutinsurance'];
                 $c->onepercentdutypkr = $cid['onepercentdutypkr'];
                 $c->pricevaluecostsheet = $cid['pricevaluecostsheet'];
                 $c->totallccostwexp = $cid['totallccostwexp'];
-
                 $c->cda = $cid['cda'];
                 $c->sta = $cid['sta'];
                 $c->rda = $cid['rda'];
@@ -249,10 +241,7 @@ class CommercialInvoiceController extends Controller
                 $c->perkg = $cid['perkg'];
                 $c->perft = $cid['perft'];
                 $c->otherexpenses = $cid['otherexpenses'];
-
                 $c->invlvlchrgs = $cid['invlvlchrgs'];
-
-
                 $c->location = $cid['location'];
                 $location = Location::where("title", $cid['location'])->first();
                 $c->locid = $location->id;
@@ -279,6 +268,26 @@ class CommercialInvoiceController extends Controller
                 $cpdtl->status = 1;
                 $cpdtl->closed = 0;
                 $cpdtl->save();
+
+
+                $cpdtl1 = new PcommercialInvoiceDetails();
+                $cpdtl1->commercial_invoice_id = $ci->id;
+                $cpdtl1->material_id = $cid['material_id'];
+                $cpdtl1->pcs = $cid['pcs'];
+                $cpdtl1->gdswt = $cid['dutygdswt'];
+                $cpdtl1->gdsprice = $cid['dtyrate'];
+                $cpdtl1->dutyval = $cid['dtyamtindollar'];
+                $cpdtl1->status = 1;
+                $cpdtl1->closed = 1;
+                $cpdtl1->save();
+
+
+
+
+
+
+
+
 
                 // Create Auto Pending Clearance [COpy of CIDetails]
                 // $cpd = new ClearancePendingDetails();
@@ -397,9 +406,9 @@ class CommercialInvoiceController extends Controller
                 // $pcontract->dutyval = $sumdtyval;
                 $pcontract->save();
 
-                $sumwt3 =  CommercialInvoiceDetails::where('commercial_invoice_id',$cpdtl->commercial_invoice_id)->sum('gdswt');
+                $sumwt3 =  CommercialInvoiceDetails::where('commercial_invoice_id',$cpdtl->commercial_invoice_id)->sum('dutygdswt');
                 $sumpcs3 = CommercialInvoiceDetails::where('commercial_invoice_id',$cpdtl->commercial_invoice_id)->sum('pcs');
-                $sumval3 = CommercialInvoiceDetails::where('commercial_invoice_id',$cpdtl->commercial_invoice_id)->sum('amtindollar');
+                $sumval3 = CommercialInvoiceDetails::where('commercial_invoice_id',$cpdtl->commercial_invoice_id)->sum('dtyamtindollar');
 
 
 
@@ -439,18 +448,15 @@ class CommercialInvoiceController extends Controller
 
     public function edit($id)
     {
-        //// Marking From Usman on 15-12-2022
-        // if(CommercialInvoice::hasCompletedReciving($id))
-        // {
-        //     Session::flash('info','You cannot edit a commercial invoice, when you already have received Goods against it');
-        //     return redirect()->back();
-        // }
-        //** */ Marking From Usman on 15-12-2022
-        //  dd($request->all());
+        $cd = DB::table('skus')->select('id AS dunitid','title AS dunit')
+        ->whereIn('id',[1,2])->get();
+       $data=compact('cd');
+
         return view('commercialinvoices.edit')
         ->with('i',CommercialInvoice::whereId($id)->with('commericalInvoiceDetails.material.hscodes')->first())
         ->with('locations',Location::select('id','title')->get())
-        ->with('hscodes',Hscode::all());
+        ->with('hscodes',Hscode::all())
+        ->with($data);
     }
 
     public function update(Request $request, CommercialInvoice $commercialInvoice)
@@ -464,6 +470,7 @@ class CommercialInvoiceController extends Controller
         DB::beginTransaction();
         try {
             //  Update Commerical Invoice
+            // dd($request->all());
             $ci->invoice_date = $request->invoicedate;
             $ci->invoiceno = $request->invoiceno;
             // $ci->challanno = $request->challanno;
@@ -483,6 +490,7 @@ class CommercialInvoiceController extends Controller
             $ci->miscexpenses = $request->miscexpenses;
             $ci->agencychrgs = $request->agencychrgs;
             $ci->otherchrgs = $request->otherchrgs;
+            $ci->dunitid = $request->dunitid;
             $ci->total = $request->total;
             $ci->save();
 
@@ -547,9 +555,6 @@ class CommercialInvoiceController extends Controller
                 $c->category_id = $cid['category_id'];
                 $c->sku_id = $cid['sku_id'];
                 $c->dimension_id = $cid['dimension_id'];
-                // $c->source_id = $cid['source_id'];
-                // $c->brand_id = $cid['brand_id'];
-
                 $c->pcs = $cid['pcs'];
                 $c->gdswt = $cid['gdswt'];
                 $c->dutygdswt = $cid['dutygdswt'];
@@ -560,13 +565,10 @@ class CommercialInvoiceController extends Controller
                 $c->invsrate = $cid['invsrate'];
                 $c->amtindollar = $cid['amtindollar'];
                 $c->amtinpkr = $cid['amtinpkr'];
-
                 $c->dtyamtindollar = $cid['dtyamtindollar'];
                 $c->dtyamtinpkr = $cid['dtyamtinpkr'];
-
                 $c->comamtindollar = $cid['comamtindollar'];
                 $c->comamtinpkr = $cid['comamtinpkr'];
-
                 $c->hscode = $cid['hscode'];
                 $c->cd = $cid['cd'];
                 $c->st = $cid['st'];
@@ -575,7 +577,6 @@ class CommercialInvoiceController extends Controller
                 $c->ast = $cid['ast'];
                 $c->it = $cid['it'];
                 $c->wse = $cid['wse'];
-
                 $c->length = $cid['length'];
                 $c->itmratio = $cid['itmratio'];
                 $c->insuranceperitem = $cid['insuranceperitem'];
@@ -583,7 +584,6 @@ class CommercialInvoiceController extends Controller
                 $c->onepercentdutypkr = $cid['onepercentdutypkr'];
                 $c->pricevaluecostsheet = $cid['pricevaluecostsheet'];
                 $c->totallccostwexp = $cid['totallccostwexp'];
-
                 $c->cda = $cid['cda'];
                 $c->sta = $cid['sta'];
                 $c->rda = $cid['rda'];
@@ -601,14 +601,15 @@ class CommercialInvoiceController extends Controller
                 $c->locid = $location->id;
                 $c->save();
 
+                // dd($c->all());
 
-                $pcontractdtl = PcontractDetails::where('commercial_invoice_id',$cid['commercial_invoice_id'])
+                $pcontractdtl = PcontractDetails::where('commercial_invoice_id',$ci->id)
                 ->where('material_id',$cid['material_id'])
                 ->where('status', '=', 0)->first();
                 $vartpcs2=$pcontractdtl->totpcs - $cid['pcs'] ;
                 $vartwt2=$pcontractdtl->gdswt - $cid['gdswt'] ;
                 $varval2=$pcontractdtl->purval - $cid['amtindollar'];
-                // dd($pcontractdtl->all());
+                // dd($c->all());
 
 
 
@@ -619,6 +620,20 @@ class CommercialInvoiceController extends Controller
                 $pcontractdtl->gdswt=$vartwt2;
                 $pcontractdtl->purval=$varval2;
                 $pcontractdtl->save();
+
+
+
+
+                $cpdtl1 =PcommercialInvoiceDetails::where('commercial_invoice_id',$cid['commercial_invoice_id'])
+                ->where('material_id',$cid['material_id'])
+                ->where('status', '=', 1)->first();
+                $cpdtl1->pcs = $cid['pcs'];
+                $cpdtl1->gdswt = $cid['dutygdswt'];
+                $cpdtl1->gdsprice = $cid['dtyrate'];
+                $cpdtl1->dutyval = $cid['dtyamtindollar'];
+                $cpdtl1->save();
+
+
 
 
 
@@ -694,13 +709,7 @@ class CommercialInvoiceController extends Controller
                 $sumwt = $vartwt1 -  CommercialInvoiceDetails::where('commercial_invoice_id',$ci->id)->sum('gdswt');
                 $sumpcs = $vartpcs1 -  CommercialInvoiceDetails::where('commercial_invoice_id',$ci->id)->sum('pcs');
                 $sumval = $varval1 -  CommercialInvoiceDetails::where('commercial_invoice_id',$ci->id)->sum('amtindollar');
-                // $sumdtyval = CommercialInvoiceDetails::where('contcommercial_invoice_idract_id',$ci->id)->sum('dutval');
-
-                // $sumwt=$vartwt - $sumwt;
-                // $sumpcs=$vartpcs - $sumpcs;
-                // $sumval=$varval - $sumval;
          //    dd($sumwt());
-                // $pcontract = new Pcontract();
                 $pcontract = Pcontract::where('commercial_invoice_id',$ci->id)
                 ->where('status', '=', 1)->first();
                 $pcontract->conversion_rate = $sumwt;
@@ -709,21 +718,18 @@ class CommercialInvoiceController extends Controller
                 // $pcontract->dutyval = $sumdtyval;
                 $pcontract->save();
 
-                // $pcontract = Pcontract::where('commercial_invoice_id',$cpd->commercial_invoice_id)
-                // ->where('status', '=', 1)->first();
-                // $pcontract->conversion_rate = $sumwt;
-                // $pcontract->insurance = $sumval;
-                // $pcontract->totalpcs = $sumpcs;
-                // // $pcontract->dutyval = $sumdtyval;
-                // $pcontract->save();
 
+                $sumwt3 =  CommercialInvoiceDetails::where('commercial_invoice_id',$ci->id)->sum('dutygdswt');
+                $sumpcs3 = CommercialInvoiceDetails::where('commercial_invoice_id',$ci->id)->sum('pcs');
+                $sumval3 = CommercialInvoiceDetails::where('commercial_invoice_id',$ci->id)->sum('dtyamtindollar');
 
-
-
+                $pci = PcommercialInvoice::where('commercial_invoice_id',$ci->id)
+                ->where('status', '=', 1)->first();
+                $pci->totpcs = $sumpcs3;
+                $pci->totwt = $sumwt3;
+                $pci->dutyval = $sumval3;
+                $pci->save();
 //  *******#########################3
-
-
-
             }
             DB::commit();
             Session::flash('info',"Commerical Invoice#[$ci->id] Updated with Reciving# & Duty Clearance#[$ci->id]");
