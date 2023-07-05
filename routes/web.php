@@ -134,6 +134,11 @@ Route::resource('contracts', ContractController::class);
 Route::get('/cis/getCisMaster', [CommercialInvoiceController::class, 'getMaster'])->name('cis.master');
 Route::get('/cis/getCisDetails', [CommercialInvoiceController::class, 'getDetails'])->name('cis.details');
 Route::get('/cis/getContractDetails', [CommercialInvoiceController::class, 'getContractDetails'])->name('cis.condet');
+
+/// For Pending DutyClear Master
+Route::get('/cis/getcidMaster', [CommercialInvoiceController::class, 'getMasterdc'])->name('dutyclear.master');
+
+
 Route::resource('cis', CommercialInvoiceController::class);
 
 //  CommercialInvoice - LOCAL NEW
@@ -177,6 +182,9 @@ Route::resource('recivings', RecivingController::class)->except(['create','store
 
 Route::get('/clearance/getCisclrMaster', [ClearanceController::class, 'getMaster'])->name('cisclr.master');
 Route::get('/clearance/getCisclrDetails', [ClearanceController::class, 'getDetails'])->name('cisclr.details');
+
+Route::get('/clearance/getContractDetails', [ClearanceController::class, 'getContractDetails'])->name('cis3.condet');
+
 Route::resource('clearance', ClearanceController::class);
 // ->except(['create','store','show']);
 

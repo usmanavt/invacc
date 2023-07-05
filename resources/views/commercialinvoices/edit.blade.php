@@ -346,7 +346,8 @@
                 var invlvlchrgs =(banktotal.value * itmratio / 100)
                 var otherexpenses = ( sconversionrate.value * otherchrgs.value ) * itmratio / 100
                 var perpc = ((e.totallccostwexp+otherexpenses) / e.pcs).toFixed(2)
-                var perkg = (e.perpc / inkg).toFixed(2)
+                // var perkg = (perpc / inkg).toFixed(2)
+                var perkg = (perpc / inkg).toFixed(2)
                 var qtyinfeet = (e.pcs * e.length).toFixed(2)
 
                 // e.pcs = pcs
@@ -374,7 +375,7 @@
                 e.ita = (ita).toFixed(2)
                 e.wsca = (wsca).toFixed(2)
                 e.total = (total).toFixed(2)
-                // e.perkg = perkg
+                e.perkg = perkg
                 e.totallccostwexp = totallccostwexp
                 e.invlvlchrgs=invlvlchrgs
                 e.perpc = perpc

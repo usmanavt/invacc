@@ -10,6 +10,7 @@ use App\Models\ClearancePendingDetails;
 use Illuminate\Support\Facades\Session;
 use App\Models\RecivingCompletedDetails;
 use App\Models\ClearanceCompletedDetails;
+use App\Models\Sku;
 
 class ClearanceController extends Controller
 {

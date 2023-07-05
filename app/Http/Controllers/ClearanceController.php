@@ -18,7 +18,7 @@ use App\Models\ClearancePendingDetails;
 use Illuminate\Support\Facades\Session;
 use App\Models\CommercialInvoiceDetails;
 use App\Models\RecivingCompletedDetails;
-
+use App\Models\Bank;
 
 class ClearanceController extends Controller
 {
@@ -78,140 +78,128 @@ class ClearanceController extends Controller
         $id = $request->id;
         // $contractDetails = ContractDetails::with('material.hscodes')->where('contract_id',$id)->get();
 
-        $contractDetails = DB::table('vwfrmpendcontractsdtl')->where('contract_id',$id)->get();
+        $contractDetails = DB::table('vwfrmpenddutycleardtl')->where('commercial_invoice_id',$id)->get();
         return response()->json($contractDetails, 200);
     }
 
     public function create()
     {
+
+        $cd = DB::table('skus')->select('id AS dunitid','title AS dunit')
+         ->whereIn('id',[1,2])->get();
+        $data=compact('cd');
+
+        $bnk = DB::table('banks')->select('id','title')->get();
+        $bdata=compact('bnk');
+
         return view('clearance.create')
         ->with('hscodes',Hscode::all())
-        ->with('locations',Location::select('id','title')
-        ->get());
+        // ->with('locations',Location::select('id','title')->get())
+        ->with($data)
+        ->with($bdata);
 
     }
 
     public function store(Request $request)
     {
-        //  dd($request->all());
+            dd($request->all());
+
         $comminvoice = $request->comminvoice;
         DB::beginTransaction();
         try {
             //  Commercial Invoice Master
-            $ci = new CommercialInvoice();
+
+            $ci = new Clearance();
+            $ci->commercial_invoice_id = 1;
             $ci->invoice_date = $request->invoicedate;
             $ci->invoiceno = $request->invoiceno;
-            $ci->contract_id = $request->contract_id;
-            // $ci->challanno = $request->challanno;
+            $ci->contract_id = 5;
             $ci->supplier_id = $comminvoice[0]['supplier_id'];
             $ci->machine_date = $request->machine_date;
             $ci->machineno = $request->machineno;
+            $ci->gd_date = $request->gd_date;
+            $ci->gdno = $request->gdno;
+
             $ci->conversionrate = $request->conversionrate;
-            $ci->sconversionrate = $request->sconversionrate;
             $ci->insurance = $request->insurance;
-            $ci->bankcharges = $request->bankcharges;
-            $ci->collofcustom = $request->collofcustom;
-            $ci->exataxoffie = $request->exataxoffie;
-            $ci->lngnshipdochrgs = $request->lngnshipdochrgs;
-            $ci->localcartage = $request->localcartage;
-            $ci->miscexplunchetc = $request->miscexplunchetc;
-            $ci->customsepoy = $request->customsepoy;
-            $ci->weighbridge = $request->weighbridge;
-            $ci->miscexpenses = $request->miscexpenses;
-            $ci->agencychrgs = $request->agencychrgs;
-            $ci->otherchrgs = $request->otherchrgs;
-            $ci->total = $request->total;
             $ci->save();
 
-            $pcontract = Pcontract::where('contract_id',$ci->contract_id)->where('status', '=', 1)->first();
-            $vartpcs1=$pcontract->totalpcs;
-            $vartwt1=$pcontract->conversion_rate;
-            $varval1=$pcontract->insurance;
-            $pcontract->status=0;
-            $pcontract->commercial_invoice_id=$ci->id;
-            $pcontract->save();
+            // $pcontract = Pcontract::where('contract_id',$ci->contract_id)->where('status', '=', 1)->first();
+            // $vartpcs1=$pcontract->totalpcs;
+            // $vartwt1=$pcontract->conversion_rate;
+            // $varval1=$pcontract->insurance;
+            // $pcontract->status=0;
+            // $pcontract->commercial_invoice_id=$ci->id;
+            // $pcontract->save();
 
 
             //  Create Auto Clearance Document
-            $cl = new Clearance();
-            $cl->commercial_invoice_id = $ci->id;
-            $cl->invoice_date = $request->invoicedate;
-            $cl->invoiceno = $request->invoiceno;
-            $cl->supplier_id = $comminvoice[0]['supplier_id'];
-            $cl->machine_date = $request->machine_date;
-            $cl->machineno = $request->machineno;
-            $cl->conversionrate = $request->conversionrate;
-            $cl->insurance = $request->insurance;
-            $cl->bankcharges = $request->bankcharges;
-            $cl->collofcustom = $request->collofcustom;
-            $cl->exataxoffie = $request->exataxoffie;
-            $cl->lngnshipdochrgs = $request->lngnshipdochrgs;
-            $cl->localcartage = $request->localcartage;
-            $cl->miscexplunchetc = $request->miscexplunchetc;
-            $cl->customsepoy = $request->customsepoy;
-            $cl->weighbridge = $request->weighbridge;
-            $cl->miscexpenses = $request->miscexpenses;
-            $cl->agencychrgs = $request->agencychrgs;
-            $cl->otherchrgs = $request->otherchrgs;
-            $cl->total = $request->total;
-            $cl->save();
-            //  Create Auto Reciving
-            // $reciving = new Reciving();
-            // $reciving->machine_date = $ci->machine_date;
-            // $reciving->machineno = $ci->machineno;
-            // $reciving->supplier_id = $comminvoice[0]['supplier_id'];
-            // $reciving->commercial_invoice_id = $ci->id;
-            // $reciving->invoiceno = $ci->invoiceno;
-            // $reciving->save();
+            // $cl = new Clearance();
+            // $cl->commercial_invoice_id = $ci->id;
+            // $cl->invoice_date = $request->invoicedate;
+            // $cl->invoiceno = $request->invoiceno;
+            // $cl->supplier_id = $comminvoice[0]['supplier_id'];
+            // $cl->machine_date = $request->machine_date;
+            // $cl->machineno = $request->machineno;
+            // $cl->conversionrate = $request->conversionrate;
+            // $cl->insurance = $request->insurance;
+            // $cl->bankcharges = $request->bankcharges;
+            // $cl->collofcustom = $request->collofcustom;
+            // $cl->exataxoffie = $request->exataxoffie;
+            // $cl->lngnshipdochrgs = $request->lngnshipdochrgs;
+            // $cl->localcartage = $request->localcartage;
+            // $cl->miscexplunchetc = $request->miscexplunchetc;
+            // $cl->customsepoy = $request->customsepoy;
+            // $cl->weighbridge = $request->weighbridge;
+            // $cl->miscexpenses = $request->miscexpenses;
+            // $cl->agencychrgs = $request->agencychrgs;
+            // $cl->otherchrgs = $request->otherchrgs;
+            // $cl->total = $request->total;
+            // $cl->save();
 
 
-            $vartxt = 'Tonage';
-            $varmac = $cl->machineno;
-            $vardta = $vartxt . ' ' . $varmac;
+            // $vartxt = 'Tonage';
+            // $varmac = $cl->machineno;
+            // $vardta = $vartxt . ' ' . $varmac;
 
-            $subhead = new Subhead();
-            $subhead->head_id = 111;
-            $subhead->title =  $vardta;
-            $subhead->commercial_invoice_id = $cl->commercial_invoice_id;
-            $subhead->status = 1;
-            $subhead->ob = 0;
-            $subhead->save();
+            // $subhead = new Subhead();
+            // $subhead->head_id = 111;
+            // $subhead->title =  $vardta;
+            // $subhead->commercial_invoice_id = $cl->commercial_invoice_id;
+            // $subhead->status = 1;
+            // $subhead->ob = 0;
+            // $subhead->save();
 
             //  Commercial Invoice Details
             foreach ($comminvoice as $cid) {
-                $c = new CommercialInvoiceDetails();
-                $c->machine_date = $request->machine_date;
-                $c->machineno = $request->machineno;
+                $c = new ClearanceCompletedDetails();
+                // $c->machine_date = $request->machine_date;
+                // $c->machineno = $request->machineno;
                 $c->invoiceno = $request->invoiceno;
-                $c->commercial_invoice_id = $ci->id;
-                $c->contract_id = $cid['contract_id'];
+                $c->clearance_id = $ci->id;
+                // $c->contract_id = $cid['contract_id'];
                 $c->material_id = $cid['material_id'];
                 $c->supplier_id = $cid['supplier_id'];
                 $c->user_id = $cid['user_id'];
                 $c->category_id = $cid['category_id'];
                 $c->sku_id = $cid['sku_id'];
                 $c->dimension_id = $cid['dimension_id'];
-                // $c->source_id = $cid['source_id'];
-                // $c->brand_id = $cid['brand_id'];
-
-
-
                 $c->pcs = $cid['pcs'];
-                $c->gdswt = $cid['gdswt'];
-                $c->dutygdswt = $cid['dutygdswt'];
-                $c->inkg = $cid['inkg'];
-                $c->gdsprice = $cid['gdsprice'];
-                $c->dtyrate = $cid['dtyrate'];
-                $c->invsrate = $cid['invsrate'];
-                $c->amtindollar = $cid['amtindollar'];
-                $c->amtinpkr = $cid['amtinpkr'];
+                $c->gdswt = $cid['dutygdswt'];
+                // $c->dutygdswt = $cid['dutygdswt'];
+                // $c->inkg = $cid['inkg'];
+                $c->gdsprice = $cid['dtyrate'];
+                // $c->dtyrate = $cid['dtyrate'];
+                // $c->invsrate = $cid['invsrate'];
+                $c->amtindollar = $cid['dtyamtindollar'];
+                $c->amtinpkr = $cid['dtyamtinpkr'];
 
-                $c->comamtindollar = $cid['comamtindollar'];
-                $c->comamtinpkr = $cid['comamtinpkr'];
+                // $c->comamtindollar = $cid['comamtindollar'];
+                // $c->comamtinpkr = $cid['comamtinpkr'];
 
 
-                $c->dtyamtindollar = $cid['dtyamtindollar'];
-                $c->dtyamtinpkr = $cid['dtyamtinpkr'];
+                // $c->dtyamtindollar = $cid['dtyamtindollar'];
+                // $c->dtyamtinpkr = $cid['dtyamtinpkr'];
 
 
                 $c->hscode = $cid['hscode'];
@@ -223,17 +211,17 @@ class ClearanceController extends Controller
                 $c->it = $cid['it'];
                 $c->wse = $cid['wse'];
 
-                $c->length = $cid['length'];
+                // $c->length = $cid['length'];
                 //// From usman 13-12-2022
-                $c->qtyinfeet = $cid['qtyinfeet'];
+                // $c->qtyinfeet = $cid['qtyinfeet'];
                 ////////
 
                 $c->itmratio = $cid['itmratio'];
                 $c->insuranceperitem = $cid['insuranceperitem'];
                 $c->amountwithoutinsurance = $cid['amountwithoutinsurance'];
                 $c->onepercentdutypkr = $cid['onepercentdutypkr'];
-                $c->pricevaluecostsheet = $cid['pricevaluecostsheet'];
-                $c->totallccostwexp = $cid['totallccostwexp'];
+                // $c->pricevaluecostsheet = $cid['pricevaluecostsheet'];
+                // $c->totallccostwexp = $cid['totallccostwexp'];
 
                 $c->cda = $cid['cda'];
                 $c->sta = $cid['sta'];
@@ -246,102 +234,103 @@ class ClearanceController extends Controller
                 $c->perpc = $cid['perpc'];
                 $c->perkg = $cid['perkg'];
                 $c->perft = $cid['perft'];
-                $c->otherexpenses = $cid['otherexpenses'];
+                // $c->otherexpenses = $cid['otherexpenses'];
 
-                $c->invlvlchrgs = $cid['invlvlchrgs'];
-
-
-                $c->location = $cid['location'];
-                $location = Location::where("title", $cid['location'])->first();
-                $c->locid = $location->id;
-                $c->save();
-
-                $pcontractdtl = PcontractDetails::where('contract_id',$cid['contract_id'])
-                ->where('material_id',$cid['material_id'])->where('status', '=', 1)->first();
-                $vartpcs=$pcontractdtl->totpcs - $cid['pcs'] ;
-                $vartwt=$pcontractdtl->gdswt - $cid['gdswt'] ;
-                $varval=$pcontractdtl->purval - $cid['amtindollar'];
-                $pcontractdtl->status=0;
-                $pcontractdtl->commercial_invoice_id=$ci->id;
-                $pcontractdtl->save();
+                // $c->invlvlchrgs = $cid['invlvlchrgs'];
 
 
-                $cpdtl = new PcontractDetails();
-                $cpdtl->contract_id = $cid['contract_id'];
-                $cpdtl->commercial_invoice_id = $ci->id;
-                $cpdtl->material_id = $cid['material_id'];
-                $cpdtl->user_id = $cid['user_id'];
-                $cpdtl->totpcs = $vartpcs;
-                $cpdtl->gdswt = $vartwt;
-                $cpdtl->purval = $varval;
-                $cpdtl->status = 1;
-                $cpdtl->closed = 0;
-                $cpdtl->save();
+                // $c->location = $cid['location'];
+                // $location = Location::where("title", $cid['location'])->first();
+                // $c->locid = $location->id;
+                // $c->save();
+
+                // $pcontractdtl = PcontractDetails::where('contract_id',$cid['contract_id'])
+                // ->where('material_id',$cid['material_id'])->where('status', '=', 1)->first();
+                // $vartpcs=$pcontractdtl->totpcs - $cid['pcs'] ;
+                // $vartwt=$pcontractdtl->gdswt - $cid['gdswt'] ;
+                // $varval=$pcontractdtl->purval - $cid['amtindollar'];
+                // $pcontractdtl->status=0;
+                // $pcontractdtl->commercial_invoice_id=$ci->id;
+                // $pcontractdtl->save();
+
+
+                // $cpdtl = new PcontractDetails();
+                // $cpdtl->contract_id = $cid['contract_id'];
+                // $cpdtl->commercial_invoice_id = $ci->id;
+                // $cpdtl->material_id = $cid['material_id'];
+                // $cpdtl->user_id = $cid['user_id'];
+                // $cpdtl->totpcs = $vartpcs;
+                // $cpdtl->gdswt = $vartwt;
+                // $cpdtl->purval = $varval;
+                // $cpdtl->status = 1;
+                // $cpdtl->closed = 0;
+                // $cpdtl->save();
 
                 // Create Auto Pending Clearance [COpy of CIDetails]
-                $cpd = new ClearancePendingDetails();
-                $cpd->clearance_id = $cl->id;
-                $cpd->machine_date = $cl->machine_date;
-                $cpd->machineno = $cl->machineno;
-                $cpd->invoiceno = $cl->invoiceno;
-                $cpd->commercial_invoice_id =  $c->commercial_invoice_id;
-                $cpd->contract_id = $cid['contract_id'];
-                $cpd->material_id = $cid['material_id'];
-                $cpd->supplier_id = $cid['supplier_id'];
-                $cpd->user_id = $cid['user_id'];
-                $cpd->category_id = $cid['category_id'];
-                $cpd->sku_id = $cid['sku_id'];
-                $cpd->dimension_id = $cid['dimension_id'];
-                // $cpd->source_id = $cid['source_id'];
-                // $cpd->brand_id = $cid['brand_id'];
+                // $cpd = new ClearancePendingDetails();
+                // $cpd->clearance_id = $cl->id;
+                // $cpd->machine_date = $cl->machine_date;
+                // $cpd->machineno = $cl->machineno;
+                // $cpd->invoiceno = $cl->invoiceno;
+                // $cpd->commercial_invoice_id =  $c->commercial_invoice_id;
+                // $cpd->contract_id = $cid['contract_id'];
+                // $cpd->material_id = $cid['material_id'];
+                // $cpd->supplier_id = $cid['supplier_id'];
+                // $cpd->user_id = $cid['user_id'];
+                // $cpd->category_id = $cid['category_id'];
+                // $cpd->sku_id = $cid['sku_id'];
+                // $cpd->dimension_id = $cid['dimension_id'];
+                // // $cpd->source_id = $cid['source_id'];
+                // // $cpd->brand_id = $cid['brand_id'];
 
-                $cpd->pcs = $cid['pcs'];
-                $cpd->gdswt = $cid['gdswt'];
+                // $cpd->pcs = $cid['pcs'];
+                // $cpd->gdswt = $cid['gdswt'];
 
-                /// *** From Muhammad usman on 27-12-2022
-                $cpd->pcs_pending = $cid['pcs'];
-                $cpd->gdswt_pending = $cid['gdswt'];
-                /// *********************************
+                // /// *** From Muhammad usman on 27-12-2022
+                // $cpd->pcs_pending = $cid['pcs'];
+                // $cpd->gdswt_pending = $cid['gdswt'];
+                // /// *********************************
 
-                $cpd->inkg = $cid['inkg'];
-                $cpd->pcs = $cid['pcs'];
-                $cpd->gdswt = $cid['gdswt'];
-                $cpd->inkg = $cid['inkg'];
-                $cpd->gdsprice = $cid['dtyrate'];
-                // $cpd->dtyrate = $cid['dtyrate'];
-                $cpd->amtindollar = $cid['amtindollar'];
-                $cpd->amtinpkr = $cid['amtinpkr'];
+                // $cpd->inkg = $cid['inkg'];
+                // $cpd->pcs = $cid['pcs'];
+                // $cpd->gdswt = $cid['gdswt'];
+                // $cpd->inkg = $cid['inkg'];
+                // $cpd->gdsprice = $cid['dtyrate'];
+                // // $cpd->dtyrate = $cid['dtyrate'];
+                // $cpd->amtindollar = $cid['amtindollar'];
+                // $cpd->amtinpkr = $cid['amtinpkr'];
 
-                $cpd->hscode = $cid['hscode'];
-                $cpd->cd = $cid['cd'];
-                $cpd->st = $cid['st'];
-                $cpd->rd = $cid['rd'];
-                $cpd->acd = $cid['acd'];
-                $cpd->ast = $cid['ast'];
-                $cpd->it = $cid['it'];
-                $cpd->wse = $cid['wse'];
+                // $cpd->hscode = $cid['hscode'];
+                // $cpd->cd = $cid['cd'];
+                // $cpd->st = $cid['st'];
+                // $cpd->rd = $cid['rd'];
+                // $cpd->acd = $cid['acd'];
+                // $cpd->ast = $cid['ast'];
+                // $cpd->it = $cid['it'];
+                // $cpd->wse = $cid['wse'];
 
-                $cpd->length = $cid['length'];
-                $cpd->itmratio = $cid['itmratio'];
-                $cpd->insuranceperitem = $cid['insuranceperitem'];
-                $cpd->amountwithoutinsurance = $cid['amountwithoutinsurance'];
-                $cpd->onepercentdutypkr = $cid['onepercentdutypkr'];
-                $cpd->pricevaluecostsheet = $cid['pricevaluecostsheet'];
-                $cpd->totallccostwexp = $cid['totallccostwexp'];
+                // $cpd->length = $cid['length'];
+                // $cpd->itmratio = $cid['itmratio'];
+                // $cpd->insuranceperitem = $cid['insuranceperitem'];
+                // $cpd->amountwithoutinsurance = $cid['amountwithoutinsurance'];
+                // $cpd->onepercentdutypkr = $cid['onepercentdutypkr'];
+                // $cpd->pricevaluecostsheet = $cid['pricevaluecostsheet'];
+                // $cpd->totallccostwexp = $cid['totallccostwexp'];
 
-                $cpd->cda = $cid['cda'];
-                $cpd->sta = $cid['sta'];
-                $cpd->rda = $cid['rda'];
-                $cpd->acda = $cid['acda'];
-                $cpd->asta = $cid['asta'];
-                $cpd->ita = $cid['ita'];
-                $cpd->wsca = $cid['wsca'];
-                $cpd->total = $cid['total'];
-                $cpd->perpc = $cid['perpc'];
-                $cpd->perkg = $cid['perkg'];
-                $cpd->perft = $cid['perft'];
-                $cpd->otherexpenses = $cid['otherexpenses'];
-                $cpd->save();
+                // $cpd->cda = $cid['cda'];
+                // $cpd->sta = $cid['sta'];
+                // $cpd->rda = $cid['rda'];
+                // $cpd->acda = $cid['acda'];
+                // $cpd->asta = $cid['asta'];
+                // $cpd->ita = $cid['ita'];
+                // $cpd->wsca = $cid['wsca'];
+                // $cpd->total = $cid['total'];
+                // $cpd->perpc = $cid['perpc'];
+                // $cpd->perkg = $cid['perkg'];
+                // $cpd->perft = $cid['perft'];
+                // $cpd->otherexpenses = $cid['otherexpenses'];
+                // $cpd->save();
+
                 //  Create Auto Pending Reciving [Copy of CIDetails]
                 // $preciving = new RecivingPendingDetails();
                 // $preciving->reciving_id = $reciving->id;
@@ -368,32 +357,24 @@ class ClearanceController extends Controller
             }
 
 
-                // $vartpcs=$pcontract->totalpcs;
-                // $vartwt=$pcontract->conversion_rate;
-                // $varval=$pcontract->insurance;
 
-                $sumwt = $vartwt1 -  CommercialInvoiceDetails::where('commercial_invoice_id',$cpd->commercial_invoice_id)->sum('gdswt');
-                $sumpcs = $vartpcs1 -  CommercialInvoiceDetails::where('commercial_invoice_id',$cpd->commercial_invoice_id)->sum('pcs');
-                $sumval = $varval1 -  CommercialInvoiceDetails::where('commercial_invoice_id',$cpd->commercial_invoice_id)->sum('amtindollar');
-                // $sumdtyval = CommercialInvoiceDetails::where('contcommercial_invoice_idract_id',$ci->id)->sum('dutval');
+                // $sumwt = $vartwt1 -  CommercialInvoiceDetails::where('commercial_invoice_id',$cpd->commercial_invoice_id)->sum('gdswt');
+                // $sumpcs = $vartpcs1 -  CommercialInvoiceDetails::where('commercial_invoice_id',$cpd->commercial_invoice_id)->sum('pcs');
+                // $sumval = $varval1 -  CommercialInvoiceDetails::where('commercial_invoice_id',$cpd->commercial_invoice_id)->sum('amtindollar');
 
-                // $sumwt=$vartwt - $sumwt;
-                // $sumpcs=$vartpcs - $sumpcs;
-                // $sumval=$varval - $sumval;
-        //    dd($sumwt());
-                $pcontract = new Pcontract();
-                $pcontract->status=1;
-                $pcontract->commercial_invoice_id=$ci->id;
-                $pcontract->supplier_id=1;
-                $pcontract->invoice_date = $request->invoicedate;
-                $pcontract->number = $request->invoiceno;
-                $pcontract->contract_id = $request->contract_id;
-                $pcontract->supplier_id = $comminvoice[0]['supplier_id'];
-                $pcontract->conversion_rate = $sumwt;
-                $pcontract->insurance = $sumval;
-                $pcontract->totalpcs = $sumpcs;
-                // $pcontract->dutyval = $sumdtyval;
-                $pcontract->save();
+                //    dd($sumwt());
+                // $pcontract = new Pcontract();
+                // $pcontract->status=1;
+                // $pcontract->commercial_invoice_id=$ci->id;
+                // $pcontract->supplier_id=1;
+                // $pcontract->invoice_date = $request->invoicedate;
+                // $pcontract->number = $request->invoiceno;
+                // $pcontract->contract_id = $request->contract_id;
+                // $pcontract->supplier_id = $comminvoice[0]['supplier_id'];
+                // $pcontract->conversion_rate = $sumwt;
+                // $pcontract->insurance = $sumval;
+                // $pcontract->totalpcs = $sumpcs;
+                // $pcontract->save();
 
 
 

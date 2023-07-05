@@ -85,6 +85,31 @@ class CommercialInvoiceController extends Controller
         return response()->json($contractDetails, 200);
     }
 
+    public function getMasterdc(Request $request)
+    {
+
+        $search = $request->search;
+        $size = $request->size;
+        $field = $request->sort[0]["field"];     //  Nested Array
+        $dir = $request->sort[0]["dir"];         //  Nested Array
+        $contracts = DB::table('vwfrmpenddutyclear')
+        // ->join('suppliers', 'contracts.supplier_id', '=', 'suppliers.id')
+        // ->select('contracts.*', 'suppliers.title')
+        ->where('supname', 'like', "%$search%")
+        ->orderBy($field,$dir)
+        ->paginate((int) $size);
+        return $contracts;
+
+
+    }
+
+
+
+
+
+
+
+
     public function create()
     {
          $cd = DB::table('skus')->select('id AS dunitid','title AS dunit')
@@ -729,7 +754,19 @@ class CommercialInvoiceController extends Controller
                 $pci->totwt = $sumwt3;
                 $pci->dutyval = $sumval3;
                 $pci->save();
-//  *******#########################3
+
+                $pci1 = commercialInvoice::where('id',$pci->commercial_invoice_id)->first();
+                $pci1->tpcs = $sumpcs3;
+                $pci1->twt = $sumwt3;
+                $pci1->tval = $sumval3;
+                $pci1->save();
+
+
+
+
+
+
+                //  *******#########################3
             }
             DB::commit();
             Session::flash('info',"Commerical Invoice#[$ci->id] Updated with Reciving# & Duty Clearance#[$ci->id]");
