@@ -440,7 +440,7 @@ var headerMenu = function(){
             responsiveLayout:"collapse",
             reactiveData:true,
             movableRows:true,
-            groupBy:"material_title",
+            // groupBy:"material_title",
             data:getDetails,
             // reactiveData:true,
             columns:[
@@ -459,7 +459,7 @@ var headerMenu = function(){
                 // },
 
                 {title:"Id",           field:"material_id", visible:false},
-                // {title:"Material",     field:"material.title"},
+                 {title:"Material",     field:"material.title"responsive:0},
                 {title:"dimension",    field:"material.dimension",responsive:0,frozen:true, headerMenu:headerMenu},
                 {title:"Unit",         field:"material.sku",responsive:0},
                 {title:"contract_id",  field:"contract_id",visible:false},

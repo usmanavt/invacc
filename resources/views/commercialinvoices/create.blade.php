@@ -724,7 +724,7 @@ var headerMenu = function(){
             responsiveLayout:"collapse",
             reactiveData:true,
             movableRows:true,
-            groupBy:"material_title",
+            // groupBy:"material_title",
             columns:[
                 {title:"Del" , formatter:deleteIcon, headerSort:false, responsive:0,
                     cellClick:function(e, cell){
@@ -732,7 +732,7 @@ var headerMenu = function(){
                     }
                 },
                 {title:"Id",           field:"id", visible:false},
-                // {title:"Material",     field:"material_title",responsive:0},
+                {title:"Material",     field:"material_title",responsive:0},
                 {title:"dimension",    field:"dimension",responsive:0,frozen:true, headerMenu:headerMenu},
                 {title:"Unit",         field:"sku",responsive:0},
                 {title:"Unitid",       field:"sku_id",visible:false},
@@ -811,8 +811,6 @@ var headerMenu = function(){
                             validator:["required","numeric"],
                             formatterParams:{thousand:",",precision:2},
                         },
-
-
 
 
                         {   title:"Wt(pcs/kg)",

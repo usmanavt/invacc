@@ -6,7 +6,7 @@
 
     <x-slot name="header">
         <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-            Commercial Invoices ( Local)
+            Commercial Invoices ( Local abc)
             {{-- Create New Customer --}}
             <a class="text-sm text-green-500 hover:text-gray-900" href="{{route('cisl.create')}}">
                 {{-- Add Icon --}}
