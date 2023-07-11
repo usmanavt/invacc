@@ -15,6 +15,7 @@ use App\Models\CommercialInvoice;
 use Illuminate\Support\Facades\DB;
 use App\Models\RecivingPendingDetails;
 use App\Models\ClearancePendingDetails;
+use App\Models\ClearanceCompletedDetails;
 use Illuminate\Support\Facades\Session;
 use App\Models\CommercialInvoiceDetails;
 use App\Models\RecivingCompletedDetails;
@@ -102,7 +103,7 @@ class ClearanceController extends Controller
 
     public function store(Request $request)
     {
-            dd($request->all());
+            //  dd($request->all());
 
         $comminvoice = $request->comminvoice;
         DB::beginTransaction();
@@ -111,17 +112,23 @@ class ClearanceController extends Controller
 
             $ci = new Clearance();
             $ci->commercial_invoice_id = 1;
-            $ci->invoice_date = $request->invoicedate;
+            // $ci->invoice_date = $request->invoicedate;
             $ci->invoiceno = $request->invoiceno;
-            $ci->contract_id = 5;
+            // $ci->contract_id = 5;
             $ci->supplier_id = $comminvoice[0]['supplier_id'];
-            $ci->machine_date = $request->machine_date;
+            // $ci->machine_date = $request->machine_date;
             $ci->machineno = $request->machineno;
             $ci->gd_date = $request->gd_date;
             $ci->gdno = $request->gdno;
 
             $ci->conversionrate = $request->conversionrate;
             $ci->insurance = $request->insurance;
+
+            $ci->bank_id = $request->bank_id;
+            $ci->cheque_date = $request->cheque_date;
+            $ci->cheque_no = $request->cheque_no;
+
+
             $ci->save();
 
             // $pcontract = Pcontract::where('contract_id',$ci->contract_id)->where('status', '=', 1)->first();
@@ -173,11 +180,8 @@ class ClearanceController extends Controller
             //  Commercial Invoice Details
             foreach ($comminvoice as $cid) {
                 $c = new ClearanceCompletedDetails();
-                // $c->machine_date = $request->machine_date;
-                // $c->machineno = $request->machineno;
                 $c->invoiceno = $request->invoiceno;
                 $c->clearance_id = $ci->id;
-                // $c->contract_id = $cid['contract_id'];
                 $c->material_id = $cid['material_id'];
                 $c->supplier_id = $cid['supplier_id'];
                 $c->user_id = $cid['user_id'];
@@ -186,21 +190,14 @@ class ClearanceController extends Controller
                 $c->dimension_id = $cid['dimension_id'];
                 $c->pcs = $cid['pcs'];
                 $c->gdswt = $cid['dutygdswt'];
-                // $c->dutygdswt = $cid['dutygdswt'];
-                // $c->inkg = $cid['inkg'];
                 $c->gdsprice = $cid['dtyrate'];
-                // $c->dtyrate = $cid['dtyrate'];
-                // $c->invsrate = $cid['invsrate'];
                 $c->amtindollar = $cid['dtyamtindollar'];
                 $c->amtinpkr = $cid['dtyamtinpkr'];
 
-                // $c->comamtindollar = $cid['comamtindollar'];
-                // $c->comamtinpkr = $cid['comamtinpkr'];
-
-
-                // $c->dtyamtindollar = $cid['dtyamtindollar'];
-                // $c->dtyamtinpkr = $cid['dtyamtinpkr'];
-
+                $c->bundle1 = $cid['bundle1'];
+                $c->pcspbundle1 = $cid['pcspbundle1'];
+                $c->bundle2 = $cid['bundle2'];
+                $c->pcspbundle2 = $cid['pcspbundle2'];
 
                 $c->hscode = $cid['hscode'];
                 $c->cd = $cid['cd'];
@@ -234,6 +231,8 @@ class ClearanceController extends Controller
                 $c->perpc = $cid['perpc'];
                 $c->perkg = $cid['perkg'];
                 $c->perft = $cid['perft'];
+
+                $c->save();
                 // $c->otherexpenses = $cid['otherexpenses'];
 
                 // $c->invlvlchrgs = $cid['invlvlchrgs'];
@@ -380,7 +379,7 @@ class ClearanceController extends Controller
 
 
             DB::commit();
-            Session::flash('success',"Commerical Invoice#[$ci->id] Created with Reciving# & Duty Clearance#[$cl->id]");
+            Session::flash('success',"Commerical Invoice#[$ci->id] Created with Reciving# & Duty Clearance#[$ci->id]");
             return response()->json(['success'],200);
         } catch (\Throwable $th) {
             DB::rollback();
@@ -390,29 +389,31 @@ class ClearanceController extends Controller
 
     public function show($id)
     {
-        return view('commercialinvoices.show')->with('i',CommercialInvoice::whereId($id)->with('commericalInvoiceDetails.material.hscodes')->first());
+        // return view('commercialinvoices.show')->with('i',CommercialInvoice::whereId($id)->with('commericalInvoiceDetails.material.hscodes')->first());
     }
 
-    public function edit($id)
-    {
-        //// Marking From Usman on 15-12-2022
-        // if(CommercialInvoice::hasCompletedReciving($id))
-        // {
-        //     Session::flash('info','You cannot edit a commercial invoice, when you already have received Goods against it');
-        //     return redirect()->back();
-        // }
-        //** */ Marking From Usman on 15-12-2022
-        //  dd($request->all());
-        return view('commercialinvoices.edit')
-        ->with('i',CommercialInvoice::whereId($id)->with('commericalInvoiceDetails.material.hscodes')->first())
-        ->with('locations',Location::select('id','title')->get())
-        ->with('hscodes',Hscode::all());
-    }
+
+
+        public function edit($id)
+        {
+            $cd = DB::table('skus')->select('id AS dunitid','title AS dunit')
+            ->whereIn('id',[1,2])->get();
+           $data=compact('cd');
+
+            return view('clearance.edit')
+            ->with('i',Clearance::whereId($id)->with('commericalInvoiceDetails.material.hscodes')->first())
+            ->with('locations',Location::select('id','title')->get())
+            ->with('hscodes',Hscode::all());
+            // ->with($data);
+        }
+
+
+
 
     public function update(Request $request, CommercialInvoice $commercialInvoice)
     {
         // dd($request->all());
-        $ci = CommercialInvoice::findOrFail($request->commercial_invoice_id);
+        $ci = Clearance::findOrFail($request->commercial_invoice_id);
         //  FIXME:If This commerical invoice has Completed Reciving, then don't allow edit
         $cr = RecivingCompletedDetails::where('commercial_invoice_id',$ci->id)->first();
         //  Get Details

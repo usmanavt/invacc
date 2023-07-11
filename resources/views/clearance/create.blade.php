@@ -26,9 +26,9 @@
                             <legend>Invoice Level Entries</legend>
                             <div class="grid grid-cols-12 gap-2 py-2 items-center">
 
-                                <x-input-date title="Inv. Date" id="invoicedate" name="invoicedate" req required class="col-span-2" disabled/>
+                                {{-- <x-input-date title="Inv. Date" id="invoicedate" name="invoicedate" req required class="col-span-2" disabled/> --}}
                                 <x-input-text title="Invoice #" name="invoiceno"  req required class="" disabled/>
-                                <x-input-date title="Mac. Date" name="machine_date" req required class="col-span-2" disabled/>
+                                {{-- <x-input-date title="Mac. Date" name="machine_date" req required class="col-span-2" disabled/> --}}
                                 <x-input-text title="Mac. No" name="machineno" req required class="col-span-2" disabled/>
 
 
@@ -148,7 +148,7 @@
 
 
         let invoiceno= document.getElementById("invoiceno")
-        let invoicedate= document.getElementById("invoicedate")
+        // let invoicedate= document.getElementById("invoicedate")
 
         // Bank Charges
         // let bankcharges= document.getElementById("bankcharges")
@@ -213,7 +213,7 @@
 @push('scripts')
     <script>
         window.onload = function() {
-            var input = document.getElementById("invoicedate").focus();
+            var input = document.getElementById("gdno.focus").focus();
         }
 
         // -----------------FOR MODAL -------------------------------//
@@ -331,12 +331,12 @@
 @push('scripts')
     <script>
 
-        const hscodes = @json($hscodes);
-        // Hscode List
-        var hscodeList=[]
-        hscodes.forEach(e => {
-            hscodeList.push({ value:e.hscode, label:e.hscode, id:e.hscode})
-        })
+                        // const hscodes = @json($hscodes);
+                        // // Hscode List
+                        // var hscodeList=[]
+                        // hscodes.forEach(e => {
+                        //     hscodeList.push({ value:e.hscode, label:e.hscode, id:e.hscode})
+                        // })
         // Locations List
         // var newList=[]
         // locations.forEach(e => {
@@ -401,14 +401,23 @@
                         pcs :               vpcs,
                         gdswt :             obj.gdswt ,
                         dutygdswt :         obj.dutygdswt ,
+                        hscode :            obj.hscode,
                         inkg :              vwinkg,
                         length :            0,
                         gdsprice :          obj.gdsprice,
                         dtyrate :           obj.dtyrate,
                         invsrate:           obj.invsrate,
                         amtindollar :       obj.purval  ,
-                        dtyamtindollar :       obj.dtyamtindollar,
-                        comamtindollar :       0,
+                        dtyamtindollar :    obj.dtyamtindollar,
+                        comamtindollar :    0,
+
+
+                        bundle1        :    obj.bundle1,
+                        pcspbundle1    :    obj.pcspbundle1 ,
+                        bundle2        :    obj.bundle2 ,
+                        pcspbundle2    :    obj.pcspbundle2 ,
+
+
 
                         // amtinpkr :          ( obj.gdswt *  obj.gdsprice  * conversionrate.value).toFixed(0),
                         dtyamtinpkr :        ( obj.gdswt *  obj.dtyrate  * conversionrate.value).toFixed(0),
@@ -432,7 +441,17 @@
                         perft:            0,
                         otherexpenses:    0,
                         qtyinfeet:0,
-                        wse      : 0
+
+                        cd       : obj.cd,
+                        st       : obj.st,
+                        rd       : obj.rd,
+                        acd       : obj.acd,
+                        ast       : obj.ast,
+                        it       : obj.it,
+                        wse      : obj.wse,
+
+
+
 
 
                     }
@@ -449,6 +468,21 @@
                     dunitid.focus();
                     return;
                 }
+                if(conversionrate.value <= 0)
+                {
+                    showSnackbar("conversionrate must be greater than 0","error");
+                    conversionrate.focus();
+                    return;
+                }
+
+                if(gdno.value === '' )
+                {
+                    showSnackbar("GD # required ","error");
+                    gdno.focus();
+                    return;
+                }
+
+
 
 
 
@@ -457,13 +491,31 @@
             // alert(dynamicTable.getData())
             const data = dynamicTable.getData()
             // Get Selected HSCode Value
-            var hscode;
+            // var hscode;
             //  First Iteration to calculate Basic Data
             data.forEach(e => {
+
+
+
+                var bundle1 = e.bundle1
+                var pcspbundle1 = e.pcspbundle1
+                var bundle2 = e.bundle2
+                var pcspbundle2 = e.pcspbundle2
+
 
                 var pcs = e.pcs
                 var gdswt = e.gdswt
                 var dutygdswt = e.dutygdswt
+                var hscode = e.hscode
+
+                var cd = e.cd
+                var st = e.st
+                var rd = e.rd
+                var acd = e.acd
+                var ast = e.ast
+                var it = e.it
+                var wse = e.wse
+
                 var inkg = ((e.gdswt / e.pcs ) ).toFixed(3)
                 var length = e.length
                 var gdsprice = e.gdsprice
@@ -481,7 +533,13 @@
                 var dutval=e.dutval
                 var purval=e.purval
                 var comval=e.comval
-                var wse=e.wse
+
+
+                e.bundle1 =     bundle1
+                e.pcspbundle1 = pcspbundle1
+                e.bundle2 =     bundle2
+                e.pcspbundle2 = pcspbundle2
+
 
 
 
@@ -490,6 +548,15 @@
                  e.inkg = inkg
                  e.length = length
                  e.dutygdswt=dutygdswt
+                 e.hscode=hscode
+
+                 e.cd =     cd
+                 e.st =     st
+                 e.rd =     rd
+                 e.acd =    acd
+                 e.ast =    st
+                 e.it =     it
+                 e.wse =    wse
                  e.gdsprice = gdsprice
                  e.dtyrate = dtyrate
                  e.purval=purval
@@ -498,7 +565,7 @@
                 //  e.amtinpkr=amtinpkr
                  e.dtyamtinpkr=dtyamtinpkr
                  e.comamtinpkr=comamtinpkr
-                 e.wse=wse
+
                 //  console.log(e.dtyrate)
 
             var sid = document.getElementById("dunitid");
@@ -547,7 +614,7 @@
                 ////////////////////////////////////////////////////////////////////////
                 // Get Values of HSCode Selected in List and Populate Data
                 ///////////////////////////////////////////////////////////////////////
-                hscode = hscodes.find(  function(el) { return el.hscode === e.hscode })
+                            // hscode = hscodes.find(  function(el) { return el.hscode === e.hscode })
                 // e.cd = hscode.cd
                 // e.st = hscode.st
                 // e.rd = hscode.rd
@@ -556,21 +623,21 @@
                 // e.it = hscode.it
                 // e.wsc = hscode.wse
 
-                var cd = hscode.cd
-                var st = hscode.st
-                var rd = hscode.rd
-                var acd = hscode.acd
-                var ast = hscode.ast
-                var it = hscode.it
+                                // var cd = hscode.cd
+                                // var st = hscode.st
+                                // var rd = hscode.rd
+                                // var acd = hscode.acd
+                                // var ast = hscode.ast
+                                // var it = hscode.it
                 // var wse = wse
 
 
-                e.cd=cd
-                e.st=st
-                e.rd=rd
-                e.acd=acd
-                e.ast=ast
-                e.it=it
+                                    // e.cd=cd
+                                    // e.st=st
+                                    // e.rd=rd
+                                    // e.acd=acd
+                                    // e.ast=ast
+                                    // e.it=it
                 // e.wse=wse
             })
 
@@ -609,6 +676,7 @@
 
 
                 var cda = parseFloat(e.cd) * dtypricevaluecostsheet / 100
+
 
                 //  console.log(cda ,parseFloat(e.cd), dtypricevaluecostsheet)
                 //  var tmpcda =  dtyamtinpkrtotal
@@ -755,6 +823,20 @@ var headerMenu = function(){
    return menu;
 };
 
+var updateValues = (cell) => {
+        var data = cell.getData();
+        var sum = (Number(data.bundle1) * Number(data.pcspbundle1)) + (Number(data.bundle2) * Number(data.pcspbundle2))
+        var row = cell.getRow();
+        row.update({
+             "pcs": sum,
+            // "gdspricetot": sum2,
+            // "gdspricedtytot":sum3
+
+        });
+    }
+
+
+
 
 
 
@@ -809,38 +891,88 @@ var headerMenu = function(){
                         // },
                         {   title:"HS code",headerHozAlign :'center',
                             field:"hscode",
-                            editor:"list",
+                            // editor:"list",
                             responsive:0,
                             headerVertical:true,
                             // cssClass:"bg-green-200 font-semibold",
-                            editorParams:   {
-                                values:hscodeList,
-                                validator:["required"]
-                            }
+                            // editorParams:   {
+                            //     values:hscodeList,
+                            //     validator:["required"]
+                            // }
                         },
 
-                        {   title:"Pcs",headerHozAlign :'center',
+                        {   title:"Bundle1",headerHozAlign :'center',
                             responsive:0,
-                            field:"pcs",
+                            field:"bundle1",
                             editor:"number",
                             headerVertical:true,
                             bottomCalc:"sum",
+                            formatter:"money",
+                            cellEdited: updateValues,
+                            validator:["required","numeric"],
+                            cssClass:"bg-green-200 font-semibold",
+                            formatterParams:{thousand:",",precision:0},
+                        },
+
+                        {   title:"Pcs/Bund",headerHozAlign :'center',
+                            responsive:0,
+                            field:"pcspbundle1",
+                            headerVertical:true,
+                            // bottomCalc:"sum",
+                            formatter:"money",
+                            cellEdited: updateValues,
+                            // cssClass:"bg-green-200 font-semibold",
+                            validator:["required","numeric"],
+                            formatterParams:{thousand:",",precision:0},
+                        },
+
+                        {   title:"Bundle2",headerHozAlign :'center',
+                            responsive:0,
+                            field:"bundle2",
+                            editor:"number",
+                            cellEdited: updateValues,
+                            headerVertical:true,
+                            bottomCalc:"sum",
+                            formatter:"money",
+                             cssClass:"bg-green-200 font-semibold",
+                            validator:["required","numeric"],
+                            formatterParams:{thousand:",",precision:0},
+                        },
+
+                        {   title:"Pcs/Bund",headerHozAlign :'center',
+                            responsive:0,
+                            field:"pcspbundle2",
+                            // editor:"number",
+                            headerVertical:true,
+                            cellEdited: updateValues,
+                            // bottomCalc:"sum",
                             formatter:"money",
                             // cssClass:"bg-green-200 font-semibold",
                             validator:["required","numeric"],
                             formatterParams:{thousand:",",precision:0},
                         },
-                        // {   title:"Supp.Wt(Kg)",
-                        //     field:"gdswt",
-                        //     responsive:0,
-                        //     editor:"number",
-                        //     headerVertical:true,
-                        //     bottomCalc:"sum",
-                        //     formatter:"money",
-                        //     // cssClass:"bg-green-200 font-semibold",
-                        //     validator:["required","numeric"],
-                        //     formatterParams:{thousand:",",precision:2},
-                        // },
+
+
+
+
+
+
+                        {   title:"Pcs",headerHozAlign :'center',
+                            responsive:0,
+                            field:"pcs",
+                            // editor:"number",
+                            headerVertical:true,
+                            formatter:"money",
+                            // cssClass:"bg-green-200 font-semibold",
+                            validator:["required","numeric"],
+                            formatterParams:{thousand:",",precision:0},
+                            formatter:function(cell,row)
+                            {
+                                return (cell.getData().bundle1 * cell.getData().pcspbundle1) + (cell.getData().bundle2 * cell.getData().pcspbundle2)
+                            },bottomCalc:"sum",
+
+
+                        },
 
                         {   title:"Duty.Wt(Kg)",
                             field:"dutygdswt",
@@ -1118,17 +1250,17 @@ var headerMenu = function(){
 
 
 
-                {title:"CD",                field:"cd",responsive:0,
+                {title:"CD",                field:"cd",editor:"number",responsive:0,
                 headerVertical:true,        visible:true},
-                {title:"ST",                field:"st",responsive:0,
+                {title:"ST",                field:"st",editor:"number",responsive:0,
                 headerVertical:true,          visible:true},
-                {title:"RD",                field:"rd",responsive:0,
+                {title:"RD",                field:"rd",editor:"number",responsive:0,
                 headerVertical:true,        visible:true},
-                {title:"ACD",               field:"acd",responsive:0,
+                {title:"ACD",               field:"acd",editor:"number",responsive:0,
                 headerVertical:true,          visible:true},
-                {title:"AST",               field:"ast",responsive:0,
+                {title:"AST",               field:"ast",editor:"number",responsive:0,
                 headerVertical:true,        visible:true},
-                {title:"IT",                field:"it",responsive:0,
+                {title:"IT",                field:"it",editor:"number",responsive:0,
                 headerVertical:true,        visible:true},
                 // {title:"WSE",               field:"wse",
                 // headerVertical:true,         visible:true},
@@ -1157,11 +1289,25 @@ var headerMenu = function(){
         function validateForm()
         {
 
-            var invoicedate = document.getElementById("invoicedate")
+            // var invoicedate = document.getElementById("invoicedate")
             var invoiceno = document.getElementById("invoiceno")
-            // var challanno = document.getElementById("challanno")
+            var gdno = document.getElementById("gdno")
             var machineno = document.getElementById("machineno")
-            var machine_date = document.getElementById("machine_date")
+            // var machine_date = document.getElementById("machine_date")
+            var conversionrate = document.getElementById("conversionrate")
+
+            var sid = document.getElementById("bank_id");
+            var bank_id = sid.options[sid.selectedIndex];
+
+            if(bank_id.value <= 0)
+            {
+                showSnackbar("Please select From Bank");
+                bank_id.focus();
+                return;
+            }
+
+
+
 
 
             if(invoiceno.value === ''){
@@ -1174,6 +1320,21 @@ var headerMenu = function(){
                 machineno.focus()
                 return;
             }
+
+            if(gdno.value === ''){
+                showSnackbar("GD # required ","error");
+                gdno.focus()
+                return;
+            }
+
+            if(conversionrate.value === ''){
+                showSnackbar("conversionrate # required ","error");
+                conversionrate.focus()
+                return;
+            }
+
+
+
             const dynamicTableData = dynamicTable.getData();
             if(dynamicTableData.length == 0)
             {
@@ -1200,16 +1361,23 @@ var headerMenu = function(){
                 'invoiceno' : invoiceno.value,
                 // 'challanno' : challanno.value,
                 'machineno' : machineno.value,
-                'machine_date' :machine_date.value,
-                'invoicedate' : invoicedate.value,
+                // 'machine_date' :machine_date.value,
+                // 'invoicedate' : invoicedate.value,
                 'gdno' : gdno.value,
                 'gd_date' : gd_date.value,
                 'dunitid' : parseFloat(dunitid.value).toFixed(0),
+                'cheque_no' : cheque_no.value,
+                'cheque_date' :cheque_date.value,
+                'bank_id' :bank_id.value,
+
+
                 // 'total' : parseFloat(banktotal.value).toFixed(2),
+
                 'comminvoice' : dynamicTableData
+
             };
             // All Ok - Proceed
-            fetch(@json(route('cis.store')),{
+            fetch(@json(route('clearance.store')),{
                 credentials: 'same-origin', // 'include', default: 'omit'
                 method: 'POST', // 'GET', 'PUT', 'DELETE', etc.
                 // body: formData, // Coordinate the body type with 'Content-Type'
@@ -1225,7 +1393,7 @@ var headerMenu = function(){
             .then( response => {
                 if (response == 'success')
                 {
-                    window.open(window.location.origin + "/cis","_self" );
+                    window.open(window.location.origin + "/clearance","_self" );
                 }
             })
             .catch(error => {
