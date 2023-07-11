@@ -38,6 +38,23 @@
                                 <x-input-date title="Mac. Date" name="machine_date" value="{{ $i->machine_date->format('Y-m-d') }}" req required class="col-span-2"/>
                                 <x-input-text title="Machine #" name="machineno" value="{{ $i->machineno }}" req required class="col-span-2"/>
 
+                                    <x-label for="" value="Unit as Per Duty Calculation"/>
+                                    <select autocomplete="on" required name="dunitid" id ="dunitid"  required >
+                                        <option value="" selected>--Unit</option>
+                                        @foreach ($cd as $sku)
+
+
+                                            @if ($i->dunitid == $sku->dunitid)
+                                            <option value="{{$sku->dunitid}}" selected>{{$sku->dunit}}</option>
+                                            @else
+                                            <option value="{{ $sku->dunitid }}">{{ $sku->dunit }}</option>
+                                            @endif
+                                        @endforeach
+                                    </select>
+
+
+
+
                             </div>
                         </fieldset>
 
@@ -164,6 +181,16 @@
     <script>
 
         var calculate = function(){
+
+            if(dunitid.value <= 0)
+                {
+                    showSnackbar("Please select Duty Unit","error");
+                    dunitid.focus();
+                    return;
+                }
+
+
+
             calculateBankCharges()
             // alert(dynamicTable.getData())
             const data = dynamicTable.getData()
@@ -235,22 +262,31 @@
                  e.dutval=dutval
                  e.amtinpkr=amtinpkr
                  e.comamtinpkr=comamtinpkr
-
                  e.invlvlchrgs=invlvlchrgs
-
-
                  e.dtyamtinpkr=dtyamtinpkr
                  e.wse=wse
 
+                 var sid = document.getElementById("dunitid");
+                 var dunitid = sid.options[sid.selectedIndex];
+
+
+                if(dunitid.value==1)
+                    { e.dutval = parseFloat(e.dutygdswt) * parseFloat(e.dtyrate)}
+                    else
+                    { e.dutval = parseFloat(e.pcs) * parseFloat(e.dtyrate) }
+
+
+
+
                  if(e.sku_id==1)
                    {
-                        e.dutval = parseFloat(e.dutygdswt) * parseFloat(e.dtyrate)
+                        // e.dutval = parseFloat(e.dutygdswt) * parseFloat(e.dtyrate)
                         e.purval = parseFloat(e.gdswt) * parseFloat(e.gdsprice)
                         e.comamtindollar = parseFloat(e.gdswt) * parseFloat(e.invsrate)
                  }
                  else
                      {
-                         e.dutval = parseFloat(e.pcs) * parseFloat(e.dtyrate)
+                        //  e.dutval = parseFloat(e.pcs) * parseFloat(e.dtyrate)
                          e.purval = parseFloat(e.pcs) * parseFloat(e.gdsprice)
                          e.comamtindollar = parseFloat(e.pcs) * parseFloat(e.invsrate)
                     }
@@ -310,7 +346,8 @@
                 var invlvlchrgs =(banktotal.value * itmratio / 100)
                 var otherexpenses = ( sconversionrate.value * otherchrgs.value ) * itmratio / 100
                 var perpc = ((e.totallccostwexp+otherexpenses) / e.pcs).toFixed(2)
-                var perkg = (e.perpc / inkg).toFixed(2)
+                // var perkg = (perpc / inkg).toFixed(2)
+                var perkg = (perpc / inkg).toFixed(2)
                 var qtyinfeet = (e.pcs * e.length).toFixed(2)
 
                 // e.pcs = pcs
@@ -338,8 +375,9 @@
                 e.ita = (ita).toFixed(2)
                 e.wsca = (wsca).toFixed(2)
                 e.total = (total).toFixed(2)
-                // e.perkg = perkg
+                e.perkg = perkg
                 e.totallccostwexp = totallccostwexp
+                e.invlvlchrgs=invlvlchrgs
                 e.perpc = perpc
                 e.perft = (perpc / length )
                 e.otherexpenses = otherexpenses
@@ -440,7 +478,6 @@ var headerMenu = function(){
             responsiveLayout:"collapse",
             reactiveData:true,
             movableRows:true,
-            // groupBy:"material_title",
             data:getDetails,
             // reactiveData:true,
             columns:[
@@ -459,7 +496,7 @@ var headerMenu = function(){
                 // },
 
                 {title:"Id",           field:"material_id", visible:false},
-                 {title:"Material",     field:"material.title"responsive:0},
+                {title:"Material",     field:"material.title",responsive:0},
                 {title:"dimension",    field:"material.dimension",responsive:0,frozen:true, headerMenu:headerMenu},
                 {title:"Unit",         field:"material.sku",responsive:0},
                 {title:"contract_id",  field:"contract_id",visible:false},
@@ -604,6 +641,7 @@ var headerMenu = function(){
                             field:"amtinpkr",
                             headerVertical:true,
                             formatter:"money",
+                            formatterParams:{thousand:",",precision:0},
                             responsive:0,
                             bottomCalc:"sum",bottomCalcParams:{precision:0},
                             // bottomCalcFormatter:"money",
@@ -613,7 +651,7 @@ var headerMenu = function(){
                             field:"dtyrate",
                             headerVertical:true,
                             editor:"number",
-                            cssClass:"bg-green-200 font-semibold",
+                            // cssClass:"bg-green-200 font-semibold",
                             formatter:"money",
                             responsive:0,
                             formatterParams:{thousand:",",precision:2},
@@ -643,6 +681,7 @@ var headerMenu = function(){
                         {   title:"Com.Invs.Price",
                             field:"invsrate",
                             responsive:0,
+                            editor:"number",
                             headerVertical:true,
                             formatter:"money",
                             // bottomCalc:"sum",bottomCalcParams:{precision:0},
@@ -696,7 +735,7 @@ var headerMenu = function(){
                     title:"Invoice Level Exp.",
                     headerVertical:true,
                     field:"invlvlchrgs",
-                    cssClass:"bg-green-200 font-semibold",
+                     cssClass:"bg-green-200 font-semibold",
                     bottomCalc:"sum",bottomCalcParams:{precision:0},
                     responsive:0,
                     formatter:"money",
@@ -864,6 +903,7 @@ var headerMenu = function(){
                 'miscexpenses' : parseFloat(miscexpenses.value).toFixed(2),
                 'agencychrgs' : parseFloat(agencychrgs.value).toFixed(2),
                 'otherchrgs' : parseFloat(otherchrgs.value).toFixed(2),
+                'dunitid' : parseFloat(dunitid.value).toFixed(0),
                 'total' : parseFloat(banktotal.value).toFixed(2),
                 'comminvoice' : dynamicTableData
             };
