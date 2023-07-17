@@ -21,7 +21,7 @@ class ContractDetails extends Model
     // protected $primaryKey = 'invid';
     // public $incrementing = false; // If no autoincrement
 
-    protected $appends = ['ttpcs','gdspricetot','gdspricedtytot'];
+    protected $appends = ['ttpcs','gdspricetot','gdspricedtytot','mastertotal'];
 
 
     protected $table= "contract_details";
@@ -32,6 +32,15 @@ class ContractDetails extends Model
 
         $calc = ( $this->bundle1 * $this->pcspbundle1 )+( $this->bundle2 * $this->pcspbundle2 ) ;
         return $calc;
+
+    }
+
+
+    public function getMastertotalAttribute()
+    {
+
+        $calc = ( ContractDetails::where('id',$this->id)->get());
+            return $calc;
 
     }
 

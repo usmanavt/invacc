@@ -261,7 +261,9 @@ class CommercialInvoiceController extends Controller
                 $c->asta = $cid['asta'];
                 $c->ita = $cid['ita'];
                 $c->wsca = $cid['wsca'];
-                $c->total = $cid['total'];
+                $c->total = $cid['goods_received'];
+                $c->goods_received = $cid['total'];
+
                 $c->perpc = $cid['perpc'];
                 $c->perkg = $cid['perkg'];
                 $c->perft = $cid['perft'];
@@ -449,14 +451,6 @@ class CommercialInvoiceController extends Controller
                 $pci->totwt = $sumwt3;
                 $pci->dutyval = $sumval3;
                 $pci->save();
-
-
-
-
-
-
-
-
             DB::commit();
             Session::flash('success',"Commerical Invoice#[$ci->id] Created with Reciving# & Duty Clearance#[$ci->id]");
             return response()->json(['success'],200);
@@ -617,10 +611,14 @@ class CommercialInvoiceController extends Controller
                 $c->ita = $cid['ita'];
                 $c->wsca = $cid['wsca'];
                 $c->total = $cid['total'];
+                $c->goods_received = $cid['goods_received'];
+
                 $c->perpc = $cid['perpc'];
                 $c->perkg = $cid['perkg'];
                 $c->perft = $cid['perft'];
                 $c->otherexpenses =  $cid['otherexpenses'];
+                $c->invlvlchrgs =  $cid['invlvlchrgs'];
+
                 $c->location = $cid['location'];
                 $location = Location::where("title", $cid['location'])->first();
                 $c->locid = $location->id;

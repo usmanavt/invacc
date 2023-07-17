@@ -34,7 +34,7 @@ class Clearance extends Model
     }
 
     /************** Relationships **************/
-    public function commericalInvoice(){ return $this->belongsTo(Clearance::class); }
+    public function clearance(){ return $this->belongsTo(Clearance::class); }
     public function supplier(){return $this->belongsTo(Supplier::class);}
     public function clearancePendingDetails(){ return $this->hasMany(ClearancePendingDetails::class); }
     public function clearanceCompletedDetails(){ return $this->hasMany(ClearanceCompletedDetails::class); }

@@ -482,10 +482,6 @@
                     return;
                 }
 
-
-
-
-
             // calculateBankCharges()
             //  console.log($unt)
             // alert(dynamicTable.getData())
@@ -554,7 +550,7 @@
                  e.st =     st
                  e.rd =     rd
                  e.acd =    acd
-                 e.ast =    st
+                 e.ast =    ast
                  e.it =     it
                  e.wse =    wse
                  e.gdsprice = gdsprice
@@ -656,10 +652,10 @@
                 // var amtinpkr = sconversionrate.value * e.purval
 
                 //  var itmratio = amtinpkr / amtinpkrtotal * 100
-                var dtyitmratio = ( parseFloat(dtyamtinpkr) / parseFloat(dtyamtinpkrtotal) ) * 100
+                var dtyitmratio = (( parseFloat(dtyamtinpkr) / parseFloat(dtyamtinpkrtotal) ) * 100).toFixed(2)
 
                 // var insuranceperitem = parseFloat(insurance.value) * itmratio / 100
-                var dtyinsuranceperitem = ( parseFloat(insurance.value) * dtyitmratio / 100 ).toFixed(2)
+                var dtyinsuranceperitem =  ( parseFloat(insurance.value) * dtyitmratio / 100 ).toFixed(2)
 
                 var dtyinsuranceperitemrs = ( ( parseFloat(insurance.value) * dtyitmratio / 100 ) * conversionrate.value ).toFixed(0)
 
@@ -847,7 +843,7 @@ var updateValues = (cell) => {
             layout:'fitDataTable',
             responsiveLayout:"collapse",
             reactiveData:true,
-            movableRows:true,
+            // movableRows:true,
             // groupBy:"material_title",
             columns:[
                 {title:"Del" , formatter:deleteIcon, headerSort:false, responsive:0,
@@ -856,7 +852,7 @@ var updateValues = (cell) => {
                     }
                 },
                 {title:"Id",           field:"id", visible:false},
-                 {title:"Material",     field:"material_title",responsive:0},
+                {title:"Material",     field:"material_title",responsive:0},
                 {title:"dimension",    field:"dimension",responsive:0,frozen:true, headerMenu:headerMenu},
                 {title:"Unit",         field:"sku",responsive:0},
                 {title:"Unitid",       field:"sku_id",visible:false},
@@ -951,11 +947,6 @@ var updateValues = (cell) => {
                             validator:["required","numeric"],
                             formatterParams:{thousand:",",precision:0},
                         },
-
-
-
-
-
 
                         {   title:"Pcs",headerHozAlign :'center',
                             responsive:0,

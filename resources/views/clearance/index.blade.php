@@ -46,7 +46,7 @@
     var printIcon = function(cell, formatterParams, onRendered){ return "<i class='fa fa-print text-pink-500'></i>";};
 
     const getMaster = @json(route('cisclr.master'));
-    const getDetails = @json(route('cisclr.details'));
+    const getDetails = @json(route('clearances.details')); //cisclr.details
     let table;
     let searchValue = "";
     let statusValue="1";  // 1 = Pending, 2 - Completed

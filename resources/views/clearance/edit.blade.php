@@ -9,7 +9,7 @@
 
     <x-slot name="header">
         <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-            Edit Commercial Invoice | {{ $i->id }}
+            Edit Duty Clerance | {{ $clearance->id }}
         </h2>
     </x-slot>
 
@@ -21,62 +21,105 @@
 
                     <div class="grid">
 
+                        {{-- <fieldset class="border px-4 py-2 rounded">
+                            <legend>Invoice Level Entries</legend>
+                            <div class="grid grid-cols-12 gap-2 py-2 items-center">
+
+                                <x-input-date title="Inv. Date" name="invoicedate" value="{{ $clearance->invoice_date->format('Y-m-d') }}" disabled />
+                                <x-input-text title="Invoice #" name="invoiceno" value="{{ $clearance->invoiceno }}" disabled class=""/>
+                                 <x-input-text title="Machine #" name="machineno" value="{{ $clearance->machineno }}" disabled />
+
+
+
+                                <x-input-numeric title="Conv. Rate" name="conversionrate" value="{{ $clearance->conversionrate }}" />
+                                <x-input-numeric title="Insurance" name="insurance"  value="{{ $clearance->insurance }}" />
+
+                                </div>
+                            <div class="grid grid-cols-12 gap-2 py-2 items-center">
+                                <x-input-date title="Mac. Date" name="machine_date" value="{{ $clearance->machine_date->format('Y-m-d') }}" disabled />
+
+                                <x-input-date title="GD Date" name="gd_date" req required />
+                                    <x-input-text title="GD #" name="gdno" value="" req required />
+                            </div>
+
+
+
+
+                        </fieldset> --}}
+
                         <fieldset class="border px-4 py-2 rounded">
                             <legend>Invoice Level Entries</legend>
                             <div class="grid grid-cols-12 gap-2 py-2 items-center">
 
-                                <x-input-date title="Inv. Date" name="invoicedate" value="{{ $i->invoice_date->format('Y-m-d') }}" req required class="col-span-2"/>
+                                <x-input-date title="Inv. Date" id="invoicedate" name="invoicedate" req required class="col-span-2" hidden/>
+                                <x-input-text title="Invoice #" name="invoiceno"  value="{{ $clearance->invoiceno }}"  disabled/>
+                                <x-input-date title="Mac. Date" name="machine_date" req required class="col-span-2" hidden/>
+                                <x-input-text title="Mac. No" name="machineno" value="{{ $clearance->machineno }}"  disabled/>
+                                <x-input-text title="myid" name="id" value="{{ $clearance->id }}"  disabled/>
 
-                                <x-input-text title="Invoice #" name="invoiceno" value="{{ $i->invoiceno }}" req required class=""/>
-                                {{-- <x-input-text title="Challan #" name="challanno" value="{{ $i->challanno }}" req required class=""/> --}}
-
-                                <x-input-numeric title="Duty.Conv.Rate" name="conversionrate" value="{{ $i->conversionrate }}" req required class=""/>
-                                <x-input-numeric title="Supp.Conv.Rate" name="sconversionrate" value="{{ $i->sconversionrate }}"  req required class=""/>
-                                <x-input-numeric title="Insurance" name="insurance"  value="{{ $i->insurance }}" req required class=""/>
                             </div>
                             <div class="grid grid-cols-12 gap-2 py-2 items-center">
-                                <x-input-date title="Mac. Date" name="machine_date" value="{{ $i->machine_date->format('Y-m-d') }}" req required class="col-span-2"/>
-                                <x-input-text title="Machine #" name="machineno" value="{{ $i->machineno }}" req required class="col-span-2"/>
+
+                                <x-input-date title="GD Date" name="gd_date" value="{{ $clearance->gd_date->format('Y-m-d') }}"   />
+                                    <x-input-text title="GD #" name="gdno"  value="{{ $clearance->gdno }}" />
+
+                                <x-input-numeric title="Conversion Rate" name="conversionrate" value="{{ $clearance->conversionrate }}"  />
+                                {{-- <x-input-numeric title="Supp.Conv. Rate" name="sconversionrate"  req required class=""/> --}}
+                                <x-input-numeric title="Insurance" name="insurance"  value="{{ $clearance->insurance }}"/>
 
                                     <x-label for="" value="Unit as Per Duty Calculation"/>
                                     <select autocomplete="on" required name="dunitid" id ="dunitid"  required >
                                         <option value="" selected>--Unit</option>
                                         @foreach ($cd as $sku)
-
-
-                                            @if ($i->dunitid == $sku->dunitid)
-                                            <option value="{{$sku->dunitid}}" selected>{{$sku->dunit}}</option>
+z                                           @if ($sku->id == $clearance->dunitid)
+                                            <option value="{{$sku->id}}" selected>{{$sku->title}}</option>
                                             @else
-                                            <option value="{{ $sku->dunitid }}">{{ $sku->dunit }}</option>
+                                            <option value="{{ $sku->id }}">{{ $sku->title }}</option>
                                             @endif
                                         @endforeach
                                     </select>
-
-
-
-
                             </div>
                         </fieldset>
 
-                        <fieldset class="border px-4 py-2 rounded">
+                        <div class="grid grid-cols-12 gap-2 py-2 items-center">
+                            <label for="">Debit to </label>
+                            <select autocomplete="on" name="bank_id" id="bank_id" required>
+                                <option disabled selected value="">--Select</option>
+                                @foreach ($banks as $bank)
+                                @if ($bank->id == $clearance->bank_id)
+                                    <option value="{{$bank->id}}" selected>{{$bank->title}}</option>
+                                @else
+                                    <option value="{{ $bank->id }}">{{ $bank->title }}</option>
+                                @endif
+                                @endforeach
+                            </select>
+                            <x-input-date title="cheque date" name="cheque_date" value="{{ $clearance->cheque_date->format('Y-m-d') }}" />
+                            <x-input-numeric title="cheque no" name="cheque_no" value="{{ $clearance->cheque_no }}"    />
+
+                        </div>
+
+
+                        {{-- <fieldset class="border px-4 py-2 rounded">
                             <legend>Invoice Level Expenses</legend>
                             <div class="grid grid-cols-12 gap-2 py-2 items-center">
 
-                                <x-input-numeric title="Bank Chrgs" name="bankcharges" value="{{ $i->bankcharges }}"  required  onblur="calculateBankCharges()"/>
-                                <x-input-numeric title="Cust Coll" name="collofcustom" value="{{ $i->collofcustom }}"  required  onblur="calculateBankCharges()"/>
-                                <x-input-numeric title="Ex Tax of" name="exataxoffie" value="{{ $i->exataxoffie }}"  required  onblur="calculateBankCharges()"/>
-                                <x-input-numeric title="Ship Doc Chg" name="lngnshipdochrgs" value="{{ $i->lngnshipdochrgs }}"  required  onblur="calculateBankCharges()"/>
-                                <x-input-numeric title="Lcl Cartage" name="localcartage" value="{{ $i->localcartage }}"  required  onblur="calculateBankCharges()"/>
-                                <x-input-numeric title="Misc Exp Lunch" name="miscexplunchetc" value="{{ $i->miscexplunchetc }}"  required  onblur="calculateBankCharges()"/>
-                                <x-input-numeric title="Custom Sepoy" name="customsepoy" value="{{ $i->customsepoy }}"  required  onblur="calculateBankCharges()"/>
-                                <x-input-numeric title="Weigh Bridge" name="weighbridge" value="{{ $i->weighbridge }}"  required  onblur="calculateBankCharges()"/>
-                                <x-input-numeric title="Misc Exp" name="miscexpenses" value="{{ $i->miscexpenses }}"  required  onblur="calculateBankCharges()"/>
-                                <x-input-numeric title="Agency Chgs" name="agencychrgs" value="{{ $i->agencychrgs }}"  required  onblur="calculateBankCharges()"/>
-                                <x-input-numeric title="Other Chgs($)" name="otherchrgs" value="{{ $i->otherchrgs }}"  required  onblur="calculateBankCharges()"/>
-                                <x-input-numeric title="Total" name="banktotal" value="{{ $i->total}}"  disabled />
+
+
+                                    <x-input-numeric title="Bank Chrgs" name="bankcharges" 0  required  onblur="calculateBankCharges()"/>
+                                        <x-input-numeric title="Cust Coll" name="collofcustom" 0  required  onblur="calculateBankCharges()"/>
+                                        <x-input-numeric title="Ex Tax of" name="exataxoffie" 0  required  onblur="calculateBankCharges()"/>
+                                        <x-input-numeric title="Ship Doc Chg" name="lngnshipdochrgs" 0  required  onblur="calculateBankCharges()"/>
+                                        <x-input-numeric title="Lcl Cartage" name="localcartage" 0  required  onblur="calculateBankCharges()"/>
+                                        <x-input-numeric title="Misc Exp Lunch" name="miscexplunchetc" 0  required  onblur="calculateBankCharges()"/>
+                                        <x-input-numeric title="Custom Sepoy" name="customsepoy" 0  required  onblur="calculateBankCharges()"/>
+                                        <x-input-numeric title="Weigh Bridge" name="weighbridge" 0  required  onblur="calculateBankCharges()"/>
+                                        <x-input-numeric title="Misc Exp" name="miscexpenses" 0  required  onblur="calculateBankCharges()"/>
+                                        <x-input-numeric title="Agency Chgs" name="agencychrgs" 0  required  onblur="calculateBankCharges()"/>
+                                        <x-input-numeric title="Other Chgs" name="otherchrgs" 0  required  onblur="calculateBankCharges()"/>
+                                        <x-input-numeric title="Total" name="banktotal" value="{{ $clearance->banktotal }}" disabled />
 
                             </div>
-                        </fieldset>
+                        </fieldset> --}}
 
                         {{-- Contract Details --}}
                         <div class="flex flex-row px-4 py-2 items-center">
@@ -109,30 +152,10 @@
 
 @push('scripts')
     <script>
-        const getDetails = @json("$i->commericalInvoiceDetails");
-        const cid = @json("$i->id");
-
-        // Populate Locations in Tabulator
-        const locations = @json($locations);
-        const hscodes = @json($hscodes);
-
-        // Hscode List
-        var hscodeList=[]
-        hscodes.forEach(e => {
-            hscodeList.push({ value:e.hscode, label:e.hscode, id:e.hscode})
-        })
-
-        var newList=[]
-        locations.forEach(e => {
-            newList.push({value:e.title,label:e.title , id:e.id})
-
-        });
-
-
-
-
-
-        // console.info(cid)
+        const deleteIcon = function(cell,formatterParams){return "<i class='fa fa-trash text-red-500'></i>";};
+        let rcvIsMoreThenPending = [] // if reciving is more then pending pcs
+        const getDetails = @json(route('clearances.details'));
+        const cid = @json("$clearance->id");
         let csrfToken = document.head.querySelector("[name~=csrf-token][content]").content;
         //
         let calculateButton = document.getElementById("calculate")
@@ -142,287 +165,375 @@
         let dynamicTableData = []
 
         // Bank Charges
-        let bankcharges= document.getElementById("bankcharges")
-        let collofcustom= document.getElementById("collofcustom")
-        let exataxoffie= document.getElementById("exataxoffie")
-        let lngnshipdochrgs= document.getElementById("lngnshipdochrgs")
-        let localcartage= document.getElementById("localcartage")
-        let miscexplunchetc= document.getElementById("miscexplunchetc")
-        let customsepoy= document.getElementById("customsepoy")
-        let weighbridge= document.getElementById("weighbridge")
-        let miscexpenses= document.getElementById("miscexpenses")
-        let agencychrgs= document.getElementById("agencychrgs")
-     //   let otherchrgs= document.getElementById("otherchrgs")
-        let banktotal= document.getElementById("banktotal")
+        // let bankcharges= document.getElementById("bankcharges")
+        // let collofcustom= document.getElementById("collofcustom")
+        // let exataxoffie= document.getElementById("exataxoffie")
+        // let lngnshipdochrgs= document.getElementById("lngnshipdochrgs")
+        // let localcartage= document.getElementById("localcartage")
+        // let miscexplunchetc= document.getElementById("miscexplunchetc")
+        // let customsepoy= document.getElementById("customsepoy")
+        // let weighbridge= document.getElementById("weighbridge")
+        // let miscexpenses= document.getElementById("miscexpenses")
+        // let agencychrgs= document.getElementById("agencychrgs")
+        //  let otherchrgs= document.getElementById("otherchrgs")
+        // let banktotal= document.getElementById("banktotal")
         // Important Rates
-        let conversionrate = document.getElementById("conversionrate");
-        let sconversionrate = document.getElementById("sconversionrate");
-
+        var conversionrate = document.getElementById("conversionrate");
         var insurance = document.getElementById("insurance");
-        var otherchrgs = document.getElementById("otherchrgs");
-
         //  Add Event on  Page Load
         document.addEventListener('DOMContentLoaded',()=>{
             // calculateButton.disabled = true
             submitButton.disabled = true
         })
         // Calculate Bank Charges [ onblur ]
-        function calculateBankCharges()
-        {
-            var t =  parseFloat(bankcharges.value) + parseFloat(collofcustom.value) + parseFloat(exataxoffie.value) + parseFloat(lngnshipdochrgs.value) + parseFloat(localcartage.value) + parseFloat(miscexplunchetc.value) + parseFloat(customsepoy.value) + parseFloat(weighbridge.value) + parseFloat(miscexpenses.value) + parseFloat(agencychrgs.value) //+ parseFloat(otherchrgs.value)
-            // var t = parseFloat(bankcharges.value) + parseFloat(collofcustom.value)
-            banktotal.value = t.toFixed(2)
-            // console.log(banktotal.value);
-        }
+        // function calculateBankCharges()
+        // {
+        //     // var t =  parseFloat(bankcharges.value) + parseFloat(collofcustom.value) + parseFloat(exataxoffie.value) + parseFloat(lngnshipdochrgs.value) + parseFloat(localcartage.value) + parseFloat(miscexplunchetc.value) + parseFloat(customsepoy.value) + parseFloat(weighbridge.value) + parseFloat(miscexpenses.value) + parseFloat(agencychrgs.value) + parseFloat(otherchrgs.value)
+        //     // var t = parseFloat(bankcharges.value) + parseFloat(collofcustom.value)
+        //     // banktotal.value = t.toFixed(2)
+        //     // console.log(banktotal.value);
+        // }
     </script>
 @endpush
 
 @push('scripts')
     <script>
+        // var calculate = function()
+        // {
+        //     // calculateBankCharges()
+        //     rcvIsMoreThenPending = []
+        //     // alert(dynamicTable.getData())
+        //     const data = dynamicTable.getData()
+        //     //  Get Ratio after price/length/pcs update
+        //     var amtinpkrtotal = 0
+        //     data.forEach(e => {
+        //         amtinpkrtotal += parseFloat(e.amtinpkr)
+        //     });
+        //     data.forEach(e => {
+        //         //  make sure reciving is not more then pending
+        //         if(e.pcs_rcv > e.pcs_pending || e.pcs_rcv === undefined)
+        //         {
+        //             showSnackbar("Rcv Pcs is Required & cannot be more then PCS","error");
+        //             rcvIsMoreThenPending.push(true)
+        //             return;
+        //         }
 
-        var calculate = function(){
+        //         if(e.kg_rcv > e.gdswt_pending || e.kg_rcv === undefined)
+        //         {
+        //             showSnackbar("Rcv kg is Required & cannot be more then kg","error");
+        //             rcvIsMoreThenPending.push(true)
+        //             return;
+        //         }
 
-            if(dunitid.value <= 0)
-                {
-                    showSnackbar("Please select Duty Unit","error");
-                    dunitid.focus();
-                    return;
-                }
+        //         var pcs = e.pcs
+        //         var gdswt = e.gdswt
+        //         var inkg = ((e.gdswt / e.pcs ) * 1000).toFixed(3)
+        //         var length = e.length
+        //         var gdsprice = e.gdsprice
 
-
-
-            calculateBankCharges()
-            // alert(dynamicTable.getData())
-            const data = dynamicTable.getData()
-            //  Get Ratio after price/length/pcs update
-
-            //   var dtyrate = e.dtyrate
-            //   var dtyamtindollar = gdswt * dtyrate
-            //   var dtyamtinpkr = ( gdswt *  dtyrate  * conversionrate.value).toFixed(0),
-
-            var hscode;
-            var amtinpkrtotal = 0
-            var dtyamtinpkrtotal = 0
-
-            data.forEach(e => {
-                amtinpkrtotal += parseFloat(e.amtinpkr)
-                // dtyamtinpkrtotal +=   conversionrate.value * e.dtyrate * e.gdswt
-                dtyamtinpkrtotal +=  parseFloat(e.dtyamtinpkr)
-            });
-            data.forEach(e => {
-        /// before edit
-                // var pcs = e.pcs
-                // var gdswt = e.gdswt
-                // var inkg = ((e.gdswt / e.pcs ) ).toFixed(3)
-                // var length = e.length
-                // var gdsprice = e.gdsprice
-                // var dtyrate = e.dtyrate
-                // var totpcs = e.totpcs
-                // var purval = e.purval
-                // var dutval = e.dutval
-
-
-                // var amtindollar = gdsprice * gdswt
-                // var dtyamtindollar = dtyrate * gdswt
-
-                var pcs = e.pcs
-                var gdswt = e.gdswt
-                var dutygdswt = e.dutygdswt
-                var inkg = ((e.gdswt / e.pcs ) ).toFixed(3)
-                var length = e.length
-                var gdsprice = e.gdsprice
-                var dtyrate = e.dtyrate
-                var invsrate = e.invsrate
-                var totpcs = e.totpcs
-                var amtindollar=e.amtindollar
-                var comamtindollar=e.comamtindollar
-                var invlvlchrgs=e.invlvlchrgs
-
-
-
-                var dtyamtindollar=e.dtyamtindollar
-                var amtinpkr=e.amtinpkr
-                var comamtinpkr=e.comamtinpkr
-                var dtyamtinpkr=e.dtyamtinpkr
-                var dutval=e.dutval
-                var purval=e.purval
-                var wse=e.wse
-
-
-                e.pcs = pcs
-                 e.gdswt = gdswt
-                 e.inkg = inkg
-                 e.length = length
-                 e.dutygdswt=dutygdswt
-                 e.gdsprice = gdsprice
-                 e.dtyrate = dtyrate
-                 e.invsrate = invsrate
-
-                 e.purval=purval
-                 e.dutval=dutval
-                 e.amtinpkr=amtinpkr
-                 e.comamtinpkr=comamtinpkr
-                 e.invlvlchrgs=invlvlchrgs
-                 e.dtyamtinpkr=dtyamtinpkr
-                 e.wse=wse
-
-                 var sid = document.getElementById("dunitid");
-                 var dunitid = sid.options[sid.selectedIndex];
-
-
-                if(dunitid.value==1)
-                    { e.dutval = parseFloat(e.dutygdswt) * parseFloat(e.dtyrate)}
-                    else
-                    { e.dutval = parseFloat(e.pcs) * parseFloat(e.dtyrate) }
+        //         var bundle1 = e.bundle1
+        //         var pcspbundle1 = e.pcspbundle1
+        //         var bundle2 = e.bundle2
+        //         var pcspbundle2 = e.pcspbundle2
 
 
 
 
-                 if(e.sku_id==1)
-                   {
-                        // e.dutval = parseFloat(e.dutygdswt) * parseFloat(e.dtyrate)
-                        e.purval = parseFloat(e.gdswt) * parseFloat(e.gdsprice)
-                        e.comamtindollar = parseFloat(e.gdswt) * parseFloat(e.invsrate)
-                 }
-                 else
-                     {
-                        //  e.dutval = parseFloat(e.pcs) * parseFloat(e.dtyrate)
-                         e.purval = parseFloat(e.pcs) * parseFloat(e.gdsprice)
-                         e.comamtindollar = parseFloat(e.pcs) * parseFloat(e.invsrate)
-                    }
-                e.amtindollar=e.purval
-                e.dtyamtindollar=e.dutval
 
-                e.amtinpkr=e.amtindollar * sconversionrate.value
-                e.dtyamtinpkr=e.dtyamtindollar * conversionrate.value
-                e.comamtinpkr=e.comamtindollar * conversionrate.value
+        //         // var amtindollar = gdsprice * gdswt
+        //         var amtindollar =  gdsprice * e.kg_rcv
+        //         var amtinpkr = conversionrate.value * amtindollar
+        //         var itmratio = amtinpkr / amtinpkrtotal * 100
+        //         var insuranceperitem = parseFloat(insurance.value) * itmratio / 100
+        //         var amountwithoutinsurance = ( amtindollar + insuranceperitem ) * parseFloat(conversionrate.value)
+        //         var onepercentdutypkr = amountwithoutinsurance * 0.01
+        //         var pricevaluecostsheet = parseFloat(onepercentdutypkr + amountwithoutinsurance)
 
-                hscode = hscodes.find(  function(el) { return el.hscode === e.hscode })
+        //         var cda = e.cd * pricevaluecostsheet / 100
+        //         var rda = e.rd * pricevaluecostsheet / 100
+        //         var acda = e.acd * pricevaluecostsheet / 100
+        //         var sta = (pricevaluecostsheet + cda + rda + acda) * e.st / 100
+        //         var asta = (pricevaluecostsheet + cda + rda + acda) * e.ast / 100
+        //         var ita =(pricevaluecostsheet + cda + sta + rda + acda + asta) * e.it / 100
+        //         var wsca = (pricevaluecostsheet * e.wse) /100
+        //         var total = cda + rda + sta + acda + asta + ita + wsca
 
-                var cd = hscode.cd
-                var st = hscode.st
-                var rd = hscode.rd
-                var acd = hscode.acd
-                var ast = hscode.ast
-                var it = hscode.it
-                // var wse = hscode.wse
+        //         e.pcs = pcs
+        //         e.gdswt = gdswt
+        //         e.inkg = inkg
+        //         e.length = length
+        //         e.gdsprice = gdsprice
 
-                e.cd=cd
-                e.st=st
-                e.rd=rd
-                e.acd=acd
-                e.ast=ast
-                e.it=it
-                // e.wse=wse
-
-                // var amtindollar = e.amtindollar
-                // var dtyamtindollar = e.dtyamtindollar
+        //         e.bundle1 =     bundle1
+        //         e.pcspbundle1 = pcspbundle1
+        //         e.bundle2 =     bundle2
+        //         e.pcspbundle2 = pcspbundle2
 
 
 
-                // var amtinpkr = sconversionrate.value * amtindollar
-                // var dtyamtinpkr = conversionrate.value * dtyamtindollar
-
-                var itmratio = parseFloat(dtyamtinpkr) / parseFloat(dtyamtinpkrtotal) * 100
-                //   var dtyitmratio =parseFloat(dtyamtinpkr) / parseFloat(dtyamtinpkrtotal) * 100
-                // console.log(dtyamtinpkrtotal)
-                var insuranceperitem = parseFloat(insurance.value) * itmratio / 100
-                var amountwithoutinsurance = ( parseFloat(dtyamtindollar) + parseFloat(insuranceperitem )) * parseFloat(conversionrate.value)
-                var onepercentdutypkr = parseFloat(amountwithoutinsurance) * 0.01
-                var pricevaluecostsheet = parseFloat(onepercentdutypkr) + parseFloat(amountwithoutinsurance)
-
-                var cda = (parseFloat(e.cd) * parseFloat(pricevaluecostsheet)) / 100
-
-                var rda = e.rd * pricevaluecostsheet / 100
-                var acda = e.acd * pricevaluecostsheet / 100
-                var sta = (pricevaluecostsheet + cda + rda + acda) * e.st / 100
-                var asta = (pricevaluecostsheet + cda + rda + acda) * e.ast / 100
-                var ita =(pricevaluecostsheet + cda + sta + rda + acda + asta) * e.it / 100
-                var wsca = (pricevaluecostsheet * e.wse) /100
-                var total = cda + rda + sta + acda + asta + ita + wsca
-                var perft = (e.perpc / e.length).toFixed(2)
-                // var totallccostwexp = total + pricevaluecostsheet + (banktotal.value * itmratio / 100)
-                var totallccostwexp = total + amtinpkr + (banktotal.value * itmratio / 100)
-                var invlvlchrgs =(banktotal.value * itmratio / 100)
-                var otherexpenses = ( sconversionrate.value * otherchrgs.value ) * itmratio / 100
-                var perpc = ((e.totallccostwexp+otherexpenses) / e.pcs).toFixed(2)
-                // var perkg = (perpc / inkg).toFixed(2)
-                var perkg = (perpc / inkg).toFixed(2)
-                var qtyinfeet = (e.pcs * e.length).toFixed(2)
-
-                // e.pcs = pcs
-                // e.gdswt = gdswt
-                // e.inkg = inkg
-                // e.length = length
-                // e.gdsprice = gdsprice
-                // e.dtyrate = dtyrate
-
-                // e.amtindollar = amtindollar
-                // e.amtinpkr = amtinpkr
-                // e.dtyrate = dtyrate
-                e.itmratio = itmratio
-                e.insuranceperitem = insuranceperitem
-                e.amountwithoutinsurance = amountwithoutinsurance
-                e.onepercentdutypkr = (onepercentdutypkr).toFixed(2)
-                e.pricevaluecostsheet = (pricevaluecostsheet).toFixed(2)
 
 
-                e.cda = (cda).toFixed(2)
-                e.rda = (rda).toFixed(2)
-                e.acda = (acda).toFixed(2)
-                e.sta = (sta).toFixed(2)
-                e.asta = (asta).toFixed(2)
-                e.ita = (ita).toFixed(2)
-                e.wsca = (wsca).toFixed(2)
-                e.total = (total).toFixed(2)
-                e.perkg = perkg
-                e.totallccostwexp = totallccostwexp
-                e.invlvlchrgs=invlvlchrgs
-                e.perpc = perpc
-                e.perft = (perpc / length )
-                e.otherexpenses = otherexpenses
-                e.qtyinfeet = qtyinfeet
-                // e.inkg = inkg
-            })
-            dynamicTable.setData(data)
-            submitButton.disabled = false
-        }
+
+
+        //         e.amtindollar = amtindollar
+        //         e.amtinpkr = amtinpkr
+        //         e.itmratio = itmratio
+        //         e.insuranceperitem = insuranceperitem
+        //         e.amountwithoutinsurance = amountwithoutinsurance
+        //         e.onepercentdutypkr = (onepercentdutypkr).toFixed(2)
+        //         e.pricevaluecostsheet = (pricevaluecostsheet).toFixed(2)
+
+        //         e.cda = (cda).toFixed(2)
+        //         e.rda = (rda).toFixed(2)
+        //         e.acda = (acda).toFixed(2)
+        //         e.sta = (sta).toFixed(2)
+        //         e.asta = (asta).toFixed(2)
+        //         e.ita = (ita).toFixed(2)
+        //         e.wsca = (wsca).toFixed(2)
+        //         e.total = (total).toFixed(2)
+        //         e.perkg = perkg
+        //         e.totallccostwexp = totallccostwexp
+        //         e.perpc = perpc
+        //         e.perft = (perpc / length )
+        //          e.otherexpenses = e.otherexpenses
+        //     })
+        //     dynamicTable.setData(data)
+
+        //     rcvIsMoreThenPending.forEach(e => {
+        //         if(e === true)
+        //         {
+        //             submitButton.disabled = true
+        //         }
+        //     })
+        //     if(rcvIsMoreThenPending.length <= 0)
+        //     {
+        //         submitButton.disabled = false
+        //     }
+        // }
         //  Dynamic Table [User data]
 
+        /// NEW CODING #############################3
+ var calculate = function(){
 
-
-        var rowMenu = [
+if(dunitid.value <= 0)
     {
-        label:"<i class='fas fa-user'></i> Change Name",
-        action:function(e, row){
-            row.update({name:"Steve Bobberson"});
-        }
-    },
-    {
-        label:"<i class='fas fa-check-square'></i> Select Row",
-        action:function(e, row){
-            row.select();
-        }
-    },
-    {
-        separator:true,
-    },
-    {
-        label:"Admin Functions",
-        menu:[
-            {
-                label:"<i class='fas fa-trash'></i> Delete Row",
-                action:function(e, row){
-                    row.delete();
-                }
-            },
-            {
-                label:"<i class='fas fa-ban'></i> Disabled Option",
-                disabled:true,
-            },
-        ]
+        showSnackbar("Please select Duty Unit","error");
+        dunitid.focus();
+        return;
     }
-]
+    if(conversionrate.value <= 0)
+    {
+        showSnackbar("conversionrate must be greater than 0","error");
+        conversionrate.focus();
+        return;
+    }
+
+    if(gdno.value === '' )
+    {
+        showSnackbar("GD # required ","error");
+        gdno.focus();
+        return;
+    }
+
+// calculateBankCharges()
+//  console.log($unt)
+// alert(dynamicTable.getData())
+const data = dynamicTable.getData()
+// Get Selected HSCode Value
+// var hscode;
+//  First Iteration to calculate Basic Data
+data.forEach(e => {
+
+
+
+    var bundle1 = e.bundle1
+    var pcspbundle1 = e.pcspbundle1
+    var bundle2 = e.bundle2
+    var pcspbundle2 = e.pcspbundle2
+
+
+    var pcs = e.pcs
+    var gdswt = e.gdswt
+    var dutygdswt = e.dutygdswt
+    var hscode = e.hscode
+
+    var cd = e.cd
+    var st = e.st
+    var rd = e.rd
+    var acd = e.acd
+    var ast = e.ast
+    var it = e.it
+    var wse = e.wse
+
+    var inkg = ((e.gdswt / e.pcs ) ).toFixed(3)
+    var length = e.length
+    var gdsprice = e.gdsprice
+    var dtyrate = e.dtyrate
+    var invsrate = e.invsrate
+    var totpcs = e.totpcs
+    var amtindollar=e.amtindollar
+    // var dtyamtinpkr=e.dtyamtinpkr
+    // var comamtinpkr=e.comamtinpkr
+
+     var dutval=e.dutval
+    // var purval=e.purval
+    // var comval=e.comval
+
+
+    e.bundle1 =     bundle1
+    e.pcspbundle1 = pcspbundle1
+    e.bundle2 =     bundle2
+    e.pcspbundle2 = pcspbundle2
+    e.amtindollar =amtindollar
+
+
+
+     e.pcs = pcs
+     e.gdswt = gdswt
+     e.inkg = inkg
+     e.length = length
+     e.dutygdswt=dutygdswt
+     e.hscode=hscode
+
+     e.cd =     cd
+     e.st =     st
+     e.rd =     rd
+     e.acd =    acd
+     e.ast =    ast
+     e.it =     it
+     e.wse =    wse
+     e.gdsprice = gdsprice
+     e.dtyrate = dtyrate
+    //  e.purval=purval
+     e.dutval=dutval
+    //  e.comval=comval
+    //  e.amtinpkr=amtinpkr
+    //  e.dtyamtinpkr=dtyamtinpkr
+    //  e.comamtinpkr=comamtinpkr
+
+    //  console.log(e.dtyrate)
+
+var sid = document.getElementById("dunitid");
+var dunitid = sid.options[sid.selectedIndex];
+
+
+if(dunitid.value==1)
+       {
+            e.amtindollar = parseFloat(e.gdswt) * parseFloat(e.gdsprice)
+       }
+     else
+         {
+             e.amtindollar = parseFloat(e.pcs) * parseFloat(e.gdsprice)
+        }
+    // if(e.sku_id==1)
+    //    {
+    //         // e.dutval = parseFloat(e.dutygdswt) * parseFloat(e.dtyrate)
+    //         e.purval = parseFloat(e.gdswt) * parseFloat(e.gdsprice)
+    //         // e.comval = parseFloat(e.gdswt) * parseFloat(e.invsrate)
+    //    }
+    //  else
+    //      {
+    //         //  e.dutval = parseFloat(e.pcs) * parseFloat(e.dtyrate)
+    //          e.purval = parseFloat(e.pcs) * parseFloat(e.gdsprice)
+    //          e.comval = parseFloat(e.pcs) * parseFloat(e.invsrate)
+    //     }
+            // e.amtindollar=e.purval
+                    //  e.amtindollar=e.dutval
+            // e.dtyamtindollar=e.dtyamtindollar
+            // e.comamtindollar=e.comval
+
+            // e.amtinpkr=e.amtindollar * sconversionrate.value
+            e.amtinpkr=e.amtindollar * conversionrate.value
+            // e.comamtinpkr=e.comamtindollar * conversionrate.value
+
+    // console.log(e.dtyamtinpkr)
+
+
+
+
+
+
+
+
+    //   break
+    ////////////////////////////////////////////////////////////////////////
+    // Get Values of HSCode Selected in List and Populate Data
+    ///////////////////////////////////////////////////////////////////////
+                // hscode = hscodes.find(  function(el) { return el.hscode === e.hscode })
+    // e.cd = hscode.cd
+    // e.st = hscode.st
+    // e.rd = hscode.rd
+    // e.acd = hscode.acd
+    // e.ast = hscode.ast
+    // e.it = hscode.it
+    // e.wsc = hscode.wse
+
+                    // var cd = hscode.cd
+                    // var st = hscode.st
+                    // var rd = hscode.rd
+                    // var acd = hscode.acd
+                    // var ast = hscode.ast
+                    // var it = hscode.it
+    // var wse = wse
+
+
+                        // e.cd=cd
+                        // e.st=st
+                        // e.rd=rd
+                        // e.acd=acd
+                        // e.ast=ast
+                        // e.it=it
+    // e.wse=wse
+})
+
+//  Get Ratio after price/length/pcs update
+var amtinpkrtotal = 0
+// var amtinpkrtotal = 0
+
+data.forEach(e => {
+    // amtinpkrtotal += parseFloat(e.amtinpkr)
+    amtinpkrtotal += parseFloat(e.amtinpkr)
+});
+
+data.forEach(e => {
+
+    var amtinpkr = parseFloat(conversionrate.value) * parseFloat(e.dutval)
+    var itmratio = (( parseFloat(e.amtinpkr) / parseFloat(amtinpkrtotal) ) * 100).toFixed(2)
+    var insuranceperitem =  ( parseFloat(insurance.value) * itmratio / 100 ).toFixed(2)
+    var dtyinsuranceperitemrs = ( ( parseFloat(insurance.value) * itmratio / 100 ) * conversionrate.value ).toFixed(0)
+    var amountwithoutinsurance = ( parseFloat(e.amtindollar) + parseFloat(insuranceperitem) ) * parseFloat(conversionrate.value)
+    var onepercentdutypkr = amountwithoutinsurance * 0.01
+    var pricevaluecostsheet = parseFloat(onepercentdutypkr + amountwithoutinsurance)
+    var cda = parseFloat(e.cd) * pricevaluecostsheet / 100
+    var rda = parseFloat(e.rd) * pricevaluecostsheet / 100
+    var acda = parseFloat(e.acd) * pricevaluecostsheet / 100
+    var sta = (pricevaluecostsheet + cda + rda + acda) * parseFloat(e.st) / 100
+    var asta = (pricevaluecostsheet + cda + rda + acda) * parseFloat(e.ast) / 100
+    var ita =(pricevaluecostsheet + cda + sta + rda + acda + asta) * parseFloat(e.it) / 100
+    var wsca = (pricevaluecostsheet * parseFloat(e.wse)) /100
+    var total = cda + rda + sta + acda + asta + ita + wsca
+
+    e.amtindollar = e.amtindollar
+    e.itmratio = itmratio
+    e.insuranceperitem = insuranceperitem
+    e.dtyinsuranceperitemrs = dtyinsuranceperitemrs
+
+    e.amountwithoutinsurance = amountwithoutinsurance
+    e.onepercentdutypkr = (onepercentdutypkr).toFixed(2)
+    e.pricevaluecostsheet = (pricevaluecostsheet).toFixed(2)
+    e.cda = (cda).toFixed(2)
+    e.rda = (rda).toFixed(2)
+    e.acda = (acda).toFixed(2)
+    e.sta = (sta).toFixed(2)
+    e.asta = (asta).toFixed(2)
+    e.ita = (ita).toFixed(2)
+    e.wsca = (wsca).toFixed(2)
+    e.total = (total).toFixed(2)
+})
+dynamicTable.setData(data)
+submitButton.disabled = false
+}
+
 
 var headerMenu = function(){
     var menu = [];
@@ -469,292 +580,185 @@ var headerMenu = function(){
    return menu;
 };
 
+var updateValues = (cell) => {
+        var data = cell.getData();
+        var sum = (Number(data.bundle1) * Number(data.pcspbundle1)) + (Number(data.bundle2) * Number(data.pcspbundle2))
+        var row = cell.getRow();
+        row.update({
+             "pcs": sum,
+            // "gdspricetot": sum2,
+            // "gdspricedtytot":sum3
 
-        dynamicTable = new Tabulator("#dynamicTable", {
-            height:"550px",
+        });
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+dynamicTable = new Tabulator("#dynamicTable", {
+            height:"450px",
             width:"1000px",
-            rowContextMenu: rowMenu,
             layout:'fitDataTable',
             responsiveLayout:"collapse",
-            reactiveData:true,
-            movableRows:true,
-            data:getDetails,
-            // reactiveData:true,
+            ajaxParams: function(){
+                return {id:cid, status:1};
+            },
+            ajaxURL: getDetails,
             columns:[
-                // {title:"Del" , formatter:deleteIcon, headerSort:false, responsive:0,
-                //     cellClick:function(e, cell){
-                //         cell.getRow().delete();
-                //     }
-                // },
-
-                // {title: "id",field: "myid",visible:false},
-                // {title:"Location", field:"location" ,editor:"list" , editorParams:   {
-                //         values:newList,
-                //         cssClass:"bg-green-200 font-semibold",
-                //         validator:["required"]
-                //     }
-                // },
-
+                {title:"Del" , formatter:deleteIcon, headerSort:false, responsive:0,
+                    cellClick:function(e, cell){
+                        cell.getRow().delete();
+                    }
+                },
                 {title:"Id",           field:"material_id", visible:false},
                 {title:"Material",     field:"material.title",responsive:0},
                 {title:"dimension",    field:"material.dimension",responsive:0,frozen:true, headerMenu:headerMenu},
                 {title:"Unit",         field:"material.sku",responsive:0},
-                {title:"contract_id",  field:"contract_id",visible:false},
-                {title:"material_id",  field:"material_id",visible:false},
+                {title:"Unitid",       field:"material.sku_id",visible:false},
                 {title:"supplier_id",  field:"supplier_id",visible:false},
                 {title:"user_id",      field:"user_id",visible:false},
                 {title:"category_id",  field:"category_id",visible:false},
-                {title:"sku_id",       field:"sku_id",visible:false},
                 {title:"dimension_id", field:"dimension_id",visible:false},
-                {title:"source_id",    field:"source_id",visible:false},
-                {title:"brand_id",     field:"brand_id",visible:false},
                 {
                     title:'Quantity', headerHozAlign:"center",
                     columns:[
 
-                    {title: "id",field: "myid",visible:false},
-                        {   title:"Location",headerHozAlign :'center',
-                            field:"location" ,
-                            editor:"list",
-                            responsive:0 ,
-                            headerVertical:true,
-                            // cssClass:"bg-green-200 font-semibold",
-                            editorParams:   {
-                                values:newList,
-                                validator:["required"]
-                            }
-                        },
-                        {   title:"HS code",headerHozAlign :'center',
+                    {   title:"HS code",headerHozAlign :'center',
                             field:"hscode",
-                            editor:"list",
+                            // editor:"list",
                             responsive:0,
                             headerVertical:true,
                             // cssClass:"bg-green-200 font-semibold",
-                            editorParams:   {
-                                values:hscodeList,
-                                validator:["required"]
-                            }
+                            // editorParams:   {
+                            //     values:hscodeList,
+                            //     validator:["required"]
+                            // }
                         },
+
+                        {   title:"Bundle1",headerHozAlign :'center',
+                            responsive:0,
+                            field:"bundle1",
+                            editor:"number",
+                            headerVertical:true,
+                            bottomCalc:"sum",
+                            formatter:"money",
+                            cellEdited: updateValues,
+                            validator:["required","numeric"],
+                            cssClass:"bg-green-200 font-semibold",
+                            formatterParams:{thousand:",",precision:0},
+                        },
+
+                        {   title:"Pcs/Bund",headerHozAlign :'center',
+                            responsive:0,
+                            field:"pcspbundle1",
+                            headerVertical:true,
+                            // bottomCalc:"sum",
+                            formatter:"money",
+                            cellEdited: updateValues,
+                            // cssClass:"bg-green-200 font-semibold",
+                            validator:["required","numeric"],
+                            formatterParams:{thousand:",",precision:0},
+                        },
+
+                        {   title:"Bundle2",headerHozAlign :'center',
+                            responsive:0,
+                            field:"bundle2",
+                            editor:"number",
+                            cellEdited: updateValues,
+                            headerVertical:true,
+                            bottomCalc:"sum",
+                            formatter:"money",
+                             cssClass:"bg-green-200 font-semibold",
+                            validator:["required","numeric"],
+                            formatterParams:{thousand:",",precision:0},
+                        },
+
+                        {   title:"Pcs/Bund",headerHozAlign :'center',
+                            responsive:0,
+                            field:"pcspbundle2",
+                            // editor:"number",
+                            headerVertical:true,
+                            cellEdited: updateValues,
+                            // bottomCalc:"sum",
+                            formatter:"money",
+                            // cssClass:"bg-green-200 font-semibold",
+                            validator:["required","numeric"],
+                            formatterParams:{thousand:",",precision:0},
+                        },
+
 
                     {   title:"Pcs",headerHozAlign :'center',
                             responsive:0,
                             field:"pcs",
-                            editor:"number",
                             headerVertical:true,
-                            formatter:"money",
                             bottomCalc:"sum",
-                            validator:["required","numeric"],
+                            formatter:"money",
                             formatterParams:{thousand:",",precision:0},
                         },
-                        {   title:"Supp.Wt(Kg)",
+
+                        {   title:"Duty.Wt(Kg)",
                             field:"gdswt",
                             responsive:0,
-                            editor:"number",
+                            // editor:"number",
                             headerVertical:true,
-                            formatter:"money",
-                            bottomCalc:"sum",
-                            validator:["required","numeric"],
-                            formatterParams:{thousand:",",precision:2},
-                        },
-                        {   title:"Duty.Wt(Kg)",
-                            field:"dutygdswt",
-                            responsive:0,
-                            editor:"number",
-                            headerVertical:true,
-                            formatter:"money",
-                            bottomCalc:"sum",
-                            validator:["required","numeric"],
-                            formatterParams:{thousand:",",precision:2},
-                        },
-
-                        {   title:"Wt(pcs/kg)",
-                            field:"inkg",
-                            responsive:0,
-                            headerVertical:true,
-                        },
-                        {   title:"Lng(pcs/feet)",
-                            field:"length",
-                            headerVertical:true,
-                            editor:"number",
-                            // selectContents:true,
-                            formatter:"money",
-                            responsive:0,
-                            formatterParams:{thousand:",",precision:2},
-                            validator:["required","numeric"],
-                            // bottomCalcParams:{precision:2}  ,
-                        },
-                        {   title:"QtyInFeet",
-                            field:"qtyinfeet",
-                            headerVertical:true,
-                          //  editor:"number",
                             bottomCalc:"sum",
                             formatter:"money",
-                            responsive:0,
-                            formatterParams:{thousand:",",precision:2},
+                            cssClass:"bg-green-200 font-semibold",
                             validator:["required","numeric"],
-                            bottomCalcParams:{precision:0}  ,
+                            formatterParams:{thousand:",",precision:2},
                         },
-
 
                     ]
                 },
-
-                // {
-                // title:'Revise WSE', headerHozAlign:"center",
-                    // columns:[
-                {title:"Rvs WSE Rate",  field:"wse",headerVertical:true,   formatter:"money",editor:"number",
-                        formatterParams:{thousand:",",precision:2},          responsive:0},
-                    // ]
-                // },
-
                 {
                     title:'Price',
                     columns:[
-                        {   title:"Supp.Price($)",
+                        {   title:"Duty.Price($)",
+                            editor:"number",
                             field:"gdsprice",
                             formatter:"money" ,
-                            // editor:"number",
                             responsive:0,
                             headerVertical:true,
-                            // cssClass:"bg-green-200 font-semibold",
                             validator:["required","numeric"],
                             formatterParams:{thousand:",",precision:2}
                         },
-
                     ]
                 },
-
-
                 {
                     title:'Amount', headerHozAlign:"center",
                     columns:[
-                        {   title:"Supp.Val($)",
-                            field:"amtindollar",
-                            headerVertical:true,
-                            formatter:"money",
-                            responsive:0,
-                            // bottomCalcFormatter:"money",
-                            formatterParams:{thousand:",",precision:2},
-                            bottomCalc:"sum",bottomCalcParams:{precision:0},
-                        },
-                        {   title:"Supp.Val(Rs)",
-                            field:"amtinpkr",
-                            headerVertical:true,
-                            formatter:"money",
-                            formatterParams:{thousand:",",precision:0},
-                            responsive:0,
-                            bottomCalc:"sum",bottomCalcParams:{precision:0},
-                            // bottomCalcFormatter:"money",
-                        },
-
-                        {   title:"Duty.Price($)",
-                            field:"dtyrate",
-                            headerVertical:true,
-                            editor:"number",
-                            // cssClass:"bg-green-200 font-semibold",
-                            formatter:"money",
-                            responsive:0,
-                            formatterParams:{thousand:",",precision:2},
-                            validator:["required","numeric"],
-                            bottomCalcParams:{precision:2}  ,
-                        },
-
                         {   title:"Duty.Val($)",
-                            field:"dtyamtindollar",
-                            formatter:"money",
-                            headerVertical:true,
+                            field:"amtindollar",
                             responsive:0,
+                            formatter:"money",
+                            bottomCalc:"sum",
                             bottomCalcFormatter:"money",
-                            formatterParams:{thousand:",",precision:2},
-                            bottomCalc:"sum",bottomCalcParams:{precision:0},
+                            formatterParams:{thousand:",",precision:0},
                         },
                         {   title:"Duty.Val(Rs)",
-                            field:"dtyamtinpkr",
-                            headerVertical:true,
+                            field:"amtinpkr",
                             formatter:"money",
                             responsive:0,
-                            // bottomCalcFormatter:"money",
-                            formatterParams:{thousand:",",precision:0},
-                            bottomCalc:"sum",bottomCalcParams:{precision:0},
-                        },
-
-                        {   title:"Com.Invs.Price",
-                            field:"invsrate",
-                            responsive:0,
-                            editor:"number",
-                            headerVertical:true,
-                            formatter:"money",
-                            // bottomCalc:"sum",bottomCalcParams:{precision:0},
-                            // bottomCalcFormatter:"money",
-                            formatterParams:{thousand:",",precision:2},
-                        },
-
-                        {   title:"Com.Invs.Val($)",
-                            field:"comamtindollar",
-                            responsive:0,
-                            headerVertical:true,
-                            formatter:"money",
-                            bottomCalc:"sum",bottomCalcParams:{precision:2},
-                            // bottomCalcFormatter:"money",
+                            bottomCalc:"sum",
+                            bottomCalcFormatter:"money",
                             formatterParams:{thousand:",",precision:0},
                         },
-
-                        {   title:"Com.Invs.Val(Rs)",
-                            field:"comamtinpkr",
-                            responsive:0,
-                            headerVertical:true,
-                            formatter:"money",
-                            bottomCalc:"sum",bottomCalcParams:{precision:0},
-                            // bottomCalcFormatter:"money",
-                            formatterParams:{thousand:",",precision:0},
-                        },
-
-                        {
-                    title:'Duties Amount (PKR)', headerHozAlign:"center",
-                    columns:[
-                        {title:"CD",                field:"cda", formatter:"money",
-                        formatterParams:{thousand:",",precision:0},             responsive:0,bottomCalc:"sum",bottomCalcParams:{precision:0}},
-                            {title:"ST",                field:"sta", formatter:"money",
-                        formatterParams:{thousand:",",precision:0},             responsive:0,bottomCalc:"sum",bottomCalcParams:{precision:0}},
-                            {title:"RD",                field:"rda", formatter:"money",
-                        formatterParams:{thousand:",",precision:0},             responsive:0,bottomCalc:"sum",bottomCalcParams:{precision:0}},
-                            {title:"ACD",               field:"acda", formatter:"money",
-                        formatterParams:{thousand:",",precision:0},            responsive:0,bottomCalc:"sum",bottomCalcParams:{precision:0}},
-                            {title:"AST",               field:"asta",  formatter:"money",
-                        formatterParams:{thousand:",",precision:0},           responsive:0,bottomCalc:"sum",bottomCalcParams:{precision:0}},
-                            {title:"IT",                field:"ita",  formatter:"money",
-                        formatterParams:{thousand:",",precision:0},            responsive:0,bottomCalc:"sum",bottomCalcParams:{precision:0}},
-                            {title:"WSE",               field:"wsca",  formatter:"money",
-                        formatterParams:{thousand:",",precision:0},           responsive:0,bottomCalc:"sum",bottomCalcParams:{precision:0}},
-                            {title:"Total Duty", cssClass:"bg-green-200 font-semibold",  field:"total", headerVertical:true,  formatter:"money",formatterParams:{thousand:",",precision:0},
-                         responsive:0,bottomCalc:"sum",bottomCalcParams:{precision:0}},
-                    ]
-                },
-
-                {
-                    title:"Invoice Level Exp.",
-                    headerVertical:true,
-                    field:"invlvlchrgs",
-                     cssClass:"bg-green-200 font-semibold",
-                    bottomCalc:"sum",bottomCalcParams:{precision:0},
-                    responsive:0,
-                    formatter:"money",
-                    formatterParams:{thousand:",",precision:0},
-                },
-
-
-                {
-                    title:"Tot Cost(Rs)",
-                    headerVertical:true,
-                    field:"totallccostwexp",
-                    cssClass:"bg-green-200 font-semibold",
-                    bottomCalc:"sum",bottomCalcParams:{precision:0},
-                    responsive:0,
-                    formatter:"money",
-                    formatterParams:{thousand:",",precision:2},
-                },
-
-
 
                         {   title:"Item Ratio(%)",
                             field:"itmratio",
@@ -763,32 +767,52 @@ var headerMenu = function(){
                             formatter:"money",
                             formatterParams:{thousand:",",precision:2},
                         },
-                    ]
-                },
-                {
-                    title:"Insurance Val($)",
+
+
+                        {
+                    title:"Insurance/Item($)",
                     field:"insuranceperitem",
-                    bottomCalc:"sum",bottomCalcParams:{precision:0},
-                    responsive:0,
                     headerVertical:true,
+                    bottomCalc:"sum",
+                    formatterParams:{thousand:",",precision:0},
+                    responsive:0,
                     formatter:"money",
                 },
                 {
-                    title:"Amt W/Insur (PKR)",
-                    field:"amountwithoutinsurance",
-                    bottomCalc:"sum",bottomCalcParams:{precision:0},
+                    title:"Insurance/Item(Rs)",
+                    field:"dtyinsuranceperitemrs",
+                    headerVertical:true,
+                    bottomCalc:"sum",
+                    formatterParams:{thousand:",",precision:0},
                     responsive:0,
+                    formatter:"money",
+                    formatterParams:{thousand:",",precision:0},
+                },
+
+                {
+                    title:"Amt W/Insurance (Rs)",
+                    field:"amountwithoutinsurance",
+                    responsive:0,
+                    bottomCalc:"sum",bottomCalcParams:{precision:0},
                     headerVertical:true,
                     formatter:"money",
+                    formatterParams:{thousand:",",precision:0},
                 },
+
+
                 {
                     title:"1% Duty (PKR)",
                     field:"onepercentdutypkr",
-                    responsive:0,
                     bottomCalc:"sum",bottomCalcParams:{precision:0},
+                    formatterParams:{thousand:",",precision:0},
+                    responsive:0,
                     headerVertical:true,
                     formatter:"money",
                 },
+
+                    ]
+                },
+
                 // {
                 //     title:"Price value (CS)",
                 //     headerVertical:true,
@@ -796,119 +820,168 @@ var headerMenu = function(){
                 //     formatter:"money",
                 //     formatterParams:{thousand:",",precision:2},
                 // },
-
-                {   title:"Other.Exp",
-                            field:"otherexpenses",
-                            headerVertical:true,
-                            editor:"number",
-                            bottomCalc:"sum",
-                            formatter:"money",
-                            responsive:0,
-                            formatterParams:{thousand:",",precision:2},
-                            validator:["required","numeric"],
-                            bottomCalcParams:{precision:2}  ,
-                },
-
-
-
-
-
-                       // {title:"Code",              field:"material.hscodes.hscode",
-                        // headerVertical:true,       visible:true},
-                        {title:"CD",                field:"cd",responsive:0,
-                        headerVertical:true,        visible:true},
-                        {title:"ST",                field:"st",responsive:0,
-                        headerVertical:true,          visible:true},
-                        {title:"RD",                field:"rd",responsive:0,
-                        headerVertical:true,        visible:true},
-                        {title:"ACD",               field:"acd",responsive:0,
-                        headerVertical:true,          visible:true},
-                        {title:"AST",               field:"ast",responsive:0,
-                        headerVertical:true,        visible:true},
-                        {title:"IT",                field:"it",responsive:0,
-                        headerVertical:true,        visible:true},
-                        // {title:"WSE",               field:"wse",
-                        // headerVertical:true,         visible:true},
-
-
-
+                // {
+                //     title:'Duties Rate', headerHozAlign:"center",
+                //     columns:[
+                //         {title:"Code",              field:"material.hscodes.hscode",
+                //         headerVertical:true,       visible:false},
+                //         {title:"CD",                field:"material.hscodes.cd",
+                //         headerVertical:true,        visible:false},
+                //         {title:"ST",                field:"material.hscodes.st",
+                //         headerVertical:true,          visible:false},
+                //         {title:"RD",                field:"material.hscodes.rd",
+                //         headerVertical:true,        visible:false},
+                //         {title:"ACD",               field:"material.hscodes.acd",
+                //         headerVertical:true,          visible:false},
+                //         {title:"AST",               field:"material.hscodes.ast",
+                //         headerVertical:true,        visible:false},
+                //         {title:"IT",                field:"material.hscodes.it",
+                //         headerVertical:true,        visible:false},
+                //         {title:"WSC",               field:"material.hscodes.wsc",
+                //         headerVertical:true,         visible:false},
+                //     ]
+                // },
                 {
-                    title:'Cost Rate/Unit', headerHozAlign:"center",
+                    title:'Duties Amount (PKR)', headerHozAlign:"center",
                     columns:[
-                        {title:"Per Pc",    field:"perpc",          responsive:0 ,formatter:"money",
-                    formatterParams:{thousand:",",precision:2}, },
-                        {title:"Per Kg",    field:"perkg",          responsive:0 , formatter:"money",
-                    formatterParams:{thousand:",",precision:2}, },
-                        {title:"Per Feet",  field:"perft",        responsive:0 ,formatter:"money",
-                    formatterParams:{thousand:",",precision:2}, },
-
+                        {title:"CD",                field:"cda",bottomCalc:"sum",bottomCalcParams:{precision:0}, formatter:"money",
+                    formatterParams:{thousand:",",precision:0},             responsive:0},
+                        {title:"ST",                field:"sta",bottomCalc:"sum",bottomCalcParams:{precision:0},formatter:"money",
+                    formatterParams:{thousand:",",precision:0},             responsive:0},
+                        {title:"RD",                field:"rda",bottomCalc:"sum",bottomCalcParams:{precision:0}, formatter:"money",
+                    formatterParams:{thousand:",",precision:0},             responsive:0},
+                        {title:"ACD",               field:"acda",bottomCalc:"sum",bottomCalcParams:{precision:0}, formatter:"money",
+                    formatterParams:{thousand:",",precision:0},            responsive:0},
+                        {title:"AST",               field:"asta",bottomCalc:"sum",bottomCalcParams:{precision:0},  formatter:"money",
+                    formatterParams:{thousand:",",precision:0},           responsive:0},
+                        {title:"IT",                field:"ita",bottomCalc:"sum",bottomCalcParams:{precision:0},  formatter:"money",
+                    formatterParams:{thousand:",",precision:0},            responsive:0},
+                        {title:"WSC",               field:"wsca",bottomCalc:"sum",bottomCalcParams:{precision:0},  formatter:"money",
+                    formatterParams:{thousand:",",precision:0},           responsive:0},
+                        {title:"Total",             field:"total",bottomCalc:"sum",bottomCalcParams:{precision:0},   formatter:"money",
+                    formatterParams:{thousand:",",precision:0},bottomCalc:"sum",bottomCalcParams:{precision:0},          responsive:0},
                     ]
                 },
+
+                {title:"CD",                field:"cd",editor:"number",responsive:0,
+                headerVertical:true,        visible:true},
+                {title:"ST",                field:"st",editor:"number",responsive:0,
+                headerVertical:true,          visible:true},
+                {title:"RD",                field:"rd",editor:"number",responsive:0,
+                headerVertical:true,        visible:true},
+                {title:"ACD",               field:"acd",editor:"number",responsive:0,
+                headerVertical:true,          visible:true},
+                {title:"AST",               field:"ast",editor:"number",responsive:0,
+                headerVertical:true,        visible:true},
+                {title:"IT",                field:"it",editor:"number",responsive:0,
+                headerVertical:true,        visible:true},
+
+
+
+
+
+
+
+
+
+
+
+
+                // {
+                //     title:"Total LC Cost W/InvsExp",
+                //     headerVertical:true,
+                //     field:"totallccostwexp",
+                //     responsive:0,
+                //     formatter:"money",
+                //     formatterParams:{thousand:",",precision:2},
+                // },
+                // {
+                //     title:'Cost Rate/Unit', headerHozAlign:"center",
+                //     columns:[
+                //         {title:"Per Pc",    field:"perpc",          responsive:0 ,formatter:"money",
+                //     formatterParams:{thousand:",",precision:2}, },
+                //         {title:"Per Kg",    field:"perkg",          responsive:0 , formatter:"money",
+                //     formatterParams:{thousand:",",precision:2}, },
+                //         {title:"Per Feet",  field:"perft",        responsive:0 ,formatter:"money",
+                //     formatterParams:{thousand:",",precision:2}, },
+
+                //     ]
+                // },
             ],
+            ajaxResponse:function(getDetails, params, response){
+                return response.data;
+            },
         })
         // Validation & Post
         function validateForm()
         {
-
             var invoicedate = document.getElementById("invoicedate")
             var invoiceno = document.getElementById("invoiceno")
-            // var challanno = document.getElementById("challanno")
             var machineno = document.getElementById("machineno")
             var machine_date = document.getElementById("machine_date")
+            var gdno = document.getElementById("gdno")
+            var gd_date = document.getElementById("gd_date")
+            var cheque_date = document.getElementById("cheque_date")
+            var cheque_no = document.getElementById("cheque_no")
 
-            if(invoiceno.value === ''){
-                showSnackbar("Invoice # required ","error");
-                invoiceno.focus()
+            var sid = document.getElementById("bank_id");
+            var bank_id = sid.options[sid.selectedIndex];
+
+            if(bank_id.value <= 0)
+            {
+                showSnackbar("Please select From Bank");
+                bank_id.focus();
                 return;
             }
-            // if(challanno.value === ''){
-            //     showSnackbar("challanno # required ","error");
-            //     challanno.focus()
-            //     return;
-            // }
-            if(machineno.value === ''){
-                showSnackbar("machineno # required ","error");
-                machineno.focus()
-                return;
+
+
+
+            if(gdno.value === ''){
+                showSnackbar("gdno # required ","error");
+                gdno.focus()
+                return
             }
             const dynamicTableData = dynamicTable.getData();
-
-            //// Marking From Usman on 15-12-2022
-            // if(dynamicTableData.length == 0)
-            // {
-            //     showSnackbar("You must have atleast 1 row of item to Proceed","info");
-            //     return;
-            // }
-           // //**** Marking From Usman on 15-12-2022
+            if(dynamicTableData.length == 0)
+            {
+                showSnackbar("You must have atleast 1 row of item to Proceed","info");
+                return;
+            }
 
             // disableSubmitButton(true);
             var data = {
-                'commercial_invoice_id':@json($i->id),
+                'commercial_invoice_id':@json($clearance->commercial_invoice_id),
+                'clearance_id':@json($clearance->id),
                 'conversionrate' : parseFloat(conversionrate.value).toFixed(2),
-                'sconversionrate' : parseFloat(sconversionrate.value).toFixed(2),
                 'insurance' : parseFloat(insurance.value).toFixed(2),
                 'invoiceno' : invoiceno.value,
-                // 'challanno' : challanno.value,
                 'machineno' : machineno.value,
                 'machine_date' :machine_date.value,
+                'gdno' : gdno.value,
+                'gd_date' :gd_date.value,
+                'dunitid' : dunitid.value,
+                'cheque_no' : cheque_no.value,
+                'cheque_date' :cheque_date.value,
+
+                'bank_id' :bank_id.value,
+
                 'invoicedate' : invoicedate.value,
-                'bankcharges' : parseFloat(bankcharges.value).toFixed(2),
-                'collofcustom' : parseFloat(collofcustom.value).toFixed(2),
-                'exataxoffie' : parseFloat(exataxoffie.value).toFixed(2),
-                'lngnshipdochrgs' : parseFloat(lngnshipdochrgs.value).toFixed(2),
-                'localcartage' : parseFloat(localcartage.value).toFixed(2),
-                'miscexplunchetc' : parseFloat(miscexplunchetc.value).toFixed(2),
-                'customsepoy' : parseFloat(customsepoy.value).toFixed(2),
-                'weighbridge' : parseFloat(weighbridge.value).toFixed(2),
-                'miscexpenses' : parseFloat(miscexpenses.value).toFixed(2),
-                'agencychrgs' : parseFloat(agencychrgs.value).toFixed(2),
-                'otherchrgs' : parseFloat(otherchrgs.value).toFixed(2),
-                'dunitid' : parseFloat(dunitid.value).toFixed(0),
-                'total' : parseFloat(banktotal.value).toFixed(2),
-                'comminvoice' : dynamicTableData
+                // 'bankcharges' : parseFloat(bankcharges.value).toFixed(2),
+                // 'collofcustom' : parseFloat(collofcustom.value).toFixed(2),
+                // 'exataxoffie' : parseFloat(exataxoffie.value).toFixed(2),
+                // 'lngnshipdochrgs' : parseFloat(lngnshipdochrgs.value).toFixed(2),
+                // 'localcartage' : parseFloat(localcartage.value).toFixed(2),
+                // 'miscexplunchetc' : parseFloat(miscexplunchetc.value).toFixed(2),
+                // 'customsepoy' : parseFloat(customsepoy.value).toFixed(2),
+                // 'weighbridge' : parseFloat(weighbridge.value).toFixed(2),
+                // 'miscexpenses' : parseFloat(miscexpenses.value).toFixed(2),
+                // 'agencychrgs' : parseFloat(agencychrgs.value).toFixed(2),
+                //  'otherchrgs' : parseFloat(otherchrgs.value).toFixed(2),
+                // 'total' : parseFloat(banktotal.value).toFixed(2),
+                'dutyclearance' : dynamicTableData
             };
             // All Ok - Proceed
-            fetch(@json(route('cis.update','$i->id')),{
+            fetch(@json(route('clearance.update',$clearance->id)),{
                 credentials: 'same-origin', // 'include', default: 'omit'
                 method: 'PUT', // 'GET', 'PUT', 'DELETE', etc.
                 // body: formData, // Coordinate the body type with 'Content-Type'
@@ -924,7 +997,7 @@ var headerMenu = function(){
             .then( response => {
                 if (response == 'success')
                 {
-                    window.open(window.location.origin + "/cis","_self" );
+                    window.open(window.location.origin + "/clearance","_self" );
                 }
             })
             .catch(error => {

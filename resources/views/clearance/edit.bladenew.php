@@ -72,7 +72,7 @@
                                 <x-input-numeric title="Weigh Bridge" name="weighbridge" value="{{ $i->weighbridge }}"  required  onblur="calculateBankCharges()"/>
                                 <x-input-numeric title="Misc Exp" name="miscexpenses" value="{{ $i->miscexpenses }}"  required  onblur="calculateBankCharges()"/>
                                 <x-input-numeric title="Agency Chgs" name="agencychrgs" value="{{ $i->agencychrgs }}"  required  onblur="calculateBankCharges()"/>
-                                {{-- <x-input-numeric title="Other Chgs($)" name="otherchrgs" value="{{ $i->otherchrgs }}"  required  onblur="calculateBankCharges()"/> --}}
+                                <x-input-numeric title="Other Chgs($)" name="otherchrgs" value="{{ $i->otherchrgs }}"  required  onblur="calculateBankCharges()"/>
                                 <x-input-numeric title="Total" name="banktotal" value="{{ $i->total}}"  disabled />
 
                             </div>
@@ -159,7 +159,7 @@
         let sconversionrate = document.getElementById("sconversionrate");
 
         var insurance = document.getElementById("insurance");
-        // var otherchrgs = document.getElementById("otherchrgs");
+        var otherchrgs = document.getElementById("otherchrgs");
 
         //  Add Event on  Page Load
         document.addEventListener('DOMContentLoaded',()=>{
@@ -226,7 +226,6 @@
                 // var dtyamtindollar = dtyrate * gdswt
 
                 var pcs = e.pcs
-                var goods_received = e.goods_received
                 var gdswt = e.gdswt
                 var dutygdswt = e.dutygdswt
                 var inkg = ((e.gdswt / e.pcs ) ).toFixed(3)
@@ -251,7 +250,6 @@
 
 
                 e.pcs = pcs
-                e.goods_received = goods_received
                  e.gdswt = gdswt
                  e.inkg = inkg
                  e.length = length
@@ -317,9 +315,13 @@
                 e.it=it
                 // e.wse=wse
 
+                // var amtindollar = e.amtindollar
+                // var dtyamtindollar = e.dtyamtindollar
 
-                //   var goods_received =  ( parseFloat(dtyamtinpkrtotal) / parseFloat(totwt) ) * parseFloat(e.dutygdswt)
 
+
+                // var amtinpkr = sconversionrate.value * amtindollar
+                // var dtyamtinpkr = conversionrate.value * dtyamtindollar
 
                 var itmratio = parseFloat(dtyamtinpkr) / parseFloat(dtyamtinpkrtotal) * 100
                 //   var dtyitmratio =parseFloat(dtyamtinpkr) / parseFloat(dtyamtinpkrtotal) * 100
@@ -337,41 +339,28 @@
                 var asta = (pricevaluecostsheet + cda + rda + acda) * e.ast / 100
                 var ita =(pricevaluecostsheet + cda + sta + rda + acda + asta) * e.it / 100
                 var wsca = (pricevaluecostsheet * e.wse) /100
-                var goods_received = cda + rda + sta + acda + asta + ita + wsca
+                var total = cda + rda + sta + acda + asta + ita + wsca
                 var perft = (e.perpc / e.length).toFixed(2)
                 // var totallccostwexp = total + pricevaluecostsheet + (banktotal.value * itmratio / 100)
-
-           var sumoftotdty = 0
-           var totwt = 0
-            data.forEach(e => {
-                sumoftotdty += parseFloat(e.goods_received)
-                totwt += parseFloat(e.gdswt)
-            });
-             var total =  ( parseFloat(sumoftotdty)/parseFloat(totwt) ) * parseFloat(gdswt)
-
-             var invlvlchrgs = ( parseFloat(banktotal.value)/parseFloat(totwt) ) * parseFloat(gdswt)
-
-            //  var invlvlchrgs =(banktotal.value * itmratio / 100)
-             var totallccostwexp = total + amtinpkr + invlvlchrgs
-            //  (banktotal.value * itmratio / 100)
-
-                // var otherexpenses = ( sconversionrate.value * otherchrgs.value ) * itmratio / 100
-                var otherexpenses = 0
+                var totallccostwexp = total + amtinpkr + (banktotal.value * itmratio / 100)
+                var invlvlchrgs =(banktotal.value * itmratio / 100)
+                var otherexpenses = ( sconversionrate.value * otherchrgs.value ) * itmratio / 100
                 var perpc = ((e.totallccostwexp+otherexpenses) / e.pcs).toFixed(2)
                 // var perkg = (perpc / inkg).toFixed(2)
-                // var perkg = (perpc / inkg).toFixed(2)
-                var perkg = ((e.totallccostwexp+otherexpenses) / e.gdswt).toFixed(2)
+                var perkg = (perpc / inkg).toFixed(2)
                 var qtyinfeet = (e.pcs * e.length).toFixed(2)
 
+                // e.pcs = pcs
+                // e.gdswt = gdswt
+                // e.inkg = inkg
+                // e.length = length
+                // e.gdsprice = gdsprice
+                // e.dtyrate = dtyrate
 
-
-
-
-
-
-
+                // e.amtindollar = amtindollar
+                // e.amtinpkr = amtinpkr
+                // e.dtyrate = dtyrate
                 e.itmratio = itmratio
-                e.goods_received = goods_received
                 e.insuranceperitem = insuranceperitem
                 e.amountwithoutinsurance = amountwithoutinsurance
                 e.onepercentdutypkr = (onepercentdutypkr).toFixed(2)
@@ -482,13 +471,13 @@ var headerMenu = function(){
 
 
         dynamicTable = new Tabulator("#dynamicTable", {
-            height:"450px",
+            height:"550px",
             width:"1000px",
             rowContextMenu: rowMenu,
             layout:'fitDataTable',
             responsiveLayout:"collapse",
             reactiveData:true,
-            // movableRows:true,
+            movableRows:true,
             data:getDetails,
             // reactiveData:true,
             columns:[
@@ -551,7 +540,6 @@ var headerMenu = function(){
                             responsive:0,
                             field:"pcs",
                             editor:"number",
-                            // editablePcs:true,
                             headerVertical:true,
                             formatter:"money",
                             bottomCalc:"sum",
@@ -562,11 +550,10 @@ var headerMenu = function(){
                             field:"gdswt",
                             responsive:0,
                             editor:"number",
-                            // editableGdswt:true,
                             headerVertical:true,
                             formatter:"money",
                             bottomCalc:"sum",
-                            // validator:["required","numeric"],
+                            validator:["required","numeric"],
                             formatterParams:{thousand:",",precision:2},
                         },
                         {   title:"Duty.Wt(Kg)",
@@ -660,38 +647,6 @@ var headerMenu = function(){
                             // bottomCalcFormatter:"money",
                         },
 
-                        {   title:"Com.Invs.Price",
-                            field:"invsrate",
-                            responsive:0,
-                            editor:"number",
-                            headerVertical:true,
-                            formatter:"money",
-                            // bottomCalc:"sum",bottomCalcParams:{precision:0},
-                            // bottomCalcFormatter:"money",
-                            formatterParams:{thousand:",",precision:2},
-                        },
-
-
-                        {   title:"Com.Invs.Val($)",
-                            field:"comamtindollar",
-                            responsive:0,
-                            headerVertical:true,
-                            formatter:"money",
-                            bottomCalc:"sum",bottomCalcParams:{precision:2},
-                            // bottomCalcFormatter:"money",
-                            formatterParams:{thousand:",",precision:0},
-                        },
-
-                        {   title:"Com.Invs.Val(Rs)",
-                            field:"comamtinpkr",
-                            responsive:0,
-                            headerVertical:true,
-                            formatter:"money",
-                            bottomCalc:"sum",bottomCalcParams:{precision:0},
-                            // bottomCalcFormatter:"money",
-                            formatterParams:{thousand:",",precision:0},
-                        },
-
                         {   title:"Duty.Price($)",
                             field:"dtyrate",
                             headerVertical:true,
@@ -723,16 +678,94 @@ var headerMenu = function(){
                             bottomCalc:"sum",bottomCalcParams:{precision:0},
                         },
 
-                        {   title:"Insu.Ratio(%)",
+                        {   title:"Com.Invs.Price",
+                            field:"invsrate",
+                            responsive:0,
+                            editor:"number",
+                            headerVertical:true,
+                            formatter:"money",
+                            // bottomCalc:"sum",bottomCalcParams:{precision:0},
+                            // bottomCalcFormatter:"money",
+                            formatterParams:{thousand:",",precision:2},
+                        },
+
+                        {   title:"Com.Invs.Val($)",
+                            field:"comamtindollar",
+                            responsive:0,
+                            headerVertical:true,
+                            formatter:"money",
+                            bottomCalc:"sum",bottomCalcParams:{precision:2},
+                            // bottomCalcFormatter:"money",
+                            formatterParams:{thousand:",",precision:0},
+                        },
+
+                        {   title:"Com.Invs.Val(Rs)",
+                            field:"comamtinpkr",
+                            responsive:0,
+                            headerVertical:true,
+                            formatter:"money",
+                            bottomCalc:"sum",bottomCalcParams:{precision:0},
+                            // bottomCalcFormatter:"money",
+                            formatterParams:{thousand:",",precision:0},
+                        },
+
+                        {
+                    title:'Duties Amount (PKR)', headerHozAlign:"center",
+                    columns:[
+                        {title:"CD",                field:"cda", formatter:"money",
+                        formatterParams:{thousand:",",precision:0},             responsive:0,bottomCalc:"sum",bottomCalcParams:{precision:0}},
+                            {title:"ST",                field:"sta", formatter:"money",
+                        formatterParams:{thousand:",",precision:0},             responsive:0,bottomCalc:"sum",bottomCalcParams:{precision:0}},
+                            {title:"RD",                field:"rda", formatter:"money",
+                        formatterParams:{thousand:",",precision:0},             responsive:0,bottomCalc:"sum",bottomCalcParams:{precision:0}},
+                            {title:"ACD",               field:"acda", formatter:"money",
+                        formatterParams:{thousand:",",precision:0},            responsive:0,bottomCalc:"sum",bottomCalcParams:{precision:0}},
+                            {title:"AST",               field:"asta",  formatter:"money",
+                        formatterParams:{thousand:",",precision:0},           responsive:0,bottomCalc:"sum",bottomCalcParams:{precision:0}},
+                            {title:"IT",                field:"ita",  formatter:"money",
+                        formatterParams:{thousand:",",precision:0},            responsive:0,bottomCalc:"sum",bottomCalcParams:{precision:0}},
+                            {title:"WSE",               field:"wsca",  formatter:"money",
+                        formatterParams:{thousand:",",precision:0},           responsive:0,bottomCalc:"sum",bottomCalcParams:{precision:0}},
+                            {title:"Total Duty", cssClass:"bg-green-200 font-semibold",  field:"total", headerVertical:true,  formatter:"money",formatterParams:{thousand:",",precision:0},
+                         responsive:0,bottomCalc:"sum",bottomCalcParams:{precision:0}},
+                    ]
+                },
+
+                {
+                    title:"Invoice Level Exp.",
+                    headerVertical:true,
+                    field:"invlvlchrgs",
+                     cssClass:"bg-green-200 font-semibold",
+                    bottomCalc:"sum",bottomCalcParams:{precision:0},
+                    responsive:0,
+                    formatter:"money",
+                    formatterParams:{thousand:",",precision:0},
+                },
+
+
+                {
+                    title:"Tot Cost(Rs)",
+                    headerVertical:true,
+                    field:"totallccostwexp",
+                    cssClass:"bg-green-200 font-semibold",
+                    bottomCalc:"sum",bottomCalcParams:{precision:0},
+                    responsive:0,
+                    formatter:"money",
+                    formatterParams:{thousand:",",precision:2},
+                },
+
+
+
+                        {   title:"Item Ratio(%)",
                             field:"itmratio",
                             responsive:0,
-                            bottomCalc:"sum",bottomCalcParams:{precision:0},
                             headerVertical:true,
                             formatter:"money",
                             formatterParams:{thousand:",",precision:2},
                         },
-
-                        {
+                    ]
+                },
+                {
                     title:"Insurance Val($)",
                     field:"insuranceperitem",
                     bottomCalc:"sum",bottomCalcParams:{precision:0},
@@ -756,72 +789,6 @@ var headerMenu = function(){
                     headerVertical:true,
                     formatter:"money",
                 },
-
-
-
-
-                        {
-                    title:'Duties Amount (PKR)', headerHozAlign:"center",
-                    columns:[
-                        {title:"CD",                field:"cda", formatter:"money",
-                        formatterParams:{thousand:",",precision:0},             responsive:0,bottomCalc:"sum",bottomCalcParams:{precision:0}},
-                            {title:"ST",                field:"sta", formatter:"money",
-                        formatterParams:{thousand:",",precision:0},             responsive:0,bottomCalc:"sum",bottomCalcParams:{precision:0}},
-                            {title:"RD",                field:"rda", formatter:"money",
-                        formatterParams:{thousand:",",precision:0},             responsive:0,bottomCalc:"sum",bottomCalcParams:{precision:0}},
-                            {title:"ACD",               field:"acda", formatter:"money",
-                        formatterParams:{thousand:",",precision:0},            responsive:0,bottomCalc:"sum",bottomCalcParams:{precision:0}},
-                            {title:"AST",               field:"asta",  formatter:"money",
-                        formatterParams:{thousand:",",precision:0},           responsive:0,bottomCalc:"sum",bottomCalcParams:{precision:0}},
-                            {title:"IT",                field:"ita",  formatter:"money",
-                        formatterParams:{thousand:",",precision:0},            responsive:0,bottomCalc:"sum",bottomCalcParams:{precision:0}},
-                            {title:"WSE",               field:"wsca",  formatter:"money",
-                        formatterParams:{thousand:",",precision:0},           responsive:0,bottomCalc:"sum",bottomCalcParams:{precision:0}},
-                            {title:"DutyGDCal.", cssClass:"bg-green-200 font-semibold",  field:"goods_received", headerVertical:true,  formatter:"money",formatterParams:{thousand:",",precision:0},
-                         responsive:0,bottomCalc:"sum",bottomCalcParams:{precision:0}},
-                    ]
-                },
-
-                {
-                    title:"PayableDuty",
-                    headerVertical:true,
-                    field:"total",
-                     cssClass:"bg-green-200 font-semibold",
-                    bottomCalc:"sum",bottomCalcParams:{precision:0},
-                    responsive:0,
-                    formatter:"money",
-                    formatterParams:{thousand:",",precision:0},
-                },
-
-                {
-                    title:"Invoice Level Exp.",
-                    headerVertical:true,
-                    field:"invlvlchrgs",
-                     cssClass:"bg-green-200 font-semibold",
-                    bottomCalc:"sum",bottomCalcParams:{precision:0},
-                    responsive:0,
-                    formatter:"money",
-                    formatterParams:{thousand:",",precision:0},
-                },
-
-
-                {
-                    title:"Tot Cost(Rs)",
-                    headerVertical:true,
-                    field:"totallccostwexp",
-                    cssClass:"bg-green-200 font-semibold",
-                    bottomCalc:"sum",bottomCalcParams:{precision:0},
-                    responsive:0,
-                    formatter:"money",
-                    formatterParams:{thousand:",",precision:0},
-                },
-
-
-
-
-                    ]
-                },
-
                 // {
                 //     title:"Price value (CS)",
                 //     headerVertical:true,
@@ -830,17 +797,17 @@ var headerMenu = function(){
                 //     formatterParams:{thousand:",",precision:2},
                 // },
 
-                // {   title:"Other.Exp",
-                //             field:"otherexpenses",
-                //             headerVertical:true,
-                //             editor:"number",
-                //             bottomCalc:"sum",
-                //             formatter:"money",
-                //             responsive:0,
-                //             formatterParams:{thousand:",",precision:2},
-                //             validator:["required","numeric"],
-                //             bottomCalcParams:{precision:2}  ,
-                // },
+                {   title:"Other.Exp",
+                            field:"otherexpenses",
+                            headerVertical:true,
+                            editor:"number",
+                            bottomCalc:"sum",
+                            formatter:"money",
+                            responsive:0,
+                            formatterParams:{thousand:",",precision:2},
+                            validator:["required","numeric"],
+                            bottomCalcParams:{precision:2}  ,
+                },
 
 
 
@@ -935,7 +902,7 @@ var headerMenu = function(){
                 'weighbridge' : parseFloat(weighbridge.value).toFixed(2),
                 'miscexpenses' : parseFloat(miscexpenses.value).toFixed(2),
                 'agencychrgs' : parseFloat(agencychrgs.value).toFixed(2),
-                // 'otherchrgs' : parseFloat(otherchrgs.value).toFixed(2),
+                'otherchrgs' : parseFloat(otherchrgs.value).toFixed(2),
                 'dunitid' : parseFloat(dunitid.value).toFixed(0),
                 'total' : parseFloat(banktotal.value).toFixed(2),
                 'comminvoice' : dynamicTableData

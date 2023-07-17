@@ -394,7 +394,7 @@ class CommercialInvoiceControllerlocal extends Controller
             $reciving->save();
 
             foreach ($comminvoice as $cid) {
-                $c = CommercialInvoiceDetails::findOrFail($cid['id']);
+                $c = CommercialInvoiceDetails::findOrFail($cid['clearance_id']);
                 $c->machine_date = $ci->machine_date;
                 $c->machineno = $ci->machineno;
                 $c->commercial_invoice_id = $cid['commercial_invoice_id'];
