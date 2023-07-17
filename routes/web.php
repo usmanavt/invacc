@@ -178,10 +178,10 @@ Route::resource('recivings', RecivingController::class)->except(['create','store
 //  Clearance
 // Route::get('/clearances/master', [ClearanceController::class, 'getMaster'])->name('clearances.master');
 // Route::get('/clearances/details', [ClearanceController::class, 'getDetails'])->name('clearances.details');
-// Route::get('/clearances/ccd', [ClearanceController::class, 'updateCompletedClearance'])->name('clearances.updatercd');
+//  Route::get('/clearances/ccd', [ClearanceController::class, 'updateCompletedClearance'])->name('clearances.updatercd');
 
 Route::get('/clearance/getCisclrMaster', [ClearanceController::class, 'getMaster'])->name('cisclr.master');
-Route::get('/clearance/getCisclrDetails', [ClearanceController::class, 'getDetails'])->name('cisclr.details');
+Route::get('/clearance/getCisclrDetails', [ClearanceController::class, 'getDetails'])->name('clearances.details');
 
 Route::get('/clearance/getContractDetails', [ClearanceController::class, 'getContractDetails'])->name('cis3.condet');
 
