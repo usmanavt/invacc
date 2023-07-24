@@ -146,7 +146,7 @@
             },
             // Master Data
             {title:"Id", field:"id" , responsive:0},
-            {title:"Invoice #", field:"invoiceno" , visible:true ,headerSortStartingDir:"asc" , responsive:0},
+            {title:"Invoice #", field:"number" , visible:true ,headerSortStartingDir:"asc" , responsive:0},
             {title:"Dated", field:"invoice_date" , visible:true , responsive:0},
             {title:"Supplier", field:"supplier.title" ,  responsive:0},
             {title:"Created By", field:"user.name" ,  responsive:0},

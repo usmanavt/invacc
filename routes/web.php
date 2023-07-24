@@ -33,7 +33,7 @@ use App\Http\Controllers\PurchaseRptController;
 use App\Http\Controllers\SaleRptController;
 use App\Http\Controllers\StockLedgerController;
 use App\Http\Controllers\CareController;
-
+use App\Http\Controllers\QuotationController;
 
 
 Route::get('/', function () {
@@ -154,7 +154,11 @@ Route::get('/sales/getSalesDetails', [SalesInvoicesController::class, 'getDetail
 Route::resource('sales', SalesInvoicesController::class);
 
 
+//  Quotation
 
+Route::get('/quotations/getQuotationsMaster', [QuotationController::class, 'getMaster'])->name('quotations.master');
+Route::get('/quotations/getQuotationsDetails', [QuotationController::class, 'getDetail'])->name('quotations.details');
+Route::resource('quotations', QuotationController::class);
 
 
 

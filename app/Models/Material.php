@@ -9,6 +9,7 @@ use App\Models\Source;
 use App\Models\Category;
 use App\Models\Contract;
 use App\Models\Dimension;
+use App\Models\Quotation;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
@@ -26,4 +27,7 @@ class Material extends Model
     public function hscodes(){ return $this->belongsTo(Hscode::class, 'hscode_id'); }
 
     public function contracts(){ return $this->hasMany(Contract::class); }
+    public function quotations(){ return $this->hasMany(Quotation::class); }
+
+
 }

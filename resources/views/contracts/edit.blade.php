@@ -1,24 +1,13 @@
 <x-app-layout>
 
+
+
+
     @push('styles')
     {{-- <link rel="stylesheet" href="{{ asset('css/tabulator_simple.min.css') }}"> --}}
     <link href="https://unpkg.com/tabulator-tables/dist/css/tabulator.min.css" rel="stylesheet">
     <script type="text/javascript" src="https://unpkg.com/tabulator-tables/dist/js/tabulator.min.js"></script>
     @endpush
-
-    {{-- @push('styles')
-        <script src="https://code.jquery.com/jquery-3.2.1.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
-        <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js" integrity="sha256-VazP97ZCwtekAsvgPBSUwPFKdrwD3unUfSGVYrahUqU=" crossorigin="anonymous"></script>
-
-        <link href="https://unpkg.com/tabulator-tables@4.0.4/dist/css/tabulator.min.css" rel="stylesheet">
-        <script type="text/javascript" src="https://unpkg.com/tabulator-tables@4.0.4/dist/js/tabulator.min.js"></script>
-        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/tabulator/4.0.5/css/tabulator.min.css" >
-        <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/tabulator/4.0.5/js/tabulator.min.js"></script>
-        <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/tabulator/4.0.5/js/tabulator_core.min.js"></script>
-        <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/tabulator/4.0.5/js/modules/format.min.js"></script>
-     @endpush --}}
-
-
 
 
 
@@ -230,7 +219,7 @@ var updateValues = (cell) => {
 
     var row = cell.getRow();
     row.update({
-        "ttpcs": sum,
+        "totpcs": sum,
         "gdspricetot": sum2,
         "purval": sum2,
         "dutval":sum3
@@ -355,15 +344,16 @@ dynamicTable = new Tabulator("#dynamicTable", {
             },
 
         {   title:"TotPcs",
-            field:"ttpcs",
+            field:"totpcs",
             cssClass:"bg-gray-200 font-semibold",
+            bottomCalc:"sum",
             formatter:"money",
             formatterParams:{thousand:",",precision:3},
             formatter:function(cell,row)
             {
                 return (cell.getData().bundle1 * cell.getData().pcspbundle1) + (cell.getData().bundle2 * cell.getData().pcspbundle2)
             },
-            bottomCalc:"sum" },
+             },
 
         {   title:"Wt(MT)",
             field:"gdswt",

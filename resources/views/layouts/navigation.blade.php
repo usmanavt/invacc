@@ -82,6 +82,7 @@
                             <x-dropdown-link href="{{ route('localpurchase.index') }}">Comm Invoices Local</x-dropdown-link>
                             {{-- <x-dropdown-link href="{{ route('recivings.index') }}">Goods Reciving</x-dropdown-link> --}}
                             <x-dropdown-link href="{{ route('clearance.index') }}">Duty Clearance</x-dropdown-link>
+                            <x-dropdown-link href="{{ route('quotations.index') }}">Sales Quotation</x-dropdown-link>
                             <x-dropdown-link href="{{ route('sales.index') }}">Sales Invoice</x-dropdown-link>
                             <x-dropdown-link href="{{ route('bankpayments.index') }}">Bank Payments</x-dropdown-link>
                             <x-dropdown-link href="{{ route('bankrecivings.index') }}">Bank Recivings</x-dropdown-link>

@@ -165,7 +165,8 @@
                 {title:"Created By", field:"user.name" ,  responsive:0},
             {title:"Edit" , formatter:editIcon, hozAlign:"center",headerSort:false, responsive:0,
                 cellClick:function(e, cell){
-                    window.open(window.location + "/" + cell.getRow().getData().id + "/edit" ,"_self");
+                    // console.log(cell.getData().id)
+                    window.open(window.location + "/" + cell.getData().id + "/edit" ,"_self");
                 }
             },
             {title:"Delete" , formatter:deleteIcon, hozAlign:"center",headerSort:false, responsive:0,

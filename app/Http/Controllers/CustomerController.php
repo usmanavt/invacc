@@ -71,7 +71,7 @@ class CustomerController extends Controller
             $customer = new Customer();
             $customer->title = $request->title;
             $customer->nick = $request->nick;
-            $customer->address = $request->address;
+            $customer->address2 = $request->address2;
             $customer->phoneoff = $request->phoneoff;
             $customer->phoneres = $request->phoneres;
             $customer->fax = $request->fax;
