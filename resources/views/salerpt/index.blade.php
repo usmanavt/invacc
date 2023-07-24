@@ -13,9 +13,15 @@
 
                     <form action="{{ route('salerpt.fetch')}}" method="POST" target="_blank">
                         @csrf
-                        <div class="flex flex-col md:flex-row flex-wrap gap-2 justify-center">
-                            <fieldset class="border px-4 py-2 rounded">
+                        <div class="flex flex-col md:flex-row flex-wrap gap-2  justify-center">
+                            {{-- <fieldset class="border px-4 py-2 height 30 rounded"> --}}
+                                <fieldset class="border h-40 w-32 px-4 py-2 rounded">
                                 <legend>Report Type</legend>
+                                <div>
+                                    <input type="radio" name="report_type" value="quotation" required onchange="checkReportType('quotation')">
+                                    <label for="">Sale Quotation </label>
+                                </div>
+
                                 <div>
                                     <input type="radio" name="report_type" value="dlvrychln" required onchange="checkReportType('dlvrychln')">
                                     <label for="">Delivery Challan </label>
@@ -67,25 +73,8 @@
                                 </div> --}}
                             </fieldset>
 
-                            <fieldset class="border px-6 py-1.5  rounded h-80 ">
+                            <fieldset class="border px-6 py-1.5  rounded  ">
                                 <legend>Report Criteria</legend>
-                                {{-- <div>
-                                    <input type="checkbox" name="additional[]" value="wdrfa">
-                                    <label for="">With Detail Report (For Aging)</label>
-                                </div>
-                                <div>
-                                    <input type="checkbox" name="additional[]" value="mmbfa">
-                                    <label for="">Mention Minus Balance (For Aging)</label>
-                                </div>
-                                <div>
-                                    <input type="checkbox" name="additional[]" value="wsfgl">
-                                    <label for="">With Summary (For General Ledger)</label>
-                                </div>
-                                <div>
-                                    <input type="checkbox" name="additional[]" value="wiwcd">
-                                    <label for="">With Invoice Wise Collections Details</label>
-                                </div> --}}
-
                                 <div class="flex flex-col md:flex-row w-full gap-2 px-6 pt-4">
 
                                     <fieldset class="border px-4 py-2  rounded w-full">
@@ -177,6 +166,9 @@
 <script>
     const heads = @json($heads);
     const subheads = @json($subheads);
+
+    const subheadsqut = @json($subheadsqut);
+
     const subheadsci = @json($subheadsci);
     const subheadsciloc = @json($subheadsciloc);
     const glheads = @json($glheads);
@@ -191,8 +183,8 @@
     let subheadavailable = false
     let rptType = ''
     let list;
-    // console.info(heads)
-        console.info(subheadsci)
+    //  console.info(fromdate.value)
+        console.info(subheadsqut)
     // console.info(vchrcats)
     const headSelected = ()=>{
           const value = head.value
@@ -216,8 +208,32 @@
                 }
                 break;
 
+        case 'quotation':
 
-        // switch (rptType){
+
+                list = subheadsqut.filter( l => l.MHEAD === Number(value)  )
+                if(list.length > 0)
+                {
+                    list.forEach(e => {
+                        addSelectElement(subhead,e.Subhead,e.title)
+                    });
+                    subhead.setAttribute('required','')
+                    subhead.removeAttribute('disabled','')
+                }else{
+                    subhead.removeAttribute('required','')
+                    subhead.setAttribute('disabled','')
+                }
+                break;
+
+
+
+
+
+
+
+
+
+            // switch (rptType){
             case 'saltxinvs':
                 list = subheadsci.filter( l => l.MHEAD === Number(value)  )
                 if(list.length > 0)
@@ -386,6 +402,26 @@
                 });
                 headSelected()
                 break;
+
+
+                case 'quotation':
+                // Show Head
+                rptType = 'quotation'
+                head.setAttribute('required','')
+                head.disabled = false
+                head.length = 0
+                subhead.removeAttribute('required')
+                subhead.disabled = true
+                subhead.length = 0
+                heads.forEach(e => {
+                    addSelectElement(head,e.id,e.title)
+                });
+                headSelected()
+                break;
+
+
+
+
 
             case 'saltxinvs':
                 // Show Head
