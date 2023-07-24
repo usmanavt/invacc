@@ -19,8 +19,8 @@ class SaleRptController extends Controller
         $fromdate = $request->fromdate;
         $todate = $request->todate;
 
-         $fromdate = '2023-07-01';
-         $todate = '2023-07-31';
+        //  $fromdate = '2023-07-01';
+        //  $todate = '2023-07-31';
 
         return view('salerpt.index')
         ->with('heads',Customer::where('status',1)->get())
@@ -35,27 +35,7 @@ class SaleRptController extends Controller
         ;
     }
 
-    // public function getMPDFSettings($orientation = 'A4')
-    // {
-    //     $format;
-    //     $orientation == 'L' ? $format = 'A4L': 'A4';
 
-    //     $mpdf = new PDF( [
-    //         'mode' => 'utf-8',
-    //         'format' => $orientation,
-    //         'margin_header' => '2',
-    //         'margin_top' => '5',
-    //         'margin_bottom' => '5',
-    //         'margin_footer' => '2',
-    //         'default_font_size' => 9,
-    //         'margin_left' => '3',
-    //         'margin_right' => '3',
-    //     ]);
-    //     $mpdf->showImageErrors = true;
-    //     $mpdf->curlAllowUnsafeSslRequests = true;
-    //     $mpdf->debug = true;
-    //     return $mpdf;
-    // }
 
     public function getMPDFSettings($orientation = 'A4')
     {

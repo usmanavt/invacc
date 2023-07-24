@@ -19,6 +19,7 @@ class PurchaseRptController extends Controller
         $fromdate = $request->fromdate;
         $todate = $request->todate;
 
+        //  dd($fromdate);
         return view('purrpt.index')
         ->with('heads',Supplier::where('status',1)->get())
         ->with('glheads',Supplier::where('status',1)->get())
