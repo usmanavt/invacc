@@ -183,8 +183,9 @@
     let subheadavailable = false
     let rptType = ''
     let list;
-    //  console.info(fromdate.value)
-        console.info(subheadsqut)
+      console.info(fromdate.value)
+      console.info(todate.value)
+        // console.info(subheadsqut)
     // console.info(vchrcats)
     const headSelected = ()=>{
           const value = head.value
@@ -224,13 +225,6 @@
                     subhead.setAttribute('disabled','')
                 }
                 break;
-
-
-
-
-
-
-
 
 
             // switch (rptType){
@@ -282,14 +276,6 @@
                     subhead.setAttribute('disabled','')
                 }
                 break;
-
-
-
-
-
-
-
-
 
 
             case 'vchr':m
