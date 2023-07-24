@@ -460,8 +460,6 @@ const skus = @json($skus);
             // },
 
 
-
-
                { title:"Rate",
                 field:"pcspbundle1",
                 editor:"number",
