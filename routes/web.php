@@ -72,6 +72,7 @@ Route::get('dutyclearance',[DutyRptController::class, 'index'])->name('dutyclear
 // Sales Reports
 Route::get('salerpt',[SaleRptController::class, 'index'])->name('salerpt.index');
 Route::post('salerpt/fetch',[SaleRptController::class, 'fetch'])->name('salerpt.fetch');
+Route::get('funcquotation',[SaleRptController::class, 'funcquotation'])->name('salerpt.funcquotation');
 
 // Material Stock Reports
  Route::get('stockledgers',[StockLedgerController::class, 'index'])->name('stockledgers.index');
@@ -158,6 +159,7 @@ Route::resource('sales', SalesInvoicesController::class);
 
 Route::get('/quotations/getQuotationsMaster', [QuotationController::class, 'getMaster'])->name('quotations.master');
 Route::get('/quotations/getQuotationsDetails', [QuotationController::class, 'getDetail'])->name('quotations.details');
+
 Route::resource('quotations', QuotationController::class);
 
 

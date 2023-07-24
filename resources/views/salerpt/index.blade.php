@@ -174,6 +174,7 @@
     const glheads = @json($glheads);
     const subheadspend = @json($subheadspend);
     const vchrheads = @json($vchrheads);
+    const funcquotation = @json(route('salerpt.funcquotation'));
 
 
     const head = document.getElementById('head_id')
@@ -183,8 +184,8 @@
     let subheadavailable = false
     let rptType = ''
     let list;
-      console.info(fromdate.value)
-      console.info(todate.value)
+    //   console.info(fromdate.value)
+    //   console.info(todate.value)
         // console.info(subheadsqut)
     // console.info(vchrcats)
     const headSelected = ()=>{
@@ -209,22 +210,73 @@
                 }
                 break;
 
+        // case 'quotation':
+
+
+        //         list = subheadsqut.filter( l => l.MHEAD === Number(value)  )
+        //         if(list.length > 0)
+        //         {
+        //             list.forEach(e => {
+        //                 addSelectElement(subhead,e.Subhead,e.title)
+        //             });
+        //             subhead.setAttribute('required','')
+        //             subhead.removeAttribute('disabled','')
+        //         }else{
+        //             subhead.removeAttribute('required','')
+        //             subhead.setAttribute('disabled','')
+        //         }
+        //         break;
+
+
+
         case 'quotation':
-
-
-                list = subheadsqut.filter( l => l.MHEAD === Number(value)  )
-                if(list.length > 0)
-                {
-                    list.forEach(e => {
-                        addSelectElement(subhead,e.Subhead,e.title)
-                    });
-                    subhead.setAttribute('required','')
-                    subhead.removeAttribute('disabled','')
-                }else{
-                    subhead.removeAttribute('required','')
-                    subhead.setAttribute('disabled','')
-                }
+            // console.log(value)
+            fetch(funcquotation + `?todate=${todate.value}&fromdate=${fromdate.value}&head=${value}`,{
+                    method:"GET",
+                    headers: { 'Accept':'application/json','Content-type':'application/json'},
+                    })
+                    .then(response => response.json())
+                    .then( data => {
+                        if(data.length > 0)
+                        {
+                            data.forEach(e => {
+                                addSelectElement(subhead,e.Subhead,e.title)
+                            });
+                            subhead.setAttribute('required','')
+                            subhead.removeAttribute('disabled','')
+                        }else{
+                            subhead.removeAttribute('required','')
+                            subhead.setAttribute('disabled','')
+                        }
+                    })
+                    .catch(error => console.error(error))
                 break;
+
+// FOR CONTRACT FILL
+const getSubheadVoucherData = async (value) =>{
+        let data = await fetch(funcquotation + `?todate=${todate.value}&fromdate=${fromdate.value}&head=${value}`,{
+            method:"GET",
+            headers: { 'Accept':'application/json','Content-type':'application/json'},
+            })
+            .then(response => response.json())
+            .then( data => { return data })
+            .catch(error => console.error(error))
+    }
+    const getQuotation =async  (value) => {
+        const quotation = await getSubheadVoucherData(value)
+        return quotation
+    }
+
+    // const addSelectElement = (select,id,value) => {
+    //     var option = document.createElement('option')
+    //     option.value = id
+    //     option.text  = value
+    //     select.appendChild(option)
+    // }
+
+
+
+
 
 
             // switch (rptType){

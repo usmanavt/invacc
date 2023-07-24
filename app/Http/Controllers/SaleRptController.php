@@ -27,15 +27,23 @@ class SaleRptController extends Controller
         ->with('glheads',Customer::where('status',1)->whereIn('id',[1,2,3,4,5,6,7,8,9,10])->get())
         ->with('vchrheads',Customer::where('status',1)->whereIn('id',[6,7,8,9])->get())
         ->with('subheads',DB::table('vwcustcategory')->select('*')->whereBetween('invoice_date',[$fromdate,$todate])->get()->toArray())
-        ->with('subheadsqut',DB::table('vwqutcategory')->select('*')->get()->toArray())
-        // ->whereBetween('invoice_date',[$fromdate,$todate])->get()->toArray())
+        ->with('subheadsqut',DB::table('vwqutcategory')->select('*')->whereBetween('invoice_date',[$fromdate,$todate])->get()->toArray())
         ->with('subheadsci',DB::table('vwcuststcategory')->select('*')->whereBetween('invoice_date',[$fromdate,$todate])->get()->toArray())
         ->with('subheadsciloc',DB::table('vwsupcategoryloccominv')->select('*')->whereBetween('invoice_date',[$fromdate,$todate])->get()->toArray())
         ->with('subheadspend',DB::table('vwpendcontinvs')->select('*')->get()->toArray())
         ;
     }
 
-
+    public function funcquotation(Request $request)
+    {
+        //  dd($request->all());
+        $fromdate = $request->fromdate;
+        $todate = $request->todate;
+        $head = $request->head;
+        return DB::table('vwqutcategory')
+        ->select('*')->whereBetween('invoice_date',[$fromdate,$todate])
+        ->where('MHEAD',$head)->get()->toArray();
+    }
 
     public function getMPDFSettings($orientation = 'A4')
     {
@@ -191,7 +199,7 @@ class SaleRptController extends Controller
 
 
         if($report_type === 'quotation'){
-            //  dd($request->all());
+             dd($request->all());
             $head_id = $request->head_id;
             // $head = Head::findOrFail($head_id);
             $head = Customer::findOrFail($head_id);

@@ -266,8 +266,9 @@ class ContractController extends Controller
     {
 
         // dd($cd);
-        $cd = DB::table('contract_details')->select('*')->get();
-        $data=compact('cd');
+        $cd = DB::table('contract_details')->select('*')
+        ->where('contract_id',$contract->id)->get();
+         $data=compact('cd');
 
 
 
