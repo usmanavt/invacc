@@ -40,6 +40,10 @@ class SaleRptController extends Controller
         $fromdate = $request->fromdate;
         $todate = $request->todate;
         $head = $request->head;
+
+        // return = DB::select('call ProcGLHW(?,?,?)',array($fromdate,$todate,$head_id));
+
+
         return DB::table('vwqutcategory')
         ->select('*')->whereBetween('invoice_date',[$fromdate,$todate])
         ->where('MHEAD',$head)->get()->toArray();
@@ -199,7 +203,7 @@ class SaleRptController extends Controller
 
 
         if($report_type === 'quotation'){
-             dd($request->all());
+            //  dd($request->all());
             $head_id = $request->head_id;
             // $head = Head::findOrFail($head_id);
             $head = Customer::findOrFail($head_id);
