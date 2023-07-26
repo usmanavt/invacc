@@ -10,7 +10,7 @@
 
     <x-slot name="header">
         <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-            {{ __('Create Sales Quotation') }}
+            {{ __('Create Customer Order') }}
         </h2>
     </x-slot>
 
@@ -32,33 +32,31 @@
                                 @endforeach
                             </select>
 .
-                            <label for="saldate">Quotation Date<x-req /></label>
-                            <input type="date" value="{{ date('Y-m-d') }}" class="col-span-2"  id="saldate" name="saldate" required>
 
-                            <label for="valdate">Valid Date<x-req /></label>
-                            <input type="date" value="{{ date('Y-m-d') }}" class="col-span-2"  id="valdate" name="valdate" required>
+                            <label for="podate">P.O Date<x-req /></label>
+                            <input type="date" value="{{ date('Y-m-d') }}" class="col-span-2"  id="podate" name="podate" required>
 
-                            <label for="qutno">Quotation No <x-req /></label>
-                            <input type="text" class="col-span-2" id="qutno" name="qutno" value="{{$maxdcno}}"    placeholder="qutno" required>
+                            <label for="prno">P.O No#<x-req /></label>
+                            <input type="text" class="col-span-2" id="prno" name="prno"   required>
 
-                            <label for="prno">P.R No#<x-req /></label>
-                            <input type="text" class="col-span-2" id="prno" name="prno"  placeholder="prno" required>
-                            <label for="">
+
+
+                            <label for="poseqno">P.O Seq.No <x-req /></label>
+                            <input type="text" class="col-span-2" id="poseqno" name="poseqno" value="{{$maxdcno}}"     required>
+
+                            <label for="deliverydt">Delivery Date<x-req /></label>
+                            <input type="date" value="{{ date('Y-m-d') }}" class="col-span-2"  id="deliverydt" name="deliverydt" required>
+
+
+                            {{-- <label for="">
                                 Cash Customer <span class="text-red-500 font-semibold">(*)</span>
                             </label>
-                            <textarea name="cashcustomer" id="cashcustomer" cols="20" rows="2" maxlength="100" required class="rounded"></textarea>
+                            <textarea name="cashcustomer" id="cashcustomer" cols="20" rows="2" maxlength="100" required class="rounded"></textarea> --}}
 
                             <label for="">
-                                Cash Cust.Address <span class="text-red-500 font-semibold">(*)</span>
+                                Remakrs <span class="text-red-500 font-semibold  ">(*)</span>
                             </label>
-                            <textarea name="cashcustadrs" id="cashcustadrs" cols="30" rows="2" maxlength="150" required class="rounded"></textarea>
-
-
-
-
-
-
-
+                            <textarea name="remarks" id="remarks" cols="30" rows="2" maxlength="150" required class="rounded"></textarea>
                         </div>
 
 
@@ -162,7 +160,7 @@ const skus = @json($skus);
 
 
 
-    const getMaster = @json(route('materials.master'));
+    const getMaster = @json(route('quotation.master'));
     let csrfToken = document.head.querySelector("[name~=csrf-token][content]").content;
     let modal = document.getElementById("myModal")
     // console.log(getMaster);
@@ -561,10 +559,10 @@ const skus = @json($skus);
     {
         var sid = document.getElementById("customer_id");
         var customer_id = sid.options[sid.selectedIndex];
-        var saldate = document.getElementById("saldate");
-        var qutno = document.getElementById("qutno");
+        var deliverydt = document.getElementById("deliverydt");
+        var poseqno = document.getElementById("poseqno");
         var prno = document.getElementById("prno");
-        var valdate = document.getElementById("valdate");
+        var podate = document.getElementById("podate");
         // var repcustname = document.getElementById("repcustname");
         // var repcustadrs = document.getElementById("repcustadrs");
 
@@ -582,16 +580,16 @@ const skus = @json($skus);
             customer_id.focus();
             return;
         }
-        if(saldate.value === "")
+        if(deliverydt.value === "")
         {
             showSnackbar("Please select From Invoice Date");
-            saldate.focus();
+            deliverydt.focus();
             return;
         }
-        if(qutno.value == "")
+        if(poseqno.value == "")
         {
-            showSnackbar("Please add qutno");
-            qutno.focus();
+            showSnackbar("Please add poseqno");
+            poseqno.focus();
             return;
         }
 
@@ -629,9 +627,9 @@ const skus = @json($skus);
         }
         disableSubmitButton(true);
         var data = { 'contracts' : dynamicTableData,'rcvblamount':rcvblamount.value,'cartage':cartage.value,'discntamt':discntamt.value,'discntper':discntper.value,'discntper':discntper.value ,
-        'customer_id': customer_id.value,'saldate':saldate.value,'qutno':qutno.value,'prno':prno.value,
+        'customer_id': customer_id.value,'deliverydt':deliverydt.value,'poseqno':poseqno.value,'prno':prno.value,
         'saletaxper':saletaxper.value,'saletaxamt':saletaxamt.value,'totrcvbamount':totrcvbamount.value,
-        'valdate':valdate.value,'cashcustomer':cashcustomer.value,'cashcustadrs':cashcustadrs.value};
+        'podate':podate.value,'cashcustomer':cashcustomer.value,'cashcustadrs':cashcustadrs.value};
         // All Ok - Proceed
         fetch(@json(route('quotations.store')),{
             credentials: 'same-origin', // 'include', default: 'omit'

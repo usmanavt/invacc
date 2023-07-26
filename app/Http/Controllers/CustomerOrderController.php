@@ -6,6 +6,10 @@ use DB;
 // use App\Models\Contract;
 use App\Models\Quotation;
 use App\Models\QuotationDetails;
+
+use App\Models\CustomerOrder;
+use App\Models\CustomerOrderDetails;
+
 use App\Models\Material;
 use App\Models\Customer;
 use App\Models\Sku;
@@ -16,11 +20,11 @@ use \Mpdf\Mpdf as PDF;
 use Illuminate\Support\Facades\Session;
 
 // LocalPurchaseController
-class QuotationController  extends Controller
+class CustomerOrderController  extends Controller
 {
     public function index(Request $request)
     {
-         return view('quotations.index');
+         return view('custorders.index');
 
 
     }
@@ -56,11 +60,11 @@ class QuotationController  extends Controller
         $size = $request->size;
         $field = $request->sort[0]["field"];     //  Nested Array
         $dir = $request->sort[0]["dir"];         //  Nested Array
-        $cis = Quotation::where('status',$status)
+        $cis = CustomerOrder::where('status',$status)
         ->where(function ($query) use ($search){
-                $query->where('qutno','LIKE','%' . $search . '%')
+                $query->where('poseqno','LIKE','%' . $search . '%')
                 // ->orWhere('gpno','LIKE','%' . $search . '%')
-                ->orWhere('prno','LIKE','%' . $search . '%');
+                ->orWhere('pono','LIKE','%' . $search . '%');
             })
             // ->whereHas('customer', function ($query) {
             //      $query->where('source_id','=','1');
@@ -76,20 +80,40 @@ class QuotationController  extends Controller
     {
         $search = $request->search;
         $size = $request->size;
-        $contractDetails = QuotationDetails::where('sale_invoice_id',$request->id)
+        $contractDetails = CustomerOrderDetails::where('sale_invoice_id',$request->id)
         ->paginate((int) $size);
         return $contractDetails;
     }
 
+    public function getMasterqut(Request $request)
+    {
 
-    // public function getDetails(Request $request)
-    // {
-    //     $search = $request->search;
-    //     $size = $request->size;
-    //     $contractDetails = ContractDetails::where('contract_id',$request->id)
-    //     ->paginate((int) $size);
-    //     return $contractDetails;
-    // }
+        $search = $request->search;
+        $size = $request->size;
+        $field = $request->sort[0]["field"];     //  Nested Array
+        $dir = $request->sort[0]["dir"];         //  Nested Array
+        $contracts = DB::table('vwmasterquotations')
+        // ->join('suppliers', 'contracts.supplier_id', '=', 'suppliers.id')
+        // ->select('contracts.*', 'suppliers.title')
+        ->where('custname', 'like', "%$search%")
+        ->orWhere('prno', 'like', "%$search%")
+        ->orderBy($field,$dir)
+        ->paginate((int) $size);
+        return $contracts;
+
+
+    }
+
+    public function getDetailsqut(Request $request)
+    {
+        $id = $request->id;
+        $contractDetails = DB::table('vwdetailquotations')->where('sale_invoice_id',$id)->get();
+        return response()->json($contractDetails, 200);
+    }
+
+
+
+
 
     public function create()
     {
@@ -97,15 +121,13 @@ class QuotationController  extends Controller
 
         // return view('sales.create')
         $mycname='MUHAMMAD HABIB & Co.';
-        $maxdcno = DB::table('quotations')->select('*')->max('qutno')+1;
-        // $maxblno = DB::table('sale_invoices')->select('*')->max('prno')+1;
-        // $maxgpno = DB::table('sale_invoices')->select('*')->max('gpno')+1;
-        return \view ('quotations.create',compact('maxdcno','mycname'))
+        $maxdcno = DB::table('customer_orders')->select('*')->max('poseqno')+1;
+        return \view ('custorders.create',compact('maxdcno','mycname'))
         ->with('customers',Customer::select('id','title')->get())
         ->with('locations',Location::select('id','title')->get())
         ->with('skus',Sku::select('id','title')->get());
 
-        // ->with('maxdcno',lastsalinvno::select('id','qutno')->get());
+        // ->with('maxdcno',lastsalinvno::select('id','poseqno')->get());
 
         // ->with('lastsno',DB::table('lastsalinvno')->select('*')->get());
     }
@@ -117,18 +139,18 @@ class QuotationController  extends Controller
         $this->validate($request,[
             'saldate' => 'required|min:3|date',
         //    'title'=>'required|min:3|unique:materials'
-            'qutno' => 'required|min:1|unique:quotations',
-            'prno' => 'required|min:1|unique:quotations',
+            'poseqno' => 'required|min:1|unique:quotations',
+            'pono' => 'required|min:1|unique:quotations',
             // 'gpno' => 'required|min:1|unique:sale_invoices',
             'customer_id' => 'required'
         ]);
         DB::beginTransaction();
         try {
-            $ci = new Quotation();
+            $ci = new CustomerOrder();
             $ci->saldate = $request->saldate;
             $ci->valdate = $request->valdate;
-            $ci->qutno = $request->qutno;
-            $ci->prno = $request->prno;
+            $ci->poseqno = $request->poseqno;
+            $ci->pono = $request->pono;
             $ci->customer_id = $request->customer_id;
 
 
@@ -147,7 +169,7 @@ class QuotationController  extends Controller
             $ci->save();
             foreach ($request->contracts as $cont) {
                 $material = Material::findOrFail($cont['id']);
-                $lpd = new QuotationDetails();
+                $lpd = new CustomerOrderDetails();
                 $lpd->sale_invoice_id = $ci->id;
                 $lpd->material_id = $material->id;
                 $lpd->repname = $cont['repname'];
@@ -195,8 +217,8 @@ class QuotationController  extends Controller
         return view('quotations.edit')
         ->with('customer',Customer::select('id','title')->get())
         // ->with('materials',Material::select('id','category')->get())
-        ->with('quotation',Quotation::findOrFail($id))
-        // ->with('cd',QuotationDetails::where('sale_invoice_id',$id)->get())
+        ->with('customerorder',CustomerOrder::findOrFail($id))
+        // ->with('cd',CustomerOrderDetails::where('sale_invoice_id',$id)->get())
         ->with($data)
         ->with('locations',Location::select('id','title')->get())
         ->with('skus',Sku::select('id','title')->get());
@@ -205,7 +227,7 @@ class QuotationController  extends Controller
     }
 
 
-    public function update(Request $request, Quotation $quotation)
+    public function update(Request $request, CustomerOrder $customerorder)
     {
         //  dd($commercialinvoice->commercial_invoice_id());
             //   dd($request->all());
@@ -217,29 +239,29 @@ class QuotationController  extends Controller
         try {
 
             // dd($quotation);
-            $quotation = Quotation::findOrFail($request->sale_invoice_id);
-            $quotation->saldate = $request->saldate;
-            $quotation->valdate = $request->valdate;
-            $quotation->qutno = $request->qutno;
-            $quotation->prno = $request->prno;
-            $quotation->customer_id = $request->customer_id;
-            $quotation->cashcustomer = $request->cashcustomer;
-            $quotation->cashcustadrs = $request->cashcustadrs;
+            $customerorder = CustomerOrder::findOrFail($request->sale_invoice_id);
+            $customerorder->saldate = $request->saldate;
+            $customerorder->valdate = $request->valdate;
+            $customerorder->poseqno = $request->poseqno;
+            $customerorder->pono = $request->pono;
+            $customerorder->customer_id = $request->customer_id;
+            $customerorder->cashcustomer = $request->cashcustomer;
+            $customerorder->cashcustadrs = $request->cashcustadrs;
 
-            $quotation->discntper = $request->discntper;
-            $quotation->discntamt = $request->discntamt;
-            $quotation->cartage = $request->cartage;
-            $quotation->rcvblamount = $request->rcvblamount;
-            $quotation->saletaxper = $request->saletaxper;
-            $quotation->saletaxamt = $request->saletaxamt;
-            $quotation->totrcvbamount = $request->totrcvbamount;
+            $customerorder->discntper = $request->discntper;
+            $customerorder->discntamt = $request->discntamt;
+            $customerorder->cartage = $request->cartage;
+            $customerorder->rcvblamount = $request->rcvblamount;
+            $customerorder->saletaxper = $request->saletaxper;
+            $customerorder->saletaxamt = $request->saletaxamt;
+            $customerorder->totrcvbamount = $request->totrcvbamount;
 
-            $quotation->save();
+            $customerorder->save();
             // Get Data
             $cds = $request->quotations; // This is array
-            $cds = QuotationDetails::hydrate($cds); // Convert it into Model Collection
+            $cds = CustomerOrderDetails::hydrate($cds); // Convert it into Model Collection
             // Now get old ContractDetails and then get the difference and delete difference
-            $oldcd = QuotationDetails::where('sale_invoice_id',$quotation->id)->get();
+            $oldcd = CustomerOrderDetails::where('sale_invoice_id',$customerorder->id)->get();
             $deleted = $oldcd->diff($cds);
             //  Delete contract details if marked for deletion
             foreach ($deleted as $d) {
@@ -249,9 +271,9 @@ class QuotationController  extends Controller
             foreach ($cds as $cd) {
                 if($cd->id)
                 {
-                    $cds = QuotationDetails::where('id',$cd->id)->first();
+                    $cds = CustomerOrderDetails::where('id',$cd->id)->first();
 
-                    $cds->sale_invoice_id = $quotation->id;
+                    $cds->sale_invoice_id = $customerorder->id;
                     $cds->material_id = $cd->material_id;
                     $cds->sku_id = $cd->sku_id;
                     $cds->repname = $cd['repname'];
@@ -274,7 +296,7 @@ class QuotationController  extends Controller
                 }else
                 {
                     //  The item is new, Add it
-                     $cds = new QuotationDetails();
+                     $cds = new CustomerOrderDetails();
                     // $cds->sale_invoice_id = $saleinvoices->id;
                     // $cds->material_id = $cd->material_id;
                     // $cds->sku_id = $cd->sku_id;
@@ -287,7 +309,7 @@ class QuotationController  extends Controller
                     // $cds->locid = $cd['location'];
                     // $cds->salunitid = $cd['sku'];
 
-                    $cds->sale_invoice_id = $quotation->id;
+                    $cds->sale_invoice_id = $customerorder->id;
                     $cds->material_id = $cd->material_id;
                     $cds->sku_id = $cd->sku_id;
                     $cds->repname = $cd['repname'];

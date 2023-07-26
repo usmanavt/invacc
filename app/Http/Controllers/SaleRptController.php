@@ -41,12 +41,12 @@ class SaleRptController extends Controller
         $todate = $request->todate;
         $head = $request->head;
 
-        // return = DB::select('call ProcGLHW(?,?,?)',array($fromdate,$todate,$head_id));
+        return  DB::select('call procqutcategory(?,?,?)',array($fromdate,$todate,$head));
 
 
-        return DB::table('vwqutcategory')
-        ->select('*')->whereBetween('invoice_date',[$fromdate,$todate])
-        ->where('MHEAD',$head)->get()->toArray();
+        // return DB::table('vwqutcategory')
+        // ->select('*')->whereBetween('invoice_date',[$fromdate,$todate])
+        // ->where('MHEAD',$head)->get()->toArray();
     }
 
     public function getMPDFSettings($orientation = 'A4')

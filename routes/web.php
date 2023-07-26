@@ -34,6 +34,10 @@ use App\Http\Controllers\SaleRptController;
 use App\Http\Controllers\StockLedgerController;
 use App\Http\Controllers\CareController;
 use App\Http\Controllers\QuotationController;
+use App\Http\Controllers\CustomerOrderController;
+
+
+
 
 
 Route::get('/', function () {
@@ -159,8 +163,14 @@ Route::resource('sales', SalesInvoicesController::class);
 
 Route::get('/quotations/getQuotationsMaster', [QuotationController::class, 'getMaster'])->name('quotations.master');
 Route::get('/quotations/getQuotationsDetails', [QuotationController::class, 'getDetail'])->name('quotations.details');
-
 Route::resource('quotations', QuotationController::class);
+
+//  Customer Orders
+Route::get('/custorders/getQuotationsMaster', [CustomerOrderController::class, 'getMaster'])->name('custorders.master');
+Route::get('/custorders/getQuotationsDetails', [CustomerOrderController::class, 'getDetail'])->name('custorders.details');
+Route::get('/custorders/getcidMaster', [CustomerOrderController::class, 'getMasterqut'])->name('custorders.quotations');
+Route::get('/custorders/getCustordersQuotationsdtl', [CustomerOrderController::class, 'getDetailsqut'])->name('custorders.quotationsdtl');
+Route::resource('custorders', CustomerOrderController::class);
 
 
 

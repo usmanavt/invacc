@@ -31,12 +31,9 @@
                         </x-slot>
 
                         <x-slot name="content">
-                            {{-- <x-dropdown-link href="{{ route('mastersetup') }}">Master</x-dropdown-link> --}}
                             <x-dropdown-link href="{{ route('categories.index') }}">Categories</x-dropdown-link>
-                            {{-- <x-dropdown-link href="{{ route('skus.index') }}">Skus</x-dropdown-link>  --}}
                             <x-dropdown-link href="{{ route('dimensions.index') }}">Dimensions</x-dropdown-link>
                             <x-dropdown-link href="{{ route('brands.index') }}">Brands</x-dropdown-link>
-                            {{-- <x-dropdown-link href="{{ route('sources.index') }}">Sources</x-dropdown-link> --}}
                             <x-dropdown-link href="{{ route('suppliers.index') }}">Suppliers</x-dropdown-link>
                             <x-dropdown-link href="{{ route('customers.index') }}">Customers</x-dropdown-link>
                             <x-dropdown-link href="{{ route('cares.index') }}">CareOf</x-dropdown-link>
@@ -75,14 +72,12 @@
 
                         <x-slot name="content">
 
-                            {{-- <x-dropdown-link href="{{ route('transaction') }}">Transaction</x-dropdown-link> --}}
                             <x-dropdown-link href="{{ route('contracts.index') }}">Contracts</x-dropdown-link>
                             <x-dropdown-link href="{{ route('cis.index') }}">Comm Invoices Imported</x-dropdown-link>
-                            {{-- <x-dropdown-link href="{{ route('cisl.index') }}">Comm Invoices Local</x-dropdown-link> --}}
                             <x-dropdown-link href="{{ route('localpurchase.index') }}">Comm Invoices Local</x-dropdown-link>
-                            {{-- <x-dropdown-link href="{{ route('recivings.index') }}">Goods Reciving</x-dropdown-link> --}}
                             <x-dropdown-link href="{{ route('clearance.index') }}">Duty Clearance</x-dropdown-link>
                             <x-dropdown-link href="{{ route('quotations.index') }}">Sales Quotation</x-dropdown-link>
+                            <x-dropdown-link href="{{ route('custorders.index') }}">Customer Order</x-dropdown-link>
                             <x-dropdown-link href="{{ route('sales.index') }}">Sales Invoice</x-dropdown-link>
                             <x-dropdown-link href="{{ route('bankpayments.index') }}">Bank Payments</x-dropdown-link>
                             <x-dropdown-link href="{{ route('bankrecivings.index') }}">Bank Recivings</x-dropdown-link>
