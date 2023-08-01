@@ -6,7 +6,7 @@
     </x-slot>
 
     <div class="py-4">
-        <div class="max-w-5xl mx-auto">
+        <div class="max-w-7xl mx-auto">
             <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
                 <div class="p-6 bg-white border-b border-gray-200">
 
@@ -21,6 +21,14 @@
                                     <input type="radio" name="report_type" value="quotation" required onchange="checkReportType('quotation')">
                                     <label for="">Sale Quotation </label>
                                 </div>
+                                <div>
+                                    <input type="radio" name="report_type" value="custorder" required onchange="checkReportType('custorder')">
+                                    <label for="">Customer Order </label>
+                                </div>
+
+
+
+
 
                                 <div>
                                     <input type="radio" name="report_type" value="dlvrychln" required onchange="checkReportType('dlvrychln')">
@@ -52,25 +60,40 @@
                                     <label for="">Sale Return History</label>
                                 </div>
 
-                                {{-- <div>
-                                    <input type="radio" name="report_type" value="Imppurhist" required onchange="checkReportType('Imppurhist')">
-                                    <label for="">Imported Purchase History</label>
+                                <div class="flex flex-col ">
+                                    <label for="">
+                                        Customer Name <span class="text-red-500 font-semibold w-10  ">(*)</span>
+                                    </label>
+                                    <textarea name="cname" id="cname" cols="40" rows="1"  maxlength="150" required class="rounded">
+                                        MUHAMMAD NAZIR & Co
+                                    </textarea>
+
+                                    <label for="">
+                                        Customer Address <span class="text-red-500 font-semibold w-10 ">(*)</span>
+                                    </label>
+                                    <textarea name="csdrs" id="csdrs" cols="40" rows="5" maxlength="255"  class="rounded">
+                                        Steam Pipes, Pipe Fitting, Flanges Valves, S.S Pipes
+                                        Plot # 8 Near Allah Malik Godown Shershah Kabari Bazar,
+                                        Phone : 021-32588781, 021-32574285 , Fax : 021-32588782
+                                    </textarea>
+
+                                    <label for="">
+                                        Term of Condition(For Quotation) <span class="text-red-500 font-semibold w-10 ">(*)</span>
+                                    </label>
+                                    <textarea name="toc" id="toc" cols="40" rows="4" maxlength="255"  class="rounded"></textarea>
+
+                                    {{-- <textarea rows="4" cols="50" required class="rounded">
+                                        Steam Pipes, Pipe Fitting, Flanges Valves, S.S Pipes
+                                        Plot # 8 Near Allah Malik Godown Shershah Kabari Bazar,
+                                        Phone : 021-32588781, 021-32574285 , Fax : 021-32588782
+                                        </textarea> --}}
+
+
+
+
                                 </div>
 
-                                <div>
-                                    <input type="radio" name="report_type" value="locpurhist" required onchange="checkReportType('locpurhist')">
-                                    <label for="">Local Purchase History</label>
-                                </div> --}}
 
-
-                                {{-- <div>
-                                    <input type="radio" name="report_type" value="vchr" required onchange="checkReportType('vchr')">
-                                    <label for="">Voucher</label>
-                                </div>
-                                <div>
-                                    <input type="radio" name="report_type" value="agng" required onchange="checkReportType('agng')">
-                                    <label for="">Aging</label>
-                                </div> --}}
                             </fieldset>
 
                             <fieldset class="border px-6 py-1.5  rounded  ">
@@ -167,7 +190,7 @@
     const heads = @json($heads);
     const subheads = @json($subheads);
 
-    const subheadsqut = @json($subheadsqut);
+
 
     const subheadsci = @json($subheadsci);
     const subheadsciloc = @json($subheadsciloc);
@@ -175,11 +198,13 @@
     const subheadspend = @json($subheadspend);
     const vchrheads = @json($vchrheads);
     const funcquotation = @json(route('salerpt.funcquotation'));
+    const funccustorder = @json(route('salerpt.funccustorder'));
 
 
     const head = document.getElementById('head_id')
     const subhead = document.getElementById('subhead_id')
     const fromdate = document.getElementById('fromdate')
+    const cname = document.getElementById('cname')
     const todate = document.getElementById('todate')
     let subheadavailable = false
     let rptType = ''
@@ -267,12 +292,47 @@ const getSubheadVoucherData = async (value) =>{
         return quotation
     }
 
-    // const addSelectElement = (select,id,value) => {
-    //     var option = document.createElement('option')
-    //     option.value = id
-    //     option.text  = value
-    //     select.appendChild(option)
-    // }
+
+    case 'custorder':
+            // console.log(value)
+            fetch(funccustorder + `?todate=${todate.value}&fromdate=${fromdate.value}&head=${value}`,{
+                    method:"GET",
+                    headers: { 'Accept':'application/json','Content-type':'application/json'},
+                    })
+                    .then(response => response.json())
+                    .then( data => {
+                        if(data.length > 0)
+                        {
+                            data.forEach(e => {
+                                addSelectElement(subhead,e.Subhead,e.title)
+                            });
+                            subhead.setAttribute('required','')
+                            subhead.removeAttribute('disabled','')
+                        }else{
+                            subhead.removeAttribute('required','')
+                            subhead.setAttribute('disabled','')
+                        }
+                    })
+                    .catch(error => console.error(error))
+                break;
+
+// // FOR CONTRACT FILL
+const getSubheadVoucherData1 = async (value) =>{
+        let data = await fetch(funccustorder + `?todate=${todate.value}&fromdate=${fromdate.value}&head=${value}`,{
+            method:"GET",
+            headers: { 'Accept':'application/json','Content-type':'application/json'},
+            })
+            .then(response => response.json())
+            .then( data => { return data })
+            .catch(error => console.error(error))
+    }
+    const getCustorder =async  (value) => {
+        const custorder = await getSubheadVoucherData1(value)
+        return custorder
+    }
+
+
+
 
 
 
@@ -456,6 +516,23 @@ const getSubheadVoucherData = async (value) =>{
                 });
                 headSelected()
                 break;
+
+                case 'custorder':
+                // Show Head
+                rptType = 'custorder'
+                head.setAttribute('required','')
+                head.disabled = false
+                head.length = 0
+                subhead.removeAttribute('required')
+                subhead.disabled = true
+                subhead.length = 0
+                heads.forEach(e => {
+                    addSelectElement(head,e.id,e.title)
+                });
+                headSelected()
+                break;
+
+
 
 
 

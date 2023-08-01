@@ -120,12 +120,12 @@ class CustomerOrderController  extends Controller
         // $locations = Location::select('id','title')->where('status',1)->get();
 
         // return view('sales.create')
-        $mycname='MUHAMMAD HABIB & Co.';
-        $maxdcno = DB::table('customer_orders')->select('*')->max('poseqno')+1;
-        return \view ('custorders.create',compact('maxdcno','mycname'))
-        ->with('customers',Customer::select('id','title')->get())
-        ->with('locations',Location::select('id','title')->get())
-        ->with('skus',Sku::select('id','title')->get());
+        // $mycname='MUHAMMAD HABIB & Co.';
+        $maxposeqno = DB::table('customer_orders')->select('*')->max('poseqno')+1;
+        return \view ('custorders.create',compact('maxposeqno'))
+        ->with('customers',Customer::select('id','title')->get());
+        // ->with('locations',Location::select('id','title')->get())
+        // ->with('skus',Sku::select('id','title')->get());
 
         // ->with('maxdcno',lastsalinvno::select('id','poseqno')->get());
 
@@ -137,25 +137,28 @@ class CustomerOrderController  extends Controller
     {
             //    dd($request->all());
         $this->validate($request,[
-            'saldate' => 'required|min:3|date',
+            // 'saldate' => 'required|min:3|date',
         //    'title'=>'required|min:3|unique:materials'
-            'poseqno' => 'required|min:1|unique:quotations',
-            'pono' => 'required|min:1|unique:quotations',
+            'poseqno' => 'required|min:1|unique:customer_orders',
+            'pono' => 'required|min:1|unique:customer_orders'
             // 'gpno' => 'required|min:1|unique:sale_invoices',
-            'customer_id' => 'required'
+            // 'customer_id' => 'required'
         ]);
         DB::beginTransaction();
         try {
             $ci = new CustomerOrder();
-            $ci->saldate = $request->saldate;
-            $ci->valdate = $request->valdate;
+
+            $ci->quotation_id = $request->quotation_id;
+            $ci->podate = $request->podate;
+            $ci->deliverydt = $request->deliverydt;
             $ci->poseqno = $request->poseqno;
             $ci->pono = $request->pono;
+
+            $ci->pqutno = $request->qutno;
+            $ci->pprno = $request->prno;
+
             $ci->customer_id = $request->customer_id;
-
-
-            $ci->cashcustomer = $request->cashcustomer;
-            $ci->cashcustadrs = $request->cashcustadrs;
+            $ci->remarks = $request->remarks;
 
 
             $ci->discntper = $request->discntper;
@@ -167,24 +170,22 @@ class CustomerOrderController  extends Controller
             $ci->saletaxamt = $request->saletaxamt;
             $ci->totrcvbamount = $request->totrcvbamount;
             $ci->save();
+
+
+
             foreach ($request->contracts as $cont) {
-                $material = Material::findOrFail($cont['id']);
+                // $material = Material::findOrFail($cont['id']);
                 $lpd = new CustomerOrderDetails();
                 $lpd->sale_invoice_id = $ci->id;
-                $lpd->material_id = $material->id;
+                $lpd->material_id = $cont['material_id'];
+                $lpd->sku_id = $cont['sku_id'];
+
+
                 $lpd->repname = $cont['repname'];
-                $lpd->mybrand = $cont['mybrand'];
-                $lpd->qtykg = $cont['bundle1'];
-                $lpd->price = $cont['pcspbundle1'];
-                $lpd->saleamnt = $cont['ttpcs'];
-
-                // $location = Location::where("title", $cont['location'])->first();
-                // $lpd->locid = $location->id;
-                // $lpd->location = $cont['location'];
-
-                $unit = Sku::where("title", $cont['sku'])->first();
-                $lpd->sku_id = $unit->id;
-                // $lpd->sku = $cont['sku'];
+                $lpd->brand = $cont['mybrand'];
+                $lpd->qtykg = $cont['saleqty'];
+                $lpd->price = $cont['price'];
+                $lpd->saleamnt = $cont['saleamnt'];
                 $lpd->save();
             }
             // }
@@ -202,25 +203,18 @@ class CustomerOrderController  extends Controller
     public function edit($id)
     {
 
-        $cd = DB::table('quotation_details')
-        ->join('materials', 'materials.id', '=', 'quotation_details.material_id')
-        ->join('skus', 'skus.id', '=', 'quotation_details.sku_id')
-        ->select('quotation_details.*','materials.title as material_title','materials.dimension','skus.title as sku')
+        $cd = DB::table('customer_order_details')
+        ->join('materials', 'materials.id', '=', 'customer_order_details.material_id')
+        ->join('skus', 'skus.id', '=', 'customer_order_details.sku_id')
+        ->select('customer_order_details.*','materials.title as material_title','materials.dimension','skus.title as sku')
         ->where('sale_invoice_id',$id)->get();
          $data=compact('cd');
 
-        // DB::table('skus')->select('id AS dunitid','title AS dunit')
-        // ->whereIn('id',[1,2])->get();
 
-
-
-        return view('quotations.edit')
+        return view('custorders.edit')
         ->with('customer',Customer::select('id','title')->get())
-        // ->with('materials',Material::select('id','category')->get())
         ->with('customerorder',CustomerOrder::findOrFail($id))
-        // ->with('cd',CustomerOrderDetails::where('sale_invoice_id',$id)->get())
         ->with($data)
-        ->with('locations',Location::select('id','title')->get())
         ->with('skus',Sku::select('id','title')->get());
 
         // return view('contracts.edit')->with('suppliers',Supplier::select('id','title')->get())->with('contract',$contract)->with('cd',ContractDetails::where('contract_id',$contract->id)->get());
@@ -238,27 +232,37 @@ class CustomerOrderController  extends Controller
         DB::beginTransaction();
         try {
 
-            // dd($quotation);
+            //  dd($request->sale_invoice_id);
             $customerorder = CustomerOrder::findOrFail($request->sale_invoice_id);
-            $customerorder->saldate = $request->saldate;
-            $customerorder->valdate = $request->valdate;
+
+
+            $customerorder->quotation_id = $request->quotation_id;
+            $customerorder->podate = $request->podate;
+            $customerorder->deliverydt = $request->deliverydt;
             $customerorder->poseqno = $request->poseqno;
             $customerorder->pono = $request->pono;
+
+            $customerorder->pqutno = $request->qutno;
+            $customerorder->pprno = $request->prno;
+
             $customerorder->customer_id = $request->customer_id;
-            $customerorder->cashcustomer = $request->cashcustomer;
-            $customerorder->cashcustadrs = $request->cashcustadrs;
+            $customerorder->remarks = $request->remarks;
+
 
             $customerorder->discntper = $request->discntper;
             $customerorder->discntamt = $request->discntamt;
             $customerorder->cartage = $request->cartage;
             $customerorder->rcvblamount = $request->rcvblamount;
+
             $customerorder->saletaxper = $request->saletaxper;
             $customerorder->saletaxamt = $request->saletaxamt;
             $customerorder->totrcvbamount = $request->totrcvbamount;
-
             $customerorder->save();
+
+
+
             // Get Data
-            $cds = $request->quotations; // This is array
+            $cds = $request->customerorder; // This is array
             $cds = CustomerOrderDetails::hydrate($cds); // Convert it into Model Collection
             // Now get old ContractDetails and then get the difference and delete difference
             $oldcd = CustomerOrderDetails::where('sale_invoice_id',$customerorder->id)->get();
@@ -277,18 +281,12 @@ class CustomerOrderController  extends Controller
                     $cds->material_id = $cd->material_id;
                     $cds->sku_id = $cd->sku_id;
                     $cds->repname = $cd['repname'];
-                    $cds->mybrand = $cd['mybrand'];
+                    $cds->brand = $cd['mybrand'];
                     $cds->qtykg = $cd['qtykg'];
-                    // $cds->qtypcs = $cd['qtypcs'];
-                    // $cds->qtyfeet = $cd['qtyfeet'];
                     $cds->price = $cd['price'];
                     $cds->saleamnt = $cd['saleamnt'];
 
-                    //  $location = Location::where("title", $cd['location'])->first();
-                    //  $cds->locid = $location->id;
-                    //   $cds->location = $cd['location'];
-
-                     $unit = Sku::where("title", $cd['sku'])->first();
+                    $unit = Sku::where("title", $cd['sku'])->first();
                      $cds->sku_id = $unit->id;
                     //  $cds->sku = $cd['sku'];
 
@@ -309,7 +307,7 @@ class CustomerOrderController  extends Controller
                     // $cds->locid = $cd['location'];
                     // $cds->salunitid = $cd['sku'];
 
-                    $cds->sale_invoice_id = $customerorder->id;
+                    $cds->sale_invoice_id = $custorders->id;
                     $cds->material_id = $cd->material_id;
                     $cds->sku_id = $cd->sku_id;
                     $cds->repname = $cd['repname'];

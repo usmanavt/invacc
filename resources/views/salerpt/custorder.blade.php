@@ -91,7 +91,7 @@ table{
             </tr>
             <tr>
                 <td  style="text-align: center;">
-                    <span style="font-size:3rem;font-weight: bold">Sale Quotation</span>
+                    <span style="font-size:3rem;font-weight: bold">Customer Order</span>
                 </td>
             </tr>
         </tbody>
@@ -108,36 +108,36 @@ table{
                     {{ $data[0]->custname }}
                 </td>
                 <td>
-                    Quotation No
+                    P.O No
                 </td>
                 <td>
-                    {{ $data[0]->qutno }}
+                    {{ $data[0]->pono }}
                 </td>
                 <td>
-                    Quotation Date
+                    P.O Date
                 </td>
                 <td>
-                    {{ $data[0]->saldate }}
+                     {{ $data[0]->podate }}
                 </td>
             </tr>
-                <tr>
-                    <td>
-                        P.R No
-                    </td>
-                    <td>
-                        {{-- From {{ $fromdate }} to {{ $todate }} --}}
-                        {{ $data[0]->prno }}
-                    </td>
+            <tr>
+                <td>
+                    P.R No
+                </td>
+                <td>
+                    {{-- From {{ $fromdate }} to {{ $todate }} --}}
+                    {{ $data[0]->prno }}
+                </td>
 
-                    <td>
-                        Valid Date
-                    </td>
-                    <td>
-                        {{ $data[0]->valdate }}
-                    </td>
+                <td>
+                    Delivery Date
+                </td>
+                <td>
+                    {{ $data[0]->deliverydt }}
+                </td>
 
 
-                </tr>
+            </tr>
         </tbody>
     </table>
     {{-- column headers --}}
@@ -189,16 +189,10 @@ table{
            </tr>
 
         </tbody>
-
     </table>
-
-<h3 style="font-size:1rem">Term and condition: {{ $hdng3 }}</h3>
-
-
 
     {{-- Footer  --}}
     <div style="margin-top:64px;">
-
         <table >
 
             <tr style="margin-top:16px;margin-bottom:16px;">

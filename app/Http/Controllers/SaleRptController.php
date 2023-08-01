@@ -19,6 +19,7 @@ class SaleRptController extends Controller
         $fromdate = $request->fromdate;
         $todate = $request->todate;
 
+
         //  $fromdate = '2023-07-01';
         //  $todate = '2023-07-31';
 
@@ -27,13 +28,14 @@ class SaleRptController extends Controller
         ->with('glheads',Customer::where('status',1)->whereIn('id',[1,2,3,4,5,6,7,8,9,10])->get())
         ->with('vchrheads',Customer::where('status',1)->whereIn('id',[6,7,8,9])->get())
         ->with('subheads',DB::table('vwcustcategory')->select('*')->whereBetween('invoice_date',[$fromdate,$todate])->get()->toArray())
-        ->with('subheadsqut',DB::table('vwqutcategory')->select('*')->whereBetween('invoice_date',[$fromdate,$todate])->get()->toArray())
+        // ->with('subheadsqut',DB::table('vwqutcategory')->select('*')->whereBetween('invoice_date',[$fromdate,$todate])->get()->toArray())
         ->with('subheadsci',DB::table('vwcuststcategory')->select('*')->whereBetween('invoice_date',[$fromdate,$todate])->get()->toArray())
         ->with('subheadsciloc',DB::table('vwsupcategoryloccominv')->select('*')->whereBetween('invoice_date',[$fromdate,$todate])->get()->toArray())
         ->with('subheadspend',DB::table('vwpendcontinvs')->select('*')->get()->toArray())
         ;
     }
 
+    // For Sale Quotation
     public function funcquotation(Request $request)
     {
         //  dd($request->all());
@@ -48,6 +50,25 @@ class SaleRptController extends Controller
         // ->select('*')->whereBetween('invoice_date',[$fromdate,$todate])
         // ->where('MHEAD',$head)->get()->toArray();
     }
+
+// For Customer Order
+    public function funccustorder(Request $request)
+    {
+        //  dd($request->all());
+        $fromdate = $request->fromdate;
+        $todate = $request->todate;
+        $head = $request->head;
+
+        return  DB::select('call proccopcategory(?,?,?)',array($fromdate,$todate,$head));
+
+
+        // return DB::table('vwqutcategory')
+        // ->select('*')->whereBetween('invoice_date',[$fromdate,$todate])
+        // ->where('MHEAD',$head)->get()->toArray();
+    }
+
+
+
 
     public function getMPDFSettings($orientation = 'A4')
     {
@@ -204,6 +225,15 @@ class SaleRptController extends Controller
 
         if($report_type === 'quotation'){
             //  dd($request->all());
+
+
+                $hdng1 = $request->cname;
+                $hdng2 = $request->csdrs;
+                $hdng3 = $request->toc;
+
+
+
+
             $head_id = $request->head_id;
             // $head = Head::findOrFail($head_id);
             $head = Customer::findOrFail($head_id);
@@ -229,7 +259,10 @@ class SaleRptController extends Controller
             $grouped = $collection->groupBy('id');       //  Sort collection by SupName
             $grouped->values()->all();                       //  values() removes indices of array
             foreach($grouped as $g){
-                 $html =  view('salerpt.quotationrpt')->with('data',$g)->with('fromdate',$fromdate)->with('todate',$todate)->with('headtype',$head->title)->render();
+                 $html =  view('salerpt.quotationrpt')->with('data',$g)->with('fromdate',$fromdate)->with('todate',$todate)
+                 ->with('headtype',$head->title)
+                 ->with('hdng1',$hdng1)->with('hdng2',$hdng2)->with('hdng3',$hdng3)
+                 ->render();
                 // $html =  view('salerpt.glhw')->with('data',$g)->with('fromdate',$fromdate)->with('todate',$todate)->render();
                 $filename = $g[0]->id  .'-'.$fromdate.'-'.$todate.'.pdf';
                 $mpdf->SetHTMLFooter('
@@ -248,6 +281,64 @@ class SaleRptController extends Controller
             }
             return response($mpdf->Output($filename,'I'),200)->header('Content-Type','application/pdf');
         }
+
+
+        if($report_type === 'custorder'){
+            //  dd($request->all());
+            $hdng1 = $request->cname;
+            $hdng2 = $request->csdrs;
+            $hdng3 = $request->toc;
+
+
+            $head_id = $request->head_id;
+            // $head = Head::findOrFail($head_id);
+            $head = Customer::findOrFail($head_id);
+            if($request->has('subhead_id')){
+                $subhead_id = $request->subhead_id;
+                //  Clear Data from Table
+                DB::table('tmpqutparrpt')->truncate();
+                foreach($request->subhead_id as $id)
+                {
+                    DB::table('tmpqutparrpt')->insert([ 'qutid' => $id ]);
+                }
+            }
+            //  Call Procedure
+            $mpdf = $this->getMPDFSettings();
+            $data = DB::select('call procsaleorders()');
+            if(!$data)
+            {
+                Session::flash('info','No data available');
+                return redirect()->back();
+            }
+            $collection = collect($data);                   //  Make array a collection
+            // $grouped = $collection->groupBy('SupName');       //  Sort collection by SupName
+            $grouped = $collection->groupBy('id');       //  Sort collection by SupName
+            $grouped->values()->all();                       //  values() removes indices of array
+            foreach($grouped as $g){
+                 $html =  view('salerpt.custorder')->with('data',$g)->with('fromdate',$fromdate)
+                 ->with('todate',$todate)
+                 ->with('headtype',$head->title)
+                 ->with('hdng1',$hdng1)->with('hdng2',$hdng2)->with('hdng3',$hdng3)
+                 ->render();
+                // $html =  view('salerpt.glhw')->with('data',$g)->with('fromdate',$fromdate)->with('todate',$todate)->render();
+                $filename = $g[0]->id  .'-'.$fromdate.'-'.$todate.'.pdf';
+                $mpdf->SetHTMLFooter('
+                <table width="100%" style="border-top:1px solid gray">
+                    <tr>
+                        <td width="33%">{DATE d-m-Y}</td>
+                        <td width="33%" align="center">{PAGENO}/{nbpg}</td>
+                        <td width="33%" style="text-align: right;">' . $filename . '</td>
+                    </tr>
+                </table>');
+                $chunks = explode("chunk", $html);
+                foreach($chunks as $key => $val) {
+                    $mpdf->WriteHTML($val);
+                }
+                $mpdf->AddPage();
+            }
+            return response($mpdf->Output($filename,'I'),200)->header('Content-Type','application/pdf');
+        }
+
 
         if($report_type === 'salinvs'){
             //  dd($request->all());

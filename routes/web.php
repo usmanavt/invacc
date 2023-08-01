@@ -77,6 +77,7 @@ Route::get('dutyclearance',[DutyRptController::class, 'index'])->name('dutyclear
 Route::get('salerpt',[SaleRptController::class, 'index'])->name('salerpt.index');
 Route::post('salerpt/fetch',[SaleRptController::class, 'fetch'])->name('salerpt.fetch');
 Route::get('funcquotation',[SaleRptController::class, 'funcquotation'])->name('salerpt.funcquotation');
+Route::get('funccustorder',[SaleRptController::class, 'funccustorder'])->name('salerpt.funccustorder');
 
 // Material Stock Reports
  Route::get('stockledgers',[StockLedgerController::class, 'index'])->name('stockledgers.index');
@@ -170,7 +171,7 @@ Route::get('/custorders/getQuotationsMaster', [CustomerOrderController::class, '
 Route::get('/custorders/getQuotationsDetails', [CustomerOrderController::class, 'getDetail'])->name('custorders.details');
 Route::get('/custorders/getcidMaster', [CustomerOrderController::class, 'getMasterqut'])->name('custorders.quotations');
 Route::get('/custorders/getCustordersQuotationsdtl', [CustomerOrderController::class, 'getDetailsqut'])->name('custorders.quotationsdtl');
-Route::resource('custorders', CustomerOrderController::class);
+Route::resource('customerorder', CustomerOrderController::class);
 
 
 

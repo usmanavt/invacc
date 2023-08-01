@@ -1,15 +1,15 @@
 <x-app-layout>
 
     @push('styles')
-    {{-- <link rel="stylesheet" href="{{ asset('css/tabulator_simple.min.css') }}"> --}}
-    <link href="https://unpkg.com/tabulator-tables/dist/css/tabulator.min.css" rel="stylesheet">
-    <script type="text/javascript" src="https://unpkg.com/tabulator-tables/dist/js/tabulator.min.js"></script>
+    <link rel="stylesheet" href="{{ asset('css/tabulator_simple.min.css') }}">
+    {{-- <link href="https://unpkg.com/tabulator-tables/dist/css/tabulator.min.css" rel="stylesheet"> --}}
+    {{-- <script type="text/javascript" src="https://unpkg.com/tabulator-tables/dist/js/tabulator.min.js"></script> --}}
 
     @endpush
 
     <x-slot name="header">
         <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-            Edit Sale Quotation
+            Edit Customer Order
         </h2>
     </x-slot>
 
@@ -23,74 +23,67 @@
                         {{-- Contract Master --}}
                         <div class="grid grid-cols-12 gap-2 py-2 items-center">
                             {{-- Contract Master --}}
+
+
+
                             <label for="customer_id">Customer</label>
-                            <select  autocomplete="on" class="col-span-2" name="customer_id" id="customer_id" required>
+                            <select  autocomplete="on" class="col-span-2" name="customer_id" id="customer_id" disabled required>
                                 @foreach($customer as $customer)
-                                    @if ($customer->id == $quotation->customer_id)
+                                    @if ($customer->id == $customerorder->customer_id)
                                     <option value="{{$customer->id}}" selected> {{$customer->title}} </option>
                                 @endif
                                     <option value="{{$customer->id}}"> {{$customer->title}} </option>
                                 @endforeach
                             </select>
 
-                            <label for="saldate">Quotation Date<x-req /></label>
-                            <input type="date"  class="col-span-2"  id="saldate" name="saldate" value="{{ $quotation->saldate->format('Y-m-d') }}" required>
+                            <x-input-text title="" name="quotation_id" id="quotation_id" value="{{ $customerorder->quotation_id }}" hidden     />
+                            <x-input-text title="Quotation No" name="qutno" id="qutno" value="{{ $customerorder->pqutno }}" disabled     />
+                            <x-input-text title="P.R No" name="prno" id="prno" value="{{ $customerorder->pprno }}" disabled     />
+                            <x-input-text title="P.O Seq.#" name="poseqno" id="poseqno" value="{{ $customerorder->poseqno }}"    required   />
 
-                            <label for="valdate">Valid Date<x-req /></label>
-                            <input type="date"  class="col-span-2"  id="valdate" name="valdate" value="{{ $quotation->valdate->format('Y-m-d') }}" required>
 
-                            <label for="qutno">Quotation No <x-req /></label>
-                            <input type="text" class="col-span-2" id="qutno" name="qutno" value="{{ $quotation->qutno }}"    placeholder="qutno" required>
-
-                            <label for="prno">P.R No#<x-req /></label>
-                            <input type="text" class="col-span-2" id="prno" name="prno" value="{{ $quotation->prno }}"  placeholder="prno" required>
-
-                            <label for="">
-                                Cash Customer Name
-                                {{-- <span class="text-red-500 font-semibold">(*)</span> --}}
-                            </label>
-                            <textarea name="cashcustomer" id="cashcustomer" cols="30"  rows="1" maxlength="100"   required class="rounded">
-                                {{ $quotation->cashcustomer }}
-                            </textarea>
-                            <label for="">
-                                Cash Customer Address
-                                {{-- <span class="text-red-500 font-semibold">(*)</span> --}}
-                            </label>
-
-                            <textarea name="cashcustadrs" id="cashcustadrs" cols="50" rows="1" maxlength="150" required class="rounded">
-                            {{ $quotation->cashcustadrs }} </textarea>
                         </div>
+                        <div class="grid grid-cols-12 gap-1 py-2 items-center">
+                            <x-input-date title="P.O Date" id="podate" name="podate" value="{{ $customerorder->podate->format('Y-m-d') }}" req required class="col-span-2" />
+                            <x-input-text title="P.O #" name="pono" id="pono" value="{{ $customerorder->pono }}"  />
+                            <x-input-date title="Delivery Date" name="deliverydt" value="{{ $customerorder->deliverydt->format('Y-m-d') }}" />
 
-                        {{-- <div class="flex flex-col-12"> --}}
 
-                            {{-- <div class="flex flex-col"> --}}
+                            <label for="">
+                                Remakrs <span class="text-red-500 font-semibold  ">(*)</span>
+                            </label>
+                            <textarea name="remarks" id="remarks" cols="100" rows="2" maxlength="150" required class="rounded">
+                                {{ $customerorder->remarks }}
 
-                                {{-- <label for="">
-                                    General Customer <span class="text-red-500 font-semibold">(*)</span>
-                                </label>
-                                <textarea name="ucustomer" id="ucustomer" cols="20" rows="2" maxlength="150" required class="rounded"></textarea>
+                            </textarea>
+                        </div>
+                    </fieldset>
 
-                                <label for="">
-                                    General Customer Address <span class="text-red-500 font-semibold">(*)</span>
-                                </label>
-                                <textarea name="ucustomeradr" id="ucustomeradr" cols="30" rows="2" maxlength="150" required class="rounded"></textarea> --}}
 
-                        {{-- </div> --}}
+                        </div>
 
                         <fieldset class="border px-4 py-2 rounded">
                             <legend>Invoice Level Expenses</legend>
                             <div class="grid grid-cols-12 gap-2 py-2 items-center">
-                                <x-input-numeric title="Discou(%)" name="discntper" id="discntper" value="{{ $quotation->discntper }}"    />
-                                <x-input-numeric title="Discount(Amount)" name="discntamt" id="discntamt" value="{{ $quotation->discntamt }}"    />
-                                <x-input-numeric title="Cartage" name="cartage" value="{{ $quotation->cartage }}"  required  onblur="tnetamount()"  />
-                                <x-input-numeric title="Payble Amount" name="rcvblamount" value="{{ $quotation->rcvblamount }}" disabled />
-                                <x-input-numeric title="" name="sale_invoice_id" id="sale_invoice_id" value="{{ $quotation->id }}" hidden  />
+                                <x-input-numeric title="Discou(%)" name="discntper" id="discntper" value="{{ $customerorder->discntper }}" disabled    />
+                                    {{-- <div class="basis-0 md:basis-1/5 self-center pt-4"> --}}
+                                        <input class="checked:bg-blue-500 checked:border-blue-500 focus:outline-none" type="checkbox" name="per" id="per" onclick="EnableDisableTextBox(this)" >
+                                        {{-- <label class="inline-block text-gray-800"> --}}
+
+                                        {{-- </label> --}}
+                                    {{-- </div> --}}
+
+
+                                <x-input-numeric title="Discount(Amount)" name="discntamt" id="discntamt" value="{{ $customerorder->discntamt }}"    />
+                                <x-input-numeric title="Cartage" name="cartage" value="{{ $customerorder->cartage }}"  required  onblur="tnetamount()"  />
+                                <x-input-numeric title="Payble Amount" name="rcvblamount" value="{{ $customerorder->rcvblamount }}" disabled />
+                                <x-input-numeric title="" name="sale_invoice_id" id="sale_invoice_id" value="{{ $customerorder->id }}" hidden  />
                             </div>
 
                             <div class="grid grid-cols-12 gap-2 py-2 items-center">
-                                <x-input-numeric title="Sale Tax(%)" name="saletaxper" value="{{ $quotation->saletaxper }}" required  onblur="tnetamount()"  />
-                                <x-input-numeric title="Sale Tax(Rs)" name="saletaxamt" value="{{ $quotation->saletaxamt }}" disabled    />
-                                <x-input-numeric title="Total Amount" name="totrcvbamount" value="{{ $quotation->totrcvbamount }}" disabled />
+                                <x-input-numeric title="Sale Tax(%)" name="saletaxper" value="{{ $customerorder->saletaxper }}" required  onblur="tnetamount()"  />
+                                <x-input-numeric title="Sale Tax(Rs)" name="saletaxamt" value="{{ $customerorder->saletaxamt }}" disabled    />
+                                <x-input-numeric title="Total Amount" name="totrcvbamount" value="{{ $customerorder->totrcvbamount }}" disabled />
                             </div>
 
 
@@ -129,6 +122,9 @@
 <script>
 let table;
 let searchValue = "";
+
+
+
 console.log(@json($cd))
 const deleteIcon = function(cell,formatterParams){return "<i class='fa fa-trash text-red-500'></i>";};
 const getMaster = @json(route('materials.master')); // For Material Modal
@@ -138,13 +134,6 @@ let modal = document.getElementById("myModal")
 let dyanmicTable = ""; // Tabulator
 let dynamicTableData = @json($cd);
 
-// Populate Locations in Tabulator
-const locations = @json($locations);
-        var newList=[]
-        locations.forEach(e => {
-            newList.push({value:e.title,label:e.title , id:e.id})
-
-        });
 
 // Populate sku in Tabulator
 const skus = @json($skus);
@@ -276,14 +265,16 @@ var updateValues = (cell) => {
         //   var sum = (Number(data.bundle1) * Number(data.pcspbundle1)) + (Number(data.bundle2) * Number(data.pcspbundle2))
         var row = cell.getRow();
             var sum = (Number(data.qtykg) * Number(data.price))
-            var sum2 = (Number(data.qtykg) * Number(data.price))
+            // var sum2 = (Number(data.qtykg) * Number(data.price))
 
         row.update({
 
-            "rcvblamount":sum2,
-             "saleamnt": sum,
-             "totval":sum,
-             "gdspricetot": sum2
+            // "rcvblamount":sum2,
+            //  "saleamnt": sum,
+            //  "totval":sum,
+            //  "gdspricetot": sum2
+            "saleamnt": sum,
+            totval: sum
 
             });
 
@@ -291,31 +282,35 @@ var updateValues = (cell) => {
     // var tamount=0;
     function tnetamount()
         {
-            //  discntamt.value=0;
-            //  rcvblamount.value=0;
-
 
             // tamount=rcvblamount
-            // discntamt.value=(tamount*discntper.value/100).toFixed(0);
+            if (discntper.disabled)
+            {discntper.value=(discntamt.value/tamount*100).toFixed(2)};
+
+            if (!discntper.disabled)
+            {discntamt.value=(tamount*discntper.value/100).toFixed(0);};
+
+
             rcvblamount.value= ( Number(tamount)-Number(discntamt.value) )+Number(cartage.value)  ;
             saletaxamt.value=(Number(rcvblamount.value) * Number(saletaxper.value) )/100 ;
             totrcvbamount.value=(Number(rcvblamount.value)+Number(saletaxamt.value)).toFixed(0);
+
+
+
         }
 
-        function tnetamount1()
-        {
-            // discntper.value=0;
-            //  rcvblamount.value=0;
-            //  discntper.value=(discntamt.value/tamount*100).toFixed(2);
-            rcvblamount.value= ( Number(tamount)-Number(discntamt.value) )+Number(cartage.value)  ;
-            saletaxamt.value=(Number(rcvblamount.value) * Number(saletaxper.value) )/100 ;
-            totrcvbamount.value=(Number(rcvblamount.value)+Number(saletaxamt.value)).toFixed(0);
-        }
+        // function tnetamount1()
+        // {
+        //     discntper.value=(discntamt.value/tamount*100).toFixed(2);
+        //     rcvblamount.value= ( Number(tamount)-Number(discntamt.value) )+Number(cartage.value)  ;
+        //     saletaxamt.value=(Number(rcvblamount.value) * Number(saletaxper.value) )/100 ;
+        //     totrcvbamount.value=(Number(rcvblamount.value)+Number(saletaxamt.value)).toFixed(0);
+        // }
 
 
 
 
- var totval = function(values, data, calcParams){
+var totval = function(values, data, calcParams){
 var calc = 0;
 // var abc=0;
 values.forEach(function(value){
@@ -327,7 +322,6 @@ values.forEach(function(value){
 });
  tamount = calc;
   tnetamount();
-// console.info(abc);
 return calc;
 }
 
@@ -350,16 +344,16 @@ dynamicTable = new Tabulator("#dynamicTable", {
         {title:"Material",          field:"material_title", cssClass:"bg-gray-200 font-semibold"},
         {title:"Dimension",         field:"dimension",      cssClass:"bg-gray-200 font-semibold"},
         {title:"Replace Description",field:"repname",       cssClass:"bg-gray-200 font-semibold",editor:true},
-        {title:"Brand",             field:"mybrand",editor:true,         cssClass:"bg-gray-200 font-semibold"},
-        // {title:"SaleUnitId",               field:"skus.skue",         cssClass:"bg-gray-200 font-semibold",visible:false},
+        {title:"Brand",             field:"brand",editor:true,         cssClass:"bg-gray-200 font-semibold"},
+        {title:"UOM",               field:"sku"},
 
 
-        {title:"UOM", field:"sku" ,editor:"list" , editorParams:   {
-                        values:newList1,
-                        cssClass:"bg-green-200 font-semibold",
-                        validator:["required"]
-                    }
-                },
+        // {title:"UOM", field:"sku" ,editor:"list" , editorParams:   {
+        //                 values:newList1,
+        //                 cssClass:"bg-green-200 font-semibold",
+        //                 validator:["required"]
+        //             }
+        //         },
 
 
         {   title:"Quantity",
@@ -373,25 +367,7 @@ dynamicTable = new Tabulator("#dynamicTable", {
                 cellEdited: updateValues,
                },
 
-            //    { title:"Qty(Pcs)",
-            //     field:"qtypcs",
-            //     editor:"number",
-            //     cssClass:"bg-yellow-200 font-semibold",
-            //     formatter:"money",
-            //     formatterParams:{thousand:",",precision:2},
-            //     validator:["required","integer"],
-            //     cellEdited: updateValues   ,
-            // },
 
-            // {   title:"Qty(Feet)",
-            //     field:"qtyfeet",
-            //     editor:"number",
-            //     cssClass:"bg-yellow-200 font-semibold",
-            //     formatter:"money",
-            //     formatterParams:{thousand:",",precision:2},
-            //     validator:["required","integer"],
-            //     cellEdited: updateValues  ,
-            // },
                { title:"Rate",
                 field:"price",
                 editor:"number",
@@ -444,17 +420,18 @@ function validateForm()
 {
     var sid = document.getElementById("customer_id");
         var customer_id = sid.options[sid.selectedIndex];
-        var saldate = document.getElementById("saldate");
+        var deliverydt = document.getElementById("deliverydt");
         var qutno = document.getElementById("qutno");
         var prno = document.getElementById("prno");
-        var valdate = document.getElementById("valdate");
-        var cashcustomer = document.getElementById("cashcustomer");
-        var cashcustadrs = document.getElementById("cashcustadrs");
+        var podate = document.getElementById("podate");
+        var quotation_id = document.getElementById("quotation_id");
 
         var discntper= document.getElementById("discntper");
         var cartage= document.getElementById("cartage");
         var discntamt= document.getElementById("discntamt");
         var rcvblamount= document.getElementById("rcvblamount");
+        var per= document.getElementById("per");
+
 
     // Required
     if(customer_id.value < 0)
@@ -463,37 +440,37 @@ function validateForm()
             customer_id.focus();
             return;
         }
-        if(saldate.value === "")
+        // if(saldate.value === "")
+        // {
+        //     showSnackbar("Please select From Invoice Date");
+        //     saldate.focus();
+        //     return;
+        // }
+        if(poseqno.value == 0)
         {
-            showSnackbar("Please select From Invoice Date");
-            saldate.focus();
-            return;
-        }
-        if(qutno.value == "")
-        {
-            showSnackbar("Please add qutno");
-            qutno.focus();
-            return;
-        }
-
-        if(prno.value == "")
-        {
-            showSnackbar("Please add prno");
-            prno.focus();
+            showSnackbar("Please add poseqno");
+            poseqno.focus();
             return;
         }
 
-        if(customer_id.value == 0)
-        {
+        // if(prno.value == "")
+        // {
+        //     showSnackbar("Please add prno");
+        //     prno.focus();
+        //     return;
+        // }
+
+        // if(customer_id.value == 0)
+        // {
 
 
-            if(cashcustomer.value == "" )
+            if(pono.value == "" )
             {
-            showSnackbar("Cash Customer Name Must Be Enter");
-            cashcustomer.focus();
+            showSnackbar("Please add pono");
+            pono.focus();
             return;
-            }
-        }
+             }
+        // }
 
 
 
@@ -521,14 +498,25 @@ function validateForm()
     // 'total' : parseFloat(banktotal.value).toFixed(2),
     disableSubmitButton(true);
     //  var data = { 'sales' : dynamicTableData,'contract_id':parseFloat(contract_id.value).toFixed(0),'bankntotal':parseFloat(bankntotal.value).toFixed(0),'collofcustom':parseFloat(exataxoffie.value).toFixed(0),'exataxoffie':parseFloat(exataxoffie.value).toFixed(0) ,'bankcharges':parseFloat(bankcharges.value).toFixed(0) ,'supplier_id': supplier_id.value,'invoice_date':invoice_date.value,'invoiceno':invoiceno.value};
-     var data = { 'quotations' : dynamicTableData,'rcvblamount':rcvblamount.value,'cartage':cartage.value,'discntamt':discntamt.value,'discntper':discntper.value ,
-     'customer_id': customer_id.value,'saldate':saldate.value,'qutno':qutno.value,'prno':prno.value,'sale_invoice_id':sale_invoice_id.value,
-     'saletaxper':saletaxper.value,'saletaxamt':saletaxamt.value,'totrcvbamount':totrcvbamount.value,
-     'valdate':valdate.value,'cashcustomer':cashcustomer.value,'cashcustadrs':cashcustadrs.value};
+    //  var data = { 'customerorder' : dynamicTableData,'rcvblamount':rcvblamount.value,'cartage':cartage.value,'discntamt':discntamt.value,'discntper':discntper.value ,
+    //  'customer_id': customer_id.value,'saldate':saldate.value,'qutno':qutno.value,'prno':prno.value,'sale_invoice_id':sale_invoice_id.value,
+    //  'saletaxper':saletaxper.value,'saletaxamt':saletaxamt.value,'totrcvbamount':totrcvbamount.value,
+    //  'valdate':valdate.value,'cashcustomer':cashcustomer.value,'cashcustadrs':cashcustadrs.value};
 
      // var data = { 'contracts' : dynamicTableData,'banktotal':parseFloat(total.value).toFixed(2),'exataxoffie':parseFloat(exataxoffie.value).toFixed(2),'collofcustom':parseFloat(collofcustom.value).toFixed(2),'bankcharges':parseFloat(bankcharges.value).toFixed(2) ,'supplier_id': supplier_id.value,'invoice_date':invoice_date.value,'invoiceno':number.value};
     // All Ok - Proceed
-    fetch(@json(route('quotations.update',$quotation)),{
+
+    var data = { 'customerorder' : dynamicTableData,'rcvblamount':rcvblamount.value,'cartage':cartage.value,'discntamt':discntamt.value,'discntper':discntper.value,'discntper':discntper.value ,
+        'customer_id': customer_id.value,'deliverydt':deliverydt.value,'quotation_id':quotation_id.value,'poseqno':poseqno.value,
+        'saletaxper':saletaxper.value,'saletaxamt':saletaxamt.value,'totrcvbamount':totrcvbamount.value,
+        'podate':podate.value,'pono':pono.value,'remarks':remarks.value,'qutno':qutno.value,'prno':prno.value
+    ,'sale_invoice_id':sale_invoice_id.value};
+
+
+
+
+
+    fetch(@json(route('customerorder.update',$customerorder)),{
         credentials: 'same-origin', // 'include', default: 'omit'
         method: 'PUT', // 'GET', 'PUT', 'DELETE', etc.
         // body: formData, // Coordinate the body type with 'Content-Type'
@@ -544,7 +532,7 @@ function validateForm()
     .then( response => {
         if (response == 'success')
         {
-            window.open(window.location.origin + "/quotations","_self" );
+            window.open(window.location.origin + "/customerorder","_self" );
         }
     })
     .catch(error => {
@@ -553,17 +541,30 @@ function validateForm()
     })
 }
 
+function EnableDisableTextBox(per) {
+        var discntper = document.getElementById("discntper");
+        discntper.disabled = per.checked ? false : true;
+        discntper.style.color ="black";
+        // if (!discntper.disabled) {
+        //     discntper.focus();
+        // }
+    }
+
+
 discntper.onblur=function(){
     // per=false
-    discntamt.value=(tamount*discntper.value/100).toFixed(0);
+
+    // discntamt.value=(tamount*discntper.value/100).toFixed(0);
     tnetamount();
-}
+    }
+
 
 discntamt.onblur=function(){
     // tnetamount1();
-    discntper.value=(discntamt.value/tamount*100).toFixed(2);
+    // discntper.value=(discntamt.value/tamount*100).toFixed(2);
     tnetamount();
-}
+    }
+
 
 </script>
 

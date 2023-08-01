@@ -8,7 +8,7 @@
         <h2 class="font-semibold text-xl text-gray-800 leading-tight">
             Customer Order
             {{-- Create New Customer --}}
-            <a class="text-sm text-green-500 hover:text-gray-900" href="{{route('custorders.create')}}">
+            <a class="text-sm text-green-500 hover:text-gray-900" href="{{route('customerorder.create')}}">
                 {{-- Add Icon --}}
                 <i class="fa fa-file fa-fw"></i>
                 Add New Record
@@ -150,9 +150,10 @@
             {title: "P.O Date",field: "podate"},
             {title: "P.O No",field: "pono"},
             {title: "P.O Seq.No",field: "poseqno"},
-            {title: "Delivery Date",field: "saldate"},
+            {title: "Delivery Date",field: "deliverydt"},
             {title: "Customer",field: "customer.title"},
             {title: "Rcvbl Amount",field: "rcvblamount"},
+            {title: "Remarks",field: "remarks"},
             {title:"View" , formatter:viewIcon, hozAlign:"center",headerSort:false, responsive:0,
                 cellClick:function(e, cell){
                     window.open(window.location + "/" + cell.getRow().getData().id  ,"_self");
