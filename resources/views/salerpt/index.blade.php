@@ -80,15 +80,13 @@
                                     <label for="">
                                         Term of Condition(For Quotation) <span class="text-red-500 font-semibold w-10 ">(*)</span>
                                     </label>
-                                    <textarea name="toc" id="toc" cols="40" rows="4" maxlength="255"  class="rounded"></textarea>
+                                    {{-- <textarea name="toc" id="toc" cols="40" rows="4" maxlength="255"  class="rounded"></textarea> --}}
 
-                                    {{-- <textarea rows="4" cols="50" required class="rounded">
-                                        Steam Pipes, Pipe Fitting, Flanges Valves, S.S Pipes
-                                        Plot # 8 Near Allah Malik Godown Shershah Kabari Bazar,
-                                        Phone : 021-32588781, 021-32574285 , Fax : 021-32588782
-                                        </textarea> --}}
-
-
+                                    <input type="text" title="Term-a" class="col-span-2" id="t1" name="t1"  >
+                                    <input type="text" title="Term-b" class="col-span-2" id="t2" name="t2"  >
+                                    <input type="text" title="Term-c" class="col-span-2" id="t3" name="t3"  >
+                                    <input type="text" title="Term-d" class="col-span-2" id="t4" name="t4"  >
+                                    <input type="text" title="Term-e" class="col-span-2" id="t5" name="t5"  >
 
 
                                 </div>
@@ -123,17 +121,8 @@
                                         </select>
                                     </div>
                                 </fieldset>
-
-
-
-
-
                             </div>
-
                             <div class="flex flex-col md:flex-row w-full gap-2 px-6 pt-4">
-
-
-
                             </fieldset>
                         </div>
 

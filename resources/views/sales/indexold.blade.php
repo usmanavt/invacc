@@ -6,9 +6,9 @@
 
     <x-slot name="header">
         <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-            Delivery Challan
+            Sales Invoices
             {{-- Create New Customer --}}
-            <a class="text-sm text-green-500 hover:text-gray-900" href="{{route('saleinvoices.create')}}">
+            <a class="text-sm text-green-500 hover:text-gray-900" href="{{route('sales.create')}}">
                 {{-- Add Icon --}}
                 <i class="fa fa-file fa-fw"></i>
                 Add New Record
@@ -80,7 +80,7 @@
         },
         ajaxURL: getMaster,
         ajaxContentType:"json",
-        initialSort:[ {column:"dcno", dir:"desc"} ],
+        initialSort:[ {column:"billno", dir:"desc"} ],
         height:"100%",
 
         columns:[
@@ -147,14 +147,30 @@
       //      Master Data
             {title: "id",field: "id"},
             // {title: "Dated",field: "created_at"},
+            {title: "Invoice Date",field: "saldate"},
+            {title: "DC#",field: "dcno"},
+            {title: "Bill#",field: "billno"},
+            {title: "GP#",field: "gpno"},
+            // {title: "Contract#",field: "contract_id"},
             {title: "Customer",field: "customer.title"},
-            {title: "D.C No",field: "dcno"},
-            {title: "G.P No",field: "gpno"},
-            {title: "Amount WO/GST",field: "rcvblamount"},
-            {title: "Amount W/GST",field: "totrcvbamount"},
+            // {title: "Challan#",field: "challanno"},
+            // {title: "Mach Date",field: "machine_date"},
+            // {title: "Description",field: "machineno"},
+            // {title: "conversionrate",field: "conversionrate"},
+            // {title: "insurance",field: "insurance"},
+            // {title: "bankcharges",field: "bankcharges"},
+            // {title: "collofcustom",field: "collofcustom"},
+            // {title: "exataxoffie",field: "exataxoffie"},
+            // {title: "lngnshipdochrgs",field: "lngnshipdochrgs"},
+            // {title: "localcartage",field: "localcartage"},
+            // {title: "miscexplunchetc",field: "miscexplunchetc"},
+            // {title: "customsepoy",field: "customsepoy"},
+            // {title: "weighbridge",field: "weighbridge"},
+            // {title: "miscexpenses",field: "miscexpenses"},
+            // {title: "agencychrgs",field: "agencychrgs"},
+            // {title: "otherchrgs",field: "otherchrgs"},
 
-            // {title: "Rcvbl Amount",field: "rcvblamount"},
-            // {title: "Remarks",field: "remarks"},
+            {title: "Rcvbl Amount",field: "rcvblamount"},
             {title:"View" , formatter:viewIcon, hozAlign:"center",headerSort:false, responsive:0,
                 cellClick:function(e, cell){
                     window.open(window.location + "/" + cell.getRow().getData().id  ,"_self");

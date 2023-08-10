@@ -14,7 +14,7 @@ use Illuminate\Database\Eloquent\Model;
 class SaleInvoices extends Model
 {
     use HasFactory;
-    protected $dates = ['saldate'];
+    protected $dates = ['saldate','podate'];
     protected $fillable = [
     //    'invoice_date','invoiceno','contract_id','supplier_id','machine_date','machineno','challanno','conversionrate','insurance','bankcharges','collofcustom','exataxoffie','lngnshipdochrgs','localcartage','miscexplunchetc','customsepoy','weighbridge','miscexpenses','agencychrgs','otherchrgs','goods_received','totallccostwexp'
         'customer_id','saldate','dcno','billno','gpno','discntper','discntamt','cartage','rcvblamount','saletaxper'

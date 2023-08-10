@@ -1,15 +1,12 @@
 <x-app-layout>
 
     @push('styles')
-    {{-- <link rel="stylesheet" href="{{ asset('css/tabulator_simple.min.css') }}"> --}}
-    <link href="https://unpkg.com/tabulator-tables/dist/css/tabulator.min.css" rel="stylesheet">
-    <script type="text/javascript" src="https://unpkg.com/tabulator-tables/dist/js/tabulator.min.js"></script>
-
+    <link rel="stylesheet" href="{{ asset('css/tabulator_simple.min.css') }}">
     @endpush
 
     <x-slot name="header">
         <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-            Edit Customer Order
+            Edit Sale Invoice
         </h2>
     </x-slot>
 
@@ -23,67 +20,44 @@
                         {{-- Contract Master --}}
                         <div class="grid grid-cols-12 gap-2 py-2 items-center">
                             {{-- Contract Master --}}
-
-
-
                             <label for="customer_id">Customer</label>
-                            <select  autocomplete="on" class="col-span-2" name="customer_id" id="customer_id" disabled required>
+                            <select  autocomplete="on" class="col-span-2" name="customer_id" id="customer_id" required>
                                 @foreach($customer as $customer)
-                                    @if ($customer->id == $customerorder->customer_id)
+                                    @if ($customer->id == $saleinvoices->customer_id)
                                     <option value="{{$customer->id}}" selected> {{$customer->title}} </option>
                                 @endif
                                     <option value="{{$customer->id}}"> {{$customer->title}} </option>
                                 @endforeach
                             </select>
 
-                            <x-input-text title="" name="quotation_id" id="quotation_id" value="{{ $customerorder->quotation_id }}" hidden     />
-                            <x-input-text title="Quotation No" name="qutno" id="qutno" value="{{ $customerorder->pqutno }}" disabled     />
-                            <x-input-text title="P.R No" name="prno" id="prno" value="{{ $customerorder->pprno }}" disabled     />
-                            <x-input-text title="P.O Seq.#" name="poseqno" id="poseqno" value="{{ $customerorder->poseqno }}"    required   />
 
+                            <label for="invoice_date">Invoice Date<x-req /></label>
+                            <input type="date" value="{{ date('Y-m-d') }}"  width="200"  id="saldate" name="saldate" value="{{ $saleinvoices->saldate->format('Y-m-d') }}"  required>
 
-                        </div>
-                        <div class="grid grid-cols-12 gap-1 py-2 items-center">
-                            <x-input-date title="P.O Date" id="podate" name="podate" value="{{ $customerorder->podate->format('Y-m-d') }}" req required class="col-span-2" />
-                            <x-input-text title="P.O #" name="pono" id="pono" value="{{ $customerorder->pono }}"  />
-                            <x-input-date title="Delivery Date" name="deliverydt" value="{{ $customerorder->deliverydt->format('Y-m-d') }}" />
+                            <label for="dcno">Delivery Chln# <x-req /></label>
+                            <input type="text" id="dcno" name="dcno" width="100" placeholder="dcno" value="{{ $saleinvoices->dcno }}" required>
 
+                            <label for="billno">Sale Bill#<x-req /></label>
+                            <input type="text" width="100" id="billno" name="billno" placeholder="billno" value="{{ $saleinvoices->billno }}" required>
 
-                            <label for="">
-                                Remakrs <span class="text-red-500 font-semibold  ">(*)</span>
-                            </label>
-                            <textarea name="remarks" id="remarks" cols="100" rows="2" maxlength="150" required class="rounded">
-                                {{ $customerorder->remarks }}
-
-                            </textarea>
-                        </div>
-                    </fieldset>
-
-
+                            <label for="gpno">Gate Pass#<x-req /></label>
+                            <input type="text" width="100" id="gpno" name="gpno" placeholder="gpno" value="{{ $saleinvoices->gpno }}" required>
                         </div>
 
                         <fieldset class="border px-4 py-2 rounded">
                             <legend>Invoice Level Expenses</legend>
                             <div class="grid grid-cols-12 gap-2 py-2 items-center">
-                                <x-input-numeric title="Discou(%)" name="discntper" id="discntper" value="{{ $customerorder->discntper }}" disabled    />
-                                    {{-- <div class="basis-0 md:basis-1/5 self-center pt-4"> --}}
-                                        <input class="checked:bg-blue-500 checked:border-blue-500 focus:outline-none" type="checkbox" name="per" id="per" onclick="EnableDisableTextBox(this)" >
-                                        {{-- <label class="inline-block text-gray-800"> --}}
-
-                                        {{-- </label> --}}
-                                    {{-- </div> --}}
-
-
-                                <x-input-numeric title="Discount(Amount)" name="discntamt" id="discntamt" value="{{ $customerorder->discntamt }}"    />
-                                <x-input-numeric title="Cartage" name="cartage" value="{{ $customerorder->cartage }}"  required  onblur="tnetamount()"  />
-                                <x-input-numeric title="Payble Amount" name="rcvblamount" value="{{ $customerorder->rcvblamount }}" disabled />
-                                <x-input-numeric title="" name="sale_invoice_id" id="sale_invoice_id" value="{{ $customerorder->id }}" hidden  />
+                                <x-input-numeric title="Discou(%)" name="discntper" value="{{ $saleinvoices->discntper }}" required  onblur="tnetamount()" />
+                                <x-input-numeric title="Discount(Amount)" name="discntamt" value="{{ $saleinvoices->discntamt }}" disabled   />
+                                <x-input-numeric title="Cartage" name="cartage" value="{{ $saleinvoices->cartage }}"  required  onblur="tnetamount()"  />
+                                <x-input-numeric title="Payble Amount" name="rcvblamount" value="{{ $saleinvoices->rcvblamount }}" disabled />
+                                <x-input-numeric title="" name="sale_invoice_id" id="sale_invoice_id" value="{{ $saleinvoices->id }}" hidden  />
                             </div>
 
                             <div class="grid grid-cols-12 gap-2 py-2 items-center">
-                                <x-input-numeric title="Sale Tax(%)" name="saletaxper" value="{{ $customerorder->saletaxper }}" required  onblur="tnetamount()"  />
-                                <x-input-numeric title="Sale Tax(Rs)" name="saletaxamt" value="{{ $customerorder->saletaxamt }}" disabled    />
-                                <x-input-numeric title="Total Amount" name="totrcvbamount" value="{{ $customerorder->totrcvbamount }}" disabled />
+                                <x-input-numeric title="Sale Tax(%)" name="saletaxper" value="{{ $saleinvoices->saletaxper }}" required  onblur="tnetamount()"  />
+                                <x-input-numeric title="Sale Tax(Rs)" name="saletaxamt" value="{{ $saleinvoices->saletaxamt }}" disabled    />
+                                <x-input-numeric title="Total Amount" name="totrcvbamount" value="{{ $saleinvoices->totrcvbamount }}" disabled />
                             </div>
 
 
@@ -122,9 +96,7 @@
 <script>
 let table;
 let searchValue = "";
-
-
-// console.log(@json($cd))
+console.log(@json($cd))
 const deleteIcon = function(cell,formatterParams){return "<i class='fa fa-trash text-red-500'></i>";};
 const getMaster = @json(route('materials.master')); // For Material Modal
 let csrfToken = document.head.querySelector("[name~=csrf-token][content]").content;
@@ -133,13 +105,24 @@ let modal = document.getElementById("myModal")
 let dyanmicTable = ""; // Tabulator
 let dynamicTableData = @json($cd);
 
+// Populate Locations in Tabulator
+const locations = @json($locations);
+        var newList=[]
+        locations.forEach(e => {
+            newList.push({value:e.title,label:e.title , id:e.id})
+
+        });
 
 // Populate sku in Tabulator
 const skus = @json($skus);
         var newList1=[]
         skus.forEach(e => {
             newList1.push({value:e.title,label:e.title , id:e.id})
+
         });
+
+
+
 
     //  ---------------- For MODAL -----------------------//
     //  Table Filter
@@ -159,8 +142,8 @@ const skus = @json($skus);
         paginationMode:"remote",
         sortMode:"remote",
         filterMode:"remote",
-        paginationSize:15,
-        paginationSizeSelector:[10,15,20,30],
+        paginationSize:20,
+        paginationSizeSelector:[10,25,50,100],
         ajaxParams: function(){
             return {search:searchValue};
         },
@@ -198,13 +181,10 @@ const skus = @json($skus);
         var simple = {...row}
         var data = simple._row.data
         //  Filter Data here .
-        // console.log(data.id)
-        // var result = dynamicTableData.filter( dt => dt.material_id == data.id)
         var result = dynamicTableData.filter( dt => dt.material_id == data.id)
         if(result.length <= 0)
         {
             pushDynamicData(data)
-
         }
     })
     function showModal(){ modal.style.display = "block"}
@@ -220,13 +200,17 @@ const skus = @json($skus);
 //  Adds actual data to row - EDIT Special
 function pushDynamicData(data)
 {
-
     dynamicTableData.push({
         material_id:data.id,
         material_title:data.title,
         category_id:data.category_id,
         category:data.category,
 
+        source_id:data.source_id,
+        source:data.source,
+
+        brand_id:data.brand_id,
+        brand:data.brand,
 
         sku_id:data.sku_id,
         sku:data.sku,
@@ -254,55 +238,64 @@ var updateValues = (cell) => {
     var data = cell.getData();
         //   var sum = (Number(data.bundle1) * Number(data.pcspbundle1)) + (Number(data.bundle2) * Number(data.pcspbundle2))
         var row = cell.getRow();
+        //  if( data.sku == 2)
+        //   {
             var sum = (Number(data.qtykg) * Number(data.price))
-            // var sum2 = (Number(data.qtykg) * Number(data.price))
+            var sum2 = (Number(data.qtykg) * Number(data.price))
+        //   }
+
+        //   if(data.sku == 1)
+        //   {
+        //   var sum = (Number(data.qtypcs) * Number(data.price))
+        //    var sum2 = (Number(data.qtypcs) * Number(data.price))
+        //   }
+
+        //   if(data.sku == 3)
+        //   {
+        //   var sum = (Number(data.qtyfeet) * Number(data.price))
+        //    var sum2= (Number(data.qtyfeet) * Number(data.price))
+        //   }
 
         row.update({
 
-            // "rcvblamount":sum2,
-            //  "saleamnt": sum,
-            //  "totval":sum,
-            //  "gdspricetot": sum2
-            "saleamnt": sum,
-            totval: sum
+            "rcvblamount":sum2,
+                "saleamnt": sum,
+                "totval":sum,
+                "gdspricetot": sum2
 
             });
 
     }
-    // var tamount=0;
+    var tamount=0;
     function tnetamount()
         {
+            //  var crtg=0;
+            //  crtg=parseFloat(cartage.value).toFixed(0);
+             discntamt.value=0;
+             rcvblamount.value=0;
 
-            // tamount=rcvblamount
-            if (discntper.disabled)
-            {discntper.value=(discntamt.value/tamount*100).toFixed(2)};
+            // var discAmnt =  parseFloat(cartage.value)*parseFloat(bankcharges.value)/100
+            // discntamt.value = discAmnt.toFixed(0)
 
-            if (!discntper.disabled)
-            {discntamt.value=(tamount*discntper.value/100).toFixed(0);};
-
-
-            rcvblamount.value= ( Number(tamount)-Number(discntamt.value) )+Number(cartage.value)  ;
-            saletaxamt.value=(Number(rcvblamount.value) * Number(saletaxper.value) )/100 ;
-            totrcvbamount.value=(Number(rcvblamount.value)+Number(saletaxamt.value)).toFixed(0);
-
-
-
+            discntamt.value=(tamount*discntper.value/100).toFixed(0);
+            rcvblamount.value= ( parseFloat(tamount)-parseFloat(discntamt.value)).toFixed(0)   ;
+            saletaxamt.value=(rcvblamount.value * saletaxper.value )/100 ;
+            totrcvbamount.value=Number(rcvblamount.value)+Number(saletaxamt.value);
+            // rcvblamount.value=parseFloat( rcvblamount.value ) + parseFloat(cartage.values);
         }
 
 
-var totval = function(values, data, calcParams){
-var calc = 0;
-// var abc=0;
-values.forEach(function(value){
-    // if(value > 18){
-        calc += Number(value) ;
-        // abc += Number(value) ;
-    // }
 
-});
- tamount = calc;
-  tnetamount();
-return calc;
+
+var totalVal = function(values, data, calcParams){
+
+    // var calc = 0;
+    values.forEach(function(value){
+        calc += value ;
+    });
+    tamount = calc;
+     tnetamount();
+    return Number(calc);
 }
 
 //  Dynamic Table [User data]
@@ -320,15 +313,41 @@ dynamicTable = new Tabulator("#dynamicTable", {
             }
         },
 
+        {title: "id",field: "myid",visible:false},
+                {title:"Location", field:"location" ,editor:"list" , editorParams:   {
+                        values:newList,
+                        cssClass:"bg-green-200 font-semibold",
+                        validator:["required"]
+                    }
+                },
+
+                {title: "id",field: "salunitid",visible:false},
+                {title:"skus", field:"sku" ,editor:"list" , editorParams:   {
+                        values:newList1,
+                        cssClass:"bg-green-200 font-semibold",
+                        validator:["required"]
+                    }
+                },
+
+        //   {title: "Location",field: "locid"},
         {title:"Id",                field:"material_id",    cssClass:"bg-gray-200 font-semibold"},
         {title:"Material",          field:"material_title", cssClass:"bg-gray-200 font-semibold"},
-        {title:"Dimension",         field:"dimension",      cssClass:"bg-gray-200 font-semibold"},
+        {title:"Category_id",       field:"material.category_id",    cssClass:"bg-gray-200 font-semibold",visible:false},
+        {title:"Category",          field:"material.category",       cssClass:"bg-gray-200 font-semibold"},
+        {title:"Dimension",         field:"dimension_id",   cssClass:"bg-gray-200 font-semibold",visible:false},
+        {title:"Dimension",         field:"material.dimension",      cssClass:"bg-gray-200 font-semibold"},
         {title:"Replace Description",field:"repname",       cssClass:"bg-gray-200 font-semibold",editor:true},
-        {title:"Brand",             field:"brand",editor:true,         cssClass:"bg-gray-200 font-semibold"},
-        {title:"UOM",               field:"sku"},
+        // {title:"Source",            field:"material.source_id",      cssClass:"bg-gray-200 font-semibold",visible:false},
+        // {title:"Source",            field:"material.source",         cssClass:"bg-gray-200 font-semibold"},
+        {title:"Sku",               field:"material.sku_id",         cssClass:"bg-gray-200 font-semibold",visible:false},
+        {title:"Sku",               field:"material.sku",            cssClass:"bg-gray-200 font-semibold"},
+        {title:"Brand",             field:"material.brand_id",       cssClass:"bg-gray-200 font-semibold",visible:false},
+        {title:"Brand",             field:"material.brand",          cssClass:"bg-gray-200 font-semibold"},
+        // {title:"SaleUnitId",               field:"skus.skue",         cssClass:"bg-gray-200 font-semibold",visible:false},
 
 
-        {   title:"Quantity",
+
+        {   title:"Qty(Kg)",
                 field:"qtykg",
                 editor:"number",
                 cssClass:"bg-green-200 font-semibold",
@@ -339,7 +358,25 @@ dynamicTable = new Tabulator("#dynamicTable", {
                 cellEdited: updateValues,
                },
 
+               { title:"Qty(Pcs)",
+                field:"qtypcs",
+                editor:"number",
+                cssClass:"bg-yellow-200 font-semibold",
+                formatter:"money",
+                formatterParams:{thousand:",",precision:2},
+                validator:["required","integer"],
+                cellEdited: updateValues   ,
+            },
 
+            {   title:"Qty(Feet)",
+                field:"qtyfeet",
+                editor:"number",
+                cssClass:"bg-yellow-200 font-semibold",
+                formatter:"money",
+                formatterParams:{thousand:",",precision:2},
+                validator:["required","integer"],
+                cellEdited: updateValues  ,
+            },
                { title:"Rate",
                 field:"price",
                 editor:"number",
@@ -357,13 +394,13 @@ dynamicTable = new Tabulator("#dynamicTable", {
                 field:"saleamnt",
                 cssClass:"bg-gray-200 font-semibold",
                 formatter:"money",
-                formatterParams:{thousand:",",precision:0},
-                // formatter:function(cell,row)
-                // {
-                //     //  return (cell.getData().bundle1 * cell.getData().pcspbundle1) + (cell.getData().bundle2 * cell.getData().pcspbundle2)
-                //      return  ( cell.getData().qtykg * cell.getData().price)
-                // },
-                bottomCalc:totval  },
+                formatterParams:{thousand:",",precision:3},
+                formatter:function(cell,row)
+                {
+                    //  return (cell.getData().bundle1 * cell.getData().pcspbundle1) + (cell.getData().bundle2 * cell.getData().pcspbundle2)
+                     return  ( cell.getData().qtykg * cell.getData().price)
+                },
+                bottomCalc:"sum"  },
 
 
 
@@ -392,66 +429,49 @@ function validateForm()
 {
     var sid = document.getElementById("customer_id");
         var customer_id = sid.options[sid.selectedIndex];
-        var deliverydt = document.getElementById("deliverydt");
-        var qutno = document.getElementById("qutno");
-        var prno = document.getElementById("prno");
-        var podate = document.getElementById("podate");
-        var quotation_id = document.getElementById("quotation_id");
+        var saldate = document.getElementById("saldate");
+        var dcno = document.getElementById("dcno");
+        var billno = document.getElementById("billno");
+        var gpno = document.getElementById("gpno");
 
-        var discntper= document.getElementById("discntper");
-        var cartage= document.getElementById("cartage");
-        var discntamt= document.getElementById("discntamt");
-        var rcvblamount= document.getElementById("rcvblamount");
-        var per= document.getElementById("per");
-
+        var discntper= document.getElementById("discntper")
+        var cartage= document.getElementById("cartage")
+        var discntamt= document.getElementById("discntamt")
+        var rcvblamount= document.getElementById("rcvblamount")
 
     // Required
-    if(customer_id.value < 0)
+    if(customer_id.value <= 0)
         {
             showSnackbar("Please select From Customer");
             customer_id.focus();
             return;
         }
-        // if(saldate.value === "")
-        // {
-        //     showSnackbar("Please select From Invoice Date");
-        //     saldate.focus();
-        //     return;
-        // }
-        if(poseqno.value == 0)
+        if(saldate.value === "")
         {
-            showSnackbar("Please add poseqno");
-            poseqno.focus();
+            showSnackbar("Please select From Invoice Date");
+            saldate.focus();
+            return;
+        }
+        if(dcno.value == "")
+        {
+            showSnackbar("Please add dcno");
+            dcno.focus();
             return;
         }
 
-        // if(prno.value == "")
-        // {
-        //     showSnackbar("Please add prno");
-        //     prno.focus();
-        //     return;
-        // }
-
-        // if(customer_id.value == 0)
-        // {
-
-
-            if(pono.value == "" )
-            {
-            showSnackbar("Please add pono");
-            pono.focus();
+        if(billno.value == "")
+        {
+            showSnackbar("Please add billno");
+            billno.focus();
             return;
-             }
-        // }
+        }
 
-
-
-        // if(gpno.value == "")
-        // {
-        //     showSnackbar("Please add gpno");
-        //     gpno.focus();
-        //     return;
-        // }
+        if(gpno.value == "")
+        {
+            showSnackbar("Please add gpno");
+            gpno.focus();
+            return;
+        }
     if(dynamicTableData.length == 0)
     {
         showSnackbar("You must have atleast 1 row of item to Proceed","info");
@@ -461,34 +481,21 @@ function validateForm()
     // Qty Required
     for (let index = 0; index < dynamicTableData.length; index++) {
         const element = dynamicTableData[index];
-        if(element.qtykg == 0 || element.price == 0  || element.saleamnt == 0)
+        if(element.bundle1 == 0 || element.pcspbundle1 == 0  || element.gdswt == 0)
         {
-            showSnackbar("Please fill qtykg,price,saleamnt  all rows to proceed","info");
+            showSnackbar("Please fill Bundle,PcsBundle,Weight & Price all rows to proceed","info");
             return;
         }
     }
     // 'total' : parseFloat(banktotal.value).toFixed(2),
     disableSubmitButton(true);
     //  var data = { 'sales' : dynamicTableData,'contract_id':parseFloat(contract_id.value).toFixed(0),'bankntotal':parseFloat(bankntotal.value).toFixed(0),'collofcustom':parseFloat(exataxoffie.value).toFixed(0),'exataxoffie':parseFloat(exataxoffie.value).toFixed(0) ,'bankcharges':parseFloat(bankcharges.value).toFixed(0) ,'supplier_id': supplier_id.value,'invoice_date':invoice_date.value,'invoiceno':invoiceno.value};
-    //  var data = { 'customerorder' : dynamicTableData,'rcvblamount':rcvblamount.value,'cartage':cartage.value,'discntamt':discntamt.value,'discntper':discntper.value ,
-    //  'customer_id': customer_id.value,'saldate':saldate.value,'qutno':qutno.value,'prno':prno.value,'sale_invoice_id':sale_invoice_id.value,
-    //  'saletaxper':saletaxper.value,'saletaxamt':saletaxamt.value,'totrcvbamount':totrcvbamount.value,
-    //  'valdate':valdate.value,'cashcustomer':cashcustomer.value,'cashcustadrs':cashcustadrs.value};
-
+     var data = { 'sales' : dynamicTableData,'rcvblamount':rcvblamount.value,'cartage':cartage.value,'discntamt':discntamt.value,'discntper':discntper.value ,
+     'customer_id': customer_id.value,'saldate':saldate.value,'dcno':dcno.value,'billno':billno.value,'gpno':gpno.value,'sale_invoice_id':sale_invoice_id.value,
+     'saletaxper':saletaxper.value,'saletaxamt':saletaxamt.value,'totrcvbamount':totrcvbamount.value};
      // var data = { 'contracts' : dynamicTableData,'banktotal':parseFloat(total.value).toFixed(2),'exataxoffie':parseFloat(exataxoffie.value).toFixed(2),'collofcustom':parseFloat(collofcustom.value).toFixed(2),'bankcharges':parseFloat(bankcharges.value).toFixed(2) ,'supplier_id': supplier_id.value,'invoice_date':invoice_date.value,'invoiceno':number.value};
     // All Ok - Proceed
-
-    var data = { 'customerorder' : dynamicTableData,'rcvblamount':rcvblamount.value,'cartage':cartage.value,'discntamt':discntamt.value,'discntper':discntper.value,'discntper':discntper.value ,
-        'customer_id': customer_id.value,'deliverydt':deliverydt.value,'quotation_id':quotation_id.value,'poseqno':poseqno.value,
-        'saletaxper':saletaxper.value,'saletaxamt':saletaxamt.value,'totrcvbamount':totrcvbamount.value,
-        'podate':podate.value,'pono':pono.value,'remarks':remarks.value,'qutno':qutno.value,'prno':prno.value
-    ,'sale_invoice_id':sale_invoice_id.value};
-
-
-
-
-
-    fetch(@json(route('customerorder.update',$customerorder)),{
+    fetch(@json(route('sales.update',$saleinvoices)),{
         credentials: 'same-origin', // 'include', default: 'omit'
         method: 'PUT', // 'GET', 'PUT', 'DELETE', etc.
         // body: formData, // Coordinate the body type with 'Content-Type'
@@ -504,7 +511,7 @@ function validateForm()
     .then( response => {
         if (response == 'success')
         {
-            window.open(window.location.origin + "/customerorder","_self" );
+            window.open(window.location.origin + "/sales","_self" );
         }
     })
     .catch(error => {
@@ -513,29 +520,6 @@ function validateForm()
     })
 }
 
-function EnableDisableTextBox(per) {
-        var discntper = document.getElementById("discntper");
-        discntper.disabled = per.checked ? false : true;
-        discntper.style.color ="black";
-        // if (!discntper.disabled) {
-        //     discntper.focus();
-        // }
-    }
-
-
-discntper.onblur=function(){
-    // per=false
-
-    // discntamt.value=(tamount*discntper.value/100).toFixed(0);
-    tnetamount();
-    }
-
-
-discntamt.onblur=function(){
-    // tnetamount1();
-    // discntper.value=(discntamt.value/tamount*100).toFixed(2);
-    tnetamount();
-    }
 
 
 </script>

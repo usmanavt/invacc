@@ -35,6 +35,9 @@ use App\Http\Controllers\StockLedgerController;
 use App\Http\Controllers\CareController;
 use App\Http\Controllers\QuotationController;
 use App\Http\Controllers\CustomerOrderController;
+use App\Http\Controllers\CustomerOrderwoqController;
+
+
 
 
 
@@ -157,7 +160,9 @@ Route::resource('localpurchase', LocalPurchaseController::class);
 
 Route::get('/sales/getSalesMaster', [SalesInvoicesController::class, 'getMaster'])->name('sales.master');
 Route::get('/sales/getSalesDetails', [SalesInvoicesController::class, 'getDetail'])->name('sales.details');
-Route::resource('sales', SalesInvoicesController::class);
+Route::get('/sales/getSalesCustplan', [SalesInvoicesController::class, 'getMastercustplan'])->name('sales.custplan');
+Route::get('/sales/getSalesCustplandtl', [SalesInvoicesController::class, 'getDetailscustplan'])->name('sales.custplandtl');
+Route::resource('saleinvoices', SalesInvoicesController::class);
 
 
 //  Quotation
@@ -172,6 +177,18 @@ Route::get('/custorders/getQuotationsDetails', [CustomerOrderController::class, 
 Route::get('/custorders/getcidMaster', [CustomerOrderController::class, 'getMasterqut'])->name('custorders.quotations');
 Route::get('/custorders/getCustordersQuotationsdtl', [CustomerOrderController::class, 'getDetailsqut'])->name('custorders.quotationsdtl');
 Route::resource('customerorder', CustomerOrderController::class);
+
+
+Route::get('/custorderswoq/getQuotationsMaster', [CustomerOrderwoqController::class, 'getMaster'])->name('custorderswoq.master');
+Route::get('/custorderswoq/getQuotationsDetails', [CustomerOrderwoqController::class, 'getDetail'])->name('custorderswoq.details');
+Route::get('/custorderswoq/getcidMaster', [CustomerOrderwoqController::class, 'getMasterqut'])->name('custorderswoq.quotations');
+Route::get('/custorderswoq/getCustordersQuotationsdtl', [CustomerOrderwoqController::class, 'getDetailsqut'])->name('custorderswoq.quotationsdtl');
+Route::resource('customerorderwoq', CustomerOrderwoqController::class);
+
+
+
+
+
 
 
 

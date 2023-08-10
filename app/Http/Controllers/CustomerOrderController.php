@@ -107,6 +107,7 @@ class CustomerOrderController  extends Controller
     public function getDetailsqut(Request $request)
     {
         $id = $request->id;
+        $abc = DB::select('call proctest0(1)');
         $contractDetails = DB::table('vwdetailquotations')->where('sale_invoice_id',$id)->get();
         return response()->json($contractDetails, 200);
     }
@@ -281,7 +282,7 @@ class CustomerOrderController  extends Controller
                     $cds->material_id = $cd->material_id;
                     $cds->sku_id = $cd->sku_id;
                     $cds->repname = $cd['repname'];
-                    $cds->brand = $cd['mybrand'];
+                    $cds->brand = $cd['brand'];
                     $cds->qtykg = $cd['qtykg'];
                     $cds->price = $cd['price'];
                     $cds->saleamnt = $cd['saleamnt'];
@@ -295,7 +296,23 @@ class CustomerOrderController  extends Controller
                 {
                     //  The item is new, Add it
                      $cds = new CustomerOrderDetails();
-                    // $cds->sale_invoice_id = $saleinvoices->id;
+
+                     $cds->sale_invoice_id = $customerorder->id;
+                     $cds->material_id = $cd->material_id;
+                     $cds->sku_id = $cd->sku_id;
+                     $cds->repname = $cd['repname'];
+                     $cds->brand = $cd['brand'];
+                     $cds->qtykg = $cd['qtykg'];
+                     $cds->price = $cd['price'];
+                     $cds->saleamnt = $cd['saleamnt'];
+
+                     $unit = Sku::where("title", $cd['sku'])->first();
+                      $cds->sku_id = $unit->id;
+
+
+
+
+                     // $cds->sale_invoice_id = $saleinvoices->id;
                     // $cds->material_id = $cd->material_id;
                     // $cds->sku_id = $cd->sku_id;
 
@@ -307,22 +324,22 @@ class CustomerOrderController  extends Controller
                     // $cds->locid = $cd['location'];
                     // $cds->salunitid = $cd['sku'];
 
-                    $cds->sale_invoice_id = $custorders->id;
-                    $cds->material_id = $cd->material_id;
-                    $cds->sku_id = $cd->sku_id;
-                    $cds->repname = $cd['repname'];
-                    $cds->qtykg = $cd['qtykg'];
+                    // $cds->sale_invoice_id = $custorders->id;
+                    // $cds->material_id = $cd->material_id;
+                    // $cds->sku_id = $cd->sku_id;
+                    // $cds->repname = $cd['repname'];
+                    // $cds->qtykg = $cd['qtykg'];
                     // $cds->qtypcs = $cd['qtypcs'];
                     // $cds->qtyfeet = $cd['qtyfeet'];
-                    $cds->price = $cd['price'];
-                    $cds->saleamnt = $cd['saleamnt'];
+                    // $cds->price = $cd['price'];
+                    // $cds->saleamnt = $cd['saleamnt'];
 
                     //  $location = Location::where("title", $cd['location'])->first();
                     //  $cds->locid = $location->id;
                     //  $cds->location = $cd['location'];
 
-                     $unit = Sku::where("title", $cd['sku'])->first();
-                     $cds->sku_id = $unit->id;
+                    //  $unit = Sku::where("title", $cd['sku'])->first();
+                    //  $cds->sku_id = $unit->id;
                     //  $cds->sku = $cd['sku'];
 
 

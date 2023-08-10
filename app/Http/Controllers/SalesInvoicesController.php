@@ -4,8 +4,17 @@ namespace App\Http\Controllers;
 
 use DB;
 // use App\Models\Contract;
+use App\Models\Quotation;
+use App\Models\QuotationDetails;
+
+use App\Models\CustomerOrder;
+use App\Models\CustomerOrderDetails;
+
 use App\Models\SaleInvoices;
 use App\Models\SaleInvoicesDetails;
+
+
+
 use App\Models\Material;
 use App\Models\Customer;
 use App\Models\Sku;
@@ -50,6 +59,7 @@ class SalesInvoicesController  extends Controller
 
     public function getMaster(Request $request)
     {
+        // dd($request->all());
         $status =$request->status ;
         $search = $request->search;
         $size = $request->size;
@@ -58,7 +68,7 @@ class SalesInvoicesController  extends Controller
         $cis = SaleInvoices::where('status',$status)
         ->where(function ($query) use ($search){
                 $query->where('dcno','LIKE','%' . $search . '%')
-                ->orWhere('gpno','LIKE','%' . $search . '%')
+                // ->orWhere('gpno','LIKE','%' . $search . '%')
                 ->orWhere('billno','LIKE','%' . $search . '%');
             })
             // ->whereHas('customer', function ($query) {
@@ -80,30 +90,52 @@ class SalesInvoicesController  extends Controller
         return $contractDetails;
     }
 
+    public function getMastercustplan(Request $request)
+    {
 
-    // public function getDetails(Request $request)
-    // {
-    //     $search = $request->search;
-    //     $size = $request->size;
-    //     $contractDetails = ContractDetails::where('contract_id',$request->id)
-    //     ->paginate((int) $size);
-    //     return $contractDetails;
-    // }
+        $search = $request->search;
+        $size = $request->size;
+        $field = $request->sort[0]["field"];     //  Nested Array
+        $dir = $request->sort[0]["dir"];         //  Nested Array
+        $contracts = DB::table('vwmastercustplan')
+        // ->join('suppliers', 'contracts.supplier_id', '=', 'suppliers.id')
+        // ->select('contracts.*', 'suppliers.title')
+        ->where('custname', 'like', "%$search%")
+        ->orWhere('pono', 'like', "%$search%")
+        ->orderBy($field,$dir)
+        ->paginate((int) $size);
+        return $contracts;
+
+
+    }
+
+    public function getDetailscustplan(Request $request)
+    {
+        $id = $request->id;
+         $contractDetails = DB::table('vwdetailcustplan')->where('sale_invoice_id',$id)->get();
+        // $contractDetails = DB::select('call procinvswsstock(1)');
+        return response()->json($contractDetails, 200);
+    }
+
+
+
+
 
     public function create()
     {
         // $locations = Location::select('id','title')->where('status',1)->get();
 
         // return view('sales.create')
-        $maxdcno = DB::table('sale_invoices')->select('*')->max('dcno')+1;
-        $maxblno = DB::table('sale_invoices')->select('*')->max('billno')+1;
-        $maxgpno = DB::table('sale_invoices')->select('*')->max('gpno')+1;
-        return \view ('sales.create',compact('maxdcno','maxblno','maxgpno'))
-        ->with('customers',Customer::select('id','title')->get())
-        ->with('locations',Location::select('id','title')->get())
-        ->with('skus',Sku::select('id','title')->get());
+        // $mycname='MUHAMMAD HABIB & Co.';
+        $maxdcno = DB::table('sale_invoices')->select('dcno')->max('dcno')+1;
+        $maxgpno = DB::table('sale_invoices')->select('gpno')->max('gpno')+1;
 
-        // ->with('maxdcno',lastsalinvno::select('id','dcno')->get());
+        return \view ('sales.create',compact('maxdcno','maxgpno'))
+        ->with('customers',Customer::select('id','title')->get());
+        // ->with('locations',Location::select('id','title')->get())
+        // ->with('skus',Sku::select('id','title')->get());
+
+        // ->with('maxdcno',lastsalinvno::select('id','poseqno')->get());
 
         // ->with('lastsno',DB::table('lastsalinvno')->select('*')->get());
     }
@@ -113,19 +145,24 @@ class SalesInvoicesController  extends Controller
     {
             //    dd($request->all());
         $this->validate($request,[
-            'saldate' => 'required|min:3|date',
-        //    'title'=>'required|min:3|unique:materials'
-            'dcno' => 'required|min:1|unique:sale_invoices',
-            'billno' => 'required|min:1|unique:sale_invoices',
-            'gpno' => 'required|min:1|unique:sale_invoices',
-            'customer_id' => 'required'
+
+            'dcno' => 'required|unique:sale_invoices',
+            'gpno' => 'required|unique:sale_invoices',
+            // 'poseqno' => 'required|min:1|unique:customer_orders',
+            // 'pono' => 'required|min:1|unique:customer_orders'
+            // 'gpno' => 'required|min:1|unique:sale_invoices',
+            // 'customer_id' => 'required'
         ]);
         DB::beginTransaction();
         try {
             $ci = new SaleInvoices();
-            $ci->saldate = $request->saldate;
+
+            $ci->custplan_id = $request->custplan_id;
+            $ci->pono = $request->pono;
+            $ci->podate = $request->podate;
+            $ci->saldate = $request->deliverydt;
+
             $ci->dcno = $request->dcno;
-            $ci->billno = $request->billno;
             $ci->gpno = $request->gpno;
             $ci->customer_id = $request->customer_id;
             $ci->discntper = $request->discntper;
@@ -137,28 +174,23 @@ class SalesInvoicesController  extends Controller
             $ci->saletaxamt = $request->saletaxamt;
             $ci->totrcvbamount = $request->totrcvbamount;
             $ci->save();
-            foreach ($request->contracts as $cont) {
-                $material = Material::findOrFail($cont['id']);
+
+
+
+            foreach ($request->sales as $cont) {
+                // $material = Material::findOrFail($cont['id']);
                 $lpd = new SaleInvoicesDetails();
                 $lpd->sale_invoice_id = $ci->id;
-                $lpd->material_id = $material->id;
-                $lpd->sku_id = $material->sku_id;
-
+                $lpd->material_id = $cont['material_id'];
+                $lpd->sku_id = $cont['sku_id'];
                 $lpd->repname = $cont['repname'];
+                $lpd->brand = $cont['mybrand'];
+                $lpd->qtykg = $cont['qtykg'];
+                $lpd->qtypcs = $cont['qtypcs'];
+                $lpd->qtyfeet = $cont['qtyfeet'];
 
-                $lpd->qtykg = $cont['bundle1'];
-                $lpd->qtypcs = $cont['bundle2'];
-                $lpd->qtyfeet = $cont['pcspbundle2'];
-                $lpd->price = $cont['pcspbundle1'];
-                $lpd->saleamnt = $cont['ttpcs'];
-
-                $location = Location::where("title", $cont['location'])->first();
-                $lpd->locid = $location->id;
-                $lpd->location = $cont['location'];
-
-                $unit = Sku::where("title", $cont['sku'])->first();
-                $lpd->salunitid = $unit->id;
-                $lpd->sku = $cont['sku'];
+                $lpd->price = $cont['price'];
+                $lpd->saleamnt = $cont['saleamnt'];
                 $lpd->save();
             }
             // }
@@ -176,12 +208,18 @@ class SalesInvoicesController  extends Controller
     public function edit($id)
     {
 
+        $cd = DB::table('sale_invoices_details')
+        ->join('materials', 'materials.id', '=', 'sale_invoices_details.material_id')
+        ->join('skus', 'skus.id', '=', 'sale_invoices_details.sku_id')
+        ->select('sale_invoices_details.*','materials.title as material_title','materials.dimension','skus.title as sku')
+        ->where('sale_invoice_id',$id)->get();
+         $data=compact('cd');
+
+
         return view('sales.edit')
         ->with('customer',Customer::select('id','title')->get())
-        // ->with('materials',Material::select('id','category')->get())
         ->with('saleinvoices',SaleInvoices::findOrFail($id))
-        ->with('cd',SaleInvoicesDetails::where('sale_invoice_id',$id)->get())
-        ->with('locations',Location::select('id','title')->get())
+        ->with($data)
         ->with('skus',Sku::select('id','title')->get());
 
         // return view('contracts.edit')->with('suppliers',Supplier::select('id','title')->get())->with('contract',$contract)->with('cd',ContractDetails::where('contract_id',$contract->id)->get());
@@ -191,7 +229,7 @@ class SalesInvoicesController  extends Controller
     public function update(Request $request, SaleInvoices $saleinvoices)
     {
         //  dd($commercialinvoice->commercial_invoice_id());
-            //  dd($request->all());
+            //   dd($request->all());
 
 
 
@@ -199,26 +237,40 @@ class SalesInvoicesController  extends Controller
         DB::beginTransaction();
         try {
 
-            $saleinvoices = SaleInvoices::findOrFail($request->sale_invoice_id);
-            $saleinvoices->saldate = $request->saldate;
-            $saleinvoices->dcno = $request->dcno;
-            $saleinvoices->billno = $request->billno;
-            $saleinvoices->gpno = $request->gpno;
-            $saleinvoices->customer_id = $request->customer_id;
-            $saleinvoices->discntper = $request->discntper;
-            $saleinvoices->discntamt = $request->discntamt;
-            $saleinvoices->cartage = $request->cartage;
-            $saleinvoices->rcvblamount = $request->rcvblamount;
-            $saleinvoices->saletaxper = $request->saletaxper;
-            $saleinvoices->saletaxamt = $request->saletaxamt;
-            $saleinvoices->totrcvbamount = $request->totrcvbamount;
+            //  dd($request->sale_invoice_id);
+            $sale_invoices = SaleInvoices::findOrFail($request->sale_invoice_id);
 
-            $saleinvoices->save();
+
+            $sale_invoices->custplan_id = $request->custplan_id;
+            $sale_invoices->pono = $request->pono;
+            $sale_invoices->podate = $request->podate;
+            $sale_invoices->saldate = $request->deliverydt;
+
+
+            $sale_invoices->dcno = $request->dcno;
+            $sale_invoices->gpno = $request->gpno;
+
+            $sale_invoices->customer_id = $request->customer_id;
+
+
+
+            $sale_invoices->discntper = $request->discntper;
+            $sale_invoices->discntamt = $request->discntamt;
+            $sale_invoices->cartage = $request->cartage;
+            $sale_invoices->rcvblamount = $request->rcvblamount;
+
+            $sale_invoices->saletaxper = $request->saletaxper;
+            $sale_invoices->saletaxamt = $request->saletaxamt;
+            $sale_invoices->totrcvbamount = $request->totrcvbamount;
+            $sale_invoices->save();
+
+
+
             // Get Data
-            $cds = $request->sales; // This is array
+            $cds = $request->saleinvoices; // This is array
             $cds = SaleInvoicesDetails::hydrate($cds); // Convert it into Model Collection
             // Now get old ContractDetails and then get the difference and delete difference
-            $oldcd = SaleInvoicesDetails::where('sale_invoice_id',$saleinvoices->id)->get();
+            $oldcd = SaleInvoicesDetails::where('sale_invoice_id',$sale_invoices->id)->get();
             $deleted = $oldcd->diff($cds);
             //  Delete contract details if marked for deletion
             foreach ($deleted as $d) {
@@ -230,30 +282,44 @@ class SalesInvoicesController  extends Controller
                 {
                     $cds = SaleInvoicesDetails::where('id',$cd->id)->first();
 
-                    $cds->sale_invoice_id = $saleinvoices->id;
+                    $cds->sale_invoice_id = $sale_invoices->id;
                     $cds->material_id = $cd->material_id;
                     $cds->sku_id = $cd->sku_id;
                     $cds->repname = $cd['repname'];
+                    $cds->brand = $cd['brand'];
                     $cds->qtykg = $cd['qtykg'];
                     $cds->qtypcs = $cd['qtypcs'];
                     $cds->qtyfeet = $cd['qtyfeet'];
+
                     $cds->price = $cd['price'];
                     $cds->saleamnt = $cd['saleamnt'];
 
-                     $location = Location::where("title", $cd['location'])->first();
-                     $cds->locid = $location->id;
-                      $cds->location = $cd['location'];
-
-                     $unit = Sku::where("title", $cd['sku'])->first();
-                     $cds->salunitid = $unit->id;
-                     $cds->sku = $cd['sku'];
+                    $unit = Sku::where("title", $cd['sku'])->first();
+                     $cds->sku_id = $unit->id;
+                    //  $cds->sku = $cd['sku'];
 
                  $cds->save();
                 }else
                 {
                     //  The item is new, Add it
                      $cds = new SaleInvoicesDetails();
-                    // $cds->sale_invoice_id = $saleinvoices->id;
+
+                     $cds->sale_invoice_id = $sale_invoices->id;
+                     $cds->material_id = $cd->material_id;
+                     $cds->sku_id = $cd->sku_id;
+                     $cds->repname = $cd['repname'];
+                     $cds->brand = $cd['brand'];
+                     $cds->qtykg = $cd['qtykg'];
+                     $cds->qtypcs = $cd['qtypcs'];
+                     $cds->qtyfeet = $cd['qtyfeet'];
+
+                     $cds->price = $cd['price'];
+                     $cds->saleamnt = $cd['saleamnt'];
+
+                     $unit = Sku::where("title", $cd['sku'])->first();
+                      $cds->sku_id = $unit->id;
+
+                     // $cds->sale_invoice_id = $saleinvoices->id;
                     // $cds->material_id = $cd->material_id;
                     // $cds->sku_id = $cd->sku_id;
 
@@ -265,23 +331,23 @@ class SalesInvoicesController  extends Controller
                     // $cds->locid = $cd['location'];
                     // $cds->salunitid = $cd['sku'];
 
-                    $cds->sale_invoice_id = $saleinvoices->id;
-                    $cds->material_id = $cd->material_id;
-                    $cds->sku_id = $cd->sku_id;
-                    $cds->repname = $cd['repname'];
-                    $cds->qtykg = $cd['qtykg'];
-                    $cds->qtypcs = $cd['qtypcs'];
-                    $cds->qtyfeet = $cd['qtyfeet'];
-                    $cds->price = $cd['price'];
-                    $cds->saleamnt = $cd['saleamnt'];
+                    // $cds->sale_invoice_id = $custorders->id;
+                    // $cds->material_id = $cd->material_id;
+                    // $cds->sku_id = $cd->sku_id;
+                    // $cds->repname = $cd['repname'];
+                    // $cds->qtykg = $cd['qtykg'];
+                    // $cds->qtypcs = $cd['qtypcs'];
+                    // $cds->qtyfeet = $cd['qtyfeet'];
+                    // $cds->price = $cd['price'];
+                    // $cds->saleamnt = $cd['saleamnt'];
 
-                     $location = Location::where("title", $cd['location'])->first();
-                     $cds->locid = $location->id;
-                      $cds->location = $cd['location'];
+                    //  $location = Location::where("title", $cd['location'])->first();
+                    //  $cds->locid = $location->id;
+                    //  $cds->location = $cd['location'];
 
-                     $unit = Sku::where("title", $cd['sku'])->first();
-                     $cds->salunitid = $unit->id;
-                     $cds->sku = $cd['sku'];
+                    //  $unit = Sku::where("title", $cd['sku'])->first();
+                    //  $cds->sku_id = $unit->id;
+                    //  $cds->sku = $cd['sku'];
 
 
                     $cds->save();

@@ -66,13 +66,13 @@
                             </div>
                         </fieldset>
 
-                        <div class="flex flex-row px-4 py-2 items-center">
+                        {{-- <div class="flex flex-row px-4 py-2 items-center">
                             <x-label value="Add Pcs & Feet Size & Press"></x-label>
                             <x-button id="calculate" class="mx-2" type="button" onclick="calculate()">Calculate</x-button>
                             <x-label value="This will prepare your commercial invoice for Submission"></x-label>
 
-                            <input class="checked:bg-blue-500 checked:border-blue-500 focus:outline-none" title="W/Qutation" type="checkbox" value="checked" name="woq" id="woq"   >
-                        </div>
+                            <input class="checked:bg-blue-500 checked:border-blue-500 focus:outline-none" title="W/Qutation" type="checkbox" value="checked" name="woq" id="woq"  >
+                        </div> --}}
 
 
 
@@ -104,12 +104,12 @@
         let table;
         let searchValue = "";
         const deleteIcon = function(cell,formatterParams){return "<i class='fa fa-trash text-red-500'></i>";};
+        const getMaster = @json(route('custorders.quotations'));
+        //  console.log(getMaster)
+        const getDetails = @json(route('custorders.quotationsdtl'));
 
 
-        var getMaster = @json(route('custorders.quotations')) ;
-        var getDetails = @json(route('custorders.quotationsdtl'));
-
-         let csrfToken = document.head.querySelector("[name~=csrf-token][content]").content;
+        let csrfToken = document.head.querySelector("[name~=csrf-token][content]").content;
         //
         let modal = document.getElementById("myModal")
         let calculateButton = document.getElementById("calculate")
@@ -123,35 +123,48 @@
         let customer_id = '';
 
 
-        // let prno= document.getElementById("prno")
+        let prno= document.getElementById("prno")
+        // var conversionrate = document.getElementById("conversionrate");
+        // var insurance = document.getElementById("insurance");
         document.addEventListener('DOMContentLoaded',()=>{
+            // calculateButton.disabled = true
+            // submitButton.disabled = true
         })
         // Add event handler to read keyboard key up event & conversionrate
         document.addEventListener('keyup', (e)=>{
 
             //  We are using ctrl key + 'ArrowUp' to show Modal
             if(e.ctrlKey && e.keyCode == 32){
+                // if(conversionrate.value <= 0 || sconversionrate.value <= 0 )
+                // {
+                //     showSnackbar("Please add conversion rate before proceeding","error");
+                //     conversionrate.focus();
+                //     return;
+                // }
+                // if(insurance.value <= 0)
+                // {
+                //     showSnackbar("Please add insurance rate before proceeding","error");
+                //     insurance.focus();
+                //     return;
+                // }
 
                 if(!adopted)
                 {
-                    // if (document.getElementById("woq").checked) {
-                    //     var getMaster = @json(route('custorders.quotations')) ;
-                        showModal()
-                    // }else {
-                    //     var getMaster = @json(route('materials.master')) ;
-                    //     showModal()
-                    // }
+                    showModal()
+
                 }
             }
         })
+        // Calculate Bank Charges [ onblur ]
+
+        function calculateBankCharges()
+        {
+        }
     </script>
 @endpush
 
 @push('scripts')
     <script>
-
-
-
         // window.onload = function() {
         //     var input = document.getElementById("pono.focus").focus();
         // }
@@ -194,6 +207,19 @@
             ajaxURL: getMaster,
             ajaxContentType:"json",
             initialSort:[ {column:"id", dir:"desc"} ],
+            // height:"100%",
+
+            // {
+            //     title:'Revise WSE', headerHozAlign:"center",
+            //         columns:[
+            //     {title:"WSE",  field:"wse",   formatter:"money",editor:"number",
+            //             formatterParams:{thousand:",",precision:2},          responsive:0}]},
+
+            //      {
+
+
+          //      {
+                //  title:'Revise WSE', headerHozAlign:"center",
 
              columns:[
                 // Master Data
@@ -241,6 +267,24 @@
             saletaxamt.value=data.saletaxamt
             rcvblamount.value=data.rcvblamount
             totrcvbamount.value=data.totrcvbamount
+
+
+
+
+
+
+
+
+
+
+
+
+            // customer_id.value=data.customer_id
+            // invoicedate = data.invoice_date->format('dd/mm/YYYY')
+
+            //***********************
+            // contract_id = data.contract_id
+            // console.info(contract_id)
             detailsUrl = `${getDetails}/?id=${data.id}`
             fetchDataFromServer(detailsUrl)
             adopted = true
@@ -273,6 +317,11 @@
 
                 const obj = data[index];
                 const mat = obj['material']
+                // const hsc = mat['hscodes']
+
+                // contract_id = obj.contract_id
+                // console.log(obj.bundle1 , obj.pcspbundle1 ,obj.bundle2 , obj.pcspbundle2);
+                // var vpcs = ((obj.bundle1 * obj.pcspbundle1) + (obj.bundle2 * obj.pcspbundle2)).toFixed(2)
                 var vpcs = obj.totpcs
                 // console.log(vpcs);
                 // var vwinkg = ((obj.gdswt / vpcs ) * 1000).toFixed(3)
@@ -397,6 +446,13 @@ var tamount=0;
             totrcvbamount.value=(Number(rcvblamount.value)+Number(saletaxamt.value)).toFixed(0);
         }
 
+
+
+
+
+
+
+
 var updateValues = (cell) => {
         var data = cell.getData();
         // var sum = (Number(data.bundle1) * Number(data.pcspbundle1)) + (Number(data.bundle2) * Number(data.pcspbundle2))
@@ -410,12 +466,19 @@ var updateValues = (cell) => {
     }
 
     var totalVal = function(values, data, calcParams){
+        //values - array of column values
+        //data - all table data
+        //calcParams - params passed from the column definition object
+        // console.log(data);
         var calc = 0;
         values.forEach(function(value){
             calc += Number(value) ;
+
         });
         tamount = calc;
         tnetamount();
+        // discntamt.value=(calc*bankcharges.value/100).toFixed(0);
+        // rcvblamount.value=calc - discntamt.value ;
         return calc;
 
     }
@@ -533,8 +596,15 @@ var updateValues = (cell) => {
         function validateForm()
         {
 
+            // var invoicedate = document.getElementById("invoicedate")
             var pono = document.getElementById("pono")
             var poseqno = document.getElementById("poseqno")
+            // var machineno = document.getElementById("machineno")
+            // var machine_date = document.getElementById("machine_date")
+            // var conversionrate = document.getElementById("conversionrate")
+
+            // var sid = document.getElementById("bank_id");
+            // var bank_id = sid.options[sid.selectedIndex];
 
             if(pono.value === '')
             {
@@ -547,6 +617,28 @@ var updateValues = (cell) => {
 
 
 
+            // if(invoiceno.value === ''){
+            //     showSnackbar("Invoice # required ","error");
+            //     invoiceno.focus()
+            //     return;
+            // }
+            // if(machineno.value === ''){
+            //     showSnackbar("machineno # required ","error");
+            //     machineno.focus()
+            //     return;
+            // }
+
+            // if(gdno.value === ''){
+            //     showSnackbar("GD # required ","error");
+            //     gdno.focus()
+            //     return;
+            // }
+
+            // if(conversionrate.value === ''){
+            //     showSnackbar("conversionrate # required ","error");
+            //     conversionrate.focus()
+            //     return;
+            // }
 
 
 
@@ -567,6 +659,30 @@ var updateValues = (cell) => {
             //     }
             // }
 
+            // // disableSubmitButton(true);
+            // var data = {
+            //     // 'conversionrate' : parseFloat(conversionrate.value).toFixed(2),
+            //     // 'sconversionrate' : parseFloat(sconversionrate.value).toFixed(2),
+            //     // 'insurance' : parseFloat(insurance.value).toFixed(2),
+            //     // 'contract_id' : contract_id,
+            //     'invoiceno' : invoiceno.value,
+            //     // 'challanno' : challanno.value,
+            //     'pono' : pono.value,
+            //     // 'machine_date' :machine_date.value,
+            //     // 'invoicedate' : invoicedate.value,
+            //     // 'gdno' : gdno.value,
+            //     'podate' : podate.value,
+            //     // 'sku_id' : sku_id.value,
+            //     'cheque_no' : cheque_no.value,
+            //     'cheque_date' :cheque_date.value,
+            //     'bank_id' :bank_id.value,
+
+
+            //     // 'total' : parseFloat(banktotal.value).toFixed(2),
+
+            //     'comminvoice' : dynamicTableData
+
+            // };
 
             var data = { 'contracts' : dynamicTableData,'rcvblamount':rcvblamount.value,'cartage':cartage.value,'discntamt':discntamt.value,'discntper':discntper.value,'discntper':discntper.value ,
         'customer_id': customer_id,'deliverydt':deliverydt.value,'quotation_id':quotation_id,'poseqno':poseqno.value,

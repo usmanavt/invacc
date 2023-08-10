@@ -512,9 +512,9 @@ function validateForm()
     // Qty Required
     for (let index = 0; index < dynamicTableData.length; index++) {
         const element = dynamicTableData[index];
-        if(element.bundle1 == 0 || element.pcspbundle1 == 0  || element.gdswt == 0)
+        if(element.qtykg == 0 || element.sku_id == 0  )
         {
-            showSnackbar("Please fill Bundle,PcsBundle,Weight & Price all rows to proceed","info");
+            showSnackbar("Please Required Data & Price all rows to proceed","info");
             return;
         }
     }

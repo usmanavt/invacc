@@ -107,14 +107,10 @@
 
         });
 
-
-
-
-
     const getMaster = @json(route('materials.master'));
     let csrfToken = document.head.querySelector("[name~=csrf-token][content]").content;
     let modal = document.getElementById("myModal")
-    console.log(getMaster);
+    // console.log(getMaster);
 
     let dyanmicTable = ""; // Tabulator
     let dynamicTableData = [];

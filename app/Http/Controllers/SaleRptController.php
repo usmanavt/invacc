@@ -229,7 +229,11 @@ class SaleRptController extends Controller
 
                 $hdng1 = $request->cname;
                 $hdng2 = $request->csdrs;
-                $hdng3 = $request->toc;
+                $t1 = $request->t1;
+                $t2 = $request->t2;
+                $t3 = $request->t3;
+                $t4 = $request->t4;
+                $t5 = $request->t5;
 
 
 
@@ -261,7 +265,7 @@ class SaleRptController extends Controller
             foreach($grouped as $g){
                  $html =  view('salerpt.quotationrpt')->with('data',$g)->with('fromdate',$fromdate)->with('todate',$todate)
                  ->with('headtype',$head->title)
-                 ->with('hdng1',$hdng1)->with('hdng2',$hdng2)->with('hdng3',$hdng3)
+                 ->with('hdng1',$hdng1)->with('hdng2',$hdng2)->with('t1',$t1)->with('t2',$t2)->with('t3',$t3)->with('t4',$t4)->with('t5',$t5)
                  ->render();
                 // $html =  view('salerpt.glhw')->with('data',$g)->with('fromdate',$fromdate)->with('todate',$todate)->render();
                 $filename = $g[0]->id  .'-'.$fromdate.'-'.$todate.'.pdf';
