@@ -42,14 +42,43 @@ class SaleRptController extends Controller
         $fromdate = $request->fromdate;
         $todate = $request->todate;
         $head = $request->head;
-
         return  DB::select('call procqutcategory(?,?,?)',array($fromdate,$todate,$head));
 
-
-        // return DB::table('vwqutcategory')
-        // ->select('*')->whereBetween('invoice_date',[$fromdate,$todate])
-        // ->where('MHEAD',$head)->get()->toArray();
     }
+
+    public function funcdlvrychln(Request $request)
+    {
+        //  dd($request->all());
+        $fromdate = $request->fromdate;
+        $todate = $request->todate;
+        $head = $request->head;
+        return  DB::select('call procsalecategory(?,?,?,?)',array($fromdate,$todate,$head,1));
+
+    }
+
+    public function funcsalinvs(Request $request)
+    {
+        //  dd($request->all());
+        $fromdate = $request->fromdate;
+        $todate = $request->todate;
+        $head = $request->head;
+        return  DB::select('call procsalecategory(?,?,?,?)',array($fromdate,$todate,$head,2));
+
+    }
+
+
+    public function funcsaltxinvs(Request $request)
+    {
+        //  dd($request->all());
+        $fromdate = $request->fromdate;
+        $todate = $request->todate;
+        $head = $request->head;
+        return  DB::select('call procsalecategory(?,?,?,?)',array($fromdate,$todate,$head,3));
+
+    }
+
+
+
 
 // For Customer Order
     public function funccustorder(Request $request)
@@ -174,59 +203,84 @@ class SaleRptController extends Controller
             $filename = 'PendingContracts-'.$fromdate.'-'.$todate.'.pdf';
         }
 
-        if($report_type === 'dlvrychln'){
-            //  dd($request->all());
-            $head_id = $request->head_id;
-            // $head = Head::findOrFail($head_id);
-            $head = Customer::findOrFail($head_id);
-            if($request->has('subhead_id')){
-                $subhead_id = $request->subhead_id;
-                //  Clear Data from Table
-                DB::table('contparameterrpt')->truncate();
-                foreach($request->subhead_id as $id)
-                {
-                    DB::table('contparameterrpt')->insert([ 'GLCODE' => $id ]);
-                }
-            }
-            //  Call Procedure
-            $mpdf = $this->getMPDFSettings();
-            $data = DB::select('call Procdlvrchln()');
-            if(!$data)
+        if($report_type === 'dlvrychln' or $report_type === 'salinvs' or $report_type === 'saltxinvs' ){
+            $hdng1 = $request->cname;
+            $hdng2 = $request->csdrs;
+        $head_id = $request->head_id;
+        // $head = Head::findOrFail($head_id);
+        $head = Customer::findOrFail($head_id);
+        if($request->has('subhead_id')){
+            $subhead_id = $request->subhead_id;
+            //  Clear Data from Table
+            DB::table('tmpqutparrpt')->truncate();
+            foreach($request->subhead_id as $id)
             {
-                Session::flash('info','No data available');
-                return redirect()->back();
+                DB::table('tmpqutparrpt')->insert([ 'qutid' => $id ]);
             }
-            $collection = collect($data);                   //  Make array a collection
-            // $grouped = $collection->groupBy('SupName');       //  Sort collection by SupName
-            $grouped = $collection->groupBy('salid');       //  Sort collection by SupName
-            $grouped->values()->all();                       //  values() removes indices of array
+        }
+        //  Call Procedure
+        $mpdf = $this->getMPDFSettings();
+        $data = DB::select('call procsaletaxinvoice()');
+        if(!$data)
+        {
+            Session::flash('info','No data available');
+            return redirect()->back();
+        }
+        $collection = collect($data);                   //  Make array a collection
+        // $grouped = $collection->groupBy('SupName');       //  Sort collection by SupName
+        $grouped = $collection->groupBy('id');       //  Sort collection by SupName
+        $grouped->values()->all();                       //  values() removes indices of array
             foreach($grouped as $g){
-                 $html =  view('salerpt.dlvrychalan')->with('data',$g)->with('fromdate',$fromdate)->with('todate',$todate)->with('headtype',$head->title)->render();
-                // $html =  view('salerpt.glhw')->with('data',$g)->with('fromdate',$fromdate)->with('todate',$todate)->render();
-                $filename = $g[0]->salid  .'-'.$fromdate.'-'.$todate.'.pdf';
-                $mpdf->SetHTMLFooter('
-                <table width="100%" style="border-top:1px solid gray">
-                    <tr>
-                        <td width="33%">{DATE d-m-Y}</td>
-                        <td width="33%" align="center">{PAGENO}/{nbpg}</td>
-                        <td width="33%" style="text-align: right;">' . $filename . '</td>
-                    </tr>
-                </table>');
-                $chunks = explode("chunk", $html);
-                foreach($chunks as $key => $val) {
-                    $mpdf->WriteHTML($val);
+
+
+                if($report_type === 'dlvrychln')
+                {
+                $html =  view('salerpt.dlvrychalan')->with('data',$g)->with('fromdate',$fromdate)->with('todate',$todate)
+                ->with('headtype',$head->title)
+                ->with('hdng1',$hdng1)->with('hdng2',$hdng2)->render();
                 }
-                $mpdf->AddPage();
+                if($report_type === 'salinvs')
+                {
+                $html =  view('salerpt.saleinvoice')->with('data',$g)->with('fromdate',$fromdate)->with('todate',$todate)
+                ->with('headtype',$head->title)
+                ->with('hdng1',$hdng1)->with('hdng2',$hdng2)->render();
+                }
+                if($report_type === 'saltxinvs')
+                {
+                $html =  view('salerpt.saltaxinvoice')->with('data',$g)->with('fromdate',$fromdate)->with('todate',$todate)
+                ->with('headtype',$head->title)
+                ->with('hdng1',$hdng1)->with('hdng2',$hdng2)->render();
+                }
+
+
+
+             // $html =  view('salerpt.glhw')->with('data',$g)->with('fromdate',$fromdate)->with('todate',$todate)->render();
+            $filename = $g[0]->id  .'-'.$fromdate.'-'.$todate.'.pdf';
+            $mpdf->SetHTMLFooter('
+            <table width="100%" style="border-top:1px solid gray">
+                <tr>
+                    <td width="33%">{DATE d-m-Y}</td>
+                    <td width="33%" align="center">{PAGENO}/{nbpg}</td>
+
+                </tr>
+            </table>');
+            $chunks = explode("chunk", $html);
+            foreach($chunks as $key => $val) {
+                $mpdf->WriteHTML($val);
             }
-            return response($mpdf->Output($filename,'I'),200)->header('Content-Type','application/pdf');
+            $mpdf->AddPage();
+        }
+        return response($mpdf->Output($filename,'I'),200)->header('Content-Type','application/pdf');
+
+
+
+
         }
 
 
 
         if($report_type === 'quotation'){
             //  dd($request->all());
-
-
                 $hdng1 = $request->cname;
                 $hdng2 = $request->csdrs;
                 $t1 = $request->t1;
@@ -274,7 +328,7 @@ class SaleRptController extends Controller
                     <tr>
                         <td width="33%">{DATE d-m-Y}</td>
                         <td width="33%" align="center">{PAGENO}/{nbpg}</td>
-                        <td width="33%" style="text-align: right;">' . $filename . '</td>
+
                     </tr>
                 </table>');
                 $chunks = explode("chunk", $html);
@@ -292,8 +346,6 @@ class SaleRptController extends Controller
             $hdng1 = $request->cname;
             $hdng2 = $request->csdrs;
             $hdng3 = $request->toc;
-
-
             $head_id = $request->head_id;
             // $head = Head::findOrFail($head_id);
             $head = Customer::findOrFail($head_id);
@@ -331,7 +383,6 @@ class SaleRptController extends Controller
                     <tr>
                         <td width="33%">{DATE d-m-Y}</td>
                         <td width="33%" align="center">{PAGENO}/{nbpg}</td>
-                        <td width="33%" style="text-align: right;">' . $filename . '</td>
                     </tr>
                 </table>');
                 $chunks = explode("chunk", $html);

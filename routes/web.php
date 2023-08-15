@@ -81,6 +81,10 @@ Route::get('salerpt',[SaleRptController::class, 'index'])->name('salerpt.index')
 Route::post('salerpt/fetch',[SaleRptController::class, 'fetch'])->name('salerpt.fetch');
 Route::get('funcquotation',[SaleRptController::class, 'funcquotation'])->name('salerpt.funcquotation');
 Route::get('funccustorder',[SaleRptController::class, 'funccustorder'])->name('salerpt.funccustorder');
+Route::get('funcdlvrychln',[SaleRptController::class, 'funcdlvrychln'])->name('salerpt.funcdlvrychln');
+Route::get('funcsalinvs',[SaleRptController::class, 'funcsalinvs'])->name('salerpt.funcsalinvs');
+Route::get('funcsaltxinvs',[SaleRptController::class, 'funcsaltxinvs'])->name('salerpt.funcsaltxinvs');
+
 
 // Material Stock Reports
  Route::get('stockledgers',[StockLedgerController::class, 'index'])->name('stockledgers.index');
@@ -169,6 +173,10 @@ Route::resource('saleinvoices', SalesInvoicesController::class);
 
 Route::get('/quotations/getQuotationsMaster', [QuotationController::class, 'getMaster'])->name('quotations.master');
 Route::get('/quotations/getQuotationsDetails', [QuotationController::class, 'getDetail'])->name('quotations.details');
+Route::get('/quotations/getMmfrqut', [QuotationController::class, 'getmmfrqut'])->name('quotations.mmfrqut');
+
+
+
 Route::resource('quotations', QuotationController::class);
 
 //  Customer Orders

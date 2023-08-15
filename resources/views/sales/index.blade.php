@@ -13,10 +13,10 @@
                 <i class="fa fa-file fa-fw"></i>
                 Add New Record
             </a>
+            {{-- <span> | </span> --}}
+            {{-- <button class="text-sm text-blue-300" onclick="setStatus(1)">Pending</button> --}}
             <span> | </span>
-            <button class="text-sm text-blue-300" onclick="setStatus(1)">Pending</button>
-            <span> | </span>
-            <button class="text-sm text-blue-300" onclick="setStatus(2)">Completed</button>
+            <button class="text-sm text-blue-300" onclick="setStatus(2)">Sales History</button>
         </h2>
     </x-slot>
 
@@ -148,10 +148,19 @@
             {title: "id",field: "id"},
             // {title: "Dated",field: "created_at"},
             {title: "Customer",field: "customer.title"},
+            {title: "P.O No",field: "pono"},
+            {title: "P.O Date",field: "podate"},
             {title: "D.C No",field: "dcno"},
             {title: "G.P No",field: "gpno"},
-            {title: "Amount WO/GST",field: "rcvblamount"},
-            {title: "Amount W/GST",field: "totrcvbamount"},
+            {title: "Bill No",field: "billno"},
+            {title: "Invoice Date",field: "saldate"},
+
+            {title: "WO/GST",field: "rcvblamount"},
+            {title: "W/GST",field: "totrcvbamount"},
+            {title: "Pending",field: "ordrbal"},
+            // {title: "Total Delivery Against Sale Order",field: "delivered"},
+            // {title: "Sale Order Balance",field: "delivered"},
+
 
             // {title: "Rcvbl Amount",field: "rcvblamount"},
             // {title: "Remarks",field: "remarks"},

@@ -41,9 +41,7 @@
                             <div class="grid grid-cols-12 gap-1 py-2 items-center">
                                 <x-input-date title="Deilivery Date" id="deliverydt" name="deliverydt" req required class="col-span-2" />
                                 <x-input-text title="DC No" name="dcno" id="dcno" value="{{$maxdcno}}"     required   />
-                                {{-- <x-input-text title="P.O #" name="pono" id="pono" req required class="col-span-2"  /> --}}
-                                {{-- <x-input-date title="Delivery Date" name="deliverydt" req required class="col-span-2"/> --}}
-
+                                <x-input-text title="Bill No" name="billno" id="billno" value="{{$maxbillno}}"     required   />
                                 {{-- <label for="">
                                     Remakrs <span class="text-red-500 font-semibold  ">(*)</span>
                                 </label>
@@ -54,7 +52,8 @@
                         <fieldset class="border px-4 py-2 rounded">
                             {{-- <legend>Invoice Level Expenses</legend> --}}
                             <div class="grid grid-cols-12 gap-2 py-2 items-center">
-                                <x-input-numeric title="Discou(%)" name="discntper" id="discntper"    />
+                                <x-input-numeric title="Discou(%)" name="discntper" id="discntper" disabled    />
+                                <input class="checked:bg-blue-500 checked:border-blue-500 focus:outline-none" type="checkbox" name="per" id="per" onclick="EnableDisableTextBox(this)" >
                                 <x-input-numeric title="Discount(Amount)" name="discntamt" id="discntamt"   />
                                 <x-input-numeric title="Cartage" name=cartage  required  onblur="tnetamount()"  />
                                 <x-input-numeric title="Receivable Amount" name="rcvblamount" disabled />
@@ -70,8 +69,7 @@
                             <x-label value="Add Pcs & Feet Size & Press"></x-label>
                             <x-button id="calculate" class="mx-2" type="button" onclick="calculate()">Calculate</x-button>
                             <x-label value="This will prepare your commercial invoice for Submission"></x-label>
-
-                            <input class="checked:bg-blue-500 checked:border-blue-500 focus:outline-none" title="W/Qutation" type="checkbox" value="checked" name="woq" id="woq"   >
+                            {{-- <input class="checked:bg-blue-500 checked:border-blue-500 focus:outline-none" title="W/Qutation" type="checkbox" value="checked" name="woq" id="woq"   > --}}
                         </div>
 
 
@@ -97,10 +95,22 @@
     <script src="{{ asset('js/tabulator.min.js') }}"></script>
 @endpush
 
-<x-tabulator-modal title="Contracts" />
+<x-tabulator-modal title="Pending Sale Order" />
 
 @push('scripts')
     <script>
+
+        const locations = @json($locations);
+        var newList=[]
+        locations.forEach(e => {
+            newList.push({value:e.title,label:e.title , id:e.id})
+
+        });
+
+
+
+
+
         let table;
         let searchValue = "";
         const deleteIcon = function(cell,formatterParams){return "<i class='fa fa-trash text-red-500'></i>";};
@@ -184,9 +194,9 @@
         }
         //  The Table for Materials Modal
         table = new Tabulator("#tableData", {
-            width:"1000px",
+            width:"1200px",
             height:"600px",
-            autoResize:true,
+            // autoResize:true,
             responsiveLayout:"collapse",
             // layout:"fitData",
             layout:'fitDataTable',
@@ -212,10 +222,11 @@
                 {title:"Customer", field:"custname" , responsive:0},
                 {title:"P.O Date", field:"podated" , responsive:0},
                 {title:"P.O No", field:"pono" , visible:true ,headerSort:false, responsive:0},
-                {title:"Amount WO/GST", field:"rcvblamount" , visible:true ,headerSort:false, responsive:0},
-                {title:"Amount W/GST", field:"totrcvbamount" , visible:true ,headerSort:false, responsive:0},
+                {title:"Amount WO/GST", field:"rcvblamount" , visible:true ,headerSort:false,headerVertical:true,responsive:0},
+                {title:"Amount W/GST", field:"totrcvbamount" , visible:true ,headerSort:false,headerVertical:true,responsive:0},
                 {title:"Delivery Date", field:"deliverydtd", visible:true ,headerSort:false, responsive:0},
-
+                {title:"Delivered", field:"delivered", visible:true ,headerSort:false, responsive:0},
+                {title:"OrderBalance", field:"salbal", visible:true ,headerSort:false, responsive:0},
 
                 // {title:"Valid Date", field:"valdate" , responsive:0},
 
@@ -312,6 +323,17 @@
                         qtykg :           obj.qtykg ,
                         qtypcs :           obj.qtypcs ,
                         qtyfeet :           obj.qtyfeet ,
+                        balqty :            obj.balqty,
+
+                        sqtykg :           obj.sqtykg ,
+                        sqtypcs :           obj.sqtypcs ,
+                        sqtyfeet :           obj.sqtyfeet ,
+
+                        totqty:             obj.totqty,
+                        wtper:              obj.wtper,
+                        pcper:              obj.pcper,
+                        feetper:            obj.feetper,
+
 
 
                         price   :           obj.price,
@@ -410,8 +432,13 @@ var tamount=0;
         {
             //  discntamt.value=0;
             //  rcvblamount.value=0;
-            discntamt.value=(tamount*discntper.value/100).toFixed(0);
-            discntper.value=(discntamt.value/tamount*100).toFixed(2);
+
+            if (discntper.disabled)
+            {discntper.value=(discntamt.value/tamount*100).toFixed(2)};
+            if (!discntper.disabled)
+            {discntamt.value=(tamount*discntper.value/100).toFixed(0);};
+            // discntamt.value=(tamount*discntper.value/100).toFixed(0);
+            // discntper.value=(discntamt.value/tamount*100).toFixed(2);
             rcvblamount.value= ( Number(tamount)-Number(discntamt.value) )+Number(cartage.value)  ;
             saletaxamt.value=(Number(rcvblamount.value) * Number(saletaxper.value) )/100 ;
             totrcvbamount.value=(Number(rcvblamount.value)+Number(saletaxamt.value)).toFixed(0);
@@ -444,6 +471,7 @@ var updateValues = (cell) => {
         var row = cell.getRow();
         row.update({
              "saleamnt": sum,
+             "wtavg1":ag1,
              totalVal: sum
 
         });
@@ -490,9 +518,70 @@ var updateValues = (cell) => {
                 {title:"category_id",  field:"category_id",visible:false},
                 {title:"sku_id",       field:"sku_id",visible:false},
                 {title:"dimension_id", field:"dimension_id",visible:false},
+                // {title:"totqty", field:"totqty"},
+                // {title:"wtper", field:"wtper"},
+                // {title:"pcper", field:"pcper"},
+                // {title:"feetper", field:"feetper"},
+                // {title:"wtavg1", field:"wtavg1",
+                // formatter:function(cell,row)
+                // {
+                //     // console.log(cell.getData().sku_id)
+                //     if(cell.getData().sku_id == 1)
+                //     {
+
+                //         return ( ( ( (cell.getData().qtykg / cell.getData().totqty)*100) / cell.getData().wtper ) *100 )
+
+                //     }
+                //     else if (cell.getData().sku_id == 2)
+                //     {
+                //         return ( ( ( (cell.getData().qtypcs / cell.getData().totqty)*100) / cell.getData().pcper ) *100 )
+                //     }
+                //     else if (cell.getData().sku_id == 3)
+                //     {
+                //         return ( ( ( (cell.getData().qtyfeet / cell.getData().totqty)*100) / cell.getData().feetper ) *100 )
+                //     }
+
+                // }
+
+
+
+
+
+                // },
 
                 {
-                    title:'Quantity', headerHozAlign:"center",
+                title:'STOCK QUANTITY', headerHozAlign:"center",
+                    columns:[
+                {title:"Qty(kg)", field:"sqtykg"},
+                {title:"Qty(pcs)", field:"sqtypcs"},
+                {title:"Qty(feet)", field:"sqtyfeet"}]},
+
+                {title:"Order BalQty",headerHozAlign :'center',
+                            field:"balqty",
+
+
+                        },
+
+
+
+
+
+
+                {title:"Location", field:"location" ,editor:"list" , editorParams:   {
+                        values:newList,
+                        cssClass:"bg-green-200 font-semibold",
+                        validator:["required"]
+                    }
+                },
+
+
+
+
+                {
+
+
+
+                    title:'SALE Quantity', headerHozAlign:"center",
                     columns:[
                         {   title:"Replace Name",headerHozAlign :'center',
                             field:"repname",
@@ -505,19 +594,13 @@ var updateValues = (cell) => {
                         {   title:"Brand",headerHozAlign :'center',
                             field:"mybrand",
                             // editor:"list",
-                            responsive:0,
                             // headerVertical:true,
                             editor:true,
                         },
 
-
-
-
-
                         {   title:"Sale Qty(kg)",
                             headerHozAlign :'right',
                             hozAlign:"right",
-                            responsive:0,
                             field:"qtykg",
                             editor:"number",
                             // headerVertical:true,
@@ -527,6 +610,7 @@ var updateValues = (cell) => {
                             validator:["required","numeric"],
                             // cssClass:"bg-green-200 font-semibold",
                             formatterParams:{thousand:",",precision:0},
+
                         },
 
                         {   title:"Sale Qty(pcs)",
@@ -615,6 +699,7 @@ var updateValues = (cell) => {
 
             var pono = document.getElementById("pono")
             var poseqno = document.getElementById("poseqno")
+            var per= document.getElementById("per");
 
             if(pono.value === '')
             {
@@ -637,21 +722,55 @@ var updateValues = (cell) => {
                 return;
             }
 
-            // for (let index = 0; index < dynamicTableData.length; index++) {
-            //     const element = dynamicTableData[index];
+            for (let index = 0; index < dynamicTableData.length; index++) {
+                const element = dynamicTableData[index];
 
-            //     if(element.location === undefined)
-            //     {
-            //         showSnackbar("Location must be Enter","info");
-            //         return;
-            //     }
-            // }
+                if(element.location === undefined)
+                {
+                    showSnackbar("Location must be Enter","info");
+                    return;
+                }
+
+                if (element.sku_id==1)
+                    {
+                        if(element.qtykg > element.balqty )
+                            {
+                                showSnackbar("Sale Qty must be less than Plan qty","info");
+                                return;
+                            }
+                    }
+                if (element.sku_id==2)
+                    {
+                        if(element.qtypcs > element.balqty )
+                        {
+                            showSnackbar("Sale Qty must be less than Plan qty","info");
+                            return;
+                        }
+                    }
+
+                if (element.sku_id==3)
+                {
+                    if(element.qtyfeet > element.balqty )
+                    {
+                        showSnackbar("Sale Qty must be less than Plan qty","info");
+                        return;
+                    }
+                }
+
+                if( element.qtykg> element.tqtykg || element.qtypcs>element.tqtypcs   || element.qtyfeet>element.tqtyfeet   )
+                    {
+                        showSnackbar("sale qty must be less than stock qty","info");
+                        return;
+                    }
+
+
+            }
 
 
             var data = { 'sales' : dynamicTableData,'rcvblamount':rcvblamount.value,'cartage':cartage.value,'discntamt':discntamt.value,'discntper':discntper.value,'discntper':discntper.value ,
         'customer_id': customer_id,'deliverydt':deliverydt.value,'custplan_id':custplan_id,
         'saletaxper':saletaxper.value,'saletaxamt':saletaxamt.value,'totrcvbamount':totrcvbamount.value,
-        'podate':podate.value,'pono':pono.value,'dcno':dcno.value,'gpno':gpno.value};
+        'podate':podate.value,'pono':pono.value,'dcno':dcno.value,'gpno':gpno.value,'billno':billno.value};
 
 
 
@@ -682,28 +801,35 @@ var updateValues = (cell) => {
             })
         }
 
-
+        function EnableDisableTextBox(per) {
+        var discntper = document.getElementById("discntper");
+        discntper.disabled = per.checked ? false : true;
+        discntper.style.color ="black";
+        // if (!discntper.disabled) {
+        //     discntper.focus();
+        // }
+    }
 
 
 
     discntper.onblur=function(){
     per=false
     // discntamt.value=(tamount*discntper.value/100).toFixed(0);
-    // tnetamount();
-            discntamt.value=(tamount*discntper.value/100).toFixed(0);
+     tnetamount();
+            // discntamt.value=(tamount*discntper.value/100).toFixed(0);
             // discntper.value=(discntamt.value/tamount*100).toFixed(2);
-            rcvblamount.value= ( Number(tamount)-Number(discntamt.value) )+Number(cartage.value)  ;
-            saletaxamt.value=(Number(rcvblamount.value) * Number(saletaxper.value) )/100 ;
-            totrcvbamount.value=(Number(rcvblamount.value)+Number(saletaxamt.value)).toFixed(0);
+            // rcvblamount.value= ( Number(tamount)-Number(discntamt.value) )+Number(cartage.value)  ;
+            // saletaxamt.value=(Number(rcvblamount.value) * Number(saletaxper.value) )/100 ;
+            // totrcvbamount.value=(Number(rcvblamount.value)+Number(saletaxamt.value)).toFixed(0);
 }
 
 discntamt.onblur=function(){
     // discntper.value=(discntamt.value/tamount*100).toFixed(2);
-    // tnetamount1();
-            discntper.value=(discntamt.value/tamount*100).toFixed(2);
-            rcvblamount.value= ( Number(tamount)-Number(discntamt.value) )+Number(cartage.value)  ;
-            saletaxamt.value=(Number(rcvblamount.value) * Number(saletaxper.value) )/100 ;
-            totrcvbamount.value=(Number(rcvblamount.value)+Number(saletaxamt.value)).toFixed(0);
+     tnetamount();
+            // discntper.value=(discntamt.value/tamount*100).toFixed(2);
+            // rcvblamount.value= ( Number(tamount)-Number(discntamt.value) )+Number(cartage.value)  ;
+            // saletaxamt.value=(Number(rcvblamount.value) * Number(saletaxper.value) )/100 ;
+            // totrcvbamount.value=(Number(rcvblamount.value)+Number(saletaxamt.value)).toFixed(0);
 
 
 }

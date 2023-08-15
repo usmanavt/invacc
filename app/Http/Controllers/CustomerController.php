@@ -17,7 +17,9 @@ class CustomerController extends Controller
         $search = $request->search;
         $customers = Customer::where(function($q) use ($search){
             $q->where('title','LIKE',"%$search%")
+
             ->orWhere('email','LIKE',"%$search%");
+
         })
         // ->with('care')
         ->with('care:id,title')
@@ -36,7 +38,7 @@ class CustomerController extends Controller
         $field = $request->sort[0]["field"];     //  Nested Array
         $dir = $request->sort[0]["dir"];         //  Nested Array
         //  With Tables
-        $customers = Customer::where(function ($query) use ($search){
+        $customers = Customer::Where('id', '>', 1)->where(function ($query) use ($search){
             $query->where('title','LIKE','%' . $search . '%')
             ->orWhere('address2','LIKE','%' . $search . '%');
 

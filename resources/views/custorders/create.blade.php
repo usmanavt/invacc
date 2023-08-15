@@ -35,26 +35,29 @@
                                     </select> --}}
                                 <x-input-text title="Customer Name" name="custname" id="custname" req required class="col-span-2" disabled  />
                                 <x-input-text title="Quotation No" name="qutno" id="qutno" req required class="col-span-2" disabled  />
+                                <x-input-date title="Quotation Date" name="qutdate" id="qutdate" req required class="col-span-2" disabled  />
                                 <x-input-text title="P.R No" name="prno" id="prno" req required class="col-span-2" disabled  />
-                                <x-input-text title="P.O Seq.#" name="poseqno" id="poseqno" value="{{$maxposeqno}}"    placeholder="poseqno" required   />
 
                             </div>
                             <div class="grid grid-cols-12 gap-1 py-2 items-center">
                                 <x-input-date title="P.O Date" id="podate" name="podate" req required class="col-span-2" />
                                 <x-input-text title="P.O #" name="pono" id="pono" req required class="col-span-2"  />
                                 <x-input-date title="Delivery Date" name="deliverydt" req required class="col-span-2"/>
+                                <x-input-text title="P.O Seq.#" name="poseqno" id="poseqno" value="{{$maxposeqno}}"    placeholder="poseqno" required   />
 
-                                <label for="">
+
+                                {{-- <label for="">
                                     Remakrs <span class="text-red-500 font-semibold  ">(*)</span>
                                 </label>
-                                <textarea name="remarks" id="remarks" cols="100" rows="2" maxlength="150" required class="rounded"></textarea>
+                                <textarea name="remarks" id="remarks" cols="100" rows="2" maxlength="150" required class="rounded"></textarea> --}}
                             </div>
                         </fieldset>
 
                         <fieldset class="border px-4 py-2 rounded">
                             {{-- <legend>Invoice Level Expenses</legend> --}}
                             <div class="grid grid-cols-12 gap-2 py-2 items-center">
-                                <x-input-numeric title="Discou(%)" name="discntper" id="discntper"    />
+                                <x-input-numeric title="Discou(%)" name="discntper" id="discntper" disabled    />
+                                <input class="checked:bg-blue-500 checked:border-blue-500 focus:outline-none" type="checkbox" name="per" id="per" onclick="EnableDisableTextBox(this)" >
                                 <x-input-numeric title="Discount(Amount)" name="discntamt" id="discntamt"   />
                                 <x-input-numeric title="Cartage" name=cartage  required  onblur="tnetamount()"  />
                                 <x-input-numeric title="Receivable Amount" name="rcvblamount" disabled />
@@ -71,7 +74,7 @@
                             <x-button id="calculate" class="mx-2" type="button" onclick="calculate()">Calculate</x-button>
                             <x-label value="This will prepare your commercial invoice for Submission"></x-label>
 
-                            <input class="checked:bg-blue-500 checked:border-blue-500 focus:outline-none" title="W/Qutation" type="checkbox" value="checked" name="woq" id="woq"   >
+                            {{-- <input class="checked:bg-blue-500 checked:border-blue-500 focus:outline-none" title="W/Qutation" type="checkbox" value="checked" name="woq" id="woq"   > --}}
                         </div>
 
 
@@ -199,12 +202,12 @@
                 // Master Data
                 {title:"Id", field:"id" , responsive:0},
                 {title:"Customer", field:"custname" , responsive:0},
-                {title:"Quotation Date", field:"qutdate" , responsive:0},
+                {title:"Quotation Date", field:"dqutdate" , responsive:0},
 
                 {title:"Quotation #", field:"qutno" , visible:true ,headerSort:false, responsive:0},
                 {title:"P.R No", field:"prno" , visible:true ,headerSort:false, responsive:0},
                 {title:"Quotation Values", field:"totrcvbamount", visible:true ,headerSort:false, responsive:0},
-                {title:"Valid Date", field:"valdate" , responsive:0},
+                {title:"Valid Date", field:"dvaldate" , responsive:0},
 
 
            ],
@@ -226,6 +229,7 @@
             // Fill Master Data
             customer_id=data.customer_id
             quotation_id = data.id
+            qutdate.value=data.qutdate
             customer_id=data.customer_id
             prno.value = data.prno
             qutno.value = data.qutno
@@ -296,6 +300,8 @@
                         saleqty :           obj.saleqty ,
                         price   :           obj.price,
                         saleamnt:           obj.saleamnt,
+                        balqty:             obj.balqty,
+                        varqty:             obj.varqty,
 
                     }
                 ])
@@ -390,8 +396,14 @@ var tamount=0;
         {
             //  discntamt.value=0;
             //  rcvblamount.value=0;
-            discntamt.value=(tamount*discntper.value/100).toFixed(0);
-            discntper.value=(discntamt.value/tamount*100).toFixed(2);
+            // discntamt.value=(tamount*discntper.value/100).toFixed(0);
+            // discntper.value=(discntamt.value/tamount*100).toFixed(2);
+            if (discntper.disabled)
+            {discntper.value=(discntamt.value/tamount*100).toFixed(2)};
+
+            if (!discntper.disabled)
+            {discntamt.value=(tamount*discntper.value/100).toFixed(0);};
+
             rcvblamount.value= ( Number(tamount)-Number(discntamt.value) )+Number(cartage.value)  ;
             saletaxamt.value=(Number(rcvblamount.value) * Number(saletaxper.value) )/100 ;
             totrcvbamount.value=(Number(rcvblamount.value)+Number(saletaxamt.value)).toFixed(0);
@@ -401,9 +413,11 @@ var updateValues = (cell) => {
         var data = cell.getData();
         // var sum = (Number(data.bundle1) * Number(data.pcspbundle1)) + (Number(data.bundle2) * Number(data.pcspbundle2))
         var sum = (Number(data.saleqty) * Number(data.price))
+        var varqty = ( Number(data.balqty) - Number(data.saleqty) )
         var row = cell.getRow();
         row.update({
              "saleamnt": sum,
+             "varqty":varqty,
              totalVal: sum
 
         });
@@ -450,6 +464,8 @@ var updateValues = (cell) => {
                 {title:"category_id",  field:"category_id",visible:false},
                 {title:"sku_id",       field:"sku_id",visible:false},
                 {title:"dimension_id", field:"dimension_id",visible:false},
+                {title:"StockQty", field:"balqty"},
+                {title:"Variance", field:"varqty",cellEdited: updateValues,},
 
                 {
                     title:'Quantity', headerHozAlign:"center",
@@ -535,6 +551,7 @@ var updateValues = (cell) => {
 
             var pono = document.getElementById("pono")
             var poseqno = document.getElementById("poseqno")
+            var per= document.getElementById("per");
 
             if(pono.value === '')
             {
@@ -571,7 +588,7 @@ var updateValues = (cell) => {
             var data = { 'contracts' : dynamicTableData,'rcvblamount':rcvblamount.value,'cartage':cartage.value,'discntamt':discntamt.value,'discntper':discntper.value,'discntper':discntper.value ,
         'customer_id': customer_id,'deliverydt':deliverydt.value,'quotation_id':quotation_id,'poseqno':poseqno.value,
         'saletaxper':saletaxper.value,'saletaxamt':saletaxamt.value,'totrcvbamount':totrcvbamount.value,
-        'podate':podate.value,'pono':pono.value,'remarks':remarks.value,'qutno':qutno.value,'prno':prno.value};
+        'podate':podate.value,'pono':pono.value,'qutno':qutno.value,'qutdate':qutdate.value,'prno':prno.value};
 
 
 
@@ -602,28 +619,35 @@ var updateValues = (cell) => {
             })
         }
 
-
+        function EnableDisableTextBox(per) {
+        var discntper = document.getElementById("discntper");
+        discntper.disabled = per.checked ? false : true;
+        discntper.style.color ="black";
+        // if (!discntper.disabled) {
+        //     discntper.focus();
+        // }
+    }
 
 
 
     discntper.onblur=function(){
     per=false
     // discntamt.value=(tamount*discntper.value/100).toFixed(0);
-    // tnetamount();
-            discntamt.value=(tamount*discntper.value/100).toFixed(0);
+     tnetamount();
+            // discntamt.value=(tamount*discntper.value/100).toFixed(0);
             // discntper.value=(discntamt.value/tamount*100).toFixed(2);
-            rcvblamount.value= ( Number(tamount)-Number(discntamt.value) )+Number(cartage.value)  ;
-            saletaxamt.value=(Number(rcvblamount.value) * Number(saletaxper.value) )/100 ;
-            totrcvbamount.value=(Number(rcvblamount.value)+Number(saletaxamt.value)).toFixed(0);
+            // rcvblamount.value= ( Number(tamount)-Number(discntamt.value) )+Number(cartage.value)  ;
+            // saletaxamt.value=(Number(rcvblamount.value) * Number(saletaxper.value) )/100 ;
+            // totrcvbamount.value=(Number(rcvblamount.value)+Number(saletaxamt.value)).toFixed(0);
 }
 
 discntamt.onblur=function(){
     // discntper.value=(discntamt.value/tamount*100).toFixed(2);
-    // tnetamount1();
-            discntper.value=(discntamt.value/tamount*100).toFixed(2);
-            rcvblamount.value= ( Number(tamount)-Number(discntamt.value) )+Number(cartage.value)  ;
-            saletaxamt.value=(Number(rcvblamount.value) * Number(saletaxper.value) )/100 ;
-            totrcvbamount.value=(Number(rcvblamount.value)+Number(saletaxamt.value)).toFixed(0);
+     tnetamount();
+            // discntper.value=(discntamt.value/tamount*100).toFixed(2);
+            // rcvblamount.value= ( Number(tamount)-Number(discntamt.value) )+Number(cartage.value)  ;
+            // saletaxamt.value=(Number(rcvblamount.value) * Number(saletaxper.value) )/100 ;
+            // totrcvbamount.value=(Number(rcvblamount.value)+Number(saletaxamt.value)).toFixed(0);
 
 
 }

@@ -162,7 +162,10 @@ const skus = @json($skus);
 
 
 
-    const getMaster = @json(route('materials.master'));
+    //  const getMaster = @json(route('materials.master'));
+     const getMaster = @json(route('quotations.mmfrqut'));
+
+
     let csrfToken = document.head.querySelector("[name~=csrf-token][content]").content;
     let modal = document.getElementById("myModal")
     // console.log(getMaster);
@@ -253,9 +256,10 @@ const skus = @json($skus);
                 dimension_id:data.dimension_id,
                 dimension:data.dimension,
 
+
                 bundle1:0,
                 bundle2:0,
-                pcspbundle1:0,
+                pcspbundle1:data.pcspbundle1,
                 pcspbundle2:0,
                 gdswt:0,
                 gdsprice:0,
@@ -303,9 +307,9 @@ const skus = @json($skus);
             // Master Data
             {title:"Id", field:"id" , responsive:0},
             {title:"Material", field:"title" , visible:true ,headerSort:false, responsive:0},
-            {title:"Category", field:"category" , visible:true ,headerSortStartingDir:"asc" , responsive:0},
+            // {title:"Category", field:"category" , visible:true ,headerSortStartingDir:"asc" , responsive:0},
             {title:"Dimesion", field:"dimension" ,  responsive:0},
-            {title:"Source", field:"source" ,  responsive:0},
+            {title:"Last Sale Price", field:"pcspbundle1" ,  responsive:0},
             {title:"Sku", field:"sku" ,  responsive:0},
             {title:"Brand", field:"brand" ,  responsive:0},
         ],
@@ -404,16 +408,12 @@ const skus = @json($skus);
 
 
 
-            // {title:"Id",                field:"id",    cssClass:"bg-gray-200 font-semibold"},
             {title:"Material",          field:"title", cssClass:"bg-gray-200 font-semibold"},
             {title:"Category_id",       field:"category_id",    cssClass:"bg-gray-200 font-semibold",visible:false},
-            // {title:"Category",          field:"category",       cssClass:"bg-gray-200 font-semibold"},
             {title:"Dimension",         field:"dimension_id",   cssClass:"bg-gray-200 font-semibold",visible:false},
             {title:"Dimension",         field:"dimension",      cssClass:"bg-gray-200 font-semibold"},
             {title:"Replace Description",field:"repname",       cssClass:"bg-gray-200 font-semibold",editor:true},
             {title:"Sku",               field:"sku_id",         cssClass:"bg-gray-200 font-semibold",visible:false},
-            // {title:"Std. Unit",         field:"sku",            cssClass:"bg-gray-200 font-semibold"},
-            // {title:"Brand",             field:"brand_id",       cssClass:"bg-gray-200 font-semibold",visible:false},
             {title:"Brand",             field:"mybrand",          cssClass:"bg-gray-200 font-semibold",editor:true},
 
 

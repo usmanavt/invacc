@@ -25,28 +25,6 @@ class QuotationController  extends Controller
 
     }
 
-    // public function getMaster(Request $request)
-    // {
-    //     $status =$request->status ;
-    //     $search = $request->search;
-    //     $size = $request->size;
-    //     $field = $request->sort[0]["field"];     //  Nested Array
-    //     $dir = $request->sort[0]["dir"];         //  Nested Array
-    //     $localpurchase = CommercialInvoice::where('status',$status)
-    //     ->where(function ($query) use ($search){
-    //             $query->where('invoiceno','LIKE','%' . $search . '%');
-
-    //         })
-    //         ->whereHas('supplier', function ($query) {
-    //             $query->where('source_id','=','1');
-    //             // ->orWhere('source_id',1);
-    //         })
-
-    //     ->with('supplier:id,title')
-    //     ->orderBy($field,$dir)
-    //     ->paginate((int) $size);
-    //     return $localpurchase;
-    // }
 
     public function getMaster(Request $request)
     {
@@ -82,14 +60,26 @@ class QuotationController  extends Controller
     }
 
 
-    // public function getDetails(Request $request)
-    // {
-    //     $search = $request->search;
-    //     $size = $request->size;
-    //     $contractDetails = ContractDetails::where('contract_id',$request->id)
-    //     ->paginate((int) $size);
-    //     return $contractDetails;
-    // }
+
+    public function getmmfrqut(Request $request)
+    {
+
+        $search = $request->search;
+        $size = $request->size;
+        $field = $request->sort[0]["field"];     //  Nested Array
+        $dir = $request->sort[0]["dir"];         //  Nested Array
+        $contracts = DB::table('mmfrquotation')
+        // ->join('suppliers', 'contracts.supplier_id', '=', 'suppliers.id')
+        // ->select('contracts.*', 'suppliers.title')
+        ->where('title', 'like', "%$search%")
+        ->orWhere('dimension', 'like', "%$search%")
+        ->orderBy($field,$dir)
+        ->paginate((int) $size);
+        return $contracts;
+    }
+
+
+
 
     public function create()
     {

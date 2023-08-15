@@ -185,6 +185,11 @@ class LocalPurchaseController  extends Controller
                 $location = Location::where("title", $cont['location'])->first();
                 $lpd->locid = $location->id;
 
+                $matsrate = Material::findOrFail($lpd->material_id);
+                $matsrate->balkg = $matsrate->balkg + $cont['gdswt'];
+                $matsrate->balpcs = $matsrate->balpcs + $cont['pcs'];
+                $matsrate->balfeet = $matsrate->balfeet + $cont['qtyinfeet'];
+                $matsrate->save();
 
 
 

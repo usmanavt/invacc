@@ -38,8 +38,10 @@
 
                             <x-input-text title="" name="quotation_id" id="quotation_id" value="{{ $customerorder->quotation_id }}" hidden     />
                             <x-input-text title="Quotation No" name="qutno" id="qutno" value="{{ $customerorder->pqutno }}" disabled     />
+                            <x-input-date title="Quotation Date" name="qutdate" id="qutdate" value="{{ $customerorder->qutdate->format('Y-m-d') }}"  class="col-span-2" disabled  />
                             <x-input-text title="P.R No" name="prno" id="prno" value="{{ $customerorder->pprno }}" disabled     />
-                            <x-input-text title="P.O Seq.#" name="poseqno" id="poseqno" value="{{ $customerorder->poseqno }}"    required   />
+
+
 
 
                         </div>
@@ -47,15 +49,15 @@
                             <x-input-date title="P.O Date" id="podate" name="podate" value="{{ $customerorder->podate->format('Y-m-d') }}" req required class="col-span-2" />
                             <x-input-text title="P.O #" name="pono" id="pono" value="{{ $customerorder->pono }}"  />
                             <x-input-date title="Delivery Date" name="deliverydt" value="{{ $customerorder->deliverydt->format('Y-m-d') }}" />
+                            <x-input-text title="P.O Seq.#" name="poseqno" id="poseqno" value="{{ $customerorder->poseqno }}"    required   />
 
-
-                            <label for="">
+                            {{-- <label for="">
                                 Remakrs <span class="text-red-500 font-semibold  ">(*)</span>
                             </label>
                             <textarea name="remarks" id="remarks" cols="100" rows="2" maxlength="150" required class="rounded">
                                 {{ $customerorder->remarks }}
 
-                            </textarea>
+                            </textarea> --}}
                         </div>
                     </fieldset>
 
@@ -255,6 +257,7 @@ var updateValues = (cell) => {
         //   var sum = (Number(data.bundle1) * Number(data.pcspbundle1)) + (Number(data.bundle2) * Number(data.pcspbundle2))
         var row = cell.getRow();
             var sum = (Number(data.qtykg) * Number(data.price))
+            var varqty = ( Number(data.balqty) - Number(data.qtykg) )
             // var sum2 = (Number(data.qtykg) * Number(data.price))
 
         row.update({
@@ -264,6 +267,7 @@ var updateValues = (cell) => {
             //  "totval":sum,
             //  "gdspricetot": sum2
             "saleamnt": sum,
+            "varqty":varqty,
             totval: sum
 
             });
@@ -323,6 +327,8 @@ dynamicTable = new Tabulator("#dynamicTable", {
         {title:"Id",                field:"material_id",    cssClass:"bg-gray-200 font-semibold"},
         {title:"Material",          field:"material_title", cssClass:"bg-gray-200 font-semibold"},
         {title:"Dimension",         field:"dimension",      cssClass:"bg-gray-200 font-semibold"},
+        {title:"StockQty",         field:"balqty"   },
+        {title:"VarQty",         field:"varqty",cellEdited: updateValues    },
         {title:"Replace Description",field:"repname",       cssClass:"bg-gray-200 font-semibold",editor:true},
         {title:"Brand",             field:"brand",editor:true,         cssClass:"bg-gray-200 font-semibold"},
         {title:"UOM",               field:"sku"},
@@ -481,7 +487,7 @@ function validateForm()
     var data = { 'customerorder' : dynamicTableData,'rcvblamount':rcvblamount.value,'cartage':cartage.value,'discntamt':discntamt.value,'discntper':discntper.value,'discntper':discntper.value ,
         'customer_id': customer_id.value,'deliverydt':deliverydt.value,'quotation_id':quotation_id.value,'poseqno':poseqno.value,
         'saletaxper':saletaxper.value,'saletaxamt':saletaxamt.value,'totrcvbamount':totrcvbamount.value,
-        'podate':podate.value,'pono':pono.value,'remarks':remarks.value,'qutno':qutno.value,'prno':prno.value
+        'podate':podate.value,'pono':pono.value,'qutno':qutno.value,'qutdate':qutdate.value,'prno':prno.value
     ,'sale_invoice_id':sale_invoice_id.value};
 
 

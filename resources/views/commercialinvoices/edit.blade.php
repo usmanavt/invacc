@@ -239,6 +239,9 @@
                 var comamtindollar=e.comamtindollar
                 var invlvlchrgs=e.invlvlchrgs
 
+                var bkg=gdswt
+                var bpcs=e.pcs
+                var bfeet=qtyinfeet
 
 
                 var dtyamtindollar=e.dtyamtindollar
@@ -267,6 +270,10 @@
                  e.invlvlchrgs=invlvlchrgs
                  e.dtyamtinpkr=dtyamtinpkr
                  e.wse=wse
+
+                e.bkg=bkg
+                e.bpcs=pcs
+                e.bfeet=qtyinfeet
 
                  var sid = document.getElementById("dunitid");
                  var dunitid = sid.options[sid.selectedIndex];
@@ -519,6 +526,10 @@ var headerMenu = function(){
                 {title:"dimension_id", field:"dimension_id",visible:false},
                 {title:"source_id",    field:"source_id",visible:false},
                 {title:"brand_id",     field:"brand_id",visible:false},
+                {title:"bkg",     field:"bkg",visible:true},
+                {title:"bpcs",     field:"bpcs",visible:true},
+                {title:"bfeet",     field:"bfeet",visible:true},
+
                 {
                     title:'Quantity', headerHozAlign:"center",
                     columns:[

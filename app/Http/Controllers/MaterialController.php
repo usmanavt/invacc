@@ -111,6 +111,9 @@ class MaterialController extends Controller
                 $material->qtyfeet = $request->qtyfeet;
                 $material->qtyfeetrt = $request->qtyfeetrt;
 
+                $material->balkg = $request->qtykg;
+                $material->balpcs = $request->qtypcs;
+                $material->balfeet = $request->qtyfeet;
 
                 $material->save();
             }
@@ -188,6 +191,12 @@ class MaterialController extends Controller
 
             $material->qtyfeet = $request->qtyfeet;
             $material->qtyfeetrt = $request->qtyfeetrt;
+
+
+            $material->balkg = $request->qtykg;
+            $material->balpcs = $request->qtypcs;
+            $material->balfeet = $request->qtyfeet;
+
 
             if($request->has('status'))
             {

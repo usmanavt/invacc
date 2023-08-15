@@ -54,25 +54,41 @@ class CustomerOrderController  extends Controller
 
     public function getMaster(Request $request)
     {
-        // dd($request->all());
-        $status =$request->status ;
+        // $search = $request->search;
+        // $size = $request->size;
+        // $field = $request->sort[0]["field"];     //  Nested Array
+        // $dir = $request->sort[0]["dir"];         //  Nested Array
+        // $cis = CustomerOrder::select ('*')
+        // ->where(function ($query) use ($search){
+        //         $query->where('poseqno','LIKE','%' . $search . '%')
+        //         ->orWhere('pono','LIKE','%' . $search . '%');
+        //     })
+        // ->with('customer:id,title')
+        //  ->orderBy($field,$dir)
+        // ->paginate((int) $size);
+        // return $cis;
+
         $search = $request->search;
         $size = $request->size;
         $field = $request->sort[0]["field"];     //  Nested Array
         $dir = $request->sort[0]["dir"];         //  Nested Array
-        $cis = CustomerOrder::where('status',$status)
-        ->where(function ($query) use ($search){
-                $query->where('poseqno','LIKE','%' . $search . '%')
-                // ->orWhere('gpno','LIKE','%' . $search . '%')
-                ->orWhere('pono','LIKE','%' . $search . '%');
-            })
-            // ->whereHas('customer', function ($query) {
-            //      $query->where('source_id','=','1');
-            // })
-        ->with('customer:id,title')
-         ->orderBy($field,$dir)
+        $cis = DB::table('vwcustomerorders')
+        // ->join('suppliers', 'contracts.supplier_id', '=', 'suppliers.id')
+        // ->select('contracts.*', 'suppliers.title')
+        // ->with('customer:id,title')
+        ->where('custname', 'like', "%$search%")
+         ->orWhere('pono', 'like', "%$search%")
+         ->orWhere('pqutno', 'like', "%$search%")
+        ->orderBy($field,$dir)
         ->paginate((int) $size);
         return $cis;
+
+
+
+
+
+
+
     }
 
 
@@ -107,8 +123,9 @@ class CustomerOrderController  extends Controller
     public function getDetailsqut(Request $request)
     {
         $id = $request->id;
-        $abc = DB::select('call proctest0(1)');
-        $contractDetails = DB::table('vwdetailquotations')->where('sale_invoice_id',$id)->get();
+        // $abc = DB::select('call proctest0(1)');
+        //  $contractDetails = DB::table('vwdetailquotations')->where('sale_invoice_id',$id)->get();
+        $contractDetails = DB::select('call procdetailquotations(?,?)',array( $id,1 ));
         return response()->json($contractDetails, 200);
     }
 
@@ -150,6 +167,8 @@ class CustomerOrderController  extends Controller
             $ci = new CustomerOrder();
 
             $ci->quotation_id = $request->quotation_id;
+            $ci->qutdate = $request->qutdate;
+
             $ci->podate = $request->podate;
             $ci->deliverydt = $request->deliverydt;
             $ci->poseqno = $request->poseqno;
@@ -159,7 +178,7 @@ class CustomerOrderController  extends Controller
             $ci->pprno = $request->prno;
 
             $ci->customer_id = $request->customer_id;
-            $ci->remarks = $request->remarks;
+            // $ci->remarks = $request->remarks;
 
 
             $ci->discntper = $request->discntper;
@@ -172,6 +191,10 @@ class CustomerOrderController  extends Controller
             $ci->totrcvbamount = $request->totrcvbamount;
             $ci->save();
 
+            // Quotation Close
+            $qutclose = Quotation::findOrFail($request->quotation_id);
+            $qutclose->closed = 0;
+            $qutclose->save();
 
 
             foreach ($request->contracts as $cont) {
@@ -185,6 +208,7 @@ class CustomerOrderController  extends Controller
                 $lpd->repname = $cont['repname'];
                 $lpd->brand = $cont['mybrand'];
                 $lpd->qtykg = $cont['saleqty'];
+                $lpd->balqty = $cont['saleqty'];
                 $lpd->price = $cont['price'];
                 $lpd->saleamnt = $cont['saleamnt'];
                 $lpd->save();
@@ -204,10 +228,14 @@ class CustomerOrderController  extends Controller
     public function edit($id)
     {
 
+        $stockdtl = DB::select('call procdetailquotations(?,?)',array( $id,2 ));
         $cd = DB::table('customer_order_details')
         ->join('materials', 'materials.id', '=', 'customer_order_details.material_id')
         ->join('skus', 'skus.id', '=', 'customer_order_details.sku_id')
-        ->select('customer_order_details.*','materials.title as material_title','materials.dimension','skus.title as sku')
+        ->leftJoin('tmptblinvswsstock','tmptblinvswsstock.material_id', '=', 'customer_order_details.material_id')
+        ->select('customer_order_details.*','materials.title as material_title','materials.dimension','skus.title as sku',
+        DB::raw('( CASE customer_order_details.sku_id  WHEN  1 THEN tmptblinvswsstock.qtykg WHEN 2 THEN tmptblinvswsstock.qtypcs WHEN 3 THEN tmptblinvswsstock.qtyfeet  END) AS balqty')
+        ,DB::raw('( CASE customer_order_details.sku_id  WHEN  1 THEN tmptblinvswsstock.qtykg - customer_order_details.qtykg  WHEN 2 THEN tmptblinvswsstock.qtypcs - customer_order_details.qtykg WHEN 3 THEN tmptblinvswsstock.qtyfeet - customer_order_details.qtykg  END) AS varqty') )
         ->where('sale_invoice_id',$id)->get();
          $data=compact('cd');
 
@@ -244,10 +272,11 @@ class CustomerOrderController  extends Controller
             $customerorder->pono = $request->pono;
 
             $customerorder->pqutno = $request->qutno;
+            $customerorder->qutdate = $request->qutdate;
             $customerorder->pprno = $request->prno;
 
             $customerorder->customer_id = $request->customer_id;
-            $customerorder->remarks = $request->remarks;
+            // $customerorder->remarks = $request->remarks;
 
 
             $customerorder->discntper = $request->discntper;
@@ -284,6 +313,7 @@ class CustomerOrderController  extends Controller
                     $cds->repname = $cd['repname'];
                     $cds->brand = $cd['brand'];
                     $cds->qtykg = $cd['qtykg'];
+                    $cds->balqty = $cd['qtykg'];
                     $cds->price = $cd['price'];
                     $cds->saleamnt = $cd['saleamnt'];
 

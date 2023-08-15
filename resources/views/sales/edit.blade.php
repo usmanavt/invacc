@@ -53,7 +53,7 @@
                         <div class="grid grid-cols-12 gap-1 py-2 items-center">
                             <x-input-date title="Deilivery Date" id="deliverydt" name="deliverydt" req required class="col-span-2" value="{{ $saleinvoices->saldate->format('Y-m-d') }}" />
                             <x-input-text title="DC No" name="dcno" id="dcno" value="{{ $saleinvoices->dcno }}"     required   />
-
+                            <x-input-text title="Bill No" name="billno" id="billno" value="{{ $saleinvoices->billno }}"     required   />
 
 
                             {{-- <x-input-date title="P.O Date" id="podate" name="podate" value="{{ $customerorder->podate->format('Y-m-d') }}" req required class="col-span-2" />
@@ -132,6 +132,14 @@
 
     @push('scripts')
 <script>
+
+const locations = @json($locations);
+        var newList=[]
+        locations.forEach(e => {
+            newList.push({value:e.title,label:e.title , id:e.id})
+
+        });
+
 let table;
 let searchValue = "";
 
@@ -245,6 +253,7 @@ function pushDynamicData(data)
 
         dimension_id:data.dimension_id,
         dimension:data.dimension,
+        // location:datea.location;
 
         bundle1:0,
         bundle2:0,
@@ -351,8 +360,39 @@ dynamicTable = new Tabulator("#dynamicTable", {
         {title:"Brand",             field:"brand",editor:true,         cssClass:"bg-gray-200 font-semibold"},
         {title:"UOM",               field:"sku"},
 
+        {
+                title:'STOCK QUANTITY', headerHozAlign:"center",
+                    columns:[
+                {title:"Qty(kg)", field:"sqtykg"},
+                {title:"Qty(pcs)", field:"sqtypcs"},
+                {title:"Qty(feet)", field:"sqtyfeet"}]},
 
-             {   title:"Sale Qty(kg)",
+                // {title:"Order BalQty",headerHozAlign :'center',
+                //             field:"balqty",
+
+
+                        },
+
+
+
+
+
+
+        {title: "id",field: "myid",visible:false},
+                {title:"Location", field:"location" ,editor:"list" , editorParams:   {
+                        values:newList,
+                        cssClass:"bg-green-200 font-semibold",
+                        validator:["required"]
+                    }
+                },
+
+
+
+
+
+
+
+            {   title:"Sale Qty(kg)",
                 field:"qtykg",
                 editor:"number",
                 cssClass:"bg-green-200 font-semibold",
@@ -507,14 +547,14 @@ function validateForm()
     }
     dynamicTableData = dynamicTable.getData();
     // Qty Required
-    for (let index = 0; index < dynamicTableData.length; index++) {
-        const element = dynamicTableData[index];
-        if(element.qtykg == 0 || element.price == 0  || element.saleamnt == 0)
-        {
-            showSnackbar("Please fill qtykg,price,saleamnt  all rows to proceed","info");
-            return;
-        }
-    }
+    // for (let index = 0; index < dynamicTableData.length; index++) {
+    //     const element = dynamicTableData[index];
+    //     if(element.qtykg == 0 || element.price == 0  || element.saleamnt == 0)
+    //     {
+    //         showSnackbar("Please fill qtykg,price,saleamnt  all rows to proceed","info");
+    //         return;
+    //     }
+    // }
     // 'total' : parseFloat(banktotal.value).toFixed(2),
     disableSubmitButton(true);
     //  var data = { 'sales' : dynamicTableData,'contract_id':parseFloat(contract_id.value).toFixed(0),'bankntotal':parseFloat(bankntotal.value).toFixed(0),'collofcustom':parseFloat(exataxoffie.value).toFixed(0),'exataxoffie':parseFloat(exataxoffie.value).toFixed(0) ,'bankcharges':parseFloat(bankcharges.value).toFixed(0) ,'supplier_id': supplier_id.value,'invoice_date':invoice_date.value,'invoiceno':invoiceno.value};
@@ -529,7 +569,7 @@ function validateForm()
     var data = { 'saleinvoices' : dynamicTableData,'rcvblamount':rcvblamount.value,'cartage':cartage.value,'discntamt':discntamt.value,'discntper':discntper.value,'discntper':discntper.value ,
         'customer_id': customer_id.value,'deliverydt':deliverydt.value,'custplan_id':custplan_id.value,
         'saletaxper':saletaxper.value,'saletaxamt':saletaxamt.value,'totrcvbamount':totrcvbamount.value,
-        'podate':podate.value,'pono':pono.value,'dcno':dcno.value,'gpno':gpno.value
+        'podate':podate.value,'pono':pono.value,'dcno':dcno.value,'gpno':gpno.value,'billno':billno.value
     ,'sale_invoice_id':sale_invoice_id.value};
 
 

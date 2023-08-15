@@ -13,10 +13,10 @@
                 <i class="fa fa-file fa-fw"></i>
                 Add New Record
             </a>
+            {{-- <span> | </span> --}}
+            {{-- <button class="text-sm text-blue-300" onclick="setStatus(1)">Pending</button> --}}
             <span> | </span>
-            <button class="text-sm text-blue-300" onclick="setStatus(1)">Pending</button>
-            <span> | </span>
-            <button class="text-sm text-blue-300" onclick="setStatus(2)">Completed</button>
+            <button class="text-sm text-blue-300" onclick="setStatus(2)">Customer Orders History</button>
         </h2>
     </x-slot>
 
@@ -145,15 +145,23 @@
                 })}
             },
       //      Master Data
-            {title: "id",field: "id"},
+
             // {title: "Dated",field: "created_at"},
+
+
+            {title: "Quotation No",field: "pqutno"},
+            {title: "Quotation Date",field: "qutdate"},
+            {title: "Sale Order id",field: "id"},
             {title: "P.O Date",field: "podate"},
             {title: "P.O No",field: "pono"},
             {title: "P.O Seq.No",field: "poseqno"},
             {title: "Delivery Date",field: "deliverydt"},
-            {title: "Customer",field: "customer.title"},
-            {title: "Rcvbl Amount",field: "rcvblamount"},
-            {title: "Remarks",field: "remarks"},
+            {title: "Customer",field: "custname"},
+            {title: "W/O GST",field: "rcvblamount"},
+            {title: "W/GST",field: "totrcvbamount"},
+            {title: "Delivered",field: "delivered"},
+            {title: "Pending",field: "pendbal"},
+
             {title:"View" , formatter:viewIcon, hozAlign:"center",headerSort:false, responsive:0,
                 cellClick:function(e, cell){
                     window.open(window.location + "/" + cell.getRow().getData().id  ,"_self");

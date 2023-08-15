@@ -131,7 +131,9 @@ let table;
 let searchValue = "";
 console.log(@json($cd))
 const deleteIcon = function(cell,formatterParams){return "<i class='fa fa-trash text-red-500'></i>";};
-const getMaster = @json(route('materials.master')); // For Material Modal
+// const getMaster = @json(route('materials.master')); // For Material Modal
+const getMaster = @json(route('quotations.mmfrqut'));
+
 let csrfToken = document.head.querySelector("[name~=csrf-token][content]").content;
 let modal = document.getElementById("myModal")
 
@@ -191,7 +193,7 @@ const skus = @json($skus);
             {title:"Material", field:"title" , visible:true ,headerSort:false, responsive:0},
             {title:"Category", field:"category" , visible:true ,headerSortStartingDir:"asc" , responsive:0},
             {title:"Dimesion", field:"dimension" ,  responsive:0},
-            {title:"Source", field:"source" ,  responsive:0},
+            {title:"Last Sale Price", field:"pcspbundle1" ,  responsive:0},
             {title:"Sku", field:"sku" ,  responsive:0},
             {title:"Brand", field:"brand" ,  responsive:0},
             // {title:"Delete" , formatter:deleteIcon, hozAlign:"center",headerSort:false, responsive:0,
@@ -257,7 +259,7 @@ function pushDynamicData(data)
 
         bundle1:0,
         bundle2:0,
-        pcspbundle1:0,
+        price:data.pcspbundle1,
         pcspbundle2:0,
         gdswt:0,
         gdsprice:0,

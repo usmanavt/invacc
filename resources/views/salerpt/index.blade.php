@@ -42,7 +42,7 @@
 
                                 <div>
                                     <input type="radio" name="report_type" value="saltxinvs" required onchange="checkReportType('saltxinvs')">
-                                    <label for="">Sale Tax invoice </label>
+                                    <label for="">Commercial Invoice </label>
                                 </div>
 
                                 <div>
@@ -188,6 +188,10 @@
     const vchrheads = @json($vchrheads);
     const funcquotation = @json(route('salerpt.funcquotation'));
     const funccustorder = @json(route('salerpt.funccustorder'));
+    const funcdlvrychln = @json(route('salerpt.funcdlvrychln'));
+    const funcsalinvs = @json(route('salerpt.funcsalinvs'));
+    const funcsaltxinvs = @json(route('salerpt.funcsaltxinvs'));
+
 
 
     const head = document.getElementById('head_id')
@@ -208,21 +212,21 @@
         subhead.options.length = 0 // Reset List
         //  console.info(rptType)
         switch (rptType){
-            case 'dlvrychln':
+            // case 'dlvrychln':
 
-                list = subheads.filter( l => l.MHEAD === Number(value)  )
-                if(list.length > 0)
-                {
-                    list.forEach(e => {
-                        addSelectElement(subhead,e.Subhead,e.title)
-                    });
-                    subhead.setAttribute('required','')
-                    subhead.removeAttribute('disabled','')
-                }else{
-                    subhead.removeAttribute('required','')
-                    subhead.setAttribute('disabled','')
-                }
-                break;
+            //     list = subheads.filter( l => l.MHEAD === Number(value)  )
+            //     if(list.length > 0)
+            //     {
+            //         list.forEach(e => {
+            //             addSelectElement(subhead,e.Subhead,e.title)
+            //         });
+            //         subhead.setAttribute('required','')
+            //         subhead.removeAttribute('disabled','')
+            //     }else{
+            //         subhead.removeAttribute('required','')
+            //         subhead.setAttribute('disabled','')
+            //     }
+            //     break;
 
         // case 'quotation':
 
@@ -320,8 +324,122 @@ const getSubheadVoucherData1 = async (value) =>{
         return custorder
     }
 
+    case 'dlvrychln':
+            // console.log(value)
+            fetch(funcdlvrychln + `?todate=${todate.value}&fromdate=${fromdate.value}&head=${value}`,{
+                    method:"GET",
+                    headers: { 'Accept':'application/json','Content-type':'application/json'},
+                    })
+                    .then(response => response.json())
+                    .then( data => {
+                        if(data.length > 0)
+                        {
+                            data.forEach(e => {
+                                addSelectElement(subhead,e.Subhead,e.title)
+                            });
+                            subhead.setAttribute('required','')
+                            subhead.removeAttribute('disabled','')
+                        }else{
+                            subhead.removeAttribute('required','')
+                            subhead.setAttribute('disabled','')
+                        }
+                    })
+                    .catch(error => console.error(error))
+                break;
+
+// FOR CONTRACT FILL
+const getSubheadVoucherData2 = async (value) =>{
+        let data = await fetch(funcdlvrychln + `?todate=${todate.value}&fromdate=${fromdate.value}&head=${value}`,{
+            method:"GET",
+            headers: { 'Accept':'application/json','Content-type':'application/json'},
+            })
+            .then(response => response.json())
+            .then( data => { return data })
+            .catch(error => console.error(error))
+    }
+    const getDlvrychln =async  (value) => {
+        const dlvrychln = await getSubheadVoucherData2(value)
+        return dlvrychln
+    }
 
 
+
+    case 'salinvs':
+            // console.log(value)
+            fetch(funcsalinvs + `?todate=${todate.value}&fromdate=${fromdate.value}&head=${value}`,{
+                    method:"GET",
+                    headers: { 'Accept':'application/json','Content-type':'application/json'},
+                    })
+                    .then(response => response.json())
+                    .then( data => {
+                        if(data.length > 0)
+                        {
+                            data.forEach(e => {
+                                addSelectElement(subhead,e.Subhead,e.title)
+                            });
+                            subhead.setAttribute('required','')
+                            subhead.removeAttribute('disabled','')
+                        }else{
+                            subhead.removeAttribute('required','')
+                            subhead.setAttribute('disabled','')
+                        }
+                    })
+                    .catch(error => console.error(error))
+                break;
+
+// FOR CONTRACT FILL
+const getSubheadVoucherData3 = async (value) =>{
+        let data = await fetch(funcsalinvs + `?todate=${todate.value}&fromdate=${fromdate.value}&head=${value}`,{
+            method:"GET",
+            headers: { 'Accept':'application/json','Content-type':'application/json'},
+            })
+            .then(response => response.json())
+            .then( data => { return data })
+            .catch(error => console.error(error))
+    }
+    const getSalinvs =async  (value) => {
+        const salinvs = await getSubheadVoucherData3(value)
+        return salinvs
+    }
+
+
+    case 'saltxinvs':
+            // console.log(value)
+            fetch(funcsaltxinvs + `?todate=${todate.value}&fromdate=${fromdate.value}&head=${value}`,{
+                    method:"GET",
+                    headers: { 'Accept':'application/json','Content-type':'application/json'},
+                    })
+                    .then(response => response.json())
+                    .then( data => {
+                        if(data.length > 0)
+                        {
+                            data.forEach(e => {
+                                addSelectElement(subhead,e.Subhead,e.title)
+                            });
+                            subhead.setAttribute('required','')
+                            subhead.removeAttribute('disabled','')
+                        }else{
+                            subhead.removeAttribute('required','')
+                            subhead.setAttribute('disabled','')
+                        }
+                    })
+                    .catch(error => console.error(error))
+                break;
+
+// FOR CONTRACT FILL
+const getSubheadVoucherData4 = async (value) =>{
+        let data = await fetch(funcsaltxinvs + `?todate=${todate.value}&fromdate=${fromdate.value}&head=${value}`,{
+            method:"GET",
+            headers: { 'Accept':'application/json','Content-type':'application/json'},
+            })
+            .then(response => response.json())
+            .then( data => { return data })
+            .catch(error => console.error(error))
+    }
+    const getSaltxinvs =async  (value) => {
+        const saltxinvs = await getSubheadVoucherData4(value)
+        return saltxinvs
+    }
 
 
 
@@ -329,20 +447,20 @@ const getSubheadVoucherData1 = async (value) =>{
 
 
             // switch (rptType){
-            case 'saltxinvs':
-                list = subheadsci.filter( l => l.MHEAD === Number(value)  )
-                if(list.length > 0)
-                {
-                    list.forEach(e => {
-                        addSelectElement(subhead,e.Subhead,e.title)
-                    });
-                    subhead.setAttribute('required','')
-                    subhead.removeAttribute('disabled','')
-                }else{
-                    subhead.removeAttribute('required','')
-                    subhead.setAttribute('disabled','')
-                }
-                break;
+            // case 'saltxinvs':
+            //     list = subheadsci.filter( l => l.MHEAD === Number(value)  )
+            //     if(list.length > 0)
+            //     {
+            //         list.forEach(e => {
+            //             addSelectElement(subhead,e.Subhead,e.title)
+            //         });
+            //         subhead.setAttribute('required','')
+            //         subhead.removeAttribute('disabled','')
+            //     }else{
+            //         subhead.removeAttribute('required','')
+            //         subhead.setAttribute('disabled','')
+            //     }
+            //     break;
 
                 case 'loccominvs':
                 list = subheadsciloc.filter( l => l.MHEAD === Number(value)  )
@@ -359,24 +477,20 @@ const getSubheadVoucherData1 = async (value) =>{
                 }
                 break;
 
-                case 'salinvs':
-                // list = subheads.filter( l => l.MHEAD === value  )
-
-                list = subheads.filter( l => l.MHEAD === Number(value)  )
-                // console.info(value)
-                if(list.length > 0)
-                {
-                    list.forEach(e => {
-                        // addSelectElement(subhead,e.Subhead,e.title)
-                        addSelectElement(subhead,e.Subhead,e.title)
-                    });
-                    subhead.setAttribute('required','')
-                    subhead.removeAttribute('disabled','')
-                }else{
-                    subhead.removeAttribute('required','')
-                    subhead.setAttribute('disabled','')
-                }
-                break;
+                // case 'salinvs':
+                // list = subheads.filter( l => l.MHEAD === Number(value)  )
+                // if(list.length > 0)
+                // {
+                //     list.forEach(e => {
+                //         addSelectElement(subhead,e.Subhead,e.title)
+                //     });
+                //     subhead.setAttribute('required','')
+                //     subhead.removeAttribute('disabled','')
+                // }else{
+                //     subhead.removeAttribute('required','')
+                //     subhead.setAttribute('disabled','')
+                // }
+                // break;
 
 
             case 'vchr':m

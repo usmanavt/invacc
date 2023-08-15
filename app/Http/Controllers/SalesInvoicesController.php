@@ -105,15 +105,14 @@ class SalesInvoicesController  extends Controller
         ->orderBy($field,$dir)
         ->paginate((int) $size);
         return $contracts;
-
-
     }
 
     public function getDetailscustplan(Request $request)
     {
         $id = $request->id;
-         $contractDetails = DB::table('vwdetailcustplan')->where('sale_invoice_id',$id)->get();
-        // $contractDetails = DB::select('call procinvswsstock(1)');
+        // dd($id);
+        //  $contractDetails = DB::table('vwdetailcustplan')->where('sale_invoice_id',$id)->get();
+        $contractDetails = DB::select('call procdetailcustplan(?)',array( $id ));
         return response()->json($contractDetails, 200);
     }
 
@@ -123,16 +122,17 @@ class SalesInvoicesController  extends Controller
 
     public function create()
     {
-        // $locations = Location::select('id','title')->where('status',1)->get();
+         $locations = Location::select('id','title')->where('status',1)->get();
 
         // return view('sales.create')
         // $mycname='MUHAMMAD HABIB & Co.';
         $maxdcno = DB::table('sale_invoices')->select('dcno')->max('dcno')+1;
         $maxgpno = DB::table('sale_invoices')->select('gpno')->max('gpno')+1;
+        $maxbillno = DB::table('sale_invoices')->select('billno')->max('billno')+1;
 
-        return \view ('sales.create',compact('maxdcno','maxgpno'))
-        ->with('customers',Customer::select('id','title')->get());
-        // ->with('locations',Location::select('id','title')->get())
+        return \view ('sales.create',compact('maxdcno','maxgpno','maxbillno'))
+        ->with('customers',Customer::select('id','title')->get())
+         ->with('locations',Location::select('id','title')->get());
         // ->with('skus',Sku::select('id','title')->get());
 
         // ->with('maxdcno',lastsalinvno::select('id','poseqno')->get());
@@ -161,21 +161,18 @@ class SalesInvoicesController  extends Controller
             $ci->pono = $request->pono;
             $ci->podate = $request->podate;
             $ci->saldate = $request->deliverydt;
-
             $ci->dcno = $request->dcno;
             $ci->gpno = $request->gpno;
+            $ci->billno = $request->billno;
             $ci->customer_id = $request->customer_id;
             $ci->discntper = $request->discntper;
             $ci->discntamt = $request->discntamt;
             $ci->cartage = $request->cartage;
             $ci->rcvblamount = $request->rcvblamount;
-
             $ci->saletaxper = $request->saletaxper;
             $ci->saletaxamt = $request->saletaxamt;
             $ci->totrcvbamount = $request->totrcvbamount;
             $ci->save();
-
-
 
             foreach ($request->sales as $cont) {
                 // $material = Material::findOrFail($cont['id']);
@@ -188,12 +185,46 @@ class SalesInvoicesController  extends Controller
                 $lpd->qtykg = $cont['qtykg'];
                 $lpd->qtypcs = $cont['qtypcs'];
                 $lpd->qtyfeet = $cont['qtyfeet'];
-
                 $lpd->price = $cont['price'];
                 $lpd->saleamnt = $cont['saleamnt'];
+
+                $location = Location::where("title", $cont['location'])->first();
+                $lpd->locid = $location->id;
+
+                // Last Sale Rate Update in Material Table
+                $matsrate = Material::findOrFail($lpd->material_id);
+                if($lpd->sku_id == 1)
+                { $matsrate->salertkg = $lpd->price;}
+                elseif($lpd->sku_id == 2)
+                { $matsrate->salertpcs = $lpd->price;}
+                elseif($lpd->sku_id == 3)
+                { $matsrate->salertfeet = $lpd->price;}
+                $matsrate->save();
+
+                // $custplnbal = customer_order_details::findOrFail($lpd->material_id);
+                $custplnbal = CustomerOrderDetails::where('sale_invoice_id',$ci->custplan_id)->where('material_id',$matsrate->id)
+                ->first();
+                if($lpd->sku_id == 1)
+                { $custplnbal->balqty = $cont['balqty'] - $cont['qtykg'];}
+                elseif($lpd->sku_id == 2)
+                { $custplnbal->balqty = $cont['balqty'] - $cont['qtypcs'];}
+                elseif($lpd->sku_id == 3)
+                { $custplnbal->balqty = $cont['balqty'] - $cont['qtyfeet'];}
+                $custplnbal->save();
                 $lpd->save();
             }
-            // }
+
+            $dlvrd = SaleInvoices::where('custplan_id',$ci->custplan_id)->sum('totrcvbamount');
+            $custordr = CustomerOrder::where('id',$ci->custplan_id)->first();
+
+            $custordr->delivered = $dlvrd;
+            $custordr->save();
+
+
+            // dd($dlvrd);
+            $sordrbal = SaleInvoices::where('id',$ci->id)->first();
+            $sordrbal->ordrbal= $custordr->totrcvbamount - $dlvrd;
+            $sordrbal->save();
             DB::commit();
             Session::flash('success','Contract Information Saved');
             return response()->json(['success'],200);
@@ -208,19 +239,27 @@ class SalesInvoicesController  extends Controller
     public function edit($id)
     {
 
+        // $planid = SaleInvoices::select('custplan_id')->where('id',$id)->first();
+        $planid = DB::table('sale_invoices')->where('id',$id)->select('custplan_id')->max('custplan_id');
+        $stk = DB::select('call procdetailcustplan(?)',array( $planid ));
+
         $cd = DB::table('sale_invoices_details')
         ->join('materials', 'materials.id', '=', 'sale_invoices_details.material_id')
         ->join('skus', 'skus.id', '=', 'sale_invoices_details.sku_id')
-        ->select('sale_invoices_details.*','materials.title as material_title','materials.dimension','skus.title as sku')
-        ->where('sale_invoice_id',$id)->get();
+        ->join('locations', 'locations.id', '=', 'sale_invoices_details.locid')
+        ->leftJoin('tmptblcustplan1', 'tmptblcustplan1.material_id', '=', 'sale_invoices_details.material_id')
+        ->select('sale_invoices_details.*','materials.title as material_title','materials.dimension','skus.title as sku',
+        'locations.title as location','tmptblcustplan1.qtykg as sqtykg','tmptblcustplan1.qtypcs as sqtypcs','tmptblcustplan1.qtyfeet as sqtyfeet')
+        ->where('sale_invoices_details.sale_invoice_id',$id)->get();
          $data=compact('cd');
-
+         $locations = Location::select('id','title')->where('status',1)->get();
 
         return view('sales.edit')
         ->with('customer',Customer::select('id','title')->get())
         ->with('saleinvoices',SaleInvoices::findOrFail($id))
         ->with($data)
-        ->with('skus',Sku::select('id','title')->get());
+        ->with('skus',Sku::select('id','title')->get())
+        ->with('locations',Location::select('id','title')->get());
 
         // return view('contracts.edit')->with('suppliers',Supplier::select('id','title')->get())->with('contract',$contract)->with('cd',ContractDetails::where('contract_id',$contract->id)->get());
     }
@@ -230,41 +269,27 @@ class SalesInvoicesController  extends Controller
     {
         //  dd($commercialinvoice->commercial_invoice_id());
             //   dd($request->all());
-
-
-
-
         DB::beginTransaction();
         try {
 
             //  dd($request->sale_invoice_id);
             $sale_invoices = SaleInvoices::findOrFail($request->sale_invoice_id);
-
-
             $sale_invoices->custplan_id = $request->custplan_id;
             $sale_invoices->pono = $request->pono;
             $sale_invoices->podate = $request->podate;
             $sale_invoices->saldate = $request->deliverydt;
-
-
             $sale_invoices->dcno = $request->dcno;
             $sale_invoices->gpno = $request->gpno;
-
+            $sale_invoices->billno = $request->billno;
             $sale_invoices->customer_id = $request->customer_id;
-
-
-
             $sale_invoices->discntper = $request->discntper;
             $sale_invoices->discntamt = $request->discntamt;
             $sale_invoices->cartage = $request->cartage;
             $sale_invoices->rcvblamount = $request->rcvblamount;
-
             $sale_invoices->saletaxper = $request->saletaxper;
             $sale_invoices->saletaxamt = $request->saletaxamt;
             $sale_invoices->totrcvbamount = $request->totrcvbamount;
             $sale_invoices->save();
-
-
 
             // Get Data
             $cds = $request->saleinvoices; // This is array
@@ -281,7 +306,6 @@ class SalesInvoicesController  extends Controller
                 if($cd->id)
                 {
                     $cds = SaleInvoicesDetails::where('id',$cd->id)->first();
-
                     $cds->sale_invoice_id = $sale_invoices->id;
                     $cds->material_id = $cd->material_id;
                     $cds->sku_id = $cd->sku_id;
@@ -290,69 +314,67 @@ class SalesInvoicesController  extends Controller
                     $cds->qtykg = $cd['qtykg'];
                     $cds->qtypcs = $cd['qtypcs'];
                     $cds->qtyfeet = $cd['qtyfeet'];
-
                     $cds->price = $cd['price'];
                     $cds->saleamnt = $cd['saleamnt'];
-
                     $unit = Sku::where("title", $cd['sku'])->first();
-                     $cds->sku_id = $unit->id;
-                    //  $cds->sku = $cd['sku'];
+                    $cds->sku_id = $unit->id;
 
-                 $cds->save();
-                }else
-                {
-                    //  The item is new, Add it
-                     $cds = new SaleInvoicesDetails();
+                    $location = Location::where("title", $cd['location'])->first();
+                    $cds->locid = $location->id;
+                    // dd($cds->locid);
+                    // Last Sale Rate Update in Material Table
+                    $matsrate = Material::findOrFail($cds->material_id);
+                    if($cds->sku_id == 1)
+                    { $matsrate->salertkg = $cds->price;}
+                    elseif($cds->sku_id == 2)
+                    { $matsrate->salertpcs = $cds->price;}
+                    elseif($cds->sku_id == 3)
+                    { $matsrate->salertfeet = $cds->price;}
+                    $matsrate->save();
 
-                     $cds->sale_invoice_id = $sale_invoices->id;
-                     $cds->material_id = $cd->material_id;
-                     $cds->sku_id = $cd->sku_id;
-                     $cds->repname = $cd['repname'];
-                     $cds->brand = $cd['brand'];
-                     $cds->qtykg = $cd['qtykg'];
-                     $cds->qtypcs = $cd['qtypcs'];
-                     $cds->qtyfeet = $cd['qtyfeet'];
-
-                     $cds->price = $cd['price'];
-                     $cds->saleamnt = $cd['saleamnt'];
-
-                     $unit = Sku::where("title", $cd['sku'])->first();
-                      $cds->sku_id = $unit->id;
-
-                     // $cds->sale_invoice_id = $saleinvoices->id;
-                    // $cds->material_id = $cd->material_id;
-                    // $cds->sku_id = $cd->sku_id;
-
-                    // $cds->qtykg = $cd['bundle1'];
-                    // $cds->qtypcs = $cd['bundle2'];
-                    // $cds->qtyfeet = $cd['pcspbundle2'];
-                    // $cds->price = $cd['pcspbundle1'];
-                    // $cds->saleamnt = $cd['ttpcs'];
-                    // $cds->locid = $cd['location'];
-                    // $cds->salunitid = $cd['sku'];
-
-                    // $cds->sale_invoice_id = $custorders->id;
-                    // $cds->material_id = $cd->material_id;
-                    // $cds->sku_id = $cd->sku_id;
-                    // $cds->repname = $cd['repname'];
-                    // $cds->qtykg = $cd['qtykg'];
-                    // $cds->qtypcs = $cd['qtypcs'];
-                    // $cds->qtyfeet = $cd['qtyfeet'];
-                    // $cds->price = $cd['price'];
-                    // $cds->saleamnt = $cd['saleamnt'];
-
-                    //  $location = Location::where("title", $cd['location'])->first();
-                    //  $cds->locid = $location->id;
-                    //  $cds->location = $cd['location'];
-
-                    //  $unit = Sku::where("title", $cd['sku'])->first();
-                    //  $cds->sku_id = $unit->id;
-                    //  $cds->sku = $cd['sku'];
-
-
+                    // $custplnbal = customer_order_details::findOrFail($cds->material_id);
+                    $custplnbal = CustomerOrderDetails::where('sale_invoice_id',$sale_invoices->custplan_id)->where('material_id',$matsrate->id)
+                    ->first();
+                    if($cds->sku_id == 1)
+                    { $custplnbal->balqty = $cds['balqty'] - $cds['qtykg'];}
+                    elseif($cds->sku_id == 2)
+                    { $custplnbal->balqty = $cds['balqty'] - $cds['qtypcs'];}
+                    elseif($cds->sku_id == 3)
+                    { $custplnbal->balqty = $cds['balqty'] - $cds['qtyfeet'];}
+                    $custplnbal->save();
                     $cds->save();
-                }
+                 }
+
+
+                //  $cds->save();
+                // }
+                else
+                 {
+                //     //  The item is new, Add it
+                //      $cds = new SaleInvoicesDetails();
+                //      $cds->sale_invoice_id = $sale_invoices->id;
+                //      $cds->material_id = $cd->material_id;
+                //      $cds->sku_id = $cd->sku_id;
+                //      $cds->repname = $cd['repname'];
+                //      $cds->brand = $cd['brand'];
+                //      $cds->qtykg = $cd['qtykg'];
+                //      $cds->qtypcs = $cd['qtypcs'];
+                //      $cds->qtyfeet = $cd['qtyfeet'];
+                //      $cds->price = $cd['price'];
+                //      $cds->saleamnt = $cd['saleamnt'];
+                //      $unit = Sku::where("title", $cd['sku'])->first();
+                //       $cds->sku_id = $unit->id;
+
+
+                //     $cds->save();
+                // }
             }
+            $dlvrd = SaleInvoices::where('custplan_id',$sale_invoices->custplan_id)->sum('totrcvbamount');
+            $custordr = CustomerOrder::where('id',$sale_invoices->custplan_id)->first();
+
+            $custordr->delivered = $dlvrd;
+            $custordr->save();
+        }
             DB::commit();
             Session::flash('success','Contract Information Saved');
             return response()->json(['success'],200);

@@ -20,6 +20,7 @@ use App\Models\CommercialInvoiceDetails;
 use App\Models\PcommercialInvoiceDetails;
 use App\Models\RecivingCompletedDetails;
 use App\Models\PcommercialInvoice;
+use App\Models\Material;
 use App\Models\Sku;
 
 
@@ -164,37 +165,6 @@ class CommercialInvoiceController extends Controller
             $pcontract->save();
 
 
-            //  Create Auto Clearance Document
-            // $cl = new Clearance();
-            // $cl->commercial_invoice_id = $ci->id;
-            // $cl->invoice_date = $request->invoicedate;
-            // $cl->invoiceno = $request->invoiceno;
-            // $cl->supplier_id = $comminvoice[0]['supplier_id'];
-            // $cl->machine_date = $request->machine_date;
-            // $cl->machineno = $request->machineno;
-            // $cl->conversionrate = $request->conversionrate;
-            // $cl->insurance = $request->insurance;
-            // $cl->bankcharges = $request->bankcharges;
-            // $cl->collofcustom = $request->collofcustom;
-            // $cl->exataxoffie = $request->exataxoffie;
-            // $cl->lngnshipdochrgs = $request->lngnshipdochrgs;
-            // $cl->localcartage = $request->localcartage;
-            // $cl->miscexplunchetc = $request->miscexplunchetc;
-            // $cl->customsepoy = $request->customsepoy;
-            // $cl->weighbridge = $request->weighbridge;
-            // $cl->miscexpenses = $request->miscexpenses;
-            // $cl->agencychrgs = $request->agencychrgs;
-            // $cl->otherchrgs = $request->otherchrgs;
-            // $cl->total = $request->total;
-            // $cl->save();
-            //  Create Auto Reciving
-            // $reciving = new Reciving();
-            // $reciving->machine_date = $ci->machine_date;
-            // $reciving->machineno = $ci->machineno;
-            // $reciving->supplier_id = $comminvoice[0]['supplier_id'];
-            // $reciving->commercial_invoice_id = $ci->id;
-            // $reciving->invoiceno = $ci->invoiceno;
-            // $reciving->save();
 
 
             $vartxt = 'Tonage';
@@ -272,7 +242,13 @@ class CommercialInvoiceController extends Controller
                 $c->location = $cid['location'];
                 $location = Location::where("title", $cid['location'])->first();
                 $c->locid = $location->id;
-                $c->save();
+
+                // $matsrate = Material::findOrFail($c->material_id);
+                //     $matsrate->balkg = $matsrate->balkg + $cid['gdswt'];
+                //     $matsrate->balpcs = $matsrate->balpcs + $cid['pcs'] ;
+                //     $matsrate->balfeet = $matsrate->balfeet + $cid['qtyinfeet'];
+                //     $matsrate->save();
+                // $c->save();
 
                 $pcontractdtl = PcontractDetails::where('contract_id',$cid['contract_id'])
                 ->where('material_id',$cid['material_id'])->where('status', '=', 1)->first();
@@ -514,41 +490,6 @@ class CommercialInvoiceController extends Controller
             $ci->save();
 
 
-
-
-
-
-            //  Create Auto Clearance Document
-            // $cl = Clearance::where('commercial_invoice_id',$ci->id)->first();
-            // $cl->commercial_invoice_id = $ci->id;
-            // $cl->invoice_date = $request->invoicedate;
-            // $cl->invoiceno = $request->invoiceno;
-            // $cl->machine_date = $request->machine_date;
-            // $cl->machineno = $request->machineno;
-            // $cl->conversionrate = $request->conversionrate;
-            // $cl->insurance = $request->insurance;
-            // $cl->bankcharges = $request->bankcharges;
-            // $cl->collofcustom = $request->collofcustom;
-            // $cl->exataxoffie = $request->exataxoffie;
-            // $cl->lngnshipdochrgs = $request->lngnshipdochrgs;
-            // $cl->localcartage = $request->localcartage;
-            // $cl->miscexplunchetc = $request->miscexplunchetc;
-            // $cl->customsepoy = $request->customsepoy;
-            // $cl->weighbridge = $request->weighbridge;
-            // $cl->miscexpenses = $request->miscexpenses;
-            // $cl->agencychrgs = $request->agencychrgs;
-            // $cl->otherchrgs = $request->otherchrgs;
-            // $cl->total = $request->total;
-            // $cl->save();
-            // //  Update Reciving
-            // $reciving = Reciving::where('commercial_invoice_id',$ci->id)->first();
-            // $reciving->machine_date = $ci->machine_date;
-            // $reciving->machineno = $ci->machineno;
-            // $reciving->supplier_id = $comminvoice[0]['supplier_id'];
-            // $reciving->commercial_invoice_id = $ci->id;
-            // $reciving->invoiceno = $ci->invoiceno;
-            // $reciving->save();
-
             //  Update Subhead
             $vartxt = 'Tonage';
             $varmac = $ci->machineno;
@@ -622,7 +563,22 @@ class CommercialInvoiceController extends Controller
                 $c->location = $cid['location'];
                 $location = Location::where("title", $cid['location'])->first();
                 $c->locid = $location->id;
-                $c->save();
+
+
+
+                // $matsrate = Material::findOrFail($c->material_id);
+                // $matsrate->balkg = $matsrate->balkg + ( $cid['bkg'] - $cid['gdswt'] );
+                // $matsrate->balpcs = $matsrate->balpcs + ( $cid['bpcs'] - $cid['pcs'] );
+                // $matsrate->balfeet = $matsrate->balfeet + ( $cid['bfeet'] - $cid['qtyinfeet'] );
+                // $matsrate->save();
+                // $c->save();
+
+
+
+
+
+
+
 
                 // dd($c->all());
 

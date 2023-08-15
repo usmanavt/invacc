@@ -14,7 +14,7 @@ use Illuminate\Database\Eloquent\Model;
 class CustomerOrder extends Model
 {
     use HasFactory;
-    protected $dates = ['deliverydt','podate'];
+    protected $dates = ['deliverydt','podate','qutdate'];
     protected $fillable = [
         'customer_id','deliverydt','poseqno','pono','discntper','discntamt','cartage','rcvblamount','saletaxper'
         ,'saletaxamt','totrcvbamount','Remarks','podate'
