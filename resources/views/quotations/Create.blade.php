@@ -296,6 +296,8 @@ const skus = @json($skus);
         initialSort:[ {column:"id", dir:"desc"} ],
         height:"100%",
 
+
+
         columns:[
             // Master Data
             {title:"Id", field:"id" , responsive:0},
