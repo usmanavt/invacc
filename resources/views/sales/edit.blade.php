@@ -268,41 +268,90 @@ function pushDynamicData(data)
 }
 
 
-var updateValues = (cell) => {
+// var updateValues = (cell) => {
 
-    sum = 0;
-    sum2=0;
-    var data = cell.getData();
-        //   var sum = (Number(data.bundle1) * Number(data.pcspbundle1)) + (Number(data.bundle2) * Number(data.pcspbundle2))
-        var row = cell.getRow();
-            // var sum = (Number(data.qtykg) * Number(data.price))
-            if(cell.getData().sku_id==1)
+//     sum = 0;
+//     sum2=0;
+//     var data = cell.getData();
+//         var row = cell.getRow();
+//             if(cell.getData().sku_id==1)
+//          {
+//             var sum = (Number(data.qtykg) * Number(data.price))
+//          }
+//          if(cell.getData().sku_id==2)
+//          {
+//             var sum = (Number(data.qtypcs) * Number(data.price))
+//          }
+
+//          if(cell.getData().sku_id==3)
+//          {
+//             var sum = (Number(data.qtyfeet) * Number(data.price))
+//          }
+
+//         row.update({
+//             "saleamnt": sum,
+//             totval: sum
+
+//             });
+
+//     }
+    // var tamount=0;
+
+    var updateValues = (cell) => {
+        var data = cell.getData();
+
+        if(cell.getData().sku_id==1)
          {
-            var sum = (Number(data.qtykg) * Number(data.price))
+
+            var sum = (Number(data.feedqty) * Number(data.price))
+            var pr1=(Number(data.feedqty) / Number(data.totqty))*100
+            console.log(data.feedqty)
+            var pr2=( pr1 / Number(data.wtper))*100
+            qtypcs=((pr2*Number(data.sqtypcs))/100).toFixed(2)
+            qtyfeet=((pr2*Number(data.sqtyfeet))/100).toFixed(2)
+            qtykg=((pr2*Number(data.sqtykg))/100).toFixed(2)
          }
          if(cell.getData().sku_id==2)
          {
-            var sum = (Number(data.qtypcs) * Number(data.price))
+            var sum = (Number(data.feedqty) * Number(data.price))
+            // var pr1=(Number(data.qtypcs) / Number(data.totqty))*100
+            var pr1=(Number(data.feedqty) / Number(data.totqty))*100
+            var pr2=( pr1 / Number(data.pcper))*100
+            qtykg=((pr2*Number(data.sqtykg))/100).toFixed(2)
+            qtyfeet=((pr2*Number(data.sqtyfeet))/100).toFixed(2)
+            qtypcs=((pr2*Number(data.sqtypcs))/100).toFixed(2)
+
          }
 
          if(cell.getData().sku_id==3)
          {
-            var sum = (Number(data.qtyfeet) * Number(data.price))
+            var sum = (Number(data.feedqty) * Number(data.price))
+            // var pr1=(Number(data.qtyfeet) / Number(data.totqty))*100
+            var pr1=(Number(data.feedqty) / Number(data.totqty))*100
+            var pr2=( pr1 / Number(data.feetper))*100
+            qtykg=((pr2*Number(data.sqtykg))/100).toFixed(2)
+            qtypcs=((pr2*Number(data.sqtypcs))/100).toFixed(2)
+            qtyfeet=((pr2*Number(data.sqtyfeet))/100).toFixed(2)
+
          }
 
+
+        var row = cell.getRow();
+
+        // if(cell.getData().sku_id==1)
+        // {
         row.update({
-
-            // "rcvblamount":sum2,
-            //  "saleamnt": sum,
-            //  "totval":sum,
-            //  "gdspricetot": sum2
             "saleamnt": sum,
-            totval: sum
+            "qtypcs":qtypcs,
+            "qtyfeet":qtyfeet,
+            "qtykg":qtykg
 
-            });
+            // totval: sum
 
+        });
     }
-    // var tamount=0;
+
+
     function tnetamount()
         {
 
@@ -356,82 +405,94 @@ dynamicTable = new Tabulator("#dynamicTable", {
         {title:"Id",                field:"material_id",    cssClass:"bg-gray-200 font-semibold"},
         {title:"Material",          field:"material_title", cssClass:"bg-gray-200 font-semibold"},
         {title:"Dimension",         field:"dimension",      cssClass:"bg-gray-200 font-semibold"},
-        {title:"Replace Description",field:"repname",       cssClass:"bg-gray-200 font-semibold",editor:true},
-        {title:"Brand",             field:"brand",editor:true,         cssClass:"bg-gray-200 font-semibold"},
-        {title:"UOM",               field:"sku"},
+
+        {title:"UOM",               field:"sku",cssClass:"bg-gray-200 font-semibold"},
 
         {
                 title:'STOCK QUANTITY', headerHozAlign:"center",
                     columns:[
-                {title:"Qty(kg)", field:"sqtykg"},
-                {title:"Qty(pcs)", field:"sqtypcs"},
-                {title:"Qty(feet)", field:"sqtyfeet"}]},
+                {title:"InKg", field:"sqtykg",cssClass:"bg-gray-200 font-semibold"},
+                {title:"InPcs", field:"sqtypcs",cssClass:"bg-gray-200 font-semibold"},
+                {title:"InFeet", field:"sqtyfeet",cssClass:"bg-gray-200 font-semibold"},
+            ]},
 
-                // {title:"Order BalQty",headerHozAlign :'center',
-                //             field:"balqty",
+            {title:"ORDER BALANCE", field:"balqty",cssClass:"bg-gray-200 font-semibold"},
+                {
+                title:'SALE QTY', headerHozAlign:"center",
+                    columns:[
+            {   title:"InKg",
+                field:"qtykg",
+                editor:"number",
+                cssClass:"bg-gray-200 font-semibold",
+                validator:"required",
+                formatter:"money",
+                formatterParams:{thousand:",",precision:2},
+                validator:["required","integer"],
+                cellEdited: updateValues,
+               },
+
+               {title:"InPcs",
+                field:"qtypcs",
+                editor:"number",
+                cssClass:"bg-gray-200 font-semibold",
+                validator:"required",
+                formatter:"money",
+                formatterParams:{thousand:",",precision:2},
+                validator:["required","integer"],
+                cellEdited: updateValues,
+               },
+
+               {   title:"InFeet",
+                field:"qtyfeet",
+                editor:"number",
+                cssClass:"bg-gray-200 font-semibold",
+                validator:"required",
+                formatter:"money",
+                formatterParams:{thousand:",",precision:2},
+                validator:["required","integer"],
+                cellEdited: updateValues,
+               },
+
+            ]},
 
 
-                        },
 
 
+                {
+                title:'ITEM DESCRIPTION', headerHozAlign:"center",
+                    columns:[
 
-
-
-
-        {title: "id",field: "myid",visible:false},
+                    {title: "id",field: "myid",visible:false},
                 {title:"Location", field:"location" ,editor:"list" , editorParams:   {
                         values:newList,
-                        cssClass:"bg-green-200 font-semibold",
+                        // cssClass:"bg-green-200 font-semibold",
                         validator:["required"]
                     }
                 },
 
+                {title:"Replace Description",field:"repname", editor:true},
+                {title:"Brand",             field:"brand",editor:true},
 
 
+                ]},
 
+                {
+                title:'SALE', headerHozAlign:"center",
+                    columns:[
 
-
-
-            {   title:"Sale Qty(kg)",
-                field:"qtykg",
+                { title:"Revise Qty",
+                field:"feedqty",
                 editor:"number",
-                cssClass:"bg-green-200 font-semibold",
-                validator:"required",
+                validator:"required" ,
                 formatter:"money",
                 formatterParams:{thousand:",",precision:2},
-                validator:["required","integer"],
-                cellEdited: updateValues,
-               },
+                validator:["required","decimal(10,3)"] ,
+                cellEdited: updateValues   ,
+            },
 
-               {   title:"Sale Qty(pcs)",
-                field:"qtypcs",
-                editor:"number",
-                cssClass:"bg-green-200 font-semibold",
-                validator:"required",
-                formatter:"money",
-                formatterParams:{thousand:",",precision:2},
-                validator:["required","integer"],
-                cellEdited: updateValues,
-               },
-
-               {   title:"Sale Qty(feet)",
-                field:"qtyfeet",
-                editor:"number",
-                cssClass:"bg-green-200 font-semibold",
-                validator:"required",
-                formatter:"money",
-                formatterParams:{thousand:",",precision:2},
-                validator:["required","integer"],
-                cellEdited: updateValues,
-               },
-
-
-
-
-               { title:"Rate",
+            { title:"Rate",
                 field:"price",
                 editor:"number",
-                cssClass:"bg-green-200 font-semibold",
                 validator:"required" ,
                 formatter:"money",
                 formatterParams:{thousand:",",precision:2},
@@ -443,17 +504,19 @@ dynamicTable = new Tabulator("#dynamicTable", {
 
             {   title:"Amount",
                 field:"saleamnt",
-                cssClass:"bg-gray-200 font-semibold",
+                cssClass:"bg-green-200 font-semibold",
                 formatter:"money",
+                bottomCalc:"sum",
                 formatterParams:{thousand:",",precision:0},
-                // formatter:function(cell,row)
-                // {
-                //     //  return (cell.getData().bundle1 * cell.getData().pcspbundle1) + (cell.getData().bundle2 * cell.getData().pcspbundle2)
-                //      return  ( cell.getData().qtykg * cell.getData().price)
-                // },
-                bottomCalc:totval  },
+                formatter:function(cell,row)
+                {
+                      return  ( cell.getData().feedqty * cell.getData().price).toFixed(0)
+                },
 
+                bottomCalc:totval
+            },
 
+                ]},
 
     ],
 })
@@ -481,8 +544,6 @@ function validateForm()
     var sid = document.getElementById("customer_id");
         var customer_id = sid.options[sid.selectedIndex];
         var deliverydt = document.getElementById("deliverydt");
-        var qutno = document.getElementById("qutno");
-        var prno = document.getElementById("prno");
         var podate = document.getElementById("podate");
         var custplan_id = document.getElementById("custplan_id");
 
@@ -500,18 +561,6 @@ function validateForm()
             customer_id.focus();
             return;
         }
-        // if(saldate.value === "")
-        // {
-        //     showSnackbar("Please select From Invoice Date");
-        //     saldate.focus();
-        //     return;
-        // }
-        // if(dcno.value == 0)
-        // {
-        //     showSnackbar("Please add dcno");
-        //     dcno.focus();
-        //     return;
-        // }
 
         if(dcno.value == "")
         {
@@ -520,8 +569,7 @@ function validateForm()
             return;
         }
 
-        // if(customer_id.value == 0)
-        // {
+
 
 
             if(pono.value == "" )
@@ -545,16 +593,17 @@ function validateForm()
         showSnackbar("You must have atleast 1 row of item to Proceed","info");
         return;
     }
+
     dynamicTableData = dynamicTable.getData();
     // Qty Required
-    // for (let index = 0; index < dynamicTableData.length; index++) {
-    //     const element = dynamicTableData[index];
-    //     if(element.qtykg == 0 || element.price == 0  || element.saleamnt == 0)
-    //     {
-    //         showSnackbar("Please fill qtykg,price,saleamnt  all rows to proceed","info");
-    //         return;
-    //     }
-    // }
+    for (let index = 0; index < dynamicTableData.length; index++) {
+        const element = dynamicTableData[index];
+        if(Number(element.feedqty ) > Number(element.balqty)+Number(element.balqty) )
+        {
+            showSnackbar("Sale Qty must be less than Plan qty","info");
+            return;
+        }
+    }
     // 'total' : parseFloat(banktotal.value).toFixed(2),
     disableSubmitButton(true);
     //  var data = { 'sales' : dynamicTableData,'contract_id':parseFloat(contract_id.value).toFixed(0),'bankntotal':parseFloat(bankntotal.value).toFixed(0),'collofcustom':parseFloat(exataxoffie.value).toFixed(0),'exataxoffie':parseFloat(exataxoffie.value).toFixed(0) ,'bankcharges':parseFloat(bankcharges.value).toFixed(0) ,'supplier_id': supplier_id.value,'invoice_date':invoice_date.value,'invoiceno':invoiceno.value};

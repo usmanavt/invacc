@@ -9,7 +9,7 @@
 
     <x-slot name="header">
         <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-            Edit Sale Quotation
+            Edit Sale Quotations
         </h2>
     </x-slot>
 
@@ -191,7 +191,7 @@ const skus = @json($skus);
             // Master Data
             {title:"Id", field:"id" , responsive:0},
             {title:"Material", field:"title" , visible:true ,headerSort:false, responsive:0},
-            {title:"Category", field:"category" , visible:true ,headerSortStartingDir:"asc" , responsive:0},
+            {title:"Customer", field:"custname" , visible:true ,headerSortStartingDir:"asc" , responsive:0},
             {title:"Dimesion", field:"dimension" ,  responsive:0},
             {title:"Last Sale Price", field:"pcspbundle1" ,  responsive:0},
             {title:"Sku", field:"sku" ,  responsive:0},

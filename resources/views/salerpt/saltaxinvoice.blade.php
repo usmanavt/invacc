@@ -154,7 +154,7 @@ body{
 
             <tr>
                 <td>P.O No:</td>
-                </td>
+
                 <td align ="left" style="font-size:12px;font-weight: bold"  >
                     {{ $data[0]->pono }}
                 </td>

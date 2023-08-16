@@ -324,6 +324,7 @@
                         qtypcs :           obj.qtypcs ,
                         qtyfeet :           obj.qtyfeet ,
                         balqty :            obj.balqty,
+                        feedqty :            obj.feedqty,
 
                         sqtykg :           obj.sqtykg ,
                         sqtypcs :           obj.sqtypcs ,
@@ -447,35 +448,93 @@ var tamount=0;
 var updateValues = (cell) => {
         var data = cell.getData();
         // var sum = (Number(data.bundle1) * Number(data.pcspbundle1)) + (Number(data.bundle2) * Number(data.pcspbundle2))
-
-
-
-
        // var sum = (Number(data.saleqty) * Number(data.price))
 
         if(cell.getData().sku_id==1)
          {
-            var sum = (Number(data.qtykg) * Number(data.price))
+
+            // var pr1=(Number(data.qtykg) / Number(data.totqty))*100
+
+            var sum = (Number(data.feedqty) * Number(data.price))
+            var pr1=(Number(data.feedqty) / Number(data.totqty))*100
+
+            var pr2=( pr1 / Number(data.wtper))*100
+            qtypcs=((pr2*Number(data.sqtypcs))/100).toFixed(2)
+            qtyfeet=((pr2*Number(data.sqtyfeet))/100).toFixed(2)
+            qtykg=((pr2*Number(data.sqtykg))/100).toFixed(2)
+
+
+
          }
          if(cell.getData().sku_id==2)
          {
-            var sum = (Number(data.qtypcs) * Number(data.price))
+            var sum = (Number(data.feedqty) * Number(data.price))
+            // var pr1=(Number(data.qtypcs) / Number(data.totqty))*100
+            var pr1=(Number(data.feedqty) / Number(data.totqty))*100
+            var pr2=( pr1 / Number(data.pcper))*100
+            qtykg=((pr2*Number(data.sqtykg))/100).toFixed(2)
+            qtyfeet=((pr2*Number(data.sqtyfeet))/100).toFixed(2)
+            qtypcs=((pr2*Number(data.sqtypcs))/100).toFixed(2)
+
+
+
          }
 
          if(cell.getData().sku_id==3)
          {
-            var sum = (Number(data.qtyfeet) * Number(data.price))
+            var sum = (Number(data.feedqty) * Number(data.price))
+            // var pr1=(Number(data.qtyfeet) / Number(data.totqty))*100
+            var pr1=(Number(data.feedqty) / Number(data.totqty))*100
+            var pr2=( pr1 / Number(data.feetper))*100
+            qtykg=((pr2*Number(data.sqtykg))/100).toFixed(2)
+            qtypcs=((pr2*Number(data.sqtypcs))/100).toFixed(2)
+            qtyfeet=((pr2*Number(data.sqtyfeet))/100).toFixed(2)
+
          }
 
 
         var row = cell.getRow();
+
+        // if(cell.getData().sku_id==1)
+        // {
         row.update({
-             "saleamnt": sum,
-             "wtavg1":ag1,
-             totalVal: sum
+            "saleamnt": sum,
+            // "mybrand": pr2,
+            "qtypcs":qtypcs,
+            "qtyfeet":qtyfeet,
+            "qtykg":qtykg,
+            totalVal: sum
 
         });
-    }
+    // }
+
+        // if(cell.getData().sku_id==2)
+        // {
+        // row.update({
+        //     "saleamnt": sum,
+        //     // "mybrand": pr2,
+        //     // "qtypcs":qtypcs,
+        //     "qtyfeet":qtyfeet,
+        //     "qtykg":qtykg,
+        //     totalVal: sum
+
+        // });}
+
+        // if(cell.getData().sku_id==3)
+        // {
+        // row.update({
+        //     "saleamnt": sum,
+        //     // "mybrand": pr2,
+        //     "qtypcs":qtypcs,
+        //     // "qtyfeet":qtyfeet,
+        //     "qtykg":qtykg,
+        //     totalVal: sum
+
+        // });}
+
+
+
+}
 
     var totalVal = function(values, data, calcParams){
         var calc = 0;
@@ -507,9 +566,10 @@ var updateValues = (cell) => {
                     }
                 },
                 {title:"Id",           field:"id", visible:false},
-                {title:"Material Name",     field:"material_title",responsive:0},
-                {title:"Material Size",    field:"dimension",responsive:0,frozen:true, headerMenu:headerMenu},
-                {title:"UOM",         field:"sku",responsive:0, hozAlign:"center"},
+                {title:"Material Name",     field:"material_title",responsive:0, cssClass:"bg-gray-200 font-semibold"},
+                {title:"Material Size",    field:"dimension",cssClass:"bg-gray-200 font-semibold",responsive:0},
+                // ,frozen:true, headerMenu:headerMenu,},
+                {title:"UOM",         field:"sku",responsive:0, hozAlign:"center", cssClass:"bg-gray-200 font-semibold"},
                 {title:"Unitid",       field:"sku_id",visible:false},
                 // {title:"contract_id",  field:"contract_id",visible:false},
                 {title:"material_id",  field:"material_id",visible:false},
@@ -518,146 +578,120 @@ var updateValues = (cell) => {
                 {title:"category_id",  field:"category_id",visible:false},
                 {title:"sku_id",       field:"sku_id",visible:false},
                 {title:"dimension_id", field:"dimension_id",visible:false},
-                // {title:"totqty", field:"totqty"},
-                // {title:"wtper", field:"wtper"},
-                // {title:"pcper", field:"pcper"},
-                // {title:"feetper", field:"feetper"},
-                // {title:"wtavg1", field:"wtavg1",
-                // formatter:function(cell,row)
-                // {
-                //     // console.log(cell.getData().sku_id)
-                //     if(cell.getData().sku_id == 1)
-                //     {
 
-                //         return ( ( ( (cell.getData().qtykg / cell.getData().totqty)*100) / cell.getData().wtper ) *100 )
-
-                //     }
-                //     else if (cell.getData().sku_id == 2)
-                //     {
-                //         return ( ( ( (cell.getData().qtypcs / cell.getData().totqty)*100) / cell.getData().pcper ) *100 )
-                //     }
-                //     else if (cell.getData().sku_id == 3)
-                //     {
-                //         return ( ( ( (cell.getData().qtyfeet / cell.getData().totqty)*100) / cell.getData().feetper ) *100 )
-                //     }
-
-                // }
-
-
-
-
-
-                // },
 
                 {
                 title:'STOCK QUANTITY', headerHozAlign:"center",
                     columns:[
-                {title:"Qty(kg)", field:"sqtykg"},
-                {title:"Qty(pcs)", field:"sqtypcs"},
-                {title:"Qty(feet)", field:"sqtyfeet"}]},
+                {title:"InKg", field:"sqtykg", cssClass:"bg-gray-200 font-semibold"},
+                {title:"InPcs", field:"sqtypcs", cssClass:"bg-gray-200 font-semibold"},
+                {title:"InFeet", field:"sqtyfeet", cssClass:"bg-gray-200 font-semibold"}]},
 
                 {title:"Order BalQty",headerHozAlign :'center',
-                            field:"balqty",
+                            field:"balqty", cssClass:"bg-gray-200 font-semibold",
+                },
 
+                {
+                    title:'SALE QUANTITY', headerHozAlign:"center",
+                    columns:[
+
+
+                        {   title:"InKg",
+                            headerHozAlign :'right',
+                            hozAlign:"right",
+                            field:"qtykg",
+                            // editor:"number",
+                            // headerVertical:true,
+                            bottomCalc:"sum",
+                            formatter:"money",
+                            cellEdited: updateValues,
+                            validator:["required","numeric"],
+                            cssClass:"bg-gray-200 font-semibold",
+                            formatterParams:{thousand:",",precision:2},
 
                         },
 
+                        {   title:"InPcs",
+                            headerHozAlign :'right',
+                            hozAlign:"right",
+                            responsive:0,
+                            field:"qtypcs",
+                            // editor:"number",
+                            // headerVertical:true,
+                            bottomCalc:"sum",
+                            formatter:"money",
+                            cellEdited: updateValues,
+                            validator:["required","numeric"],
+                            cssClass:"bg-gray-200 font-semibold",
+                            formatterParams:{thousand:",",precision:2},
+                        },
+
+                        {   title:"InFeet",
+                            headerHozAlign :'right',
+                            hozAlign:"right",
+                            responsive:0,
+                            field:"qtyfeet",
+                            // editor:"number",
+                            // headerVertical:true,
+                            bottomCalc:"sum",
+                            formatter:"money",
+                            cellEdited: updateValues,
+                            validator:["required","numeric"],
+                            cssClass:"bg-gray-200 font-semibold",
+                            formatterParams:{thousand:",",precision:2},
+                        },
 
 
-
-
-
-                {title:"Location", field:"location" ,editor:"list" , editorParams:   {
-                        values:newList,
-                        cssClass:"bg-green-200 font-semibold",
-                        validator:["required"]
-                    }
+                        ]
                 },
 
 
 
-
                 {
-
-
-
-                    title:'SALE Quantity', headerHozAlign:"center",
+                    title:'Item Description', headerHozAlign:"center",
                     columns:[
-                        {   title:"Replace Name",headerHozAlign :'center',
+
+                {title:"Location", field:"location" ,editor:"list" , editorParams:   {
+                        values:newList,
+                        // cssClass:"bg-green-200 font-semibold",
+                        validator:["required"]
+                    }
+                },
+
+                {   title:"Replace Name",headerHozAlign :'center',
                             field:"repname",
-                            // editor:"list",
                             responsive:0,
-                            // headerVertical:true,
                             editor:true,
                         },
 
                         {   title:"Brand",headerHozAlign :'center',
                             field:"mybrand",
-                            // editor:"list",
-                            // headerVertical:true,
                             editor:true,
                         },
 
-                        {   title:"Sale Qty(kg)",
-                            headerHozAlign :'right',
-                            hozAlign:"right",
-                            field:"qtykg",
-                            editor:"number",
-                            // headerVertical:true,
-                            bottomCalc:"sum",
-                            formatter:"money",
-                            cellEdited: updateValues,
-                            validator:["required","numeric"],
-                            // cssClass:"bg-green-200 font-semibold",
-                            formatterParams:{thousand:",",precision:0},
-
-                        },
-
-                        {   title:"Sale Qty(pcs)",
-                            headerHozAlign :'right',
-                            hozAlign:"right",
-                            responsive:0,
-                            field:"qtypcs",
-                            editor:"number",
-                            // headerVertical:true,
-                            bottomCalc:"sum",
-                            formatter:"money",
-                            cellEdited: updateValues,
-                            validator:["required","numeric"],
-                            // cssClass:"bg-green-200 font-semibold",
-                            formatterParams:{thousand:",",precision:0},
-                        },
-
-                        {   title:"Sale Qty(feet)",
-                            headerHozAlign :'right',
-                            hozAlign:"right",
-                            responsive:0,
-                            field:"qtyfeet",
-                            editor:"number",
-                            // headerVertical:true,
-                            bottomCalc:"sum",
-                            formatter:"money",
-                            cellEdited: updateValues,
-                            validator:["required","numeric"],
-                            // cssClass:"bg-green-200 font-semibold",
-                            formatterParams:{thousand:",",precision:0},
-                        },
+                    ]},
 
 
 
+                    // {title:"feedqty", field:"feedqty",cellEdited: updateValues,editor:"number"},
 
-                        {   title:"Sale Price",
+                    {
+                    title:'SALE', headerHozAlign:"center",
+                    columns:[
+
+
+                    {title:"Revise Qty", field:"feedqty",cellEdited: updateValues,editor:"number"},
+
+                    {   title:"Sale Price",
                             headerHozAlign :'right',
                             hozAlign:"right",
                             responsive:0,
                             field:"price",
                             editor:"number",
-                            // headerVertical:true,
                             bottomCalc:"sum",
                             formatter:"money",
                             cellEdited: updateValues,
                             validator:["required","numeric"],
-                            // cssClass:"bg-green-200 font-semibold",
                             formatterParams:{thousand:",",precision:0},
                         },
 
@@ -666,26 +700,24 @@ var updateValues = (cell) => {
                         headerHozAlign :'right',
                         hozAlign:"right",
                         field:"saleamnt",
-                        cssClass:"bg-gray-200 font-semibold",
-                        formatter:"money",
                         cssClass:"bg-green-200 font-semibold",
+                        formatter:"money",
                         formatterParams:{thousand:",",precision:3},
                         formatter:function(cell,row)
                         {
-                            if(cell.getData().sku_id == 1)
-                               { return (cell.getData().qtykg * cell.getData().price) }
-                            else if (cell.getData().sku_id == 2)
-                               { return (cell.getData().qtypcs * cell.getData().price) }
-                            else if (cell.getData().sku_id == 3)
-                               { return (cell.getData().qtyfeet * cell.getData().price) }
+                            // if(cell.getData().sku_id == 1)
+                            //    { return (cell.getData().qtykg * cell.getData().price).toFixed(0) }
+                            // else if (cell.getData().sku_id == 2)
+                            //    { return (cell.getData().qtypcs * cell.getData().price).toFixed(0) }
+                            // else if (cell.getData().sku_id == 3)
+                            //    { return (cell.getData().qtyfeet * cell.getData().price).toFixed(0) }
 
-
+                            return  ( cell.getData().feedqty * cell.getData().price).toFixed(0)
                         },
                         bottomCalc:totalVal  },
 
 
-                    ]
-                },
+                    ]},
 
 
             ],
@@ -731,35 +763,52 @@ var updateValues = (cell) => {
                     return;
                 }
 
-                if (element.sku_id==1)
-                    {
-                        if(element.qtykg > element.balqty )
+                // if (element.sku_id==1)
+                    // {
+                        if(element.feedqty > element.balqty )
                             {
                                 showSnackbar("Sale Qty must be less than Plan qty","info");
                                 return;
                             }
-                    }
-                if (element.sku_id==2)
-                    {
-                        if(element.qtypcs > element.balqty )
-                        {
-                            showSnackbar("Sale Qty must be less than Plan qty","info");
-                            return;
-                        }
-                    }
+                    // }
+                // if (element.sku_id==2)
+                //     {
+                //         if(element.feedqty > element.balqty )
+                //         {
+                //             showSnackbar("Sale Qty must be less than Plan qty","info");
+                //             return;
+                //         }
+                //     }
 
-                if (element.sku_id==3)
-                {
-                    if(element.qtyfeet > element.balqty )
-                    {
-                        showSnackbar("Sale Qty must be less than Plan qty","info");
-                        return;
-                    }
-                }
+                // if (element.sku_id==3)
+                // {
 
-                if( element.qtykg> element.tqtykg || element.qtypcs>element.tqtypcs   || element.qtyfeet>element.tqtyfeet   )
+                //     if(element.feedqty > element.balqty )
+                //     {
+                //         showSnackbar("Sale Qty must be less than Plan qty xyz","info");
+                //         return;
+                //     }
+                // }
+
+                if( Number(element.qtykg)> Number(element.sqtykg) )
                     {
                         showSnackbar("sale qty must be less than stock qty","info");
+                        console.log(element.qtyfeet)
+                        console.log(element.sqtyfeet)
+                        return;
+                    }
+
+                    if( Number(element.qtypcs)>Number(element.sqtypcs) )
+                    {
+                        showSnackbar("sale qty must be less than stock qty","info");
+
+                        return;
+                    }
+
+                    if( Number(element.qtyfeet)>Number(element.sqtyfeet)   )
+                    {
+                        showSnackbar("sale qty must be less than stock qty","info");
+
                         return;
                     }
 

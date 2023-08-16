@@ -64,6 +64,8 @@ class QuotationController  extends Controller
     public function getmmfrqut(Request $request)
     {
 
+         $custid=$request->customer_id;
+        //  dd($custid);
         $search = $request->search;
         $size = $request->size;
         $field = $request->sort[0]["field"];     //  Nested Array
@@ -71,7 +73,8 @@ class QuotationController  extends Controller
         $contracts = DB::table('mmfrquotation')
         // ->join('suppliers', 'contracts.supplier_id', '=', 'suppliers.id')
         // ->select('contracts.*', 'suppliers.title')
-        ->where('title', 'like', "%$search%")
+        ->where('custname', 'like', "%$search%")
+        ->orWhere('title', 'like', "%$search%")
         ->orWhere('dimension', 'like', "%$search%")
         ->orderBy($field,$dir)
         ->paginate((int) $size);

@@ -249,7 +249,9 @@ class SalesInvoicesController  extends Controller
         ->join('locations', 'locations.id', '=', 'sale_invoices_details.locid')
         ->leftJoin('tmptblcustplan1', 'tmptblcustplan1.material_id', '=', 'sale_invoices_details.material_id')
         ->select('sale_invoices_details.*','materials.title as material_title','materials.dimension','skus.title as sku',
-        'locations.title as location','tmptblcustplan1.qtykg as sqtykg','tmptblcustplan1.qtypcs as sqtypcs','tmptblcustplan1.qtyfeet as sqtyfeet')
+        'locations.title as location','tmptblcustplan1.qtykg as sqtykg','tmptblcustplan1.qtypcs as sqtypcs','tmptblcustplan1.qtyfeet as sqtyfeet'
+        ,'tmptblcustplan1.balqty as balqty','tmptblcustplan1.balqty as feedqty','tmptblcustplan1.totqty'
+        ,'tmptblcustplan1.wtper','tmptblcustplan1.pcper','tmptblcustplan1.feetper')
         ->where('sale_invoices_details.sale_invoice_id',$id)->get();
          $data=compact('cd');
          $locations = Location::select('id','title')->where('status',1)->get();
@@ -335,12 +337,12 @@ class SalesInvoicesController  extends Controller
                     // $custplnbal = customer_order_details::findOrFail($cds->material_id);
                     $custplnbal = CustomerOrderDetails::where('sale_invoice_id',$sale_invoices->custplan_id)->where('material_id',$matsrate->id)
                     ->first();
-                    if($cds->sku_id == 1)
-                    { $custplnbal->balqty = $cds['balqty'] - $cds['qtykg'];}
-                    elseif($cds->sku_id == 2)
-                    { $custplnbal->balqty = $cds['balqty'] - $cds['qtypcs'];}
-                    elseif($cds->sku_id == 3)
-                    { $custplnbal->balqty = $cds['balqty'] - $cds['qtyfeet'];}
+                    // if($cds->sku_id == 1)
+                     $custplnbal->balqty = ( ($cds['balqty']+$cds['balqty']) - $cds['feedqty'] );
+                    // elseif($cds->sku_id == 2)
+                    // { $custplnbal->balqty = ( $cds['balqty'] - $cds['feedqty'] ) + $cds['qtypcs'];}
+                    // elseif($cds->sku_id == 3)
+                    // { $custplnbal->balqty = ( $cds['balqty'] - $cds['feedqty'] ) + $cds['qtyfeet'];}
                     $custplnbal->save();
                     $cds->save();
                  }
@@ -374,6 +376,12 @@ class SalesInvoicesController  extends Controller
 
             $custordr->delivered = $dlvrd;
             $custordr->save();
+
+            $sordrbal = SaleInvoices::where('id',$sale_invoices->id)->first();
+            $sordrbal->ordrbal= $custordr->totrcvbamount - $dlvrd;
+            $sordrbal->save();
+
+
         }
             DB::commit();
             Session::flash('success','Contract Information Saved');

@@ -144,9 +144,9 @@ body{
         <tbody>
             <tr class="hd1">
                 <td > Customer Name:</td>
-                <td align ="left" style="font-size:12px;font-weight: bold;width;width: 30%" > {{ $data[0]->custname }}</td>
+                <td align ="left" style="font-size:12px;font-weight: bold;" > {{ $data[0]->custname }}</td>
                 <td> Address:</td>
-                <td align ="left" style="font-size:12px;font-weight: bold;width: 70%" > {{ $data[0]->custadrs }}</td>
+                <td align ="left" style="font-size:12px;font-weight: bold;" > {{ $data[0]->custadrs }}</td>
            </tr>
 
 
@@ -154,7 +154,7 @@ body{
 
             <tr>
                 <td>P.O No:</td>
-                </td>
+
                 <td align ="left" style="font-size:12px;font-weight: bold"  >
                     {{ $data[0]->pono }}
                 </td>

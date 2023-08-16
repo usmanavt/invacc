@@ -526,9 +526,9 @@ var headerMenu = function(){
                 {title:"dimension_id", field:"dimension_id",visible:false},
                 {title:"source_id",    field:"source_id",visible:false},
                 {title:"brand_id",     field:"brand_id",visible:false},
-                {title:"bkg",     field:"bkg",visible:true},
-                {title:"bpcs",     field:"bpcs",visible:true},
-                {title:"bfeet",     field:"bfeet",visible:true},
+                // {title:"bkg",     field:"bkg",visible:true},
+                // {title:"bpcs",     field:"bpcs",visible:true},
+                // {title:"bfeet",     field:"bfeet",visible:true},
 
                 {
                     title:'Quantity', headerHozAlign:"center",
