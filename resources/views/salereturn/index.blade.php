@@ -6,9 +6,9 @@
 
     <x-slot name="header">
         <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-            Purchase Order
+            Sale Return
             {{-- Create New Customer --}}
-            <a class="text-sm text-green-500 hover:text-gray-900" href="{{route('customerorder.create')}}">
+            <a class="text-sm text-green-500 hover:text-gray-900" href="{{route('saleinvoices.create')}}">
                 {{-- Add Icon --}}
                 <i class="fa fa-file fa-fw"></i>
                 Add New Record
@@ -16,7 +16,7 @@
             {{-- <span> | </span> --}}
             {{-- <button class="text-sm text-blue-300" onclick="setStatus(1)">Pending</button> --}}
             <span> | </span>
-            <button class="text-sm text-blue-300" onclick="setStatus(2)">Purchase Orders History</button>
+            <button class="text-sm text-blue-300" onclick="setStatus(2)">Sales History</button>
         </h2>
     </x-slot>
 
@@ -45,8 +45,8 @@
     var deleteIcon = function(cell, formatterParams, onRendered){ return "<i class='fa fa-trash text-red-600'></i>";};
     var printIcon = function(cell, formatterParams, onRendered){ return "<i class='fa fa-print text-pink-500'></i>";};
 
-    const getMaster = @json(route('custorders.master'));
-    const getDetails = @json(route('custorders.details'));
+    const getMaster = @json(route('sales.master'));
+    const getDetails = @json(route('sales.details'));
     let table;
     let searchValue = "";
     let statusValue="1";  // 1 = Pending, 2 - Completed
@@ -80,7 +80,7 @@
         },
         ajaxURL: getMaster,
         ajaxContentType:"json",
-        initialSort:[ {column:"poseqno", dir:"desc"} ],
+        initialSort:[ {column:"dcno", dir:"desc"} ],
         height:"100%",
 
         columns:[
@@ -145,23 +145,25 @@
                 })}
             },
       //      Master Data
-
+            {title: "id",field: "id"},
             // {title: "Dated",field: "created_at"},
-
-
-            {title: "Quotation No",field: "pqutno"},
-            {title: "Quotation Date",field: "qutdate"},
-            {title: "Sale Order id",field: "id"},
-            {title: "P.O Date",field: "podate"},
+            {title: "Customer",field: "customer.title"},
             {title: "P.O No",field: "pono"},
-            {title: "P.O Seq.No",field: "poseqno"},
-            {title: "Delivery Date",field: "deliverydt"},
-            {title: "Customer",field: "custname"},
-            {title: "W/O GST",field: "rcvblamount"},
-            {title: "W/GST",field: "totrcvbamount"},
-            {title: "Delivered",field: "delivered"},
-            {title: "Pending",field: "pendbal"},
+            {title: "P.O Date",field: "podate"},
+            {title: "D.C No",field: "dcno"},
+            {title: "G.P No",field: "gpno"},
+            {title: "Bill No",field: "billno"},
+            {title: "Invoice Date",field: "saldate"},
 
+            {title: "WO/GST",field: "rcvblamount"},
+            {title: "W/GST",field: "totrcvbamount"},
+            {title: "Pending",field: "ordrbal"},
+            // {title: "Total Delivery Against Sale Order",field: "delivered"},
+            // {title: "Sale Order Balance",field: "delivered"},
+
+
+            // {title: "Rcvbl Amount",field: "rcvblamount"},
+            // {title: "Remarks",field: "remarks"},
             {title:"View" , formatter:viewIcon, hozAlign:"center",headerSort:false, responsive:0,
                 cellClick:function(e, cell){
                     window.open(window.location + "/" + cell.getRow().getData().id  ,"_self");

@@ -1,9 +1,9 @@
 <x-app-layout>
 
     @push('styles')
-    {{-- <link rel="stylesheet" href="{{ asset('css/tabulator_simple.min.css') }}"> --}}
-    <link href="https://unpkg.com/tabulator-tables/dist/css/tabulator.min.css" rel="stylesheet">
-    <script type="text/javascript" src="https://unpkg.com/tabulator-tables/dist/js/tabulator.min.js"></script>
+    <link rel="stylesheet" href="{{ asset('css/tabulator_simple.min.css') }}">
+    {{-- <link href="https://unpkg.com/tabulator-tables/dist/css/tabulator.min.css" rel="stylesheet"> --}}
+    {{-- <script type="text/javascript" src="https://unpkg.com/tabulator-tables/dist/js/tabulator.min.js"></script> --}}
     @endpush
 
     <x-slot name="header">
@@ -116,8 +116,11 @@ const locations = @json($locations);
             newList.push({value:e.title,label:e.title , id:e.id})
 
         });
-
-
+        const skus = @json($skus);
+        var newList1=[]
+        skus.forEach(e => {
+            newList1.push({value:e.title,label:e.title , id:e.id})
+        });
 
 
 
@@ -241,22 +244,22 @@ var updateValues = (cell) => {
     var data = cell.getData();
 
 
-         if(data.purunit=='k')
-            {
+        //  if(data.purunit=='k')
+        //     {
                 var sum =  Number(data.gdswt) * Number(data.gdsprice)
                 var sum2 =  Number(data.gdswt) * Number(data.gdsprice)
 
-            }
-         if(data.purunit=='p')
-            {
-                var sum =  Number(data.pcs) * Number(data.gdsprice)
-                var sum2 =  Number(data.pcs) * Number(data.gdsprice)
-            }
-         if(data.purunit=='f')
-            {
-                var sum =  Number(data.qtyinfeet) * Number(data.gdsprice)
-                var sum2 =  Number(data.qtyinfeet) * Number(data.gdsprice)
-            }
+        //     }
+        //  if(data.purunit=='p')
+        //     {
+        //         var sum =  Number(data.pcs) * Number(data.gdsprice)
+        //         var sum2 =  Number(data.pcs) * Number(data.gdsprice)
+        //     }
+        //  if(data.purunit=='f')
+        //     {
+        //         var sum =  Number(data.qtyinfeet) * Number(data.gdsprice)
+        //         var sum2 =  Number(data.qtyinfeet) * Number(data.gdsprice)
+        //     }
 
 
     // var sum = (Number(data.gdswt) * Number(data.perkg)).toFixed(0)
@@ -336,8 +339,8 @@ dynamicTable = new Tabulator("#dynamicTable", {
         {title:"Category",          field:"category",       cssClass:"bg-gray-200 font-semibold"},
         {title:"Dimension",         field:"dimension_id",   cssClass:"bg-gray-200 font-semibold",visible:false},
         {title:"Dimension",         field:"dimension",      cssClass:"bg-gray-200 font-semibold"},
-        {title:"Sku",               field:"sku_id",         cssClass:"bg-gray-200 font-semibold",visible:false},
-        {title:"M/Unit",            field:"sku",            cssClass:"bg-gray-200 font-semibold"},
+        // {title:"Sku",               field:"sku_id",         cssClass:"bg-gray-200 font-semibold",visible:false},
+        // {title:"M/Unit",            field:"sku",            cssClass:"bg-gray-200 font-semibold"},
 
         {title: "id",field: "myid",visible:false},
                 {title:"Location", field:"location" ,editor:"list" , editorParams:   {
@@ -347,13 +350,22 @@ dynamicTable = new Tabulator("#dynamicTable", {
                     }
                 },
 
-        {title:"PurUnit",           field:"purunit",        cssClass:"bg-gray-200 font-semibold",validator:"in:p|k|f",editor:true},
+                {title: "id",field: "skuid",visible:false},
+                {title:"UOM", field:"sku" ,editor:"list" , editorParams:   {
+                        values:newList1,
+                        cssClass:"bg-green-200 font-semibold",
+                        validator:["required"]
+                    }
+                },
+
+
+        // {title:"PurUnit",           field:"purunit",        cssClass:"bg-gray-200 font-semibold",validator:"in:p|k|f",editor:true},
         {title:"Replace Description",field:"repname",       cssClass:"bg-gray-200 font-semibold",editor:true},
         {title:"Brand",              field:"machineno",     cssClass:"bg-gray-200 font-semibold",editor:true},
         {title:"ForCustomer",        field:"forcust",       cssClass:"bg-gray-200 font-semibold",editor:true},
 
 
-        {   title:"Qty(Kg)",
+        {   title:"Quantity",
             field: "gdswt",
             editor:"number",
             cssClass:"bg-green-200 font-semibold",
@@ -367,38 +379,38 @@ dynamicTable = new Tabulator("#dynamicTable", {
 
             },
 
-        {   title:"Qty(Pcs)",
-            field:"pcs",
-            editor:"number",
-            cssClass:"bg-green-200 font-semibold",
-            validator:"required" ,
-            formatter:"money",
-            formatterParams:{thousand:",",precision:2},
-            validator:["required","decimal(10,2)"] ,
-            cellEdited: updateValues  ,
-            },
+        // {   title:"Qty(Pcs)",
+        //     field:"pcs",
+        //     editor:"number",
+        //     cssClass:"bg-green-200 font-semibold",
+        //     validator:"required" ,
+        //     formatter:"money",
+        //     formatterParams:{thousand:",",precision:2},
+        //     validator:["required","decimal(10,2)"] ,
+        //     cellEdited: updateValues  ,
+        //     },
 
-            {title:"Length",
-                field:"length",
-                editor:"number",
-                cssClass:"bg-green-200 font-semibold",
-                validator:"required",
-                formatter:"money",
-                formatterParams:{thousand:",",precision:2},
-                validator:["required","integer"],
-                cellEdited: updateValues,
-               },
+        //     {title:"Length",
+        //         field:"length",
+        //         editor:"number",
+        //         cssClass:"bg-green-200 font-semibold",
+        //         validator:"required",
+        //         formatter:"money",
+        //         formatterParams:{thousand:",",precision:2},
+        //         validator:["required","integer"],
+        //         cellEdited: updateValues,
+        //        },
 
-               {title:"Qty(Feet)",
-                field:"qtyinfeet",
-                editor:"number",
-                cssClass:"bg-green-200 font-semibold",
-                validator:"required",
-                formatter:"money",
-                formatterParams:{thousand:",",precision:2},
-                 validator:["required","integer"],
-                 cellEdited: updateValues,
-               },
+        //        {title:"Qty(Feet)",
+        //         field:"qtyinfeet",
+        //         editor:"number",
+        //         cssClass:"bg-green-200 font-semibold",
+        //         validator:"required",
+        //         formatter:"money",
+        //         formatterParams:{thousand:",",precision:2},
+        //          validator:["required","integer"],
+        //          cellEdited: updateValues,
+        //        },
 
                {title:"Price",
                 field:"gdsprice",
@@ -425,10 +437,6 @@ dynamicTable = new Tabulator("#dynamicTable", {
 
                 // },
                 bottomCalc:totval  },
-
-
-
-
     ],
 })
 
@@ -492,12 +500,12 @@ function validateForm()
                 showSnackbar("Location must be Enter","info");
                 return;
                }
-               if(element.gdswt == 0 || element.pcs == 0 || element.qtyinfeet == 0 || element.gdsprice == 0 )
+            //    if(element.gdswt == 0 || element.pcs == 0 || element.qtyinfeet == 0 || element.gdsprice == 0 )
 
-                {
-                    showSnackbar("Please fill all Weight,Length,Pcs & Price all rows to proceed","info");
-                    return;
-                }
+            //     {
+            //         showSnackbar("Please fill all Weight,Length,Pcs & Price all rows to proceed","info");
+            //         return;
+            //     }
 
     }
     // 'total' : parseFloat(banktotal.value).toFixed(2),

@@ -96,7 +96,8 @@ class LocalPurchaseController  extends Controller
         return view('localpurchase.create',compact('maxgpno'))
         // return \view ('sales.create',compact('maxdcno','maxblno','maxgpno'))
         ->with('suppliers',Supplier::select('id','title')->where('source_id',1)->get())
-        ->with('locations',Location::select('id','title')->get());
+        ->with('locations',Location::select('id','title')->get())
+        ->with('skus',Sku::select('id','title')->get());
         // ->with('purunit',Sku::select('id','title')->get());
     }
 
@@ -165,7 +166,6 @@ class LocalPurchaseController  extends Controller
                 $lpd->supplier_id = $ci->supplier_id;
                 $lpd->user_id = auth()->id();
                 $lpd->category_id = $material->category_id;
-                $lpd->sku_id = $material->sku_id;
                 $lpd->dimension_id = $material->dimension_id;
                 $lpd->hscode = '12314';
                 $lpd->itmratio = 0;
@@ -176,25 +176,16 @@ class LocalPurchaseController  extends Controller
                 $lpd->purunit = $cont['purunit'];
 
                 $lpd->gdswt = $cont['gdswt'];
-                $lpd->pcs = $cont['pcs'];
-                $lpd->qtyinfeet = $cont['qtyinfeet'];
-                $lpd->length = $cont['length'];;
+                $lpd->pcs = 0;
+                $lpd->qtyinfeet = 0;
+                $lpd->length = 0;
                 $lpd->gdsprice = $cont['gdsprice'];
                 $lpd->amtinpkr = $cont['amtinpkr'];
                 $lpd->location = $cont['location'];
                 $location = Location::where("title", $cont['location'])->first();
                 $lpd->locid = $location->id;
-
-                $matsrate = Material::findOrFail($lpd->material_id);
-                $matsrate->balkg = $matsrate->balkg + $cont['gdswt'];
-                $matsrate->balpcs = $matsrate->balpcs + $cont['pcs'];
-                $matsrate->balfeet = $matsrate->balfeet + $cont['qtyinfeet'];
-                $matsrate->save();
-
-
-
-                // $lpd->perft = 0;
-
+                $unitid = Sku::where("title", $cont['sku'])->first();
+                $lpd->sku_id = $unitid->id;
                 $lpd->save();
             }
             // }
@@ -215,11 +206,11 @@ class LocalPurchaseController  extends Controller
 
         $cd = DB::table('commercial_invoices as a')
         ->join('commercial_invoice_details as b', 'a.id', '=', 'b.commercial_invoice_id')
-        // ->join('suppliers', 'suppliers.id', '=', 'commercial_invoices.supplier_id')
         ->join('materials as c', 'c.id', '=', 'b.material_id')
-        // ->select('commercial_invoices.*' , 'commercial_invoice_details.*','suppliers.*','materials.*' )
+        ->join('skus as d', 'd.id', '=', 'b.sku_id')
         ->select('c.id as material_id','c.title','c.category_id','c.category','c.dimension_id','c.dimension','c.sku_id','c.sku','c.brand_id','c.brand'
-        ,'b.user_id','b.supplier_id','b.id','b.gdswt','b.pcs','b.length','b.qtyinfeet','b.gdsprice','b.amtinpkr','b.perkg','b.purval','b.repname','b.machineno','b.forcust','b.purunit','b.locid','b.location','b.contract_id')
+        ,'b.user_id','b.supplier_id','b.id','b.gdswt','b.pcs','b.length','b.qtyinfeet','b.gdsprice','b.amtinpkr','b.perkg','b.purval','b.repname',
+        'b.machineno','b.forcust','b.purunit','b.locid','b.location','b.contract_id','d.title as sku')
         ->where('a.id',$id)->get();
 
         $data=compact('cd');
@@ -229,6 +220,7 @@ class LocalPurchaseController  extends Controller
         ->with('commercialInvoice',CommercialInvoice::findOrFail($id))
         // ->with('cd',CommercialInvoiceDetails::where('commercial_invoice_id',$id)->get())
         ->with('locations',Location::select('id','title')->get())
+        ->with('skus',Sku::select('id','title')->get())
         ->with($data);
 
     }
@@ -308,7 +300,6 @@ class LocalPurchaseController  extends Controller
                     $cds->supplier_id = $cd->supplier_id;
                     $cds->user_id = auth()->id();
                     $cds->category_id = $cd->category_id;
-                    $cds->sku_id = $cd->sku_id;
                     $cds->dimension_id = $cd->dimension_id;
                     $cds->hscode = '12314';
                     $cds->itmratio = 0;
@@ -316,17 +307,20 @@ class LocalPurchaseController  extends Controller
                     $cds->machineno = $cd->machineno;
                     $cds->repname = $cd->repname;
                     $cds->forcust = $cd->forcust;
-                    $cds->purunit = $cd->purunit;
+                    // $cds->purunit = $cd->purunit;
 
                     $cds->gdswt = $cd->gdswt;
-                    $cds->pcs = $cd->pcs;
-                    $cds->qtyinfeet = $cd->qtyinfeet;
-                    $cds->length = $cd->length;
+                    $cds->pcs = 0;
+                    $cds->qtyinfeet = 0;
+                    $cds->length = 0;
                     $cds->gdsprice = $cd->gdsprice;
                     $cds->amtinpkr = $cd->amtinpkr;
                     $cds->location = $cd->location;
                     $location = Location::where("title", $cd['location'])->first();
                     $cds->locid = $location->id;
+
+                    $unitid = Sku::where("title", $cd['sku'])->first();
+                    $cds->sku_id = $unitid->id;
                     $cds->save();
                 }else
                 {
@@ -340,21 +334,17 @@ class LocalPurchaseController  extends Controller
                     $cds->user_id =  auth()->id();
                     $cds->material_id = $cd->material_id;
                     $cds->category_id = $cd->category_id;
-                    $cds->sku_id = $cd->sku_id;
                     $cds->dimension_id = $cd->dimension_id;
                     $cds->source_id = $cd->source_id;
                     $cds->brand_id = $cd->brand_id;
                     $cds->gdswt = $cd->gdswt;
-                    $cds->perkg = $cd->perkg;
+                    $cds->perkg = 0;
                     $cds->amtinpkr = $cd->amtinpkr;
                     $cds->location = $cd->location;
                     $location = Location::where("title", $cd['location'])->first();
                     $cds->locid = $location->id;
-
-
-
-
-
+                    $unitid = Sku::where("title", $cd['sku'])->first();
+                    $cds->sku_id = $unitid->id;
                     $cds->save();
                 }
             }

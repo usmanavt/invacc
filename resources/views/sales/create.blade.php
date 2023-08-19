@@ -700,6 +700,7 @@ var updateValues = (cell) => {
                         headerHozAlign :'right',
                         hozAlign:"right",
                         field:"saleamnt",
+                        bottomCalc:"sum",
                         cssClass:"bg-green-200 font-semibold",
                         formatter:"money",
                         formatterParams:{thousand:",",precision:3},
@@ -712,7 +713,7 @@ var updateValues = (cell) => {
                             // else if (cell.getData().sku_id == 3)
                             //    { return (cell.getData().qtyfeet * cell.getData().price).toFixed(0) }
 
-                            return  ( cell.getData().feedqty * cell.getData().price).toFixed(0)
+                            return  ( Number(cell.getData().feedqty) * Number(cell.getData().price)).toFixed(0)
                         },
                         bottomCalc:totalVal  },
 

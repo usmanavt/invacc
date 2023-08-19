@@ -1,15 +1,15 @@
 <x-app-layout>
 
     @push('styles')
-    {{-- <link rel="stylesheet" href="{{ asset('css/tabulator_simple.min.css') }}"> --}}
-    <link href="https://unpkg.com/tabulator-tables/dist/css/tabulator.min.css" rel="stylesheet">
-    <script type="text/javascript" src="https://unpkg.com/tabulator-tables/dist/js/tabulator.min.js"></script>
+    <link rel="stylesheet" href="{{ asset('css/tabulator_simple.min.css') }}">
+    {{-- <link href="https://unpkg.com/tabulator-tables/dist/css/tabulator.min.css" rel="stylesheet"> --}}
+    {{-- <script type="text/javascript" src="https://unpkg.com/tabulator-tables/dist/js/tabulator.min.js"></script> --}}
 
     @endpush
 
     <x-slot name="header">
         <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-            Edit Purchase Order
+            Edit Sale Return
         </h2>
     </x-slot>
 
@@ -29,29 +29,39 @@
                             <label for="customer_id">Customer</label>
                             <select  autocomplete="on" class="col-span-2" name="customer_id" id="customer_id" disabled required>
                                 @foreach($customer as $customer)
-                                    @if ($customer->id == $customerorder->customer_id)
+                                    @if ($customer->id == $saleinvoices->customer_id)
                                     <option value="{{$customer->id}}" selected> {{$customer->title}} </option>
                                 @endif
                                     <option value="{{$customer->id}}"> {{$customer->title}} </option>
                                 @endforeach
                             </select>
 
-                            <x-input-text title="" name="quotation_id" id="quotation_id" value="{{ $customerorder->quotation_id }}" hidden     />
-                            <x-input-text title="Quotation No" name="qutno" id="qutno" value="{{ $customerorder->pqutno }}" disabled     />
-                            <x-input-date title="Quotation Date" name="qutdate" id="qutdate" value="{{ $customerorder->qutdate->format('Y-m-d') }}"  class="col-span-2" disabled  />
+                            <x-input-text title="" name="custplan_id" id="custplan_id" value="{{ $saleinvoices->custplan_id }}" hidden     />
+                            {{-- <x-input-text title="Quotation No" name="qutno" id="qutno" value="{{ $customerorder->pqutno }}" disabled     />
                             <x-input-text title="P.R No" name="prno" id="prno" value="{{ $customerorder->pprno }}" disabled     />
+                            <x-input-text title="P.O Seq.#" name="poseqno" id="poseqno" value="{{ $customerorder->poseqno }}"    required   /> --}}
+
+                                <x-input-text title="P.O No" name="pono" id="pono" req required class="col-span-2" value="{{ $saleinvoices->pono }}" disabled  />
+                                <x-input-date title="P.O Date" name="podate" id="podate" req required class="col-span-2" value="{{ $saleinvoices->podate->format('Y-m-d') }}" disabled  />
+                                <x-input-text title="G.Pass No" name="gpno" id="gpno" value="{{ $saleinvoices->gpno }}"     required   />
+
 
 
 
 
                         </div>
                         <div class="grid grid-cols-12 gap-1 py-2 items-center">
-                            <x-input-date title="P.O Date" id="podate" name="podate" value="{{ $customerorder->podate->format('Y-m-d') }}" req required class="col-span-2" />
+                            <x-input-date title="Deilivery Date" id="deliverydt" name="deliverydt" req required class="col-span-2" value="{{ $saleinvoices->saldate->format('Y-m-d') }}" />
+                            <x-input-text title="DC No" name="dcno" id="dcno" value="{{ $saleinvoices->dcno }}"     required   />
+                            <x-input-text title="Bill No" name="billno" id="billno" value="{{ $saleinvoices->billno }}"     required   />
+
+
+                            {{-- <x-input-date title="P.O Date" id="podate" name="podate" value="{{ $customerorder->podate->format('Y-m-d') }}" req required class="col-span-2" />
                             <x-input-text title="P.O #" name="pono" id="pono" value="{{ $customerorder->pono }}"  />
                             <x-input-date title="Delivery Date" name="deliverydt" value="{{ $customerorder->deliverydt->format('Y-m-d') }}" />
-                            <x-input-text title="P.O Seq.#" name="poseqno" id="poseqno" value="{{ $customerorder->poseqno }}"    required   />
 
-                            {{-- <label for="">
+
+                            <label for="">
                                 Remakrs <span class="text-red-500 font-semibold  ">(*)</span>
                             </label>
                             <textarea name="remarks" id="remarks" cols="100" rows="2" maxlength="150" required class="rounded">
@@ -67,7 +77,7 @@
                         <fieldset class="border px-4 py-2 rounded">
                             <legend>Invoice Level Expenses</legend>
                             <div class="grid grid-cols-12 gap-2 py-2 items-center">
-                                <x-input-numeric title="Discou(%)" name="discntper" id="discntper" value="{{ $customerorder->discntper }}" disabled    />
+                                <x-input-numeric title="Discou(%)" name="discntper" id="discntper" value="{{ $saleinvoices->discntper }}" disabled    />
                                     {{-- <div class="basis-0 md:basis-1/5 self-center pt-4"> --}}
                                         <input class="checked:bg-blue-500 checked:border-blue-500 focus:outline-none" type="checkbox" name="per" id="per" onclick="EnableDisableTextBox(this)" >
                                         {{-- <label class="inline-block text-gray-800"> --}}
@@ -76,16 +86,16 @@
                                     {{-- </div> --}}
 
 
-                                <x-input-numeric title="Discount(Amount)" name="discntamt" id="discntamt" value="{{ $customerorder->discntamt }}"    />
-                                <x-input-numeric title="Cartage" name="cartage" value="{{ $customerorder->cartage }}"  required  onblur="tnetamount()"  />
-                                <x-input-numeric title="Payble Amount" name="rcvblamount" value="{{ $customerorder->rcvblamount }}" disabled />
-                                <x-input-numeric title="" name="sale_invoice_id" id="sale_invoice_id" value="{{ $customerorder->id }}" hidden  />
+                                <x-input-numeric title="Discount(Amount)" name="discntamt" id="discntamt" value="{{ $saleinvoices->discntamt }}"    />
+                                <x-input-numeric title="Cartage" name="cartage" value="{{ $saleinvoices->cartage }}"  required  onblur="tnetamount()"  />
+                                <x-input-numeric title="Payble Amount" name="rcvblamount" value="{{ $saleinvoices->rcvblamount }}" disabled />
+                                <x-input-numeric title="" name="sale_invoice_id" id="sale_invoice_id" value="{{ $saleinvoices->id }}" hidden  />
                             </div>
 
                             <div class="grid grid-cols-12 gap-2 py-2 items-center">
-                                <x-input-numeric title="Sale Tax(%)" name="saletaxper" value="{{ $customerorder->saletaxper }}" required  onblur="tnetamount()"  />
-                                <x-input-numeric title="Sale Tax(Rs)" name="saletaxamt" value="{{ $customerorder->saletaxamt }}" disabled    />
-                                <x-input-numeric title="Total Amount" name="totrcvbamount" value="{{ $customerorder->totrcvbamount }}" disabled />
+                                <x-input-numeric title="Sale Tax(%)" name="saletaxper" value="{{ $saleinvoices->saletaxper }}" required  onblur="tnetamount()"  />
+                                <x-input-numeric title="Sale Tax(Rs)" name="saletaxamt" value="{{ $saleinvoices->saletaxamt }}" disabled    />
+                                <x-input-numeric title="Total Amount" name="totrcvbamount" value="{{ $saleinvoices->totrcvbamount }}" disabled />
                             </div>
 
 
@@ -122,6 +132,14 @@
 
     @push('scripts')
 <script>
+
+const locations = @json($locations);
+        var newList=[]
+        locations.forEach(e => {
+            newList.push({value:e.title,label:e.title , id:e.id})
+
+        });
+
 let table;
 let searchValue = "";
 
@@ -235,6 +253,7 @@ function pushDynamicData(data)
 
         dimension_id:data.dimension_id,
         dimension:data.dimension,
+        // location:datea.location;
 
         bundle1:0,
         bundle2:0,
@@ -249,31 +268,89 @@ function pushDynamicData(data)
 }
 
 
-var updateValues = (cell) => {
+// var updateValues = (cell) => {
 
-    sum = 0;
-    sum2=0;
-    var data = cell.getData();
-        //   var sum = (Number(data.bundle1) * Number(data.pcspbundle1)) + (Number(data.bundle2) * Number(data.pcspbundle2))
-        var row = cell.getRow();
-            var sum = (Number(data.qtykg) * Number(data.price))
-            var varqty = ( Number(data.balqty) - Number(data.qtykg) )
-            // var sum2 = (Number(data.qtykg) * Number(data.price))
+//     sum = 0;
+//     sum2=0;
+//     var data = cell.getData();
+//         var row = cell.getRow();
+//             if(cell.getData().sku_id==1)
+//          {
+//             var sum = (Number(data.qtykg) * Number(data.price))
+//          }
+//          if(cell.getData().sku_id==2)
+//          {
+//             var sum = (Number(data.qtypcs) * Number(data.price))
+//          }
 
-        row.update({
+//          if(cell.getData().sku_id==3)
+//          {
+//             var sum = (Number(data.qtyfeet) * Number(data.price))
+//          }
 
-            // "rcvblamount":sum2,
-            //  "saleamnt": sum,
-            //  "totval":sum,
-            //  "gdspricetot": sum2
-            "saleamnt": sum,
-            "varqty":varqty,
-            totval: sum
+//         row.update({
+//             "saleamnt": sum,
+//             totval: sum
 
-            });
+//             });
 
-    }
+//     }
     // var tamount=0;
+
+    var updateValues = (cell) => {
+        var data = cell.getData();
+
+        if(cell.getData().sku_id==1)
+         {
+
+            var sum = (Number(data.feedqty) * Number(data.price))
+            var pr1=(Number(data.feedqty) / Number(data.totqty))*100
+            console.log(data.feedqty)
+            var pr2=( pr1 / Number(data.wtper))*100
+            qtypcs=((pr2*Number(data.sqtypcs))/100).toFixed(2)
+            qtyfeet=((pr2*Number(data.sqtyfeet))/100).toFixed(2)
+            qtykg=((pr2*Number(data.sqtykg))/100).toFixed(2)
+         }
+         if(cell.getData().sku_id==2)
+         {
+            var sum = (Number(data.feedqty) * Number(data.price))
+            // var pr1=(Number(data.qtypcs) / Number(data.totqty))*100
+            var pr1=(Number(data.feedqty) / Number(data.totqty))*100
+            var pr2=( pr1 / Number(data.pcper))*100
+            qtykg=((pr2*Number(data.sqtykg))/100).toFixed(2)
+            qtyfeet=((pr2*Number(data.sqtyfeet))/100).toFixed(2)
+            qtypcs=((pr2*Number(data.sqtypcs))/100).toFixed(2)
+
+         }
+
+         if(cell.getData().sku_id==3)
+         {
+            var sum = (Number(data.feedqty) * Number(data.price))
+            // var pr1=(Number(data.qtyfeet) / Number(data.totqty))*100
+            var pr1=(Number(data.feedqty) / Number(data.totqty))*100
+            var pr2=( pr1 / Number(data.feetper))*100
+            qtykg=((pr2*Number(data.sqtykg))/100).toFixed(2)
+            qtypcs=((pr2*Number(data.sqtypcs))/100).toFixed(2)
+            qtyfeet=((pr2*Number(data.sqtyfeet))/100).toFixed(2)
+
+         }
+
+
+        var row = cell.getRow();
+
+        // if(cell.getData().sku_id==1)
+        // {
+        row.update({
+            "saleamnt": sum,
+            "qtypcs":qtypcs,
+            "qtyfeet":qtyfeet,
+            "qtykg":qtykg,
+             totval: sum
+
+        });
+    }
+
+
     function tnetamount()
         {
 
@@ -327,17 +404,25 @@ dynamicTable = new Tabulator("#dynamicTable", {
         {title:"Id",                field:"material_id",    cssClass:"bg-gray-200 font-semibold"},
         {title:"Material",          field:"material_title", cssClass:"bg-gray-200 font-semibold"},
         {title:"Dimension",         field:"dimension",      cssClass:"bg-gray-200 font-semibold"},
-        {title:"StockQty",         field:"balqty"   },
-        {title:"VarQty",         field:"varqty",cellEdited: updateValues    },
-        {title:"Replace Description",field:"repname",       cssClass:"bg-gray-200 font-semibold",editor:true},
-        {title:"Brand",             field:"brand",editor:true,         cssClass:"bg-gray-200 font-semibold"},
-        {title:"UOM",               field:"sku"},
 
+        {title:"UOM",               field:"sku",cssClass:"bg-gray-200 font-semibold"},
 
-        {   title:"Quantity",
+        {
+                title:'STOCK QUANTITY', headerHozAlign:"center",
+                    columns:[
+                {title:"InKg", field:"sqtykg",cssClass:"bg-gray-200 font-semibold"},
+                {title:"InPcs", field:"sqtypcs",cssClass:"bg-gray-200 font-semibold"},
+                {title:"InFeet", field:"sqtyfeet",cssClass:"bg-gray-200 font-semibold"},
+            ]},
+
+            {title:"ORDER BALANCE", field:"balqty",cssClass:"bg-gray-200 font-semibold"},
+                {
+                title:'SALE QTY', headerHozAlign:"center",
+                    columns:[
+            {   title:"InKg",
                 field:"qtykg",
                 editor:"number",
-                cssClass:"bg-green-200 font-semibold",
+                cssClass:"bg-gray-200 font-semibold",
                 validator:"required",
                 formatter:"money",
                 formatterParams:{thousand:",",precision:2},
@@ -345,11 +430,68 @@ dynamicTable = new Tabulator("#dynamicTable", {
                 cellEdited: updateValues,
                },
 
+               {title:"InPcs",
+                field:"qtypcs",
+                editor:"number",
+                cssClass:"bg-gray-200 font-semibold",
+                validator:"required",
+                formatter:"money",
+                formatterParams:{thousand:",",precision:2},
+                validator:["required","integer"],
+                cellEdited: updateValues,
+               },
 
-               { title:"Rate",
+               {   title:"InFeet",
+                field:"qtyfeet",
+                editor:"number",
+                cssClass:"bg-gray-200 font-semibold",
+                validator:"required",
+                formatter:"money",
+                formatterParams:{thousand:",",precision:2},
+                validator:["required","integer"],
+                cellEdited: updateValues,
+               },
+
+            ]},
+
+
+
+
+                {
+                title:'ITEM DESCRIPTION', headerHozAlign:"center",
+                    columns:[
+
+                    {title: "id",field: "myid",visible:false},
+                {title:"Location", field:"location" ,editor:"list" , editorParams:   {
+                        values:newList,
+                        // cssClass:"bg-green-200 font-semibold",
+                        validator:["required"]
+                    }
+                },
+
+                {title:"Replace Description",field:"repname", editor:true},
+                {title:"Brand",             field:"brand",editor:true},
+
+
+                ]},
+
+                {
+                title:'SALE', headerHozAlign:"center",
+                    columns:[
+
+                { title:"Revise Qty",
+                field:"feedqty",
+                editor:"number",
+                validator:"required" ,
+                formatter:"money",
+                formatterParams:{thousand:",",precision:2},
+                validator:["required","decimal(10,3)"] ,
+                cellEdited: updateValues   ,
+            },
+
+            { title:"Rate",
                 field:"price",
                 editor:"number",
-                cssClass:"bg-green-200 font-semibold",
                 validator:"required" ,
                 formatter:"money",
                 formatterParams:{thousand:",",precision:2},
@@ -361,17 +503,19 @@ dynamicTable = new Tabulator("#dynamicTable", {
 
             {   title:"Amount",
                 field:"saleamnt",
-                cssClass:"bg-gray-200 font-semibold",
+                cssClass:"bg-green-200 font-semibold",
                 formatter:"money",
+                bottomCalc:"sum",
                 formatterParams:{thousand:",",precision:0},
-                // formatter:function(cell,row)
-                // {
-                //     //  return (cell.getData().bundle1 * cell.getData().pcspbundle1) + (cell.getData().bundle2 * cell.getData().pcspbundle2)
-                //      return  ( cell.getData().qtykg * cell.getData().price)
-                // },
-                bottomCalc:totval  },
+                formatter:function(cell,row)
+                {
+                      return  ( cell.getData().feedqty * cell.getData().price).toFixed(0)
+                },
 
+                bottomCalc:totval
+            },
 
+                ]},
 
     ],
 })
@@ -399,10 +543,8 @@ function validateForm()
     var sid = document.getElementById("customer_id");
         var customer_id = sid.options[sid.selectedIndex];
         var deliverydt = document.getElementById("deliverydt");
-        var qutno = document.getElementById("qutno");
-        var prno = document.getElementById("prno");
         var podate = document.getElementById("podate");
-        var quotation_id = document.getElementById("quotation_id");
+        var custplan_id = document.getElementById("custplan_id");
 
         var discntper= document.getElementById("discntper");
         var cartage= document.getElementById("cartage");
@@ -418,28 +560,15 @@ function validateForm()
             customer_id.focus();
             return;
         }
-        // if(saldate.value === "")
-        // {
-        //     showSnackbar("Please select From Invoice Date");
-        //     saldate.focus();
-        //     return;
-        // }
-        if(poseqno.value == 0)
+
+        if(dcno.value == "")
         {
-            showSnackbar("Please add poseqno");
-            poseqno.focus();
+            showSnackbar("Please add dcno");
+            dcno.focus();
             return;
         }
 
-        // if(prno.value == "")
-        // {
-        //     showSnackbar("Please add prno");
-        //     prno.focus();
-        //     return;
-        // }
 
-        // if(customer_id.value == 0)
-        // {
 
 
             if(pono.value == "" )
@@ -452,24 +581,25 @@ function validateForm()
 
 
 
-        // if(gpno.value == "")
-        // {
-        //     showSnackbar("Please add gpno");
-        //     gpno.focus();
-        //     return;
-        // }
+        if(gpno.value == "")
+        {
+            showSnackbar("Please add gpno");
+            gpno.focus();
+            return;
+        }
     if(dynamicTableData.length == 0)
     {
         showSnackbar("You must have atleast 1 row of item to Proceed","info");
         return;
     }
+
     dynamicTableData = dynamicTable.getData();
     // Qty Required
     for (let index = 0; index < dynamicTableData.length; index++) {
         const element = dynamicTableData[index];
-        if(element.qtykg == 0 || element.price == 0  || element.saleamnt == 0)
+        if(Number(element.feedqty ) > Number(element.balqty)+Number(element.balqty) )
         {
-            showSnackbar("Please fill qtykg,price,saleamnt  all rows to proceed","info");
+            showSnackbar("Sale Qty must be less than Plan qty","info");
             return;
         }
     }
@@ -484,17 +614,17 @@ function validateForm()
      // var data = { 'contracts' : dynamicTableData,'banktotal':parseFloat(total.value).toFixed(2),'exataxoffie':parseFloat(exataxoffie.value).toFixed(2),'collofcustom':parseFloat(collofcustom.value).toFixed(2),'bankcharges':parseFloat(bankcharges.value).toFixed(2) ,'supplier_id': supplier_id.value,'invoice_date':invoice_date.value,'invoiceno':number.value};
     // All Ok - Proceed
 
-    var data = { 'customerorder' : dynamicTableData,'rcvblamount':rcvblamount.value,'cartage':cartage.value,'discntamt':discntamt.value,'discntper':discntper.value,'discntper':discntper.value ,
-        'customer_id': customer_id.value,'deliverydt':deliverydt.value,'quotation_id':quotation_id.value,'poseqno':poseqno.value,
+    var data = { 'saleinvoices' : dynamicTableData,'rcvblamount':rcvblamount.value,'cartage':cartage.value,'discntamt':discntamt.value,'discntper':discntper.value,'discntper':discntper.value ,
+        'customer_id': customer_id.value,'deliverydt':deliverydt.value,'custplan_id':custplan_id.value,
         'saletaxper':saletaxper.value,'saletaxamt':saletaxamt.value,'totrcvbamount':totrcvbamount.value,
-        'podate':podate.value,'pono':pono.value,'qutno':qutno.value,'qutdate':qutdate.value,'prno':prno.value
+        'podate':podate.value,'pono':pono.value,'dcno':dcno.value,'gpno':gpno.value,'billno':billno.value
     ,'sale_invoice_id':sale_invoice_id.value};
 
 
 
 
 
-    fetch(@json(route('customerorder.update',$customerorder)),{
+    fetch(@json(route('saleinvoices.update',$saleinvoices)),{
         credentials: 'same-origin', // 'include', default: 'omit'
         method: 'PUT', // 'GET', 'PUT', 'DELETE', etc.
         // body: formData, // Coordinate the body type with 'Content-Type'
@@ -510,7 +640,7 @@ function validateForm()
     .then( response => {
         if (response == 'success')
         {
-            window.open(window.location.origin + "/customerorder","_self" );
+            window.open(window.location.origin + "/saleinvoices","_self" );
         }
     })
     .catch(error => {

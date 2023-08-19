@@ -344,9 +344,8 @@ function pushDynamicData(data)
             "saleamnt": sum,
             "qtypcs":qtypcs,
             "qtyfeet":qtyfeet,
-            "qtykg":qtykg
-
-            // totval: sum
+            "qtykg":qtykg,
+             totval: sum
 
         });
     }

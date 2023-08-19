@@ -125,7 +125,7 @@ class CommercialInvoiceController extends Controller
 
     public function store(Request $request)
     {
-        //   dd($request->all());
+        //    dd($request->all());
         $comminvoice = $request->comminvoice;
         DB::beginTransaction();
         try {
@@ -248,7 +248,7 @@ class CommercialInvoiceController extends Controller
                 //     $matsrate->balpcs = $matsrate->balpcs + $cid['pcs'] ;
                 //     $matsrate->balfeet = $matsrate->balfeet + $cid['qtyinfeet'];
                 //     $matsrate->save();
-                // $c->save();
+                 $c->save();
 
                 $pcontractdtl = PcontractDetails::where('contract_id',$cid['contract_id'])
                 ->where('material_id',$cid['material_id'])->where('status', '=', 1)->first();

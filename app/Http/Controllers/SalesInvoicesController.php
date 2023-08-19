@@ -192,39 +192,57 @@ class SalesInvoicesController  extends Controller
                 $lpd->locid = $location->id;
 
                 // Last Sale Rate Update in Material Table
-                $matsrate = Material::findOrFail($lpd->material_id);
-                if($lpd->sku_id == 1)
-                { $matsrate->salertkg = $lpd->price;}
-                elseif($lpd->sku_id == 2)
-                { $matsrate->salertpcs = $lpd->price;}
-                elseif($lpd->sku_id == 3)
-                { $matsrate->salertfeet = $lpd->price;}
-                $matsrate->save();
+                // $matsrate = Material::findOrFail($lpd->material_id);
+                // if($lpd->sku_id == 1)
+                // { $matsrate->salertkg = $lpd->price;}
+                // elseif($lpd->sku_id == 2)
+                // { $matsrate->salertpcs = $lpd->price;}
+                // elseif($lpd->sku_id == 3)
+                // { $matsrate->salertfeet = $lpd->price;}
+                // $matsrate->save();
 
                 // $custplnbal = customer_order_details::findOrFail($lpd->material_id);
-                $custplnbal = CustomerOrderDetails::where('sale_invoice_id',$ci->custplan_id)->where('material_id',$matsrate->id)
-                ->first();
-                if($lpd->sku_id == 1)
-                { $custplnbal->balqty = $cont['balqty'] - $cont['qtykg'];}
-                elseif($lpd->sku_id == 2)
-                { $custplnbal->balqty = $cont['balqty'] - $cont['qtypcs'];}
-                elseif($lpd->sku_id == 3)
-                { $custplnbal->balqty = $cont['balqty'] - $cont['qtyfeet'];}
-                $custplnbal->save();
-                $lpd->save();
+            //     $custplnbal = CustomerOrderDetails::where('sale_invoice_id',$ci->custplan_id)->where('material_id',$lpd->material_id)
+            //     ->first();
+            //     if($lpd->sku_id == 1)
+            //     { $custplnbal->balqty = $cont['balqty'] - $cont['qtykg'];}
+            //     elseif($lpd->sku_id == 2)
+            //     { $custplnbal->balqty = $cont['balqty'] - $cont['qtypcs'];}
+            //     elseif($lpd->sku_id == 3)
+            //     { $custplnbal->balqty = $cont['balqty'] - $cont['qtyfeet'];}
+            //     $custplnbal->save();
+                 $lpd->save();
+            // }
+
+            //  $dlvrdval = SaleInvoices->->select('totrcvbamount')::where('custplan_id',$ci->custplan_id)->sum('totrcvbamount');
+            //  $dlvrdval=DB::table('sale_invoices')->where('custplan_id',$ci->custplan_id)->select('totrcvbamount')->sum('totrcvbamount');
+             $dlvrdval = SaleInvoices::where('custplan_id',$ci->custplan_id)->sum('totrcvbamount');
+            //  dd($dlvrdval);
+             $custordr = CustomerOrder::where('id',$ci->custplan_id)->first();
+
+             $custordr->delivered = $dlvrdval;
+             $custordr->save();
+
+              $sordrbal = SaleInvoices::where('id',$ci->id)->first();
+
+            //   $XYZ=$custordr->totrcvbamount;
+            //   DD($dlvrdval);
+
+              $sordrbal->ordrbal= $custordr->totrcvbamount - $dlvrdval;
+              $sordrbal->save();
+
+
+             $dlvrd = DB::table('sale_invoices_details')
+            ->join('sale_invoices', 'sale_invoices_details.sale_invoice_id', '=', 'sale_invoices.id')
+            ->where('sale_invoices.custplan_id', '=', $ci->custplan_id)->where('sale_invoices_details.material_id', '=', $lpd->material_id)
+            ->sum(DB::raw('( CASE sale_invoices_details.sku_id  WHEN  1 THEN sale_invoices_details.qtykg WHEN 2 THEN sale_invoices_details.qtypcs WHEN 3 THEN sale_invoices_details.qtyfeet  END)'));
+            // dd($ci->custplan_id);
+            $custplnbal = CustomerOrderDetails::where('sale_invoice_id',$ci->custplan_id)->where('material_id',$cont['material_id'])
+            ->first();
+            $custplnbal->balqty = $custplnbal->qtykg - $dlvrd;
+            $custplnbal->save();
+
             }
-
-            $dlvrd = SaleInvoices::where('custplan_id',$ci->custplan_id)->sum('totrcvbamount');
-            $custordr = CustomerOrder::where('id',$ci->custplan_id)->first();
-
-            $custordr->delivered = $dlvrd;
-            $custordr->save();
-
-
-            // dd($dlvrd);
-            $sordrbal = SaleInvoices::where('id',$ci->id)->first();
-            $sordrbal->ordrbal= $custordr->totrcvbamount - $dlvrd;
-            $sordrbal->save();
             DB::commit();
             Session::flash('success','Contract Information Saved');
             return response()->json(['success'],200);
@@ -250,8 +268,10 @@ class SalesInvoicesController  extends Controller
         ->leftJoin('tmptblcustplan1', 'tmptblcustplan1.material_id', '=', 'sale_invoices_details.material_id')
         ->select('sale_invoices_details.*','materials.title as material_title','materials.dimension','skus.title as sku',
         'locations.title as location','tmptblcustplan1.qtykg as sqtykg','tmptblcustplan1.qtypcs as sqtypcs','tmptblcustplan1.qtyfeet as sqtyfeet'
-        ,'tmptblcustplan1.balqty as balqty','tmptblcustplan1.balqty as feedqty','tmptblcustplan1.totqty'
-        ,'tmptblcustplan1.wtper','tmptblcustplan1.pcper','tmptblcustplan1.feetper')
+        ,'tmptblcustplan1.balqty as balqty','tmptblcustplan1.totqty'
+        ,'tmptblcustplan1.wtper','tmptblcustplan1.pcper','tmptblcustplan1.feetper',
+        DB::raw('( CASE sale_invoices_details.sku_id  WHEN  1 THEN sale_invoices_details.qtykg WHEN 2 THEN sale_invoices_details.qtypcs WHEN 3 THEN sale_invoices_details.qtyfeet  END) AS feedqty')
+        )
         ->where('sale_invoices_details.sale_invoice_id',$id)->get();
          $data=compact('cd');
          $locations = Location::select('id','title')->where('status',1)->get();
@@ -325,25 +345,33 @@ class SalesInvoicesController  extends Controller
                     $cds->locid = $location->id;
                     // dd($cds->locid);
                     // Last Sale Rate Update in Material Table
-                    $matsrate = Material::findOrFail($cds->material_id);
-                    if($cds->sku_id == 1)
-                    { $matsrate->salertkg = $cds->price;}
-                    elseif($cds->sku_id == 2)
-                    { $matsrate->salertpcs = $cds->price;}
-                    elseif($cds->sku_id == 3)
-                    { $matsrate->salertfeet = $cds->price;}
-                    $matsrate->save();
+                    // $matsrate = Material::findOrFail($cds->material_id);
+                    // if($cds->sku_id == 1)
+                    // { $matsrate->salertkg = $cds->price;}
+                    // elseif($cds->sku_id == 2)
+                    // { $matsrate->salertpcs = $cds->price;}
+                    // elseif($cds->sku_id == 3)
+                    // { $matsrate->salertfeet = $cds->price;}
+                    // $matsrate->save();
 
                     // $custplnbal = customer_order_details::findOrFail($cds->material_id);
-                    $custplnbal = CustomerOrderDetails::where('sale_invoice_id',$sale_invoices->custplan_id)->where('material_id',$matsrate->id)
+
+
+
+
+
+                    $dlvrd = DB::table('sale_invoices_details')
+                    ->join('sale_invoices', 'sale_invoices_details.sale_invoice_id', '=', 'sale_invoices.id')
+                    ->where('sale_invoices.custplan_id', '=', $sale_invoices->custplan_id)->where('sale_invoices_details.material_id', '=', $cd->material_id)
+                    ->sum(DB::raw('( CASE sale_invoices_details.sku_id  WHEN  1 THEN sale_invoices_details.qtykg WHEN 2 THEN sale_invoices_details.qtypcs WHEN 3 THEN sale_invoices_details.qtyfeet  END)'));
+                    // dd($dlvrd);
+                    $custplnbal = CustomerOrderDetails::where('sale_invoice_id',$sale_invoices->custplan_id)->where('material_id',$cd->material_id)
                     ->first();
-                    // if($cds->sku_id == 1)
-                     $custplnbal->balqty = ( ($cds['balqty']+$cds['balqty']) - $cds['feedqty'] );
-                    // elseif($cds->sku_id == 2)
-                    // { $custplnbal->balqty = ( $cds['balqty'] - $cds['feedqty'] ) + $cds['qtypcs'];}
-                    // elseif($cds->sku_id == 3)
-                    // { $custplnbal->balqty = ( $cds['balqty'] - $cds['feedqty'] ) + $cds['qtyfeet'];}
+                    $custplnbal->balqty = $custplnbal->qtykg - $dlvrd;
                     $custplnbal->save();
+
+
+
                     $cds->save();
                  }
 

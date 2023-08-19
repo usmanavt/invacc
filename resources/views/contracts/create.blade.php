@@ -148,7 +148,7 @@
                 gdsprice:0,
                 dtyrate:0,
                 invsrate:0,
-                gdspricetot:0
+                gdspricetot:0.00
             }
         ])
     }
@@ -329,7 +329,7 @@
                 field:"ttpcs",
                 cssClass:"bg-gray-200 font-semibold",
                 formatter:"money",
-                formatterParams:{thousand:",",precision:3},
+                formatterParams:{thousand:",",precision:2},
                 formatter:function(cell,row)
                 {
                     return (cell.getData().bundle1 * cell.getData().pcspbundle1) + (cell.getData().bundle2 * cell.getData().pcspbundle2)
@@ -341,7 +341,7 @@
                 editor:"number",
                 cssClass:"bg-green-200 font-semibold",
                 formatter:"money",
-                formatterParams:{thousand:",",precision:3},
+                formatterParams:{thousand:",",precision:2},
                 validator:["required","numeric"],
                 cellEdited:updateValues,
                 bottomCalc:"sum",
@@ -352,7 +352,7 @@
                 editor:"number",
                 cssClass:"bg-green-200 font-semibold",
                 formatter:"money",
-                formatterParams:{thousand:",",precision:3},
+                formatterParams:{thousand:",",precision:2},
                 validator:["required","numeric"],
                 cellEdited:updateValues,
             },
@@ -362,7 +362,7 @@
                 editor:"number",
                 cssClass:"bg-green-200 font-semibold",
                 formatter:"money",
-                formatterParams:{thousand:",",precision:3},
+                formatterParams:{thousand:",",precision:2},
                 validator:["required","numeric"],
                 cellEdited:updateValues,
             },
@@ -380,8 +380,10 @@
             {   title:"Supp.Val($)",
                 field:"gdspricetot",
                 cssClass:"bg-gray-200 font-semibold",
+                formatterParams:{thousand:",",precision:2},
                 bottomCalc:totalVal,
-                bottomCalcParams:{precision:3} ,
+                // validator:["required","numeric"],
+                bottomCalcParams:{precision:0} ,
                 formatter:"money",
                 formatterParams:{
                     decimal:".",
@@ -419,6 +421,7 @@
                 bottomCalc:totalVal,
                 bottomCalcParams:{precision:3} ,
                 formatter:"money",
+                formatterParams:{thousand:",",precision:2},
                 formatterParams:{
                     decimal:".",
                     thousand:",",

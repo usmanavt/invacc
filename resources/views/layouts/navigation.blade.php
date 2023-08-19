@@ -76,8 +76,8 @@
                             <x-dropdown-link href="{{ route('cis.index') }}">Comm Invoices Imported</x-dropdown-link>
                             <x-dropdown-link href="{{ route('localpurchase.index') }}">Comm Invoices Local</x-dropdown-link>
                             <x-dropdown-link href="{{ route('clearance.index') }}">Duty Clearance</x-dropdown-link>
-                            <x-dropdown-link href="{{ route('quotations.index') }}">Sales Quotation</x-dropdown-link>
-                            <x-dropdown-link href="{{ route('customerorder.index') }}">Customer Order</x-dropdown-link>
+                            <x-dropdown-link href="{{ route('quotations.index') }}">Purchase Quotation</x-dropdown-link>
+                            <x-dropdown-link href="{{ route('customerorder.index') }}">Purchase Order</x-dropdown-link>
                             <x-dropdown-link href="{{ route('saleinvoices.index') }}">Sales Invoice</x-dropdown-link>
                             <x-dropdown-link href="{{ route('bankpayments.index') }}">Bank Payments</x-dropdown-link>
                             <x-dropdown-link href="{{ route('bankrecivings.index') }}">Bank Recivings</x-dropdown-link>

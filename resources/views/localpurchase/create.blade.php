@@ -1,9 +1,9 @@
 <x-app-layout>
 
     @push('styles')
-    {{-- <link rel="stylesheet" href="{{ asset('css/tabulator_simple.min.css') }}"> --}}
-    <link href="https://unpkg.com/tabulator-tables/dist/css/tabulator.min.css" rel="stylesheet">
-    <script type="text/javascript" src="https://unpkg.com/tabulator-tables/dist/js/tabulator.min.js"></script>
+    <link rel="stylesheet" href="{{ asset('css/tabulator_simple.min.css') }}">
+    {{-- <link href="https://unpkg.com/tabulator-tables/dist/css/tabulator.min.css" rel="stylesheet"> --}}
+    {{-- <script type="text/javascript" src="https://unpkg.com/tabulator-tables/dist/js/tabulator.min.js"></script> --}}
     @endpush
 
 
@@ -106,6 +106,16 @@
             newList.push({value:e.title,label:e.title , id:e.id})
 
         });
+
+        const skus = @json($skus);
+        var newList1=[]
+        skus.forEach(e => {
+            newList1.push({value:e.title,label:e.title , id:e.id})
+
+        });
+
+
+
 
     const getMaster = @json(route('materials.master'));
     let csrfToken = document.head.querySelector("[name~=csrf-token][content]").content;
@@ -268,21 +278,21 @@
     var updateValues = (cell) => {
         var data = cell.getData();
         var leninft = Number(data.pcs) * Number(data.length)
-        if(data.purunit=='k')
-         {
+        // if(data.purunit=='k')
+        //  {
              var sum =  Number(data.gdswt) * Number(data.gdsprice)
              var sum2 =  Number(data.gdswt) * Number(data.gdsprice)
-         }
-         if(data.purunit=='p')
-         {
-             var sum =  Number(data.pcs) * Number(data.gdsprice)
-             var sum2 =  Number(data.pcs) * Number(data.gdsprice)
-         }
-         if(data.purunit=='f')
-         {
-             var sum =  Number(data.qtyinfeet) * Number(data.gdsprice)
-             var sum2 =  Number(data.qtyinfeet) * Number(data.gdsprice)
-         }
+        //  }
+        //  if(data.purunit=='p')
+        //  {
+        //      var sum =  Number(data.pcs) * Number(data.gdsprice)
+        //      var sum2 =  Number(data.pcs) * Number(data.gdsprice)
+        //  }
+        //  if(data.purunit=='f')
+        //  {
+        //      var sum =  Number(data.qtyinfeet) * Number(data.gdsprice)
+        //      var sum2 =  Number(data.qtyinfeet) * Number(data.gdsprice)
+        //  }
         // var sum = Number(data.gdswt) * Number(data.gdsprice)
         // var sum2 =  Number(data.gdswt) * Number(data.gdsprice)
         var row = cell.getRow();
@@ -342,8 +352,18 @@
                     }
                 },
 
+                {title: "id",field: "skuid",visible:false},
+                {title:"UOM", field:"sku" ,editor:"list" , editorParams:   {
+                        values:newList1,
+                        cssClass:"bg-green-200 font-semibold",
+                        validator:["required"]
+                    }
+                },
 
-            {title:"PurUnit",           field:"purunit",        cssClass:"bg-gray-200 font-semibold",validator:"in:p|k|f",editor:true},
+
+
+
+            // {title:"PurUnit",           field:"purunit",        cssClass:"bg-gray-200 font-semibold",validator:"in:p|k|f",editor:true},
 
 
             {title:"Replace Description",field:"repname",       cssClass:"bg-gray-200 font-semibold",editor:true},
@@ -358,7 +378,7 @@
 
 
 
-            {   title:"Qty(Kg)",
+            {   title:"Quantity",
                 field:"gdswt",
                 editor:"number",
                 cssClass:"bg-green-200 font-semibold",
@@ -369,40 +389,40 @@
                 cellEdited: updateValues,
                },
 
-               {title:"Qty(Pcs)",
-                field:"pcs",
-                editor:"number",
-                cssClass:"bg-green-200 font-semibold",
-                validator:"required",
-                formatter:"money",
-                formatterParams:{thousand:",",precision:2},
-                validator:["required","integer"],
-                cellEdited: updateValues,
-               },
+            //    {title:"Qty(Pcs)",
+            //     field:"pcs",
+            //     editor:"number",
+            //     cssClass:"bg-green-200 font-semibold",
+            //     validator:"required",
+            //     formatter:"money",
+            //     formatterParams:{thousand:",",precision:2},
+            //     validator:["required","integer"],
+            //     cellEdited: updateValues,
+            //    },
 
-               {title:"Length",
-                field:"length",
-                editor:"number",
-                cssClass:"bg-green-200 font-semibold",
-                validator:"required",
-                formatter:"money",
-                formatterParams:{thousand:",",precision:2},
-                validator:["required","integer"],
-                cellEdited: updateValues,
-               },
+            //    {title:"Length",
+            //     field:"length",
+            //     editor:"number",
+            //     cssClass:"bg-green-200 font-semibold",
+            //     validator:"required",
+            //     formatter:"money",
+            //     formatterParams:{thousand:",",precision:2},
+            //     validator:["required","integer"],
+            //     cellEdited: updateValues,
+            //    },
 
 
 
-               {title:"Qty(Feet)",
-                field:"qtyinfeet",
-                editor:"number",
-                cssClass:"bg-green-200 font-semibold",
-                validator:"required",
-                formatter:"money",
-                formatterParams:{thousand:",",precision:2},
-                validator:["required","integer"],
-                cellEdited: updateValues,
-               },
+            //    {title:"Qty(Feet)",
+            //     field:"qtyinfeet",
+            //     editor:"number",
+            //     cssClass:"bg-green-200 font-semibold",
+            //     validator:"required",
+            //     formatter:"money",
+            //     formatterParams:{thousand:",",precision:2},
+            //     validator:["required","integer"],
+            //     cellEdited: updateValues,
+            //    },
 
 
 
@@ -487,12 +507,12 @@
                 return;
                }
 
-            if(element.gdswt == 0 || element.pcs == 0 || element.qtyinfeet == 0 || element.gdsprice == 0 )
+            // if(element.gdswt == 0 || element.pcs == 0 || element.qtyinfeet == 0 || element.gdsprice == 0 )
 
-            {
-                showSnackbar("Please fill all Weight,Length,Pcs & Price all rows to proceed","info");
-                return;
-            }
+            // {
+            //     showSnackbar("Please fill all Weight,Length,Pcs & Price all rows to proceed","info");
+            //     return;
+            // }
         }
         disableSubmitButton(true);
         var data = { 'contracts' : dynamicTableData,'bankntotal':bankntotal.value,'otherchrgs':otherchrgs.value,'exataxoffie':exataxoffie.value,'collofcustom':collofcustom.value,'insurance':insurance.value ,'supplier_id': supplier_id.value,'invoice_date':invoice_date.value,'number':number.value,'gpassno':gpassno.value};

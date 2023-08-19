@@ -10,7 +10,7 @@
 
     <x-slot name="header">
         <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-            Create Customer Order
+            Create Purchase Order
         </h2>
     </x-slot>
 
@@ -531,7 +531,7 @@ var updateValues = (cell) => {
                         formatterParams:{thousand:",",precision:3},
                         formatter:function(cell,row)
                         {
-                            return (cell.getData().saleqty * cell.getData().price)
+                            return (cell.getData().saleqty * cell.getData().price).toFixed(0)
                         },
                         bottomCalc:totalVal  },
 

@@ -10,7 +10,7 @@
 
     <x-slot name="header">
         <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-            {{ __('Create Sales Quotation') }}
+            {{ __('Create Purchase Quotation') }}
         </h2>
     </x-slot>
 
@@ -411,10 +411,6 @@ const skus = @json($skus);
             {title:"Sku",               field:"sku_id",         cssClass:"bg-gray-200 font-semibold",visible:false},
             {title:"Brand",             field:"mybrand",          cssClass:"bg-gray-200 font-semibold",editor:true},
 
-
-
-
-
             {title: "id",field: "skuid",visible:false},
                 {title:"UOM", field:"sku" ,editor:"list" , editorParams:   {
                         values:newList1,
@@ -422,9 +418,6 @@ const skus = @json($skus);
                         validator:["required"]
                     }
                 },
-
-
-
 
             {   title:"Quantity",
                 field:"bundle1",
