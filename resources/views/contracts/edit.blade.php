@@ -1,17 +1,10 @@
 <x-app-layout>
 
-
-
-
     @push('styles')
     {{-- <link rel="stylesheet" href="{{ asset('css/tabulator_simple.min.css') }}"> --}}
     <link href="https://unpkg.com/tabulator-tables/dist/css/tabulator.min.css" rel="stylesheet">
     <script type="text/javascript" src="https://unpkg.com/tabulator-tables/dist/js/tabulator.min.js"></script>
     @endpush
-
-
-
-
 
     <x-slot name="header">
         <h2 class="font-semibold text-xl text-gray-800 leading-tight">
@@ -90,78 +83,76 @@ let dyanmicTable = ""; // Tabulator
 let dynamicTableData = @json($cd);
 
 
-    //  ---------------- For MODAL -----------------------//
-    //  Table Filter
-    function dataFilter(element)
-    {
-        searchValue = element.value;
-        table.setData(getMaster,{search:searchValue});
-    }
-    //  The Table for Materials Modal
-    table = new Tabulator("#tableData", {
-        autoResize:true,
-        responsiveLayout:"collapse",
-        layout:"fitData",
-        index:"id",
-        placeholder:"No Data Available",
-        pagination:true,
-        paginationMode:"remote",
-        sortMode:"remote",
-        filterMode:"remote",
-        paginationSize:20,
-        paginationSizeSelector:[10,25,50,100],
-        ajaxParams: function(){
-            return {search:searchValue};
-        },
-        ajaxURL: getMaster,
-        ajaxContentType:"json",
-        initialSort:[ {column:"id", dir:"desc"} ],
-        height:"100%",
+//  ---------------- For MODAL -----------------------//
+//  Table Filter
+function dataFilter(element)
+{
+    searchValue = element.value;
+    table.setData(getMaster,{search:searchValue});
+}
+//  The Table for Materials Modal
+table = new Tabulator("#tableData", {
+    autoResize:true,
+    responsiveLayout:"collapse",
+    layout:"fitData",
+    index:"id",
+    placeholder:"No Data Available",
+    pagination:true,
+    paginationMode:"remote",
+    sortMode:"remote",
+    filterMode:"remote",
+    paginationSize:20,
+    paginationSizeSelector:[10,25,50,100],
+    ajaxParams: function(){
+        return {search:searchValue};
+    },
+    ajaxURL: getMaster,
+    ajaxContentType:"json",
+    initialSort:[ {column:"id", dir:"desc"} ],
+    height:"100%",
 
-        columns:[
-            // Master Data
-            {title:"Id", field:"id" , responsive:0},
-            {title:"Material", field:"title" , visible:true ,headerSort:false, responsive:0},
-            {title:"Category", field:"category" , visible:true ,headerSortStartingDir:"asc" , responsive:0},
-            {title:"Dimesion", field:"dimension" ,  responsive:0},
-            {title:"Source", field:"source" ,  responsive:0},
-            {title:"Sku", field:"sku" ,  responsive:0},
-            {title:"Brand", field:"brand" ,  responsive:0},
-            // {title:"Delete" , formatter:deleteIcon, hozAlign:"center",headerSort:false, responsive:0,
-            //     cellClick:function(e, cell){
-            //         // window.open(window.location + "/" + cell.getRow().getData().id + "/delete" ,"_self");
-            //     }
-            // },
-        ],
-        // Extra Pagination Data for End Users
-        ajaxResponse:function(getDataUrl, params, response){
-            remaining = response.total;
-            let doc = document.getElementById("example-table-info");
-            doc.classList.add('font-weight-bold');
-            doc.innerText = `Displaying ${response.from} - ${response.to} out of ${remaining} records`;
-            return response;
-        }
-    })
-    //  Adds New row to dyanmicTable
-    table.on('rowClick',function(e,row){
-        var simple = {...row}
-        var data = simple._row.data
-        //  Filter Data here .
-        var result = dynamicTableData.filter( dt => dt.material_id == data.id)
-        if(result.length <= 0)
-        {
-            pushDynamicData(data)
-        }
-    })
-    function showModal(){ modal.style.display = "block"}
-    function closeModal(){  modal.style.display = "none"}
-    //  When the user clicks anywhere outside of the modal, close it
-    window.onclick = function(event) {
-        if (event.target == modal) {
-            modal.style.display = "none";
-        }
+    columns:[
+        // Master Data
+        {title:"Id", field:"id" , responsive:0},
+        {title:"Material", field:"title" , visible:true ,headerSort:false, responsive:0},
+        {title:"Category", field:"category" , visible:true ,headerSortStartingDir:"asc" , responsive:0},
+        {title:"Dimesion", field:"dimension" ,  responsive:0},
+        {title:"Source", field:"source" ,  responsive:0},
+        {title:"Sku", field:"sku" ,  responsive:0},
+        {title:"Brand", field:"brand" ,  responsive:0},
+        // {title:"Delete" , formatter:deleteIcon, hozAlign:"center",headerSort:false, responsive:0,
+        //     cellClick:function(e, cell){
+        //         // window.open(window.location + "/" + cell.getRow().getData().id + "/delete" ,"_self");
+        //     }
+        // },
+    ],
+    // Extra Pagination Data for End Users
+    ajaxResponse:function(getDataUrl, params, response){
+        remaining = response.total;
+        let doc = document.getElementById("example-table-info");
+        doc.classList.add('font-weight-bold');
+        doc.innerText = `Displaying ${response.from} - ${response.to} out of ${remaining} records`;
+        return response;
     }
-    // -----------------FOR MODAL -------------------------------//
+})
+//  Adds New row to dyanmicTable
+table.on('rowClick',function(e,row){
+    var simple = {...row}
+    var data = simple._row.data
+    // check if data in table already
+    if(!dynamicTableData.filter( dt => dt.material_id === data.id).length){
+        pushDynamicData(data)
+    }
+})
+function showModal(){ modal.style.display = "block"}
+function closeModal(){  modal.style.display = "none"}
+//  When the user clicks anywhere outside of the modal, close it
+window.onclick = function(event) {
+    if (event.target == modal) {
+        modal.style.display = "none";
+    }
+}
+// -----------------FOR MODAL -------------------------------//
 
 //  Adds actual data to row - EDIT Special
 function pushDynamicData(data)
@@ -193,7 +184,8 @@ function pushDynamicData(data)
         gdspricetot:0
     })
     //  dyanmicTable.setData()
-     dynamicTable.setData(dynamicTableData);
+    //  dynamicTable.setData(dynamicTableData);
+    // console.log(dynamicTableData)
 }
 
 var updateValues = (cell) => {
@@ -212,10 +204,6 @@ var updateValues = (cell) => {
              var sum2 =  ( (Number(data.bundle1) * Number(data.pcspbundle1)) + (Number(data.bundle2) * Number(data.pcspbundle2)) ) * Number(data.gdsprice)
              var sum3 =  ( (Number(data.bundle1) * Number(data.pcspbundle1)) + (Number(data.bundle2) * Number(data.pcspbundle2)) ) * Number(data.dtyrate)
          }
-
-
-
-
 
     var row = cell.getRow();
     row.update({
@@ -267,11 +255,6 @@ var customMutator = function(value, data, type, params, component){
 
     return data.gdswt + data.gdsprice ; //return the sum of the other two columns.
 }
-
-
-
-
-
 
 //  Dynamic Table [User data]
 dynamicTable = new Tabulator("#dynamicTable", {
