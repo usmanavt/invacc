@@ -70,7 +70,7 @@
     {{-- Modal - Should come below Tabulator --}}
     <x-tabulator-modal title="Material"/>
 
-    @push('scripts')
+@push('scripts')
 <script>
 let table;
 let searchValue = "";
@@ -101,8 +101,8 @@ table = new Tabulator("#tableData", {
     paginationMode:"remote",
     sortMode:"remote",
     filterMode:"remote",
-    paginationSize:20,
-    paginationSizeSelector:[10,25,50,100],
+    paginationSize:10,
+    paginationSizeSelector:[10,15],
     ajaxParams: function(){
         return {search:searchValue};
     },
@@ -139,10 +139,12 @@ table = new Tabulator("#tableData", {
 table.on('rowClick',function(e,row){
     var simple = {...row}
     var data = simple._row.data
+    ///////////////////// CORRECTION ////////////////////////////
     // check if data in table already
     if(!dynamicTableData.filter( dt => dt.material_id === data.id).length){
         pushDynamicData(data)
     }
+    ///////////////////// CORRECTION ////////////////////////////
 })
 function showModal(){ modal.style.display = "block"}
 function closeModal(){  modal.style.display = "none"}
@@ -183,9 +185,11 @@ function pushDynamicData(data)
         gdsprice:0,
         gdspricetot:0
     })
+    ///////////////////// CORRECTION ////////////////////////////
     //  dyanmicTable.setData()
     //  dynamicTable.setData(dynamicTableData);
     // console.log(dynamicTableData)
+    ///////////////////// CORRECTION ////////////////////////////
 }
 
 var updateValues = (cell) => {
