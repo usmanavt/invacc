@@ -110,15 +110,6 @@ class PurchaseRptController extends Controller
         return $mpdf;
     }
 
-
-
-
-
-
-
-
-
-
     public function fetch(Request $request)
     {
         //  https://stackoverflow.com/questions/42555512/how-to-create-temporary-table-in-laravel

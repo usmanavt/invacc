@@ -15,7 +15,7 @@
                         @csrf
                         <div class="flex flex-col md:flex-row flex-wrap gap-2  justify-center">
                             {{-- <fieldset class="border px-4 py-2 height 30 rounded"> --}}
-                                <fieldset class="border h-40 w-32 px-4 py-2 rounded">
+                                <fieldset class="border h-60 w-32 px-4 py-2 rounded">
                                 <legend>Report Type</legend>
                                 <div>
                                     <input type="radio" name="report_type" value="quotation" required onchange="checkReportType('quotation')">
@@ -25,26 +25,18 @@
                                     <input type="radio" name="report_type" value="custorder" required onchange="checkReportType('custorder')">
                                     <label for="">Customer Order </label>
                                 </div>
-
-
-
-
-
                                 <div>
                                     <input type="radio" name="report_type" value="dlvrychln" required onchange="checkReportType('dlvrychln')">
                                     <label for="">Delivery Challan </label>
                                 </div>
-
                                 <div>
                                     <input type="radio" name="report_type" value="salinvs" required onchange="checkReportType('salinvs')">
                                     <label for="">Sale Invoice</label>
                                 </div>
-
                                 <div>
                                     <input type="radio" name="report_type" value="saltxinvs" required onchange="checkReportType('saltxinvs')">
                                     <label for="">Commercial Invoice </label>
                                 </div>
-
                                 <div>
                                     <input type="radio" name="report_type" value="loccominvs" required onchange="checkReportType('loccominvs')">
                                     <label for="">Credit Note </label>
@@ -53,16 +45,16 @@
                                     <input type="radio" name="report_type" value="purret" required onchange="checkReportType('purret')">
                                     <label for="">Sale History </label>
                                 </div>
-
-
                                 <div>
                                     <input type="radio" name="report_type" value="tpl" required onchange="checkReportType('tpl')">
                                     <label for="">Sale Return History</label>
                                 </div>
+                                <br>
+
 
                                 <div class="flex flex-col ">
                                     <label for="">
-                                        Customer Name <span class="text-red-500 font-semibold w-10  ">(*)</span>
+                                        Customer Name<span class="text-red-500 font-semibold w-10">(*)</span>
                                     </label>
                                     <textarea name="cname" id="cname" cols="40" rows="1"  maxlength="150" required class="rounded">
                                         MUHAMMAD NAZIR & Co
@@ -96,7 +88,7 @@
 
                             <fieldset class="border px-6 py-1.5  rounded  ">
                                 <legend>Report Criteria</legend>
-                                <div class="flex flex-col md:flex-row w-full gap-2 px-6 pt-4">
+                                {{-- <div class="flex flex-col md:flex-row w-full gap-2 px-6 pt-4"> --}}
 
                                     <fieldset class="border px-4 py-2  rounded w-full">
                                         <legend>Date Selection</legend>
@@ -105,7 +97,7 @@
                                             <x-input-date title="To" req id="todate" name="todate" required/>
                                         </div>
                                     </fieldset>
-                                </div>
+                                {{-- </div> --}}
 
                                 <fieldset class="border px-4 py-2 rounded w-full">
                                     <legend>Customer Selection</legend>
@@ -122,49 +114,14 @@
                                     </div>
                                 </fieldset>
                             </div>
-                            <div class="flex flex-col md:flex-row w-full gap-2 px-6 pt-4">
+
                             </fieldset>
-                        </div>
+                            <div class="flex flex-col md:flex-row w-full gap-2 px-6 py-2">
+                                <x-button type="submit">
+                                    Generate PDF
+                                </x-button>
+                            </div>
 
-                        {{-- <div class="flex flex-col md:flex-row w-full gap-2 px-6 pt-4">
-
-                            <fieldset class="border px-4 py-2 rounded w-full">
-                                <legend>Date Selection</legend>
-                                <div class="flex justify-between py-1">
-                                    <x-input-date title="From Date" req id="fromdate" name="fromdate" required/>
-                                    <x-input-date title="To Date" req id="todate" name="todate" required/>
-                                </div>
-                                {{-- <div class="flex justify-between py-1"> --}}
-                                    {{-- <x-input-date title="To Date" req id="todate" name="todate" required/> --}}
-                                    {{-- <x-input-date name="to"  id="to" required> --}}
-                                {{-- </div> --}}
-                            </fieldset>
-                        {{-- </div> --}}
-
-                        <div class="flex flex-col md:flex-row w-full gap-2 px-6 pt-4">
-
-                            {{-- <fieldset class="border px-4 py-2 rounded w-full">
-                                <legend>Heads</legend>
-                                <div class="flex justify-between py-1">
-                                    <select  name="head_id" id="head_id" required class="w-full" disabled onchange="headSelected()">
-                                    </select>
-                                </div>
-                            </fieldset>
-                        </div>
-
-                        <div class="flex flex-col md:flex-row w-full gap-2 px-6 pt-4">
-
-                            <fieldset class="border px-4 py-2 rounded w-full">
-                                <legend>Sub Head <span class="text-xs text-mute">shift & click to select multiple items</span></legend>
-                                <div class="flex justify-between py-1">
-                                    <select size="5" multiple class="h-full w-full" name="subhead_id[]" id="subhead_id" required class="w-full disabled:opacity-50" disabled>
-                                    </select>
-                                </div>
-                            </fieldset> --}}
-
-                            <x-button type="submit">
-                                Generate PDF
-                            </x-button>
                         </div>
 
                     </form>
@@ -178,9 +135,6 @@
 <script>
     const heads = @json($heads);
     const subheads = @json($subheads);
-
-
-
     const subheadsci = @json($subheadsci);
     const subheadsciloc = @json($subheadsciloc);
     const glheads = @json($glheads);
@@ -192,8 +146,6 @@
     const funcsalinvs = @json(route('salerpt.funcsalinvs'));
     const funcsaltxinvs = @json(route('salerpt.funcsaltxinvs'));
 
-
-
     const head = document.getElementById('head_id')
     const subhead = document.getElementById('subhead_id')
     const fromdate = document.getElementById('fromdate')
@@ -202,50 +154,13 @@
     let subheadavailable = false
     let rptType = ''
     let list;
-    //   console.info(fromdate.value)
-    //   console.info(todate.value)
-        // console.info(subheadsqut)
-    // console.info(vchrcats)
+
     const headSelected = ()=>{
           const value = head.value
         //  const value = 6
         subhead.options.length = 0 // Reset List
         //  console.info(rptType)
         switch (rptType){
-            // case 'dlvrychln':
-
-            //     list = subheads.filter( l => l.MHEAD === Number(value)  )
-            //     if(list.length > 0)
-            //     {
-            //         list.forEach(e => {
-            //             addSelectElement(subhead,e.Subhead,e.title)
-            //         });
-            //         subhead.setAttribute('required','')
-            //         subhead.removeAttribute('disabled','')
-            //     }else{
-            //         subhead.removeAttribute('required','')
-            //         subhead.setAttribute('disabled','')
-            //     }
-            //     break;
-
-        // case 'quotation':
-
-
-        //         list = subheadsqut.filter( l => l.MHEAD === Number(value)  )
-        //         if(list.length > 0)
-        //         {
-        //             list.forEach(e => {
-        //                 addSelectElement(subhead,e.Subhead,e.title)
-        //             });
-        //             subhead.setAttribute('required','')
-        //             subhead.removeAttribute('disabled','')
-        //         }else{
-        //             subhead.removeAttribute('required','')
-        //             subhead.setAttribute('disabled','')
-        //         }
-        //         break;
-
-
 
         case 'quotation':
             // console.log(value)

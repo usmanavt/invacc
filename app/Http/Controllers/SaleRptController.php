@@ -138,20 +138,6 @@ class SaleRptController extends Controller
     public function fetch(Request $request)
     {
         //  https://stackoverflow.com/questions/42555512/how-to-create-temporary-table-in-laravel
-        // dd($request->all());
-        // $report_type = $request->report_type;
-        // $fromdate = $request->fromdate;
-        // $todate = $request->todate;
-        // $data = null;
-        // // MPDF Settings
-        // ini_set('max_execution_time', '2000');
-        // ini_set("pcre.backtrack_limit", "100000000");
-        // ini_set("memory_limit","4000M");
-        // ini_set('allow_url_fopen',1);
-        // ini_set('user_agent', 'Mozilla/5.0');
-        // $temp = storage_path('temp');
-        // $mpdf = $this->getMPDFSettings();
-
         $report_type = $request->report_type;
         $fromdate = $request->fromdate;
         $todate = $request->todate;
@@ -335,7 +321,7 @@ class SaleRptController extends Controller
                 foreach($chunks as $key => $val) {
                     $mpdf->WriteHTML($val);
                 }
-                $mpdf->AddPage();
+                // $mpdf->AddPage();
             }
             return response($mpdf->Output($filename,'I'),200)->header('Content-Type','application/pdf');
         }

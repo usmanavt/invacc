@@ -128,10 +128,6 @@
 
         });
 
-
-
-
-
         // console.info(cid)
         let csrfToken = document.head.querySelector("[name~=csrf-token][content]").content;
         //
