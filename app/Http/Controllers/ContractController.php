@@ -387,11 +387,11 @@ class ContractController extends Controller
                 $d->delete();
             }
             // Now update existing and add new
-            //  dd($cd->all());
-
+            // dd($cds->all());
             foreach ($cds as $cd) {
                 if($cd->id)
                 {
+                    // dd($cd->contract_id);
                     $cds = PcontractDetails::where('id',$cd->id)->first();
                     $cds->contract_id = $cd->contract_id;
                     $cds->material_id = $cd->material_id;
