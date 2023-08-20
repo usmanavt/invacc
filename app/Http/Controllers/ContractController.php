@@ -75,12 +75,6 @@ class ContractController extends Controller
         return $contracts;
     }
 
-
-    // $contracts =DB::table('contracts')
-    // ->join('suppliers', 'suppliers.id', '=', 'contracts.supplier_id')
-    // ->select('contracts.*','suppliers.title')
-
-
     public function getMasterImp(Request $request)
     {
 
@@ -104,7 +98,6 @@ class ContractController extends Controller
 
 
     }
-
 
     public function getMasterLoc(Request $request)
     {

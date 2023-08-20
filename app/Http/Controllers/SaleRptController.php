@@ -66,7 +66,6 @@ class SaleRptController extends Controller
 
     }
 
-
     public function funcsaltxinvs(Request $request)
     {
         //  dd($request->all());
@@ -76,9 +75,6 @@ class SaleRptController extends Controller
         return  DB::select('call procsalecategory(?,?,?,?)',array($fromdate,$todate,$head,3));
 
     }
-
-
-
 
 // For Customer Order
     public function funccustorder(Request $request)
@@ -95,9 +91,6 @@ class SaleRptController extends Controller
         // ->select('*')->whereBetween('invoice_date',[$fromdate,$todate])
         // ->where('MHEAD',$head)->get()->toArray();
     }
-
-
-
 
     public function getMPDFSettings($orientation = 'A4')
     {
@@ -122,7 +115,6 @@ class SaleRptController extends Controller
         return $mpdf;
     }
 
-
     public function vouchers(Request $request)
     {
         // dd($request->all());
@@ -133,7 +125,6 @@ class SaleRptController extends Controller
         // return DB::table('vwvouchercategory')->select('*')->whereBetween('docdate',[$fromdate,$todate])->where('mheadid',$head)->get()->toArray();
         return DB::table('vwsupcategory')->select('*')->whereBetween('docdate',[$fromdate,$todate])->where('mheadid',$head)->get()->toArray();
     }
-
 
     public function fetch(Request $request)
     {
@@ -254,7 +245,7 @@ class SaleRptController extends Controller
             foreach($chunks as $key => $val) {
                 $mpdf->WriteHTML($val);
             }
-            $mpdf->AddPage();
+            //$mpdf->AddPage();
         }
         return response($mpdf->Output($filename,'I'),200)->header('Content-Type','application/pdf');
 
@@ -321,7 +312,7 @@ class SaleRptController extends Controller
                 foreach($chunks as $key => $val) {
                     $mpdf->WriteHTML($val);
                 }
-                // $mpdf->AddPage();
+                // //$mpdf->AddPage();
             }
             return response($mpdf->Output($filename,'I'),200)->header('Content-Type','application/pdf');
         }
@@ -356,6 +347,9 @@ class SaleRptController extends Controller
             // $grouped = $collection->groupBy('SupName');       //  Sort collection by SupName
             $grouped = $collection->groupBy('id');       //  Sort collection by SupName
             $grouped->values()->all();                       //  values() removes indices of array
+
+            // dd($grouped);
+
             foreach($grouped as $g){
                  $html =  view('salerpt.custorder')->with('data',$g)->with('fromdate',$fromdate)
                  ->with('todate',$todate)
@@ -375,7 +369,7 @@ class SaleRptController extends Controller
                 foreach($chunks as $key => $val) {
                     $mpdf->WriteHTML($val);
                 }
-                $mpdf->AddPage();
+                //$mpdf->AddPage();
             }
             return response($mpdf->Output($filename,'I'),200)->header('Content-Type','application/pdf');
         }
@@ -424,7 +418,7 @@ class SaleRptController extends Controller
                 foreach($chunks as $key => $val) {
                     $mpdf->WriteHTML($val);
                 }
-                $mpdf->AddPage();
+                //$mpdf->AddPage();
             }
             return response($mpdf->Output($filename,'I'),200)->header('Content-Type','application/pdf');
         }
@@ -474,7 +468,7 @@ class SaleRptController extends Controller
                 foreach($chunks as $key => $val) {
                     $mpdf->WriteHTML($val);
                 }
-                $mpdf->AddPage();
+                //$mpdf->AddPage();
             }
             return response($mpdf->Output($filename,'I'),200)->header('Content-Type','application/pdf');
         }
@@ -536,7 +530,7 @@ class SaleRptController extends Controller
                 foreach($chunks as $key => $val) {
                     $mpdf->WriteHTML($val);
                 }
-                $mpdf->AddPage();
+                //$mpdf->AddPage();
             }
             $mpdf->Output($filename,'I');
             dd('wait');
