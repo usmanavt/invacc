@@ -13,7 +13,6 @@
 table{
     width:100%;
 }
-
 body{
     /* border:1px solid lightgray; */
     padding:30px;
