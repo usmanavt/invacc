@@ -1,9 +1,9 @@
 <x-app-layout>
 
     @push('styles')
-    <link rel="stylesheet" href="{{ asset('css/tabulator_simple.min.css') }}">
-    {{-- <link href="https://unpkg.com/tabulator-tables/dist/css/tabulator.min.css" rel="stylesheet"> --}}
-    {{-- <script type="text/javascript" src="https://unpkg.com/tabulator-tables/dist/js/tabulator.min.js"></script> --}}
+    {{-- <link rel="stylesheet" href="{{ asset('css/tabulator_simple.min.css') }}"> --}}
+    <link href="https://unpkg.com/tabulator-tables/dist/css/tabulator.min.css" rel="stylesheet">
+    <script type="text/javascript" src="https://unpkg.com/tabulator-tables/dist/js/tabulator.min.js"></script>
 
     @endpush
 
@@ -36,24 +36,21 @@
                                 @endforeach
                             </select>
 
-                            <x-input-text title="" name="custplan_id" id="custplan_id" value="{{ $saleinvoices->custplan_id }}" hidden     />
-                            {{-- <x-input-text title="Quotation No" name="qutno" id="qutno" value="{{ $customerorder->pqutno }}" disabled     />
-                            <x-input-text title="P.R No" name="prno" id="prno" value="{{ $customerorder->pprno }}" disabled     />
-                            <x-input-text title="P.O Seq.#" name="poseqno" id="poseqno" value="{{ $customerorder->poseqno }}"    required   /> --}}
-
+                                {{-- <x-input-text title="" name="custplan_id" id="custplan_id" value="{{ $saleinvoices->custplan_id }}" hidden     />
                                 <x-input-text title="P.O No" name="pono" id="pono" req required class="col-span-2" value="{{ $saleinvoices->pono }}" disabled  />
                                 <x-input-date title="P.O Date" name="podate" id="podate" req required class="col-span-2" value="{{ $saleinvoices->podate->format('Y-m-d') }}" disabled  />
-                                <x-input-text title="G.Pass No" name="gpno" id="gpno" value="{{ $saleinvoices->gpno }}"     required   />
-
-
-
-
-
+                                <x-input-text title="G.Pass No" name="gpno" id="gpno" value="{{ $saleinvoices->gpno }}"     required   /> --}}
+                                    <x-input-text title="Customer Name" name="custname" id="custname" value="{{ $salereturn->custname }}" req required class="col-span-2" disabled  />
+                                    <x-input-date title="Deilivery Date" id="dcdate" name="dcdate" value="{{ $salereturn->dcdate }}"   class="col-span-2" disabled />
+                                    <x-input-text title="DC No" name="dcno" id="dcno" value="{{ $salereturn->dcno }}"    disabled   />
+                                    <x-input-text title="Bill No" name="billno" id="billno" value="{{ $salereturn->billno }}"   disabled   />
+                                    <x-input-text title="G.Pass No" name="gpno" id="gpno" value="{{ $salereturn->gpno }}"   disabled   />
+                                    <x-input-date title="Return Date" name="rdate" id="rdate" value="{{ $salereturn->rdate }}"  class="col-span-2" />
                         </div>
-                        <div class="grid grid-cols-12 gap-1 py-2 items-center">
-                            <x-input-date title="Deilivery Date" id="deliverydt" name="deliverydt" req required class="col-span-2" value="{{ $saleinvoices->saldate->format('Y-m-d') }}" />
+                        {{-- <div class="grid grid-cols-12 gap-1 py-2 items-center"> --}}
+                            {{-- <x-input-date title="Deilivery Date" id="deliverydt" name="deliverydt" req required class="col-span-2" value="{{ $saleinvoices->saldate->format('Y-m-d') }}" />
                             <x-input-text title="DC No" name="dcno" id="dcno" value="{{ $saleinvoices->dcno }}"     required   />
-                            <x-input-text title="Bill No" name="billno" id="billno" value="{{ $saleinvoices->billno }}"     required   />
+                            <x-input-text title="Bill No" name="billno" id="billno" value="{{ $saleinvoices->billno }}"     required   /> --}}
 
 
                             {{-- <x-input-date title="P.O Date" id="podate" name="podate" value="{{ $customerorder->podate->format('Y-m-d') }}" req required class="col-span-2" />
@@ -68,7 +65,7 @@
                                 {{ $customerorder->remarks }}
 
                             </textarea> --}}
-                        </div>
+                        {{-- </div> --}}
                     </fieldset>
 
 
@@ -76,26 +73,27 @@
 
                         <fieldset class="border px-4 py-2 rounded">
                             <legend>Invoice Level Expenses</legend>
-                            <div class="grid grid-cols-12 gap-2 py-2 items-center">
-                                <x-input-numeric title="Discou(%)" name="discntper" id="discntper" value="{{ $saleinvoices->discntper }}" disabled    />
+                            {{-- <div class="grid grid-cols-12 gap-2 py-2 items-center"> --}}
+                                {{-- <x-input-numeric title="Discou(%)" name="discntper" id="discntper" value="{{ $saleinvoices->discntper }}" disabled    /> --}}
                                     {{-- <div class="basis-0 md:basis-1/5 self-center pt-4"> --}}
-                                        <input class="checked:bg-blue-500 checked:border-blue-500 focus:outline-none" type="checkbox" name="per" id="per" onclick="EnableDisableTextBox(this)" >
+                                        {{-- <input class="checked:bg-blue-500 checked:border-blue-500 focus:outline-none" type="checkbox" name="per" id="per" onclick="EnableDisableTextBox(this)" > --}}
                                         {{-- <label class="inline-block text-gray-800"> --}}
 
                                         {{-- </label> --}}
                                     {{-- </div> --}}
 
 
-                                <x-input-numeric title="Discount(Amount)" name="discntamt" id="discntamt" value="{{ $saleinvoices->discntamt }}"    />
+                                {{-- <x-input-numeric title="Discount(Amount)" name="discntamt" id="discntamt" value="{{ $saleinvoices->discntamt }}"    />
                                 <x-input-numeric title="Cartage" name="cartage" value="{{ $saleinvoices->cartage }}"  required  onblur="tnetamount()"  />
-                                <x-input-numeric title="Payble Amount" name="rcvblamount" value="{{ $saleinvoices->rcvblamount }}" disabled />
-                                <x-input-numeric title="" name="sale_invoice_id" id="sale_invoice_id" value="{{ $saleinvoices->id }}" hidden  />
-                            </div>
+                                <x-input-numeric title="Payble Amount" name="rcvblamount" value="{{ $saleinvoices->rcvblamount }}" disabled /> --}}
+                            {{-- </div> --}}
 
                             <div class="grid grid-cols-12 gap-2 py-2 items-center">
-                                <x-input-numeric title="Sale Tax(%)" name="saletaxper" value="{{ $saleinvoices->saletaxper }}" required  onblur="tnetamount()"  />
-                                <x-input-numeric title="Sale Tax(Rs)" name="saletaxamt" value="{{ $saleinvoices->saletaxamt }}" disabled    />
-                                <x-input-numeric title="Total Amount" name="totrcvbamount" value="{{ $saleinvoices->totrcvbamount }}" disabled />
+
+                                <x-input-numeric title="Sale Tax(%)" name="saletaxper" value="{{ $salereturn->saletaxper }}" required  onblur="tnetamount()"  />
+                                <x-input-numeric title="Sale Tax(Rs)" name="saletaxamt" value="{{ $salereturn->saletaxamt }}" disabled    />
+                                <x-input-numeric title="Total Amount" name="totrcvbamount" value="{{ $salereturn->totrcvbamount }}" disabled />
+                                <x-input-numeric title="" name="sale_invoice_id" id="sale_invoice_id" value="{{ $salereturn->id }}" hidden  />
                             </div>
 
 

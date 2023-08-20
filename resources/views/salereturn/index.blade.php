@@ -8,7 +8,7 @@
         <h2 class="font-semibold text-xl text-gray-800 leading-tight">
             Sale Return
             {{-- Create New Customer --}}
-            <a class="text-sm text-green-500 hover:text-gray-900" href="{{route('saleinvoices.create')}}">
+            <a class="text-sm text-green-500 hover:text-gray-900" href="{{route('salereturn.create')}}">
                 {{-- Add Icon --}}
                 <i class="fa fa-file fa-fw"></i>
                 Add New Record
@@ -16,7 +16,7 @@
             {{-- <span> | </span> --}}
             {{-- <button class="text-sm text-blue-300" onclick="setStatus(1)">Pending</button> --}}
             <span> | </span>
-            <button class="text-sm text-blue-300" onclick="setStatus(2)">Sales History</button>
+            <button class="text-sm text-blue-300" onclick="setStatus(2)">Sales Return History</button>
         </h2>
     </x-slot>
 
@@ -45,8 +45,8 @@
     var deleteIcon = function(cell, formatterParams, onRendered){ return "<i class='fa fa-trash text-red-600'></i>";};
     var printIcon = function(cell, formatterParams, onRendered){ return "<i class='fa fa-print text-pink-500'></i>";};
 
-    const getMaster = @json(route('sales.master'));
-    const getDetails = @json(route('sales.details'));
+    const getMaster = @json(route('saler.master'));
+    const getDetails = @json(route('saler.details'));
     let table;
     let searchValue = "";
     let statusValue="1";  // 1 = Pending, 2 - Completed
@@ -148,16 +148,16 @@
             {title: "id",field: "id"},
             // {title: "Dated",field: "created_at"},
             {title: "Customer",field: "customer.title"},
-            {title: "P.O No",field: "pono"},
-            {title: "P.O Date",field: "podate"},
+            // {title: "P.O No",field: "pono"},
+            {title: "Return Date",field: "rdate"},
             {title: "D.C No",field: "dcno"},
             {title: "G.P No",field: "gpno"},
             {title: "Bill No",field: "billno"},
-            {title: "Invoice Date",field: "saldate"},
+            {title: "Delivery Date",field: "dcdate"},
 
             {title: "WO/GST",field: "rcvblamount"},
             {title: "W/GST",field: "totrcvbamount"},
-            {title: "Pending",field: "ordrbal"},
+            // {title: "Pending",field: "ordrbal"},
             // {title: "Total Delivery Against Sale Order",field: "delivered"},
             // {title: "Sale Order Balance",field: "delivered"},
 

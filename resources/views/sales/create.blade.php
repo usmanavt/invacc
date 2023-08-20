@@ -116,8 +116,8 @@
         const deleteIcon = function(cell,formatterParams){return "<i class='fa fa-trash text-red-500'></i>";};
 
 
-             var getMaster = @json(route('sales.custplan')) ;
-             var getDetails = @json(route('sales.custplandtl'));
+             const getMaster = @json(route('sales.custplan')) ;
+             const getDetails = @json(route('sales.custplandtl'));
 
             //  if (document.getElementById("woq").checked)
 
@@ -338,7 +338,7 @@
 
 
                         price   :           obj.price,
-                        saleamnt:           obj.saleamnt,
+                        saleamnt:           obj.feedqty * obj.price,
 
                     }
                 ])
@@ -498,12 +498,12 @@ var updateValues = (cell) => {
         // if(cell.getData().sku_id==1)
         // {
         row.update({
-            "saleamnt": sum,
             // "mybrand": pr2,
             "qtypcs":qtypcs,
             "qtyfeet":qtyfeet,
             "qtykg":qtykg,
-            totalVal: sum
+            "saleamnt": sum,
+            totalVal: sum,
 
         });
     // }
@@ -536,7 +536,8 @@ var updateValues = (cell) => {
 
 }
 
-    var totalVal = function(values, data, calcParams){
+
+var totalVal = function(values, data, calcParams){
         var calc = 0;
         values.forEach(function(value){
             calc += Number(value) ;
@@ -714,6 +715,7 @@ var updateValues = (cell) => {
                             //    { return (cell.getData().qtyfeet * cell.getData().price).toFixed(0) }
 
                             return  ( Number(cell.getData().feedqty) * Number(cell.getData().price)).toFixed(0)
+
                         },
                         bottomCalc:totalVal  },
 

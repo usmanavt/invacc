@@ -20,7 +20,7 @@
                                 <x-dropdown-link href="{{ route('mastersetup') }}">Master</x-dropdown-link>
 
                                 <div class="ml-1">
-                                    <svg class="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg"
+                                    <svg class="fill-current h-4 w-20" xmlns="http://www.w3.org/2000/svg"
                                         viewBox="0 0 20 20">
                                         <path fill-rule="evenodd"
                                             d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
@@ -73,12 +73,13 @@
                         <x-slot name="content">
 
                             <x-dropdown-link href="{{ route('contracts.index') }}">Contracts</x-dropdown-link>
-                            <x-dropdown-link href="{{ route('cis.index') }}">Comm Invoices Imported</x-dropdown-link>
-                            <x-dropdown-link href="{{ route('localpurchase.index') }}">Comm Invoices Local</x-dropdown-link>
+                            <x-dropdown-link href="{{ route('cis.index') }}">Imported Purchase</x-dropdown-link>
+                            <x-dropdown-link href="{{ route('localpurchase.index') }}">Local Purchase</x-dropdown-link>
                             <x-dropdown-link href="{{ route('clearance.index') }}">Duty Clearance</x-dropdown-link>
-                            <x-dropdown-link href="{{ route('quotations.index') }}">Purchase Quotation</x-dropdown-link>
+                            <x-dropdown-link href="{{ route('quotations.index') }}">Price Quotation</x-dropdown-link>
                             <x-dropdown-link href="{{ route('customerorder.index') }}">Purchase Order</x-dropdown-link>
                             <x-dropdown-link href="{{ route('saleinvoices.index') }}">Sales Invoice</x-dropdown-link>
+                            <x-dropdown-link href="{{ route('salereturn.index') }}">Sales Return</x-dropdown-link>
                             <x-dropdown-link href="{{ route('bankpayments.index') }}">Bank Payments</x-dropdown-link>
                             <x-dropdown-link href="{{ route('bankrecivings.index') }}">Bank Recivings</x-dropdown-link>
                             <x-dropdown-link href="{{ route('cashpayments.index') }}">Cash Payments</x-dropdown-link>

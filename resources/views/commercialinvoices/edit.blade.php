@@ -9,7 +9,7 @@
 
     <x-slot name="header">
         <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-            Edit Commercial Invoice | {{ $i->id }}
+            Edit Imported Purchase | {{ $i->id }}
         </h2>
     </x-slot>
 

@@ -36,6 +36,7 @@ use App\Http\Controllers\CareController;
 use App\Http\Controllers\QuotationController;
 use App\Http\Controllers\CustomerOrderController;
 use App\Http\Controllers\CustomerOrderwoqController;
+use App\Http\Controllers\SalesRetunrsController;
 
 
 
@@ -167,6 +168,19 @@ Route::get('/sales/getSalesDetails', [SalesInvoicesController::class, 'getDetail
 Route::get('/sales/getSalesCustplan', [SalesInvoicesController::class, 'getMastercustplan'])->name('sales.custplan');
 Route::get('/sales/getSalesCustplandtl', [SalesInvoicesController::class, 'getDetailscustplan'])->name('sales.custplandtl');
 Route::resource('saleinvoices', SalesInvoicesController::class);
+
+
+
+
+
+
+//  Sales Return Invoices
+Route::get('/sales/getSalesrMaster', [SalesRetunrsController::class, 'getMaster'])->name('saler.master');
+Route::get('/sales/getSalesrDetails', [SalesRetunrsController::class, 'getDetail'])->name('saler.details');
+Route::get('/sales/getSalesrCustplan', [SalesRetunrsController::class, 'getMastersaler'])->name('salei.master');
+Route::get('/sales/getSalesrdtl', [SalesRetunrsController::class, 'getDetailssaler'])->name('salei.details');
+Route::resource('salereturn', SalesRetunrsController::class);
+
 
 
 //  Quotation

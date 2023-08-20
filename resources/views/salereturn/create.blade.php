@@ -1,9 +1,9 @@
 <x-app-layout>
 
     @push('styles')
-    {{-- <link rel="stylesheet" href="{{ asset('css/tabulator_simple.min.css') }}"> --}}
-    <link href="https://unpkg.com/tabulator-tables/dist/css/tabulator.min.css" rel="stylesheet">
-    <script type="text/javascript" src="https://unpkg.com/tabulator-tables/dist/js/tabulator.min.js"></script>
+    <link rel="stylesheet" href="{{ asset('css/tabulator_simple.min.css') }}">
+    {{-- <link href="https://unpkg.com/tabulator-tables/dist/css/tabulator.min.css" rel="stylesheet"> --}}
+    {{-- <script type="text/javascript" src="https://unpkg.com/tabulator-tables/dist/js/tabulator.min.js"></script> --}}
 
     @endpush
 
@@ -34,35 +34,41 @@
                                         @endforeach
                                     </select> --}}
                                 <x-input-text title="Customer Name" name="custname" id="custname" req required class="col-span-2" disabled  />
-                                <x-input-text title="P.O No" name="pono" id="pono" req required class="col-span-2" disabled  />
-                                <x-input-date title="P.O Date" name="podate" id="podate" req required class="col-span-2" disabled  />
-                                <x-input-text title="G.Pass No" name="gpno" id="gpno" value="{{$maxgpno}}"     required   />
+                                <x-input-date title="Deilivery Date" id="dcdate" name="dcdate"  class="col-span-2" disabled />
+                                <x-input-text title="DC No" name="dcno" id="dcno"    disabled   />
+                                <x-input-text title="Bill No" name="billno" id="billno"   disabled   />
+                                <x-input-text title="G.Pass No" name="gpno" id="gpno"   disabled   />
                             </div>
-                            <div class="grid grid-cols-12 gap-1 py-2 items-center">
-                                <x-input-date title="Deilivery Date" id="deliverydt" name="deliverydt" req required class="col-span-2" />
+                            {{-- <div class="grid grid-cols-12 gap-1 py-2 items-center"> --}}
+                                {{-- <x-input-date title="Deilivery Date" id="deliverydt" name="deliverydt" req required class="col-span-2" />
                                 <x-input-text title="DC No" name="dcno" id="dcno" value="{{$maxdcno}}"     required   />
-                                <x-input-text title="Bill No" name="billno" id="billno" value="{{$maxbillno}}"     required   />
+                                <x-input-text title="Bill No" name="billno" id="billno" value="{{$maxbillno}}"     required   /> --}}
                                 {{-- <label for="">
                                     Remakrs <span class="text-red-500 font-semibold  ">(*)</span>
                                 </label>
                                 <textarea name="remarks" id="remarks" cols="100" rows="2" maxlength="150" required class="rounded"></textarea> --}}
-                            </div>
+                            {{-- </div> --}}
                         </fieldset>
 
                         <fieldset class="border px-4 py-2 rounded">
                             {{-- <legend>Invoice Level Expenses</legend> --}}
                             <div class="grid grid-cols-12 gap-2 py-2 items-center">
-                                <x-input-numeric title="Discou(%)" name="discntper" id="discntper" disabled    />
-                                <input class="checked:bg-blue-500 checked:border-blue-500 focus:outline-none" type="checkbox" name="per" id="per" onclick="EnableDisableTextBox(this)" >
-                                <x-input-numeric title="Discount(Amount)" name="discntamt" id="discntamt"   />
-                                <x-input-numeric title="Cartage" name=cartage  required  onblur="tnetamount()"  />
+                                {{-- <x-input-numeric title="Discou(%)" name="discntper" id="discntper" disabled    /> --}}
+                                {{-- <input class="checked:bg-blue-500 checked:border-blue-500 focus:outline-none" type="checkbox" name="per" id="per" onclick="EnableDisableTextBox(this)" > --}}
+                                {{-- <x-input-numeric title="Discount(Amount)" name="discntamt" id="discntamt"   /> --}}
+                                {{-- <x-input-numeric title="Cartage" name=cartage  required  onblur="tnetamount()"  /> --}}
+                                <x-input-date title="Return Date" name="rdate" id="rdate"  class="col-span-2" />
                                 <x-input-numeric title="Receivable Amount" name="rcvblamount" disabled />
+                                <x-input-numeric title="Sale Tax(%)" name="saletaxper" disabled onblur="tnetamount()"  />
+                                <x-input-numeric title="Sale Tax(Rs)" name="saletaxamt" disabled    />
+                                <x-input-numeric title="Total Amount" name="totrcvbamount" disabled />
+
                             </div>
-                            <div class="grid grid-cols-12 gap-2 py-2 items-center">
+                            {{-- <div class="grid grid-cols-12 gap-2 py-2 items-center">
                                 <x-input-numeric title="Sale Tax(%)" name="saletaxper" required  onblur="tnetamount()"  />
                                 <x-input-numeric title="Sale Tax(Rs)" name="saletaxamt" disabled    />
                                 <x-input-numeric title="Total Amount" name="totrcvbamount" disabled />
-                            </div>
+                            </div> --}}
                         </fieldset>
 
                         <div class="flex flex-row px-4 py-2 items-center">
@@ -95,7 +101,7 @@
     <script src="{{ asset('js/tabulator.min.js') }}"></script>
 @endpush
 
-<x-tabulator-modal title="Pending Sale Order" />
+<x-tabulator-modal title="Sale Invoices" />
 
 @push('scripts')
     <script>
@@ -116,9 +122,9 @@
         const deleteIcon = function(cell,formatterParams){return "<i class='fa fa-trash text-red-500'></i>";};
 
 
-             var getMaster = @json(route('sales.custplan')) ;
-             var getDetails = @json(route('sales.custplandtl'));
-
+             const getMaster = @json(route('salei.master')) ;
+             const getDetails = @json(route('salei.details'));
+            //  console.log(getMaster)
             //  if (document.getElementById("woq").checked)
 
             //     {
@@ -146,7 +152,7 @@
         let dynamicTableData = []
         let adopted = false
         let detailsUrl = ''
-        let custplan_id = '';
+        let invoice_id = '';
         let customer_id = '';
 
 
@@ -222,11 +228,13 @@
                 {title:"Customer", field:"custname" , responsive:0},
                 {title:"P.O Date", field:"podated" , responsive:0},
                 {title:"P.O No", field:"pono" , visible:true ,headerSort:false, responsive:0},
+                {title:"DC No", field:"dcno" , visible:true ,headerSort:false, responsive:0},
+                {title:"Bill No", field:"billno" , visible:true ,headerSort:false, responsive:0},
                 {title:"Amount WO/GST", field:"rcvblamount" , visible:true ,headerSort:false,headerVertical:true,responsive:0},
                 {title:"Amount W/GST", field:"totrcvbamount" , visible:true ,headerSort:false,headerVertical:true,responsive:0},
-                {title:"Delivery Date", field:"deliverydtd", visible:true ,headerSort:false, responsive:0},
-                {title:"Delivered", field:"delivered", visible:true ,headerSort:false, responsive:0},
-                {title:"OrderBalance", field:"salbal", visible:true ,headerSort:false, responsive:0},
+                {title:"Sale Date", field:"saldated", visible:true ,headerSort:false, responsive:0},
+                // {title:"Delivered", field:"delivered", visible:true ,headerSort:false, responsive:0},
+                // {title:"OrderBalance", field:"salbal", visible:true ,headerSort:false, responsive:0},
 
                 // {title:"Valid Date", field:"valdate" , responsive:0},
 
@@ -249,20 +257,14 @@
 
             // Fill Master Data
             customer_id=data.customer_id
-            custplan_id = data.id
+            invoice_id = data.id
             customer_id=data.customer_id
-            pono.value = data.pono
-            podate.value = data.podate
-            deliverydt.value=data.deliverydt
-
-        //    console.log(data.podate)
-            discntper.value=data.discntper
             custname.value=data.custname
+            dcdate.value=data.saldate
 
-
-            discntper.value=data.discntper
-            discntamt.value=data.discntamt
-            cartage.value=data.cartage
+            dcno.value=data.dcno
+            gpno.value=data.gpno
+            billno.value=data.billno
 
             saletaxper.value=data.saletaxper
             saletaxamt.value=data.saletaxamt
@@ -308,7 +310,7 @@
                     {
                         id :                obj.id,
                         material_title :    obj.material_title,
-                        custplan_id :      obj.custplan_id,
+                        invoice_id :      obj.invoice_id,
                         material_id :       obj.material_id,
                         customer_id :       obj.customer_id,
                         user_id :           obj.user_id,
@@ -434,13 +436,14 @@ var tamount=0;
             //  discntamt.value=0;
             //  rcvblamount.value=0;
 
-            if (discntper.disabled)
-            {discntper.value=(discntamt.value/tamount*100).toFixed(2)};
-            if (!discntper.disabled)
-            {discntamt.value=(tamount*discntper.value/100).toFixed(0);};
+            // if (discntper.disabled)
+            // {discntper.value=(discntamt.value/tamount*100).toFixed(2)};
+            // if (!discntper.disabled)
+            // {discntamt.value=(tamount*discntper.value/100).toFixed(0);};
             // discntamt.value=(tamount*discntper.value/100).toFixed(0);
             // discntper.value=(discntamt.value/tamount*100).toFixed(2);
-            rcvblamount.value= ( Number(tamount)-Number(discntamt.value) )+Number(cartage.value)  ;
+            rcvblamount.value= ( Number(tamount) )
+            // +Number(cartage.value)  ;
             saletaxamt.value=(Number(rcvblamount.value) * Number(saletaxper.value) )/100 ;
             totrcvbamount.value=(Number(rcvblamount.value)+Number(saletaxamt.value)).toFixed(0);
         }
@@ -581,18 +584,18 @@ var updateValues = (cell) => {
 
 
                 {
-                title:'STOCK QUANTITY', headerHozAlign:"center",
+                title:'Sale Quantity', headerHozAlign:"center",
                     columns:[
                 {title:"InKg", field:"sqtykg", cssClass:"bg-gray-200 font-semibold"},
                 {title:"InPcs", field:"sqtypcs", cssClass:"bg-gray-200 font-semibold"},
                 {title:"InFeet", field:"sqtyfeet", cssClass:"bg-gray-200 font-semibold"}]},
 
-                {title:"Order BalQty",headerHozAlign :'center',
-                            field:"balqty", cssClass:"bg-gray-200 font-semibold",
-                },
+                // {title:"Order BalQty",headerHozAlign :'center',
+                //             field:"balqty", cssClass:"bg-gray-200 font-semibold",
+                // },
 
                 {
-                    title:'SALE QUANTITY', headerHozAlign:"center",
+                    title:'Sale Return Quantity', headerHozAlign:"center",
                     columns:[
 
 
@@ -676,11 +679,11 @@ var updateValues = (cell) => {
                     // {title:"feedqty", field:"feedqty",cellEdited: updateValues,editor:"number"},
 
                     {
-                    title:'SALE', headerHozAlign:"center",
+                    title:'Princing', headerHozAlign:"center",
                     columns:[
 
 
-                    {title:"Revise Qty", field:"feedqty",cellEdited: updateValues,editor:"number"},
+                    {title:"Return Qty", field:"feedqty",cellEdited: updateValues,editor:"number"},
 
                     {   title:"Sale Price",
                             headerHozAlign :'right',
@@ -730,16 +733,16 @@ var updateValues = (cell) => {
         function validateForm()
         {
 
-            var pono = document.getElementById("pono")
-            var poseqno = document.getElementById("poseqno")
-            var per= document.getElementById("per");
+            // var pono = document.getElementById("pono")
+            // var poseqno = document.getElementById("poseqno")
+            // var per= document.getElementById("per");
 
-            if(pono.value === '')
-            {
-                showSnackbar("P.O No Required","error");
-                pono.focus();
-                return;
-            }
+            // if(pono.value === '')
+            // {
+            //     showSnackbar("P.O No Required","error");
+            //     pono.focus();
+            //     return;
+            // }
 
 
 
@@ -766,11 +769,11 @@ var updateValues = (cell) => {
 
                 // if (element.sku_id==1)
                     // {
-                        if(element.feedqty > element.balqty )
-                            {
-                                showSnackbar("Sale Qty must be less than Plan qty","info");
-                                return;
-                            }
+                        // if(element.feedqty > element.balqty )
+                        //     {
+                        //         showSnackbar("Sale Qty must be less than Plan qty","info");
+                        //         return;
+                        //     }
                     // }
                 // if (element.sku_id==2)
                 //     {
@@ -794,8 +797,8 @@ var updateValues = (cell) => {
                 if( Number(element.qtykg)> Number(element.sqtykg) )
                     {
                         showSnackbar("sale qty must be less than stock qty","info");
-                        console.log(element.qtyfeet)
-                        console.log(element.sqtyfeet)
+                        // console.log(element.qtyfeet)
+                        // console.log(element.sqtyfeet)
                         return;
                     }
 
@@ -815,18 +818,16 @@ var updateValues = (cell) => {
 
 
             }
-
-
-            var data = { 'sales' : dynamicTableData,'rcvblamount':rcvblamount.value,'cartage':cartage.value,'discntamt':discntamt.value,'discntper':discntper.value,'discntper':discntper.value ,
-        'customer_id': customer_id,'deliverydt':deliverydt.value,'custplan_id':custplan_id,
+            var data = { 'sales' : dynamicTableData,'rcvblamount':rcvblamount.value,
+        'customer_id': customer_id,'dcdate':dcdate.value,'invoice_id':invoice_id,
         'saletaxper':saletaxper.value,'saletaxamt':saletaxamt.value,'totrcvbamount':totrcvbamount.value,
-        'podate':podate.value,'pono':pono.value,'dcno':dcno.value,'gpno':gpno.value,'billno':billno.value};
+        'dcno':dcno.value,'gpno':gpno.value,'billno':billno.value,'rdate':rdate.value};
 
 
 
 
             // All Ok - Proceed
-            fetch(@json(route('saleinvoices.store')),{
+            fetch(@json(route('salereturn.store')),{
                 credentials: 'same-origin', // 'include', default: 'omit'
                 method: 'POST', // 'GET', 'PUT', 'DELETE', etc.
                 // body: formData, // Coordinate the body type with 'Content-Type'
@@ -842,7 +843,7 @@ var updateValues = (cell) => {
             .then( response => {
                 if (response == 'success')
                 {
-                    window.open(window.location.origin + "/saleinvoices","_self" );
+                    window.open(window.location.origin + "/salereturn","_self" );
                 }
             })
             .catch(error => {
@@ -851,38 +852,38 @@ var updateValues = (cell) => {
             })
         }
 
-        function EnableDisableTextBox(per) {
-        var discntper = document.getElementById("discntper");
-        discntper.disabled = per.checked ? false : true;
-        discntper.style.color ="black";
+        // function EnableDisableTextBox(per) {
+        // var discntper = document.getElementById("discntper");
+        // discntper.disabled = per.checked ? false : true;
+        // discntper.style.color ="black";
         // if (!discntper.disabled) {
         //     discntper.focus();
         // }
-    }
+    // }
 
 
 
-    discntper.onblur=function(){
-    per=false
+    // discntper.onblur=function(){
+    // per=false
     // discntamt.value=(tamount*discntper.value/100).toFixed(0);
-     tnetamount();
+    //  tnetamount();
             // discntamt.value=(tamount*discntper.value/100).toFixed(0);
             // discntper.value=(discntamt.value/tamount*100).toFixed(2);
             // rcvblamount.value= ( Number(tamount)-Number(discntamt.value) )+Number(cartage.value)  ;
             // saletaxamt.value=(Number(rcvblamount.value) * Number(saletaxper.value) )/100 ;
             // totrcvbamount.value=(Number(rcvblamount.value)+Number(saletaxamt.value)).toFixed(0);
-}
+// }
 
-discntamt.onblur=function(){
+// discntamt.onblur=function(){
     // discntper.value=(discntamt.value/tamount*100).toFixed(2);
-     tnetamount();
+    //  tnetamount();
             // discntper.value=(discntamt.value/tamount*100).toFixed(2);
             // rcvblamount.value= ( Number(tamount)-Number(discntamt.value) )+Number(cartage.value)  ;
             // saletaxamt.value=(Number(rcvblamount.value) * Number(saletaxper.value) )/100 ;
             // totrcvbamount.value=(Number(rcvblamount.value)+Number(saletaxamt.value)).toFixed(0);
 
 
-}
+// }
     </script>
 @endpush
 

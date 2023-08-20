@@ -157,8 +157,8 @@ class CustomerOrderController  extends Controller
         $this->validate($request,[
             // 'saldate' => 'required|min:3|date',
         //    'title'=>'required|min:3|unique:materials'
-            'poseqno' => 'required|min:1|unique:customer_orders',
-            'pono' => 'required|min:1|unique:customer_orders'
+             'poseqno' => 'required|min:1|unique:customer_orders',
+            // 'pono' => 'required|min:1|unique:customer_orders'
             // 'gpno' => 'required|min:1|unique:sale_invoices',
             // 'customer_id' => 'required'
         ]);
