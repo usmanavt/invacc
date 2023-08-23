@@ -247,28 +247,18 @@ class SaleRptController extends Controller
             }
             //$mpdf->AddPage();
         }
-        return response($mpdf->Output($filename,'I'),200)->header('Content-Type','application/pdf');
-
-
-
+            return response($mpdf->Output($filename,'I'),200)->header('Content-Type','application/pdf');
 
         }
 
-
-
         if($report_type === 'quotation'){
-            //  dd($request->all());
-                $hdng1 = $request->cname;
-                $hdng2 = $request->csdrs;
-                $t1 = $request->t1;
-                $t2 = $request->t2;
-                $t3 = $request->t3;
-                $t4 = $request->t4;
-                $t5 = $request->t5;
-
-
-
-
+            $hdng1 = $request->cname;
+            $hdng2 = $request->csdrs;
+            $t1 = $request->t1;
+            $t2 = $request->t2;
+            $t3 = $request->t3;
+            $t4 = $request->t4;
+            $t5 = $request->t5;
             $head_id = $request->head_id;
             // $head = Head::findOrFail($head_id);
             $head = Customer::findOrFail($head_id);
@@ -290,11 +280,21 @@ class SaleRptController extends Controller
                 return redirect()->back();
             }
             $collection = collect($data);                   //  Make array a collection
-            // $grouped = $collection->groupBy('SupName');       //  Sort collection by SupName
-            $grouped = $collection->groupBy('id');       //  Sort collection by SupName
-            $grouped->values()->all();                       //  values() removes indices of array
+            ///// THIS IS CHANGED FOR REPORT//////////
+            // Filter non grpid
+            $nogrp = $collection->filter(function ($item){
+                return $item->grpid != 1;
+            })->values();
+            $nogrp->values()->all();
+            // Now FIlter Collection for grpid == 1
+            $collection = $collection->filter(function ($item){
+                return $item->grpid == 1;
+            })->values();
+            ///// THIS IS CHANGED FOR REPORT//////////
+            $grouped = $collection->groupBy('id');
+            $grouped->values()->all();        //  values() removes indices of array
             foreach($grouped as $g){
-                 $html =  view('salerpt.quotationrpt')->with('data',$g)->with('fromdate',$fromdate)->with('todate',$todate)
+                 $html =  view('salerpt.quotationrpt')->with('data',$g)->with('nogrp',$nogrp)->with('fromdate',$fromdate)->with('todate',$todate)
                  ->with('headtype',$head->title)
                  ->with('hdng1',$hdng1)->with('hdng2',$hdng2)->with('t1',$t1)->with('t2',$t2)->with('t3',$t3)->with('t4',$t4)->with('t5',$t5)
                  ->render();

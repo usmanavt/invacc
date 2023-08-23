@@ -26,7 +26,7 @@ body{
     padding:12px;
 }
 .databox{
-    height:480px;
+    /* height:480px; */
     /* padding-bottom: 8px; */
 }
 .column-headers{
@@ -79,85 +79,11 @@ body{
 
     {{-- calculate the lenght of data here,if more than 30 lines, we need different strategy to print multiple pages --}}
     @php
-    foreach ($data as $k => $d) {
-        // echo $k;
-        if ($d->grpid == 1){
-            unset($data[$k]);
-        }
-    }
+        $showlines = 23
     @endphp
-
-    @php
-        $lines = 31
-    @endphp
-
-    @if ( $lines <= 30 )
-
-      {{-- Report Header --}}
-        <table>
-            <tbody>
-                <tr>
-                    <td  style="text-align: center;">
-                        <span style="font-size:2rem;font-weight:bold;magin:1px;">PRICE QUOTATION</span>
-                    </td>
-                </tr>
-            </tbody>
-        </table>
-
-        <table>
-            <tbody>
-                <tr style="width:100%;"  >
-                    <td  style="width:60%;font-size:32px;" >  From  :  </td>
-                    <td style="width:10%;font-size:32px;"  > &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </td>
-                    <td  style="width:30;font-size:32px;" > To  :  </td>
-                </tr>
-                <tr align ="left" style="width:100%;"  >
-                    <td align ="left" style="width:100%;font-size:32px;">
-                        <h3> {{ $hdng1 }} </h3>
-                        <h6> {{ $hdng2 }} </h6>
-                    </td>
-                    <td style="width:10%;font-size:32px;"  > &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </td>
-                    <td align ="left" style="width:100%;font-size:32px;vertical-align: top;">
-                        <h3> {{ $data[0]->custname }} </h3>
-                        <h6> {{ $data[0]->custadrs }} </h6>
-                    </td>
-                </tr>
-            </tbody>
-        </table>
-
-        {{-- Ledger Info --}}
-        <table class="ledger">
-            <tbody>
-                <tr>
-                    <td>
-                        Quotation No:
-                    </td>
-                    <td align ="left" style="font-size:12px;font-weight: bold"  >
-                        {{ $data[0]->qutno }}
-                    </td>
-                    <td >
-                        Quotation Date:
-                    </td>
-                    <td align ="left" style="font-size:12px;font-weight: bold">
-                        {{ $data[0]->saldate }}
-                    </td>
-                    <td>
-                        P.R No:
-                    </td>
-                    <td align ="left" style="font-size:12px;font-weight: bold">
-                        {{-- From {{ $fromdate }} to {{ $todate }} --}}
-                        {{ $data[0]->prno }}
-                    </td>
-
-                    <td>
-                        Valid Date:
-                    </td>
-                    <td align ="left" style="font-size:12px;font-weight: bold">
-                        {{ $data[0]->valdate }}
-                    </td>
-                </tr>
-            </tbody>
-        </table>
+    @if ( count($data) <= $showlines )
+        {{-- Report Header --}}
+        @include('salerpt.components.quotationheader')
         {{-- Databox --}}
         <div class="databox">
 
@@ -185,33 +111,46 @@ body{
                     </tr>
                 </thead>
             </table>
-            {{-- {{ dd($data)}} --}}
+
             {{-- Actual Data --}}
             <table class="data" cellspacing="10" style="display:table-cell">
                 <tbody>
                     {{ $vvlues = 0 }}
-
+                    {{ $vqty = 0 }}
                     @for ($i = 0 ; $i < count($data) ; $i++)
-                        @if ($data[$i]->grpid  == 1)
-                            <tr>
-                                {{ $vvlues += $data[$i]->saleamnt }}
-                                <td class="" width="4%">{{ $i+1 }}</td>
-                                <td style="font-size:12px" width="40%">{{ $data[$i]->matname }} </td>
-                                <td style="text-align:center;font-size:12px" width="7%">{{ $data[$i]->UOM }} </td>
-                                <td style="text-align:left;font-size:12px" width="20%">{{ $data[$i]->mybrand }} </td>
-                                <td style="font-size:12px" width="9%">{{ number_format($data[$i]->qty,1) }} </td>
-                                <td style="font-size:12px" width="9%">{{ number_format($data[$i]->price,1) }} </td>
-                                <td style="text-align:right;font-size:12px" width="11%">{{ number_format($data[$i]->saleamnt,0) }} </td>
-                            </tr>
-                        @endif
+                        <tr>
+                            {{ $vvlues += $data[$i]->saleamnt }}
+                            {{ $vqty += $data[$i]->qty }}
+                            <td class="" width="4%">{{ $i+1 }}</td>
+                            <td style="font-size:12px" width="40%">{{ $data[$i]->matname }} </td>
+                            <td style="text-align:center;font-size:12px" width="7%">{{ $data[$i]->UOM }} </td>
+                            <td style="text-align:left;font-size:12px" width="20%">{{ $data[$i]->mybrand }} </td>
+                            <td style="font-size:12px" width="9%">{{ number_format($data[$i]->qty,1) }} </td>
+                            <td style="font-size:12px" width="9%">{{ number_format($data[$i]->price,1) }} </td>
+                            <td style="text-align:right;font-size:12px" width="11%">{{ number_format($data[$i]->saleamnt,0) }} </td>
+                        </tr>
                     @endfor
 
-                    {{-- <tr> --}}
-                        {{-- <td colspan="8" width="100%" style="text-align: right;border-bottom: 1px solid lightgray;"></td> --}}
+                    @if($i < $showlines)
+                        @for ($j = $i ; $j <= $showlines ; $j++)
+                        <tr>
+                            <td class="" width="4%">&nbsp;</td>
+                            <td style="font-size:12px" width="40%">&nbsp;</td>
+                            <td style="text-align:center;font-size:12px" width="7%"> </td>
+                            <td style="text-align:left;font-size:12px" width="20%"></td>
+                            <td style="font-size:12px" width="9%"></td>
+                            <td style="font-size:12px" width="9%"></td>
+                            <td style="text-align:right;font-size:12px" width="11%"></td>
+                        </tr>
+                        @endfor
+                    @endif
+                    <tr>
+                        <td colspan="4" width="100%" style="text-align: right;border-bottom: 1px solid lightgray;font-size:12px;font-weight:bold;">Totals</td>
                         {{-- <td colspan="4" width="8%" style="text-align: right;border-bottom: 1px solid lightgray;">{{ number_format($vtotpcs,0) }} </td> --}}
-                        {{-- <td class="1" width="8%" style="text-align: right;border-bottom: 1px solid lightgray;">{{ number_format($vwt,0) }} </td> --}}
-                        {{-- <td class="2" width="8%" style="text-align: right;border-bottom: 1px solid lightgray;">{{ number_format($vvlues,0) }} </td> --}}
-                {{-- </tr> --}}
+                        <td class="2" width="9%" style="text-align: right;border-bottom: 1px solid lightgray;font-size:12px;font-weight:bold;">{{ number_format($vqty,1) }} </td>
+                        <td class="2" width="9%" style="text-align: right;border-bottom: 1px solid lightgray;">&nbsp; </td>
+                        <td class="2" width="11%" style="text-align: right;border-bottom: 1px solid lightgray;font-size:12px;font-weight:bold;">{{ number_format($vvlues,1) }} </td>
+                    </tr>
 
                 </tbody>
 
@@ -219,111 +158,86 @@ body{
 
         </div>
         {{-- Footer  --}}
-        <div style="margin-top:10px;">
+        @include('salerpt.components.quotationfooter')
+
+    @else
+        {{ $vvlues = 0 }}
+        {{ $vqty = 0 }}
+        @foreach ($data->chunk(45) as $j)
+            {{-- Report Header --}}
+            @include('salerpt.components.quotationheader')
+
+            {{-- Databox --}}
+         <div class="databox">
 
             <table>
                 <tbody>
-                        <tr>
+                    <tr>
                         <td  style="text-align: left;">
-                            <span style="font-size:1.5rem;font-weight: bold">SUMMARY</span>
+                            <span style="font-size:1.5rem;font-weight: bold">ITEM COST</span>
                         </td>
                     </tr>
                 </tbody>
             </table>
 
-            <table class="data1" >
+            {{-- column headers --}}
+            <table class="column-headers ">
+                <thead >
+                    <tr>
+                        <th class="" width="4%">S#</th>
+                        <th class="" width="40%">Material Name</th>
+                        <th class="" width="7%">Unit</th>
+                        <th class="" width="20%">Brand</th>
+                        <th class="" width="9%">Quantity</th>
+                        <th class="" width="9%">Price</th>
+                        <th class="" width="11%">Amount</th>
+                    </tr>
+                </thead>
+            </table>
 
+            {{-- Actual Data --}}
+            <table class="data" cellspacing="10" style="display:table-cell">
                 <tbody>
-                    {{ $vvlues = 0 }}
-                    @for ($i = 0 ; $i < count($data) ; $i++)
-                        @if ($data[$i]->grpid  > 1)
-                            <tr>
-                                {{ $vvlues += $data[$i]->saleamnt }}
-                                <td style="font-size:12px" width="4%">{{ $i+1 }}</td>
-                                {{-- <td class="" width="16%">{{ $data[$i]->grpname }} </td> --}}
-                                <td style="font-size:12px;border-right: 1.5px solid burlywood;font-weight: bold;" width="40%">{{ $data[$i]->matname }} </td>
-                                <td style="text-align:center;font-size:12px ;font-weight: bold;" width="7%">{{ $data[$i]->UOM }} </td>
-                                <td style="text-align:left;font-size:12px;border-right: 1.5px solid burlywood;font-weight: bold;" width="20%">{{ $data[$i]->mybrand }} </td>
-                                <td style="text-align:right;font-size:12px;border-right: 1.5px solid burlywood;font-weight: bold;" width="9%">{{ number_format($data[$i]->qty,1) }} </td>
-                                <td style="text-align:right;font-size:12px;border-right: 1.5px solid burlywood;font-weight: bold;" width="9%">{{ number_format($data[$i]->price,1) }} </td>
-                                <td style="text-align:right;font-size:12px;font-weight: bold" width="11%">{{ number_format($data[$i]->saleamnt,0) }} </td>
 
-                            </tr>
-                        @endif
+
+                    @for ($i = 0 ; $i < count($data) ; $i++)
+                        <tr>
+                            {{ $vvlues += $data[$i]->saleamnt }}
+                            {{ $vqty += $data[$i]->qty }}
+                            <td class="" width="4%">{{ $i+1 }}</td>
+                            <td style="font-size:12px" width="40%">{{ $data[$i]->matname }} </td>
+                            <td style="text-align:center;font-size:12px" width="7%">{{ $data[$i]->UOM }} </td>
+                            <td style="text-align:left;font-size:12px" width="20%">{{ $data[$i]->mybrand }} </td>
+                            <td style="font-size:12px" width="9%">{{ number_format($data[$i]->qty,1) }} </td>
+                            <td style="font-size:12px" width="9%">{{ number_format($data[$i]->price,1) }} </td>
+                            <td style="text-align:right;font-size:12px" width="11%">{{ number_format($data[$i]->saleamnt,0) }} </td>
+                        </tr>
                     @endfor
 
-                    {{-- border:1px solid burlywood; --}}
-
-
-                    {{-- <h3 style="font-size:1rem">Term and condition: {{ $hdng3 }}</h3> --}}
                 </tbody>
+
             </table>
+
         </div>
 
+        @endforeach
+
         <table>
-            <tbody  >
+            <tbody>
 
-                <tr style="width:100%;"  >
-                    <td  style="width:60%;font-size:14px;font-weight: bold;" > Term of Condition:  </td>
+                <tr>
+                    <td colspan="4" width="100%" style="text-align: right;border-bottom: 1px solid lightgray;font-size:12px;font-weight:bold;">Totals</td>
+                    {{-- <td colspan="4" width="8%" style="text-align: right;border-bottom: 1px solid lightgray;">{{ number_format($vtotpcs,0) }} </td> --}}
+                    <td class="2" width="9%" style="text-align: right;border-bottom: 1px solid lightgray;font-size:12px;font-weight:bold;">{{ $i }}</td>
+                    <td class="2" width="9%" style="text-align: right;border-bottom: 1px solid lightgray;">&nbsp; </td>
+                    <td class="2" width="11%" style="text-align: right;border-bottom: 1px solid lightgray;font-size:12px;font-weight:bold;">{{ $i }}</td>
                 </tr>
-                <tr align ="left" style="width:60%;"  >
-                    <td align ="left" style="width:100%;font-size:12px;">
-                        {{ $t1 }}
-                    </td>
-                </tr>
-                <tr align ="left" style="width:60%;"  >
-                    <td align ="left" style="width:100%;font-size:12px;">
-                        {{ $t2 }}
-                    </td>
-                    </tr>
-                <tr align ="left" style="width:60%;"  >
-                    <td align ="left" style="width:100%;font-size:12px;">
-                        {{ $t3 }}
-                    </td>
-                </tr>
-                <tr align ="left" style="width:60%;"  >
-                    <td align ="left" style="width:100%;font-size:12px;">
-                        {{ $t4 }}
-                    </td>
-                </tr>
-                <tr align ="left" style="width:60%;"  >
-                    <td align ="left" style="width:100%;font-size:12px;">
-                        {{ $t5 }}
-                    </td>
-                </tr>
-
             </tbody>
         </table>
 
-        <div style="margin-top:60px;">
-            <table>
-                <tbody>
 
-                    <tr style="margin-top:16px;margin-bottom:16px;" >
-                        <td style="width=33%;font-size:80%;text-align:center">
-                            --------------------
-                        </td>
-
-                        <td style="width=33%;font-size:80%;text-align:center">
-                            --------------------
-                        </td>
-                    </tr>
-
-                    <tr>
-                        <td style="width=33%;font-size:80%;text-align:center">
-                            Prepared By
-                        </td>
-                        <td style="width=33%;font-size:80%;text-align:center">
-                            Approved By
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
-        </div>
-
-    @else
-
-
+         {{-- Footer  --}}
+         @include('salerpt.components.quotationfooter')
 
 
     @endif
