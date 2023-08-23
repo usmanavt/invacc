@@ -59,12 +59,12 @@
                                 <x-input-numeric title="Discou(%)" name="discntper" id="discntper" disabled    />
                                 <input class="checked:bg-blue-500 checked:border-blue-500 focus:outline-none" type="checkbox" name="per" id="per" onclick="EnableDisableTextBox(this)" >
                                 <x-input-numeric title="Discount(Amount)" name="discntamt" id="discntamt"   />
-                                <x-input-numeric title="Cartage" name=cartage  required  onblur="tnetamount()"  />
                                 <x-input-numeric title="Receivable Amount" name="rcvblamount" disabled />
                             </div>
                             <div class="grid grid-cols-12 gap-2 py-2 items-center">
                                 <x-input-numeric title="Sale Tax(%)" name="saletaxper" required  onblur="tnetamount()"  />
                                 <x-input-numeric title="Sale Tax(Rs)" name="saletaxamt" disabled    />
+                                <x-input-numeric title="Cartage" name=cartage  required  onblur="tnetamount()"  />
                                 <x-input-numeric title="Total Amount" name="totrcvbamount" disabled />
                             </div>
                         </fieldset>
@@ -404,9 +404,9 @@ var tamount=0;
             if (!discntper.disabled)
             {discntamt.value=(tamount*discntper.value/100).toFixed(0);};
 
-            rcvblamount.value= ( Number(tamount)-Number(discntamt.value) )+Number(cartage.value)  ;
+            rcvblamount.value= ( Number(tamount)-Number(discntamt.value) )  ;
             saletaxamt.value=(Number(rcvblamount.value) * Number(saletaxper.value) )/100 ;
-            totrcvbamount.value=(Number(rcvblamount.value)+Number(saletaxamt.value)).toFixed(0);
+            totrcvbamount.value=(Number(rcvblamount.value)+Number(saletaxamt.value)+Number(cartage.value)).toFixed(0);
         }
 
 var updateValues = (cell) => {

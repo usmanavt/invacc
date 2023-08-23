@@ -12,7 +12,8 @@ use App\Models\CustomerOrderDetails;
 
 use App\Models\SaleInvoices;
 use App\Models\SaleInvoicesDetails;
-
+use App\Models\CreateSaleRate;
+use App\Models\ItemBal;
 
 
 use App\Models\Material;
@@ -214,6 +215,48 @@ class SalesInvoicesController  extends Controller
                  $lpd->save();
             // }
 
+            $lstrt = CreateSaleRate::where('customer_id',$request->customer_id)->where('material_id',$cont['material_id'])->first();
+            if(!$lstrt) {
+                $abc = new CreateSaleRate();
+                $abc->customer_id=$request->customer_id;
+                $abc->material_id=$cont['material_id'];
+                $abc->salrate=$cont['price'];
+                $abc->save();
+            }
+            else
+                {
+                // $abc->customer_id=$request->customer_id;
+                // $abc->material_id=$cont['material_id'];
+
+                $lstrt->salrate=$cont['price'];
+                $lstrt->save();
+                }
+
+                // $lwsstk = ItemBal::where('locid',$location->id)->where('material_id',$cont['material_id'])->first();
+                // ;
+                //  if($cont['qtykg']>$lwsstk->cbqtykg || $cont['qtypcs']>$lwsstk->cbqtypcs || $cont['qtyfeet']>$lwsstk->cbqtyfeet )
+
+                //  {
+
+                //     $notification = array(
+                //         'message' => 'Message wording goes here',
+                //         // 'alert-type' => 'success / danger / warning / info etc.'
+                //     );
+                //     return ;
+
+                // }
+
+                //  { return response()->json(['message' =>'success'], 200);}
+                //  { dd($lwsstk->cbqtykg,($cont['qtykg'])); }
+
+
+
+
+
+
+
+
+
             //  $dlvrdval = SaleInvoices->->select('totrcvbamount')::where('custplan_id',$ci->custplan_id)->sum('totrcvbamount');
             //  $dlvrdval=DB::table('sale_invoices')->where('custplan_id',$ci->custplan_id)->select('totrcvbamount')->sum('totrcvbamount');
              $dlvrdval = SaleInvoices::where('custplan_id',$ci->custplan_id)->sum('totrcvbamount');
@@ -347,7 +390,7 @@ class SalesInvoicesController  extends Controller
                     // Last Sale Rate Update in Material Table
                     // $matsrate = Material::findOrFail($cds->material_id);
                     // if($cds->sku_id == 1)
-                    // { $matsrate->salertkg = $cds->price;}
+                    // { $matsrate->salertkg = $cds->price+;}
                     // elseif($cds->sku_id == 2)
                     // { $matsrate->salertpcs = $cds->price;}
                     // elseif($cds->sku_id == 3)
@@ -369,17 +412,29 @@ class SalesInvoicesController  extends Controller
                     ->first();
                     $custplnbal->balqty = $custplnbal->qtykg - $dlvrd;
                     $custplnbal->save();
-
-
-
                     $cds->save();
-                 }
 
 
-                //  $cds->save();
+                    $lstrt = CreateSaleRate::where('customer_id',$request->customer_id)->where('material_id',$cd->material_id)->first();
+                    if(!$lstrt) {
+                        $abc = new CreateSaleRate();
+                        $abc->customer_id=$request->customer_id;
+                        $abc->material_id=$cd->material_id;
+                        $abc->salrate=$cd['price'];;
+                        $abc->save();
+                    }
+                    else
+                        {
+                        $lstrt->salrate=$cd['price'];;
+                        $lstrt->save();
+                        }
+
+
+
+
+
+                    //  $cds->save();
                 // }
-                else
-                 {
                 //     //  The item is new, Add it
                 //      $cds = new SaleInvoicesDetails();
                 //      $cds->sale_invoice_id = $sale_invoices->id;

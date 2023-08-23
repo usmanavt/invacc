@@ -10,7 +10,7 @@ use App\Models\Reciving;
 use App\Models\Clearance;
 use Illuminate\Http\Request;
 use App\Models\ContractDetails;
-use App\Models\PcontractDetails;
+use App\Models\Contract;
 use App\Models\CommercialInvoice;
 use Illuminate\Support\Facades\DB;
 use App\Models\RecivingPendingDetails;
@@ -82,7 +82,8 @@ class CommercialInvoiceController extends Controller
         $id = $request->id;
         // $contractDetails = ContractDetails::with('material.hscodes')->where('contract_id',$id)->get();
 
-        $contractDetails = DB::table('vwfrmpendcontractsdtl')->where('contract_id',$id)->get();
+        // $contractDetails = DB::table('vwfrmpendcontractsdtl')->where('contract_id',$id)->get();
+        $contractDetails = DB::select('call procfrmpendcontractsdtl(?)',array( $id ));
         return response()->json($contractDetails, 200);
     }
 
@@ -156,13 +157,13 @@ class CommercialInvoiceController extends Controller
             $ci->total = $request->total;
             $ci->save();
 
-            $pcontract = Pcontract::where('contract_id',$ci->contract_id)->where('status', '=', 1)->first();
-            $vartpcs1=$pcontract->totalpcs;
-            $vartwt1=$pcontract->conversion_rate;
-            $varval1=$pcontract->insurance;
-            $pcontract->status=0;
-            $pcontract->commercial_invoice_id=$ci->id;
-            $pcontract->save();
+            // $pcontract = Pcontract::where('contract_id',$ci->contract_id)->where('status', '=', 1)->first();
+            // $vartpcs1=$pcontract->totalpcs;
+            // $vartwt1=$pcontract->conversion_rate;
+            // $varval1=$pcontract->insurance;
+            // $pcontract->status=0;
+            // $pcontract->commercial_invoice_id=$ci->id;
+            // $pcontract->save();
 
 
 
@@ -248,185 +249,105 @@ class CommercialInvoiceController extends Controller
                 //     $matsrate->balpcs = $matsrate->balpcs + $cid['pcs'] ;
                 //     $matsrate->balfeet = $matsrate->balfeet + $cid['qtyinfeet'];
                 //     $matsrate->save();
-                 $c->save();
-
-                $pcontractdtl = PcontractDetails::where('contract_id',$cid['contract_id'])
-                ->where('material_id',$cid['material_id'])->where('status', '=', 1)->first();
-                $vartpcs=$pcontractdtl->totpcs - $cid['pcs'] ;
-                $vartwt=$pcontractdtl->gdswt - $cid['gdswt'] ;
-                $varval=$pcontractdtl->purval - $cid['amtindollar'];
-                $pcontractdtl->status=0;
-                $pcontractdtl->commercial_invoice_id=$ci->id;
-                $pcontractdtl->save();
 
 
-                $cpdtl = new PcontractDetails();
-                $cpdtl->contract_id = $cid['contract_id'];
-                $cpdtl->commercial_invoice_id = $ci->id;
-                $cpdtl->material_id = $cid['material_id'];
-                $cpdtl->user_id = $cid['user_id'];
-                $cpdtl->totpcs = $vartpcs;
-                $cpdtl->gdswt = $vartwt;
-                $cpdtl->purval = $varval;
-                $cpdtl->status = 1;
-                $cpdtl->closed = 0;
-                $cpdtl->save();
+                $c->save();
 
 
-                $cpdtl1 = new PcommercialInvoiceDetails();
-                $cpdtl1->commercial_invoice_id = $ci->id;
-                $cpdtl1->material_id = $cid['material_id'];
-                $cpdtl1->pcs = $cid['pcs'];
-                $cpdtl1->gdswt = $cid['dutygdswt'];
-                $cpdtl1->gdsprice = $cid['dtyrate'];
-                $cpdtl1->dutyval = $cid['dtyamtindollar'];
-                $cpdtl1->status = 1;
-                $cpdtl1->closed = 1;
-                $cpdtl1->save();
+                // $tsumwt3 =  CommercialInvoiceDetails::where('contract_id',$c->contract_id)->where('material_id',$c->material_id) ->sum('gdswt');
+                // $tsumpcs3 = CommercialInvoiceDetails::where('contract_id',$c->contract_id)->where('material_id',$c->material_id)->sum('pcs');
+                // $tsumval3 = CommercialInvoiceDetails::where('contract_id',$c->contract_id)->where('material_id',$c->material_id)->sum('amtindollar');
+
+
+                $tcontmbal = ContractDetails::where('contract_id',$c->contract_id)->where('material_id',$c->material_id)->first();
+                // dd($tcontmbal->tbalwt);
+                $tcontmbal->tbalwt = $tcontmbal->tbalwt - $cid['gdswt'];
+                $tcontmbal->tbalpcs=$tcontmbal->tbalpcs - $cid['pcs'];
+                $tcontmbal->tbalsupval=$tcontmbal->tbalsupval - $cid['amtindollar'];
+                $tcontmbal->save();
 
 
 
+                // $pcontractdtl = PcontractDetails::where('contract_id',$cid['contract_id'])
+                // ->where('material_id',$cid['material_id'])->where('status', '=', 1)->first();
+                // $vartpcs=$pcontractdtl->totpcs - $cid['pcs'] ;
+                // $vartwt=$pcontractdtl->gdswt - $cid['gdswt'] ;
+                // $varval=$pcontractdtl->purval - $cid['amtindollar'];
+                // $pcontractdtl->status=0;
+                // $pcontractdtl->commercial_invoice_id=$ci->id;
+                // $pcontractdtl->save();
+
+
+                // $cpdtl = new PcontractDetails();
+                // $cpdtl->contract_id = $cid['contract_id'];
+                // $cpdtl->commercial_invoice_id = $ci->id;
+                // $cpdtl->material_id = $cid['material_id'];
+                // $cpdtl->user_id = $cid['user_id'];
+                // $cpdtl->totpcs = $vartpcs;
+                // $cpdtl->gdswt = $vartwt;
+                // $cpdtl->purval = $varval;
+                // $cpdtl->status = 1;
+                // $cpdtl->closed = 0;
+                // $cpdtl->save();
+
+
+                // $cpdtl1 = new PcommercialInvoiceDetails();
+                // $cpdtl1->commercial_invoice_id = $ci->id;
+                // $cpdtl1->material_id = $cid['material_id'];
+                // $cpdtl1->pcs = $cid['pcs'];
+                // $cpdtl1->gdswt = $cid['dutygdswt'];
+                // $cpdtl1->gdsprice = $cid['dtyrate'];
+                // $cpdtl1->dutyval = $cid['dtyamtindollar'];
+                // $cpdtl1->status = 1;
+                // $cpdtl1->closed = 1;
+                // $cpdtl1->save();
 
 
 
 
 
 
-                // Create Auto Pending Clearance [COpy of CIDetails]
-                // $cpd = new ClearancePendingDetails();
-                // $cpd->clearance_id = $cl->id;
-                // $cpd->machine_date = $cl->machine_date;
-                // $cpd->machineno = $cl->machineno;
-                // $cpd->invoiceno = $cl->invoiceno;
-                // $cpd->commercial_invoice_id =  $c->commercial_invoice_id;
-                // $cpd->contract_id = $cid['contract_id'];
-                // $cpd->material_id = $cid['material_id'];
-                // $cpd->supplier_id = $cid['supplier_id'];
-                // $cpd->user_id = $cid['user_id'];
-                // $cpd->category_id = $cid['category_id'];
-                // $cpd->sku_id = $cid['sku_id'];
-                // $cpd->dimension_id = $cid['dimension_id'];
-                // // $cpd->source_id = $cid['source_id'];
-                // // $cpd->brand_id = $cid['brand_id'];
 
-                // $cpd->pcs = $cid['pcs'];
-                // $cpd->gdswt = $cid['gdswt'];
-
-                // /// *** From Muhammad usman on 27-12-2022
-                // $cpd->pcs_pending = $cid['pcs'];
-                // $cpd->gdswt_pending = $cid['gdswt'];
-                // /// *********************************
-
-                // $cpd->inkg = $cid['inkg'];
-                // $cpd->pcs = $cid['pcs'];
-                // $cpd->gdswt = $cid['gdswt'];
-                // $cpd->inkg = $cid['inkg'];
-                // $cpd->gdsprice = $cid['dtyrate'];
-                // // $cpd->dtyrate = $cid['dtyrate'];
-                // $cpd->amtindollar = $cid['amtindollar'];
-                // $cpd->amtinpkr = $cid['amtinpkr'];
-
-                // $cpd->hscode = $cid['hscode'];
-                // $cpd->cd = $cid['cd'];
-                // $cpd->st = $cid['st'];
-                // $cpd->rd = $cid['rd'];
-                // $cpd->acd = $cid['acd'];
-                // $cpd->ast = $cid['ast'];
-                // $cpd->it = $cid['it'];
-                // $cpd->wse = $cid['wse'];
-
-                // $cpd->length = $cid['length'];
-                // $cpd->itmratio = $cid['itmratio'];
-                // $cpd->insuranceperitem = $cid['insuranceperitem'];
-                // $cpd->amountwithoutinsurance = $cid['amountwithoutinsurance'];
-                // $cpd->onepercentdutypkr = $cid['onepercentdutypkr'];
-                // $cpd->pricevaluecostsheet = $cid['pricevaluecostsheet'];
-                // $cpd->totallccostwexp = $cid['totallccostwexp'];
-
-                // $cpd->cda = $cid['cda'];
-                // $cpd->sta = $cid['sta'];
-                // $cpd->rda = $cid['rda'];
-                // $cpd->acda = $cid['acda'];
-                // $cpd->asta = $cid['asta'];
-                // $cpd->ita = $cid['ita'];
-                // $cpd->wsca = $cid['wsca'];
-                // $cpd->total = $cid['total'];
-                // $cpd->perpc = $cid['perpc'];
-                // $cpd->perkg = $cid['perkg'];
-                // $cpd->perft = $cid['perft'];
-                // $cpd->otherexpenses = $cid['otherexpenses'];
-                // $cpd->save();
-                //  Create Auto Pending Reciving [Copy of CIDetails]
-                // $preciving = new RecivingPendingDetails();
-                // $preciving->reciving_id = $reciving->id;
-                // $preciving->machine_date = $request->machine_date;
-                // $preciving->machineno = $request->machineno;
-                // $preciving->supplier_id = $cid['supplier_id'];
-                // $preciving->commercial_invoice_id = $ci->id;
-                // $preciving->invoiceno = $request->invoiceno;
-                // $preciving->material_id = $cid['material_id'];
-                // $preciving->qtyinpcs = $cid['pcs'];
-                // $preciving->qtyinkg = $cid['gdswt'];
-                // $preciving->qtyinfeet = $cid['qtyinfeet']; //inkg
-                // $preciving->rateperpc = $cid['perpc'];
-                // $preciving->rateperkg = $cid['perkg'];
-                // $preciving->rateperft = $cid['perft'];
-
-                // /// Changed from usman on 16-12-2022
-                // $preciving->length = $cid['length'];
-                // $preciving->inkg = $cid['inkg'];
-                // //******************************** */
-
-                // $preciving->qtyinpcspending = $preciving->qtyinpcs = $cid['pcs'];
-                // $preciving->save();
             }
 
 
-                // $vartpcs=$pcontract->totalpcs;
-                // $vartwt=$pcontract->conversion_rate;
-                // $varval=$pcontract->insurance;
+                // $sumwt = $vartwt1 -  CommercialInvoiceDetails::where('commercial_invoice_id',$cpdtl->commercial_invoice_id)->sum('gdswt');
+                // $sumpcs = $vartpcs1 -  CommercialInvoiceDetails::where('commercial_invoice_id',$cpdtl->commercial_invoice_id)->sum('pcs');
+                // $sumval = $varval1 -  CommercialInvoiceDetails::where('commercial_invoice_id',$cpdtl->commercial_invoice_id)->sum('amtindollar');
 
-                $sumwt = $vartwt1 -  CommercialInvoiceDetails::where('commercial_invoice_id',$cpdtl->commercial_invoice_id)->sum('gdswt');
-                $sumpcs = $vartpcs1 -  CommercialInvoiceDetails::where('commercial_invoice_id',$cpdtl->commercial_invoice_id)->sum('pcs');
-                $sumval = $varval1 -  CommercialInvoiceDetails::where('commercial_invoice_id',$cpdtl->commercial_invoice_id)->sum('amtindollar');
-                // $sumdtyval = CommercialInvoiceDetails::where('contcommercial_invoice_idract_id',$ci->id)->sum('dutval');
+                // $pcontract = new Pcontract();
+                // $pcontract->status=1;
+                // $pcontract->commercial_invoice_id=$ci->id;
+                // $pcontract->supplier_id=1;
+                // $pcontract->invoice_date = $request->invoicedate;
+                // $pcontract->number = $request->invoiceno;
+                // $pcontract->contract_id = $request->contract_id;
+                // $pcontract->supplier_id = $comminvoice[0]['supplier_id'];
+                // $pcontract->conversion_rate = $sumwt;
+                // $pcontract->insurance = $sumval;
+                // $pcontract->totalpcs = $sumpcs;
 
-                // $sumwt=$vartwt - $sumwt;
-                // $sumpcs=$vartpcs - $sumpcs;
-                // $sumval=$varval - $sumval;
-        //    dd($sumwt());
-                $pcontract = new Pcontract();
-                $pcontract->status=1;
-                $pcontract->commercial_invoice_id=$ci->id;
-                $pcontract->supplier_id=1;
-                $pcontract->invoice_date = $request->invoicedate;
-                $pcontract->number = $request->invoiceno;
-                $pcontract->contract_id = $request->contract_id;
-                $pcontract->supplier_id = $comminvoice[0]['supplier_id'];
-                $pcontract->conversion_rate = $sumwt;
-                $pcontract->insurance = $sumval;
-                $pcontract->totalpcs = $sumpcs;
-                // $pcontract->dutyval = $sumdtyval;
-                $pcontract->save();
+                // $pcontract->save();
 
-                $sumwt3 =  CommercialInvoiceDetails::where('commercial_invoice_id',$cpdtl->commercial_invoice_id)->sum('dutygdswt');
-                $sumpcs3 = CommercialInvoiceDetails::where('commercial_invoice_id',$cpdtl->commercial_invoice_id)->sum('pcs');
-                $sumval3 = CommercialInvoiceDetails::where('commercial_invoice_id',$cpdtl->commercial_invoice_id)->sum('dtyamtindollar');
+                $sumwt3 =  CommercialInvoiceDetails::where('contract_id',$c->contract_id)->sum('gdswt');
+                $sumpcs3 = CommercialInvoiceDetails::where('contract_id',$c->contract_id)->sum('pcs');
+                $sumval3 = CommercialInvoiceDetails::where('contract_id',$c->contract_id)->sum('amtindollar');
+                $contmbal = Contract::where('id',$c->contract_id)->first();
+                $contmbal->balwt = $contmbal->conversion_rate - $sumwt3;
+                $contmbal->balpcs=$contmbal->totalpcs - $sumpcs3;
+                $contmbal->balsupval=$contmbal->insurance -$sumval3;
+                $contmbal->save();
 
-
-
-
-                $pci = new PcommercialInvoice();
-                $pci->commercial_invoice_id = $cpdtl->commercial_invoice_id;
-                $pci->invoice_date = $request->invoicedate;
-                $pci->invoiceno = $request->invoiceno;
-                $pci->machine_date = $request->machine_date;
-                $pci->machineno = $request->machineno;
-
-                $pci->totpcs = $sumpcs3;
-                $pci->totwt = $sumwt3;
-                $pci->dutyval = $sumval3;
-                $pci->save();
+                // $pci = new PcommercialInvoice();
+                // $pci->commercial_invoice_id = $cpdtl->commercial_invoice_id;
+                // $pci->invoice_date = $request->invoicedate;
+                // $pci->invoiceno = $request->invoiceno;
+                // $pci->machine_date = $request->machine_date;
+                // $pci->machineno = $request->machineno;
+                // $pci->totpcs = $sumpcs3;
+                // $pci->totwt = $sumwt3;
+                // $pci->dutyval = $sumval3;
+                // $pci->save();
             DB::commit();
             Session::flash('success',"Commerical Invoice#[$ci->id] Created with Reciving# & Duty Clearance#[$ci->id]");
             return response()->json(['success'],200);
@@ -505,6 +426,14 @@ class CommercialInvoiceController extends Controller
 
             foreach ($comminvoice as $cid) {
                 $c = CommercialInvoiceDetails::findOrFail($cid['id']);
+                $tsumwt3 =  CommercialInvoiceDetails::where('commercial_invoice_id',$ci->id)->where('material_id',$cid['material_id'])->first();
+
+
+                 $bwt=$tsumwt3->gdswt;
+                 $bpcs=$tsumwt3->pcs;
+                 $bval=$tsumwt3->amtindollar;
+
+
                 $c->machine_date = $ci->machine_date;
                 $c->machineno = $ci->machineno;
                 $c->commercial_invoice_id = $cid['commercial_invoice_id'];
@@ -566,51 +495,76 @@ class CommercialInvoiceController extends Controller
 
 
 
+                 $varwt=$bwt - $cid['gdswt'];
+                 $varpcs=$bpcs- $cid['pcs'];
+                 $varval=$bval- $cid['amtindollar'];
+
                 // $matsrate = Material::findOrFail($c->material_id);
                 // $matsrate->balkg = $matsrate->balkg + ( $cid['bkg'] - $cid['gdswt'] );
                 // $matsrate->balpcs = $matsrate->balpcs + ( $cid['bpcs'] - $cid['pcs'] );
                 // $matsrate->balfeet = $matsrate->balfeet + ( $cid['bfeet'] - $cid['qtyinfeet'] );
                 // $matsrate->save();
-                // $c->save();
+
+                $c->save();
+
+                //  $tsumwt3 =  CommercialInvoiceDetails::where('contract_id',$c->contract_id)->where('material_id',$c->material_id) ->sum('gdswt');
+                //  $tsumpcs3 = CommercialInvoiceDetails::where('contract_id',$c->contract_id)->where('material_id',$c->material_id)->sum('pcs');
+                //  $tsumval3 = CommercialInvoiceDetails::where('contract_id',$c->contract_id)->where('material_id',$c->material_id)->sum('amtindollar');
+
+
+                 // for Contract_details Balance
+
+                 $swt=0;
+                 $spcs=0;
+                 $sval=0;
+
+                 $tcontmbal = ContractDetails::where('contract_id',$c->contract_id)->where('material_id',$c->material_id)->first();
+                 $tcontmbal->tbalwt = $tcontmbal->tbalwt + $varwt;
+                 $tcontmbal->tbalpcs=$tcontmbal->tbalpcs + $varpcs;
+                 $tcontmbal->tbalsupval=$tcontmbal->tbalsupval + $varval;
+
+                //  $swt=$swt + $tcontmbal->tbalwt ;
+                //  $spcs=$spcs + $tcontmbal->tbalpcs ;
+                //  $sval=$sval + $tcontmbal->tbalsupval ;
+
+                 $tcontmbal->save();
+
+
+
+                //  dd($swt);
 
 
 
 
-
-
-
-
+                // $pcontractdtl = PcontractDetails::where('commercial_invoice_id',$ci->id)
+                // ->where('material_id',$cid['material_id'])
+                // ->where('status', '=', 0)->first();
+                // $vartpcs2=$pcontractdtl->totpcs - $cid['pcs'] ;
+                // $vartwt2=$pcontractdtl->gdswt - $cid['gdswt'] ;
+                // $varval2=$pcontractdtl->purval - $cid['amtindollar'];
                 // dd($c->all());
 
-                $pcontractdtl = PcontractDetails::where('commercial_invoice_id',$ci->id)
-                ->where('material_id',$cid['material_id'])
-                ->where('status', '=', 0)->first();
-                $vartpcs2=$pcontractdtl->totpcs - $cid['pcs'] ;
-                $vartwt2=$pcontractdtl->gdswt - $cid['gdswt'] ;
-                $varval2=$pcontractdtl->purval - $cid['amtindollar'];
-                // dd($c->all());
 
 
-
-                $pcontractdtl = PcontractDetails::where('commercial_invoice_id',$cid['commercial_invoice_id'])
-                ->where('material_id',$cid['material_id'])
-                ->where('status', '=', 1)->first();
-                $pcontractdtl->totpcs=$vartpcs2;
-                $pcontractdtl->gdswt=$vartwt2;
-                $pcontractdtl->purval=$varval2;
-                $pcontractdtl->save();
+                // $pcontractdtl = PcontractDetails::where('commercial_invoice_id',$cid['commercial_invoice_id'])
+                // ->where('material_id',$cid['material_id'])
+                // ->where('status', '=', 1)->first();
+                // $pcontractdtl->totpcs=$vartpcs2;
+                // $pcontractdtl->gdswt=$vartwt2;
+                // $pcontractdtl->purval=$varval2;
+                // $pcontractdtl->save();
 
 
 
 
-                $cpdtl1 =PcommercialInvoiceDetails::where('commercial_invoice_id',$cid['commercial_invoice_id'])
-                ->where('material_id',$cid['material_id'])
-                ->where('status', '=', 1)->first();
-                $cpdtl1->pcs = $cid['pcs'];
-                $cpdtl1->gdswt = $cid['dutygdswt'];
-                $cpdtl1->gdsprice = $cid['dtyrate'];
-                $cpdtl1->dutyval = $cid['dtyamtindollar'];
-                $cpdtl1->save();
+                // $cpdtl1 =PcommercialInvoiceDetails::where('commercial_invoice_id',$cid['commercial_invoice_id'])
+                // ->where('material_id',$cid['material_id'])
+                // ->where('status', '=', 1)->first();
+                // $cpdtl1->pcs = $cid['pcs'];
+                // $cpdtl1->gdswt = $cid['dutygdswt'];
+                // $cpdtl1->gdsprice = $cid['dtyrate'];
+                // $cpdtl1->dutyval = $cid['dtyamtindollar'];
+                // $cpdtl1->save();
 
 
 
@@ -678,50 +632,61 @@ class CommercialInvoiceController extends Controller
 
 //              for pcontacts edit
 
-                $pcontract = Pcontract::where('commercial_invoice_id',$ci->id)
-                ->where('status', '=', 0)->first();
-                $vartpcs1=$pcontract->totalpcs;
-                $vartwt1=$pcontract->conversion_rate;
-                $varval1=$pcontract->insurance;
+                // $pcontract = Pcontract::where('commercial_invoice_id',$ci->id)
+                // ->where('status', '=', 0)->first();
+                // $vartpcs1=$pcontract->totalpcs;
+                // $vartwt1=$pcontract->conversion_rate;
+                // $varval1=$pcontract->insurance;
 
 
-                $sumwt = $vartwt1 -  CommercialInvoiceDetails::where('commercial_invoice_id',$ci->id)->sum('gdswt');
-                $sumpcs = $vartpcs1 -  CommercialInvoiceDetails::where('commercial_invoice_id',$ci->id)->sum('pcs');
-                $sumval = $varval1 -  CommercialInvoiceDetails::where('commercial_invoice_id',$ci->id)->sum('amtindollar');
-         //    dd($sumwt());
-                $pcontract = Pcontract::where('commercial_invoice_id',$ci->id)
-                ->where('status', '=', 1)->first();
-                $pcontract->conversion_rate = $sumwt;
-                $pcontract->insurance = $sumval;
-                $pcontract->totalpcs = $sumpcs;
-                // $pcontract->dutyval = $sumdtyval;
-                $pcontract->save();
+                // $sumwt = $vartwt1 -  CommercialInvoiceDetails::where('commercial_invoice_id',$ci->id)->sum('gdswt');
+                // $sumpcs = $vartpcs1 -  CommercialInvoiceDetails::where('commercial_invoice_id',$ci->id)->sum('pcs');
+                // $sumval = $varval1 -  CommercialInvoiceDetails::where('commercial_invoice_id',$ci->id)->sum('amtindollar');
+                // $pcontract = Pcontract::where('commercial_invoice_id',$ci->id)
+                // ->where('status', '=', 1)->first();
+                // $pcontract->conversion_rate = $sumwt;
+                // $pcontract->insurance = $sumval;
+                // $pcontract->totalpcs = $sumpcs;
+                // $pcontract->save();
 
 
-                $sumwt3 =  CommercialInvoiceDetails::where('commercial_invoice_id',$ci->id)->sum('dutygdswt');
-                $sumpcs3 = CommercialInvoiceDetails::where('commercial_invoice_id',$ci->id)->sum('pcs');
-                $sumval3 = CommercialInvoiceDetails::where('commercial_invoice_id',$ci->id)->sum('dtyamtindollar');
+                // $sumwt3 =  CommercialInvoiceDetails::where('commercial_invoice_id',$ci->id)->sum('dutygdswt');
+                // $sumpcs3 = CommercialInvoiceDetails::where('commercial_invoice_id',$ci->id)->sum('pcs');
+                // $sumval3 = CommercialInvoiceDetails::where('commercial_invoice_id',$ci->id)->sum('dtyamtindollar');
 
-                $pci = PcommercialInvoice::where('commercial_invoice_id',$ci->id)
-                ->where('status', '=', 1)->first();
-                $pci->totpcs = $sumpcs3;
-                $pci->totwt = $sumwt3;
-                $pci->dutyval = $sumval3;
-                $pci->save();
+                // $pci = PcommercialInvoice::where('commercial_invoice_id',$ci->id)
+                // ->where('status', '=', 1)->first();
+                // $pci->totpcs = $sumpcs3;
+                // $pci->totwt = $sumwt3;
+                // $pci->dutyval = $sumval3;
+                // $pci->save();
 
-                $pci1 = commercialInvoice::where('id',$pci->commercial_invoice_id)->first();
-                $pci1->tpcs = $sumpcs3;
-                $pci1->twt = $sumwt3;
-                $pci1->tval = $sumval3;
-                $pci1->save();
+                // $pci1 = commercialInvoice::where('id',$pci->commercial_invoice_id)->first();
+                // $pci1->tpcs = $sumpcs3;
+                // $pci1->twt = $sumwt3;
+                // $pci1->tval = $sumval3;
+                // $pci1->save();
 
+                $sumtwt =  ContractDetails::where('contract_id',$c->contract_id)->sum('tbalwt');
+                $sumtpcs =  ContractDetails::where('contract_id',$c->contract_id)->sum('tbalpcs');
+                $sumtval =  ContractDetails::where('contract_id',$c->contract_id)->sum('tbalsupval');
 
+                $contsumry = Contract::where('id',$c->contract_id)->first();
+                    $contsumry->balwt = $sumtwt;
+                    $contsumry->balpcs = $sumtpcs;
+                    $contsumry->balsupval =$sumtval;
+                    $contsumry->save();
 
 
 
 
                 //  *******#########################3
             }
+
+
+
+
+
             DB::commit();
             Session::flash('info',"Commerical Invoice#[$ci->id] Updated with Reciving# & Duty Clearance#[$ci->id]");
             return response()->json(['success'],200);

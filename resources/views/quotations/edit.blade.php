@@ -82,7 +82,6 @@
                             <div class="grid grid-cols-12 gap-2 py-2 items-center">
                                 <x-input-numeric title="Discou(%)" name="discntper" id="discntper" value="{{ $quotation->discntper }}"    />
                                 <x-input-numeric title="Discount(Amount)" name="discntamt" id="discntamt" value="{{ $quotation->discntamt }}"    />
-                                <x-input-numeric title="Cartage" name="cartage" value="{{ $quotation->cartage }}"  required  onblur="tnetamount()"  />
                                 <x-input-numeric title="Payble Amount" name="rcvblamount" value="{{ $quotation->rcvblamount }}" disabled />
                                 <x-input-numeric title="" name="sale_invoice_id" id="sale_invoice_id" value="{{ $quotation->id }}" hidden  />
                             </div>
@@ -90,6 +89,7 @@
                             <div class="grid grid-cols-12 gap-2 py-2 items-center">
                                 <x-input-numeric title="Sale Tax(%)" name="saletaxper" value="{{ $quotation->saletaxper }}" required  onblur="tnetamount()"  />
                                 <x-input-numeric title="Sale Tax(Rs)" name="saletaxamt" value="{{ $quotation->saletaxamt }}" disabled    />
+                                <x-input-numeric title="Cartage" name="cartage" value="{{ $quotation->cartage }}"  required  onblur="tnetamount()"  />
                                 <x-input-numeric title="Total Amount" name="totrcvbamount" value="{{ $quotation->totrcvbamount }}" disabled />
                             </div>
 
@@ -299,9 +299,9 @@ var updateValues = (cell) => {
 
             // tamount=rcvblamount
             // discntamt.value=(tamount*discntper.value/100).toFixed(0);
-            rcvblamount.value= ( Number(tamount)-Number(discntamt.value) )+Number(cartage.value)  ;
+            rcvblamount.value= ( Number(tamount)-Number(discntamt.value) )  ;
             saletaxamt.value=(Number(rcvblamount.value) * Number(saletaxper.value) )/100 ;
-            totrcvbamount.value=(Number(rcvblamount.value)+Number(saletaxamt.value)).toFixed(0);
+            totrcvbamount.value=(Number(rcvblamount.value)+Number(saletaxamt.value)+Number(cartage.value)).toFixed(0);
         }
 
         function tnetamount1()
@@ -309,9 +309,9 @@ var updateValues = (cell) => {
             // discntper.value=0;
             //  rcvblamount.value=0;
             //  discntper.value=(discntamt.value/tamount*100).toFixed(2);
-            rcvblamount.value= ( Number(tamount)-Number(discntamt.value) )+Number(cartage.value)  ;
+            rcvblamount.value= ( Number(tamount)-Number(discntamt.value) )  ;
             saletaxamt.value=(Number(rcvblamount.value) * Number(saletaxper.value) )/100 ;
-            totrcvbamount.value=(Number(rcvblamount.value)+Number(saletaxamt.value)).toFixed(0);
+            totrcvbamount.value=(Number(rcvblamount.value)+Number(saletaxamt.value)+Number(cartage.value)).toFixed(0);
         }
 
 

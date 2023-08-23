@@ -64,18 +64,22 @@ class QuotationController  extends Controller
     public function getmmfrqut(Request $request)
     {
 
-         $custid=$request->customer_id;
-        //  dd($custid);
+        //  $custid=$request->customer_id;
+         $custid = 5;
+        //   dd($custid);
         $search = $request->search;
         $size = $request->size;
         $field = $request->sort[0]["field"];     //  Nested Array
         $dir = $request->sort[0]["dir"];         //  Nested Array
-        $contracts = DB::table('mmfrquotation')
+         $contracts = DB::table('mmfrquotation')
+        // $contracts = DB::select(' call procmmfrquotation(?)',array( 5 ))
         // ->join('suppliers', 'contracts.supplier_id', '=', 'suppliers.id')
         // ->select('contracts.*', 'suppliers.title')
-        ->where('custname', 'like', "%$search%")
-        ->orWhere('title', 'like', "%$search%")
-        ->orWhere('dimension', 'like', "%$search%")
+        //  ->where('customer_id',$custid)
+        // ->orWhere('customer_id','=','0')
+         ->where('custname', 'like', "%$search%")
+         ->orWhere('title', 'like', "%$search%")
+         ->orWhere('dimension', 'like', "%$search%")
         ->orderBy($field,$dir)
         ->paginate((int) $size);
         return $contracts;

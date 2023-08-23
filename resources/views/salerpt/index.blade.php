@@ -19,11 +19,11 @@
                                 <legend>Report Type</legend>
                                 <div>
                                     <input type="radio" name="report_type" value="quotation" required onchange="checkReportType('quotation')">
-                                    <label for="">Sale Quotation </label>
+                                    <label for="">Price Quotation </label>
                                 </div>
                                 <div>
                                     <input type="radio" name="report_type" value="custorder" required onchange="checkReportType('custorder')">
-                                    <label for="">Customer Order </label>
+                                    <label for="">Purchase Order </label>
                                 </div>
                                 <div>
                                     <input type="radio" name="report_type" value="dlvrychln" required onchange="checkReportType('dlvrychln')">

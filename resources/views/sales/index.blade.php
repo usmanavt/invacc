@@ -157,7 +157,7 @@
 
             {title: "WO/GST",field: "rcvblamount"},
             {title: "W/GST",field: "totrcvbamount"},
-            {title: "Pending",field: "ordrbal"},
+            // {title: "Pending",field: "ordrbal"},
             // {title: "Total Delivery Against Sale Order",field: "delivered"},
             // {title: "Sale Order Balance",field: "delivered"},
 

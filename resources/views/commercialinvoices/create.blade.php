@@ -877,7 +877,7 @@ var headerMenu = function(){
                 {
                 title:'Revise WSE', headerHozAlign:"center",
                     columns:[
-                {title:"WSE",  field:"wse",   formatter:"money",editor:"number",
+                {title:"WSC",  field:"wse",   formatter:"money",editor:"number",
                         formatterParams:{thousand:",",precision:2},          responsive:0}]
                 },
 
@@ -1161,6 +1161,15 @@ var headerMenu = function(){
                     showSnackbar("Location must be Enter","info");
                     return;
                 }
+
+                // if(element.pcs == 0 || element.gdswt == 0 || elemen.length == 0 )
+                // {
+                //     showSnackbar("invalid Data","info");
+                //     return;
+                // }
+
+
+
             }
 
             // disableSubmitButton(true);

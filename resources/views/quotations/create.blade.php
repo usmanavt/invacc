@@ -62,12 +62,12 @@
                                 <div class="grid grid-cols-12 gap-2 py-2 items-center">
                                     <x-input-numeric title="Discou(%)" name="discntper" id="discntper"    />
                                     <x-input-numeric title="Discount(Amount)" name="discntamt" id="discntamt"   />
-                                    <x-input-numeric title="Cartage" name=cartage  required  onblur="tnetamount()"  />
                                     <x-input-numeric title="Receivable Amount" name="rcvblamount" disabled />
                                 </div>
                                 <div class="grid grid-cols-12 gap-2 py-2 items-center">
                                     <x-input-numeric title="Sale Tax(%)" name="saletaxper" required  onblur="tnetamount()"  />
                                     <x-input-numeric title="Sale Tax(Rs)" name="saletaxamt" disabled    />
+                                    <x-input-numeric title="Cartage" name=cartage  required  onblur="tnetamount()"  />
                                     <x-input-numeric title="Total Amount" name="totrcvbamount" disabled />
                                 </div>
                             </fieldset>
@@ -151,9 +151,10 @@ const skus = @json($skus);
              discntamt.value=0;
              rcvblamount.value=0;
             discntamt.value=(tamount*discntper.value/100).toFixed(0);
-            rcvblamount.value= ( Number(tamount)-Number(discntamt.value) )+Number(cartage.value)  ;
+            rcvblamount.value= ( Number(tamount)-Number(discntamt.value) )  ;
+            // +Number(cartage.value)
             saletaxamt.value=(Number(rcvblamount.value) * Number(saletaxper.value) )/100 ;
-            totrcvbamount.value=(Number(rcvblamount.value)+Number(saletaxamt.value)).toFixed(0);
+            totrcvbamount.value=(Number(rcvblamount.value)+Number(saletaxamt.value)+Number(cartage.value)).toFixed(0);
         }
 
         function tnetamount1()
@@ -161,9 +162,9 @@ const skus = @json($skus);
             discntper.value=0;
              rcvblamount.value=0;
              discntper.value=(discntamt.value/tamount*100).toFixed(2);
-            rcvblamount.value= ( Number(tamount)-Number(discntamt.value) )+Number(cartage.value)  ;
+            rcvblamount.value= ( Number(tamount)-Number(discntamt.value) )  ;
             saletaxamt.value=(Number(rcvblamount.value) * Number(saletaxper.value) )/100 ;
-            totrcvbamount.value=(Number(rcvblamount.value)+Number(saletaxamt.value)).toFixed(0);
+            totrcvbamount.value=(Number(rcvblamount.value)+Number(saletaxamt.value)+Number(cartage.value)).toFixed(0);
         }
 
 
