@@ -43,6 +43,9 @@
                             <x-dropdown-link href="{{ route('hscodes.index') }}">Hscode</x-dropdown-link>
                             <x-dropdown-link href="{{ route('materials.index') }}">Materials</x-dropdown-link>
                             <x-dropdown-link href="{{ route('banks.index') }}">Banks</x-dropdown-link>
+                            <x-dropdown-link href="{{ route('openinggodownstock.index') }}">Item Opening Stock</x-dropdown-link>
+
+
                             @if (auth()->user()->email == 'ali.jibran@auvitronics.com')
                                 <x-dropdown-link href="{{ route('users.index') }}">Users</x-dropdown-link>
 
@@ -70,15 +73,17 @@
                             </button>
                         </x-slot>
 
-                        <x-slot name="content">
+                        <x-slot name="content" width="60">
 
                             <x-dropdown-link href="{{ route('contracts.index') }}">Contracts</x-dropdown-link>
-                            <x-dropdown-link href="{{ route('cis.index') }}">Imported Purchase</x-dropdown-link>
-                            <x-dropdown-link href="{{ route('localpurchase.index') }}">Local Purchase</x-dropdown-link>
+                            <x-dropdown-link href="{{ route('purchasing.index') }}">Goods Receive Not (GRN) </x-dropdown-link>
+                            <x-dropdown-link href="{{ route('cis.index') }}">Importet Purchase Invoice</x-dropdown-link>
+                            <x-dropdown-link href="{{ route('localpurchase.index') }}">Local Purchase Invoice</x-dropdown-link>
                             <x-dropdown-link href="{{ route('clearance.index') }}">Duty Clearance</x-dropdown-link>
                             <x-dropdown-link href="{{ route('quotations.index') }}">Price Quotation</x-dropdown-link>
                             <x-dropdown-link href="{{ route('customerorder.index') }}">Purchase Order</x-dropdown-link>
                             <x-dropdown-link href="{{ route('saleinvoices.index') }}">Sales Invoice</x-dropdown-link>
+                            <x-dropdown-link href="{{ route('gatepasse.index') }}">Gate Pass</x-dropdown-link>
                             <x-dropdown-link href="{{ route('salereturn.index') }}">Sales Return</x-dropdown-link>
                             <x-dropdown-link href="{{ route('bankpayments.index') }}">Bank Payments</x-dropdown-link>
                             <x-dropdown-link href="{{ route('bankrecivings.index') }}">Bank Recivings</x-dropdown-link>

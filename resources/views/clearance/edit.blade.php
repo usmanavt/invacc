@@ -511,7 +511,7 @@ data.forEach(e => {
     var asta = (pricevaluecostsheet + cda + rda + acda) * parseFloat(e.ast) / 100
     var ita =(pricevaluecostsheet + cda + sta + rda + acda + asta) * parseFloat(e.it) / 100
     var wsca = (pricevaluecostsheet * parseFloat(e.wse)) /100
-    var total = cda + rda + sta + acda + asta + ita + wsca
+    var total = cda + rda + sta + acda + asta + ita
 
     e.amtindollar = e.amtindollar
     e.itmratio = itmratio
@@ -715,7 +715,7 @@ dynamicTable = new Tabulator("#dynamicTable", {
                         {   title:"Duty.Wt(Kg)",
                             field:"gdswt",
                             responsive:0,
-                            // editor:"number",
+                            editor:"number",
                             headerVertical:true,
                             bottomCalc:"sum",
                             formatter:"money",
@@ -855,8 +855,8 @@ dynamicTable = new Tabulator("#dynamicTable", {
                         {title:"AST",               field:"asta",bottomCalc:"sum",bottomCalcParams:{precision:0},  formatter:"money",
                     formatterParams:{thousand:",",precision:0},           responsive:0},
                         {title:"IT",                field:"ita",bottomCalc:"sum",bottomCalcParams:{precision:0},  formatter:"money",
-                    formatterParams:{thousand:",",precision:0},            responsive:0},
-                        {title:"WSC",               field:"wsca",bottomCalc:"sum",bottomCalcParams:{precision:0},  formatter:"money",
+                    // formatterParams:{thousand:",",precision:0},            responsive:0},
+                    //     {title:"WSC",               field:"wsca",bottomCalc:"sum",bottomCalcParams:{precision:0},  formatter:"money",
                     formatterParams:{thousand:",",precision:0},           responsive:0},
                         {title:"Total",             field:"total",bottomCalc:"sum",bottomCalcParams:{precision:0},   formatter:"money",
                     formatterParams:{thousand:",",precision:0},bottomCalc:"sum",bottomCalcParams:{precision:0},          responsive:0},

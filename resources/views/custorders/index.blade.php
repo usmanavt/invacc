@@ -160,7 +160,7 @@
             {title: "W/O GST",field: "rcvblamount"},
             {title: "W/GST",field: "totrcvbamount"},
             {title: "Delivered",field: "delivered"},
-            {title: "Pending",field: "pendbal"},
+            {title: "Pending",field: "salordbal"},
 
             {title:"View" , formatter:viewIcon, hozAlign:"center",headerSort:false, responsive:0,
                 cellClick:function(e, cell){

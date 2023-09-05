@@ -145,18 +145,42 @@
                 })}
             },
       //      Master Data
+
+
+
+            {
+            title:'Data Description', headerHozAlign:"center",
+            columns:[
+
             {title: "id",field: "id"},
-            // {title: "Dated",field: "created_at"},
             {title: "Customer",field: "customer.title"},
             {title: "P.O No",field: "pono"},
             {title: "P.O Date",field: "podate"},
             {title: "D.C No",field: "dcno"},
             {title: "G.P No",field: "gpno"},
             {title: "Bill No",field: "billno"},
-            {title: "Invoice Date",field: "saldate"},
+            {title: "Invoice Date",field: "saldate"}
+            ]},
 
+            {
+            title:'Total Delivery Goods', headerHozAlign:"center",
+            columns:[
+
+            {title: "Weight",field: "sltwt"},
+            {title: "Pcs",field: "sltpcs"},
+            {title: "Feet",field: "slfeet"},
             {title: "WO/GST",field: "rcvblamount"},
-            {title: "W/GST",field: "totrcvbamount"},
+            {title: "W/GST",field: "totrcvbamount"}
+            ]},
+
+            {
+            title:'Balance Against GatePass', headerHozAlign:"center",
+            columns:[
+
+            {title: "Weight",field: "balsltwt"},
+            {title: "Pcs",field: "balsltpcs"},
+            {title: "Feet",field: "balslfeet"},
+            ]},
             // {title: "Pending",field: "ordrbal"},
             // {title: "Total Delivery Against Sale Order",field: "delivered"},
             // {title: "Sale Order Balance",field: "delivered"},

@@ -190,7 +190,15 @@ class LocalPurchaseController  extends Controller
 
                 $lpd->save();
             }
-            // }
+
+            DB::insert(DB::raw("
+            INSERT INTO office_item_bal(transaction_id,tdate,ttypedesc,ttypeid,material_id,uom,tqtykg,tqtypcs,tqtyfeet,tcostkg,tcostpcs,tcostfeet)
+            SELECT a.id AS transid,a.invoice_date,'Ipurchasing',3,b.material_id,sku_id,gdswt,pcs,qtyinfeet,gdsprice,gdsprice,gdsprice FROM commercial_invoices a INNER JOIN  commercial_invoice_details b
+            ON a.id=b.commercial_invoice_id WHERE a.id=$ci->id"));
+
+
+
+
             DB::commit();
             Session::flash('success','Contract Information Saved');
             return response()->json(['success'],200);
@@ -361,6 +369,18 @@ class LocalPurchaseController  extends Controller
                     $cds->save();
                 }
             }
+
+            DB::delete(DB::raw(" delete from office_item_bal where ttypeid=3 and  transaction_id=$commercialinvoice->id   "));
+
+            DB::insert(DB::raw("
+            INSERT INTO office_item_bal(transaction_id,tdate,ttypedesc,ttypeid,material_id,uom,tqtykg,tqtypcs,tqtyfeet,tcostkg,tcostpcs,tcostfeet)
+            SELECT a.id AS transid,a.invoice_date,'Ipurchasing',3,b.material_id,sku_id,gdswt,pcs,qtyinfeet,gdsprice,gdsprice,gdsprice FROM commercial_invoices a INNER JOIN  commercial_invoice_details b
+            ON a.id=b.commercial_invoice_id WHERE a.id=$commercialinvoice->id"));
+
+
+
+
+
             DB::commit();
             Session::flash('success','Contract Information Saved');
             return response()->json(['success'],200);

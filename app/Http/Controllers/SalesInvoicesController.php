@@ -188,9 +188,29 @@ class SalesInvoicesController  extends Controller
                 $lpd->qtyfeet = $cont['qtyfeet'];
                 $lpd->price = $cont['price'];
                 $lpd->saleamnt = $cont['saleamnt'];
+                $lpd->feedqty = $cont['feedqty'];
 
-                $location = Location::where("title", $cont['location'])->first();
-                $lpd->locid = $location->id;
+                $lpd->qtykgcrt = $cont['salcostkg'];
+                $lpd->qtypcscrt = $cont['salcostpcs'];
+                $lpd->qtyfeetcrt = $cont['salcostfeet'];
+
+                $lpd->sqtykg = $cont['sqtykg'];
+                $lpd->sqtypcs = $cont['sqtypcs'];
+                $lpd->sqtyfeet = $cont['sqtyfeet'];
+
+                $lpd->wtper = $cont['wtper'];
+                $lpd->pcper = $cont['pcper'];
+                $lpd->feetper = $cont['feetper'];
+
+                $lpd->salewt = $cont['qtykg'];
+                $lpd->salepcs = $cont['qtypcs'];
+                $lpd->salefeet = $cont['qtyfeet'];
+
+
+                $lpd->save();
+
+                // $location = Location::where("title", $cont['location'])->first();
+                // $lpd->locid = $location->id;
 
                 // Last Sale Rate Update in Material Table
                 // $matsrate = Material::findOrFail($lpd->material_id);
@@ -212,7 +232,7 @@ class SalesInvoicesController  extends Controller
             //     elseif($lpd->sku_id == 3)
             //     { $custplnbal->balqty = $cont['balqty'] - $cont['qtyfeet'];}
             //     $custplnbal->save();
-                 $lpd->save();
+
             // }
 
             $lstrt = CreateSaleRate::where('customer_id',$request->customer_id)->where('material_id',$cont['material_id'])->first();
@@ -249,43 +269,81 @@ class SalesInvoicesController  extends Controller
                 //  { return response()->json(['message' =>'success'], 200);}
                 //  { dd($lwsstk->cbqtykg,($cont['qtykg'])); }
 
-
-
-
-
-
-
-
-
             //  $dlvrdval = SaleInvoices->->select('totrcvbamount')::where('custplan_id',$ci->custplan_id)->sum('totrcvbamount');
             //  $dlvrdval=DB::table('sale_invoices')->where('custplan_id',$ci->custplan_id)->select('totrcvbamount')->sum('totrcvbamount');
-             $dlvrdval = SaleInvoices::where('custplan_id',$ci->custplan_id)->sum('totrcvbamount');
-            //  dd($dlvrdval);
-             $custordr = CustomerOrder::where('id',$ci->custplan_id)->first();
-
-             $custordr->delivered = $dlvrdval;
-             $custordr->save();
-
-              $sordrbal = SaleInvoices::where('id',$ci->id)->first();
-
-            //   $XYZ=$custordr->totrcvbamount;
-            //   DD($dlvrdval);
-
-              $sordrbal->ordrbal= $custordr->totrcvbamount - $dlvrdval;
-              $sordrbal->save();
 
 
-             $dlvrd = DB::table('sale_invoices_details')
-            ->join('sale_invoices', 'sale_invoices_details.sale_invoice_id', '=', 'sale_invoices.id')
-            ->where('sale_invoices.custplan_id', '=', $ci->custplan_id)->where('sale_invoices_details.material_id', '=', $lpd->material_id)
-            ->sum(DB::raw('( CASE sale_invoices_details.sku_id  WHEN  1 THEN sale_invoices_details.qtykg WHEN 2 THEN sale_invoices_details.qtypcs WHEN 3 THEN sale_invoices_details.qtyfeet  END)'));
-            // dd($ci->custplan_id);
-            $custplnbal = CustomerOrderDetails::where('sale_invoice_id',$ci->custplan_id)->where('material_id',$cont['material_id'])
-            ->first();
-            $custplnbal->balqty = $custplnbal->qtykg - $dlvrd;
-            $custplnbal->save();
 
+
+
+            // $dlvrdval = SaleInvoices::where('custplan_id',$ci->custplan_id)->sum('totrcvbamount');
+            // $custordr = CustomerOrder::where('id',$ci->custplan_id)->first();
+            // $custordr->delivered = $dlvrdval;
+            // $custordr->save();
+            // $sordrbal = SaleInvoices::where('id',$ci->id)->first();
+            // $sordrbal->ordrbal= $custordr->totrcvbamount - $dlvrdval;
+            // $sordrbal->save();
+
+
+            //  $dlvrd = DB::table('sale_invoices_details')
+            // ->join('sale_invoices', 'sale_invoices_details.sale_invoice_id', '=', 'sale_invoices.id')
+            // ->where('sale_invoices.custplan_id', '=', $ci->custplan_id)->where('sale_invoices_details.material_id', '=', $lpd->material_id)
+            // ->sum(DB::raw('( CASE sale_invoices_details.sku_id  WHEN  1 THEN sale_invoices_details.qtykg WHEN 2 THEN sale_invoices_details.qtypcs WHEN 3 THEN sale_invoices_details.qtyfeet  END)'));
+            // // dd($ci->custplan_id);
+            // $custplnbal = CustomerOrderDetails::where('sale_invoice_id',$ci->custplan_id)->where('material_id',$cont['material_id'])
+            // ->first();
+            // $custplnbal->balqty = $custplnbal->qtykg - $dlvrd;
+            // $custplnbal->save();
             }
+
+            //// Details update
+
+            /// **** update summary data to master table
+            DB::update(DB::raw("
+            UPDATE sale_invoices c
+            INNER JOIN (
+            SELECT sale_invoice_id,SUM(qtykg) AS twt,SUM(qtypcs) AS tpcs,SUM(qtyfeet) AS tfeet FROM sale_invoices_details WHERE sale_invoice_id=$ci->id GROUP BY sale_invoice_id
+            ) x ON c.id = x.sale_invoice_id
+            SET c.sltwt = x.twt,c.sltpcs=x.tpcs,c.slfeet=x.tfeet ,
+            c.balsltwt=x.twt,c.balsltpcs=x.tpcs,c.balslfeet=x.tfeet  WHERE  c.id = $ci->id "));
+
+
+
+
+
+
+
+
+            DB::update(DB::raw("
+            UPDATE customer_order_details c
+            INNER JOIN (
+            SELECT b.custplan_id,a.material_id,SUM(feedqty) AS feedqty  FROM sale_invoices_details a
+				INNER JOIN sale_invoices AS b ON b.id=a.sale_invoice_id WHERE b.custplan_id=$ci->custplan_id GROUP BY b.custplan_id,a.material_id
+            ) x ON c.sale_invoice_id = x.custplan_id AND c.material_id=x.material_id
+            SET c.balqty = c.qtykg - x.feedqty WHERE  c.sale_invoice_id = $ci->custplan_id"));
+
+
+            ///**** Master Update
+            DB::update(DB::raw("
+            UPDATE customer_orders c
+            INNER JOIN (
+            SELECT custplan_id,SUM(totrcvbamount)-SUM(cartage) AS Dlvred FROM sale_invoices WHERE custplan_id=$ci->custplan_id
+				GROUP BY custplan_id
+            ) x ON c.id = x.custplan_id
+            SET c.delivered = x.Dlvred,c.salordbal=( coalesce(totrcvbamount,0)-coalesce(cartage,0) )-x.Dlvred WHERE  c.id = $ci->custplan_id"));
+
+
+
+            DB::insert(DB::raw("
+            INSERT INTO office_item_bal(transaction_id,tdate,ttypedesc,ttypeid,material_id,uom,tqtykg,tqtypcs,tqtyfeet,tcostkg,tcostpcs,tcostfeet)
+            SELECT a.id AS transid,a.saldate,'sales',4,b.material_id,sku_id,qtykg*-1,qtypcs*-1,qtyfeet*-1,qtykgcrt,qtypcscrt,qtyfeetcrt FROM sale_invoices a INNER JOIN  sale_invoices_details b
+            ON a.id=b.sale_invoice_id WHERE a.id=$ci->id"));
+
+
+
+
+
+
             DB::commit();
             Session::flash('success','Contract Information Saved');
             return response()->json(['success'],200);
@@ -301,21 +359,28 @@ class SalesInvoicesController  extends Controller
     {
 
         // $planid = SaleInvoices::select('custplan_id')->where('id',$id)->first();
-        $planid = DB::table('sale_invoices')->where('id',$id)->select('custplan_id')->max('custplan_id');
-        $stk = DB::select('call procdetailcustplan(?)',array( $planid ));
+        // $planid = DB::table('sale_invoices')->where('id',$id)->select('custplan_id')->max('custplan_id');
+         $cd = DB::select('call procdetailcustplanedit (?)',array( $id ));
+        // $cd = DB::table('sale_invoices_details')
+        // ->join('materials', 'materials.id', '=', 'sale_invoices_details.material_id')
+        // ->join('skus', 'skus.id', '=', 'sale_invoices_details.sku_id')
+        // ->join('sale_invoices', 'sale_invoices.id', '=', 'sale_invoices_details.sale_invoice_id')
+        // ->join('customer_orders', 'customer_orders.id', '=', 'sale_invoices_details.sale_invoice_id')
+        // ->join('customer_order_details', 'customer_orders.id', '=', 'customer_order_details.sale_invoice_id')
+        // ->and('customer_order_details.material_id', '=', 'sale_invoices_details.material_id'     )
 
-        $cd = DB::table('sale_invoices_details')
-        ->join('materials', 'materials.id', '=', 'sale_invoices_details.material_id')
-        ->join('skus', 'skus.id', '=', 'sale_invoices_details.sku_id')
-        ->join('locations', 'locations.id', '=', 'sale_invoices_details.locid')
-        ->leftJoin('tmptblcustplan1', 'tmptblcustplan1.material_id', '=', 'sale_invoices_details.material_id')
-        ->select('sale_invoices_details.*','materials.title as material_title','materials.dimension','skus.title as sku',
-        'locations.title as location','tmptblcustplan1.qtykg as sqtykg','tmptblcustplan1.qtypcs as sqtypcs','tmptblcustplan1.qtyfeet as sqtyfeet'
-        ,'tmptblcustplan1.balqty as balqty','tmptblcustplan1.totqty'
-        ,'tmptblcustplan1.wtper','tmptblcustplan1.pcper','tmptblcustplan1.feetper',
-        DB::raw('( CASE sale_invoices_details.sku_id  WHEN  1 THEN sale_invoices_details.qtykg WHEN 2 THEN sale_invoices_details.qtypcs WHEN 3 THEN sale_invoices_details.qtyfeet  END) AS feedqty')
-        )
-        ->where('sale_invoices_details.sale_invoice_id',$id)->get();
+
+        // ->select('sale_invoices_details.*','customer_order_details.balqty','materials.title as material_title','materials.dimension','skus.title as sku'
+        // , '0 as balqty'
+        // 'tmptblcustplan1.totqty' ,'tmptblcustplan1.wtper','tmptblcustplan1.pcper','tmptblcustplan1.feetper'
+        // ,'tmptblcustplan1.qtykg as sqtykg','tmptblcustplan1.qtypcs as sqtypcs','tmptblcustplan1.qtyfeet as sqtyfeet'
+
+        // DB::raw('( CASE sale_invoices_details.sku_id  WHEN  1 THEN sale_invoices_details.qtykg WHEN 2 THEN sale_invoices_details.qtypcs WHEN 3 THEN sale_invoices_details.qtyfeet  END) AS feedqty')
+        // ,DB::raw('( CASE sale_invoices_details.sku_id  WHEN  1 THEN sale_invoices_details.qtykg WHEN 2 THEN sale_invoices_details.qtypcs WHEN 3 THEN sale_invoices_details.qtyfeet  END) + tmptblcustplan1.balqty AS balqty')
+        // ,DB::raw(' tmptblcustplan1.balqty + sale_invoices_details.feedqty   AS balqty')
+
+        // )
+        // ->where('sale_invoices_details.sale_invoice_id',$id)->get();
          $data=compact('cd');
          $locations = Location::select('id','title')->where('status',1)->get();
 
@@ -381,11 +446,18 @@ class SalesInvoicesController  extends Controller
                     $cds->qtyfeet = $cd['qtyfeet'];
                     $cds->price = $cd['price'];
                     $cds->saleamnt = $cd['saleamnt'];
+                    $cds->feedqty = $cd['feedqty'];
                     $unit = Sku::where("title", $cd['sku'])->first();
                     $cds->sku_id = $unit->id;
+                    $cds->salewt = $cd['qtykg'];
+                    $cds->salepcs = $cd['qtypcs'];
+                    $cds->salefeet = $cd['qtyfeet'];
 
-                    $location = Location::where("title", $cd['location'])->first();
-                    $cds->locid = $location->id;
+
+                    $cds->save();
+
+                    // $location = Location::where("title", $cd['location'])->first();
+                    // $cds->locid = $location->id;
                     // dd($cds->locid);
                     // Last Sale Rate Update in Material Table
                     // $matsrate = Material::findOrFail($cds->material_id);
@@ -403,16 +475,16 @@ class SalesInvoicesController  extends Controller
 
 
 
-                    $dlvrd = DB::table('sale_invoices_details')
-                    ->join('sale_invoices', 'sale_invoices_details.sale_invoice_id', '=', 'sale_invoices.id')
-                    ->where('sale_invoices.custplan_id', '=', $sale_invoices->custplan_id)->where('sale_invoices_details.material_id', '=', $cd->material_id)
-                    ->sum(DB::raw('( CASE sale_invoices_details.sku_id  WHEN  1 THEN sale_invoices_details.qtykg WHEN 2 THEN sale_invoices_details.qtypcs WHEN 3 THEN sale_invoices_details.qtyfeet  END)'));
-                    // dd($dlvrd);
-                    $custplnbal = CustomerOrderDetails::where('sale_invoice_id',$sale_invoices->custplan_id)->where('material_id',$cd->material_id)
-                    ->first();
-                    $custplnbal->balqty = $custplnbal->qtykg - $dlvrd;
-                    $custplnbal->save();
-                    $cds->save();
+                    // $dlvrd = DB::table('sale_invoices_details')
+                    // ->join('sale_invoices', 'sale_invoices_details.sale_invoice_id', '=', 'sale_invoices.id')
+                    // ->where('sale_invoices.custplan_id', '=', $sale_invoices->custplan_id)->where('sale_invoices_details.material_id', '=', $cd->material_id)
+                    // ->sum(DB::raw('( CASE sale_invoices_details.sku_id  WHEN  1 THEN sale_invoices_details.qtykg WHEN 2 THEN sale_invoices_details.qtypcs WHEN 3 THEN sale_invoices_details.qtyfeet  END)'));
+                    // // dd($dlvrd);
+                    // $custplnbal = CustomerOrderDetails::where('sale_invoice_id',$sale_invoices->custplan_id)->where('material_id',$cd->material_id)
+                    // ->first();
+                    // $custplnbal->balqty = $custplnbal->qtykg - $dlvrd;
+                    // $custplnbal->save();
+
 
 
                     $lstrt = CreateSaleRate::where('customer_id',$request->customer_id)->where('material_id',$cd->material_id)->first();
@@ -454,18 +526,68 @@ class SalesInvoicesController  extends Controller
                 //     $cds->save();
                 // }
             }
-            $dlvrd = SaleInvoices::where('custplan_id',$sale_invoices->custplan_id)->sum('totrcvbamount');
-            $custordr = CustomerOrder::where('id',$sale_invoices->custplan_id)->first();
+            // $dlvrd = SaleInvoices::where('custplan_id',$sale_invoices->custplan_id)->sum('totrcvbamount');
+            // $custordr = CustomerOrder::where('id',$sale_invoices->custplan_id)->first();
 
-            $custordr->delivered = $dlvrd;
-            $custordr->save();
+            // $custordr->delivered = $dlvrd;
+            // $custordr->save();
 
-            $sordrbal = SaleInvoices::where('id',$sale_invoices->id)->first();
-            $sordrbal->ordrbal= $custordr->totrcvbamount - $dlvrd;
-            $sordrbal->save();
+            // $sordrbal = SaleInvoices::where('id',$sale_invoices->id)->first();
+            // $sordrbal->ordrbal= $custordr->totrcvbamount - $dlvrd;
+            // $sordrbal->save();
 
 
         }
+
+            /// **** update summary data to master table
+            DB::update(DB::raw("
+            UPDATE sale_invoices c
+            INNER JOIN (
+            SELECT sale_invoice_id,SUM(qtykg) AS twt,SUM(qtypcs) AS tpcs,SUM(qtyfeet) AS tfeet FROM sale_invoices_details WHERE sale_invoice_id=$sale_invoices->id GROUP BY sale_invoice_id
+            ) x ON c.id = x.sale_invoice_id
+            SET c.sltwt = x.twt,c.sltpcs=x.tpcs,c.slfeet=x.tfeet ,
+            c.balsltwt=x.twt,c.balsltpcs=x.tpcs,c.balslfeet=x.tfeet  WHERE  c.id = $sale_invoices->id "));
+
+
+
+
+
+
+        //// Details update
+        DB::update(DB::raw("
+        UPDATE customer_order_details c
+        INNER JOIN (
+        SELECT b.custplan_id,a.material_id,SUM(feedqty) AS feedqty  FROM sale_invoices_details a
+            INNER JOIN sale_invoices AS b ON b.id=a.sale_invoice_id WHERE b.custplan_id=$sale_invoices->custplan_id GROUP BY b.custplan_id,a.material_id
+        ) x ON c.sale_invoice_id = x.custplan_id AND c.material_id=x.material_id
+        SET c.balqty = c.qtykg - x.feedqty WHERE  c.sale_invoice_id = $sale_invoices->custplan_id"));
+
+
+
+
+
+        DB::update(DB::raw("
+        UPDATE customer_orders c
+        INNER JOIN (
+        SELECT custplan_id,SUM(totrcvbamount)-SUM(cartage) AS Dlvred FROM sale_invoices WHERE custplan_id=$sale_invoices->custplan_id
+            GROUP BY custplan_id
+        ) x ON c.id = x.custplan_id
+        SET c.delivered = x.Dlvred,c.salordbal=( coalesce(totrcvbamount,0)-coalesce(cartage,0) )-x.Dlvred WHERE  c.id = $sale_invoices->custplan_id"));
+
+        DB::delete(DB::raw(" delete from office_item_bal where ttypeid=4 and  transaction_id=$sale_invoices->id   "));
+
+        DB::insert(DB::raw("
+        INSERT INTO office_item_bal(transaction_id,tdate,ttypedesc,ttypeid,material_id,uom,tqtykg,tqtypcs,tqtyfeet,tcostkg,tcostpcs,tcostfeet)
+        SELECT a.id AS transid,a.saldate,'sales',4,b.material_id,sku_id,qtykg*-1,qtypcs*-1,qtyfeet*-1,qtykgcrt,qtypcscrt,qtyfeetcrt FROM sale_invoices a INNER JOIN  sale_invoices_details b
+        ON a.id=b.sale_invoice_id WHERE a.id=$sale_invoices->id"));
+
+
+
+
+
+
+
+
             DB::commit();
             Session::flash('success','Contract Information Saved');
             return response()->json(['success'],200);

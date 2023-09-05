@@ -1,22 +1,29 @@
 <x-app-layout>
 
     @push('styles')
+    {{-- <link rel="stylesheet" href="{{ asset('css/tabulator_simple.min.css') }}"> --}}
+    <link href="https://unpkg.com/tabulator-tables/dist/css/tabulator.min.css" rel="stylesheet">
+    <script type="text/javascript" src="https://unpkg.com/tabulator-tables/dist/js/tabulator.min.js"></script>
     <link rel="stylesheet" href="{{ asset('css/tabulator_simple.min.css') }}">
     @endpush
 
+
+
+
+
     <x-slot name="header">
         <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-            Imported Purchase
+            Opening Stock
             {{-- Create New Customer --}}
-            <a class="text-sm text-green-500 hover:text-gray-900" href="{{route('cis.create')}}">
+            <a class="text-sm text-green-500 hover:text-gray-900" href="{{route('openinggodownstock.create')}}">
                 {{-- Add Icon --}}
                 <i class="fa fa-file fa-fw"></i>
                 Add New Record
             </a>
             <span> | </span>
-            <button class="text-sm text-blue-300" onclick="setStatus(1)">Transaction</button>
+            <button class="text-sm text-blue-300" onclick="setStatus(1)">Pending</button>
             <span> | </span>
-            <button class="text-sm text-blue-300" onclick="setStatus(2)">Status</button>
+            <button class="text-sm text-blue-300" onclick="setStatus(2)">Completed</button>
         </h2>
     </x-slot>
 
@@ -45,8 +52,8 @@
     var deleteIcon = function(cell, formatterParams, onRendered){ return "<i class='fa fa-trash text-red-600'></i>";};
     var printIcon = function(cell, formatterParams, onRendered){ return "<i class='fa fa-print text-pink-500'></i>";};
 
-    const getMaster = @json(route('cis.master'));
-    const getDetails = @json(route('cis.details'));
+    const getMaster = @json(route('opstk.master'));
+    // const getDetails = @json(route('localpurchase.details'));
     let table;
     let searchValue = "";
     let statusValue="1";  // 1 = Pending, 2 - Completed
@@ -111,79 +118,107 @@
                         return {id:row.getData().id};
                     },
                     ajaxURL: getDetails,
-                    columns: [
-                        {title: "material_title",field: "material_title" ,headerVertical:true,},
-                        {title: "pcs",field: "pcs" ,headerVertical:true,},
-                        {title: "gdswt",field: "gdswt" ,headerVertical:true,},
-                        {title: "inkg",field: "inkg" ,headerVertical:true,},
-                        {title: "gdsprice",field: "gdsprice" ,headerVertical:true,},
-                        {title: "otherexpenses",field: "otherexpenses" ,headerVertical:true,},
-                        {title: "amtindollar",field: "amtindollar" ,headerVertical:true,},
-                        {title: "amtinpkr",field: "amtinpkr" ,headerVertical:true,},
-                        {title: "length",field: "length" ,headerVertical:true,},
-                        {title: "itmratio",field: "itmratio" ,headerVertical:true,},
-                        {title: "insuranceperitem",field: "insuranceperitem" ,headerVertical:true,},
-                        {title: "amountwithoutinsurance",field: "amountwithoutinsurance" ,headerVertical:true,},
-                        {title: "onepercentdutypkr",field: "onepercentdutypkr" ,headerVertical:true,},
-                        {title: "pricevaluecostsheet",field: "pricevaluecostsheet" ,headerVertical:true,},
-                        {title: "DutyRate",field: "dtyrate" ,headerVertical:true,},
-                        {title: "cda",field: "cda" ,headerVertical:true,},
-                        {title: "sta",field: "sta" ,headerVertical:true,},
-                        {title: "rda",field: "rda" ,headerVertical:true,},
-                        {title: "acda",field: "acda" ,headerVertical:true,},
-                        {title: "asta",field: "asta" ,headerVertical:true,},
-                        {title: "ita",field: "ita" ,headerVertical:true,},
-                        {title: "wsca",field: "wsca" ,headerVertical:true,},
-                        {title: "total",field: "total" ,headerVertical:true,},
-                        {title: "perpc",field: "perpc" ,headerVertical:true,},
-                        {title: "perkg",field: "perkg" ,headerVertical:true,},
-                        {title: "perft",field: "perft" ,headerVertical:true,},
+                    // columns: [
+                    //     {title: "material_title",field: "material_title" ,headerVertical:true,},
+                    //     {title: "pcs",field: "pcs" ,headerVertical:true,},
+                    //     {title: "gdswt",field: "gdswt" ,headerVertical:true,},
+                    //     {title: "inkg",field: "inkg" ,headerVertical:true,},
+                    //     {title: "gdsprice",field: "gdsprice" ,headerVertical:true,},
+                    //     {title: "otherexpenses",field: "otherexpenses" ,headerVertical:true,},
+                    //     {title: "amtindollar",field: "amtindollar" ,headerVertical:true,},
+                    //     {title: "amtinpkr",field: "amtinpkr" ,headerVertical:true,},
+                    //     {title: "length",field: "length" ,headerVertical:true,},
+                    //     {title: "itmratio",field: "itmratio" ,headerVertical:true,},
+                    //     {title: "insuranceperitem",field: "insuranceperitem" ,headerVertical:true,},
+                    //     {title: "amountwithoutinsurance",field: "amountwithoutinsurance" ,headerVertical:true,},
+                    //     {title: "onepercentdutypkr",field: "onepercentdutypkr" ,headerVertical:true,},
+                    //     {title: "pricevaluecostsheet",field: "pricevaluecostsheet" ,headerVertical:true,},
+                    //     {title: "cda",field: "cda" ,headerVertical:true,},
+                    //     {title: "sta",field: "sta" ,headerVertical:true,},
+                    //     {title: "rda",field: "rda" ,headerVertical:true,},
+                    //     {title: "acda",field: "acda" ,headerVertical:true,},
+                    //     {title: "asta",field: "asta" ,headerVertical:true,},
+                    //     {title: "ita",field: "ita" ,headerVertical:true,},
+                    //     {title: "wsca",field: "wsca" ,headerVertical:true,},
+                    //     {title: "total",field: "total" ,headerVertical:true,},
+                    //     {title: "perpc",field: "perpc" ,headerVertical:true,},
+                    //     {title: "perkg",field: "perkg" ,headerVertical:true,},
+                    //     {title: "perft",field: "perft" ,headerVertical:true,},
 
-                    ],
+                    // ],
                     ajaxResponse:function(getDetails, params, response){
                         return response.data;
                     },
                 })}
             },
       //      Master Data
+
+            {
+                title:'Material Description', headerHozAlign:"center",
+                    columns:[
             {title: "id",field: "id"},
-            {title: "Dated",field: "created_at"},
-            {title: "Inv Dt",field: "invoice_date"},
-            {title: "Invoice#",field: "invoiceno"},
-            {title: "Contract#",field: "contract_id"},
-            {title: "Supplier",field: "supplier.title"},
-            {title: "Mach Date",field: "machine_date"},
-            {title: "Machine #",field: "machineno"},
+            {title: "O/Date",field: "opdate"},
+            {title: "Material Code",field: "material_id",visible:false },
+            {title: "Material Title",field: "material_title"}
+            ]},
 
             {
-                title:'Supplier Status', headerHozAlign:"center",
+                title:'E - 13', headerHozAlign:"center",
                     columns:[
-            {title: "Pcs",field: "tpcs"},
-            {title: "Weight",field: "tswt"},
-            {title: "Amount($)",field: "tval"}]},
-
-            {title: "Total LC Amt",field: "full_total",formatterParams:{thousand:",",precision:0}},
+            {title: "Weight",field: "ostkwte13"},
+            {title: "Pcs",field: "ostkpcse13"},
+            {title: "Feet",field: "ostkfeete13"},
+            ]},
 
             {
-                title:'Duty Status', headerHozAlign:"center",
+                title:'Gali No 2', headerHozAlign:"center",
                     columns:[
-            {title: "D/Weight",field: "twt"},
-            {title: "Payable",field: "tduty"},
-            {title: "Cleared",field: "payed"},
-            {title: "VarDtyVal",field: "dutybal"},
-            {title: "PendWt",field: "wtbal"},
-        ]},
+            {title: "Weight",field: "ostkwtgn2"},
+            {title: "Pcs",field: "ostkpcsgn2"},
+            {title: "Feet",field: "ostkfeetgn2"},
+            ]},
 
+            {
+                title:'Allah Malik Shop', headerHozAlign:"center",
+                    columns:[
+            {title: "Weight",field: "ostkwtams"},
+            {title: "Pcs",field: "ostkpcsams"},
+            {title: "Feet",field: "ostkfeetams"},
+            ]},
 
+            {
+                title:'E - 24', headerHozAlign:"center",
+                    columns:[
+            {title: "Weight",field: "ostkwte24"},
+            {title: "Pcs",field: "ostkpcse24"},
+            {title: "Feet",field: "ostkfeete24"},
+            ]},
 
+            {
+                title:'Bolton Shop', headerHozAlign:"center",
+                    columns:[
+            {title: "Weight",field: "ostkwtbs"},
+            {title: "Pcs",field: "ostkpcsbs"},
+            {title: "Feet",field: "ostkfeetbs"},
+            ]},
 
-            {title:"View" , formatter:viewIcon, hozAlign:"center",headerSort:false, responsive:0,
-                cellClick:function(e, cell){
-                    window.open(window.location + "/" + cell.getRow().getData().id  ,"_self");
-                }
-            },
+            {
+                title:'T O T A L', headerHozAlign:"center",
+                    columns:[
+            {title: "Weight",field: "ostkwttot"},
+            {title: "Pcs",field: "ostkpcstot"},
+            {title: "Feet",field: "ostkfeettot"},
+            ]},
+
+            // {title: "Payble Amount",field: "total"},
+            // {title:"View" , formatter:viewIcon, hozAlign:"center",headerSort:false, responsive:0,
+            //     cellClick:function(e, cell){
+            //         window.open(window.location + "/" + cell.getRow().getData().id  ,"_self");
+            //     }
+            // },
             {title:"Edit" , formatter:editIcon, hozAlign:"center",headerSort:false, responsive:0,
                 cellClick:function(e, cell){
+                    console.log(cell.getRow().getData())
                     window.open(window.location + "/" + cell.getRow().getData().id + "/edit" ,"_self");
                 }
             },
@@ -192,11 +227,11 @@
             //         window.open(window.location + "/" + cell.getRow().getData().id  ,"_self");
             //     }
             // },
-            {title:"Print" , formatter:printIcon, hozAlign:"center",headerSort:false, responsive:0,
-                cellClick:function(e, cell){
-                    window.open(window.location + "/" + cell.getRow().getData().id + "/printcontract"  ,"_self");
-                }
-            },
+            // {title:"Print" , formatter:printIcon, hozAlign:"center",headerSort:false, responsive:0,
+            //     cellClick:function(e, cell){
+            //         window.open(window.location + "/" + cell.getRow().getData().id + "/printcontract"  ,"_self");
+            //     }
+            // },
         ],
         // Extra Pagination Data for End Users
         ajaxResponse:function(getDataUrl, params, response){

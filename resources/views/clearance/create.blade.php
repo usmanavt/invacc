@@ -28,7 +28,7 @@
 
                                 {{-- <x-input-date title="Inv. Date" id="invoicedate" name="invoicedate" req required class="col-span-2" disabled/> --}}
                                 <x-input-text title="Invoice #" name="invoiceno"  req required class="" disabled/>
-                                {{-- <x-input-date title="Mac. Date" name="machine_date" req required class="col-span-2" disabled/> --}}
+                                {{-- <x-input-date title="Mac. Date" name="machine_date" id="machine_date" req required class="col-span-2" disabled/> --}}
                                 <x-input-text title="Mac. No" name="machineno" req required class="col-span-2" disabled/>
 
 
@@ -37,7 +37,7 @@
 
                                 <x-input-date title="GD Date" name="gd_date"  req required />
                                     <x-input-text title="GD #" name="gdno" value="" req required />
-
+                                    <x-input-numeric title="" name="cominvsid" hidden   />
                                 <x-input-numeric title="Conversion Rate" name="conversionrate"  req required class=""/>
                                 {{-- <x-input-numeric title="Supp.Conv. Rate" name="sconversionrate"  req required class=""/> --}}
                                 <x-input-numeric title="Insurance" name="insurance"  req required class=""/>
@@ -90,12 +90,6 @@
 
                         </div>
 
-
-
-
-
-
-
                         <div class="flex flex-row px-4 py-2 items-center">
                             <x-label value="Add Pcs & Feet Size & Press"></x-label>
                             <x-button id="calculate" class="mx-2" type="button" onclick="calculate()">Calculate</x-button>
@@ -145,9 +139,10 @@
         let adopted = false
         let detailsUrl = ''
         let contract_id = '';
-
+        // let cominvsid='';
 
         let invoiceno= document.getElementById("invoiceno")
+        // let machine_date= document.getElementById("machine_date")
         // let invoicedate= document.getElementById("invoicedate")
 
         // Bank Charges
@@ -274,16 +269,17 @@
                 {title:"Machine No", field:"machineno" , responsive:0},
                 {title:"Machine Date", field:"machine_date" , responsive:0},
 
+
                 {title:"Invoice #", field:"invoiceno" , visible:true ,headerSort:false, responsive:0},
                 {title:"Date", field:"invoice_date" , visible:true ,headerSort:false, responsive:0},
                 {title:"Supplier", field:"supname", visible:true ,headerSort:false, responsive:0},
 
                 {
-                 title:'Total Import Data', headerHozAlign:"center",
+                 title:'Com.Invs.Duty.Data', headerHozAlign:"center",
                  columns:[
                  {title:"Weight", field:"tweight" , visible:true ,headerSort:false, responsive:0},
-                 {title:"TotalPcs", field:"ttotalpcs" , visible:true ,headerSort:false, responsive:0},
-                 {title:"TotalVal($)", field:"tvalue" , visible:true ,headerSort:false, responsive:0},
+                //  {title:"TotalPcs", field:"ttotalpcs" , visible:true ,headerSort:false, responsive:0},
+                 {title:"Duty", field:"tvalue" , visible:true ,headerSort:false, responsive:0},
 
                 ]},
 
@@ -291,8 +287,8 @@
                  title:'Pending Duty Clearance', headerHozAlign:"center",
                  columns:[
                  {title:"Weight", field:"pweight" , visible:true ,headerSort:false, responsive:0},
-                 {title:"TotalPcs", field:"ptotalpcs" , visible:true ,headerSort:false, responsive:0},
-                 {title:"TotalVal($)", field:"ptvalue" , visible:true ,headerSort:false, responsive:0},
+                //  {title:"TotalPcs", field:"ptotalpcs" , visible:true ,headerSort:false, responsive:0},
+                 {title:"Duty", field:"ptvalue" , visible:true ,headerSort:false, responsive:0},
 
                 ]}
            ],
@@ -312,8 +308,14 @@
             var data = simple._row.data
 
             // Fill Master Data
+
+            console.log(data.machine_date);
             invoiceno.value = data.invoiceno
+            // invoicedate.value=data.invoicedate
             machineno.value = data.machineno
+            // machine_date.value=data.machine_date
+            cominvsid.value = data.id
+
             // invoicedate = data.invoice_date->format('dd/mm/YYYY')
 
             //***********************
@@ -382,7 +384,7 @@
                         category_id :       obj.category_id,
                         sku_id :            obj.sku_id,
                         sku:                obj.sku,
-
+                        // cominvsid:          obj.comer
 
 
                         totpcs:             obj.totpcs,
@@ -684,7 +686,7 @@
                 var asta = (dtypricevaluecostsheet + cda + rda + acda) * parseFloat(e.ast) / 100
                 var ita =(dtypricevaluecostsheet + cda + sta + rda + acda + asta) * parseFloat(e.it) / 100
                 var wsca = (dtypricevaluecostsheet * parseFloat(e.wse)) /100
-                var total = cda + rda + sta + acda + asta + ita + wsca
+                var total = cda + rda + sta + acda + asta + ita
                 // var perft = (e.perpc / e.length).toFixed(2)
                 // var totallccostwexp = total + dtypricevaluecostsheet + (banktotal.value * dtyitmratio / 100)
                 // var totallccostwexp = total + amtinpkr + (banktotal.value * itmratio / 100)
@@ -1090,12 +1092,9 @@ var updateValues = (cell) => {
 
 
 
-                {
-                title:'Revise WSE', headerHozAlign:"center",
-                    columns:[
                 {title:"WSE",  field:"wse",   formatter:"money",editor:"number",
-                        formatterParams:{thousand:",",precision:2},          responsive:0}]
-                },
+                        formatterParams:{thousand:",",precision:2}, visible:false},
+                        //]},
 
                 // {
                 //     title:'Price',
@@ -1187,7 +1186,7 @@ var updateValues = (cell) => {
                         formatterParams:{thousand:",",precision:0},           responsive:0,bottomCalc:"sum",bottomCalcParams:{precision:0}},
                             {title:"IT",                field:"ita",  formatter:"money",
                         formatterParams:{thousand:",",precision:0},            responsive:0,bottomCalc:"sum",bottomCalcParams:{precision:0}},
-                            {title:"WSE",               field:"wsca",  formatter:"money",
+                            {title:"WSE",visible:false,               field:"wsca",  formatter:"money",
                         formatterParams:{thousand:",",precision:0},           responsive:0,bottomCalc:"sum",bottomCalcParams:{precision:0}},
                             {title:"Total Duty", cssClass:"bg-green-200 font-semibold",  field:"total", headerVertical:true,  formatter:"money",formatterParams:{thousand:",",precision:0},
                          responsive:0,bottomCalc:"sum",bottomCalcParams:{precision:0}},
@@ -1284,6 +1283,8 @@ var updateValues = (cell) => {
             var invoiceno = document.getElementById("invoiceno")
             var gdno = document.getElementById("gdno")
             var machineno = document.getElementById("machineno")
+            var cominvsid = document.getElementById("cominvsid")
+
             // var machine_date = document.getElementById("machine_date")
             var conversionrate = document.getElementById("conversionrate")
 
@@ -1349,6 +1350,7 @@ var updateValues = (cell) => {
                 // 'sconversionrate' : parseFloat(sconversionrate.value).toFixed(2),
                 'insurance' : parseFloat(insurance.value).toFixed(2),
                 // 'contract_id' : contract_id,
+                'cominvsid':cominvsid.value,
                 'invoiceno' : invoiceno.value,
                 // 'challanno' : challanno.value,
                 'machineno' : machineno.value,

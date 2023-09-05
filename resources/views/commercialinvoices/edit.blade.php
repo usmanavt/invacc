@@ -33,6 +33,7 @@
                                 <x-input-numeric title="Duty.Conv.Rate" name="conversionrate" value="{{ $i->conversionrate }}" req required class=""/>
                                 <x-input-numeric title="Supp.Conv.Rate" name="sconversionrate" value="{{ $i->sconversionrate }}"  req required class=""/>
                                 <x-input-numeric title="Insurance" name="insurance"  value="{{ $i->insurance }}" req required class=""/>
+                                <x-input-numeric title="purid" name="purid"  value="{{ $i->purid }}" hidden/>
                             </div>
                             <div class="grid grid-cols-12 gap-2 py-2 items-center">
                                 <x-input-date title="Mac. Date" name="machine_date" value="{{ $i->machine_date->format('Y-m-d') }}" req required class="col-span-2"/>
@@ -122,11 +123,11 @@
             hscodeList.push({ value:e.hscode, label:e.hscode, id:e.hscode})
         })
 
-        var newList=[]
-        locations.forEach(e => {
-            newList.push({value:e.title,label:e.title , id:e.id})
+        // var newList=[]
+        // locations.forEach(e => {
+        //     newList.push({value:e.title,label:e.title , id:e.id})
 
-        });
+        // });
 
         // console.info(cid)
         let csrfToken = document.head.querySelector("[name~=csrf-token][content]").content;
@@ -365,6 +366,7 @@
                 // var perkg = (perpc / inkg).toFixed(2)
                 var perkg = ((e.totallccostwexp+otherexpenses) / e.gdswt).toFixed(2)
                 var qtyinfeet = (e.pcs * e.length).toFixed(2)
+                var qtyinfeet = e.qtyinfeet
 
 
 
@@ -522,6 +524,9 @@ var headerMenu = function(){
                 {title:"dimension_id", field:"dimension_id",visible:false},
                 {title:"source_id",    field:"source_id",visible:false},
                 {title:"brand_id",     field:"brand_id",visible:false},
+                {title:"bundle1",    field:"bundle1",visible:false},
+                {title:"bundle2",    field:"bundle2",visible:false},
+
                 // {title:"bkg",     field:"bkg",visible:true},
                 // {title:"bpcs",     field:"bpcs",visible:true},
                 // {title:"bfeet",     field:"bfeet",visible:true},
@@ -530,18 +535,18 @@ var headerMenu = function(){
                     title:'Quantity', headerHozAlign:"center",
                     columns:[
 
-                    {title: "id",field: "myid",visible:false},
-                        {   title:"Location",headerHozAlign :'center',
-                            field:"location" ,
-                            editor:"list",
-                            responsive:0 ,
-                            headerVertical:true,
-                            // cssClass:"bg-green-200 font-semibold",
-                            editorParams:   {
-                                values:newList,
-                                validator:["required"]
-                            }
-                        },
+                    // {title: "id",field: "myid",visible:false},
+                    //     {   title:"Location",headerHozAlign :'center',
+                    //         field:"location" ,
+                    //         editor:"list",
+                    //         responsive:0 ,
+                    //         headerVertical:true,
+                    //         // cssClass:"bg-green-200 font-semibold",
+                    //         editorParams:   {
+                    //             values:newList,
+                    //             validator:["required"]
+                    //         }
+                    //     },
                         {   title:"HS code",headerHozAlign :'center',
                             field:"hscode",
                             editor:"list",
@@ -557,7 +562,7 @@ var headerMenu = function(){
                     {   title:"Pcs",headerHozAlign :'center',
                             responsive:0,
                             field:"pcs",
-                            editor:"number",
+                            // editor:"number",
                             // editablePcs:true,
                             headerVertical:true,
                             formatter:"money",
@@ -568,7 +573,7 @@ var headerMenu = function(){
                         {   title:"Supp.Wt(Kg)",
                             field:"gdswt",
                             responsive:0,
-                            editor:"number",
+                            // editor:"number",
                             // editableGdswt:true,
                             headerVertical:true,
                             formatter:"money",
@@ -595,7 +600,7 @@ var headerMenu = function(){
                         {   title:"Lng(pcs/feet)",
                             field:"length",
                             headerVertical:true,
-                            editor:"number",
+                            // editor:"number",
                             // selectContents:true,
                             formatter:"money",
                             responsive:0,
@@ -928,7 +933,7 @@ var headerMenu = function(){
                 'sconversionrate' : parseFloat(sconversionrate.value).toFixed(2),
                 'insurance' : parseFloat(insurance.value).toFixed(2),
                 'invoiceno' : invoiceno.value,
-                // 'challanno' : challanno.value,
+                'purid' : purid.value,
                 'machineno' : machineno.value,
                 'machine_date' :machine_date.value,
                 'invoicedate' : invoicedate.value,

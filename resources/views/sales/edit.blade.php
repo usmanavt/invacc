@@ -305,11 +305,12 @@ function pushDynamicData(data)
 
             var sum = (Number(data.feedqty) * Number(data.price))
             var pr1=(Number(data.feedqty) / Number(data.totqty))*100
-            console.log(data.feedqty)
+            // console.log(data.feedqty)
             var pr2=( pr1 / Number(data.wtper))*100
             qtypcs=((pr2*Number(data.sqtypcs))/100).toFixed(2)
             qtyfeet=((pr2*Number(data.sqtyfeet))/100).toFixed(2)
-            qtykg=((pr2*Number(data.sqtykg))/100).toFixed(2)
+            // qtykg=((pr2*Number(data.sqtykg))/100).toFixed(2)
+            qtykg=data.feedqty
          }
          if(cell.getData().sku_id==2)
          {
@@ -319,7 +320,8 @@ function pushDynamicData(data)
             var pr2=( pr1 / Number(data.pcper))*100
             qtykg=((pr2*Number(data.sqtykg))/100).toFixed(2)
             qtyfeet=((pr2*Number(data.sqtyfeet))/100).toFixed(2)
-            qtypcs=((pr2*Number(data.sqtypcs))/100).toFixed(2)
+            // qtypcs=((pr2*Number(data.sqtypcs))/100).toFixed(2)
+            qtypcs=data.feedqty
 
          }
 
@@ -331,7 +333,8 @@ function pushDynamicData(data)
             var pr2=( pr1 / Number(data.feetper))*100
             qtykg=((pr2*Number(data.sqtykg))/100).toFixed(2)
             qtypcs=((pr2*Number(data.sqtypcs))/100).toFixed(2)
-            qtyfeet=((pr2*Number(data.sqtyfeet))/100).toFixed(2)
+            // qtyfeet=((pr2*Number(data.sqtyfeet))/100).toFixed(2)
+            qtyfeet=data.qtyfeet
 
          }
 
@@ -362,8 +365,8 @@ function pushDynamicData(data)
             {discntamt.value=(tamount*discntper.value/100).toFixed(0);};
 
 
-            rcvblamount.value= ( Number(tamount)-Number(discntamt.value) )  ;
-            saletaxamt.value=(Number(rcvblamount.value) * Number(saletaxper.value) )/100 ;
+            rcvblamount.value= ( Number(tamount)-Number(discntamt.value) ).toFixed(0)  ;
+            saletaxamt.value=((Number(rcvblamount.value) * Number(saletaxper.value) )/100).toFixed(0) ;
             totrcvbamount.value=(Number(rcvblamount.value)+Number(saletaxamt.value)+Number(cartage.value)).toFixed(0);
 
 
@@ -405,6 +408,10 @@ dynamicTable = new Tabulator("#dynamicTable", {
         {title:"Material",          field:"material_title", cssClass:"bg-gray-200 font-semibold"},
         {title:"Dimension",         field:"dimension",      cssClass:"bg-gray-200 font-semibold"},
         {title:"UOM",               field:"sku",cssClass:"bg-gray-200 font-semibold"},
+
+        {title:"qtykgcrt", field:"qtykgcrt",visible:false},
+        {title:"qtypcscrt", field:"qtypcscrt",visible:false},
+        {title:"qtyfeetcrt", field:"qtyfeetcrt",visible:false},
 
         {
                 title:'STOCK QUANTITY', headerHozAlign:"center",
@@ -460,13 +467,12 @@ dynamicTable = new Tabulator("#dynamicTable", {
                 title:'ITEM DESCRIPTION', headerHozAlign:"center",
                     columns:[
 
-                    {title: "id",field: "myid",visible:false},
-                {title:"Location", field:"location" ,editor:"list" , editorParams:   {
-                        values:newList,
-                        // cssClass:"bg-green-200 font-semibold",
-                        validator:["required"]
-                    }
-                },
+          //          {title: "id",field: "myid",visible:false},
+          //      {title:"Location", field:"location" ,editor:"list" , editorParams:   {
+          //              values:newList,
+          //              validator:["required"]
+          //          }
+          //      },
 
                 {title:"Replace Description",field:"repname", editor:true},
                 {title:"Brand",             field:"brand",editor:true},

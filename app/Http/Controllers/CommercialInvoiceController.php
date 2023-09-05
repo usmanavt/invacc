@@ -55,18 +55,6 @@ class CommercialInvoiceController extends Controller
         return $cis;
     }
 
-    public function getMaster123(Request $request)
-    {
-        $status =$request->status ;
-        $search = $request->search;
-        $size = $request->size;
-        $field = $request->sort[0]["field"];     //  Nested Array
-        $dir = $request->sort[0]["dir"];         //  Nested Array
-        //$cis = CommercialInvoice::where('status',$status)
-        $cis = DB::table('commercial_invoices')->get();
-        return $cis;
-
-    }
 
     public function getDetails(Request $request)
     {
@@ -83,9 +71,28 @@ class CommercialInvoiceController extends Controller
         // $contractDetails = ContractDetails::with('material.hscodes')->where('contract_id',$id)->get();
 
         // $contractDetails = DB::table('vwfrmpendcontractsdtl')->where('contract_id',$id)->get();
-        $contractDetails = DB::select('call procfrmpendcontractsdtl(?)',array( $id ));
+        $contractDetails = DB::select('call procfrmpendpurdtl(?)',array( $id ));
         return response()->json($contractDetails, 200);
     }
+
+    public function getMasterImp(Request $request)
+    {
+
+        $search = $request->search;
+        $size = $request->size;
+        $field = $request->sort[0]["field"];     //  Nested Array
+        $dir = $request->sort[0]["dir"];         //  Nested Array
+        $contracts = DB::table('vwfrmpendpurchase')
+        // ->join('suppliers', 'contracts.supplier_id', '=', 'suppliers.id')
+        // ->select('contracts.*', 'suppliers.title')
+        ->where('supname', 'like', "%$search%")
+        ->orderBy($field,$dir)
+        ->paginate((int) $size);
+        return $contracts;
+
+
+    }
+
 
     public function getMasterdc(Request $request)
     {
@@ -155,6 +162,9 @@ class CommercialInvoiceController extends Controller
             $ci->otherchrgs = $request->otherchrgs;
             $ci->dunitid = $request->dunitid;
             $ci->total = $request->total;
+            $ci->purid = $request->purid;
+
+
             $ci->save();
 
             // $pcontract = Pcontract::where('contract_id',$ci->contract_id)->where('status', '=', 1)->first();
@@ -190,8 +200,8 @@ class CommercialInvoiceController extends Controller
                 $c->contract_id = $cid['contract_id'];
                 $c->material_id = $cid['material_id'];
                 $c->supplier_id = $cid['supplier_id'];
-                $c->user_id = $cid['user_id'];
-                $c->category_id = $cid['category_id'];
+                // $c->user_id = $cid['user_id'];
+                // $c->category_id = $cid['category_id'];
                 $c->sku_id = $cid['sku_id'];
                 $c->dimension_id = $cid['dimension_id'];
                 $c->pcs = $cid['pcs'];
@@ -240,15 +250,20 @@ class CommercialInvoiceController extends Controller
                 $c->perft = $cid['perft'];
                 $c->otherexpenses = $cid['otherexpenses'];
                 $c->invlvlchrgs = $cid['invlvlchrgs'];
-                $c->location = $cid['location'];
-                $location = Location::where("title", $cid['location'])->first();
-                $c->locid = $location->id;
+                $c->dbalwt = $cid['dutygdswt'];
+                $c->dbalpcs = $cid['pcs'];
+                $c->dtybal = $cid['total'];
+                $c->dbundle1 = $cid['bundle1'];
+                $c->dbundle2 = $cid['bundle2'];
+                $c->bundle1 = $cid['bundle1'];
+                $c->bundle2 = $cid['bundle2'];
 
-                // $matsrate = Material::findOrFail($c->material_id);
-                //     $matsrate->balkg = $matsrate->balkg + $cid['gdswt'];
-                //     $matsrate->balpcs = $matsrate->balpcs + $cid['pcs'] ;
-                //     $matsrate->balfeet = $matsrate->balfeet + $cid['qtyinfeet'];
-                //     $matsrate->save();
+
+
+                // $c->location = $cid['location'];
+                // $location = Location::where("title", $cid['location'])->first();
+                // $c->locid = $location->id;
+
 
 
                 $c->save();
@@ -259,12 +274,11 @@ class CommercialInvoiceController extends Controller
                 // $tsumval3 = CommercialInvoiceDetails::where('contract_id',$c->contract_id)->where('material_id',$c->material_id)->sum('amtindollar');
 
 
-                $tcontmbal = ContractDetails::where('contract_id',$c->contract_id)->where('material_id',$c->material_id)->first();
-                // dd($tcontmbal->tbalwt);
-                $tcontmbal->tbalwt = $tcontmbal->tbalwt - $cid['gdswt'];
-                $tcontmbal->tbalpcs=$tcontmbal->tbalpcs - $cid['pcs'];
-                $tcontmbal->tbalsupval=$tcontmbal->tbalsupval - $cid['amtindollar'];
-                $tcontmbal->save();
+                // $tcontmbal = ContractDetails::where('contract_id',$c->contract_id)->where('material_id',$c->material_id)->first();
+                // $tcontmbal->tbalwt = $tcontmbal->tbalwt - $cid['gdswt'];
+                // $tcontmbal->tbalpcs=$tcontmbal->tbalpcs - $cid['pcs'];
+                // $tcontmbal->tbalsupval=$tcontmbal->tbalsupval - $cid['amtindollar'];
+                // $tcontmbal->save();
 
 
 
@@ -329,14 +343,14 @@ class CommercialInvoiceController extends Controller
 
                 // $pcontract->save();
 
-                $sumwt3 =  CommercialInvoiceDetails::where('contract_id',$c->contract_id)->sum('gdswt');
-                $sumpcs3 = CommercialInvoiceDetails::where('contract_id',$c->contract_id)->sum('pcs');
-                $sumval3 = CommercialInvoiceDetails::where('contract_id',$c->contract_id)->sum('amtindollar');
-                $contmbal = Contract::where('id',$c->contract_id)->first();
-                $contmbal->balwt = $contmbal->conversion_rate - $sumwt3;
-                $contmbal->balpcs=$contmbal->totalpcs - $sumpcs3;
-                $contmbal->balsupval=$contmbal->insurance -$sumval3;
-                $contmbal->save();
+                // $sumwt3 =  CommercialInvoiceDetails::where('contract_id',$c->contract_id)->sum('gdswt');
+                // $sumpcs3 = CommercialInvoiceDetails::where('contract_id',$c->contract_id)->sum('pcs');
+                // $sumval3 = CommercialInvoiceDetails::where('contract_id',$c->contract_id)->sum('amtindollar');
+                // $contmbal = Contract::where('id',$c->contract_id)->first();
+                // $contmbal->balwt = $contmbal->conversion_rate - $sumwt3;
+                // $contmbal->balpcs=$contmbal->totalpcs - $sumpcs3;
+                // $contmbal->balsupval=$contmbal->insurance -$sumval3;
+                // $contmbal->save();
 
                 // $pci = new PcommercialInvoice();
                 // $pci->commercial_invoice_id = $cpdtl->commercial_invoice_id;
@@ -348,6 +362,57 @@ class CommercialInvoiceController extends Controller
                 // $pci->totwt = $sumwt3;
                 // $pci->dutyval = $sumval3;
                 // $pci->save();
+
+            DB::update(DB::raw("
+            UPDATE commercial_invoices c
+            INNER JOIN (
+            SELECT commercial_invoice_id, SUM(pcs) as pcs,SUM(gdswt) AS swt,sum(dutygdswt) as wt,SUM(amtindollar) AS amount
+            ,sum(total) as totduty
+            FROM commercial_invoice_details where  commercial_invoice_id = $ci->id
+            GROUP BY commercial_invoice_id
+            ) x ON c.id = x.commercial_invoice_id
+            SET c.tpcs = x.pcs,c.twt=x.wt,c.tval=x.amount,c.tduty=totduty,dutybal=totduty,c.tswt=x.swt where  commercial_invoice_id = $ci->id  "));
+
+            //****################# Transfert Contract Balance to Contracts
+            DB::update(DB::raw("
+            UPDATE contracts c
+            INNER JOIN (
+            SELECT contract_id, SUM(tval) AS amount
+            FROM commercial_invoices where  contract_id=$c->contract_id
+            GROUP BY contract_id
+            ) x ON c.id = x.contract_id
+            SET c.balsupval=c.insurance-x.amount
+            where  contract_id = $c->contract_id "));
+
+            //****################# Transfert item wise Contract Balance from detail to detail
+            DB::update(DB::raw("
+            UPDATE contract_details c
+            INNER JOIN (
+            SELECT contract_id,material_id,SUM(amtindollar) AS amount
+            FROM commercial_invoice_details where  contract_id = $c->contract_id
+            GROUP BY contract_id,material_id
+            ) x ON c.contract_id = x.contract_id and c.material_id=x.material_id
+            SET c.tbalsupval=c.purval-x.amount WHERE  c.contract_id = $c->contract_id "));
+
+            DB::update(DB::raw(" update purchasings set closed=0 where id=$ci->purid "));
+
+            DB::insert(DB::raw("
+            INSERT INTO office_item_bal(transaction_id,tdate,ttypedesc,ttypeid,material_id,uom,tqtykg,tqtypcs,tqtyfeet,tcostkg,tcostpcs,tcostfeet)
+            SELECT a.id AS transid,a.invoice_date,'Ipurchasing',2,b.material_id,sku_id,gdswt,pcs,qtyinfeet,perkg,perpc,perft FROM commercial_invoices a INNER JOIN  commercial_invoice_details b
+            ON a.id=b.commercial_invoice_id WHERE a.id=$ci->id"));
+
+
+
+            //****################# Transfert item cost to godown stock table
+            DB::update(DB::raw("
+            UPDATE godown_stock c
+            INNER JOIN (
+            SELECT b.purid,material_id,perpc,perkg,perft
+            FROM commercial_invoice_details as a inner join commercial_invoices as b
+            on a.commercial_invoice_id=b.id  where  b.purid = $ci->purid
+            ) x ON c.transaction_id = x.purid and c.material_id=x.material_id
+            SET c.costwt=x.perkg,c.costpcs=x.perpc,c.costfeet=x.perft WHERE  c.transaction_id = $ci->purid "));
+
             DB::commit();
             Session::flash('success',"Commerical Invoice#[$ci->id] Created with Reciving# & Duty Clearance#[$ci->id]");
             return response()->json(['success'],200);
@@ -408,6 +473,8 @@ class CommercialInvoiceController extends Controller
             $ci->otherchrgs = $request->otherchrgs;
             $ci->dunitid = $request->dunitid;
             $ci->total = $request->total;
+            $ci->purid = $request->purid;
+
             $ci->save();
 
 
@@ -426,12 +493,12 @@ class CommercialInvoiceController extends Controller
 
             foreach ($comminvoice as $cid) {
                 $c = CommercialInvoiceDetails::findOrFail($cid['id']);
-                $tsumwt3 =  CommercialInvoiceDetails::where('commercial_invoice_id',$ci->id)->where('material_id',$cid['material_id'])->first();
+                // $tsumwt3 =  CommercialInvoiceDetails::where('commercial_invoice_id',$ci->id)->where('material_id',$cid['material_id'])->first();
 
 
-                 $bwt=$tsumwt3->gdswt;
-                 $bpcs=$tsumwt3->pcs;
-                 $bval=$tsumwt3->amtindollar;
+                //  $bwt=$tsumwt3->gdswt;
+                //  $bpcs=$tsumwt3->pcs;
+                //  $bval=$tsumwt3->amtindollar;
 
 
                 $c->machine_date = $ci->machine_date;
@@ -440,8 +507,8 @@ class CommercialInvoiceController extends Controller
                 $c->contract_id = $cid['contract_id'];
                 $c->material_id = $cid['material_id'];
                 $c->supplier_id = $cid['supplier_id'];
-                $c->user_id = $cid['user_id'];
-                $c->category_id = $cid['category_id'];
+                // $c->user_id = $cid['user_id'];
+                // $c->category_id = $cid['category_id'];
                 $c->sku_id = $cid['sku_id'];
                 $c->dimension_id = $cid['dimension_id'];
                 $c->pcs = $cid['pcs'];
@@ -488,16 +555,24 @@ class CommercialInvoiceController extends Controller
                 $c->perft = $cid['perft'];
                 $c->otherexpenses =  $cid['otherexpenses'];
                 $c->invlvlchrgs =  $cid['invlvlchrgs'];
+                $c->dbalwt = $cid['dutygdswt'];
+                $c->dbalpcs = $cid['pcs'];
+                $c->dtybal = $cid['total'];
+                $c->dbundle1 = $cid['bundle1'];
+                $c->dbundle2 = $cid['bundle2'];
+                $c->bundle1 = $cid['bundle1'];
+                $c->bundle2 = $cid['bundle2'];
 
-                $c->location = $cid['location'];
-                $location = Location::where("title", $cid['location'])->first();
-                $c->locid = $location->id;
+
+                // $c->location = $cid['location'];
+                // $location = Location::where("title", $cid['location'])->first();
+                // $c->locid = $location->id;
 
 
 
-                 $varwt=$bwt - $cid['gdswt'];
-                 $varpcs=$bpcs- $cid['pcs'];
-                 $varval=$bval- $cid['amtindollar'];
+                //  $varwt=$bwt - $cid['gdswt'];
+                //  $varpcs=$bpcs- $cid['pcs'];
+                //  $varval=$bval- $cid['amtindollar'];
 
                 // $matsrate = Material::findOrFail($c->material_id);
                 // $matsrate->balkg = $matsrate->balkg + ( $cid['bkg'] - $cid['gdswt'] );
@@ -514,20 +589,15 @@ class CommercialInvoiceController extends Controller
 
                  // for Contract_details Balance
 
-                 $swt=0;
-                 $spcs=0;
-                 $sval=0;
+                //  $swt=0;
+                //  $spcs=0;
+                //  $sval=0;
 
-                 $tcontmbal = ContractDetails::where('contract_id',$c->contract_id)->where('material_id',$c->material_id)->first();
-                 $tcontmbal->tbalwt = $tcontmbal->tbalwt + $varwt;
-                 $tcontmbal->tbalpcs=$tcontmbal->tbalpcs + $varpcs;
-                 $tcontmbal->tbalsupval=$tcontmbal->tbalsupval + $varval;
-
-                //  $swt=$swt + $tcontmbal->tbalwt ;
-                //  $spcs=$spcs + $tcontmbal->tbalpcs ;
-                //  $sval=$sval + $tcontmbal->tbalsupval ;
-
-                 $tcontmbal->save();
+                //  $tcontmbal = ContractDetails::where('contract_id',$c->contract_id)->where('material_id',$c->material_id)->first();
+                //  $tcontmbal->tbalwt = $tcontmbal->tbalwt + $varwt;
+                //  $tcontmbal->tbalpcs=$tcontmbal->tbalpcs + $varpcs;
+                //  $tcontmbal->tbalsupval=$tcontmbal->tbalsupval + $varval;
+                //  $tcontmbal->save();
 
 
 
@@ -667,21 +737,85 @@ class CommercialInvoiceController extends Controller
                 // $pci1->tval = $sumval3;
                 // $pci1->save();
 
-                $sumtwt =  ContractDetails::where('contract_id',$c->contract_id)->sum('tbalwt');
-                $sumtpcs =  ContractDetails::where('contract_id',$c->contract_id)->sum('tbalpcs');
-                $sumtval =  ContractDetails::where('contract_id',$c->contract_id)->sum('tbalsupval');
+                // $sumtwt =  ContractDetails::where('contract_id',$c->contract_id)->sum('tbalwt');
+                // $sumtpcs =  ContractDetails::where('contract_id',$c->contract_id)->sum('tbalpcs');
+                // $sumtval =  ContractDetails::where('contract_id',$c->contract_id)->sum('tbalsupval');
 
-                $contsumry = Contract::where('id',$c->contract_id)->first();
-                    $contsumry->balwt = $sumtwt;
-                    $contsumry->balpcs = $sumtpcs;
-                    $contsumry->balsupval =$sumtval;
-                    $contsumry->save();
+                // $contsumry = Contract::where('id',$c->contract_id)->first();
+                //     $contsumry->balwt = $sumtwt;
+                //     $contsumry->balpcs = $sumtpcs;
+                //     $contsumry->balsupval =$sumtval;
+                //     $contsumry->save();
 
+                    //  *******#########################3
+                // $test = DB::update(DB::raw('UPDATE users SET name='.$name.' WHERE id =3'));
 
-
-
-                //  *******#########################3
             }
+
+
+
+            //****################# Transfert Data Summary from commercial_invoice_details to Commercial_invoices
+            DB::update(DB::raw("
+            UPDATE commercial_invoices c
+            INNER JOIN (
+            SELECT commercial_invoice_id, SUM(pcs) as pcs,SUM(gdswt) AS swt,sum(dutygdswt) as wt,SUM(amtindollar) AS amount
+            ,sum(total) as totduty
+            FROM commercial_invoice_details where  commercial_invoice_id = $ci->id
+            GROUP BY commercial_invoice_id
+            ) x ON c.id = x.commercial_invoice_id
+            SET c.tpcs = x.pcs,c.twt=x.wt,c.tval=x.amount,c.tduty=totduty,c.tswt=x.swt where  commercial_invoice_id = $ci->id "));
+
+            $lstrt = Clearance::where('commercial_invoice_id',$ci->id)->first();
+            if(!$lstrt) {
+                DB::update(DB::raw("
+                UPDATE commercial_invoices c
+                INNER JOIN (
+                SELECT commercial_invoice_id, sum(total) as totduty
+                FROM commercial_invoice_details where  commercial_invoice_id = $ci->id
+                GROUP BY commercial_invoice_id
+                ) x ON c.id = x.commercial_invoice_id
+                SET c.dutybal=totduty where  commercial_invoice_id = $ci->id "));
+                }
+
+
+            //****################# Transfert Contract Balance to Contracts
+            DB::update(DB::raw("
+            UPDATE contracts c
+            INNER JOIN (
+            SELECT contract_id,SUM(tval) AS amount
+            FROM commercial_invoices where  contract_id=$c->contract_id
+            GROUP BY contract_id
+            ) x ON c.id = x.contract_id
+            SET c.balsupval=c.insurance-x.amount
+            where  contract_id = $c->contract_id "));
+
+            //****################# Transfert item wise Contract Balance from detail to detail
+            DB::update(DB::raw("
+            UPDATE contract_details c
+            INNER JOIN (
+            SELECT contract_id,material_id,SUM(amtindollar) AS amount
+            FROM commercial_invoice_details where  contract_id = $c->contract_id
+            GROUP BY contract_id,material_id
+            ) x ON c.contract_id = x.contract_id and c.material_id=x.material_id
+            SET c.tbalsupval=c.purval-x.amount WHERE  c.contract_id = $c->contract_id "));
+
+            DB::delete(DB::raw(" delete from office_item_bal where ttypeid=2 and  transaction_id=$ci->id   "));
+
+            DB::insert(DB::raw("
+            INSERT INTO office_item_bal(transaction_id,tdate,ttypedesc,ttypeid,material_id,uom,tqtykg,tqtypcs,tqtyfeet,tcostkg,tcostpcs,tcostfeet)
+            SELECT a.id AS transid,a.invoice_date,'Ipurchasing',2,b.material_id,sku_id,gdswt,pcs,qtyinfeet,perkg,perpc,perft FROM commercial_invoices a INNER JOIN  commercial_invoice_details b
+            ON a.id=b.commercial_invoice_id WHERE a.id=$ci->id"));
+
+            //****################# Transfert item cost to godown stock table
+            DB::update(DB::raw("
+            UPDATE godown_stock c
+            INNER JOIN (
+            SELECT b.purid,material_id,perpc,perkg,perft
+            FROM commercial_invoice_details as a inner join commercial_invoices as b
+            on a.commercial_invoice_id=b.id  where  b.purid = $ci->purid
+            ) x ON c.transaction_id = x.purid and c.material_id=x.material_id
+            SET c.costwt=x.perkg,c.costpcs=x.perpc,c.costfeet=x.perft WHERE  c.transaction_id = $ci->purid "));
+
 
 
 

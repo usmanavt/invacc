@@ -203,8 +203,6 @@ class CustomerOrderController  extends Controller
                 $lpd->sale_invoice_id = $ci->id;
                 $lpd->material_id = $cont['material_id'];
                 $lpd->sku_id = $cont['sku_id'];
-
-
                 $lpd->repname = $cont['repname'];
                 $lpd->brand = $cont['mybrand'];
                 $lpd->qtykg = $cont['saleqty'];
@@ -254,31 +252,21 @@ class CustomerOrderController  extends Controller
     {
         //  dd($commercialinvoice->commercial_invoice_id());
             //   dd($request->all());
-
-
-
-
         DB::beginTransaction();
         try {
 
             //  dd($request->sale_invoice_id);
             $customerorder = CustomerOrder::findOrFail($request->sale_invoice_id);
-
-
             $customerorder->quotation_id = $request->quotation_id;
             $customerorder->podate = $request->podate;
             $customerorder->deliverydt = $request->deliverydt;
             $customerorder->poseqno = $request->poseqno;
             $customerorder->pono = $request->pono;
-
             $customerorder->pqutno = $request->qutno;
             $customerorder->qutdate = $request->qutdate;
             $customerorder->pprno = $request->prno;
-
             $customerorder->customer_id = $request->customer_id;
             // $customerorder->remarks = $request->remarks;
-
-
             $customerorder->discntper = $request->discntper;
             $customerorder->discntamt = $request->discntamt;
             $customerorder->cartage = $request->cartage;
@@ -306,7 +294,6 @@ class CustomerOrderController  extends Controller
                 if($cd->id)
                 {
                     $cds = CustomerOrderDetails::where('id',$cd->id)->first();
-
                     $cds->sale_invoice_id = $customerorder->id;
                     $cds->material_id = $cd->material_id;
                     $cds->sku_id = $cd->sku_id;
@@ -316,7 +303,6 @@ class CustomerOrderController  extends Controller
                     $cds->balqty = $cd['qtykg'];
                     $cds->price = $cd['price'];
                     $cds->saleamnt = $cd['saleamnt'];
-
                     $unit = Sku::where("title", $cd['sku'])->first();
                      $cds->sku_id = $unit->id;
                     //  $cds->sku = $cd['sku'];
@@ -338,10 +324,6 @@ class CustomerOrderController  extends Controller
 
                      $unit = Sku::where("title", $cd['sku'])->first();
                       $cds->sku_id = $unit->id;
-
-
-
-
                      // $cds->sale_invoice_id = $saleinvoices->id;
                     // $cds->material_id = $cd->material_id;
                     // $cds->sku_id = $cd->sku_id;
@@ -376,6 +358,31 @@ class CustomerOrderController  extends Controller
                     $cds->save();
                 }
             }
+
+            //// Details update
+            DB::update(DB::raw("
+            UPDATE customer_order_details c
+            INNER JOIN (
+            SELECT b.custplan_id,a.material_id,SUM(feedqty) AS feedqty  FROM sale_invoices_details a
+				INNER JOIN sale_invoices AS b ON b.id=a.sale_invoice_id WHERE b.custplan_id=$customerorder->id GROUP BY b.custplan_id,a.material_id
+            ) x ON c.sale_invoice_id = x.custplan_id AND c.material_id=x.material_id
+            SET c.balqty = c.qtykg - x.feedqty WHERE  c.sale_invoice_id = $customerorder->id"));
+
+
+            ///**** Master Update
+            DB::update(DB::raw("
+            UPDATE customer_orders c
+            INNER JOIN (
+            SELECT custplan_id,SUM(totrcvbamount)-SUM(cartage) AS Dlvred FROM sale_invoices WHERE custplan_id=$customerorder->id
+				GROUP BY custplan_id
+            ) x ON c.id = x.custplan_id
+            SET c.delivered = x.Dlvred,c.salordbal=( coalesce(totrcvbamount,0)-coalesce(cartage,0) )-x.Dlvred WHERE  c.id = $customerorder->id"));
+
+
+
+
+
+
             DB::commit();
             Session::flash('success','Contract Information Saved');
             return response()->json(['success'],200);

@@ -335,6 +335,9 @@
                         pcper:              obj.pcper,
                         feetper:            obj.feetper,
 
+                        salcostkg:          obj.salcostkg,
+                        salcostpcs:          obj.salcostpcs,
+                        salcostfeet:          obj.salcostfeet,
 
 
                         price   :           obj.price,
@@ -440,8 +443,8 @@ var tamount=0;
             {discntamt.value=(tamount*discntper.value/100).toFixed(0);};
             // discntamt.value=(tamount*discntper.value/100).toFixed(0);
             // discntper.value=(discntamt.value/tamount*100).toFixed(2);
-            rcvblamount.value= ( Number(tamount)-Number(discntamt.value) )  ;
-            saletaxamt.value=(Number(rcvblamount.value) * Number(saletaxper.value) )/100 ;
+            rcvblamount.value= ( Number(tamount)-Number(discntamt.value) ).toFixed(0)  ;
+            saletaxamt.value=((Number(rcvblamount.value) * Number(saletaxper.value) )/100).toFixed(0) ;
             totrcvbamount.value=(Number(rcvblamount.value)+Number(saletaxamt.value)+Number(cartage.value)).toFixed(0);
         }
 
@@ -580,6 +583,10 @@ var totalVal = function(values, data, calcParams){
                 {title:"sku_id",       field:"sku_id",visible:false},
                 {title:"dimension_id", field:"dimension_id",visible:false},
 
+                {title:"costkg", field:"salcostkg",visible:false},
+                {title:"costpcs", field:"salcostpcs",visible:false},
+                {title:"costfeet", field:"salcostfeet",visible:false},
+
 
                 {
                 title:'STOCK QUANTITY', headerHozAlign:"center",
@@ -652,12 +659,12 @@ var totalVal = function(values, data, calcParams){
                     title:'Item Description', headerHozAlign:"center",
                     columns:[
 
-                {title:"Location", field:"location" ,editor:"list" , editorParams:   {
-                        values:newList,
-                        // cssClass:"bg-green-200 font-semibold",
-                        validator:["required"]
-                    }
-                },
+                // {title:"Location", field:"location" ,editor:"list" , editorParams:   {
+                //         values:newList,
+                //         // cssClass:"bg-green-200 font-semibold",
+                //         validator:["required"]
+                //     }
+                // },
 
                 {   title:"Replace Name",headerHozAlign :'center',
                             field:"repname",
@@ -760,60 +767,45 @@ var totalVal = function(values, data, calcParams){
             for (let index = 0; index < dynamicTableData.length; index++) {
                 const element = dynamicTableData[index];
 
-                if(element.location === undefined)
-                {
-                    showSnackbar("Location must be Enter","info");
-                    return;
-                }
-
-                // if (element.sku_id==1)
-                    // {
                         if(element.feedqty > element.balqty )
                             {
                                 showSnackbar("Sale Qty must be less than Plan qty","info");
                                 return;
                             }
-                    // }
-                // if (element.sku_id==2)
-                //     {
-                //         if(element.feedqty > element.balqty )
-                //         {
-                //             showSnackbar("Sale Qty must be less than Plan qty","info");
-                //             return;
-                //         }
-                //     }
 
-                // if (element.sku_id==3)
-                // {
+                if( element.sku_id==2)
+                {
+                if(element.feedqty > element.sqtypcs )
+                             {
 
-                //     if(element.feedqty > element.balqty )
-                //     {
-                //         showSnackbar("Sale Qty must be less than Plan qty xyz","info");
-                //         return;
-                //     }
-                // }
+                                showSnackbar("sale qty must be less than stock qty","info");
+                                return;
+                            }
+                }
 
-                if( Number(element.qtykg)> Number(element.sqtykg) )
-                    {
-                        showSnackbar("sale qty must be less than stock qty","info");
-                        console.log(element.qtyfeet)
-                        console.log(element.sqtyfeet)
-                        return;
-                    }
+                if( element.sku_id==1)
+                {
+                if(element.feedqty > element.sqtykg )
+                             {
 
-                    if( Number(element.qtypcs)>Number(element.sqtypcs) )
-                    {
-                        showSnackbar("sale qty must be less than stock qty","info");
+                                showSnackbar("sale qty must be less than stock qty","info");
+                                return;
+                            }
+                }
 
-                        return;
-                    }
+                if( element.sku_id==3)
+                {
+                if(element.feedqty > element.sqtyfeet )
+                             {
 
-                    if( Number(element.qtyfeet)>Number(element.sqtyfeet)   )
-                    {
-                        showSnackbar("sale qty must be less than stock qty","info");
+                                showSnackbar("sale qty must be less than stock qty","info");
+                                return;
+                            }
+                }
 
-                        return;
-                    }
+
+
+
 
 
             }

@@ -37,11 +37,9 @@ use App\Http\Controllers\QuotationController;
 use App\Http\Controllers\CustomerOrderController;
 use App\Http\Controllers\CustomerOrderwoqController;
 use App\Http\Controllers\SalesRetunrsController;
-
-
-
-
-
+use App\Http\Controllers\PurchasingController;
+use App\Http\Controllers\GatepasseController;
+use App\Http\Controllers\OpeningGodownStockController;
 
 
 Route::get('/', function () {
@@ -147,6 +145,7 @@ Route::resource('contracts', ContractController::class);
 //  CommercialInvoice
 Route::get('/cis/getCisMaster', [CommercialInvoiceController::class, 'getMaster'])->name('cis.master');
 Route::get('/cis/getCisDetails', [CommercialInvoiceController::class, 'getDetails'])->name('cis.details');
+Route::get('/cid/getContractMasterI', [CommercialInvoiceController::class, 'getMasterImp'])->name('contracts.masterII');
 Route::get('/cis/getContractDetails', [CommercialInvoiceController::class, 'getContractDetails'])->name('cis.condet');
 
 /// For Pending DutyClear Master
@@ -161,6 +160,13 @@ Route::get('/localpurchase/getPurchaseDetails', [LocalPurchaseController::class,
 Route::resource('localpurchase', LocalPurchaseController::class);
 
 
+// openinggodownstock
+Route::get('/opstock/getOpstkMaster', [OpeningGodownStockController::class, 'getMaster'])->name('opstk.master');
+Route::get('/opstock/getMaterialMastermat', [OpeningGodownStockController::class, 'getMastermat'])->name('materials.mastermat');
+Route::resource('openinggodownstock', OpeningGodownStockController::class);
+
+
+
 //  Sales Invoices
 
 Route::get('/sales/getSalesMaster', [SalesInvoicesController::class, 'getMaster'])->name('sales.master');
@@ -168,6 +174,17 @@ Route::get('/sales/getSalesDetails', [SalesInvoicesController::class, 'getDetail
 Route::get('/sales/getSalesCustplan', [SalesInvoicesController::class, 'getMastercustplan'])->name('sales.custplan');
 Route::get('/sales/getSalesCustplandtl', [SalesInvoicesController::class, 'getDetailscustplan'])->name('sales.custplandtl');
 Route::resource('saleinvoices', SalesInvoicesController::class);
+
+
+
+//  Gate Pass
+Route::get('/gatepasse/getSalesMaster', [GatepasseController::class, 'getMaster'])->name('gatepasse.master');
+Route::get('/gatepasse/getSalesDetails', [GatepasseController::class, 'getDetail'])->name('gatepasse.details');
+Route::get('/gatepasse/getInvsMaster', [GatepasseController::class, 'getMasterinvs'])->name('gatepasse.dcmaster');
+
+Route::get('/gatepasse/getInvsDtl', [GatepasseController::class, 'getContractDetails'])->name('gatepasse.dcdtl');
+
+Route::resource('gatepasse', GatepasseController::class);
 
 
 
@@ -201,6 +218,26 @@ Route::get('/custorders/getCustordersQuotationsdtl', [CustomerOrderController::c
 Route::resource('customerorder', CustomerOrderController::class);
 
 
+
+
+
+//  Purchasing
+Route::get('/Purchasing/getPurchasingMaster', [PurchasingController::class, 'getMaster'])->name('purchasing.master');
+Route::get('/Purchasing/getPurchasingDetails', [PurchasingController::class, 'getDetail'])->name('purchasing.details');
+// Route::get('/Purchasing/getcidMaster', [PurchasingController::class, 'getMasterqut'])->name('Purchasing.quotations');
+// Route::get('/Purchasing/getCustordersQuotationsdtl', [PurchasingController::class, 'getDetailsqut'])->name('Purchasing.quotationsdtl');
+Route::get('/Purchasing/getContractDetails', [PurchasingController::class, 'getContractDetails'])->name('contfrpur.dtl');
+Route::resource('purchasing', PurchasingController::class);
+
+
+
+
+
+
+
+
+
+
 Route::get('/custorderswoq/getQuotationsMaster', [CustomerOrderwoqController::class, 'getMaster'])->name('custorderswoq.master');
 Route::get('/custorderswoq/getQuotationsDetails', [CustomerOrderwoqController::class, 'getDetail'])->name('custorderswoq.details');
 Route::get('/custorderswoq/getcidMaster', [CustomerOrderwoqController::class, 'getMasterqut'])->name('custorderswoq.quotations');
@@ -208,18 +245,11 @@ Route::get('/custorderswoq/getCustordersQuotationsdtl', [CustomerOrderwoqControl
 Route::resource('customerorderwoq', CustomerOrderwoqController::class);
 
 
-
-
-
-
-
-
-
 //  CommercialInvoice - LOCAL
 Route::get('/cisl/getCisMaster', [CommercialInvoiceControllerlocal::class, 'getMaster'])->name('cisl.master');
- Route::get('/cisl/getCisDetails', [CommercialInvoiceControllerlocal::class, 'getDetails'])->name('cisl.details');
-  Route::get('/cisl/getContractDetails', [CommercialInvoiceControllerlocal::class, 'getContractDetails'])->name('cisl.condet');
-   Route::resource('cisl', CommercialInvoiceControllerlocal::class);
+Route::get('/cisl/getCisDetails', [CommercialInvoiceControllerlocal::class, 'getDetails'])->name('cisl.details');
+Route::get('/cisl/getContractDetails', [CommercialInvoiceControllerlocal::class, 'getContractDetails'])->name('cisl.condet');
+Route::resource('cisl', CommercialInvoiceControllerlocal::class);
 
 
 

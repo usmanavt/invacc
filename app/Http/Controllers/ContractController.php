@@ -275,7 +275,7 @@ class ContractController extends Controller
         ->where('contract_id',$contract->id)->get();
          $data=compact('cd');
 
-
+// for update change
 
         return view('contracts.edit')->with('suppliers',Supplier::select('id','title')->where('source_id',2)->get())
         ->with('contract',$contract)

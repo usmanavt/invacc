@@ -1,30 +1,28 @@
 <x-app-layout>
 
     @push('styles')
-    {{-- <link rel="stylesheet" href="{{ asset('css/tabulator_simple.min.css') }}"> --}}
-    <link href="https://unpkg.com/tabulator-tables/dist/css/tabulator.min.css" rel="stylesheet">
-    <script type="text/javascript" src="https://unpkg.com/tabulator-tables/dist/js/tabulator.min.js"></script>
-    @endpush
-
-    @push('styles')
     <link rel="stylesheet" href="{{ asset('css/tabulator_simple.min.css') }}">
     @endpush
 
     <x-slot name="header">
         <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-            Contracts
+            GatePasses
             {{-- Create New Customer --}}
-            <a class="text-sm text-green-500 hover:text-gray-900" href="{{route('contracts.create')}}">
+            <a class="text-sm text-green-500 hover:text-gray-900" href="{{route('gatepasse.create')}}">
                 {{-- Add Icon --}}
                 <i class="fa fa-file fa-fw"></i>
                 Add New Record
             </a>
+            {{-- <span> | </span> --}}
+            {{-- <button class="text-sm text-blue-300" onclick="setStatus(1)">Pending</button> --}}
+            <span> | </span>
+            <button class="text-sm text-blue-300" onclick="setStatus(2)">Gatepass History</button>
         </h2>
     </x-slot>
 
     {{-- Tabulator --}}
     <div class="py-6">
-        <div class="max-w-8xl mx-auto sm:px-2 lg:px-4">
+        <div class="max-w-9xl mx-auto sm:px-2 lg:px-4">
             <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg p-4">
 
                 {{-- tabulator component --}}
@@ -42,20 +40,27 @@
 @push('scripts')
 <script>
     var hideIcon = function(cell, formatterParams, onRendered){ return "<i class='fa fa-eye text-green-600'></i>";};
+    var viewIcon = function(cell, formatterParams, onRendered){ return "<i class='fa fa-binoculars text-purple-600'></i>";};
     var editIcon = function(cell, formatterParams, onRendered){ return "<i class='fa fa-edit text-blue-600'></i>";};
     var deleteIcon = function(cell, formatterParams, onRendered){ return "<i class='fa fa-trash text-red-600'></i>";};
     var printIcon = function(cell, formatterParams, onRendered){ return "<i class='fa fa-print text-pink-500'></i>";};
 
-    const getMaster = @json(route('contracts.master'));
-    const getDetails = @json(route('contracts.details'));
+    const getMaster = @json(route('gatepasse.master'));
+    const getDetails = @json(route('gatepasse.details'));
     let table;
     let searchValue = "";
-
+    let statusValue="1";  // 1 = Pending, 2 - Completed
+    //  Status Setter
+    function setStatus(status)
+        {
+            statusValue = status
+            table.setData(getMaster,{search:searchValue,status:statusValue});
+        }
     //  Table Filter
     function dataFilter(element)
     {
-        searchValue = element.value;
-        table.setData(getMaster,{search:searchValue});
+        searchValue =  element.value;
+        table.setData(getMaster,{search:searchValue,status:statusValue});
     }
     // The Table for Items Modal
     table = new Tabulator("#tableData", {
@@ -68,16 +73,15 @@
         paginationMode:"remote",
         sortMode:"remote",
         filterMode:"remote",
-        paginationSize:20,
+        paginationSize:10,
         paginationSizeSelector:[10,25,50,100],
         ajaxParams: function(){
-            return {search:searchValue};
+            return {search:searchValue,status:statusValue};
         },
         ajaxURL: getMaster,
         ajaxContentType:"json",
         initialSort:[ {column:"id", dir:"desc"} ],
         height:"100%",
-
 
         columns:[
             //  Detail Data
@@ -108,85 +112,92 @@
                     },
                     ajaxURL: getDetails,
                     columns: [
-                        {title: "Material",field: "material_title"},
-                        {title: "Category",field: "category"},
-                        {title: "Sku",field: "sku"},
-                        {title: "Dimension",field: "dimension"},
-                        {title: "Source",field: "source"},
-                        {title: "Brand",field: "brand"},
-                        {title: "Bundle1",field: "bundle1"},
-                        {title: "Pcs/Bnd1",field: "pcspbundle1"},
-                        {title: "Bundle2",field: "bundle2"},
-                        {title: "Pcs/Bnd2",field: "pcspbundle2"},
-                        {title: "Gdswt",field: "gdswt" ,formatter:"money",
-                formatterParams:{thousand:",",precision:3}},
-                        {title: "Value",field: "gdsprice" , formatter:"money",
-                formatterParams:{thousand:",",precision:3}},
+                        {title: "material_title",field: "material_title" ,headerVertical:true,},
+                        {title: "pcs",field: "pcs" ,headerVertical:true,},
+                        {title: "gdswt",field: "gdswt" ,headerVertical:true,},
+                        {title: "inkg",field: "inkg" ,headerVertical:true,},
+                        {title: "gdsprice",field: "gdsprice" ,headerVertical:true,},
+                        {title: "otherexpenses",field: "otherexpenses" ,headerVertical:true,},
+                        {title: "amtindollar",field: "amtindollar" ,headerVertical:true,},
+                        {title: "amtinpkr",field: "amtinpkr" ,headerVertical:true,},
+                        {title: "length",field: "length" ,headerVertical:true,},
+                        {title: "itmratio",field: "itmratio" ,headerVertical:true,},
+                        {title: "insuranceperitem",field: "insuranceperitem" ,headerVertical:true,},
+                        {title: "amountwithoutinsurance",field: "amountwithoutinsurance" ,headerVertical:true,},
+                        {title: "onepercentdutypkr",field: "onepercentdutypkr" ,headerVertical:true,},
+                        {title: "pricevaluecostsheet",field: "pricevaluecostsheet" ,headerVertical:true,},
+                        {title: "cda",field: "cda" ,headerVertical:true,},
+                        {title: "sta",field: "sta" ,headerVertical:true,},
+                        {title: "rda",field: "rda" ,headerVertical:true,},
+                        {title: "acda",field: "acda" ,headerVertical:true,},
+                        {title: "asta",field: "asta" ,headerVertical:true,},
+                        {title: "ita",field: "ita" ,headerVertical:true,},
+                        {title: "wsca",field: "wsca" ,headerVertical:true,},
+                        {title: "total",field: "total" ,headerVertical:true,},
+                        {title: "perpc",field: "perpc" ,headerVertical:true,},
+                        {title: "perkg",field: "perkg" ,headerVertical:true,},
+                        {title: "perft",field: "perft" ,headerVertical:true,},
 
-                        // {title:"Approve Single" , hozAlign:"center",visible:visibleApprove,headerSort:false, responsive:0,
-                        //     formatter:function(cell, onRendered){
-                        //         return (cell.getRow().getData().type === 1 && cell.getRow().getData().locked === 0) ? "<i class='fa fa-thumbs-up text-green-500'></i>":"";
-                        //     },
-                        //     cellClick:function(e, cell){
-                        //         (cell.getRow().getData().type === 2 || cell.getRow().getData().locked == 1) ? "":
-                        //         //  Fetch the Data from Rest Api
-                        //         fetch(window.location + `/approveall?gp=2&id=${cell.getRow().getData().id}`,{
-                        //         method:"GET",
-                        //         headers: { 'Accept':'application/json','Content-type':'application/json'},
-                        //         })
-                        //         .then((response) => response.json()) //Transform data to json
-                        //         .then(function(response){
-                        //             if(response == "success")
-                        //             showSnackbar("Returnable Gatepass approved","green");
-                        //             window.open(window.location.origin + `/gatepass`,"_self");
-                        //         })
-                        //         .catch(function(error){
-                        //             showSnackbar(error,"red");
-                        //         })
-                        //     }
-                        // },
                     ],
                     ajaxResponse:function(getDetails, params, response){
                         return response.data;
                     },
                 })}
             },
-            // Master Data
-            {title:"Id", field:"id" , responsive:0},
-            {title:"Invoice #", field:"number" , visible:true ,headerSortStartingDir:"asc" , responsive:0},
-            {title:"Dated", field:"invoice_date" , visible:true , responsive:0},
-            {title:"Supplier", field:"supplier.title" ,  responsive:0},
+      //      Master Data
+
+            // {title: "Dated",field: "created_at"},
+
 
             {
-                title:'Contract Data', headerHozAlign:"center",
+                    title:'Data Description', headerHozAlign:"center",
                     columns:[
-            {title: "Weight",field: "conversion_rate" ,formatter:"money",formatterParams:{thousand:",",precision:0}},
-            {title: "Pcs",field: "totalpcs" ,formatter:"money",formatterParams:{thousand:",",precision:0}},
-            {title: "Supp.Val($)",field: "insurance" ,formatter:"money",formatterParams:{thousand:",",precision:3}},
-            {title: "Duty.Val($)",field: "dutyval" ,formatter:"money",
-                formatterParams:{thousand:",",precision:3}} ]},
 
-                {
-                title:'Pending Data', headerHozAlign:"center",
+            {title: "id",field: "id"},
+            {title: "Customer",field: "customer.title"},
+            {title: "DC No",field: "dcno"},
+            {title: "DC Date",field: "saldate"},
+            {title: "GatePass No",field: "gpseqid"},
+            {title: "GatePass Date",field: "gpdate"}]},
+
+            {
+                    title:'Total Quantity', headerHozAlign:"center",
                     columns:[
-            {title: "Weight",field: "balwt" ,formatter:"money",formatterParams:{thousand:",",precision:0}},
-            {title: "Pcs",field: "balpcs" ,formatter:"money",formatterParams:{thousand:",",precision:0}},
-            {title: "Supp.Val($)",field: "balsupval" ,formatter:"money",formatterParams:{thousand:",",precision:0}}
-             ]},
+
+            {title: "In Pcs",field: "gptotpcs"},
+            {title: "In Kg",field: "gptotwt"},
+            {title: "In Feet",field: "gptotfeet"}]},
+
+            // {
+            //         title:'Contract Balance', headerHozAlign:"center",
+            //         columns:[
+
+            // {title: "In Pcs",field: "balpurtotpcs"},
+            // {title: "In Kg",field: "balpurtotwt"},
+            // {title: "In Feet",field: "balpurtotfeet"}]},
 
 
-                {title:"Created By", field:"user.name" ,  responsive:0},
-            {title:"Edit" , formatter:editIcon, hozAlign:"center",headerSort:false, responsive:0,
-                cellClick:function(e, cell){
-                    // console.log(cell.getData().id)
-                    window.open(window.location + "/" + cell.getData().id + "/edit" ,"_self");
-                }
-            },
-            {title:"Delete" , formatter:deleteIcon, hozAlign:"center",headerSort:false, responsive:0,
+
+
+
+
+
+            {title:"View" , formatter:viewIcon, hozAlign:"center",headerSort:false, responsive:0,
                 cellClick:function(e, cell){
                     window.open(window.location + "/" + cell.getRow().getData().id  ,"_self");
                 }
             },
+            {title:"Edit" , formatter:editIcon, hozAlign:"center",headerSort:false, responsive:0,
+                cellClick:function(e, cell){
+                    console.log(cell.getRow().getData())
+                    window.open(window.location + "/" + cell.getRow().getData().id + "/edit" ,"_self");
+                }
+            },
+            // {title:"Delete" , formatter:deleteIcon, hozAlign:"center",headerSort:false, responsive:0,
+            //     cellClick:function(e, cell){
+            //         window.open(window.location + "/" + cell.getRow().getData().id  ,"_self");
+            //     }
+            // },
             {title:"Print" , formatter:printIcon, hozAlign:"center",headerSort:false, responsive:0,
                 cellClick:function(e, cell){
                     window.open(window.location + "/" + cell.getRow().getData().id + "/printcontract"  ,"_self");

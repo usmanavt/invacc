@@ -464,7 +464,12 @@ var updateValues = (cell) => {
                 {title:"category_id",  field:"category_id",visible:false},
                 {title:"sku_id",       field:"sku_id",visible:false},
                 {title:"dimension_id", field:"dimension_id",visible:false},
+
+
                 {title:"StockQty", field:"balqty"},
+
+
+
                 {title:"Variance", field:"varqty",cellEdited: updateValues,},
 
                 {

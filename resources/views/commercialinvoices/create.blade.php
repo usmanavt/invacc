@@ -109,7 +109,7 @@
         let table;
         let searchValue = "";
         const deleteIcon = function(cell,formatterParams){return "<i class='fa fa-trash text-red-500'></i>";};
-        const getMaster = @json(route('contracts.masterI'));
+        const getMaster = @json(route('contracts.masterII'));
         const getDetails = @json(route('cis.condet'));
         // console.log(getMaster)
         let csrfToken = document.head.querySelector("[name~=csrf-token][content]").content;
@@ -123,6 +123,7 @@
         let adopted = false
         let detailsUrl = ''
         let contract_id = '';
+        let purid=0;
 
         // Bank Charges
         let bankcharges= document.getElementById("bankcharges")
@@ -206,12 +207,12 @@
         }
         //  The Table for Materials Modal
         table = new Tabulator("#tableData", {
-            width:"1000px",
+            width:"1500px",
             height:"600px",
-            autoResize:true,
+            // autoResize:true,
             responsiveLayout:"collapse",
-            // layout:"fitData",
-            layout:'fitDataTable',
+            //  layout:"fitData",
+             layout:'fitDataTable',
 
             index:"id",
             placeholder:"No Data Available",
@@ -249,7 +250,7 @@
                 {title:"Supplier", field:"supname", visible:true ,headerSort:false, responsive:0},
 
                 {
-                 title:'Total Contract Data', headerHozAlign:"center",
+                 title:'Contract Data', headerHozAlign:"center",
                  columns:[
                  {title:"Weight", field:"tweight" , visible:true ,headerSort:false, responsive:0},
                  {title:"TotalPcs", field:"ttotalpcs" , visible:true ,headerSort:false, responsive:0},
@@ -258,13 +259,15 @@
                 ]},
 
                 {
-                 title:'Pending Contract Data', headerHozAlign:"center",
+                 title:'Purchasing Data', headerHozAlign:"center",
                  columns:[
                  {title:"Weight", field:"pweight" , visible:true ,headerSort:false, responsive:0},
                  {title:"TotalPcs", field:"ptotalpcs" , visible:true ,headerSort:false, responsive:0},
-                 {title:"TotalVal($)", field:"ptvalue" , visible:true ,headerSort:false, responsive:0},
+                 {title:"Totalfeet", field:"purtotfeet" , visible:true ,headerSort:false, responsive:0}]},
 
-                ]}
+                 {title:"PendContVal($)", field:"ptvalue" , visible:true ,headerSort:false, responsive:0},
+
+
            ],
         // },
             // Extra Pagination Data for End Users
@@ -282,6 +285,7 @@
             var data = simple._row.data
 
             contract_id = data.contract_id
+            purid=data.id
             // console.info(contract_id)
             detailsUrl = `${getDetails}/?id=${data.id}`
             fetchDataFromServer(detailsUrl)
@@ -367,7 +371,7 @@
                         gdswt :             obj.gdswt ,
                         dutygdswt :         obj.dutygdswt ,
                         inkg :              vwinkg,
-                        length :            0,
+                        length :            obj.length,
                         gdsprice :          obj.gdsprice,
                         dtyrate :           obj.dtyrate,
                         invsrate:           obj.invsrate,
@@ -380,6 +384,9 @@
                         comamtinpkr :        0,
                         itmratio:          0,
                         dtyitmratio:0,
+                        bundle1:    obj.bundle1,
+                        bundle2:    obj.bundle2,
+
 
                         insuranceperitem :  0,
                         dtyinsuranceperitem :  0,
@@ -395,7 +402,7 @@
                         perkg:              0,
                         perft:            0,
                         otherexpenses:    0,
-                        qtyinfeet:0,
+                        qtyinfeet:obj.qtyinfeet,
                         wse      : 0,
                         goods_received  :0,
                         total :0
@@ -596,7 +603,8 @@
                 var perft=0
                 var perft=0
 
-                var qtyinfeet = (e.pcs * e.length).toFixed(2)
+                // var qtyinfeet = (e.pcs * e.length).toFixed(2)
+                qtyinfeet=e.qtyinfeet
                 var otherexpenses = 0
 
 
@@ -771,7 +779,8 @@ var headerMenu = function(){
                 {title:"category_id",  field:"category_id",visible:false},
                 {title:"sku_id",       field:"sku_id",visible:false},
                 {title:"dimension_id", field:"dimension_id",visible:false},
-                // {title:"source_id",    field:"source_id",visible:false},
+                {title:"bundle1",    field:"bundle1",visible:false},
+                {title:"bundle2",    field:"bundle2",visible:false},
                 // {title:"brand_id",     field:"brand_id",visible:false},
 
                 // {title:"totpcs",     field:"pcs",visible:true},
@@ -781,18 +790,18 @@ var headerMenu = function(){
                 {
                     title:'Quantity', headerHozAlign:"center",
                     columns:[
-                        {title: "id",field: "myid",visible:false},
-                        {   title:"Location",headerHozAlign :'center',
-                            field:"location" ,
-                            editor:"list",
-                            responsive:0 ,
-                            headerVertical:true,
-                            // cssClass:"bg-green-200 font-semibold",
-                            editorParams:   {
-                                values:newList,
-                                validator:["required"]
-                            }
-                        },
+                        // {title: "id",field: "myid",visible:false},
+                        // {   title:"Location",headerHozAlign :'center',
+                        //     field:"location" ,
+                        //     editor:"list",
+                        //     responsive:0 ,
+                        //     headerVertical:true,
+                        //     // cssClass:"bg-green-200 font-semibold",
+                        //     editorParams:   {
+                        //         values:newList,
+                        //         validator:["required"]
+                        //     }
+                        // },
                         {   title:"HS code",headerHozAlign :'center',
                             field:"hscode",
                             editor:"list",
@@ -808,7 +817,7 @@ var headerMenu = function(){
                         {   title:"Pcs",headerHozAlign :'center',
                             responsive:0,
                             field:"pcs",
-                            editor:"number",
+                            // editor:"number",
                             headerVertical:true,
                             bottomCalc:"sum",
                             formatter:"money",
@@ -819,7 +828,7 @@ var headerMenu = function(){
                         {   title:"Supp.Wt(Kg)",
                             field:"gdswt",
                             responsive:0,
-                            editor:"number",
+                            // editor:"number",
                             headerVertical:true,
                             bottomCalc:"sum",
                             formatter:"money",
@@ -850,7 +859,7 @@ var headerMenu = function(){
                         {   title:"Lng(pcs/feet)",
                             field:"length",
                             headerVertical:true,
-                            editor:"number",
+                            // editor:"number",
                             formatter:"money",
                             responsive:0,
                             formatterParams:{thousand:",",precision:2},
@@ -1156,9 +1165,15 @@ var headerMenu = function(){
             for (let index = 0; index < dynamicTableData.length; index++) {
                 const element = dynamicTableData[index];
 
-                if(element.location === undefined)
+                // if(element.location === undefined)
+                // {
+                //     showSnackbar("Location must be Enter","info");
+                //     return;
+                // }
+
+                if(element.length == 0)
                 {
-                    showSnackbar("Location must be Enter","info");
+                    showSnackbar("Length must be Enter","info");
                     return;
                 }
 
@@ -1179,7 +1194,7 @@ var headerMenu = function(){
                 'insurance' : parseFloat(insurance.value).toFixed(2),
                 'contract_id' : contract_id,
                 'invoiceno' : invoiceno.value,
-                // 'challanno' : challanno.value,
+                'purid'     : purid,
                 'machineno' : machineno.value,
                 'machine_date' :machine_date.value,
                 'invoicedate' : invoicedate.value,

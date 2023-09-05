@@ -2,22 +2,23 @@
 
 namespace App\Models;
 
-use App\Models\Sku;
-use App\Models\Brand;
-use App\Models\Hscode;
-use App\Models\Source;
-use App\Models\Category;
-use App\Models\Contract;
-use App\Models\Dimension;
-use App\Models\Quotation;
-
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
 
-class Material extends Model
+
+
+class OpeningGodownStock extends Model
 {
     use HasFactory;
-    protected $fillable = ['category_id','dimension_id','source_id','sku_id','brand_id','hscode_id','category','dimension','source','sku','brand','title','nick','status'];
+    protected $fillable = [
+    'opdate','ostkwte13','ostkpcse13','ostkfeete13','ostkwtgn2','ostkpcsgn2', 'ostkfeetgn2','ostkwtams','ostkpcsams','ostkfeetams',
+    'ostkwte24','ostkpcse24','ostkfeete24','ostkwtbs','ostkpcsbs','ostkfeetbs','ostkwtoth',
+    'ostkpcsoth','ostkfeetoth','ostkwttot','ostkpcstot', 'ostkfeettot', 'ocostwt','ocostpcs', 'ocostfeet',
+    ];
+
+
+
+
 
     //  Relationships
     public function dimension(){ return $this->belongsTo(Dimension::class , 'dimension_id'); }
@@ -28,9 +29,8 @@ class Material extends Model
     public function hscodes(){ return $this->belongsTo(Hscode::class, 'hscode_id'); }
 
     public function contracts(){ return $this->hasMany(Contract::class); }
-
-
     public function quotations(){ return $this->hasMany(Quotation::class); }
+
 
 
 }
