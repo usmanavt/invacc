@@ -76,7 +76,8 @@
                         <x-slot name="content" width="60">
 
                             <x-dropdown-link href="{{ route('contracts.index') }}">Contracts</x-dropdown-link>
-                            <x-dropdown-link href="{{ route('purchasing.index') }}">Goods Receive Not (GRN) </x-dropdown-link>
+                            <x-dropdown-link href="{{ route('purchasing.index') }}">Goods Receive Not (I) </x-dropdown-link>
+                            <x-dropdown-link href="{{ route('purchasingloc.index') }}">Goods Receive Not (L) </x-dropdown-link>
                             <x-dropdown-link href="{{ route('cis.index') }}">Importet Purchase Invoice</x-dropdown-link>
                             <x-dropdown-link href="{{ route('localpurchase.index') }}">Local Purchase Invoice</x-dropdown-link>
                             <x-dropdown-link href="{{ route('clearance.index') }}">Duty Clearance</x-dropdown-link>

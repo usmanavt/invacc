@@ -185,6 +185,7 @@ class CustomerOrderController  extends Controller
             $ci->discntamt = $request->discntamt;
             $ci->cartage = $request->cartage;
             $ci->rcvblamount = $request->rcvblamount;
+            $ci->salordbal = $request->rcvblamount;
 
             $ci->saletaxper = $request->saletaxper;
             $ci->saletaxamt = $request->saletaxamt;
@@ -270,7 +271,13 @@ class CustomerOrderController  extends Controller
             $customerorder->discntper = $request->discntper;
             $customerorder->discntamt = $request->discntamt;
             $customerorder->cartage = $request->cartage;
+
+
             $customerorder->rcvblamount = $request->rcvblamount;
+
+            $customerorder->salordbal = $request->rcvblamount-$request->delivered;
+
+
 
             $customerorder->saletaxper = $request->saletaxper;
             $customerorder->saletaxamt = $request->saletaxamt;

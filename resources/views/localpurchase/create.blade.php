@@ -100,12 +100,12 @@
     const deleteIcon = function(cell,formatterParams){return "<i class='fa fa-trash text-red-500'></i>";};
 
     // Populate Locations in Tabulator
-    const locations = @json($locations);
-        var newList=[]
-        locations.forEach(e => {
-            newList.push({value:e.title,label:e.title , id:e.id})
+  //  const locations = @json($locations);
+  //      var newList=[]
+  //      locations.forEach(e => {
+  //          newList.push({value:e.title,label:e.title , id:e.id})
 
-        });
+  //      });
 
         const skus = @json($skus);
         var newList1=[]
@@ -117,7 +117,10 @@
 
 
 
-    const getMaster = @json(route('materials.master'));
+    // const getMaster = @json(route('materials.master'));
+
+    const getMaster = @json(route('locmat.master'));
+
     let csrfToken = document.head.querySelector("[name~=csrf-token][content]").content;
     let modal = document.getElementById("myModal")
     // console.log(getMaster);
@@ -249,10 +252,10 @@
             {title:"Id", field:"id" , responsive:0},
             {title:"Material", field:"title" , visible:true ,headerSort:false, responsive:0},
             {title:"Category", field:"category" , visible:true ,headerSortStartingDir:"asc" , responsive:0},
+            {title:"Category_Id", field:"category_id" , visible:true ,headerSortStartingDir:"asc" , responsive:0},
             {title:"Dimesion", field:"dimension" ,   responsive:0},
-            {title:"Source", field:"source" ,  responsive:0},
             {title:"Sku", field:"sku" ,  responsive:0},
-            {title:"Brand", field:"brand" ,  responsive:0},
+            {title:"sku_id", field:"sku_id",visible:false ,  responsive:0},
         ],
         // Extra Pagination Data for End Users
         ajaxResponse:function(getDataUrl, params, response){
@@ -278,21 +281,22 @@
     var updateValues = (cell) => {
         var data = cell.getData();
         var leninft = Number(data.pcs) * Number(data.length)
-        // if(data.purunit=='k')
-        //  {
-             var sum =  Number(data.gdswt) * Number(data.gdsprice)
+        if(data.sku==='KG')
+         {
+
+            var sum =  Number(data.gdswt) * Number(data.gdsprice)
              var sum2 =  Number(data.gdswt) * Number(data.gdsprice)
-        //  }
-        //  if(data.purunit=='p')
-        //  {
-        //      var sum =  Number(data.pcs) * Number(data.gdsprice)
-        //      var sum2 =  Number(data.pcs) * Number(data.gdsprice)
-        //  }
-        //  if(data.purunit=='f')
-        //  {
-        //      var sum =  Number(data.qtyinfeet) * Number(data.gdsprice)
-        //      var sum2 =  Number(data.qtyinfeet) * Number(data.gdsprice)
-        //  }
+         }
+         if(data.sku==='PCS')
+         {
+             var sum =  Number(data.pcs) * Number(data.gdsprice)
+             var sum2 =  Number(data.pcs) * Number(data.gdsprice)
+         }
+         if(data.sku==='FEET')
+         {
+             var sum =  Number(data.qtyinfeet) * Number(data.gdsprice)
+             var sum2 =  Number(data.qtyinfeet) * Number(data.gdsprice)
+         }
         // var sum = Number(data.gdswt) * Number(data.gdsprice)
         // var sum2 =  Number(data.gdswt) * Number(data.gdsprice)
         var row = cell.getRow();
@@ -344,18 +348,19 @@
             {title:"Sku",               field:"sku_id",         cssClass:"bg-gray-200 font-semibold",visible:false},
             {title:"M/Unit",            field:"sku",            cssClass:"bg-gray-200 font-semibold"},
 
-            {title: "id",field: "myid",visible:false},
-                {title:"Location", field:"location" ,editor:"list" , editorParams:   {
-                        values:newList,
-                        cssClass:"bg-green-200 font-semibold",
-                        validator:["required"]
-                    }
-                },
+            // {title: "id",field: "myid",visible:false},
+            //     {title:"Location", field:"location" ,editor:"list" , editorParams:   {
+            //             values:newList,
+            //             cssClass:"bg-green-200 font-semibold",
+            //             validator:["required"]
+            //         }
+            //     },
 
                 {title: "id",field: "skuid",visible:false},
                 {title:"UOM", field:"sku" ,editor:"list" , editorParams:   {
                         values:newList1,
                         cssClass:"bg-green-200 font-semibold",
+                        cellEdited: updateValues,
                         validator:["required"]
                     }
                 },
@@ -378,8 +383,32 @@
 
 
 
-            {   title:"Quantity",
+            {   title:"Weight",
                 field:"gdswt",
+                editor:"number",
+                cssClass:"bg-green-200 font-semibold",
+                validator:"required",
+                formatter:"money",
+                formatterParams:{thousand:",",precision:2},
+                validator:["required","integer"],
+                cellEdited: updateValues,
+                bottomCalc:"sum"
+               },
+
+               {title:"Qty(Pcs)",
+                field:"pcs",
+                editor:"number",
+                cssClass:"bg-green-200 font-semibold",
+                validator:"required",
+                formatter:"money",
+                formatterParams:{thousand:",",precision:2},
+                validator:["required","integer"],
+                cellEdited: updateValues,
+                bottomCalc:"sum"
+               },
+
+               {title:"Length",
+                field:"length",
                 editor:"number",
                 cssClass:"bg-green-200 font-semibold",
                 validator:"required",
@@ -389,40 +418,19 @@
                 cellEdited: updateValues,
                },
 
-            //    {title:"Qty(Pcs)",
-            //     field:"pcs",
-            //     editor:"number",
-            //     cssClass:"bg-green-200 font-semibold",
-            //     validator:"required",
-            //     formatter:"money",
-            //     formatterParams:{thousand:",",precision:2},
-            //     validator:["required","integer"],
-            //     cellEdited: updateValues,
-            //    },
-
-            //    {title:"Length",
-            //     field:"length",
-            //     editor:"number",
-            //     cssClass:"bg-green-200 font-semibold",
-            //     validator:"required",
-            //     formatter:"money",
-            //     formatterParams:{thousand:",",precision:2},
-            //     validator:["required","integer"],
-            //     cellEdited: updateValues,
-            //    },
 
 
-
-            //    {title:"Qty(Feet)",
-            //     field:"qtyinfeet",
-            //     editor:"number",
-            //     cssClass:"bg-green-200 font-semibold",
-            //     validator:"required",
-            //     formatter:"money",
-            //     formatterParams:{thousand:",",precision:2},
-            //     validator:["required","integer"],
-            //     cellEdited: updateValues,
-            //    },
+               {title:"Qty(Feet)",
+                field:"qtyinfeet",
+                editor:"number",
+                cssClass:"bg-green-200 font-semibold",
+                validator:"required",
+                formatter:"money",
+                formatterParams:{thousand:",",precision:2},
+                validator:["required","integer"],
+                cellEdited: updateValues,
+                bottomCalc:"sum"
+               },
 
 
 
@@ -443,6 +451,7 @@
                 cssClass:"bg-gray-200 font-semibold",
                 formatter:"money",
                 formatterParams:{thousand:",",precision:0},
+                cellEdited: updateValues   ,
                 // formatter:function(cell,row)
                 // {
                 //     // return (cell.getData().bundle1 * cell.getData().pcspbundle1) + (cell.getData().bundle2 * cell.getData().pcspbundle2)
@@ -498,22 +507,22 @@
         }
         dynamicTableData = dynamicTable.getData();
         // Qty Required
-        for (let index = 0; index < dynamicTableData.length; index++) {
-            const element = dynamicTableData[index];
+        // for (let index = 0; index < dynamicTableData.length; index++) {
+        //     const element = dynamicTableData[index];
 
-            if(element.location === undefined || element.purunit==undefined)
-               {
-                showSnackbar("Location must be Enter","info");
-                return;
-               }
+        //     // if(element.location === undefined || element.purunit==undefined)
+        //     //    {
+        //     //     showSnackbar("Location must be Enter","info");
+        //     //     return;
+        //     //    }
 
-            // if(element.gdswt == 0 || element.pcs == 0 || element.qtyinfeet == 0 || element.gdsprice == 0 )
+        //     // if(element.gdswt == 0 || element.pcs == 0 || element.qtyinfeet == 0 || element.gdsprice == 0 )
 
-            // {
-            //     showSnackbar("Please fill all Weight,Length,Pcs & Price all rows to proceed","info");
-            //     return;
-            // }
-        }
+        //     // {
+        //     //     showSnackbar("Please fill all Weight,Length,Pcs & Price all rows to proceed","info");
+        //     //     return;
+        //     // }
+        // }
         disableSubmitButton(true);
         var data = { 'contracts' : dynamicTableData,'bankntotal':bankntotal.value,'otherchrgs':otherchrgs.value,'exataxoffie':exataxoffie.value,'collofcustom':collofcustom.value,'insurance':insurance.value ,'supplier_id': supplier_id.value,'invoice_date':invoice_date.value,'number':number.value,'gpassno':gpassno.value};
         // All Ok - Proceed

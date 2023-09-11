@@ -19,6 +19,7 @@ class CAddColumnToCommercialInvoices extends Migration
             $table->integer('dutybal')->default(0);
             $table->decimal('tswt', 15, 3)->default(0.000);
             $table->integer('purid')->default(0);
+            $table->decimal('wtbal', 15, 3)->default(0.000);
 
         });
     }

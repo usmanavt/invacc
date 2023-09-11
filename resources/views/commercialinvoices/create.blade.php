@@ -660,7 +660,16 @@
                  e.totallccostwexp = e.total + e.amtinpkr + e.invlvlchrgs
                  e.perpc =  (( e.totallccostwexp + e.otherexpenses) / e.pcs).toFixed(2)
                  e.perkg = (( e.totallccostwexp + e.otherexpenses) / e.gdswt).toFixed(2)
+                 if(e.qtyinfeet.value>0)
+                 {
                  e.perft =(( e.totallccostwexp + e.otherexpenses) / e.qtyinfeet).toFixed(2)
+                 }
+
+                 if(e.qtyinfeet.value===0)
+                 {
+                 e.perft.value =0
+                 }
+
                 //  console.log(e.totallccostwexp)
             })
 
@@ -1171,11 +1180,11 @@ var headerMenu = function(){
                 //     return;
                 // }
 
-                if(element.length == 0)
-                {
-                    showSnackbar("Length must be Enter","info");
-                    return;
-                }
+                // if(element.length == 0)
+                // {
+                //     showSnackbar("Length must be Enter","info");
+                //     return;
+                // }
 
                 // if(element.pcs == 0 || element.gdswt == 0 || elemen.length == 0 )
                 // {

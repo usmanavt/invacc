@@ -51,31 +51,50 @@ class ContractController extends Controller
         return $contracts;
     }
 
-    public function getMasterImpold(Request $request)
+
+    public function matMaster(Request $request)
     {
-        // dd($request->all());
         $search = $request->search;
         $size = $request->size;
         $field = $request->sort[0]["field"];     //  Nested Array
         $dir = $request->sort[0]["dir"];         //  Nested Array
         //  With Tables
-        $contracts = Contract::where(function ($query) use ($search){
-                $query->where('id','LIKE','%' . $search . '%')
-                ->orWhere('number','LIKE','%' . $search . '%');
-            })
-            // ->orWherehas('supplier',function($query) use($search){
-            //     $query->where('title','LIKE',"%$search%");
-            // })
-            ->whereHas('supplier', function ($query) {
-                $query->where('source_id','=','2');
-                // ->orWhere('source_id',1);
-            })
-
-        ->with('user:id,name','supplier:id,title')
+        $materials = Material::where(function ($query) use ($search){
+            $query->where('category_id','=',(int)(substr($search,0,2)))
+            ->where('dimension','LIKE','%' . substr($search,3,10) . '%');
+        })
         ->orderBy($field,$dir)
         ->paginate((int) $size);
-        return $contracts;
+        return $materials;
     }
+
+    // public function matMaster(Request $request)
+    // {
+
+
+    //     $search = $request->search;
+
+    //     //  $ABC=substr($search,0,2);
+    //     //  $ABC= substr($search,0,2);
+    //     $size = $request->size;
+    //     $field = $request->sort[0]["field"];     //  Nested Array
+    //     $dir = $request->sort[0]["dir"];         //  Nested Array
+    //     $materials = DB::table('materials')
+    //     ->where('category_id','=',substr($search,0,2))
+    //     // ->where('title', 'like', "%substr($search,3,10)%")
+    //     // ->join('suppliers', 'contracts.supplier_id', '=', 'suppliers.id')
+    //     // ->select('contracts.*', 'suppliers.title')
+
+    //     // ->orWhere('dimension','LIKE','%' . $search . '%')
+    //     ->orderBy($field,$dir)
+    //     ->paginate((int) $size);
+    //     //  dd($ABC);
+    //     return $materials;
+    // }
+
+
+
+
 
     public function getMasterImp(Request $request)
     {
@@ -90,15 +109,7 @@ class ContractController extends Controller
         ->where('supname', 'like', "%$search%")
         ->orderBy($field,$dir)
         ->paginate((int) $size);
-        // ->paginate(5);
-
-
-        // ->with('user:id,name','supplier:id,title')
-        // ->orderBy($field,$dir)
-        // ->paginate((int) $size);
         return $contracts;
-
-
     }
 
     public function getMasterLoc(Request $request)

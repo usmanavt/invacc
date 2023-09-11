@@ -752,11 +752,6 @@ var totalVal = function(values, data, calcParams){
 
 
 
-
-
-
-
-
             const dynamicTableData = dynamicTable.getData();
             if(dynamicTableData.length == 0)
             {
@@ -773,7 +768,7 @@ var totalVal = function(values, data, calcParams){
                                 return;
                             }
 
-                if( element.sku_id==2)
+                if( element.sku_id===2)
                 {
                 if(element.feedqty > element.sqtypcs )
                              {
@@ -783,7 +778,7 @@ var totalVal = function(values, data, calcParams){
                             }
                 }
 
-                if( element.sku_id==1)
+                if( element.sku_id===1)
                 {
                 if(element.feedqty > element.sqtykg )
                              {
@@ -793,7 +788,7 @@ var totalVal = function(values, data, calcParams){
                             }
                 }
 
-                if( element.sku_id==3)
+                if( element.sku_id===3)
                 {
                 if(element.feedqty > element.sqtyfeet )
                              {
@@ -803,11 +798,6 @@ var totalVal = function(values, data, calcParams){
                             }
                 }
 
-
-
-
-
-
             }
 
 
@@ -815,9 +805,6 @@ var totalVal = function(values, data, calcParams){
         'customer_id': customer_id,'deliverydt':deliverydt.value,'custplan_id':custplan_id,
         'saletaxper':saletaxper.value,'saletaxamt':saletaxamt.value,'totrcvbamount':totrcvbamount.value,
         'podate':podate.value,'pono':pono.value,'dcno':dcno.value,'gpno':gpno.value,'billno':billno.value};
-
-
-
 
             // All Ok - Proceed
             fetch(@json(route('saleinvoices.store')),{

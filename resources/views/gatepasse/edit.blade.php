@@ -388,22 +388,22 @@ dynamicTable = new Tabulator("#dynamicTable", {
                         {
                         title:'E-24', headerHozAlign:"center",
                     columns:[
-                        {   title:"Pcs",visible:false,editor:true,headerHozAlign :'right',hozAlign:"right",responsive:0,field:"gppcse24",bottomCalc:"sum",
+                        {   title:"Pcs",editor:true,headerHozAlign :'right',hozAlign:"right",responsive:0,field:"gppcse24",bottomCalc:"sum",
                                         formatter:"money",cellEdited: updateValues,validator:["required","numeric"],formatterParams:{thousand:",",precision:2}},
-                        {   title:"Weight",visible:false,editor:true,headerHozAlign :'right',hozAlign:"right",responsive:0,field:"gpwte24",bottomCalc:"sum",
+                        {   title:"Weight",editor:true,headerHozAlign :'right',hozAlign:"right",responsive:0,field:"gpwte24",bottomCalc:"sum",
                             formatter:"money",cellEdited: updateValues,validator:["required","numeric"],formatterParams:{thousand:",",precision:2}},
-                            {   title:"Feet",editor:true,visible:false,headerHozAlign :'right',hozAlign:"right",responsive:0,field:"gpfeete24",bottomCalc:"sum",
+                            {   title:"Feet",editor:true,headerHozAlign :'right',hozAlign:"right",responsive:0,field:"gpfeete24",bottomCalc:"sum",
                             formatter:"money",cellEdited: updateValues,validator:["required","numeric"],formatterParams:{thousand:",",precision:2}}
                         ]},
 
                         {
                         title:'BOLTON SHOP', headerHozAlign:"center",
                     columns:[
-                        {   title:"Pcs",visible:false,editor:true,headerHozAlign :'right',hozAlign:"right",responsive:0,field:"gppcsbs",bottomCalc:"sum",
+                        {   title:"Pcs",editor:true,headerHozAlign :'right',hozAlign:"right",responsive:0,field:"gppcsbs",bottomCalc:"sum",
                                         formatter:"money",cellEdited: updateValues,validator:["required","numeric"],formatterParams:{thousand:",",precision:2}},
-                        {   title:"Weight",visible:false,editor:true,headerHozAlign :'right',hozAlign:"right",responsive:0,field:"gpwtbs",bottomCalc:"sum",
+                        {   title:"Weight",editor:true,headerHozAlign :'right',hozAlign:"right",responsive:0,field:"gpwtbs",bottomCalc:"sum",
                             formatter:"money",cellEdited: updateValues,validator:["required","numeric"],formatterParams:{thousand:",",precision:2}},
-                            {   title:"Feet",editor:true,visible:false,headerHozAlign :'right',hozAlign:"right",responsive:0,field:"gpfeetbs",bottomCalc:"sum",
+                            {   title:"Feet",editor:true,headerHozAlign :'right',hozAlign:"right",responsive:0,field:"gpfeetbs",bottomCalc:"sum",
                             formatter:"money",cellEdited: updateValues,validator:["required","numeric"],formatterParams:{thousand:",",precision:2}}
                         ]},
 
@@ -429,9 +429,9 @@ dynamicTable = new Tabulator("#dynamicTable", {
                             formatter:"money",cellEdited: updateValues,validator:["required","numeric"],cssClass:"bg-green-200 font-semibold",formatterParams:{thousand:",",precision:2}}
                         ]},
 
-                        {title:"gpkgrate",           field:"gpkgrate", visible:true},
-                        {title:"gppcsrate",           field:"gppcsrate", visible:true},
-                        {title:"gpfeetrate",           field:"gpfeetrate", visible:true},
+                        {title:"gpkgrate",           field:"gpkgrate", visible:false},
+                        {title:"gppcsrate",           field:"gppcsrate", visible:false},
+                        {title:"gpfeetrate",           field:"gpfeetrate", visible:false},
 
 
 

@@ -69,6 +69,22 @@ class LocalPurchaseController  extends Controller
         return $cis;
     }
 
+    public function matMaster(Request $request)
+    {
+        $search = $request->search;
+        $size = $request->size;
+        $field = $request->sort[0]["field"];     //  Nested Array
+        $dir = $request->sort[0]["dir"];         //  Nested Array
+        //  With Tables
+        $materials = Material::where(function ($query) use ($search){
+            $query->where('category_id','=',(int)(substr($search,0,2)))
+            ->where('dimension','LIKE','%' . substr($search,3,10) . '%');
+        })
+        ->orderBy($field,$dir)
+        ->paginate((int) $size);
+        return $materials;
+    }
+
 
     public function getDetails(Request $request)
     {
@@ -178,22 +194,38 @@ class LocalPurchaseController  extends Controller
                 $lpd->length = 0;
                 $lpd->gdsprice = $cont['gdsprice'];
                 $lpd->amtinpkr = $cont['amtinpkr'];
-                $lpd->location = $cont['location'];
-                $location = Location::where("title", $cont['location'])->first();
-                $lpd->locid = $location->id;
+                // $lpd->location = $cont['location'];
+                // $location = Location::where("title", $cont['location'])->first();
+                // $lpd->locid = $location->id;
                 $unitid = Sku::where("title", $cont['sku'])->first();
                 $lpd->sku_id = $unitid->id;
 
-                if($lpd->sku_id==1)   { $lpd->gdswt = $cont['gdswt']; }
-                if($lpd->sku_id==2)   { $lpd->pcs = $cont['gdswt']; }
-                if($lpd->sku_id==3)   { $lpd->qtyinfeet = $cont['gdswt']; }
+                // if($lpd->sku_id==1)
+                 $lpd->gdswt = $cont['gdswt'];
+                 $lpd->dbalwt = $cont['gdswt'];
 
+                // if($lpd->sku_id==2)
+                 $lpd->pcs = $cont['pcs'];
+                 $lpd->bundle1 = $cont['pcs'];
+
+                // if($lpd->sku_id==3)
+                  $lpd->qtyinfeet = $cont['qtyinfeet'];
+                  $lpd->bundle2 = $cont['qtyinfeet'];
                 $lpd->save();
             }
 
+            DB::update(DB::raw("
+            UPDATE commercial_invoices c
+            INNER JOIN (
+            SELECT commercial_invoice_id, SUM(pcs) as pcs,SUM(gdswt) AS wt,sum(qtyinfeet) as feet,SUM(amtinpkr) AS amount
+            FROM commercial_invoice_details where  commercial_invoice_id = $ci->id
+            GROUP BY commercial_invoice_id
+            ) x ON c.id = x.commercial_invoice_id
+            SET c.tpcs = x.pcs,c.twt=x.wt,c.otherchrgs=x.feet,c.tval=x.amount,wtbal=x.wt,dutybal=x.pcs,agencychrgs=x.feet where  commercial_invoice_id = $ci->id "));
+
             DB::insert(DB::raw("
             INSERT INTO office_item_bal(transaction_id,tdate,ttypedesc,ttypeid,material_id,uom,tqtykg,tqtypcs,tqtyfeet,tcostkg,tcostpcs,tcostfeet)
-            SELECT a.id AS transid,a.invoice_date,'Ipurchasing',3,b.material_id,sku_id,gdswt,pcs,qtyinfeet,gdsprice,gdsprice,gdsprice FROM commercial_invoices a INNER JOIN  commercial_invoice_details b
+            SELECT a.id AS transid,a.invoice_date,'Lpurchasing',3,b.material_id,sku_id,gdswt,pcs,qtyinfeet,gdsprice,gdsprice,gdsprice FROM commercial_invoices a INNER JOIN  commercial_invoice_details b
             ON a.id=b.commercial_invoice_id WHERE a.id=$ci->id"));
 
 
@@ -221,7 +253,8 @@ class LocalPurchaseController  extends Controller
         ->select('c.id as material_id','c.title','c.category_id','c.category','c.dimension_id','c.dimension','c.sku_id','c.sku','c.brand_id','c.brand'
         ,'b.user_id','b.supplier_id','b.id','b.pcs','b.length','b.qtyinfeet','b.gdsprice','b.amtinpkr','b.perkg','b.purval','b.repname',
         'b.machineno','b.forcust','b.purunit','b.locid','b.location','b.contract_id','d.title as sku',
-        DB::raw('( CASE b.sku_id  WHEN  1 THEN b.gdswt WHEN 2 THEN b.pcs WHEN 3 THEN b.qtyinfeet  END) AS gdswt')
+        'b.gdswt','pcs','qtyinfeet'
+        // DB::raw('( CASE b.sku_id  WHEN  1 THEN b.gdswt WHEN 2 THEN b.pcs WHEN 3 THEN b.qtyinfeet  END) AS gdswt')
         )
         ->where('a.id',$id)->get();
 
@@ -285,25 +318,6 @@ class LocalPurchaseController  extends Controller
                 if($cd->id)
                 {
                     $cds = CommercialInvoiceDetails::where('id',$cd->id)->first();
-                    // $cds->contract_id = 0;
-                    // $cds->material_id = $cd->material_id;
-                    // // $cds->material_title = $cd->material_title;
-                    // $cds->repname = $cd->repname;
-                    // $cds->supplier_id = $cd->supplier_id;
-                    // $cds->user_id = $cd->user_id;
-                    // $cds->category_id = $cd->category_id;
-                    // $cds->sku_id = $cd->sku_id;
-                    // $cds->dimension_id = $cd->dimension_id;
-                    // $cds->source_id = $cd->source_id;
-                    // $cds->brand_id = $cd->brand_id;
-                    // $cds->gdswt = $cd->gdswt;
-                    // $cds->perkg = $cd->perkg;
-                    // $cds->amtinpkr = $cd->amtinpkr;
-                    // $cds->location = $cd->location;
-                    // $location = Location::where("title", $cd['location'])->first();
-                    // $cds->locid = $location->id;
-
-
                     $cds->machine_date = $cd->invoice_date;
                     $cds->invoiceno = $cd->invoiceno;
                     // $cds->commercial_invoice_id = $cd->id;
@@ -327,16 +341,30 @@ class LocalPurchaseController  extends Controller
                     $cds->length = 0;
                     $cds->gdsprice = $cd->gdsprice;
                     $cds->amtinpkr = $cd->amtinpkr;
-                    $cds->location = $cd->location;
-                    $location = Location::where("title", $cd['location'])->first();
-                    $cds->locid = $location->id;
+                    // $cds->location = $cd->location;
+                    // $location = Location::where("title", $cd['location'])->first();
+                    // $cds->locid = $location->id;
 
                     $unitid = Sku::where("title", $cd['sku'])->first();
                     $cds->sku_id = $unitid->id;
 
-                    if($unitid->id==1)   { $cds->gdswt = $cd->gdswt; }
-                    if($unitid->id==2)   { $cds->pcs = $cd->gdswt; }
-                    if($unitid->id==3)   { $cds->qtyinfeet = $cd->gdswt; }
+                 // if($lpd->sku_id==1)
+                 $cds->gdswt = $cd['gdswt'];
+                 $cds->dbalwt = $cd['gdswt'];
+
+                // if($lpd->sku_id==2)
+                 $cds->pcs = $cd['pcs'];
+                 $cds->bundle1 = $cd['pcs'];
+
+                // if($lpd->sku_id==3)
+                  $cds->qtyinfeet = $cd['qtyinfeet'];
+                  $cds->bundle2 = $cd['qtyinfeet'];
+
+
+
+
+
+
 
                     $cds->save();
                 }else
@@ -357,24 +385,44 @@ class LocalPurchaseController  extends Controller
                     // $cds->gdswt = $cd->gdswt;
                     $cds->perkg = 0;
                     $cds->amtinpkr = $cd->amtinpkr;
-                    $cds->location = $cd->location;
-                    $location = Location::where("title", $cd['location'])->first();
-                    $cds->locid = $location->id;
+                    // $cds->location = $cd->location;
+                    // $location = Location::where("title", $cd['location'])->first();
+                    // $cds->locid = $location->id;
                     $unitid = Sku::where("title", $cd['sku'])->first();
                     $cds->sku_id = $unitid->id;
+           // if($lpd->sku_id==1)
+                    $cds->gdswt = $cd['gdswt'];
+                    $cds->dbalwt = $cd['gdswt'];
 
-                    if($unitid->id==1)   { $cds->gdswt = $cd->gdswt; }
-                    if($unitid->id==2)   { $cds->pcs = $cd->gdswt; }
-                    if($unitid->id==3)   { $cds->qtyinfeet = $cd->gdswt; }
+                    // if($lpd->sku_id==2)
+                    $cds->pcs = $cd['pcs'];
+                    $cds->bundle1 = $cd['pcs'];
+
+                    // if($lpd->sku_id==3)
+                        $cds->qtyinfeet = $cd['qtyinfeet'];
+                        $cds->bundle2 = $cd['qtyinfeet'];
+
+
+
                     $cds->save();
                 }
             }
+
+            DB::update(DB::raw("
+            UPDATE commercial_invoices c
+            INNER JOIN (
+            SELECT commercial_invoice_id, SUM(pcs) as pcs,SUM(gdswt) AS wt,sum(qtyinfeet) as feet,SUM(amtinpkr) AS amount
+            FROM commercial_invoice_details where  commercial_invoice_id = $commercialinvoice->id
+            GROUP BY commercial_invoice_id
+            ) x ON c.id = x.commercial_invoice_id
+            SET c.tpcs = x.pcs,c.twt=x.wt,c.otherchrgs=x.feet,c.tval=x.amount,wtbal=x.wt,dutybal=x.pcs,agencychrgs=x.feet where  commercial_invoice_id = $commercialinvoice->id "));
+
 
             DB::delete(DB::raw(" delete from office_item_bal where ttypeid=3 and  transaction_id=$commercialinvoice->id   "));
 
             DB::insert(DB::raw("
             INSERT INTO office_item_bal(transaction_id,tdate,ttypedesc,ttypeid,material_id,uom,tqtykg,tqtypcs,tqtyfeet,tcostkg,tcostpcs,tcostfeet)
-            SELECT a.id AS transid,a.invoice_date,'Ipurchasing',3,b.material_id,sku_id,gdswt,pcs,qtyinfeet,gdsprice,gdsprice,gdsprice FROM commercial_invoices a INNER JOIN  commercial_invoice_details b
+            SELECT a.id AS transid,a.invoice_date,'Lpurchasing',3,b.material_id,sku_id,gdswt,pcs,qtyinfeet,gdsprice,gdsprice,gdsprice FROM commercial_invoices a INNER JOIN  commercial_invoice_details b
             ON a.id=b.commercial_invoice_id WHERE a.id=$commercialinvoice->id"));
 
 

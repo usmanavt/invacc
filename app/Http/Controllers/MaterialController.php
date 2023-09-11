@@ -75,13 +75,14 @@ class MaterialController extends Controller
         ]);
 
         $title = $request->title;
+        $category_id=$request->category_id;
         $dimension_id = $request->dimension_id;
-        $mat = Material::where('dimension_id',$dimension_id)->where('title',$title)->first();
+        $mat = Material::where('dimension_id',$dimension_id)->where('title',$title)->where('category_id',$category_id)->first();
         if($mat)
         {
             // dd($mat);
             Session::flash('info','Same dimension for same title exists');
-            return redirect()->back();
+            return  redirect()->back();
         }
 
         DB::beginTransaction();
@@ -95,7 +96,7 @@ class MaterialController extends Controller
                 $material->source_id = 0;
                 $material->sku_id = $request->sku_id;
                 $material->brand_id = 0;
-                $material->hscode_id = 0;
+
                 $material->category = $request->category;
                 $material->dimension = $request->dimension;
                 // $material->source = $request->source;
@@ -117,6 +118,22 @@ class MaterialController extends Controller
 
                 $material->save();
             }
+
+            // DB::update(DB::raw("
+            // update materials set hscode_id=1 where id=$material->id and title='MS SEAMLESS PIPE'
+            // "));
+
+            // DB::update(DB::raw("
+            // update materials set hscode_id=2 where id=$material->id and title='MS ELBOW 90Â°'
+            // "));
+
+            // DB::update(DB::raw("
+            // update materials set hscode_id=3 where id=$material->id and title not in('MS ELBOW 90Â°','MS SEAMLESS PIPE')
+            // "));
+
+
+
+
             DB::commit();
             Session::flash('success','Material created');
                return redirect()->back();

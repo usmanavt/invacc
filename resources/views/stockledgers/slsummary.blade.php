@@ -88,9 +88,19 @@ table{
             </tr>
             <tr>
                 <td  style="text-align: center;">
-                    <span style="font-size:2rem;font-weight: bold">Stock Movement Ledger Summary</span>
+                    <span style="font-size:2rem">Stock Movement Ledger Summary</span>
                 </td>
             </tr>
+
+        <tr>
+
+            <td  style="text-align: center;">
+                <span style="font-size:1.5rem;font-weight: bold">{{ $ltype }}</span>
+            </td>
+
+        </tr>
+
+
         </tbody>
     </table>
 

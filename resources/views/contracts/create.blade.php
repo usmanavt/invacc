@@ -41,6 +41,8 @@
                                 minlength="3" title="minimum 3 characters required" required>
 
 
+
+
                         </div>
 
                         {{-- Contract Details --}}
@@ -70,11 +72,15 @@
 <x-tabulator-modal title="Materials" />
 
 @push('scripts')
+
 <script>
     let table;
     let searchValue = "";
+
     const deleteIcon = function(cell,formatterParams){return "<i class='fa fa-trash text-red-500'></i>";};
-    const getMaster = @json(route('materials.master'));
+    // const getMaster = @json(route('materials.master'));
+    const getMaster = @json(route('mat.master'));
+
     let csrfToken = document.head.querySelector("[name~=csrf-token][content]").content;
     let modal = document.getElementById("myModal")
     // console.log(getMaster);
@@ -189,11 +195,12 @@
             {title:"Id", field:"id" , responsive:0},
             {title:"Material", field:"title" , visible:true ,headerSort:false, responsive:0},
             {title:"Category", field:"category" , visible:true ,headerSortStartingDir:"asc" , responsive:0},
+            {title:"Category_Id", field:"category_id" , visible:true ,headerSortStartingDir:"asc" , responsive:0},
             {title:"Dimesion", field:"dimension" ,  responsive:0},
-            {title:"Source", field:"source" ,  responsive:0},
+            // {title:"Source", field:"source" ,  responsive:0},
             {title:"Sku", field:"sku" ,  responsive:0},
-            {title:"Sku_id", field:"sku_id" ,  responsive:0},
-            {title:"Brand", field:"brand" ,  responsive:0},
+            {title:"Sku_id", field:"sku_id",visible:false ,  responsive:0},
+            // {title:"Brand", field:"brand" ,  responsive:0},
         ],
         // Extra Pagination Data for End Users
         ajaxResponse:function(getDataUrl, params, response){

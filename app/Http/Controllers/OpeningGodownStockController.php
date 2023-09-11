@@ -91,14 +91,27 @@ class OpeningGodownStockController  extends Controller
 
     public function getMastermat(Request $request)
     {
+        // $search = $request->search;
+        // $size = $request->size;
+        // $field = $request->sort[0]["field"];     //  Nested Array
+        // $dir = $request->sort[0]["dir"];         //  Nested Array
+        // //  With Tables
+        // $materials = Material::where(function ($query) use ($search){
+        //     $query->where('title','LIKE','%' . $search . '%')
+        //     ->orWhere('dimension','LIKE','%' . $search . '%');
+        // })
+        // ->orderBy($field,$dir)
+        // ->paginate((int) $size);
+        // return $materials;
+
         $search = $request->search;
         $size = $request->size;
         $field = $request->sort[0]["field"];     //  Nested Array
         $dir = $request->sort[0]["dir"];         //  Nested Array
         //  With Tables
         $materials = Material::where(function ($query) use ($search){
-            $query->where('title','LIKE','%' . $search . '%')
-            ->orWhere('dimension','LIKE','%' . $search . '%');
+            $query->where('category_id','=',(int)(substr($search,0,2)))
+            ->where('dimension','LIKE','%' . substr($search,3,10) . '%');
         })
         ->orderBy($field,$dir)
         ->paginate((int) $size);
@@ -284,8 +297,13 @@ class OpeningGodownStockController  extends Controller
 
 
             DB::commit();
-            Session::flash('success','Contract Information Saved');
-            return response()->json(['success'],200);
+             Session::flash('success','Contract Information Saved');
+             return response()->json(['success'],200);
+            // Session::flash('success','O/Balance created Successfully');
+            //    return redirect()->back();
+
+
+
         } catch (\Throwable $th) {
             DB::rollback();
             throw $th;

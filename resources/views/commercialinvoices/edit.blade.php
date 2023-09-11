@@ -1,9 +1,9 @@
 <x-app-layout>
 
     @push('styles')
-    {{-- <link rel="stylesheet" href="{{ asset('css/tabulator_simple.min.css') }}"> --}}
-    <link href="https://unpkg.com/tabulator-tables/dist/css/tabulator.min.css" rel="stylesheet">
-    <script type="text/javascript" src="https://unpkg.com/tabulator-tables/dist/js/tabulator.min.js"></script>
+    <link rel="stylesheet" href="{{ asset('css/tabulator_simple.min.css') }}">
+    {{-- <link href="https://unpkg.com/tabulator-tables/dist/css/tabulator.min.css" rel="stylesheet"> --}}
+    {{-- <script type="text/javascript" src="https://unpkg.com/tabulator-tables/dist/js/tabulator.min.js"></script> --}}
     @endpush
 
 
@@ -342,7 +342,22 @@
                 var ita =(pricevaluecostsheet + cda + sta + rda + acda + asta) * e.it / 100
                 var wsca = (pricevaluecostsheet * e.wse) /100
                 var goods_received = cda + rda + sta + acda + asta + ita + wsca
-                var perft = (e.perpc / e.length).toFixed(2)
+
+                if(e.length.value>0)
+                 {
+                    var perft = (e.perpc / e.length).toFixed(2)
+                 }
+
+                 if(e.length.value===0)
+                 {
+                    var perft =0
+                 }
+
+
+
+
+
+
                 // var totallccostwexp = total + pricevaluecostsheet + (banktotal.value * itmratio / 100)
 
            var sumoftotdty = 0
@@ -395,7 +410,16 @@
                 e.totallccostwexp = totallccostwexp
                 e.invlvlchrgs=invlvlchrgs
                 e.perpc = perpc
+
+
+
+
+
                 e.perft = (perpc / length )
+
+
+
+
                 e.otherexpenses = otherexpenses
                 e.qtyinfeet = qtyinfeet
                 // e.inkg = inkg

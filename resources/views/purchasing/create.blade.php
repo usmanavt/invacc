@@ -10,7 +10,7 @@
 
     <x-slot name="header">
         <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-            Goods Receive Note
+            Goods Receive Note (Imported)
         </h2>
     </x-slot>
 
@@ -207,6 +207,8 @@
              {
                  title:'Contract Description', headerHozAlign:"center",
                  columns:[
+
+                {title:"InvsType", field:"InvsDescr" , responsive:0},
                 {title:"Id", field:"id" , responsive:0},
                 {title:"Invoice #", field:"invoiceno" , visible:true ,headerSort:false, responsive:0},
                 {title:"Date", field:"invoice_date" , visible:true ,headerSort:false, responsive:0},
@@ -471,10 +473,13 @@ var updateValues = (cell) => {
         var bswt=Number(data.gdswt)/(Number(data.totpcs))*Number(data.purpcsbs)
         var othwt=Number(data.gdswt)/(Number(data.totpcs))*Number(data.purpcsoth)
 
-
         var sumpcs=Number(data.purpcse13)+Number(data.purpcsgn2)+Number(data.purpcsams)+Number(data.purpcse24)+Number(data.purpcsbs)+Number(data.purpcsoth)
-        var sumwt=Number(data.purwte13)+Number(data.purwtgn2)+Number(data.purwtams)+Number(data.purwte24)+Number(data.purwtbs)+Number(data.purwtoth)
-        var sumfeet=Number(data.purfeete13)+Number(data.purfeetgn2)+Number(data.purfeetams)+Number(data.purfeete24)+Number(data.purfeetbs)+Number(data.purfeetoth)
+        var sumfeet=e13ft+gn2ft+amsft+e24ft+bsft+othft
+        var sumwt=e13wt+gn2wt+amswt+e24wt+bswt+othwt
+
+        // var sumpcs=Number(data.purpcse13)+Number(data.purpcsgn2)+Number(data.purpcsams)+Number(data.purpcse24)+Number(data.purpcsbs)+Number(data.purpcsoth)
+        // var sumwt=Number(data.purwte13)+Number(data.purwtgn2)+Number(data.purwtams)+Number(data.purwte24)+Number(data.purwtbs)+Number(data.purwtoth)
+        // var sumfeet=Number(data.purfeete13)+Number(data.purfeetgn2)+Number(data.purfeetams)+Number(data.purfeete24)+Number(data.purfeetbs)+Number(data.purfeetoth)
 
         //  var e13pcst= sumpcs - Number(data.purpcstot)
         //  console.info(e13pcst)
@@ -597,22 +602,22 @@ var updateValues = (cell) => {
                         {
                         title:'E-24', headerHozAlign:"center",
                     columns:[
-                        {   title:"Pcs",visible:false,editor:true,headerHozAlign :'right',hozAlign:"right",responsive:0,field:"purpcse24",bottomCalc:"sum",
+                        {   title:"Pcs",editor:true,headerHozAlign :'right',hozAlign:"right",responsive:0,field:"purpcse24",bottomCalc:"sum",
                                         formatter:"money",cellEdited: updateValues,validator:["required","numeric"],formatterParams:{thousand:",",precision:0}},
-                        {   title:"Weight",visible:false,headerHozAlign :'right',hozAlign:"right",responsive:0,field:"purwte24",bottomCalc:"sum",
+                        {   title:"Weight",headerHozAlign :'right',hozAlign:"right",responsive:0,field:"purwte24",bottomCalc:"sum",
                             formatter:"money",cellEdited: updateValues,validator:["required","numeric"],cssClass:"bg-gray-200 font-semibold",formatterParams:{thousand:",",precision:0}, bottomCalcParams:{precision:2}},
-                            {   title:"Feet",visible:false,headerHozAlign :'right',hozAlign:"right",responsive:0,field:"purfeete24",bottomCalc:"sum",
+                            {   title:"Feet",headerHozAlign :'right',hozAlign:"right",responsive:0,field:"purfeete24",bottomCalc:"sum",
                             formatter:"money",cellEdited: updateValues,validator:["required","numeric"],cssClass:"bg-gray-200 font-semibold",formatterParams:{thousand:",",precision:0}}
                         ]},
 
                         {
                         title:'BOLTON SHOP', headerHozAlign:"center",
                     columns:[
-                        {   title:"Pcs",visible:false,editor:true,headerHozAlign :'right',hozAlign:"right",responsive:0,field:"purpcsbs",bottomCalc:"sum",
+                        {   title:"Pcs",editor:true,headerHozAlign :'right',hozAlign:"right",responsive:0,field:"purpcsbs",bottomCalc:"sum",
                                         formatter:"money",cellEdited: updateValues,validator:["required","numeric"],formatterParams:{thousand:",",precision:0}},
-                        {   title:"Weight",visible:false,headerHozAlign :'right',hozAlign:"right",responsive:0,field:"purwtbs",bottomCalc:"sum",
+                        {   title:"Weight",headerHozAlign :'right',hozAlign:"right",responsive:0,field:"purwtbs",bottomCalc:"sum",
                             formatter:"money",cellEdited: updateValues,validator:["required","numeric"],cssClass:"bg-gray-200 font-semibold",formatterParams:{thousand:",",precision:0}, bottomCalcParams:{precision:2}},
-                            {   title:"Feet",visible:false,headerHozAlign :'right',hozAlign:"right",responsive:0,field:"purfeetbs",bottomCalc:"sum",
+                            {   title:"Feet",headerHozAlign :'right',hozAlign:"right",responsive:0,field:"purfeetbs",bottomCalc:"sum",
                             formatter:"money",cellEdited: updateValues,validator:["required","numeric"],cssClass:"bg-gray-200 font-semibold",formatterParams:{thousand:",",precision:0}}
                         ]},
 

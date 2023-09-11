@@ -247,7 +247,11 @@ class CommercialInvoiceController extends Controller
 
                 $c->perpc = $cid['perpc'];
                 $c->perkg = $cid['perkg'];
-                $c->perft = $cid['perft'];
+
+                if ( $cid['perft']<>'infinity' )
+                { $c->perft = $cid['perft']; }
+
+
                 $c->otherexpenses = $cid['otherexpenses'];
                 $c->invlvlchrgs = $cid['invlvlchrgs'];
                 $c->dbalwt = $cid['dutygdswt'];
@@ -552,7 +556,13 @@ class CommercialInvoiceController extends Controller
 
                 $c->perpc = $cid['perpc'];
                 $c->perkg = $cid['perkg'];
-                $c->perft = $cid['perft'];
+
+                if ( $cid['perft']<>'infinity' )
+                { $c->perft = $cid['perft']; }
+                if ( $cid['perft']='infinity' )
+                { $c->perft = 0; }
+
+
                 $c->otherexpenses =  $cid['otherexpenses'];
                 $c->invlvlchrgs =  $cid['invlvlchrgs'];
                 $c->dbalwt = $cid['dutygdswt'];
@@ -814,7 +824,7 @@ class CommercialInvoiceController extends Controller
             FROM commercial_invoice_details as a inner join commercial_invoices as b
             on a.commercial_invoice_id=b.id  where  b.purid = $ci->purid
             ) x ON c.transaction_id = x.purid and c.material_id=x.material_id
-            SET c.costwt=x.perkg,c.costpcs=x.perpc,c.costfeet=x.perft WHERE  c.transaction_id = $ci->purid "));
+            SET c.costwt=x.perkg,c.costpcs=x.perpc,c.costfeet=x.perft WHERE ttypeid=2 and   c.transaction_id = $ci->purid "));
 
 
 

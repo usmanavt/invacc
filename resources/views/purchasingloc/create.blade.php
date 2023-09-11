@@ -10,7 +10,7 @@
 
     <x-slot name="header">
         <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-            Create GatePasse
+            Goods Receive Note (Local)
         </h2>
     </x-slot>
 
@@ -33,20 +33,20 @@
                                         <option value="{{$customer->id}}"> {{$customer->title}} </option>
                                         @endforeach
                                     </select> --}}
-                                <x-input-text title="Customer Name" name="supname" id="supname"  disabled  />
-                                <x-input-text title="DC No" name="dcno" id="dcno"  disabled  />
-                                <x-input-date title="DC Date" id="saldate" name="saldate"  disabled />
-                                {{-- <x-input-text title="Contract Invice#" id="continvsno" name="continvsno" req required class="col-span-2" disabled /> --}}
+                                <x-input-text title="Supplier Name" name="supname" id="supname" req required class="col-span-2" disabled  />
+                                <x-input-text title="P.Invoice id" name="contract_id" id="contract_id" req required class="col-span-2" disabled  />
+                                <x-input-date title="P.Invoice Date" id="contract_date" name="contract_date" req required class="col-span-2" disabled />
+                                <x-input-text title="P.Invice#" id="continvsno" name="continvsno" req required class="col-span-2" disabled />
 
                                 {{-- <x-input-date title="Receiving Date" name="purdate" id="purdate"    /> --}}
                                 {{-- <x-input-text title="P.R No" name="prno" id="prno" req required class="col-span-2" disabled  /> --}}
 
                             </div>
                             <div class="grid grid-cols-12 gap-1 py-2 items-center">
-                                <x-input-date title="GatePass Date" id="gpdate" name="gpdate"  />
-                                <x-input-text title="GatePass Seq. #" name="gpseqid" id="gpseqid" value="{{$maxgpseqid}}"  disabled />
+                                <x-input-date title="Purchase Date" id="purdate" name="purdate"  />
+                                <x-input-text title="Purchase Seq. #" name="purseqid" id="purseqid" value="{{$maxpurseqid}}"  disabled />
                                 <input class="checked:bg-blue-500 checked:border-blue-500 focus:outline-none" type="checkbox" name="per" id="per" onclick="EnableDisableTextBox(this)" >
-                                {{-- <x-input-text title="Pur.Invoice #" name="purinvsno" /> --}}
+                                <x-input-text title="Pur.Invoice #" name="purinvsno" />
                                 {{-- <x-input-text title="P.O Seq.#" name="poseqno" id="poseqno" value="{{$maxpurseqid}}"    placeholder="poseqno" required   /> --}}
 
 
@@ -113,11 +113,10 @@
 
 
         // var getMaster = @json(route('custorders.quotations')) ;
-        const getMaster = @json(route('gatepasse.dcmaster'));
-        const getDetails = @json(route('gatepasse.dcdtl'));
-
-        let csrfToken = document.head.querySelector("[name~=csrf-token][content]").content;
-
+        const getMaster = @json(route('purinvs.master'));
+        const getDetails = @json(route('purinvs.detail'));
+         let csrfToken = document.head.querySelector("[name~=csrf-token][content]").content;
+        //
         let modal = document.getElementById("myModal")
         let calculateButton = document.getElementById("calculate")
         let submitButton = document.getElementById("submitbutton")
@@ -126,8 +125,8 @@
         let dynamicTableData = []
         let adopted = false
         let detailsUrl = ''
-        let sale_invoice_id = 0;
-        let customer_id = 0;
+        // let contract_id = '';
+        let supplier_id = 0;
 
 
         // let prno= document.getElementById("prno")
@@ -205,29 +204,29 @@
              columns:[
 
              {
-                 title:'Sale Description', headerHozAlign:"center",
+                 title:'Contract Description', headerHozAlign:"center",
                  columns:[
+
+                // {title:"InvsType", field:"InvsDescr" , responsive:0},
                 {title:"Id", field:"id" , responsive:0},
-                {title:"DC No", field:"dcno" , visible:true ,headerSort:false, responsive:0},
-                {title:"DC Date", field:"saldate" , visible:true ,headerSort:false, responsive:0},
-                {title:"Customer", field:"custname", visible:true ,headerSort:false, responsive:0},
+                {title:"Invoice #", field:"invoiceno" , visible:true ,headerSort:false, responsive:0},
+                {title:"Date", field:"invoice_date" , visible:true ,headerSort:false, responsive:0},
+                {title:"Supplier", field:"supname", visible:true ,headerSort:false, responsive:0},
              ]},
 
 
              {
-                 title:'Sale Data', headerHozAlign:"center",
+                 title:'Contract Data', headerHozAlign:"center",
                  columns:[
                 {title:"Weight", field:"tweight" , visible:true ,headerSort:false, responsive:0},
-                {title:"Pcs", field:"ttotalpcs" , visible:true ,headerSort:false, responsive:0},
-                {title:"Feet", field:"tfeet" , visible:true ,headerSort:false, responsive:0},
+                {title:"TotalPcs", field:"ttotalpcs" , visible:true ,headerSort:false, responsive:0},
              ]},
 
              {
                  title:'Pending Data', headerHozAlign:"center",
                  columns:[
-                 {title:"Weight", field:"balwt" , visible:true ,headerSort:false, responsive:0},
-                 {title:"Pcs", field:"balpcs" , visible:true ,headerSort:false, responsive:0},
-                 {title:"Feet", field:"balfeet" , visible:true ,headerSort:false, responsive:0},
+                 {title:"Weight", field:"pweight" , visible:true ,headerSort:false, responsive:0},
+                 {title:"TotalPcs", field:"ptotalpcs" , visible:true ,headerSort:false, responsive:0},
              ]},
 
 
@@ -251,13 +250,12 @@
             var data = simple._row.data
 
             // Fill Master Data
-
-            customer_id=data.custid
-            sale_invoice_id =data.id
-            dcno.value=data.dcno
-            saldate.value=data.saldate
-            supname.value=data.custname
-            // console.log(sale_invoice_id)
+            supplier_id=data.supid
+            contract_id.value =data.id
+            continvsno.value=data.invoiceno
+            contract_date.value=data.invoice_date
+            supname.value=data.supname
+            purinvsno.value=data.invoiceno
 
 
             // quotation_id = data.id
@@ -309,47 +307,47 @@
 
                 const obj = data[index];
                 const mat = obj['material']
-                // var vpcs = obj.totpcs
+                var vpcs = obj.totpcs
 
                 // console.log(vpcs);
                 // var vwinkg = ((obj.gdswt / vpcs ) * 1000).toFixed(3)
-                // var vwinkg = ((obj.gdswt / vpcs ) ).toFixed(3)
+                var vwinkg = ((obj.gdswt / vpcs ) ).toFixed(3)
                 dynamicTable.addData([
                     {
                         id :                obj.id,
                         material_title :    obj.material_title,
                         material_id :       obj.material_id,
-                        customer_id :       obj.custid,
+                        supplier_id :       obj.supid,
                         sku_id :            obj.sku_id,
                         sku:                obj.sku,
                         dimension_id :      obj.dimension_id,
                         dimension :         obj.dimension,
-                        brand :             obj.brand,
+                        brand :             '',
                         repname :           obj.repname,
                          totpcs :            obj.totpcs ,
                          gdswt   :           obj.gdswt,
-                         salefeet :          obj.salefeet,
+                         qtyinfeet:          obj.balqtyinfeet,
+                         purpcse13:          obj.totpcs,
+                         purwte13:           obj.gdswt,
+                         length:0,
+                         purfeete13:         obj.balqtyinfeet,
 
-                         gppcse13:          obj.totpcs,
-                         gpwte13:           obj.gdswt,
-                         gpfeete13:         obj.salefeet,
-                         qtykgcrt:           obj.qtykgcrt,
-                         qtypcscrt:          obj.qtypcscrt,
-                         qtyfeetcrt:          obj.qtyfeetcrt,
-                        //  price:              obj.price,
-                        //  saleamnt:           obj.saleamnt,
+                        //  dtyrate:            obj.dtyrate,
+                         gdsprice:            obj.gdsprice,
                         //  invsrate:            obj.invsrate,
                         //  purval:            obj.purval,
                         //  dutval:            obj.dutval,
                         //  bundle1:            obj.bundle1,
                         //  bundle2:            obj.bundle2,
-                        gppcstot:obj.totpcs,gpwttot:obj.gdswt,gpfeettot:obj.salefeet,
-                        gpwtgn2:0,gppcsgn2:0,gpfeetgn2:0,
-                        gpwtams:0,gppcsams:0,gpfeetams:0,
-                        gpwte24:0,gppcse24:0,gpfeete24:0,
-                        gpwtbs:0,gppcsbs:0,gpfeetbs:0,
-                        gpwtoth:0,gppcsoth:0,gpfeetoth:0
 
+
+                        purpcstot:obj.totpcs,purwttot:obj.gdswt,purfeettot:obj.balqtyinfeet,
+
+                        purwtgn2:0,purpcsgn2:0,purfeetgn2:0,
+                        purwtams:0,purpcsams:0,purfeetams:0,
+                        purwte24:0,purpcse24:0,purfeete24:0,
+                        purwtbs:0,purpcsbs:0,purfeetbs:0,
+                        purwtoth:0,purpcsoth:0,purfeetoth:0
 
                     }
                 ])
@@ -469,12 +467,21 @@ var updateValues = (cell) => {
         // var bsft=Number(data.purpcsbs)*Number(data.length)
         // var othft=Number(data.purpcsoth)*Number(data.length)
 
+        // var e13wt=Number(data.gdswt)/(Number(data.totpcs))*Number(data.purpcse13)
+        // var gn2wt=Number(data.gdswt)/(Number(data.totpcs))*Number(data.purpcsgn2)
+        // var amswt=Number(data.gdswt)/(Number(data.totpcs))*Number(data.purpcsams)
+        // var e24wt=Number(data.gdswt)/(Number(data.totpcs))*Number(data.purpcse24)
+        // var bswt=Number(data.gdswt)/(Number(data.totpcs))*Number(data.purpcsbs)
+        // var othwt=Number(data.gdswt)/(Number(data.totpcs))*Number(data.purpcsoth)
 
 
+        var sumpcs=Number(data.purpcse13)+Number(data.purpcsgn2)+Number(data.purpcsams)+Number(data.purpcse24)+Number(data.purpcsbs)+Number(data.purpcsoth)
+        var sumwt=Number(data.purwte13)+Number(data.purwtgn2)+Number(data.purwtams)+Number(data.purwte24)+Number(data.purwtbs)+Number(data.purwtoth)
+        var sumfeet=Number(data.purfeete13)+Number(data.purfeetgn2)+Number(data.purfeetams)+Number(data.purfeete24)+Number(data.purfeetbs)+Number(data.purfeetoth)
 
-        var sumpcs=Number(data.gppcse13)+Number(data.gppcsgn2)+Number(data.gppcsams)+Number(data.gppcse24)+Number(data.gppcsbs)+Number(data.gppcsoth)
-        var sumwt=Number(data.gpwte13)+Number(data.gpwtgn2)+Number(data.gpwtams)+Number(data.gpwte24)+Number(data.gpwtbs)+Number(data.gpwtoth)
-        var sumfeet=Number(data.gpfeete13)+Number(data.gpfeetgn2)+Number(data.gpfeetams)+Number(data.gpfeete24)+Number(data.gpfeetbs)+Number(data.gpfeetoth)
+        //  var e13pcst= sumpcs - Number(data.purpcstot)
+        //  console.info(e13pcst)
+
         var row = cell.getRow();
         row.update({
             //  "purfeete13": e13ft,
@@ -484,11 +491,21 @@ var updateValues = (cell) => {
             //  "purfeete24": e24ft,
             //  "purfeetoth": othft,
 
+            //  "purwte13":e13wt,
+            //  "purwtgn2":gn2wt,
+            //  "purwtams":amswt,
+            //  "purwte24":e24wt,
+            //  "purwtbs":bswt,
+            //  "purwtoth":othwt,
 
-             "gppcstot":sumpcs,
-             "gpwttot":sumwt,
-             "gpfeettot":sumfeet
-            //  totalVal: e13ft
+             "purpcstot":sumpcs,
+             "purwttot":sumwt,
+             "purfeettot":sumfeet,
+
+
+            //  "purpcse13":e13pcst
+            // "purfeete13":e13feett,
+            //   totalVal: e13ft
 
         });
     }
@@ -524,27 +541,28 @@ var updateValues = (cell) => {
                 },
                 {title:"Id",           field:"id", visible:false,cssClass:"bg-gray-200 font-semibold"},
                 {title:"Material Name", field:"material_title",responsive:0,cssClass:"bg-gray-200 font-semibold"},
-                {title:"Material Size",    field:"dimension",responsive:0,frozen:true, headerMenu:headerMenu,cssClass:"bg-gray-200 font-semibold"},
+                {title:"Material Size",    field:"dimension",cssClass:"bg-gray-200 font-semibold",responsive:0,frozen:true, headerMenu:headerMenu},
                 {title:"UOM",         field:"sku",responsive:0, hozAlign:"center",cssClass:"bg-gray-200 font-semibold"},
                 {title:"Unitid",       field:"sku_id",visible:false},
 
                 {
-                    title:'Sale Invoice Data', headerHozAlign:"center",
+                    title:'Contracts Data', headerHozAlign:"center",
                     columns:[
                         // {   title:"Replace Name",headerHozAlign :'center',field:"repname",responsive:0,editor:true},
                         // {   title:"Brand",headerHozAlign :'center',field:"mybrand",responsive:0,editor:true},
                         {   title:"Pcs",headerHozAlign :'right',hozAlign:"right",responsive:0,field:"totpcs",bottomCalc:"sum",
-                                        formatter:"money",cellEdited: updateValues,validator:["required","numeric"],cssClass:"bg-gray-200 font-semibold",formatterParams:{thousand:",",precision:2}},
+                                        formatter:"money",cellEdited: updateValues,validator:["required","numeric"],cssClass:"bg-gray-200 font-semibold",formatterParams:{thousand:",",precision:0}},
                         {   title:"Weight",headerHozAlign :'right',hozAlign:"right",responsive:0,field:"gdswt",bottomCalc:"sum",
-                            formatter:"money",cellEdited: updateValues,validator:["required","numeric"],cssClass:"bg-gray-200 font-semibold",formatterParams:{thousand:",",precision:2}},
-                            {   title:"Feet",editor:true,headerHozAlign :'right',hozAlign:"right",responsive:0,field:"salefeet",bottomCalc:"sum",
-                            formatter:"money",cellEdited: updateValues,validator:["required","numeric"],formatterParams:{thousand:",",precision:2}},
-                            ]},
+                            formatter:"money",cellEdited: updateValues,validator:["required","numeric"],cssClass:"bg-gray-200 font-semibold",formatterParams:{thousand:",",precision:0}, bottomCalcParams:{precision:2}},
+                            {   title:"QtyInFeet",headerHozAlign :'right',hozAlign:"right",responsive:0,field:"qtyinfeet",bottomCalc:"sum",
+                            formatter:"money",cellEdited: updateValues,validator:["required","numeric"],cssClass:"bg-gray-200 font-semibold",formatterParams:{thousand:",",precision:0}, bottomCalcParams:{precision:2}},
 
-                // {   title:"length",headerHozAlign :'right',hozAlign:"right",editor:true,responsive:0,field:"length",bottomCalc:"sum"},
 
-                {title:"Replace Description",field:"repname",responsive:0,       editor:true},
-                {title:"Brand",              field:"brand",responsive:0,     editor:true},
+                        ]},
+
+                {title:"Replace Description",field:"repname",responsive:0, editor:true},
+                {title:"Brand",              field:"brand",responsive:0, editor:true},
+                // {   title:"length",headerHozAlign :'right',hozAlign:"right",cellEdited: updateValues,editor:true,responsive:0,field:"length",bottomCalc:"sum"},
 
 
 
@@ -552,93 +570,82 @@ var updateValues = (cell) => {
                 {
                     title:'E-13', headerHozAlign:"center",
                     columns:[
-                        {   title:"Pcs",editor:true,headerHozAlign :'right',hozAlign:"right",responsive:0,field:"gppcse13",bottomCalc:"sum",
-                                        formatter:"money",cellEdited: updateValues,validator:["required","numeric"],formatterParams:{thousand:",",precision:2}},
-                        {   title:"Weight",editor:true,headerHozAlign :'right',hozAlign:"right",responsive:0,field:"gpwte13",bottomCalc:"sum",
-                            formatter:"money",cellEdited: updateValues,validator:["required","numeric"],formatterParams:{thousand:",",precision:2}},
+                        {   title:"Pcs",editor:true,headerHozAlign :'right',hozAlign:"right",responsive:0,field:"purpcse13",bottomCalc:"sum",
+                                        formatter:"money",cellEdited: updateValues,validator:["required","numeric"],formatterParams:{thousand:",",precision:0}},
+                        {   title:"Weight",editor:true,headerHozAlign :'right',hozAlign:"right",responsive:0,field:"purwte13",bottomCalc:"sum",
+                            formatter:"money",cellEdited: updateValues,validator:["required","numeric"],formatterParams:{thousand:",",precision:0}, bottomCalcParams:{precision:2}},
 
-                            {   title:"Feet",editor:true,headerHozAlign :'right',hozAlign:"right",responsive:0,field:"gpfeete13",bottomCalc:"sum",
-                            formatter:"money",cellEdited: updateValues,validator:["required","numeric"],formatterParams:{thousand:",",precision:2}},
-
-
-
-
-
+                            {   title:"Feet",editor:true,editor:true,headerHozAlign :'right',hozAlign:"right",responsive:0,field:"purfeete13",bottomCalc:"sum",
+                            formatter:"money",cellEdited: updateValues,validator:["required","numeric"],formatterParams:{thousand:",",precision:0}},
                         ]},
 
                         {
                     title:'GALI NO 2', headerHozAlign:"center",
                     columns:[
-                        {   title:"Pcs",editor:true,headerHozAlign :'right',hozAlign:"right",responsive:0,field:"gppcsgn2",bottomCalc:"sum",
-                                        formatter:"money",cellEdited: updateValues,validator:["required","numeric"],formatterParams:{thousand:",",precision:2}},
-                        {   title:"Weight",editor:true,headerHozAlign :'right',hozAlign:"right",responsive:0,field:"gpwtgn2",bottomCalc:"sum",
-                            formatter:"money",cellEdited: updateValues,validator:["required","numeric"],formatterParams:{thousand:",",precision:2}},
-                            {   title:"Feet",editor:true,headerHozAlign :'right',hozAlign:"right",responsive:0,field:"gpfeetgn2",bottomCalc:"sum",
-                            formatter:"money",cellEdited: updateValues,validator:["required","numeric"],formatterParams:{thousand:",",precision:2}}
+                        {   title:"Pcs",editor:true,headerHozAlign :'right',hozAlign:"right",responsive:0,field:"purpcsgn2",bottomCalc:"sum",
+                                        formatter:"money",cellEdited: updateValues,validator:["required","numeric"],formatterParams:{thousand:",",precision:0}},
+                        {   title:"Weight",editor:true,headerHozAlign :'right',hozAlign:"right",responsive:0,field:"purwtgn2",bottomCalc:"sum",
+                            formatter:"money",cellEdited: updateValues,validator:["required","numeric"],formatterParams:{thousand:",",precision:0}, bottomCalcParams:{precision:2}},
+                            {   title:"Feet",editor:true,headerHozAlign :'right',hozAlign:"right",responsive:0,field:"purfeetgn2",bottomCalc:"sum",
+                            formatter:"money",cellEdited: updateValues,validator:["required","numeric"],formatterParams:{thousand:",",precision:0}}
                         ]},
 
                         {
                     title:'A.MALIK SHOP', headerHozAlign:"center",
                     columns:[
-                        {   title:"Pcs",editor:true,headerHozAlign :'right',hozAlign:"right",responsive:0,field:"gppcsams",bottomCalc:"sum",
-                                        formatter:"money",cellEdited: updateValues,validator:["required","numeric"],formatterParams:{thousand:",",precision:2}},
-                        {   title:"Weight",editor:true,headerHozAlign :'right',hozAlign:"right",responsive:0,field:"gpwtams",bottomCalc:"sum",
-                            formatter:"money",cellEdited: updateValues,validator:["required","numeric"],formatterParams:{thousand:",",precision:2}},
-                            {   title:"Feet",editor:true,headerHozAlign :'right',hozAlign:"right",responsive:0,field:"gpfeetams",bottomCalc:"sum",
-                            formatter:"money",cellEdited: updateValues,validator:["required","numeric"],formatterParams:{thousand:",",precision:2}}
+                        {   title:"Pcs",editor:true,headerHozAlign :'right',hozAlign:"right",responsive:0,field:"purpcsams",bottomCalc:"sum",
+                                        formatter:"money",cellEdited: updateValues,validator:["required","numeric"],formatterParams:{thousand:",",precision:0}},
+                        {   title:"Weight",editor:true,headerHozAlign :'right',hozAlign:"right",responsive:0,field:"purwtams",bottomCalc:"sum",
+                            formatter:"money",cellEdited: updateValues,validator:["required","numeric"],formatterParams:{thousand:",",precision:0}, bottomCalcParams:{precision:2}},
+                            {   title:"Feet",editor:true,headerHozAlign :'right',hozAlign:"right",responsive:0,field:"purfeetams",bottomCalc:"sum",
+                            formatter:"money",cellEdited: updateValues,validator:["required","numeric"],formatterParams:{thousand:",",precision:0}}
                         ]},
 
                         {
                         title:'E-24', headerHozAlign:"center",
                     columns:[
-                        {   title:"Pcs",editor:true,headerHozAlign :'right',hozAlign:"right",responsive:0,field:"gppcse24",bottomCalc:"sum",
-                                        formatter:"money",cellEdited: updateValues,validator:["required","numeric"],formatterParams:{thousand:",",precision:2}},
-                        {   title:"Weight",editor:true,headerHozAlign :'right',hozAlign:"right",responsive:0,field:"gpwte24",bottomCalc:"sum",
-                            formatter:"money",cellEdited: updateValues,validator:["required","numeric"],formatterParams:{thousand:",",precision:2}},
-                            {   title:"Feet",editor:true,headerHozAlign :'right',hozAlign:"right",responsive:0,field:"gpfeete24",bottomCalc:"sum",
-                            formatter:"money",cellEdited: updateValues,validator:["required","numeric"],formatterParams:{thousand:",",precision:2}}
+                        {   title:"Pcs",editor:true,headerHozAlign :'right',hozAlign:"right",responsive:0,field:"purpcse24",bottomCalc:"sum",
+                                        formatter:"money",cellEdited: updateValues,validator:["required","numeric"],formatterParams:{thousand:",",precision:0}},
+                        {   title:"Weight",editor:true,headerHozAlign :'right',hozAlign:"right",responsive:0,field:"purwte24",bottomCalc:"sum",
+                            formatter:"money",cellEdited: updateValues,validator:["required","numeric"],formatterParams:{thousand:",",precision:0}, bottomCalcParams:{precision:2}},
+                            {   title:"Feet",editor:true,headerHozAlign :'right',hozAlign:"right",responsive:0,field:"purfeete24",bottomCalc:"sum",
+                            formatter:"money",cellEdited: updateValues,validator:["required","numeric"],formatterParams:{thousand:",",precision:0}}
                         ]},
 
                         {
                         title:'BOLTON SHOP', headerHozAlign:"center",
                     columns:[
-                        {   title:"Pcs",editor:true,headerHozAlign :'right',hozAlign:"right",responsive:0,field:"gppcsbs",bottomCalc:"sum",
-                                        formatter:"money",cellEdited: updateValues,validator:["required","numeric"],formatterParams:{thousand:",",precision:2}},
-                        {   title:"Weight",editor:true,headerHozAlign :'right',hozAlign:"right",responsive:0,field:"gpwtbs",bottomCalc:"sum",
-                            formatter:"money",cellEdited: updateValues,validator:["required","numeric"],formatterParams:{thousand:",",precision:2}},
-                            {   title:"Feet",editor:true,headerHozAlign :'right',hozAlign:"right",responsive:0,field:"gpfeetbs",bottomCalc:"sum",
-                            formatter:"money",cellEdited: updateValues,validator:["required","numeric"],formatterParams:{thousand:",",precision:2}}
+                        {   title:"Pcs",editor:true,headerHozAlign :'right',hozAlign:"right",responsive:0,field:"purpcsbs",bottomCalc:"sum",
+                                        formatter:"money",cellEdited: updateValues,validator:["required","numeric"],formatterParams:{thousand:",",precision:0}},
+                        {   title:"Weight",editor:true,headerHozAlign :'right',hozAlign:"right",responsive:0,field:"purwtbs",bottomCalc:"sum",
+                            formatter:"money",cellEdited: updateValues,validator:["required","numeric"],formatterParams:{thousand:",",precision:0}, bottomCalcParams:{precision:2}},
+                            {   title:"Feet",editor:true,headerHozAlign :'right',hozAlign:"right",responsive:0,field:"purfeetbs",bottomCalc:"sum",
+                            formatter:"money",cellEdited: updateValues,validator:["required","numeric"],formatterParams:{thousand:",",precision:0}}
                         ]},
 
                        {
                         title:'OTHERS', headerHozAlign:"center",
                     columns:[
-                        {   title:"Pcs",visible:false,editor:true,headerHozAlign :'right',hozAlign:"right",responsive:0,field:"gppcsoth",bottomCalc:"sum",
-                                        formatter:"money",cellEdited: updateValues,validator:["required","numeric"],formatterParams:{thousand:",",precision:2}},
-                        {   title:"Weight",visible:false,editor:true,headerHozAlign :'right',hozAlign:"right",responsive:0,field:"gpwtoth",bottomCalc:"sum",
-                            formatter:"money",cellEdited: updateValues,validator:["required","numeric"],formatterParams:{thousand:",",precision:2}},
-                            {   title:"Feet",editor:true,visible:false,headerHozAlign :'right',hozAlign:"right",responsive:0,field:"gpfeetoth",bottomCalc:"sum",
-                            formatter:"money",cellEdited: updateValues,validator:["required","numeric"],formatterParams:{thousand:",",precision:2}}
+                        {   title:"Pcs",visible:false,editor:true,headerHozAlign :'right',hozAlign:"right",responsive:0,field:"purpcsoth",bottomCalc:"sum",
+                                        formatter:"money",cellEdited: updateValues,validator:["required","numeric"],formatterParams:{thousand:",",precision:0}},
+                        {   title:"Weight",editor:true,visible:false,headerHozAlign :'right',hozAlign:"right",responsive:0,field:"purwtoth",bottomCalc:"sum",
+                            formatter:"money",cellEdited: updateValues,validator:["required","numeric"],formatterParams:{thousand:",",precision:0}, bottomCalcParams:{precision:2}},
+                            {   title:"Feet",editor:true,visible:false,headerHozAlign :'right',hozAlign:"right",responsive:0,field:"purfeetoth",bottomCalc:"sum",
+                            formatter:"money",cellEdited: updateValues,validator:["required","numeric"],formatterParams:{thousand:",",precision:0}}
                         ]},
 
                         {
                         title:'TOTAL', headerHozAlign:"center",
                     columns:[
-                        {   title:"Pcs",headerHozAlign :'right',hozAlign:"right",responsive:0,field:"gppcstot",bottomCalc:"sum",
-                                        formatter:"money",cellEdited: updateValues,validator:["required","numeric"],cssClass:"bg-green-200 font-semibold",formatterParams:{thousand:",",precision:2}},
-                        {   title:"Weight",headerHozAlign :'right',hozAlign:"right",responsive:0,field:"gpwttot",bottomCalc:"sum",
-                            formatter:"money",cellEdited: updateValues,validator:["required","numeric"],cssClass:"bg-green-200 font-semibold",formatterParams:{thousand:",",precision:2}},
-                            {   title:"Feet",headerHozAlign :'right',hozAlign:"right",responsive:0,field:"gpfeettot",bottomCalc:"sum",
-                            formatter:"money",cellEdited: updateValues,validator:["required","numeric"],cssClass:"bg-green-200 font-semibold",formatterParams:{thousand:",",precision:2}}
+                        {   title:"Pcs",headerHozAlign :'right',hozAlign:"right",responsive:0,field:"purpcstot",bottomCalc:"sum",
+                                        formatter:"money",cellEdited: updateValues,validator:["required","numeric"],cssClass:"bg-green-200 font-semibold",formatterParams:{thousand:",",precision:0}},
+                        {   title:"Weight",headerHozAlign :'right',hozAlign:"right",responsive:0,field:"purwttot",bottomCalc:"sum",
+                            formatter:"money",cellEdited: updateValues,validator:["required","numeric"],cssClass:"bg-green-200 font-semibold",formatterParams:{thousand:",",precision:0}, bottomCalcParams:{precision:2}},
+                            {   title:"Feet",headerHozAlign :'right',hozAlign:"right",responsive:0,field:"purfeettot",bottomCalc:"sum",
+                            formatter:"money",cellEdited: updateValues,validator:["required","numeric"],cssClass:"bg-green-200 font-semibold",formatterParams:{thousand:",",precision:0}}
                         ]},
-
-                        {title:"qtykgcrt",           field:"qtykgcrt", visible:false},
-                        {title:"qtypcscrt",           field:"qtypcscrt", visible:false},
-                        {title:"qtyfeetcrt",           field:"qtyfeetcrt", visible:false},
-
-
-                        // {title:"price",           field:"price", visible:false},
-                        // {title:"saleamnt",           field:"saleamnt", visible:false},
+                        // {title:"dtyrate",           field:"dtyrate", visible:false},
+                        // {title:"gdsprice",           field:"gdsprice", visible:false},
                         // {title:"invsrate",           field:"invsrate", visible:false},
                         // {title:"bundle1",           field:"bundle1", visible:false},
                         // {title:"bundle2",           field:"bundle2", visible:false},
@@ -671,16 +678,16 @@ var updateValues = (cell) => {
         function validateForm()
         {
 
-            //  var purinvsno = document.getElementById("purinvsno")
+             var purinvsno = document.getElementById("purinvsno")
             // var poseqno = document.getElementById("poseqno")
             var per= document.getElementById("per");
 
-            // if(purinvsno.value === '')
-            // {
-            //     showSnackbar("Invoice No Required","error");
-            //     purinvsno.focus();
-            //     return;
-            // }
+            if(purinvsno.value === '')
+            {
+                showSnackbar("Invoice No Required","error");
+                purinvsno.focus();
+                return;
+            }
 
 
 
@@ -695,26 +702,24 @@ var updateValues = (cell) => {
                 showSnackbar("You must have atleast 1 row of item to Proceed","info");
                 return;
             }
-            // totpcs,gdswt,salefeet
-            // gppcstot,gpwttot,gpfeettot
 
-            for (let index = 0; index < dynamicTableData.length; index++) {
-                const element = dynamicTableData[index];
+             for (let index = 0; index < dynamicTableData.length; index++) {
+                 const element = dynamicTableData[index];
 
-                if(element.gppcstot > element.totpcs || element.gpwttot > element.gdswt || element.gpfeettot > element.salefeet )
-                {
-                    showSnackbar("GatePass Qty must be less than sale invoice qty","info");
-                    return;
-                }
-            }
+                 if(element.purpcstot>element.totpcs || element.purwttot>element.gdswt  )
+                 {
+                     showSnackbar("Purchase Data must be less than Contract Data","info");
+                     return;
+                 }
+             }
 
 
-            var data = { 'gatepasse' : dynamicTableData,
-        'customer_id': customer_id,'sale_invoice_id':sale_invoice_id,'saldate':saldate.value,'gpseqid':gpseqid.value,
-                          'gpdate':gpdate.value,'dcno':dcno.value      };
+            var data = { 'purchasingloc' : dynamicTableData,
+        'supplier_id': supplier_id,'contract_id':contract_id.value,'contract_date':contract_date.value,'purseqid':purseqid.value,
+                          'purdate':purdate.value,'purinvsno':purinvsno.value      };
 
             // All Ok - Proceed
-            fetch(@json(route('gatepasse.store')),{
+            fetch(@json(route('purchasingloc.store')),{
                 credentials: 'same-origin', // 'include', default: 'omit'
                 method: 'POST', // 'GET', 'PUT', 'DELETE', etc.
                 // body: formData, // Coordinate the body type with 'Content-Type'
@@ -730,7 +735,7 @@ var updateValues = (cell) => {
             .then( response => {
                 if (response == 'success')
                 {
-                    window.open(window.location.origin + "/gatepasse","_self" );
+                    window.open(window.location.origin + "/purchasingloc","_self" );
                 }
             })
             .catch(error => {

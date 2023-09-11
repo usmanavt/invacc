@@ -31,7 +31,7 @@
                                 <x-input-text title="Dimension" name="dimension" value="{{ $mat->dimension}}" disabled    />
                                 <x-input-date title="O/Date" name="opdate" value="{{ $openinggodownstock->opdate}}"  />
                                 <x-input-numeric title="" name="material_id" value="{{ $openinggodownstock->material_id}}" hidden   />
-                                <x-input-numeric title="" name="trans_id" value="{{ $openinggodownstock->id}}"    />
+                                <x-input-numeric title="" name="trans_id" value="{{ $openinggodownstock->id}}" hidden    />
                             </div>
                         </fieldset>
 
@@ -152,7 +152,8 @@ let searchValue = "";
 
 
 const deleteIcon = function(cell,formatterParams){return "<i class='fa fa-trash text-red-500'></i>";};
-const getMaster = @json(route('materials.master')); // For Material Modal
+// const getMaster = @json(route('materials.master')); // For Material Modal
+const getMaster = @json(route('materials.mastermat'));
 let csrfToken = document.head.querySelector("[name~=csrf-token][content]").content;
 let modal = document.getElementById("myModal")
 
@@ -194,10 +195,11 @@ let dynamicTable = ""
             {title:"Id", field:"id" , responsive:0},
             {title:"Material", field:"title" , visible:true ,headerSort:false, responsive:0},
             {title:"Category", field:"category" , visible:true ,headerSortStartingDir:"asc" , responsive:0},
+            {title:"Category_Id", field:"category_id" , headerSortStartingDir:"asc" , responsive:0},
             {title:"Dimesion", field:"dimension" ,  responsive:0},
-            {title:"Source", field:"source" ,  responsive:0},
+            // {title:"Source", field:"source" ,  responsive:0},
             // {title:"Sku", field:"sku" ,  responsive:0},
-            {title:"Brand", field:"brand" ,  responsive:0},
+            // {title:"Brand", field:"brand" ,  responsive:0},
             // {title:"Delete" , formatter:deleteIcon, hozAlign:"center",headerSort:false, responsive:0,
             //     cellClick:function(e, cell){
             //         // window.open(window.location + "/" + cell.getRow().getData().id + "/delete" ,"_self");

@@ -102,7 +102,9 @@ let table;
 let searchValue = "";
 console.log(@json($cd))
 const deleteIcon = function(cell,formatterParams){return "<i class='fa fa-trash text-red-500'></i>";};
-const getMaster = @json(route('materials.master')); // For Material Modal
+// const getMaster = @json(route('materials.master')); // For Material Modal
+
+const getMaster = @json(route('locmat.master'));
 let csrfToken = document.head.querySelector("[name~=csrf-token][content]").content;
 let modal = document.getElementById("myModal")
 
@@ -110,12 +112,12 @@ let dyanmicTable = ""; // Tabulator
 let dynamicTableData = @json($cd);
 
 // Populate Locations in Tabulator
-const locations = @json($locations);
-        var newList=[]
-        locations.forEach(e => {
-            newList.push({value:e.title,label:e.title , id:e.id})
+// const locations = @json($locations);
+//         var newList=[]
+//         locations.forEach(e => {
+//             newList.push({value:e.title,label:e.title , id:e.id})
 
-        });
+//         });
         const skus = @json($skus);
         var newList1=[]
         skus.forEach(e => {
@@ -158,10 +160,11 @@ const locations = @json($locations);
             {title:"Id", field:"id" , responsive:0},
             {title:"Material", field:"title" , visible:true ,headerSort:false, responsive:0},
             {title:"Category", field:"category" , visible:true ,headerSortStartingDir:"asc" , responsive:0},
+            {title:"Category_Id", field:"category_id" , visible:true ,headerSortStartingDir:"asc" , responsive:0},
             {title:"Dimesion", field:"dimension" ,  responsive:0},
-            {title:"Source", field:"source" ,  responsive:0},
             {title:"Sku", field:"sku" ,  responsive:0},
-            {title:"Brand", field:"brand" ,  responsive:0},
+            {title:"sku_id", field:"sku_id",visible:false ,  responsive:0},
+            // {title:"Brand", field:"brand" ,  responsive:0},
             // {title:"Delete" , formatter:deleteIcon, hozAlign:"center",headerSort:false, responsive:0,
             //     cellClick:function(e, cell){
             //         // window.open(window.location + "/" + cell.getRow().getData().id + "/delete" ,"_self");
@@ -240,40 +243,33 @@ function pushDynamicData(data)
      dynamicTable.setData(dynamicTableData);
 }
 var updateValues = (cell) => {
+        var data = cell.getData();
+        var leninft = Number(data.pcs) * Number(data.length)
+        if(data.sku==='KG')
+         {
 
-    var data = cell.getData();
-
-
-        //  if(data.purunit=='k')
-        //     {
-                var sum =  Number(data.gdswt) * Number(data.gdsprice)
-                var sum2 =  Number(data.gdswt) * Number(data.gdsprice)
-
-        //     }
-        //  if(data.purunit=='p')
-        //     {
-        //         var sum =  Number(data.pcs) * Number(data.gdsprice)
-        //         var sum2 =  Number(data.pcs) * Number(data.gdsprice)
-        //     }
-        //  if(data.purunit=='f')
-        //     {
-        //         var sum =  Number(data.qtyinfeet) * Number(data.gdsprice)
-        //         var sum2 =  Number(data.qtyinfeet) * Number(data.gdsprice)
-        //     }
-
-
-    // var sum = (Number(data.gdswt) * Number(data.perkg)).toFixed(0)
-    // var sum2 =  (Number(data.gdswt) * Number(data.gdsprice)).toFixed(0)
-    var row = cell.getRow();
-    //  console.info(abc);
-    row.update({
-
-        "amtinpkr": sum,
-        "gdspricetot": sum2,
-        "qtyinfeet":sum,
-    });
-
-}
+            var sum =  Number(data.gdswt) * Number(data.gdsprice)
+             var sum2 =  Number(data.gdswt) * Number(data.gdsprice)
+         }
+         if(data.sku==='PCS')
+         {
+             var sum =  Number(data.pcs) * Number(data.gdsprice)
+             var sum2 =  Number(data.pcs) * Number(data.gdsprice)
+         }
+         if(data.sku==='FEET')
+         {
+             var sum =  Number(data.qtyinfeet) * Number(data.gdsprice)
+             var sum2 =  Number(data.qtyinfeet) * Number(data.gdsprice)
+         }
+        // var sum = Number(data.gdswt) * Number(data.gdsprice)
+        // var sum2 =  Number(data.gdswt) * Number(data.gdsprice)
+        var row = cell.getRow();
+        row.update({
+            "amtinpkr": sum,
+            "gdspricetot": sum2,
+            "qtyinfeet":leninft
+        });
+    }
 
 //  var tamount=0;
     function tnetamount()
@@ -342,13 +338,13 @@ dynamicTable = new Tabulator("#dynamicTable", {
         // {title:"Sku",               field:"sku_id",         cssClass:"bg-gray-200 font-semibold",visible:false},
         // {title:"M/Unit",            field:"sku",            cssClass:"bg-gray-200 font-semibold"},
 
-        {title: "id",field: "myid",visible:false},
-                {title:"Location", field:"location" ,editor:"list" , editorParams:   {
-                        values:newList,
-                        cssClass:"bg-green-200 font-semibold",
-                        validator:["required"]
-                    }
-                },
+        // {title: "id",field: "myid",visible:false},
+        //         {title:"Location", field:"location" ,editor:"list" , editorParams:   {
+        //                 values:newList,
+        //                 cssClass:"bg-green-200 font-semibold",
+        //                 validator:["required"]
+        //             }
+        //         },
 
                 {title: "id",field: "skuid",visible:false},
                 {title:"UOM", field:"sku" ,editor:"list" , editorParams:   {
@@ -365,7 +361,7 @@ dynamicTable = new Tabulator("#dynamicTable", {
         {title:"ForCustomer",        field:"forcust",       cssClass:"bg-gray-200 font-semibold",editor:true},
 
 
-        {   title:"Quantity",
+        {   title:"Weight",
             field: "gdswt",
             editor:"number",
             cssClass:"bg-green-200 font-semibold",
@@ -379,38 +375,40 @@ dynamicTable = new Tabulator("#dynamicTable", {
 
             },
 
-        // {   title:"Qty(Pcs)",
-        //     field:"pcs",
-        //     editor:"number",
-        //     cssClass:"bg-green-200 font-semibold",
-        //     validator:"required" ,
-        //     formatter:"money",
-        //     formatterParams:{thousand:",",precision:2},
-        //     validator:["required","decimal(10,2)"] ,
-        //     cellEdited: updateValues  ,
-        //     },
+        {   title:"Qty(Pcs)",
+            field:"pcs",
+            editor:"number",
+            cssClass:"bg-green-200 font-semibold",
+            validator:"required" ,
+            formatter:"money",
+            formatterParams:{thousand:",",precision:2},
+            validator:["required","decimal(10,2)"] ,
+            cellEdited: updateValues  ,
+            bottomCalc:"sum"
+            },
 
-        //     {title:"Length",
-        //         field:"length",
-        //         editor:"number",
-        //         cssClass:"bg-green-200 font-semibold",
-        //         validator:"required",
-        //         formatter:"money",
-        //         formatterParams:{thousand:",",precision:2},
-        //         validator:["required","integer"],
-        //         cellEdited: updateValues,
-        //        },
+            {title:"Length",
+                field:"length",
+                editor:"number",
+                cssClass:"bg-green-200 font-semibold",
+                validator:"required",
+                formatter:"money",
+                formatterParams:{thousand:",",precision:2},
+                validator:["required","integer"],
+                cellEdited: updateValues,
+               },
 
-        //        {title:"Qty(Feet)",
-        //         field:"qtyinfeet",
-        //         editor:"number",
-        //         cssClass:"bg-green-200 font-semibold",
-        //         validator:"required",
-        //         formatter:"money",
-        //         formatterParams:{thousand:",",precision:2},
-        //          validator:["required","integer"],
-        //          cellEdited: updateValues,
-        //        },
+               {title:"Qty(Feet)",
+                field:"qtyinfeet",
+                editor:"number",
+                cssClass:"bg-green-200 font-semibold",
+                validator:"required",
+                formatter:"money",
+                formatterParams:{thousand:",",precision:2},
+                 validator:["required","integer"],
+                 cellEdited: updateValues,
+                 bottomCalc:"sum"
+               },
 
                {title:"Price",
                 field:"gdsprice",
@@ -491,23 +489,23 @@ function validateForm()
     }
     dynamicTableData = dynamicTable.getData();
     // Qty Required
-    for (let index = 0; index < dynamicTableData.length; index++) {
-        const element = dynamicTableData[index];
+    // for (let index = 0; index < dynamicTableData.length; index++) {
+    //     const element = dynamicTableData[index];
 
 
-               if(element.location === undefined)
-               {
-                showSnackbar("Location must be Enter","info");
-                return;
-               }
-            //    if(element.gdswt == 0 || element.pcs == 0 || element.qtyinfeet == 0 || element.gdsprice == 0 )
+    //         //    if(element.location === undefined)
+    //         //    {
+    //         //     showSnackbar("Location must be Enter","info");
+    //         //     return;
+    //         //    }
+    //         //    if(element.gdswt == 0 || element.pcs == 0 || element.qtyinfeet == 0 || element.gdsprice == 0 )
 
-            //     {
-            //         showSnackbar("Please fill all Weight,Length,Pcs & Price all rows to proceed","info");
-            //         return;
-            //     }
+    //         //     {
+    //         //         showSnackbar("Please fill all Weight,Length,Pcs & Price all rows to proceed","info");
+    //         //         return;
+    //         //     }
 
-    }
+    // }
     // 'total' : parseFloat(banktotal.value).toFixed(2),
     disableSubmitButton(true);
      var data = { 'localpurchase' : dynamicTableData,'contract_id':parseFloat(contract_id.value).toFixed(0),'bankntotal':parseFloat(bankntotal.value).toFixed(0),'collofcustom':parseFloat(exataxoffie.value).toFixed(0),'exataxoffie':parseFloat(exataxoffie.value).toFixed(0) ,'insurance':parseFloat(insurance.value).toFixed(2) ,'supplier_id': supplier_id.value,'invoice_date':invoice_date.value,'invoiceno':invoiceno.value,'otherchrgs':otherchrgs.value,'gpassno':gpassno.value};

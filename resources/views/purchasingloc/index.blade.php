@@ -6,9 +6,9 @@
 
     <x-slot name="header">
         <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-            Goods Receive Note (Imported)
+            Goods Receive Note (Local)
             {{-- Create New Customer --}}
-            <a class="text-sm text-green-500 hover:text-gray-900" href="{{route('purchasing.create')}}">
+            <a class="text-sm text-green-500 hover:text-gray-900" href="{{route('purchasingloc.create')}}">
                 {{-- Add Icon --}}
                 <i class="fa fa-file fa-fw"></i>
                 Add New Record
@@ -45,8 +45,8 @@
     var deleteIcon = function(cell, formatterParams, onRendered){ return "<i class='fa fa-trash text-red-600'></i>";};
     var printIcon = function(cell, formatterParams, onRendered){ return "<i class='fa fa-print text-pink-500'></i>";};
 
-    const getMaster = @json(route('purchasing.master'));
-    const getDetails = @json(route('purchasing.details'));
+    const getMaster = @json(route('purchasingloc.master'));
+    const getDetails = @json(route('purchasingloc.details'));
     let table;
     let searchValue = "";
     let statusValue="1";  // 1 = Pending, 2 - Completed
@@ -154,8 +154,8 @@
                     columns:[
 
             {title: "Supplier",field: "supplier.title"},
-            {title: "Contract No",field: "contract_id"},
-            {title: "Contract Date",field: "contract_date"},
+            {title: "Invoice Id",field: "contract_id"},
+            {title: "Invoice Date",field: "contract_date"},
             {title: "Purchase Id",field: "id"},
             {title: "Invoice No",field: "purinvsno"}]},
 
@@ -174,10 +174,6 @@
             // {title: "In Pcs",field: "balpurtotpcs"},
             // {title: "In Kg",field: "balpurtotwt"},
             // {title: "In Feet",field: "balpurtotfeet"}]},
-
-
-
-
 
 
 

@@ -145,30 +145,36 @@
                 })}
             },
       //      Master Data
-            {title: "id",field: "id"},
-            // {title: "Dated",field: "created_at"},
-            {title: "Inv Dt",field: "invoice_date"},
-            {title: "Invoice#",field: "invoiceno"},
-            // {title: "Contract#",field: "contract_id"},
-            {title: "Supplier",field: "supplier.title"},
-            // {title: "Challan#",field: "challanno"},
-            // {title: "Mach Date",field: "machine_date"},
-            {title: "Description",field: "machineno"},
-            // {title: "conversionrate",field: "conversionrate"},
-            // {title: "insurance",field: "insurance"},
-            // {title: "bankcharges",field: "bankcharges"},
-            // {title: "collofcustom",field: "collofcustom"},
-            // {title: "exataxoffie",field: "exataxoffie"},
-            // {title: "lngnshipdochrgs",field: "lngnshipdochrgs"},
-            // {title: "localcartage",field: "localcartage"},
-            // {title: "miscexplunchetc",field: "miscexplunchetc"},
-            // {title: "customsepoy",field: "customsepoy"},
-            // {title: "weighbridge",field: "weighbridge"},
-            // {title: "miscexpenses",field: "miscexpenses"},
-            // {title: "agencychrgs",field: "agencychrgs"},
-            // {title: "otherchrgs",field: "otherchrgs"},
 
-            {title: "Payble Amount",field: "total"},
+                {
+                title:'Item Description', headerHozAlign:"center",
+                    columns:[
+
+                    {title: "id",field: "id"},
+                    {title: "Inv Dt",field: "invoice_date"},
+                    {title: "Invoice#",field: "invoiceno"},
+                    {title: "Supplier",field: "supplier.title"},
+                    {title: "Description",field: "machineno"}
+                    ]},
+
+                {
+                title:'Total', headerHozAlign:"center",
+                columns:[
+                    {title: "Pcs",field: "tpcs"},
+                    {title: "Weight",field: "twt"},
+                    {title: "Feet",field: "otherchrgs"},
+                    {title: "Payble Amount",field: "tval"}
+                ]},
+
+                {
+                title:'Pending Against Goods Receive', headerHozAlign:"center",
+                columns:[
+                    {title: "Pcs",field: "dutybal"},
+                    {title: "Weight",field: "wtbal"},
+                    {title: "Feet",field: "agencychrgs"}
+                ]},
+
+
             {title:"View" , formatter:viewIcon, hozAlign:"center",headerSort:false, responsive:0,
                 cellClick:function(e, cell){
                     window.open(window.location + "/" + cell.getRow().getData().id  ,"_self");

@@ -77,13 +77,18 @@ class QuotationController  extends Controller
         // ->select('contracts.*', 'suppliers.title')
         //  ->where('customer_id',$custid)
         // ->orWhere('customer_id','=','0')
-         ->where('custname', 'like', "%$search%")
-         ->orWhere('title', 'like', "%$search%")
-         ->orWhere('dimension', 'like', "%$search%")
+        ->where('category_id','=',(int)(substr($search,0,2)))
+        ->where('dimension','LIKE','%' . substr($search,3,10) . '%')
+
+        // ->where('custname', 'like', "%$search%")
+        //  ->orWhere('title', 'like', "%$search%")
+        //  ->orWhere('dimension', 'like', "%$search%")
         ->orderBy($field,$dir)
         ->paginate((int) $size);
         return $contracts;
     }
+
+
 
 
 

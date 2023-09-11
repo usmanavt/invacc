@@ -40,6 +40,7 @@ use App\Http\Controllers\SalesRetunrsController;
 use App\Http\Controllers\PurchasingController;
 use App\Http\Controllers\GatepasseController;
 use App\Http\Controllers\OpeningGodownStockController;
+use App\Http\Controllers\PurchasinglocController;
 
 
 Route::get('/', function () {
@@ -141,7 +142,11 @@ Route::get('/contracts/getContractMaster', [ContractController::class, 'getMaste
 Route::get('/contracts/getContractMasterI', [ContractController::class, 'getMasterImp'])->name('contracts.masterI');
 Route::get('/contracts/getContractMasterL', [ContractController::class, 'getMasterLoc'])->name('contracts.masterL');
 Route::get('/contracts/getContractDetails', [ContractController::class, 'getDetails'])->name('contracts.details');
+Route::get('/contracts/getmatMaster', [ContractController::class, 'matMaster'])->name('mat.master');
 Route::resource('contracts', ContractController::class);
+
+
+
 //  CommercialInvoice
 Route::get('/cis/getCisMaster', [CommercialInvoiceController::class, 'getMaster'])->name('cis.master');
 Route::get('/cis/getCisDetails', [CommercialInvoiceController::class, 'getDetails'])->name('cis.details');
@@ -157,6 +162,10 @@ Route::resource('cis', CommercialInvoiceController::class);
 //  CommercialInvoice - LOCAL NEW
 Route::get('/localpurchase/getPurchaseMaster', [LocalPurchaseController::class, 'getMaster'])->name('localpurchase.master');
 Route::get('/localpurchase/getPurchaseDetails', [LocalPurchaseController::class, 'getDetail'])->name('localpurchase.details');
+Route::get('/localpurchase/getLocmatMaster', [LocalPurchaseController::class, 'matMaster'])->name('locmat.master');
+
+
+
 Route::resource('localpurchase', LocalPurchaseController::class);
 
 
@@ -221,15 +230,19 @@ Route::resource('customerorder', CustomerOrderController::class);
 
 
 
-//  Purchasing
+//  Purchasing Imported
 Route::get('/Purchasing/getPurchasingMaster', [PurchasingController::class, 'getMaster'])->name('purchasing.master');
 Route::get('/Purchasing/getPurchasingDetails', [PurchasingController::class, 'getDetail'])->name('purchasing.details');
-// Route::get('/Purchasing/getcidMaster', [PurchasingController::class, 'getMasterqut'])->name('Purchasing.quotations');
-// Route::get('/Purchasing/getCustordersQuotationsdtl', [PurchasingController::class, 'getDetailsqut'])->name('Purchasing.quotationsdtl');
 Route::get('/Purchasing/getContractDetails', [PurchasingController::class, 'getContractDetails'])->name('contfrpur.dtl');
 Route::resource('purchasing', PurchasingController::class);
 
 
+//  Purchasing Local
+Route::get('/Purchasingloc/getPurchasingMaster', [PurchasinglocController::class, 'getMaster'])->name('purchasingloc.master');
+Route::get('/Purchasingloc/getPurchasingDetails', [PurchasinglocController::class, 'getDetail'])->name('purchasingloc.details');
+Route::get('/Purchasingloc/PurinvsMaster', [PurchasinglocController::class, 'getMasterpendipurnvs'])->name('purinvs.master');
+Route::get('/Purchasingloc/P.urinvsDetail', [PurchasinglocController::class, 'getContractDetails'])->name('purinvs.detail');
+Route::resource('purchasingloc', PurchasinglocController::class);
 
 
 

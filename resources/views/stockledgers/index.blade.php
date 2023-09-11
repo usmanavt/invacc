@@ -18,8 +18,13 @@
                                 <legend>Report Type</legend>
                                 <div>
                                     <input type="radio" name="report_type" value="dlvrychln" required onchange="checkReportType('dlvrychln')">
-                                    <label for="">Stock Movement Ledger Summary </label>
+                                    <label for="">SMLS Master Unit(For Office) </label>
                                 </div>
+                                <div>
+                                    <input type="radio" name="report_type" value="dlvrychlngd" required onchange="checkReportType('dlvrychlngd')">
+                                    <label for="">SMLS Master Unit(For Godown) </label>
+                                </div>
+
 
                                 <div>
                                     <input type="radio" name="report_type" value="salinvs" required onchange="checkReportType('salinvs')">
@@ -67,7 +72,7 @@
                                 </div> --}}
                             </fieldset>
 
-                            <fieldset class="border px-6 py-1.5  rounded h-80 ">
+                            <fieldset class="border px-6 py-1.5  rounded h-120 ">
                                 <legend>Report Criteria</legend>
                                 {{-- <div>
                                     <input type="checkbox" name="additional[]" value="wdrfa">
@@ -216,7 +221,30 @@
                 }
                 break;
 
-        // switch (rptType){
+
+            case 'dlvrychlngd':
+
+                list = subheads.filter( l => l.MHEAD === Number(value)  )
+                if(list.length > 0)
+                {
+                    list.forEach(e => {
+                        addSelectElement(subhead,e.Subhead,e.title)
+                    });
+                    subhead.setAttribute('required','')
+                    subhead.removeAttribute('disabled','')
+                }else{
+                    subhead.removeAttribute('required','')
+                    subhead.setAttribute('disabled','')
+                }
+                break;
+
+
+
+
+
+
+
+                // switch (rptType){
             case 'saltxinvs':
                 list = subheadsci.filter( l => l.MHEAD === Number(value)  )
                 if(list.length > 0)
@@ -377,6 +405,25 @@
                 });
                 headSelected()
                 break;
+
+                case 'dlvrychlngd':
+                // Show Head
+                rptType = 'dlvrychlngd'
+                head.setAttribute('required','')
+                head.disabled = false
+                head.length = 0
+                subhead.removeAttribute('required')
+                subhead.disabled = true
+                subhead.length = 0
+                heads.forEach(e => {
+                    addSelectElement(head,e.id,e.title)
+                });
+                headSelected()
+                break;
+
+
+
+
 
             case 'saltxinvs':
                 // Show Head

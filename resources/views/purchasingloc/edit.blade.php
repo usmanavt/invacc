@@ -9,7 +9,7 @@
 
     <x-slot name="header">
         <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-            Edit Goods Received (Imported)
+            Edit Goods Received Note (Local)
         </h2>
     </x-slot>
 
@@ -36,10 +36,10 @@
                                 @endforeach
                             </select>
 
-                            <x-input-text title="Contract No" name="contract_id" id="contract_id" value="{{ $purchasing->contract_id }}" disabled  />
-                            <x-input-date title="Contract Date" id="contract_date" name="contract_date" value="{{ $purchasing->contract_date }}"  disabled />
-                            <x-input-text title="Contract Invice#" id="continvsno" name="continvsno" value="{{ $purchasing->continvsno }}" disabled />
-                            <x-input-numeric title="" name="purid" id="purid" value="{{ $purchasing->id }}" hidden  />
+                            <x-input-text title="P.Invoice ID" name="contract_id" id="contract_id" value="{{ $purchasing->contract_id }}" disabled  />
+                            <x-input-date title="P.Invoice Date" id="contract_date" name="contract_date" value="{{ $purchasing->contract_date }}"  disabled />
+                            <x-input-text title="P.Invice#" id="continvsno" name="continvsno" value="{{ $purchasing->continvsno }}" disabled />
+                            <x-input-numeric title="" name="purid" id="purid" value="{{ $purchasing->id }}"   />
 
 
 
@@ -267,51 +267,48 @@ var updateValues = (cell) => {
 
 
         // For Feet
-        var e13ft=Number(data.purpcse13)*Number(data.length)
-        var gn2ft=Number(data.purpcsgn2)*Number(data.length)
-        var amsft=Number(data.purpcsams)*Number(data.length)
-        var e24ft=Number(data.purpcse24)*Number(data.length)
-        var bsft=Number(data.purpcsbs)*Number(data.length)
-        var othft=Number(data.purpcsoth)*Number(data.length)
+        // var e13ft=Number(data.purpcse13)*Number(data.length)
+        // var gn2ft=Number(data.purpcsgn2)*Number(data.length)
+        // var amsft=Number(data.purpcsams)*Number(data.length)
+        // var e24ft=Number(data.purpcse24)*Number(data.length)
+        // var bsft=Number(data.purpcsbs)*Number(data.length)
+        // var othft=Number(data.purpcsoth)*Number(data.length)
 
-        var e13wt=Number(data.gdswt)/(Number(data.totpcs))*Number(data.purpcse13)
-        var gn2wt=Number(data.gdswt)/(Number(data.totpcs))*Number(data.purpcsgn2)
-        var amswt=Number(data.gdswt)/(Number(data.totpcs))*Number(data.purpcsams)
-        var e24wt=Number(data.gdswt)/(Number(data.totpcs))*Number(data.purpcse24)
-        var bswt=Number(data.gdswt)/(Number(data.totpcs))*Number(data.purpcsbs)
-        var othwt=Number(data.gdswt)/(Number(data.totpcs))*Number(data.purpcsoth)
+        // var e13wt=Number(data.gdswt)/(Number(data.totpcs))*Number(data.purpcse13)
+        // var gn2wt=Number(data.gdswt)/(Number(data.totpcs))*Number(data.purpcsgn2)
+        // var amswt=Number(data.gdswt)/(Number(data.totpcs))*Number(data.purpcsams)
+        // var e24wt=Number(data.gdswt)/(Number(data.totpcs))*Number(data.purpcse24)
+        // var bswt=Number(data.gdswt)/(Number(data.totpcs))*Number(data.purpcsbs)
+        // var othwt=Number(data.gdswt)/(Number(data.totpcs))*Number(data.purpcsoth)
+
+
+
 
         var sumpcs=Number(data.purpcse13)+Number(data.purpcsgn2)+Number(data.purpcsams)+Number(data.purpcse24)+Number(data.purpcsbs)+Number(data.purpcsoth)
-        var sumfeet=e13ft+gn2ft+amsft+e24ft+bsft+othft
-        var sumwt=e13wt+gn2wt+amswt+e24wt+bswt+othwt
-
-
-
-        // var sumpcs=Number(data.purpcse13)+Number(data.purpcsgn2)+Number(data.purpcsams)+Number(data.purpcse24)+Number(data.purpcsbs)+Number(data.purpcsoth)
-        // var sumwt=Number(data.purwte13)+Number(data.purwtgn2)+Number(data.purwtams)+Number(data.purwte24)+Number(data.purwtbs)+Number(data.purwtoth)
-        // var sumfeet=Number(data.purfeete13)+Number(data.purfeetgn2)+Number(data.purfeetams)+Number(data.purfeete24)+Number(data.purfeetbs)+Number(data.purfeetoth)
+        var sumwt=Number(data.purwte13)+Number(data.purwtgn2)+Number(data.purwtams)+Number(data.purwte24)+Number(data.purwtbs)+Number(data.purwtoth)
+        var sumfeet=Number(data.purfeete13)+Number(data.purfeetgn2)+Number(data.purfeetams)+Number(data.purfeete24)+Number(data.purfeetbs)+Number(data.purfeetoth)
         // +Number(data.purpcsgn2)+Number(data.purpcsams)+Number(data.purpcse24)+Number(data.purpcsbs)+Number(data.purpcsoth)
         var row = cell.getRow();
         row.update({
-             "purfeete13": e13ft,
-             "purfeetgn2": gn2ft,
-             "purfeetams": amsft,
-             "purfeetbs": bsft,
-             "purfeete24": e24ft,
-             "purfeetoth": othft,
+            //  "purfeete13": e13ft,
+            //  "purfeetgn2": gn2ft,
+            //  "purfeetams": amsft,
+            //  "purfeetbs": bsft,
+            //  "purfeete24": e24ft,
+            //  "purfeetoth": othft,
 
-             "purwte13":e13wt,
-             "purwtgn2":gn2wt,
-             "purwtams":amswt,
-             "purwte24":e24wt,
-             "purwtbs":bswt,
-             "purwtoth":othwt,
+            //  "purwte13":e13wt,
+            //  "purwtgn2":gn2wt,
+            //  "purwtams":amswt,
+            //  "purwte24":e24wt,
+            //  "purwtbs":bswt,
+            //  "purwtoth":othwt,
 
 
              "purpcstot":sumpcs,
              "purwttot":sumwt,
-             "purfeettot":sumfeet,
-             totalVal: e13ft
+             "purfeettot":sumfeet
+            //  totalVal: e13ft
 
         });
     }
@@ -377,17 +374,17 @@ dynamicTable = new Tabulator("#dynamicTable", {
                 {title:"Brand",              field:"brand",     editor:true},
                 {title:"dimension_id", field:"dimension_id",visible:false},
 
-                {   title:"length",headerHozAlign :'right',hozAlign:"right",cellEdited: updateValues,editor:true,responsive:0,field:"length",bottomCalc:"sum"},
+                // {   title:"length",headerHozAlign :'right',hozAlign:"right",cellEdited: updateValues,editor:true,responsive:0,field:"length",bottomCalc:"sum"},
                 {
                     title:'E-13', headerHozAlign:"center",
                     columns:[
                         {   title:"Pcs",editor:true,headerHozAlign :'right',hozAlign:"right",responsive:0,field:"purpcse13",bottomCalc:"sum",
                                         formatter:"money",cellEdited: updateValues,validator:["required","numeric"],formatterParams:{thousand:",",precision:0}},
-                        {   title:"Weight",headerHozAlign :'right',hozAlign:"right",responsive:0,field:"purwte13",bottomCalc:"sum",
-                            formatter:"money",cellEdited: updateValues,validator:["required","numeric"],cssClass:"bg-gray-200 font-semibold",formatterParams:{thousand:",",precision:0}},
+                        {   title:"Weight",editor:true,headerHozAlign :'right',hozAlign:"right",responsive:0,field:"purwte13",bottomCalc:"sum",
+                            formatter:"money",cellEdited: updateValues,validator:["required","numeric"],formatterParams:{thousand:",",precision:0}},
 
                         {title:"Feet",editor:true,headerHozAlign :'right',hozAlign:"right",responsive:0,field:"purfeete13",bottomCalc:"sum",
-                        formatter:"money",cellEdited: updateValues,validator:["required","numeric"],cssClass:"bg-gray-200 font-semibold",formatterParams:{thousand:",",precision:0}},
+                        formatter:"money",cellEdited: updateValues,validator:["required","numeric"],formatterParams:{thousand:",",precision:0}},
 
                         ]},
 
@@ -396,10 +393,10 @@ dynamicTable = new Tabulator("#dynamicTable", {
                     columns:[
                         {   title:"Pcs",editor:true,headerHozAlign :'right',hozAlign:"right",responsive:0,field:"purpcsgn2",bottomCalc:"sum",
                                         formatter:"money",cellEdited: updateValues,validator:["required","numeric"],formatterParams:{thousand:",",precision:0}},
-                        {   title:"Weight",headerHozAlign :'right',hozAlign:"right",responsive:0,field:"purwtgn2",bottomCalc:"sum",
-                            formatter:"money",cellEdited: updateValues,validator:["required","numeric"],cssClass:"bg-gray-200 font-semibold",formatterParams:{thousand:",",precision:0}},
-                            {   title:"Feet",headerHozAlign :'right',hozAlign:"right",responsive:0,field:"purfeetgn2",bottomCalc:"sum",
-                            formatter:"money",cellEdited: updateValues,validator:["required","numeric"],cssClass:"bg-gray-200 font-semibold",formatterParams:{thousand:",",precision:0}}
+                        {   title:"Weight",editor:true,headerHozAlign :'right',hozAlign:"right",responsive:0,field:"purwtgn2",bottomCalc:"sum",
+                            formatter:"money",cellEdited: updateValues,validator:["required","numeric"],formatterParams:{thousand:",",precision:0}},
+                            {   title:"Feet",editor:true,headerHozAlign :'right',hozAlign:"right",responsive:0,field:"purfeetgn2",bottomCalc:"sum",
+                            formatter:"money",cellEdited: updateValues,validator:["required","numeric"],formatterParams:{thousand:",",precision:0}}
                         ]},
 
                         {
@@ -407,10 +404,10 @@ dynamicTable = new Tabulator("#dynamicTable", {
                     columns:[
                         {   title:"Pcs",editor:true,headerHozAlign :'right',hozAlign:"right",responsive:0,field:"purpcsams",bottomCalc:"sum",
                                         formatter:"money",cellEdited: updateValues,validator:["required","numeric"],formatterParams:{thousand:",",precision:0}},
-                        {   title:"Weight",headerHozAlign :'right',hozAlign:"right",responsive:0,field:"purwtams",bottomCalc:"sum",
-                            formatter:"money",cellEdited: updateValues,validator:["required","numeric"],cssClass:"bg-gray-200 font-semibold",formatterParams:{thousand:",",precision:0}},
-                            {   title:"Feet",headerHozAlign :'right',hozAlign:"right",responsive:0,field:"purfeetams",bottomCalc:"sum",
-                            formatter:"money",cellEdited: updateValues,validator:["required","numeric"],cssClass:"bg-gray-200 font-semibold",formatterParams:{thousand:",",precision:0}}
+                        {   title:"Weight",editor:true,headerHozAlign :'right',hozAlign:"right",responsive:0,field:"purwtams",bottomCalc:"sum",
+                            formatter:"money",cellEdited: updateValues,validator:["required","numeric"],formatterParams:{thousand:",",precision:0}},
+                            {   title:"Feet",editor:true,headerHozAlign :'right',hozAlign:"right",responsive:0,field:"purfeetams",bottomCalc:"sum",
+                            formatter:"money",cellEdited: updateValues,validator:["required","numeric"],formatterParams:{thousand:",",precision:0}}
                         ]},
 
                         {
@@ -418,10 +415,10 @@ dynamicTable = new Tabulator("#dynamicTable", {
                     columns:[
                         {   title:"Pcs",editor:true,headerHozAlign :'right',hozAlign:"right",responsive:0,field:"purpcse24",bottomCalc:"sum",
                                         formatter:"money",cellEdited: updateValues,validator:["required","numeric"],formatterParams:{thousand:",",precision:0}},
-                        {   title:"Weight",headerHozAlign :'right',hozAlign:"right",responsive:0,field:"purwte24",bottomCalc:"sum",
-                            formatter:"money",cellEdited: updateValues,validator:["required","numeric"],cssClass:"bg-gray-200 font-semibold",formatterParams:{thousand:",",precision:0}},
-                            {   title:"Feet",headerHozAlign :'right',hozAlign:"right",responsive:0,field:"purfeete24",bottomCalc:"sum",
-                            formatter:"money",cellEdited: updateValues,validator:["required","numeric"],cssClass:"bg-gray-200 font-semibold",formatterParams:{thousand:",",precision:0}}
+                        {   title:"Weight",editor:true,headerHozAlign :'right',hozAlign:"right",responsive:0,field:"purwte24",bottomCalc:"sum",
+                            formatter:"money",cellEdited: updateValues,validator:["required","numeric"],formatterParams:{thousand:",",precision:0}},
+                            {   title:"Feet",editor:true,headerHozAlign :'right',hozAlign:"right",responsive:0,field:"purfeete24",bottomCalc:"sum",
+                            formatter:"money",cellEdited: updateValues,validator:["required","numeric"],formatterParams:{thousand:",",precision:0}}
                         ]},
 
                         {
@@ -429,10 +426,10 @@ dynamicTable = new Tabulator("#dynamicTable", {
                     columns:[
                         {   title:"Pcs",editor:true,headerHozAlign :'right',hozAlign:"right",responsive:0,field:"purpcsbs",bottomCalc:"sum",
                                         formatter:"money",cellEdited: updateValues,validator:["required","numeric"],formatterParams:{thousand:",",precision:0}},
-                        {   title:"Weight",headerHozAlign :'right',hozAlign:"right",responsive:0,field:"purwtbs",bottomCalc:"sum",
-                            formatter:"money",cellEdited: updateValues,validator:["required","numeric"],cssClass:"bg-gray-200 font-semibold",formatterParams:{thousand:",",precision:0}},
-                            {   title:"Feet",headerHozAlign :'right',hozAlign:"right",responsive:0,field:"purfeetbs",bottomCalc:"sum",
-                            formatter:"money",cellEdited: updateValues,validator:["required","numeric"],cssClass:"bg-gray-200 font-semibold",formatterParams:{thousand:",",precision:0}}
+                        {   title:"Weight",editor:true,headerHozAlign :'right',hozAlign:"right",responsive:0,field:"purwtbs",bottomCalc:"sum",
+                            formatter:"money",cellEdited: updateValues,validator:["required","numeric"],formatterParams:{thousand:",",precision:0}},
+                            {   title:"Feet",editor:true,headerHozAlign :'right',hozAlign:"right",responsive:0,field:"purfeetbs",bottomCalc:"sum",
+                            formatter:"money",cellEdited: updateValues,validator:["required","numeric"],formatterParams:{thousand:",",precision:0}}
                         ]},
 
                        {
@@ -440,10 +437,10 @@ dynamicTable = new Tabulator("#dynamicTable", {
                     columns:[
                         {   title:"Pcs",visible:false,editor:true,headerHozAlign :'right',hozAlign:"right",responsive:0,field:"purpcsoth",bottomCalc:"sum",
                                         formatter:"money",cellEdited: updateValues,validator:["required","numeric"],formatterParams:{thousand:",",precision:0}},
-                        {   title:"Weight",visible:false,headerHozAlign :'right',hozAlign:"right",responsive:0,field:"purwtoth",bottomCalc:"sum",
-                            formatter:"money",cellEdited: updateValues,validator:["required","numeric"],cssClass:"bg-gray-200 font-semibold",formatterParams:{thousand:",",precision:0}},
-                            {   title:"Feet",visible:false,headerHozAlign :'right',hozAlign:"right",responsive:0,field:"purfeetoth",bottomCalc:"sum",
-                            formatter:"money",cellEdited: updateValues,validator:["required","numeric"],cssClass:"bg-gray-200 font-semibold",formatterParams:{thousand:",",precision:0}}
+                        {   title:"Weight",editor:true,visible:false,headerHozAlign :'right',hozAlign:"right",responsive:0,field:"purwtoth",bottomCalc:"sum",
+                            formatter:"money",cellEdited: updateValues,validator:["required","numeric"],formatterParams:{thousand:",",precision:0}},
+                            {   title:"Feet",editor:true,visible:false,headerHozAlign :'right',hozAlign:"right",responsive:0,field:"purfeetoth",bottomCalc:"sum",
+                            formatter:"money",cellEdited: updateValues,validator:["required","numeric"],formatterParams:{thousand:",",precision:0}}
                         ]},
 
                         {
@@ -584,7 +581,7 @@ function validateForm()
     //     'podate':podate.value,'pono':pono.value,'qutno':qutno.value,'qutdate':qutdate.value,'prno':prno.value
     // ,'sale_invoice_id':sale_invoice_id.value};
 
-    var data = { 'purchasing' : dynamicTableData,
+    var data = { 'purchasingloc' : dynamicTableData,
         'supplier_id': supplier_id.value,'contract_id':contract_id.value,'contract_date':contract_date.value,'purseqid':purseqid.value,
                           'purdate':purdate.value,'purinvsno':purinvsno.value,'purid':purid.value      };
 
@@ -592,7 +589,7 @@ function validateForm()
 
 
 
-    fetch(@json(route('purchasing.update',$purchasing)),{
+    fetch(@json(route('purchasingloc.update',$purchasing)),{
         credentials: 'same-origin', // 'include', default: 'omit'
         method: 'PUT', // 'GET', 'PUT', 'DELETE', etc.
         // body: formData, // Coordinate the body type with 'Content-Type'
@@ -608,7 +605,7 @@ function validateForm()
     .then( response => {
         if (response == 'success')
         {
-            window.open(window.location.origin + "/purchasing","_self" );
+            window.open(window.location.origin + "/purchasingloc","_self" );
         }
     })
     .catch(error => {

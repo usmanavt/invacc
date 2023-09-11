@@ -80,6 +80,7 @@ class StockLedgerController extends Controller
 
             //   dd($request->all());
             $head_id = $request->head_id;
+            $ltype ="Office Stock";
             $head = Category::findOrFail($head_id);
             if($request->has('subhead_id')){
                 $subhead_id = $request->subhead_id;
@@ -91,15 +92,48 @@ class StockLedgerController extends Controller
                     DB::table('tmpstockrptpar')->insert([ 'GLCODE' => $id ]);
                 }
             }
-            $data = DB::select('call procstockledger(?,?)',array($fromdate,$todate));
+            $data = DB::select('call procstockledgeros(?,?)',array($fromdate,$todate));
             if(!$data)
             {
                 Session::flash('info','No data available');
                 return redirect()->back();
             }
-            $html =  view('stockledgers.slsummary')->with('data',$data)->with('fromdate',$fromdate)->with('todate',$todate)->render();
+            $html =  view('stockledgers.slsummary')->with('data',$data)->with('fromdate',$fromdate)
+            ->with('todate',$todate)->with('ltype',$ltype)->render();
             $filename = 'StockLedgerSummary-'.$fromdate.'-'.$todate.'.pdf';
         }
+
+
+        if($report_type === 'dlvrychlngd'){
+
+            //   dd($request->all());
+            $head_id = $request->head_id;
+            $head = Category::findOrFail($head_id);
+            if($request->has('subhead_id')){
+                $subhead_id = $request->subhead_id;
+                $ltype ="Godown Stock";
+                //  dd($request->subhead_id);
+                //  Clear Data from Table
+                DB::table('tmpstockrptpar')->truncate();
+                foreach($request->subhead_id as $id)
+                {
+                    DB::table('tmpstockrptpar')->insert([ 'GLCODE' => $id ]);
+                }
+            }
+            $data = DB::select('call procstockledgergs(?,?)',array($fromdate,$todate));
+            if(!$data)
+            {
+                Session::flash('info','No data available');
+                return redirect()->back();
+            }
+            $html =  view('stockledgers.slsummary')->with('data',$data)->with('fromdate',$fromdate)
+            ->with('todate',$todate)->with('ltype',$ltype)->render();
+            $filename = 'StockLedgerSummary-'.$fromdate.'-'.$todate.'.pdf';
+        }
+
+
+
+
 
         if($report_type === 'gl'){
             // dd($request->all());
