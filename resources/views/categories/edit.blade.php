@@ -1,7 +1,7 @@
 <x-app-layout>
     <x-slot name="header">
         <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-            {{ __('Edit Category') }}
+            {{ __('Edit Item') }}
         </h2>
     </x-slot>
 
@@ -25,7 +25,7 @@
                                 <x-input id="nick" class="bg-indigo-100" type="text" name="nick" value="{{$category->nick}}" />
                                 @if($errors->has('nick'))<div class="text-red-500 text-xs">{{ $errors->first('nick') }}</div>@endif
 
-                                
+
                                 <input class="checked:bg-blue-500 checked:border-blue-500 focus:outline-none" type="checkbox" name="status" @if ($category->status == 1)
                                         checked
                                     @endif >

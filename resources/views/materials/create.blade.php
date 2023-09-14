@@ -36,7 +36,15 @@
                                 @if($errors->has('nick'))<div class="text-red-500 text-xs">{{ $errors->first('nick') }}</div>@endif
 
 
-                                <x-label for="" value="Category"/>
+                                <x-label for="Category" value="Source"/>
+                                <select autocomplete="on" required name="source_id" class="bg-indigo-100 w-full" required onchange="getHiddenValues(this)">
+                                    <option value="" selected>--Source</option>
+                                    @foreach ($sources as $source)
+                                        <option value="{{ $source->id }}">{{ $source->title }}</option>
+                                    @endforeach
+                                </select>
+
+                                <x-label for="Item" value="Category"/>
                                 <select autocomplete="on" required name="category_id" class="bg-indigo-100 w-full" required onchange="getHiddenValues(this)">
                                     <option value="" selected>--Category</option>
                                     @foreach ($categories as $category)
@@ -55,13 +63,6 @@
                                     @endforeach
                                 </select>
 
-                                {{-- <x-label for="" value="Source"/>
-                                <select autocomplete="on" required name="source_id" class="bg-indigo-100 w-full" required onchange="getHiddenValues(this)">
-                                    <option value="" selected>--Source</option>
-                                    @foreach ($sources as $source)
-                                        <option value="{{ $source->id }}">{{ $source->title }}</option>
-                                    @endforeach
-                                </select> --}}
 
                                 <x-label for="" value="Sku"/>
                                 <select autocomplete="on" required name="sku_id" class="bg-indigo-100 w-full" required onchange="getHiddenValues(this)">

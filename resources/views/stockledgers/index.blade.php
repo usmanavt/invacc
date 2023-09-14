@@ -26,6 +26,22 @@
                                 </div>
 
 
+
+                                <div>
+                                    <input type="radio" name="report_type" value="sraluntos" required onchange="checkReportType('sraluntos')">
+                                    <label for="">SMLS All Unit(For Office) </label>
+                                </div>
+
+
+                                <div>
+                                    <input type="radio" name="report_type" value="sraluntgs" required onchange="checkReportType('sraluntgs')">
+                                    <label for="">SMLS All Unit(For Godown) </label>
+                                </div>
+
+
+
+
+
                                 <div>
                                     <input type="radio" name="report_type" value="salinvs" required onchange="checkReportType('salinvs')">
                                     <label for="">Stock Movement Ledger Individual</label>
@@ -205,7 +221,7 @@
         subhead.options.length = 0 // Reset List
         //  console.info(rptType)
         switch (rptType){
-            case 'dlvrychln':
+            case 'dlvrychln' :
 
                 list = subheads.filter( l => l.MHEAD === Number(value)  )
                 if(list.length > 0)
@@ -223,6 +239,23 @@
 
 
             case 'dlvrychlngd':
+
+                list = subheads.filter( l => l.MHEAD === Number(value)  )
+                if(list.length > 0)
+                {
+                    list.forEach(e => {
+                        addSelectElement(subhead,e.Subhead,e.title)
+                    });
+                    subhead.setAttribute('required','')
+                    subhead.removeAttribute('disabled','')
+                }else{
+                    subhead.removeAttribute('required','')
+                    subhead.setAttribute('disabled','')
+                }
+                break;
+
+
+                case 'sraluntos':
 
                 list = subheads.filter( l => l.MHEAD === Number(value)  )
                 if(list.length > 0)
@@ -421,7 +454,20 @@
                 headSelected()
                 break;
 
-
+                case 'sraluntos':
+                // Show Head
+                rptType = 'sraluntos'
+                head.setAttribute('required','')
+                head.disabled = false
+                head.length = 0
+                subhead.removeAttribute('required')
+                subhead.disabled = true
+                subhead.length = 0
+                heads.forEach(e => {
+                    addSelectElement(head,e.id,e.title)
+                });
+                headSelected()
+                break;
 
 
 

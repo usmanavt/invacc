@@ -193,10 +193,14 @@ let dynamicTable = ""
         columns:[
             // Master Data
             {title:"Id", field:"id" , responsive:0},
-            {title:"Material", field:"title" , visible:true ,headerSort:false, responsive:0},
-            {title:"Category", field:"category" , visible:true ,headerSortStartingDir:"asc" , responsive:0},
-            {title:"Category_Id", field:"category_id" , headerSortStartingDir:"asc" , responsive:0},
+            {title:"Material", field:"title" , headerSort:false, responsive:0},
+            {title:"Category", field:"source" , headerSortStartingDir:"asc" , responsive:0},
+            {title:"Items", field:"category" , headerSortStartingDir:"asc" , responsive:0},
+            {title:"Category_Id", field:"category_id",visible:false , headerSortStartingDir:"asc" , responsive:0},
             {title:"Dimesion", field:"dimension" ,  responsive:0},
+            {title:"Search Text", field:"srchb" ,  responsive:0},
+
+
             // {title:"Source", field:"source" ,  responsive:0},
             // {title:"Sku", field:"sku" ,  responsive:0},
             // {title:"Brand", field:"brand" ,  responsive:0},

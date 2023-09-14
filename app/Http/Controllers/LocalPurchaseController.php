@@ -77,8 +77,8 @@ class LocalPurchaseController  extends Controller
         $dir = $request->sort[0]["dir"];         //  Nested Array
         //  With Tables
         $materials = Material::where(function ($query) use ($search){
-            $query->where('category_id','=',(int)(substr($search,0,2)))
-            ->where('dimension','LIKE','%' . substr($search,3,10) . '%');
+            $query->where('source_id','=',1)
+            ->where('srchi','LIKE','%' . $search. '%');
         })
         ->orderBy($field,$dir)
         ->paginate((int) $size);

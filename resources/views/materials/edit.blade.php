@@ -26,16 +26,20 @@
                             <input type="hidden" id="sku" name="sku" value="{{ $material->sku }}">
 
 
-                                <x-label for="title" :value="__('Name')"/>
-                                <x-input class="bg-indigo-100" type="text" name="title" value="{{ $material->title }}"  required minlength="3"/>
-                                @if($errors->has('title'))<div class="text-red-500 text-xs">{{ $errors->first('title') }}</div>@endif
-
-                                <x-label for="nick" :value="__('Knick Name')"/>
-                                <x-input class="bg-indigo-100" type="text" name="nick" value="{{ $material->nick }}"  required minlength="3"/>
-                                @if($errors->has('nick'))<div class="text-red-500 text-xs">{{ $errors->first('nick') }}</div>@endif
-
 
                                 <x-label for="" value="Category"/>
+                                <select autocomplete="on" required name="source_id" class="bg-indigo-100 w-full" required onchange="getHiddenValues(this)">
+                                    @foreach ($sources as $source)
+                                        @if ($material->source_id == $source->id)
+                                            <option value="{{ $source->id }}" selected>{{ $source->title }}</option>
+                                        @else
+                                            <option value="{{ $source->id }}">{{ $source->title }}</option>
+                                        @endif
+                                    @endforeach
+                                </select>
+
+
+                                <x-label for="" value="Item"/>
                                 <select autocomplete="on" required name="category_id" class="bg-indigo-100 w-full" required onchange="getHiddenValues(this)">
                                     @foreach ($categories as $category)
                                         @if ($material->category_id == $category->id)
@@ -57,18 +61,7 @@
                                     @endforeach
                                 </select>
 
-                                {{-- <x-label for="" value="Source"/>
-                                <select autocomplete="on" required name="source_id" class="bg-indigo-100 w-full" required onchange="getHiddenValues(this)">
-                                    @foreach ($sources as $source)
-                                        @if ($material->source_id == $source->id)
-                                            <option value="{{ $source->id }}" selected>{{ $source->title }}</option>
-                                        @else
-                                            <option value="{{ $source->id }}">{{ $source->title }}</option>
-                                        @endif
-                                    @endforeach
-                                </select> --}}
-
-                                <x-label for="" value="Sku"/>
+                                <x-label for="" value="Unit"/>
                                 <select autocomplete="on" required name="sku_id" class="bg-indigo-100 w-full" required onchange="getHiddenValues(this)">
                                     @foreach ($skus as $sku)
                                         @if ($material->sku_id == $sku->id)
@@ -78,6 +71,25 @@
                                         @endif
                                     @endforeach
                                 </select>
+
+
+                                <x-label for="title" :value="__('Complete Name')"/>
+                                <x-input class="bg-indigo-100" type="text" name="title" value="{{ $material->title }}"  required minlength="3"/>
+                                @if($errors->has('title'))<div class="text-red-500 text-xs">{{ $errors->first('title') }}</div>@endif
+
+                                <x-label for="nick" :value="__('Nick Name')"/>
+                                <x-input class="bg-indigo-100" type="text" name="nick" value="{{ $material->nick }}"  required minlength="3"/>
+                                @if($errors->has('nick'))<div class="text-red-500 text-xs">{{ $errors->first('nick') }}</div>@endif
+
+                                <x-label for="srchi" :value="__('Search Tex For Import/Local')"/>
+                                <x-input class="bg-indigo-100" type="text" maxlength='15' name=" srchi" value="{{ $material->srchi }}"  required minlength="3"/>
+                                @if($errors->has('srchi'))<div class="text-red-500 text-xs">{{ $errors->first('srchi') }}</div>@endif
+
+                                <x-label for="srchb" :value="__('Search Tex For Both')"/>
+                                <x-input class="bg-indigo-100" type="text" maxlength='15' name=" srchb" value="{{ $material->srchb }}"  required minlength="3"/>
+                                @if($errors->has('srchb'))<div class="text-red-500 text-xs">{{ $errors->first('srchb') }}</div>@endif
+
+
 
                                 {{-- <x-label for="" value="Brand"/>
                                 <select autocomplete="on" required name="brand_id" class="bg-indigo-100 w-full" required onchange="getHiddenValues(this)">
@@ -102,7 +114,7 @@
                                 </select> --}}
 
 
-                                <x-label for="Qty(Kg)" :value="__('Qty(Kg)')"/>
+                                {{-- <x-label for="Qty(Kg)" :value="__('Qty(Kg)')"/>
                                 <x-input class="bg-indigo-100" type="text" name="qtykg" value="{{ $material->qtykg }}"  />
                                 @if($errors->has('qtykg'))<div class="text-red-500 text-xs">{{ $errors->first('qtykg') }}</div>@endif
 
@@ -128,7 +140,7 @@
 
                                 <x-label for="Cost(feet)" :value="__('Cost(feet)')"/>
                                 <x-input class="bg-indigo-100" type="text" name="qtyfeetrt" value="{{ $material->qtyfeetrt }}"  />
-                                @if($errors->has('qtyfeetrt'))<div class="text-red-500 text-xs">{{ $errors->first('qtyfeetrt') }}</div>@endif
+                                @if($errors->has('qtyfeetrt'))<div class="text-red-500 text-xs">{{ $errors->first('qtyfeetrt') }}</div>@endif --}}
 
 
                                 <input class="checked:bg-blue-500 checked:border-blue-500 focus:outline-none" type="checkbox" name="status"

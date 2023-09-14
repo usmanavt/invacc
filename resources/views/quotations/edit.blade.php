@@ -190,12 +190,13 @@ const skus = @json($skus);
         columns:[
             // Master Data
             {title:"Id", field:"id" , responsive:0},
-            {title:"Material", field:"title" ,headerSort:false, responsive:0},
             {title:"Customer", field:"custname" ,headerSortStartingDir:"asc" , responsive:0},
-            {title:"Category", field:"category" ,headerSortStartingDir:"asc" , responsive:0},
-            {title:"Category_Id", field:"category_id" ,headerSortStartingDir:"asc" , responsive:0},
-
+            {title:"Material", field:"title" ,headerSort:false, responsive:0},
+            {title:"Searching Text", field:"srchb" ,headerSortStartingDir:"asc" , responsive:0},
+            {title:"Items", field:"category" ,headerSortStartingDir:"asc" , responsive:0},
+            {title:"Category_Id", field:"category_id",visible:false ,headerSortStartingDir:"asc" , responsive:0},
             {title:"Dimesion", field:"dimension" ,  responsive:0},
+            {title:"Category", field:"category" ,headerSortStartingDir:"asc" , responsive:0},
             {title:"Last Sale Price", field:"pcspbundle1" ,  responsive:0},
             {title:"Sku", field:"sku" ,  responsive:0},
             // {title:"Brand", field:"brand" ,  responsive:0},

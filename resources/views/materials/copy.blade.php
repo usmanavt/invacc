@@ -20,16 +20,15 @@
 
                             <input type="hidden" id="dimension" name="dimension" value="{{ $material->dimension }}">
 
-                            <x-label for="title" :value="__('Name')"/>
-                            <x-input class="" type="text" name="title" value="{{ $material->title }}"  required minlength="3"/>
-                            @if($errors->has('title'))<div class="text-red-500 text-xs">{{ $errors->first('title') }}</div>@endif
-
-                            <x-label for="nick" :value="__('Knick Name')"/>
-                            <x-input class="" type="text" name="nick" value="{{ $material->nick }}"  required minlength="3"/>
-                            @if($errors->has('nick'))<div class="text-red-500 text-xs">{{ $errors->first('nick') }}</div>@endif
 
 
                             <x-label for="" value="Category"/>
+                            <x-input class="" type="text"  name="source" value="{{ $material->source }}" disabled />
+                            <input type="hidden" name="source_id" value="{{ $material->source_id }}">
+                            <input type="hidden" name="source" value="{{ $material->source }}">
+
+
+                            <x-label for="" value="Item"/>
                             <x-input class="" type="text"  name="category" value="{{ $material->category }}" disabled />
                             <input type="hidden" name="category_id" value="{{ $material->category_id }}">
                             <input type="hidden" name="category" value="{{ $material->category }}">
@@ -45,15 +44,31 @@
                                 @endforeach
                             </select>
 
-                            {{-- <x-label for="" value="Source"/>
-                            <x-input class="" type="text"  name="source" value="{{ $material->source }}" disabled />
-                            <input type="hidden" name="source_id" value="{{ $material->source_id }}">
-                            <input type="hidden" name="source" value="{{ $material->source }}"> --}}
 
                             <x-label for="" value="Unit"/>
                             <x-input class="" type="text"  name="sku" value="{{ $material->sku }}" disabled />
                             <input type="hidden" name="sku_id" value="{{ $material->sku_id }}">
                             <input type="hidden" name="sku" value="{{ $material->sku }}">
+
+
+                            <x-label for="title" :value="__('Complete Name')"/>
+                            <x-input class="" type="text" name="title" value="{{ $material->title }}"  required minlength="3"/>
+                            @if($errors->has('title'))<div class="text-red-500 text-xs">{{ $errors->first('title') }}</div>@endif
+
+                            <x-label for="nick" :value="__('Nick Name')"/>
+                            <x-input class="" type="text" name="nick" value="{{ $material->nick }}"  required minlength="3"/>
+                            @if($errors->has('nick'))<div class="text-red-500 text-xs">{{ $errors->first('nick') }}</div>@endif
+
+                            <x-label for="srchi" :value="__('Search Tex For Import/Local')"/>
+                            <x-input class="bg-indigo-100" type="text" maxlength='15' name=" srchi" value="{{ $material->srchi }}"  required minlength="3"/>
+                            @if($errors->has('srchi'))<div class="text-red-500 text-xs">{{ $errors->first('srchi') }}</div>@endif
+
+                            <x-label for="srchb" :value="__('Search Tex For Both')"/>
+                            <x-input class="bg-indigo-100" type="text" maxlength='15' name=" srchb" value="{{ $material->srchb }}"  required minlength="3"/>
+                            @if($errors->has('srchb'))<div class="text-red-500 text-xs">{{ $errors->first('srchb') }}</div>@endif
+
+
+
 
 
                             {{-- <x-label for="" value="Brand"/>
@@ -65,7 +80,7 @@
                             <x-input class="" type="text"   value="{{ $material->hscodes->hscode }}" disabled />
                                 <input type="hidden" name="hscode_id" value="{{ $material->hscode_id }}"> --}}
 
-                                <div >
+                                {{-- <div >
                                     <x-label for="Qty(Kg)" value="Qty(Kg)"/>
                                     <x-input id="qtykg" class="bg-indigo-100" type="text" name="qtykg" :value="old('qtykg')"   />
 
@@ -87,7 +102,7 @@
 
                                     <x-label for="Cost(feet)" value="Cost(feet)"/>
                                     <x-input id="qtyfeetrt" class="bg-indigo-100" type="text" name="qtyfeetrt" :value="old('qtyfeetrt')"   />
-                                </div>
+                                </div> --}}
 
                             <input class="checked:bg-blue-500 checked:border-blue-500 focus:outline-none" type="checkbox" name="status"
                             @if ($material->status == 1)

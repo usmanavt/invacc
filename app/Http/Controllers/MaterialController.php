@@ -46,8 +46,8 @@ class MaterialController extends Controller
         $dir = $request->sort[0]["dir"];         //  Nested Array
         //  With Tables
         $materials = Material::where(function ($query) use ($search){
-            $query->where('title','LIKE','%' . $search . '%')
-            ->orWhere('dimension','LIKE','%' . $search . '%');
+            $query->where('srchb','LIKE','%' . $search . '%');
+            // ->orWhere('dimension','LIKE','%' . $search . '%');
         })
         ->orderBy($field,$dir)
         ->paginate((int) $size);
@@ -72,6 +72,8 @@ class MaterialController extends Controller
         //   dd($request->all());
         $request->validate([
             //  'title'=>'required|min:3|unique:materials'
+            'srchi'=>'required|unique:materials',
+            'srchb'=>'required|unique:materials'
         ]);
 
         $title = $request->title;
@@ -93,28 +95,28 @@ class MaterialController extends Controller
                 $material->nick = $request->nick;
                 $material->category_id = $request->category_id;
                 $material->dimension_id = $request->dimension_id;
-                $material->source_id = 0;
+                $material->source_id = $request->source_id;
+                $material->source = $request->source;
                 $material->sku_id = $request->sku_id;
+                $material->sku = $request->sku;
                 $material->brand_id = 0;
-
                 $material->category = $request->category;
                 $material->dimension = $request->dimension;
-                // $material->source = $request->source;
-                $material->sku = $request->sku;
+                $material->srchi = $request->srchi;
+                $material->srchb = $request->srchb;
+
+
                 // $material->brand = $request->brand;
 
-                $material->qtykg = $request->qtykg;
-                $material->qtykgrt = $request->qtykgrt;
-
-                $material->qtypcs = $request->qtypcs;
-                $material->qtypcsrt = $request->qtypcsrt;
-
-                $material->qtyfeet = $request->qtyfeet;
-                $material->qtyfeetrt = $request->qtyfeetrt;
-
-                $material->balkg = $request->qtykg;
-                $material->balpcs = $request->qtypcs;
-                $material->balfeet = $request->qtyfeet;
+                // $material->qtykg = $request->qtykg;
+                // $material->qtykgrt = $request->qtykgrt;
+                // $material->qtypcs = $request->qtypcs;
+                // $material->qtypcsrt = $request->qtypcsrt;
+                // $material->qtyfeet = $request->qtyfeet;
+                // $material->qtyfeetrt = $request->qtyfeetrt;
+                // $material->balkg = $request->qtykg;
+                // $material->balpcs = $request->qtypcs;
+                // $material->balfeet = $request->qtyfeet;
 
                 $material->save();
             }
@@ -183,6 +185,7 @@ class MaterialController extends Controller
         // dd($request->all());
         $request->validate([
             // 'title'=>'required|unique:materials,title,'.$material->id
+            // 'srchb' => 'required|size:10|string'
         ]);
         DB::beginTransaction();
         try {
@@ -190,29 +193,27 @@ class MaterialController extends Controller
             $material->nick = $request->nick;
             $material->category_id = $request->category_id;
             $material->dimension_id = $request->dimension_id;
-            // $material->source_id = $request->source_id;
+            $material->source_id = $request->source_id;
             $material->sku_id = $request->sku_id;
             // $material->brand_id = $request->brand_id;
             // $material->hscode_id = $request->hscode_id;
             $material->category = $request->category;
             $material->dimension = $request->dimension;
-            // $material->source = $request->source;
+            $material->source = $request->source;
             $material->sku = $request->sku;
+            $material->srchi = $request->srchi;
+            $material->srchb = $request->srchb;
+
             // $material->brand = $request->brand;
-
-            $material->qtykg = $request->qtykg;
-            $material->qtykgrt = $request->qtykgrt;
-
-            $material->qtypcs = $request->qtypcs;
-            $material->qtypcsrt = $request->qtypcsrt;
-
-            $material->qtyfeet = $request->qtyfeet;
-            $material->qtyfeetrt = $request->qtyfeetrt;
-
-
-            $material->balkg = $request->qtykg;
-            $material->balpcs = $request->qtypcs;
-            $material->balfeet = $request->qtyfeet;
+            // $material->qtykg = $request->qtykg;
+            // $material->qtykgrt = $request->qtykgrt;
+            // $material->qtypcs = $request->qtypcs;
+            // $material->qtypcsrt = $request->qtypcsrt;
+            // $material->qtyfeet = $request->qtyfeet;
+            // $material->qtyfeetrt = $request->qtyfeetrt;
+            // $material->balkg = $request->qtykg;
+            // $material->balpcs = $request->qtypcs;
+            // $material->balfeet = $request->qtyfeet;
 
 
             if($request->has('status'))

@@ -6,7 +6,7 @@
 
     <x-slot name="header">
         <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-            Categories
+            Items
         </h2>
     </x-slot>
 
@@ -21,7 +21,7 @@
                     <div class="flex flex-col justify-start items-center border rounded-md px-2">
                         <form action="{{ route('categories.store') }}" method="post" >
                             @csrf
-                            <p class="font-semibold pb-6">Create New Category</p>
+                            <p class="font-semibold pb-6">Create New Items</p>
                             <x-label for="title" value="Title"/>
                             <x-input id="title" type="text" name="title"  required minlength="3" :value="old('title')"/>
                             @if($errors->has('title'))<div class="text-red-500 text-xs">{{ $errors->first('title') }}</div>@endif

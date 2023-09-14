@@ -31,7 +31,8 @@
                         </x-slot>
 
                         <x-slot name="content">
-                            <x-dropdown-link href="{{ route('categories.index') }}">Categories</x-dropdown-link>
+                            <x-dropdown-link href="{{ route('sources.index') }}">Category</x-dropdown-link>
+                            <x-dropdown-link href="{{ route('categories.index') }}">Item</x-dropdown-link>
                             <x-dropdown-link href="{{ route('dimensions.index') }}">Dimensions</x-dropdown-link>
                             <x-dropdown-link href="{{ route('brands.index') }}">Brands</x-dropdown-link>
                             <x-dropdown-link href="{{ route('suppliers.index') }}">Suppliers</x-dropdown-link>
