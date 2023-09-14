@@ -51,6 +51,8 @@ class MaterialController extends Controller
             ->orWhere('category','LIKE','%' . $search . '%')
             ->orWhere('brand','LIKE','%' . $search . '%')
             ->orWhere('sku','LIKE','%' . $search . '%')
+            ->orWhere('srchi','LIKE','%' . $search . '%')
+            ->orWhere('srchb','LIKE','%' . $search . '%')
             ->orWhere('nick','LIKE','%' . $search . '%');
         })
         ->orderBy($field,$dir)
