@@ -78,19 +78,19 @@
                                 <x-input id="nick" class="bg-indigo-100" type="text" name="nick" :value="old('nick')"  />
                                 @if($errors->has('nick'))<div class="text-red-500 text-xs">{{ $errors->first('nick') }}</div>@endif
 
-                                 <h1 style="color: blue"> TEXT BOXES FOR SEARCHING  </h1>
+                                 {{-- <h1 style="color: blue"> TEXT BOXES FOR SEARCHING  </h1>
                                 <x-label for="srchi" value="Searc Text For Imported Or Local Items"/>
                                 <x-input id="srchi" class="bg-indigo-100 w-96" type="text" maxlength='15' name="srchi"  value="{{request()->input('srchi')}}"   />
-                                @if($errors->has('srchi'))<div class="text-red-500 text-xs">{{ $errors->first('srchi') }}</div>@endif
+                                @if($errors->has('srchi'))<div class="text-red-500 text-xs">{{ $errors->first('srchi') }}</div>@endif --}}
 
                                 {{-- <x-label for="srchl" value="Searc Text For Local Items"/>
                                 <x-input id="srchl" class="bg-indigo-100 w-96" type="text" name="srchl"  value="{{request()->input('srchl')}}"   />
                                 @if($errors->has('srchl'))<div class="text-red-500 text-xs">{{ $errors->first('srchl') }}</div>@endif --}}
 
-                                <x-label for="srchb" value="Searc Text For Both Items"/>
+                                {{-- <x-label for="srchb" value="Searc Text For Both Items"/>
                                 <x-input id="srchb"  class="bg-indigo-100 w-96" type="text" maxlength='15' name="srchb"  value="{{request()->input('srchb')}}"   />
                                 @if($errors->has('srchb'))<div class="text-red-500 text-xs">{{ $errors->first('srchb') }}</div>@endif
-
+ --}}
 
 
 
@@ -206,7 +206,7 @@
             {title:"Item", field:"category" ,  responsive:0},
             {title:"Dimension", field:"dimension" ,  responsive:0},
             {title:"Complete Name", field:"title" , visible:true ,headerSortStartingDir:"asc" , responsive:0},
-            {title:"Searching", field:"srchb" , headerSortStartingDir:"asc" , responsive:0},
+            // {title:"Searching", field:"srchb" , headerSortStartingDir:"asc" , responsive:0},
 
             //  {title:"Nick", field:"nick" , visible:true , responsive:0},
 

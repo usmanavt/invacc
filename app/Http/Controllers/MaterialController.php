@@ -46,8 +46,12 @@ class MaterialController extends Controller
         $dir = $request->sort[0]["dir"];         //  Nested Array
         //  With Tables
         $materials = Material::where(function ($query) use ($search){
-            $query->where('srchb','LIKE','%' . $search . '%');
-            // ->orWhere('dimension','LIKE','%' . $search . '%');
+            $query->where('title','LIKE','%' . $search . '%')
+            ->orWhere('dimension','LIKE','%' . $search . '%')
+            ->orWhere('category','LIKE','%' . $search . '%')
+            ->orWhere('brand','LIKE','%' . $search . '%')
+            ->orWhere('sku','LIKE','%' . $search . '%')
+            ->orWhere('nick','LIKE','%' . $search . '%');
         })
         ->orderBy($field,$dir)
         ->paginate((int) $size);
