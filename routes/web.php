@@ -88,6 +88,8 @@ Route::get('funcsaltxinvs',[SaleRptController::class, 'funcsaltxinvs'])->name('s
 
 // Material Stock Reports
  Route::get('stockledgers',[StockLedgerController::class, 'index'])->name('stockledgers.index');
+ Route::get('funcstkos',[StockLedgerController::class, 'funcstkos'])->name('stockledgers.funcstkos');
+
  Route::post('stockledgers/fetch',[StockLedgerController::class, 'fetch'])->name('stockledgers.fetch');
 
 

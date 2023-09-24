@@ -160,10 +160,8 @@
                     columns:[
             {title: "Pcs",field: "tpcs"},
             {title: "Weight",field: "tswt"},
-            {title: "Amount($)",field: "tval"}]},
-
-            {title: "Total LC Amt",field: "full_total",formatterParams:{thousand:",",precision:0}},
-
+            {title: "Amount($)",field: "tval"},
+            {title: "Amount(Pkr)",field: "tvalpkr"}]},
             {
                 title:'Duty Status', headerHozAlign:"center",
                     columns:[
@@ -173,6 +171,7 @@
             {title: "VarDtyVal",field: "dutybal"},
             {title: "PendWt",field: "wtbal"},
         ]},
+        {title: "Total LC Amt",field: "full_total",formatterParams:{thousand:",",precision:0}},
 
 
 

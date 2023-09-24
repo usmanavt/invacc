@@ -46,14 +46,14 @@ class MaterialController extends Controller
         $dir = $request->sort[0]["dir"];         //  Nested Array
         //  With Tables
         $materials = Material::where(function ($query) use ($search){
-            $query->where('title','LIKE','%' . $search . '%')
-            ->orWhere('dimension','LIKE','%' . $search . '%')
-            ->orWhere('category','LIKE','%' . $search . '%')
-            ->orWhere('brand','LIKE','%' . $search . '%')
-            ->orWhere('sku','LIKE','%' . $search . '%')
-            ->orWhere('srchi','LIKE','%' . $search . '%')
-            ->orWhere('srchb','LIKE','%' . $search . '%')
-            ->orWhere('nick','LIKE','%' . $search . '%');
+            $query->where('srchb','LIKE','%' . $search . '%');
+            // ->orWhere('dimension','LIKE','%' . $search . '%')
+            // ->orWhere('category','LIKE','%' . $search . '%')
+            // ->orWhere('brand','LIKE','%' . $search . '%')
+            // ->orWhere('sku','LIKE','%' . $search . '%')
+            // ->orWhere('srchi','LIKE','%' . $search . '%')
+            // ->orWhere('srchb','LIKE','%' . $search . '%')
+            // ->orWhere('nick','LIKE','%' . $search . '%');
         })
         ->orderBy($field,$dir)
         ->paginate((int) $size);
@@ -78,8 +78,8 @@ class MaterialController extends Controller
         //   dd($request->all());
         $request->validate([
             //  'title'=>'required|min:3|unique:materials'
-            'srchi'=>'required|unique:materials',
-            'srchb'=>'required|unique:materials'
+            // 'srchi'=>'required|unique:materials',
+            // 'srchb'=>'required|unique:materials'
         ]);
 
         $title = $request->title;
@@ -97,6 +97,7 @@ class MaterialController extends Controller
         try {
             {
                 $material = new Material();
+                // dd($request->title);
                 $material->title = $request->title;
                 $material->nick = $request->nick;
                 $material->category_id = $request->category_id;
@@ -110,7 +111,7 @@ class MaterialController extends Controller
                 $material->dimension = $request->dimension;
                 $material->srchi = $request->srchi;
                 $material->srchb = $request->srchb;
-
+                $material->save();
 
                 // $material->brand = $request->brand;
 
@@ -124,7 +125,7 @@ class MaterialController extends Controller
                 // $material->balpcs = $request->qtypcs;
                 // $material->balfeet = $request->qtyfeet;
 
-                $material->save();
+
             }
 
             // DB::update(DB::raw("

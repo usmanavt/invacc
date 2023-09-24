@@ -38,13 +38,9 @@
                                     <label for="">SMLS All Unit(For Godown) </label>
                                 </div>
 
-
-
-
-
                                 <div>
-                                    <input type="radio" name="report_type" value="salinvs" required onchange="checkReportType('salinvs')">
-                                    <label for="">Stock Movement Ledger Individual</label>
+                                    <input type="radio" name="report_type" value="gwsmu" required onchange="checkReportType('gwsmu')">
+                                    <label for="">Godown Wise Stock(Master Unit)</label>
                                 </div>
 
                                 {{-- <div>
@@ -53,9 +49,17 @@
                                 </div> --}}
 
                                 <div>
-                                    <input type="radio" name="report_type" value="loccominvs" required onchange="checkReportType('loccominvs')">
-                                    <label for="">Stock Movement Valuation Summary </label>
+                                    <input type="radio" name="report_type" value="gwsau" required onchange="checkReportType('gwsau')">
+                                    <label for="">Godown Wise Stock(All Unit) </label>
                                 </div>
+
+                                <div>
+                                    <input type="radio" name="report_type" value="smsind" required onchange="checkReportType('smsind')">
+                                    <label for="">SMSL Individual Master Unit (For Office) </label>
+                                </div>
+
+
+
                                 {{-- <div>
                                     <input type="radio" name="report_type" value="purret" required onchange="checkReportType('purret')">
                                     <label for="">Sale History </label>
@@ -119,12 +123,36 @@
                                 </div>
 
                                 <fieldset class="border px-4 py-2 rounded w-full">
-                                    <legend>Category Selection</legend>
+                                    <legend>Item Group Selection</legend>
                                     <div class="flex justify-between py-1">
                                         <select  name="head_id" id="head_id" required class="w-full" disabled onchange="headSelected()">
                                         </select>
                                     </div>
                                 </fieldset>
+
+                                <fieldset class="border px-4 py-2 rounded w-full">
+                                    <legend>Category Selection</legend>
+                                    <div class="flex justify-between py-1">
+                                        <select  name="source_id" id="source_id" required class="w-full" disabled onchange="headSelected()">
+                                        </select>
+                                    </div>
+                                </fieldset>
+
+                                <fieldset class="border px-4 py-2 rounded w-full">
+                                    <legend>Godown Selection</legend>
+                                    <div class="flex justify-between py-1">
+                                        <select  name="gc" id="gc" required class="w-full" disabled onchange="headSelected()">
+                                        </select>
+                                    </div>
+                                </fieldset>
+
+
+
+
+
+
+                                {{-- <input type="text" title="Search List Text" class="col-span-2" id="srch" name="srch"  onchange="headSelected()" > --}}
+
 
                                 <fieldset class="border px-4 py-2 rounded w-full">
                                     <legend>Inoices Selection <span class="text-xs text-mute">shift & click to select multiple items</span></legend>
@@ -197,6 +225,9 @@
 @push('scripts')
 <script>
     const heads = @json($heads);
+    const sources = @json($source);
+    const locations = @json($location);
+
     const subheads = @json($subheads);
     const subheadsci = @json($subheadsci);
     const subheadsciloc = @json($subheadsciloc);
@@ -204,128 +235,249 @@
     const subheadspend = @json($subheadspend);
     const vchrheads = @json($vchrheads);
 
+    const funcstkos = @json(route('stockledgers.funcstkos'));
 
+
+    // const head1 = document.getElementById('source_id')
     const head = document.getElementById('head_id')
+    const source = document.getElementById('source_id')
+    const locationss = document.getElementById('gc')
     const subhead = document.getElementById('subhead_id')
     const fromdate = document.getElementById('fromdate')
     const todate = document.getElementById('todate')
     let subheadavailable = false
     let rptType = ''
     let list;
-    // console.info(heads)
+    //  console.info(head)
         // console.info(subheadsci)
     // console.info(vchrcats)
     const headSelected = ()=>{
           const value = head.value
-        //  const value = 6
+          const value1 = source.value
+          //  const value = 6
         subhead.options.length = 0 // Reset List
         //  console.info(rptType)
+
+
         switch (rptType){
             case 'dlvrychln' :
 
-                list = subheads.filter( l => l.MHEAD === Number(value)  )
-                if(list.length > 0)
-                {
-                    list.forEach(e => {
-                        addSelectElement(subhead,e.Subhead,e.title)
-                    });
-                    subhead.setAttribute('required','')
-                    subhead.removeAttribute('disabled','')
-                }else{
-                    subhead.removeAttribute('required','')
-                    subhead.setAttribute('disabled','')
-                }
+                fetch(funcstkos + `?head_id=${value} &source_id=${value1}`,{
+                    method:"GET",
+                    headers: { 'Accept':'application/json','Content-type':'application/json'},
+                    })
+                    .then(response => response.json())
+                    .then( data => {
+                        if(data.length > 0)
+                        {
+
+                            let a = 0;
+                            data.forEach(e => {
+                                a += 1;
+                                addSelectElement(subhead,e.Subhead,a + ' - ' + e.title)
+                            });
+                            subhead.setAttribute('required','')
+                            subhead.removeAttribute('disabled','')
+                        }else{
+                            subhead.removeAttribute('required','')
+                            subhead.setAttribute('disabled','')
+                        }
+                    })
+                    .catch(error => console.error(error))
                 break;
+
+// FOR CONTRACT FILL
+const getSubheadVoucherData = async (value) =>{
+        let data = await fetch(funcstkos + `?head_id=${value} &source_id=${value1} &srchb like ${srch} `,{
+            method:"GET",
+            headers: { 'Accept':'application/json','Content-type':'application/json'},
+            })
+            .then(response => response.json())
+            .then( data => { return data })
+            .catch(error => console.error(error))
+    }
+    const getStkos =async  (value) => {
+        const Stkos = await getSubheadVoucherData(value)
+        return Stkos
+    }
 
 
             case 'dlvrychlngd':
+            fetch(funcstkos + `?head_id=${value} &source_id=${value1}`,{
+                    method:"GET",
+                    headers: { 'Accept':'application/json','Content-type':'application/json'},
+                    })
+                    .then(response => response.json())
+                    .then( data => {
+                        if(data.length > 0)
+                        {
 
-                list = subheads.filter( l => l.MHEAD === Number(value)  )
-                if(list.length > 0)
-                {
-                    list.forEach(e => {
-                        addSelectElement(subhead,e.Subhead,e.title)
-                    });
-                    subhead.setAttribute('required','')
-                    subhead.removeAttribute('disabled','')
-                }else{
-                    subhead.removeAttribute('required','')
-                    subhead.setAttribute('disabled','')
-                }
+                            let a = 0;
+                            data.forEach(e => {
+
+                                a += 1;
+                                addSelectElement(subhead,e.Subhead,a + ' - ' + e.title)
+                            });
+                            subhead.setAttribute('required','')
+                            subhead.removeAttribute('disabled','')
+                        }else{
+                            subhead.removeAttribute('required','')
+                            subhead.setAttribute('disabled','')
+                        }
+                    })
+                    .catch(error => console.error(error))
                 break;
+
+// FOR CONTRACT FILL
+const getSubheadVoucherData1 = async (value) =>{
+        let data = await fetch(funcstkos + `?head_id=${value} &source_id=${value1} &srchb like ${srch} `,{
+            method:"GET",
+            headers: { 'Accept':'application/json','Content-type':'application/json'},
+            })
+            .then(response => response.json())
+            .then( data => { return data })
+            .catch(error => console.error(error))
+    }
+    const getStkos1 =async  (value) => {
+        const Stkos1 = await getSubheadVoucherData1(value)
+        return Stkos1
+    }
 
 
                 case 'sraluntos':
+                fetch(funcstkos + `?head_id=${value} &source_id=${value1}`,{
+                    method:"GET",
+                    headers: { 'Accept':'application/json','Content-type':'application/json'},
+                    })
+                    .then(response => response.json())
+                    .then( data => {
+                        if(data.length > 0)
+                        {
 
-                list = subheads.filter( l => l.MHEAD === Number(value)  )
-                if(list.length > 0)
-                {
-                    list.forEach(e => {
-                        addSelectElement(subhead,e.Subhead,e.title)
-                    });
-                    subhead.setAttribute('required','')
-                    subhead.removeAttribute('disabled','')
-                }else{
-                    subhead.removeAttribute('required','')
-                    subhead.setAttribute('disabled','')
-                }
+                            let a = 0;
+                            data.forEach(e => {
+
+                                a += 1;
+                                addSelectElement(subhead,e.Subhead,a + ' - ' + e.title)
+                            });
+                            subhead.setAttribute('required','')
+                            subhead.removeAttribute('disabled','')
+                        }else{
+                            subhead.removeAttribute('required','')
+                            subhead.setAttribute('disabled','')
+                        }
+                    })
+                    .catch(error => console.error(error))
                 break;
 
-
+// FOR CONTRACT FILL
+const getSubheadVoucherData2 = async (value) =>{
+        let data = await fetch(funcstkos + `?head_id=${value} &source_id=${value1} &srchb like ${srch} `,{
+            method:"GET",
+            headers: { 'Accept':'application/json','Content-type':'application/json'},
+            })
+            .then(response => response.json())
+            .then( data => { return data })
+            .catch(error => console.error(error))
+    }
+    const getStkos2 =async  (value) => {
+        const Stkos2 = await getSubheadVoucherData2(value)
+        return Stkos2
+    }
 
 
 
 
 
                 // switch (rptType){
-            case 'saltxinvs':
-                list = subheadsci.filter( l => l.MHEAD === Number(value)  )
-                if(list.length > 0)
-                {
-                    list.forEach(e => {
-                        addSelectElement(subhead,e.Subhead,e.title)
-                    });
-                    subhead.setAttribute('required','')
-                    subhead.removeAttribute('disabled','')
-                }else{
-                    subhead.removeAttribute('required','')
-                    subhead.setAttribute('disabled','')
-                }
+            // case 'saltxinvs':
+
+            case 'sraluntos':
+                fetch(funcstkos + `?head_id=${value} &source_id=${value1}`,{
+                    method:"GET",
+                    headers: { 'Accept':'application/json','Content-type':'application/json'},
+                    })
+                    .then(response => response.json())
+                    .then( data => {
+                        if(data.length > 0)
+                        {
+
+                            let a = 0;
+                            data.forEach(e => {
+
+                                a += 1;
+                                addSelectElement(subhead,e.Subhead,a + ' - ' + e.title)
+                            });
+                            subhead.setAttribute('required','')
+                            subhead.removeAttribute('disabled','')
+                        }else{
+                            subhead.removeAttribute('required','')
+                            subhead.setAttribute('disabled','')
+                        }
+                    })
+                    .catch(error => console.error(error))
                 break;
 
-                case 'loccominvs':
-                list = subheadsciloc.filter( l => l.MHEAD === Number(value)  )
-                if(list.length > 0)
-                {
-                    list.forEach(e => {
-                        addSelectElement(subhead,e.Subhead,e.title)
-                    });
-                    subhead.setAttribute('required','')
-                    subhead.removeAttribute('disabled','')
-                }else{
-                    subhead.removeAttribute('required','')
-                    subhead.setAttribute('disabled','')
-                }
+// FOR CONTRACT FILL
+const getSubheadVoucherData3 = async (value) =>{
+        let data = await fetch(funcstkos + `?head_id=${value} &source_id=${value1} &srchb like ${srch} `,{
+            method:"GET",
+            headers: { 'Accept':'application/json','Content-type':'application/json'},
+            })
+            .then(response => response.json())
+            .then( data => { return data })
+            .catch(error => console.error(error))
+    }
+    const getStkos3 =async  (value) => {
+        const Stkos3 = await getSubheadVoucherData3(value)
+        return Stkos3
+    }
+
+    case 'gwsmu':
+                fetch(funcstkos + `?head_id=${value} &source_id=${value1}`,{
+                    method:"GET",
+                    headers: { 'Accept':'application/json','Content-type':'application/json'},
+                    })
+                    .then(response => response.json())
+                    .then( data => {
+                        if(data.length > 0)
+                        {
+
+                            let a = 0;
+                            data.forEach(e => {
+
+                                a += 1;
+                                addSelectElement(subhead,e.Subhead,a + ' - ' + e.title)
+                            });
+                            subhead.setAttribute('required','')
+                            subhead.removeAttribute('disabled','')
+                        }else{
+                            subhead.removeAttribute('required','')
+                            subhead.setAttribute('disabled','')
+                        }
+                    })
+                    .catch(error => console.error(error))
                 break;
 
-                case 'salinvs':
-                // list = subheads.filter( l => l.MHEAD === value  )
+// FOR CONTRACT FILL
+const getSubheadVoucherData4 = async (value) =>{
+        let data = await fetch(funcstkos + `?head_id=${value} &source_id=${value1} &srchb like ${srch} `,{
+            method:"GET",
+            headers: { 'Accept':'application/json','Content-type':'application/json'},
+            })
+            .then(response => response.json())
+            .then( data => { return data })
+            .catch(error => console.error(error))
+    }
+    const getStkos4 =async  (value) => {
+        const Stkos4 = await getSubheadVoucherData4(value)
+        return Stkos4
+    }
 
-                list = subheads.filter( l => l.MHEAD === Number(value)  )
-                // console.info(value)
-                if(list.length > 0)
-                {
-                    list.forEach(e => {
-                        // addSelectElement(subhead,e.Subhead,e.title)
-                        addSelectElement(subhead,e.Subhead,e.title)
-                    });
-                    subhead.setAttribute('required','')
-                    subhead.removeAttribute('disabled','')
-                }else{
-                    subhead.removeAttribute('required','')
-                    subhead.setAttribute('disabled','')
-                }
-                break;
+
+
+
+
 
 
             case 'vchr':m
@@ -395,19 +547,6 @@
             case 'salinvs':
                 //  Show Head
                  rptType = 'salinvs'
-                // head.removeAttribute('required','')
-                // head.disabled = true
-                // head.length = 0
-                // subhead.setAttribute('required','')
-                // subhead.disabled = false
-                // subhead.length = 0
-                // subheadavailable = false
-                // glheads.forEach(e => {
-                //     // console.info(e)
-                //     addSelectElement(subhead,e.id,e.title)
-                // });
-                // // Show subheads
-                // break;
 
                 head.setAttribute('required','')
                 head.disabled = false
@@ -428,30 +567,90 @@
                 // Show Head
                 rptType = 'dlvrychln'
                 head.setAttribute('required','')
+                source.setAttribute('required','')
                 head.disabled = false
+                source.disabled=false
                 head.length = 0
+                source.length=0
                 subhead.removeAttribute('required')
                 subhead.disabled = true
                 subhead.length = 0
+                // For Second Category
                 heads.forEach(e => {
                     addSelectElement(head,e.id,e.title)
                 });
+
+
+                // For First Category
+                sources.forEach(e => {
+                    addSelectElement(source,e.id,e.title)
+                });
+
+                // locations.forEach(e => {
+                //     addSelectElement(locationss,e.id,e.title)
+                // });
+
+
+                // sourceSelected()
                 headSelected()
                 break;
 
-                case 'dlvrychlngd':
+
+                case 'gwsmu':
+                // Show Head
+                rptType = 'gwsmu'
+                locationss.setAttribute('required','')
+                locationss.disabled=false
+                locationss.length=0
+                locations.forEach(e => {
+                    addSelectElement(locationss,e.id,e.title)
+                });
+
+
+                // sourceSelected()
+                // headSelected()
+                break;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+;                case 'dlvrychlngd':
                 // Show Head
                 rptType = 'dlvrychlngd'
                 head.setAttribute('required','')
+                source.setAttribute('required','')
+
                 head.disabled = false
+                source.disabled=false
+
                 head.length = 0
+                source.length=0
+
                 subhead.removeAttribute('required')
                 subhead.disabled = true
                 subhead.length = 0
                 heads.forEach(e => {
                     addSelectElement(head,e.id,e.title)
                 });
+
+                // For First Category
+                sources.forEach(e => {
+                    addSelectElement(source,e.id,e.title)
+                });
+
                 headSelected()
+                // sourceSelected()
                 break;
 
                 case 'sraluntos':

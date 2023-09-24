@@ -325,6 +325,7 @@
                         qtykg :           obj.qtykg ,
                         qtypcs :           obj.qtypcs ,
                         qtyfeet :           obj.qtyfeet ,
+
                         balqty :            obj.balqty,
                         feedqty :            obj.feedqty,
 
@@ -336,8 +337,9 @@
                         wtper:              obj.wtper,
                         pcper:              obj.pcper,
                         feetper:            obj.feetper,
-
-
+                        salcostkg:          obj.salcostkg,
+                        salcostpcs:         obj.salcostpcs,
+                        salcostfeet:         obj.salcostfeet,
 
                         price   :           obj.price,
                         saleamnt:           obj.saleamnt,
@@ -571,7 +573,6 @@ var updateValues = (cell) => {
                 {title:"Id",           field:"id", visible:false},
                 {title:"Material Name",     field:"material_title",responsive:0, cssClass:"bg-gray-200 font-semibold"},
                 {title:"Material Size",    field:"dimension",cssClass:"bg-gray-200 font-semibold",responsive:0},
-                // ,frozen:true, headerMenu:headerMenu,},
                 {title:"UOM",         field:"sku",responsive:0, hozAlign:"center", cssClass:"bg-gray-200 font-semibold"},
                 {title:"Unitid",       field:"sku_id",visible:false},
                 // {title:"contract_id",  field:"contract_id",visible:false},
@@ -654,12 +655,12 @@ var updateValues = (cell) => {
                     title:'Item Description', headerHozAlign:"center",
                     columns:[
 
-                {title:"Location", field:"location" ,editor:"list" , editorParams:   {
-                        values:newList,
-                        // cssClass:"bg-green-200 font-semibold",
-                        validator:["required"]
-                    }
-                },
+                // {title:"Location", field:"location" ,editor:"list" , editorParams:   {
+                //         values:newList,
+                //         // cssClass:"bg-green-200 font-semibold",
+                //         validator:["required"]
+                //     }
+                // },
 
                 {   title:"Replace Name",headerHozAlign :'center',
                             field:"repname",
@@ -761,11 +762,11 @@ var updateValues = (cell) => {
             for (let index = 0; index < dynamicTableData.length; index++) {
                 const element = dynamicTableData[index];
 
-                if(element.location === undefined)
-                {
-                    showSnackbar("Location must be Enter","info");
-                    return;
-                }
+                // if(element.location === undefined)
+                // {
+                //     showSnackbar("Location must be Enter","info");
+                //     return;
+                // }
 
                 // if (element.sku_id==1)
                     // {

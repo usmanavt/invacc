@@ -1,9 +1,9 @@
 <x-app-layout>
 
     @push('styles')
-    {{-- <link rel="stylesheet" href="{{ asset('css/tabulator_simple.min.css') }}"> --}}
-    <link href="https://unpkg.com/tabulator-tables/dist/css/tabulator.min.css" rel="stylesheet">
-    <script type="text/javascript" src="https://unpkg.com/tabulator-tables/dist/js/tabulator.min.js"></script>
+    <link rel="stylesheet" href="{{ asset('css/tabulator_simple.min.css') }}">
+    {{-- <link href="https://unpkg.com/tabulator-tables/dist/css/tabulator.min.css" rel="stylesheet"> --}}
+    {{-- <script type="text/javascript" src="https://unpkg.com/tabulator-tables/dist/js/tabulator.min.js"></script> --}}
 
     @endpush
 
@@ -558,8 +558,8 @@ var updateValues = (cell) => {
                             formatter:"money",cellEdited: updateValues,validator:["required","numeric"],cssClass:"bg-gray-200 font-semibold",formatterParams:{thousand:",",precision:0}, bottomCalcParams:{precision:2}},
                             ]},
 
-                {title:"Replace Description",field:"repname",       editor:true},
-                {title:"Brand",              field:"brand",     editor:true},
+                {title:"Replace Description",field:"repname",responsive:0, editor:true},
+                {title:"Brand",              field:"brand",responsive:0,     editor:true},
                 {   title:"length",headerHozAlign :'right',hozAlign:"right",cellEdited: updateValues,editor:true,responsive:0,field:"length",bottomCalc:"sum"},
 
 

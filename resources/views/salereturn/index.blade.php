@@ -145,21 +145,38 @@
                 })}
             },
       //      Master Data
+
+
+      {
+            title:'Data Description', headerHozAlign:"center",
+            columns:[
             {title: "id",field: "id"},
-            // {title: "Dated",field: "created_at"},
             {title: "Customer",field: "customer.title"},
-            // {title: "P.O No",field: "pono"},
             {title: "Return Date",field: "rdate"},
             {title: "D.C No",field: "dcno"},
             {title: "G.P No",field: "gpno"},
             {title: "Bill No",field: "billno"},
-            {title: "Delivery Date",field: "dcdate"},
+            {title: "Delivery Date",field: "dcdate"}
+      ]},
 
-            {title: "WO/GST",field: "rcvblamount"},
-            {title: "W/GST",field: "totrcvbamount"},
-            // {title: "Pending",field: "ordrbal"},
-            // {title: "Total Delivery Against Sale Order",field: "delivered"},
-            // {title: "Sale Order Balance",field: "delivered"},
+
+      {
+            title:'Invoice Level Summary', headerHozAlign:"center",
+            columns:[
+            {title: "Weight",field: "tsrwt"},
+            {title: "Pcs",field: "tsrpcs"},
+            {title: "Feet",field: "tsrfeet"},
+            {title: "Amount",field: "rcvblamount"}
+      ]},
+
+      {
+            title:'Pending Data Against Godown Entry', headerHozAlign:"center",
+            columns:[
+            {title: "Weight",field: "psrwt"},
+            {title: "Pcs",field: "psrpcs"},
+            {title: "Feet",field: "psrfeet"},
+      ]},
+
 
 
             // {title: "Rcvbl Amount",field: "rcvblamount"},

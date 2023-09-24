@@ -52,6 +52,28 @@ class ContractController extends Controller
     }
 
 
+    // public function matMaster(Request $request)
+    // {
+    //     $search = $request->search;
+    //     $size = $request->size;
+    //     $field = $request->sort[0]["field"];     //  Nested Array
+    //     $dir = $request->sort[0]["dir"];         //  Nested Array
+    //     //  With Tables
+    //     $materials = Material::where(function ($query) use ($search){
+    //         $query->where('title','LIKE','%' . $search . '%')
+    //         ->orWhere('dimension','LIKE','%' . $search . '%')
+    //         ->orWhere('category','LIKE','%' . $search . '%')
+    //         ->orWhere('brand','LIKE','%' . $search . '%')
+    //         ->orWhere('sku','LIKE','%' . $search . '%')
+    //         ->orWhere('srchi','LIKE','%' . $search . '%')
+    //         ->orWhere('srchb','LIKE','%' . $search . '%')
+    //         ->orWhere('nick','LIKE','%' . $search . '%');
+    //     })
+    //     ->orderBy($field,$dir)
+    //     ->paginate((int) $size);
+    //     return $materials;
+    // }
+
     public function matMaster(Request $request)
     {
         $search = $request->search;
@@ -60,19 +82,14 @@ class ContractController extends Controller
         $dir = $request->sort[0]["dir"];         //  Nested Array
         //  With Tables
         $materials = Material::where(function ($query) use ($search){
-            $query->where('title','LIKE','%' . $search . '%')
-            ->orWhere('dimension','LIKE','%' . $search . '%')
-            ->orWhere('category','LIKE','%' . $search . '%')
-            ->orWhere('brand','LIKE','%' . $search . '%')
-            ->orWhere('sku','LIKE','%' . $search . '%')
-            ->orWhere('srchi','LIKE','%' . $search . '%')
-            ->orWhere('srchb','LIKE','%' . $search . '%')
-            ->orWhere('nick','LIKE','%' . $search . '%');
+            $query->where('source_id','=',2)
+            ->where('srchi','LIKE','%' . $search. '%');
         })
         ->orderBy($field,$dir)
         ->paginate((int) $size);
         return $materials;
     }
+
 
     // public function matMaster(Request $request)
     // {

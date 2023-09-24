@@ -250,6 +250,8 @@ class CommercialInvoiceController extends Controller
 
                 if ( $cid['perft']<>'infinity' )
                 { $c->perft = $cid['perft']; }
+                elseif ( $cid['perft']='infinity' )
+                { $c->perft = 0; }
 
 
                 $c->otherexpenses = $cid['otherexpenses'];
@@ -367,15 +369,31 @@ class CommercialInvoiceController extends Controller
                 // $pci->dutyval = $sumval3;
                 // $pci->save();
 
+            // DB::update(DB::raw("
+            // UPDATE commercial_invoices c
+            // INNER JOIN (
+            // SELECT commercial_invoice_id, SUM(pcs) as pcs,SUM(gdswt) AS swt,sum(dutygdswt) as wt,SUM(amtindollar) AS amount
+            // ,sum(total) as totduty
+            // FROM commercial_invoice_details where  commercial_invoice_id = $ci->id
+            // GROUP BY commercial_invoice_id
+            // ) x ON c.id = x.commercial_invoice_id
+            // SET c.tpcs = x.pcs,c.twt=x.wt,c.tval=x.amount,c.tduty=totduty,dutybal=totduty,c.tswt=x.swt where  commercial_invoice_id = $ci->id  "));
             DB::update(DB::raw("
             UPDATE commercial_invoices c
             INNER JOIN (
             SELECT commercial_invoice_id, SUM(pcs) as pcs,SUM(gdswt) AS swt,sum(dutygdswt) as wt,SUM(amtindollar) AS amount
-            ,sum(total) as totduty
+            ,sum(amtinpkr) as amtinpkr,sum(total) as totduty
             FROM commercial_invoice_details where  commercial_invoice_id = $ci->id
             GROUP BY commercial_invoice_id
             ) x ON c.id = x.commercial_invoice_id
-            SET c.tpcs = x.pcs,c.twt=x.wt,c.tval=x.amount,c.tduty=totduty,dutybal=totduty,c.tswt=x.swt where  commercial_invoice_id = $ci->id  "));
+            SET c.tpcs = x.pcs,c.twt=x.wt,c.tval=x.amount,c.tduty=totduty,c.tvalpkr=x.amtinpkr,c.tswt=x.swt where  commercial_invoice_id = $ci->id "));
+
+
+
+
+
+
+
 
             //****################# Transfert Contract Balance to Contracts
             DB::update(DB::raw("
@@ -556,10 +574,13 @@ class CommercialInvoiceController extends Controller
 
                 $c->perpc = $cid['perpc'];
                 $c->perkg = $cid['perkg'];
+                // dd($cid['perft']);
 
                 if ( $cid['perft']<>'infinity' )
+                // dd($cid['perft']);
                 { $c->perft = $cid['perft']; }
-                if ( $cid['perft']='infinity' )
+                elseif ( $cid['perft']='infinity' )
+                // dd(575);
                 { $c->perft = 0; }
 
 
@@ -769,11 +790,11 @@ class CommercialInvoiceController extends Controller
             UPDATE commercial_invoices c
             INNER JOIN (
             SELECT commercial_invoice_id, SUM(pcs) as pcs,SUM(gdswt) AS swt,sum(dutygdswt) as wt,SUM(amtindollar) AS amount
-            ,sum(total) as totduty
+            ,sum(amtinpkr) as amtinpkr,sum(total) as totduty
             FROM commercial_invoice_details where  commercial_invoice_id = $ci->id
             GROUP BY commercial_invoice_id
             ) x ON c.id = x.commercial_invoice_id
-            SET c.tpcs = x.pcs,c.twt=x.wt,c.tval=x.amount,c.tduty=totduty,c.tswt=x.swt where  commercial_invoice_id = $ci->id "));
+            SET c.tpcs = x.pcs,c.twt=x.wt,c.tval=x.amount,c.tduty=totduty,c.tvalpkr=x.amtinpkr,c.tswt=x.swt where  commercial_invoice_id = $ci->id "));
 
             $lstrt = Clearance::where('commercial_invoice_id',$ci->id)->first();
             if(!$lstrt) {

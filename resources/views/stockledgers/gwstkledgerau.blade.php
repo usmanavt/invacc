@@ -88,14 +88,14 @@ table{
             </tr>
             <tr>
                 <td  style="text-align: center;">
-                    <span style="font-size:2rem">Stock Movement Ledger Summary</span>
+                    <span style="font-size:2rem">Godown Wise Stock Movement Ledger Summary( For All Units )</span>
                 </td>
             </tr>
 
         <tr>
 
             <td  style="text-align: center;">
-                <span style="font-size:1.5rem;font-weight: bold">{{ $ltype }}</span>
+                <span style="font-size:1.5rem;font-weight: bold">{{ $data[0]->ldesc }}</span>
             </td>
 
         </tr>

@@ -88,14 +88,14 @@ table{
             </tr>
             <tr>
                 <td  style="text-align: center;">
-                    <span style="font-size:2rem">Stock Movement Ledger Summary</span>
+                    <span style="font-size:1.5rem">Godown Wise Stock Movement Ledger Summary( For Master Unit )</span>
                 </td>
             </tr>
 
         <tr>
 
             <td  style="text-align: center;">
-                <span style="font-size:1.5rem;font-weight: bold">{{ $ltype }}</span>
+                <span style="font-size:1.5rem;font-weight: bold">{{ $data[0]->ldesc }}</span>
             </td>
 
         </tr>
@@ -151,7 +151,7 @@ table{
             @else
 
             {{ $srno = $i - 1 }}
-            @if ($data[$i]->Itemgroupe  <> $data[$srno]->Itemgroupe )
+            @if ($data[$i]->Itemgroupe  <> $data[$srno]->Itemgroupe)
                 <tr>
                         <td colspan="9" width="100%" style="text-align:left;font-size:1.2rem;border-bottom: 2px solid rgb(211, 211, 211);"> {{ $data[$i]->Itemgroupe}} </td>
                 </tr>
