@@ -424,16 +424,6 @@ class StockLedgerController extends Controller
 
         }
 
-
-
-
-
-
-
-
-
-
-
         if($report_type === 'sraluntgs'){
 
             //   dd($request->all());
@@ -570,9 +560,11 @@ class StockLedgerController extends Controller
                 }
                 $mpdf->AddPage();
             }
-            $mpdf->Output($filename,'I');
-            dd('wait');
-            return;
+            // $mpdf->Output($filename,'I');
+            // dd('wait');
+            // return;
+                    //  CORRECTION
+        return response($mpdf->Output($filename,'I'),200)->header('Content-Type','application/pdf');
         }
 
 
@@ -638,9 +630,11 @@ class StockLedgerController extends Controller
                 }
                 $mpdf->AddPage();
             }
-            $mpdf->Output($filename,'I');
-            dd('wait');
-            return;
+            // $mpdf->Output($filename,'I');
+            // dd('wait');
+            // return;
+                    //  CORRECTION
+        return response($mpdf->Output($filename,'I'),200)->header('Content-Type','application/pdf');
         }
 
 
@@ -689,9 +683,11 @@ class StockLedgerController extends Controller
                 }
                 $mpdf->AddPage();
             }
-            $mpdf->Output($filename,'I');
-            dd('wait');
-            return;
+            // $mpdf->Output($filename,'I');
+            // dd('wait');
+            // return;
+                    //  CORRECTION
+        return response($mpdf->Output($filename,'I'),200)->header('Content-Type','application/pdf');
         }
 
 
@@ -716,7 +712,9 @@ class StockLedgerController extends Controller
         foreach($chunks as $key => $val) {
             $mpdf->WriteHTML($val);
         }
-        $mpdf->Output($filename,'I');
+        // $mpdf->Output($filename,'I');
+        //  CORRECTION
+        return response($mpdf->Output($filename,'I'),200)->header('Content-Type','application/pdf');
     }
 
 }
