@@ -158,7 +158,9 @@
                     columns:[
             {title: "id",field: "id"},
             {title: "O/Date",field: "opdate"},
+            {title: "Searching",field: "srchb"},
             {title: "Material Code",field: "material_id",visible:false },
+            {title: "Item Group",field: "category"},
             {title: "Material Title",field: "material_title"}
             ]},
 

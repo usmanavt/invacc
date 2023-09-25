@@ -168,13 +168,13 @@ table{
 
     <table class="data" cellspacing="0">
         <tbody>
-            {{-- {{ $vtotpcs = 0 }}
-            {{ $vwt = 0 }}
-            {{ $vvlues = 0 }} --}}
-            {{-- {{ $pcspbundle2 = 0 }} --}}
+
+            {{ $owt = 0 }};{{ $opcs = 0 }}; {{ $ofeet = 0 }}
+            {{ $pwt = 0 }};{{ $ppcs = 0 }}; {{ $pfeet = 0 }}
+            {{ $swt = 0 }};{{ $spcs = 0 }}; {{ $sfeet = 0 }}
+            {{ $cwt = 0 }};{{ $cpcs = 0 }}; {{ $cfeet = 0 }}
 
             @for ($i = 0 ; $i < count($data) ; $i++)
-
             @if( $i==0 )
             <tr>
                 <td colspan="20" width="100%" style="text-align: left;font-size:1.2rem;border-bottom: 2px solid rgb(211, 211, 211);"> {{ $data[$i]->Itemgroupe}} </td>
@@ -185,20 +185,18 @@ table{
         @if ($data[$i]->Itemgroupe  <> $data[$srno]->Itemgroupe)
             <tr>
                     <td colspan="20" width="100%" style="text-align:left;font-size:1.2rem;border-bottom: 2px solid rgb(211, 211, 211);"> {{ $data[$i]->Itemgroupe}} </td>
-            </tr>
+             </tr>
         @endif
         @endif
-
-
-
-
-
-
-
-
 
 
             <tr>
+
+                {{ $owt += $data[$i]->oqtykg }};{{ $opcs += $data[$i]->oqtypcs }};{{ $ofeet += $data[$i]->oqtyfeet }}
+                {{ $pwt += $data[$i]->pqtykg }};{{ $ppcs += $data[$i]->pqtypcs }};{{ $pfeet += $data[$i]->pqtyfeet }}
+                {{ $swt += $data[$i]->sqtykg }};{{ $spcs += $data[$i]->sqtypcs }};{{ $sfeet += $data[$i]->sqtyfeet }}
+                {{ $cwt += $data[$i]->cbkg }};{{ $cpcs += $data[$i]->cbpcs }};{{ $cfeet += $data[$i]->cbfeet }}
+
                 <td style="text-align:center" width="3%">{{ $i+1 }}</td>
                 <td width="25%">{{ $data[$i]->matname}} </td>
                 {{-- <td style="text-align:center" width="6%">{{ $data[$i]->unit }} </td> --}}
@@ -231,11 +229,25 @@ table{
             </tr>
             @endfor
             <tr>
-                <td colspan="20" width="100%" style="text-align: right;border-bottom: 1px solid lightgray;"></td>
-                {{-- <td colspan="4" width="8%" style="text-align: right;border-bottom: 1px solid lightgray;">{{ number_format($vtotpcs,0) }} </td>
-                <td class="1" width="8%" style="text-align: right;border-bottom: 1px solid lightgray;">{{ number_format($vwt,0) }} </td>
-                <td class="2" width="8%" style="text-align: right;border-bottom: 1px solid lightgray;">{{ number_format($vvlues,0) }} </td> --}}
-           </tr>
+                {{-- <td colspan="20" width="100%" style="text-align: right;border-bottom: 1px solid lightgray;"></td> --}}
+                <td colspan="3" width="4%" style="text-align: right;border-bottom: 1px solid lightgray;">{{ number_format($owt,0) }} </td>
+                <td colspan="1" width="4%" style="text-align: right;border-bottom: 1px solid lightgray;">{{ number_format($opcs,0) }} </td>
+                <td colspan="1" width="4%" style="text-align: right;border-bottom: 1px solid lightgray;">{{ number_format($ofeet,0) }} </td>
+
+                <td colspan="1" width="4%" style="text-align: right;border-bottom: 1px solid lightgray;">{{ number_format($pwt,0) }} </td>
+                <td colspan="1" width="4%" style="text-align: right;border-bottom: 1px solid lightgray;">{{ number_format($ppcs,0) }} </td>
+                <td colspan="1" width="4%" style="text-align: right;border-bottom: 1px solid lightgray;">{{ number_format($pfeet,0) }} </td>
+
+                <td colspan="1" width="4%" style="text-align: right;border-bottom: 1px solid lightgray;">{{ number_format($swt,0) }} </td>
+                <td colspan="1" width="4%" style="text-align: right;border-bottom: 1px solid lightgray;">{{ number_format($spcs,0) }} </td>
+                <td colspan="1" width="4%" style="text-align: right;border-bottom: 1px solid lightgray;">{{ number_format($sfeet,0) }} </td>
+
+                <td colspan="7" width="4%" style="text-align: right;border-bottom: 1px solid lightgray;">{{ number_format($cwt,0) }} </td>
+                <td colspan="1" width="4%" style="text-align: right;border-bottom: 1px solid lightgray;">{{ number_format($cpcs,0) }} </td>
+                <td colspan="1" width="4%" style="text-align: right;border-bottom: 1px solid lightgray;">{{ number_format($cfeet,0) }} </td>
+
+
+            </tr>
 
 
 

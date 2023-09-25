@@ -14,8 +14,8 @@
         </h2>
     </x-slot>
 
-    <div class="py-2">
-        <div class="max-w-full mx-auto sm:px-2 lg:px-4">
+    <div class="py-2 ">
+        <div class="max-w-full mx-auto sm:px-2 lg:px-4 ">
             <div class="bg-white overflow-hidden shadow-sm  sm:rounded-lg">
                 {{-- Create Form --}}
                 <div class="px-6 py-2">
@@ -51,22 +51,28 @@
                                 </label>
                                 <textarea name="remarks" id="remarks" cols="100" rows="2" maxlength="150" required class="rounded"></textarea> --}}
                             {{-- </div> --}}
-                        </fieldset>
+                        {{-- </fieldset> --}}
 
-                        <fieldset class="border px-4 py-2 rounded">
+                        <fieldset  class="border px-4 py-2 rounded">
                             <legend>Item Description</legend>
-                            <div class="grid grid-cols-12 gap-1 py-1 items-center">
-                                <x-input-text title="Material Name" name="material_title" disabled    />
+                            <div class="grid grid-cols-16 gap-1 py-1 items-center ">
+                                <x-input-text title="Material Name" name="material_title"  disabled    />
                                 <x-input-text title="Dimension" name="dimension" disabled    />
                                 <x-input-date title="O/Date" name="opdate"  />
                                 <x-input-numeric title="" name="material_id" hidden  />
                             </div>
                         </fieldset>
 
+
+
+
+
+
+
                         <fieldset class="border px-4 py-2 rounded">
                             <legend>E - 13</legend>
-                            <div class="grid grid-cols-12 gap-1 py-1 items-center">
-                                <x-input-numeric title="InKg" name="ostkwte13" onblur="tnetamount()"    />
+                            <div class="grid grid-cols-12 gap-1 py-1  items-center">
+                                <x-input-numeric title="InKg" name="ostkwte13"  onblur="tnetamount()"    />
                                 <x-input-numeric title="InPcs" name="ostkpcse13" onblur="tnetamount()"     />
                                 <x-input-numeric title="InFeet" name="ostkfeete13" onblur="tnetamount()"  />
                                 <input class="checked:bg-blue-500 checked:border-blue-500 focus:outline-none" type="checkbox" name="e13"  id="e13" onclick="grp1(this)" >

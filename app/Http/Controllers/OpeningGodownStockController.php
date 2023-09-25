@@ -81,7 +81,7 @@ class OpeningGodownStockController  extends Controller
         $opstock = DB::table('vwmatindex')
         // ->join('suppliers', 'contracts.supplier_id', '=', 'suppliers.id')
         // ->select('contracts.*', 'suppliers.title')
-        // ->where('supname', 'like', "%$search%")
+        ->where('srchb', 'like', "%$search%")
         ->orderBy($field,$dir)
         ->paginate((int) $size);
         return $opstock;

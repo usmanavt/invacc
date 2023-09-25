@@ -137,10 +137,13 @@ table{
 
     <table class="data" cellspacing="0">
         <tbody>
-            {{-- {{ $vtotpcs = 0 }}
-            {{ $vwt = 0 }}
-            {{ $vvlues = 0 }} --}}
-            {{-- {{ $pcspbundle2 = 0 }} --}}
+
+            {{ $vob = 0 }}
+            {{ $vrcvd = 0 }}
+            {{ $vsl = 0 }}
+            {{ $vcb = 0 }}
+
+
 
             @for ($i = 0 ; $i < count($data) ; $i++)
 
@@ -164,9 +167,10 @@ table{
 
             <tr>
 
-                {{-- {{ $vtotpcs += $data[$i]->totpcs }} --}}
-                {{-- {{ $vwt += $data[$i]->wt }} --}}
-                {{-- {{ $vvlues += $data[$i]->vlues }} --}}
+                {{ $vob += $data[$i]->OBALANCE }}
+                {{ $vrcvd += $data[$i]->PURQTY }}
+                {{ $vsl += $data[$i]->SALQTY }}
+                {{ $vcb += $data[$i]->CB }}
 
 
                 <td style="text-align:center" width="5%">{{ $i+1 }}</td>
@@ -181,11 +185,13 @@ table{
             </tr>
             @endfor
             <tr>
-                <td colspan="9" width="100%" style="text-align: right;border-bottom: 1px solid lightgray;"></td>
-                {{-- <td colspan="4" width="8%" style="text-align: right;border-bottom: 1px solid lightgray;">{{ number_format($vtotpcs,0) }} </td>
-                <td class="1" width="8%" style="text-align: right;border-bottom: 1px solid lightgray;">{{ number_format($vwt,0) }} </td>
-                <td class="2" width="8%" style="text-align: right;border-bottom: 1px solid lightgray;">{{ number_format($vvlues,0) }} </td> --}}
-           </tr>
+                <td colspan="4" width="9%" style="text-align: right;border-bottom: 1px solid lightgray;">{{ number_format($vob,0) }} </td>
+                <td colspan="1" width="9%" style="text-align: right;border-bottom: 1px solid lightgray;">{{ number_format($vrcvd,0) }} </td>
+                <td colspan="1" width="9%" style="text-align: right;border-bottom: 1px solid lightgray;">{{ number_format($vsl,0) }} </td>
+                <td colspan="4" width="9%" style="text-align: right;border-bottom: 1px solid lightgray;">{{ number_format($vcb,0) }} </td>
+
+
+            </tr>
 
 
 
