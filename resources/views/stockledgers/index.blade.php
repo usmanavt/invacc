@@ -139,6 +139,18 @@
                                 </fieldset>
 
                                 <fieldset class="border px-4 py-2 rounded w-full">
+                                    <legend>Specification Selection</legend>
+                                    <div class="flex justify-between py-1">
+                                        <select  name="brand_id" id="brand_id" required class="w-full" disabled onchange="headSelected()">
+                                        </select>
+                                    </div>
+                                </fieldset>
+
+
+
+
+
+                                <fieldset class="border px-4 py-2 rounded w-full">
                                     <legend>Godown Selection</legend>
                                     <div class="flex justify-between py-1">
                                         <select  name="gc" id="gc" required class="w-full" disabled onchange="headSelected()">
@@ -226,8 +238,11 @@
 <script>
     const heads = @json($heads);
     const sources = @json($source);
-    const locations = @json($location);
+    const specifications = @json($specification);
 
+
+
+    const locations = @json($location);
     const subheads = @json($subheads);
     const subheadsci = @json($subheadsci);
     const subheadsciloc = @json($subheadsciloc);
@@ -241,6 +256,9 @@
     // const head1 = document.getElementById('source_id')
     const head = document.getElementById('head_id')
     const source = document.getElementById('source_id')
+    const specification = document.getElementById('brand_id')
+
+
     const locationss = document.getElementById('gc')
     const subhead = document.getElementById('subhead_id')
     const fromdate = document.getElementById('fromdate')
@@ -254,6 +272,8 @@
     const headSelected = ()=>{
           const value = head.value
           const value1 = source.value
+          const value3 = specification.value
+
           //  const value = 6
         subhead.options.length = 0 // Reset List
         //  console.info(rptType)
@@ -262,7 +282,7 @@
         switch (rptType){
             case 'dlvrychln' :
 
-                fetch(funcstkos + `?head_id=${value} &source_id=${value1}`,{
+                fetch(funcstkos + `?head_id=${value} &source_id=${value1} &brand_id=${value3} `,{
                     method:"GET",
                     headers: { 'Accept':'application/json','Content-type':'application/json'},
                     })
@@ -288,7 +308,7 @@
 
 // FOR CONTRACT FILL
 const getSubheadVoucherData = async (value) =>{
-        let data = await fetch(funcstkos + `?head_id=${value} &source_id=${value1} &srchb like ${srch} `,{
+        let data = await fetch(funcstkos + `?head_id=${value} &source_id=${value1} &brand_id=${value3} `,{
             method:"GET",
             headers: { 'Accept':'application/json','Content-type':'application/json'},
             })
@@ -303,7 +323,7 @@ const getSubheadVoucherData = async (value) =>{
 
 
             case 'dlvrychlngd':
-            fetch(funcstkos + `?head_id=${value} &source_id=${value1}`,{
+            fetch(funcstkos + `?head_id=${value} &source_id=${value1} &brand_id=${value3} `,{
                     method:"GET",
                     headers: { 'Accept':'application/json','Content-type':'application/json'},
                     })
@@ -330,7 +350,7 @@ const getSubheadVoucherData = async (value) =>{
 
 // FOR CONTRACT FILL
 const getSubheadVoucherData1 = async (value) =>{
-        let data = await fetch(funcstkos + `?head_id=${value} &source_id=${value1} &srchb like ${srch} `,{
+        let data = await fetch(funcstkos + `?head_id=${value} &source_id=${value1} &brand_id=${value3} `,{
             method:"GET",
             headers: { 'Accept':'application/json','Content-type':'application/json'},
             })
@@ -345,7 +365,7 @@ const getSubheadVoucherData1 = async (value) =>{
 
 
                 case 'sraluntos':
-                fetch(funcstkos + `?head_id=${value} &source_id=${value1}`,{
+                fetch(funcstkos + `?head_id=${value} &source_id=${value1} &brand_id=${value3} `,{
                     method:"GET",
                     headers: { 'Accept':'application/json','Content-type':'application/json'},
                     })
@@ -372,7 +392,7 @@ const getSubheadVoucherData1 = async (value) =>{
 
 // FOR CONTRACT FILL
 const getSubheadVoucherData2 = async (value) =>{
-        let data = await fetch(funcstkos + `?head_id=${value} &source_id=${value1} &srchb like ${srch} `,{
+        let data = await fetch(funcstkos + `?head_id=${value} &source_id=${value1} &brand_id=${value3} `,{
             method:"GET",
             headers: { 'Accept':'application/json','Content-type':'application/json'},
             })
@@ -393,7 +413,7 @@ const getSubheadVoucherData2 = async (value) =>{
             // case 'saltxinvs':
 
             case 'sraluntos':
-                fetch(funcstkos + `?head_id=${value} &source_id=${value1}`,{
+                fetch(funcstkos + `?head_id=${value} &source_id=${value1} &brand_id=${value3} `,{
                     method:"GET",
                     headers: { 'Accept':'application/json','Content-type':'application/json'},
                     })
@@ -420,7 +440,7 @@ const getSubheadVoucherData2 = async (value) =>{
 
 // FOR CONTRACT FILL
 const getSubheadVoucherData3 = async (value) =>{
-        let data = await fetch(funcstkos + `?head_id=${value} &source_id=${value1} &srchb like ${srch} `,{
+        let data = await fetch(funcstkos + `?head_id=${value} &source_id=${value1} &brand_id=${value3} `,{
             method:"GET",
             headers: { 'Accept':'application/json','Content-type':'application/json'},
             })
@@ -434,7 +454,7 @@ const getSubheadVoucherData3 = async (value) =>{
     }
 
     case 'gwsmu':
-                fetch(funcstkos + `?head_id=${value} &source_id=${value1}`,{
+                fetch(funcstkos + `?head_id=${value} &source_id=${value1} &brand_id=${value3}`,{
                     method:"GET",
                     headers: { 'Accept':'application/json','Content-type':'application/json'},
                     })
@@ -461,7 +481,7 @@ const getSubheadVoucherData3 = async (value) =>{
 
 // FOR CONTRACT FILL
 const getSubheadVoucherData4 = async (value) =>{
-        let data = await fetch(funcstkos + `?head_id=${value} &source_id=${value1} &srchb like ${srch} `,{
+        let data = await fetch(funcstkos + `?head_id=${value} &source_id=${value1} &brand_id=${value3} `,{
             method:"GET",
             headers: { 'Accept':'application/json','Content-type':'application/json'},
             })
@@ -568,10 +588,20 @@ const getSubheadVoucherData4 = async (value) =>{
                 rptType = 'dlvrychln'
                 head.setAttribute('required','')
                 source.setAttribute('required','')
+                specification.setAttribute('required','')
+
                 head.disabled = false
                 source.disabled=false
+                specification.disabled=false
+
+
+
                 head.length = 0
                 source.length=0
+                specification.length=0
+
+
+
                 subhead.removeAttribute('required')
                 subhead.disabled = true
                 subhead.length = 0
@@ -584,6 +614,10 @@ const getSubheadVoucherData4 = async (value) =>{
                 // For First Category
                 sources.forEach(e => {
                     addSelectElement(source,e.id,e.title)
+                });
+
+                specifications.forEach(e => {
+                    addSelectElement(specification,e.id,e.title)
                 });
 
                 // locations.forEach(e => {

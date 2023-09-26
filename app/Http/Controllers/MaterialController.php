@@ -10,6 +10,9 @@ use App\Models\Source;
 use App\Models\Category;
 use App\Models\Material;
 use App\Models\Dimension;
+use App\Models\Specification;
+
+
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Session;
 
@@ -34,7 +37,8 @@ class MaterialController extends Controller
         ->with('categories',Category::all())
         ->with('dimensions',Dimension::all())
         ->with('sources',Source::all())
-        ->with('brands',Brand::all())
+        // ->with('brands',Brand::all())
+        ->with('specifications',Specification::all())
         ->with('hscodes',Hscode::select('id','hscode')->get());
     }
 
@@ -85,6 +89,8 @@ class MaterialController extends Controller
         $title = $request->title;
         $category_id=$request->category_id;
         $dimension_id = $request->dimension_id;
+
+
         $mat = Material::where('dimension_id',$dimension_id)->where('title',$title)->where('category_id',$category_id)->first();
         if($mat)
         {
@@ -97,7 +103,7 @@ class MaterialController extends Controller
         try {
             {
                 $material = new Material();
-                // dd($request->title);
+                //  dd($request->brand);
                 $material->title = $request->title;
                 $material->nick = $request->nick;
                 $material->category_id = $request->category_id;
@@ -106,14 +112,14 @@ class MaterialController extends Controller
                 $material->source = $request->source;
                 $material->sku_id = $request->sku_id;
                 $material->sku = $request->sku;
-                $material->brand_id = 0;
+                $material->brand_id = $request->brand_id;
                 $material->category = $request->category;
                 $material->dimension = $request->dimension;
                 $material->srchi = $request->srchi;
                 $material->srchb = $request->srchb;
+                $material->brand = $request->brand;
                 $material->save();
 
-                // $material->brand = $request->brand;
 
                 // $material->qtykg = $request->qtykg;
                 // $material->qtykgrt = $request->qtykgrt;
@@ -169,9 +175,9 @@ class MaterialController extends Controller
         // ->with('sources',Source::all())
         // ->with('brands',Brand::all())
         // ->with('hscodes',Hscode::all())
+        ->with('specifications',Specification::all())
         ->with('material',Material::findOrFail($id))
-        ->with('materials',Material::select('id','title','dimension')->get())
-        ;
+        ->with('materials',Material::select('id','title','dimension','brand')->get()) ;
     }
 
     public function edit(Material $material)
@@ -181,7 +187,9 @@ class MaterialController extends Controller
         ->with('categories',Category::all())
         ->with('dimensions',Dimension::all())
         ->with('sources',Source::all())
-        ->with('brands',Brand::all())
+        // ->with('brands',Brand::all())
+        ->with('specifications',Specification::all())
+
         // ->with('hscodes',Hscode::select('id','hscode')->get())
         ->with('material',$material)
         ;
@@ -202,7 +210,8 @@ class MaterialController extends Controller
             $material->dimension_id = $request->dimension_id;
             $material->source_id = $request->source_id;
             $material->sku_id = $request->sku_id;
-            // $material->brand_id = $request->brand_id;
+            $material->brand_id = $request->brand_id;
+            $material->brand = $request->brand;
             // $material->hscode_id = $request->hscode_id;
             $material->category = $request->category;
             $material->dimension = $request->dimension;

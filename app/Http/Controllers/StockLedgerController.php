@@ -7,6 +7,8 @@ use App\Models\Customer;
 use App\Models\Category;
 use App\Models\Source;
 use App\Models\Location;
+use App\Models\Specification;
+
 use \Mpdf\Mpdf as PDF;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -29,6 +31,7 @@ class StockLedgerController extends Controller
         ->with('heads',Category::where('status',1)->get())
         ->with('location',Location::where('status',1)->get())
         ->with('source',Source::where('status',1)->get())
+        ->with('specification',Specification::where('status',1)->get())
         ->with('glheads',Category::where('status',1)->whereIn('id',[1,2,3,4,5,6,7,8,9,10])->get())
         ->with('vchrheads',Category::where('status',1)->whereIn('id',[6,7,8,9])->get())
         ->with('subheads',DB::table('vwmatcategory')->select('*')->get()->toArray())
@@ -57,9 +60,10 @@ class StockLedgerController extends Controller
         // $head = $request->head;
         $head_id = $request->head_id;
         $source_id = $request->source_id;
+        $brand_id = $request->brand_id;
         $srch = $request->srch;
 
-        return  DB::select('call procmatcategory(?,?)',array($head_id,$source_id));
+        return  DB::select('call procmatcategory(?,?,?)',array($head_id,$source_id, $brand_id));
 
     }
 

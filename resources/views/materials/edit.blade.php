@@ -61,6 +61,23 @@
                                     @endforeach
                                 </select>
 
+                                <x-label for="" value="Specification"/>
+                                <select autocomplete="on" required name="brand_id" class="bg-indigo-100 w-full" required onchange="getHiddenValues(this)">
+                                    @foreach ($specifications as $brand)
+                                    @if ($material->brand_id == $brand->id)
+                                        <option value="{{ $brand->id }}" selected>{{ $brand->title }}</option>
+                                    @else
+                                        <option value="{{ $brand->id }}">{{ $brand->title }}</option>
+                                    @endif
+                                    @endforeach
+                                </select>
+
+
+
+
+
+
+
                                 <x-label for="" value="Unit"/>
                                 <select autocomplete="on" required name="sku_id" class="bg-indigo-100 w-full" required onchange="getHiddenValues(this)">
                                     @foreach ($skus as $sku)
@@ -91,16 +108,7 @@
 
 
 
-                                {{-- <x-label for="" value="Brand"/>
-                                <select autocomplete="on" required name="brand_id" class="bg-indigo-100 w-full" required onchange="getHiddenValues(this)">
-                                    @foreach ($brands as $brand)
-                                    @if ($material->brand_id == $brand->id)
-                                        <option value="{{ $brand->id }}" selected>{{ $brand->title }}</option>
-                                    @else
-                                        <option value="{{ $brand->id }}">{{ $brand->title }}</option>
-                                    @endif
-                                    @endforeach
-                                </select> --}}
+
 {{--
                                 <x-label for="" value="hscode"/>
                                 <select autocomplete="on" required name="hscode_id" class="bg-indigo-100 w-full" required onchange="getHiddenValues(this)">

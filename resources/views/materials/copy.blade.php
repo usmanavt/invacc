@@ -19,6 +19,8 @@
                             @csrf
 
                             <input type="hidden" id="dimension" name="dimension" value="{{ $material->dimension }}">
+                            <input type="hidden" id="brand"  name="brand"     value="{{ $material->brand }}">
+
 
 
 
@@ -43,6 +45,28 @@
                                     @endif
                                 @endforeach
                             </select>
+
+
+                            {{-- <x-label for="" value="Brand"/>
+                            <x-input class="" type="text"  name="brand" value="{{ $material->brand }}" disabled />
+                            <input type="hidden" name="brand_id" value="{{ $material->brand_id }}">
+                            <input type="hidden" name="brand" value="{{ $material->brand }}"> --}}
+
+                            <x-label for="" value="brand"/>
+                            <select autocomplete="on" required name="brand_id" id="brand_id"  class="bg-indigo-100 w-full" required onchange="getHiddenValues(this)">
+                                @foreach ($specifications as $brand)
+                                @if ($material->brand_id == $brand->id)
+                                    <option value="{{ $brand->id }}" selected>{{ $brand->title }}</option>
+                                @else
+                                    <option value="{{ $brand->id }}">{{ $brand->title }}</option>
+                                @endif
+                                @endforeach
+                            </select>
+
+
+
+
+
 
 
                             <x-label for="" value="Unit"/>
@@ -71,10 +95,7 @@
 
 
 
-                            {{-- <x-label for="" value="Brand"/>
-                            <x-input class="" type="text"  name="brand" value="{{ $material->brand }}" disabled />
-                            <input type="hidden" name="brand_id" value="{{ $material->brand_id }}">
-                            <input type="hidden" name="brand" value="{{ $material->brand }}"> --}}
+
 
                             {{-- <x-label for="" value="hscode"/>
                             <x-input class="" type="text"   value="{{ $material->hscodes->hscode }}" disabled />
@@ -147,10 +168,13 @@
 <script>
     const dimension = document.getElementById('dimension')
     const dimension_id = document.getElementById('dimension_id')
+    const brand = document.getElementById('brand')
+    const  brand_id = document.getElementById('brand_id')
 
     function getHiddenValues(el)
     {
         dimension.value = dimension_id.options[dimension_id.selectedIndex].innerText
+        brand.value = brand_id.options[brand_id.selectedIndex].innerText
     }
 </script>
 @endpush

@@ -1,10 +1,10 @@
 <x-app-layout>
 
     @push('styles')
-    <link rel="stylesheet" href="{{ asset('css/tabulator_simple.min.css') }}">
 
-
-
+    {{-- <link rel="stylesheet" href="{{ asset('css/tabulator_simple.min.css') }}"> --}}
+    <link href="https://unpkg.com/tabulator-tables/dist/css/tabulator.min.css" rel="stylesheet">
+    <script type="text/javascript" src="https://unpkg.com/tabulator-tables/dist/js/tabulator.min.js"></script>
 
     @endpush
 
@@ -18,7 +18,7 @@
 
 
     <div class="py-6">
-        <div class="max-w-7xl mx-auto sm:px-2 lg:px-4">
+        <div class="max-w-7x2 mx-auto sm:px-2 lg:px-4">
             <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg p4">
             {{-- Create Form --}}
             <div class="p-6" >
@@ -32,7 +32,7 @@
                             <input type="hidden" id="dimension" name="dimension" value="">
                             <input type="hidden" id="category" name="category" value="">
                             <input type="hidden" id="source" name="source" value="">
-                            {{-- <input type="hidden" id="brand" name="brand" value=""> --}}
+                            <input type="hidden" id="brand" name="brand" value="">
                             <input type="hidden" id="sku" name="sku" value="">
 
                                 <x-label for="" value="Category"/>
@@ -59,6 +59,15 @@
                                         <option value="{{ $dimension->id }}">{{ $dimension->title }}</option>
                                     @endforeach
                                 </select>
+
+                                <x-label for="" value="Specifications"/>
+                                <select autocomplete="on" required name="brand_id" class="bg-indigo-100 w-full" required onchange="getHiddenValues(this)">
+                                    <option value="" selected>--specification</option>
+                                    @foreach ($specifications as $specification)
+                                        <option value="{{ $specification->id }}">{{ $specification->title }}</option>
+                                    @endforeach
+                                </select>
+
 
 
                                 <x-label for="" value="Unit"/>
@@ -94,13 +103,7 @@
 
 
 
-                                {{-- <x-label for="" value="Brand"/>
-                                <select autocomplete="on" required name="brand_id" class="bg-indigo-100 w-full" required onchange="getHiddenValues(this)">
-                                    <option value="" selected>--brand</option>
-                                    @foreach ($brands as $brand)
-                                        <option value="{{ $brand->id }}">{{ $brand->title }}</option>
-                                    @endforeach
-                                </select> --}}
+
 
 
                                 {{-- <x-label for="" value="hscode"/>
@@ -180,6 +183,7 @@
     }
     // The Table for Items Modal
     table = new Tabulator("#tableData", {
+        width:"100px",
         autoResize:true,
         responsiveLayout:"collapse",
         layout:"fitData",
@@ -205,6 +209,7 @@
             {title:"Category", field:"source" ,  responsive:0},
             {title:"Item", field:"category" ,  responsive:0},
             {title:"Dimension", field:"dimension" ,  responsive:0},
+            {title:"Specification", field:"brand" ,  responsive:0},
             {title:"Complete Name", field:"title" , visible:true ,headerSortStartingDir:"asc" , responsive:0},
              {title:"Searching", field:"srchb" , headerSortStartingDir:"asc" , responsive:0},
 
