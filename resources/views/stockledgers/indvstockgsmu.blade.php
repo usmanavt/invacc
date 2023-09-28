@@ -54,6 +54,8 @@ table{
 {{-- https://stackoverflow.com/questions/3341485/how-to-make-a-html-page-in-a4-paper-size-pages?answertab=votes#tab-top --}}
 
     {{-- Report Header --}}
+
+
     <table>
         <tbody>
             <tr>
@@ -62,32 +64,44 @@ table{
                     {{-- <img src="{{ asset('/images/pipesfittings.jpg') }}" width="90"> --}}
                 </td>
                 <td align="center" style="width:60%;">
-                    <h1>MUHAMMAD HABIB & Co. </h1>
+                    <h1>MUHAMMAD NAZIR & Co </h1>
                 </td>
                 <td align="right" style="width:20%;">
                     &nbsp;&nbsp;&nbsp;&nbsp;
                 </td>
-            </tr>
+.            </tr>
         </tbody>
     </table>
 
-    {{-- Address --}}
+
+
     <table>
         <tbody>
             <tr>
                 <td  style="text-align: center;">
-                    <h3 style="font-size:0.7rem">Steam Pipes, Pipe Fittings, Flanges, Valves, S.S.Pipes & Tbues</h3>
-                    <h3 style="font-size:0.7rem">30 KM, Sunder Stop, Multan Road, Lahore</h3>
+                    <h3 style="font-size:0.7rem">Steam Pipes, Pipe Fitting, Flanges Valves, S.S Pipes</h3>
+                    <h3 style="font-size:0.7rem">Plot # 8 Near Allah Malik Godown Shershah Kabari Bazar,</h3>
+                    <h3 style="font-size:0.7rem">Phone : 021-32588781, 021-32574285 , Fax : 021-32588782</h3>
                 </td>
+
             </tr>
             <tr>
                 <td  style="text-align: center;">
-                    <span style="font-size:1.5rem;font-weight: bold">Stock Movement Individualy Ledger( Master Unit )</span>
+                    <span style="font-size:2rem">Date Wise Stock Movement Ledger History</span>
                 </td>
             </tr>
+
+        <tr>
+
+            <td  style="text-align: center;">
+                <span style="font-size:1.5rem;font-weight: bold">{{ $ltype }}</span>
+            </td>
+
+        </tr>
+
+
         </tbody>
     </table>
-
     {{-- Ledger Info --}}
     <table class="ledger">
         <tbody>
@@ -107,6 +121,13 @@ table{
             </tr>
             <tr>
                 <td>
+                    Dimension
+                </td>
+                <td>
+                    {{ $data[0]->DIMENSION }}
+                </td>
+
+                <td>
                     Period
                 </td>
                 <td>
@@ -121,8 +142,8 @@ table{
         <thead>
             <tr>
                 <th class="" width="3%">S#</th>3
-                <th class="" width="7%">Date</th>
-                <th class="" width="30%">Particular</th>
+                <th class="" width="10%">Date</th>
+                <th class="" width="27%">Particular</th>
                 {{-- <th class="" width="7%">Ref</th> --}}
                 <th class="" width="10%">O/Balance</th>
                 <th class="" width="10%">Purchase</th>
@@ -153,15 +174,15 @@ table{
                 {{ $sale += $data[$i]->sale }}
 
                 <td class="" width="3%">{{ $i+1 }}</td>
-                <td class="" width="7%">{{ $data[$i]->tdate }} </td>
-                <td class="" width="30%">{{ $data[$i]->Descr }} </td>
+                <td class="" width="10%">{{ $data[$i]->tdate }} </td>
+                <td class="" width="27%">{{ $data[$i]->Descr }} </td>
                 {{-- <td class="" width="7%">{{ $data[$i]->Ref }} </td> --}}
-                <td class="" width="10%">{{ number_format($data[$i]->oqty,0) }} </td>
-                <td class="" width="10%">{{ number_format($data[$i]->received,0) }}</td>
-                <td class="" width="10%">{{ number_format($data[$i]->sale,0) }} </td>
-                <td class="" width="10%">{{ number_format($data[$i]->purret,0) }} </td>
-                <td class="" width="10%">{{ number_format($data[$i]->saleret,0) }} </td>
-                <td class="" width="10%">{{ number_format($data[$i]->CB,0) }} </td>
+                <td style="text-align:center" width="10%">{{ number_format($data[$i]->oqty,0) }} </td>
+                <td style="text-align:center" width="10%">{{ number_format($data[$i]->received,0) }}</td>
+                <td style="text-align:center" width="10%">{{ number_format($data[$i]->sale,0) }} </td>
+                <td style="text-align:center" width="10%">{{ number_format($data[$i]->purret,0) }} </td>
+                <td style="text-align:center" width="10%">{{ number_format($data[$i]->saleret,0) }} </td>
+                <td style="text-align:center" width="10%">{{ number_format($data[$i]->CB,0) }} </td>
 
             </tr>
             @endfor

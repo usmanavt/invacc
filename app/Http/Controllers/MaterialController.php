@@ -89,9 +89,10 @@ class MaterialController extends Controller
         $title = $request->title;
         $category_id=$request->category_id;
         $dimension_id = $request->dimension_id;
+        $source_id = $request->source_id;
 
 
-        $mat = Material::where('dimension_id',$dimension_id)->where('title',$title)->where('category_id',$category_id)->first();
+        $mat = Material::where('dimension_id',$dimension_id)->where('title',$title)->where('category_id',$category_id)->where('source_id',$source_id)->first();
         if($mat)
         {
             // dd($mat);
