@@ -1,13 +1,15 @@
 <x-app-layout>
+
+
+
     <x-slot name="header">
-        <h2 class="font-semibold text-xl text-gray-800 leading-tight">
+        {{-- <h2 class="font-semibold text-xl text-gray-800 leading-tight">
             Users
             <a class="text-sm text-green-500 hover:text-gray-900" href="{{route('users.create')}}">
-                {{-- Add Icon --}}
                 <i class="fa fa-file fa-fw"></i>
                 Add New Record
             </a>
-        </h2>
+        </h2> --}}
     </x-slot>
 
     <div class="py-6">

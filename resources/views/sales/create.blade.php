@@ -1,9 +1,9 @@
 <x-app-layout>
 
     @push('styles')
-    <link rel="stylesheet" href="{{ asset('css/tabulator_simple.min.css') }}">
-    {{-- <link href="https://unpkg.com/tabulator-tables/dist/css/tabulator.min.css" rel="stylesheet"> --}}
-    {{-- <script type="text/javascript" src="https://unpkg.com/tabulator-tables/dist/js/tabulator.min.js"></script> --}}
+    {{-- <link rel="stylesheet" href="{{ asset('css/tabulator_simple.min.css') }}"> --}}
+    <link href="https://unpkg.com/tabulator-tables/dist/css/tabulator.min.css" rel="stylesheet">
+    <script type="text/javascript" src="https://unpkg.com/tabulator-tables/dist/js/tabulator.min.js"></script>
 
     @endpush
 
@@ -583,9 +583,9 @@ var totalVal = function(values, data, calcParams){
                 {title:"sku_id",       field:"sku_id",visible:false},
                 {title:"dimension_id", field:"dimension_id",visible:false},
 
-                {title:"costkg", field:"salcostkg",visible:false},
-                {title:"costpcs", field:"salcostpcs",visible:false},
-                {title:"costfeet", field:"salcostfeet",visible:false},
+                {title:"costkg", field:"salcostkg",visible:true},
+                {title:"costpcs", field:"salcostpcs",visible:true},
+                {title:"costfeet", field:"salcostfeet",visible:true},
 
 
                 {

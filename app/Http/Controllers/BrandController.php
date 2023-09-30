@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use DB;
 use App\Models\Brand;
+use App\Models\Specification;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Session;
 
@@ -22,7 +23,7 @@ class BrandController extends Controller
         $field = $request->sort[0]["field"];     //  Nested Array
         $dir = $request->sort[0]["dir"];         //  Nested Array
         //  With Tables
-        $brands = Brand::where(function ($query) use ($search){
+        $brands = Specification::where(function ($query) use ($search){
             $query->where('id','LIKE','%' . $search . '%')
             ->orWhere('title','LIKE','%' . $search . '%');
         })
@@ -40,15 +41,16 @@ class BrandController extends Controller
 
         DB::beginTransaction();
         try {
-            $brand = new Brand();
+            $brand = new Specification();
             $brand->title = $request->title;
-            if($request->has('status'))
-            {
-                $brand->status = 1;
-            }
-            else {
-                $brand->status = 0;
-            }
+            $brand->status = 1;
+            // if($request->has('status'))
+            // {
+            //     $brand->status = 1;
+            // }
+            // else {
+            //     $brand->status = 0;
+            // }
             $brand->save();
             DB::commit();
             Session::flash('success','Brand created');
@@ -59,17 +61,17 @@ class BrandController extends Controller
         }
     }
 
-    public function edit(Brand $brand)
+    public function edit(Specification $brand)
     {
         return view('brands.edit')->with('brand',$brand);
     }
 
 
-    public function update(Brand $brand,Request $request)
+    public function update(Specification $brand,Request $request)
     {
         // dd($request->all());
         $request->validate([
-            'title'=>'required|min:3|unique:brands,title,'. $brand->id ,
+            'title'=>'required|min:3|unique:specifications,title,'. $brand->id ,
         ]);
 
         DB::beginTransaction();

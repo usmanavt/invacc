@@ -35,7 +35,7 @@
                             <x-dropdown-link href="{{ route('sources.index') }}">Category</x-dropdown-link>
                             <x-dropdown-link href="{{ route('categories.index') }}">Item</x-dropdown-link>
                             <x-dropdown-link href="{{ route('dimensions.index') }}">Dimensions</x-dropdown-link>
-                            <x-dropdown-link href="{{ route('brands.index') }}">Brands</x-dropdown-link>
+                            <x-dropdown-link href="{{ route('brands.index') }}">Specifications</x-dropdown-link>
                             <x-dropdown-link href="{{ route('suppliers.index') }}">Suppliers</x-dropdown-link>
                             <x-dropdown-link href="{{ route('customers.index') }}">Customers</x-dropdown-link>
                             <x-dropdown-link href="{{ route('cares.index') }}">CareOf</x-dropdown-link>

@@ -121,5 +121,16 @@
         },
     })
 </script>
+
+<script>
+    $(document).load(function() {
+        alert "dfadsfafs";
+    });
+</script>
+
+
+
+
+
 @endpush
 </x-app-layout>

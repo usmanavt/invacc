@@ -361,14 +361,10 @@ class StockLedgerController extends Controller
 
 
 
+
+
+
         if($report_type === 'smsind'){
-            // $hdng1 = $request->cname;
-            // $hdng2 = $request->csdrs;
-            // $t1 = $request->t1;
-            // $t2 = $request->t2;
-            // $t3 = $request->t3;
-            // $t4 = $request->t4;
-            // $t5 = $request->t5;
             $ltype ="Office Stock";
             $head_id = $request->head_id;
             // $head = Head::findOrFail($head_id);
@@ -427,6 +423,102 @@ class StockLedgerController extends Controller
             return response($mpdf->Output($filename,'I'),200)->header('Content-Type','application/pdf');
 
         }
+
+
+        if($report_type === 'smsindgs'){
+            $ltype ="Godown Stock";
+            $head_id = $request->head_id;
+            $gc = $request->gc;
+            $head = Category::findOrFail($head_id);
+            if($request->has('subhead_id')){
+                $subhead_id = $request->subhead_id;
+                //  Clear Data from Table
+                DB::table('tmpstockrptpar')->truncate();
+                foreach($request->subhead_id as $id)
+                {
+                    DB::table('tmpstockrptpar')->insert([ 'glcode' => $id ]);
+                }
+            }
+            //  Call Procedure
+            $mpdf = $this->getMPDFSettingsP();
+            $data = DB::select('call procindvstockgs(?,?,?)',array($fromdate,$todate,$gc));
+            if(!$data)
+            {
+                Session::flash('info','No data available');
+                return redirect()->back();
+            }
+            $collection = collect($data);                   //  Make array a collection
+            ///// THIS IS CHANGED FOR REPORT//////////
+            // Filter non grpid
+            // $nogrp = $collection->filter(function ($item){
+            //     return $item->sortid != 1;
+            // })->values();
+            // $nogrp->values()->all();
+            // // Now FIlter Collection for grpid == 1
+            // $collection = $collection->filter(function ($item){
+            //     return $item->sortid == 1;
+            // })->values();
+            ///// THIS IS CHANGED FOR REPORT//////////
+            $grouped = $collection->groupBy('lid');
+            $grouped->values()->all();        //  values() removes indices of array
+            foreach($grouped as $g){
+                 $html =  view('stockledgers.indvstockgsmugs')->with('data',$g)->with('fromdate',$fromdate)->with('todate',$todate)
+                 ->with('headtype',$head->title)->with('ltype',$ltype)->render();
+                //  ->with('hdng1',$hdng1)->with('hdng2',$hdng2)->with('t1',$t1)->with('t2',$t2)->with('t3',$t3)->with('t4',$t4)->with('t5',$t5)
+                // $html =  view('salerpt.glhw')->with('data',$g)->with('fromdate',$fromdate)->with('todate',$todate)->render();
+                $filename = $g[0]->material_id  .'-'.$fromdate.'-'.$todate.'.pdf';
+                // $mpdf->SetHTMLFooter('
+                // <table width="100%" style="border-top:1px solid gray">
+                //     <tr>
+                //         <td width="33%">{DATE d-m-Y}</td>
+                //         <td width="33%" align="center">{PAGENO}/{nbpg}</td>
+
+                //     </tr>
+                // </table>');
+                $chunks = explode("chunk", $html);
+                foreach($chunks as $key => $val) {
+                    $mpdf->WriteHTML($val);
+                }
+                $mpdf->AddPage();
+            }
+            return response($mpdf->Output($filename,'I'),200)->header('Content-Type','application/pdf');
+
+        }
+
+        if($report_type === 'smsval'){
+
+            //   dd($request->all());
+            $head_id = $request->head_id;
+            $head = Category::findOrFail($head_id);
+            if($request->has('subhead_id')){
+                $subhead_id = $request->subhead_id;
+                 $ltype ="Office Stock";
+                //  dd($request->subhead_id);
+                //  Clear Data from Table
+                DB::table('tmpstockrptpar')->truncate();
+                foreach($request->subhead_id as $id)
+                {
+                    DB::table('tmpstockrptpar')->insert([ 'GLCODE' => $id ]);
+                }
+            }
+            $data = DB::select('call procstockledgerosval(?,?)',array($fromdate,$todate));
+            if(!$data)
+            {
+                Session::flash('info','No data available');
+                return redirect()->back();
+            }
+            $mpdf = $this->getMPDFSettingsL();
+            $html =  view('stockledgers.smsvaluation')->with('data',$data)->with('fromdate',$fromdate)
+            ->with('todate',$todate)->with('ltype',$ltype)->render();
+            $filename = 'StockLedgerSummary-'.$fromdate.'-'.$todate.'.pdf';
+        }
+
+
+
+
+
+
+
 
         if($report_type === 'sraluntgs'){
 

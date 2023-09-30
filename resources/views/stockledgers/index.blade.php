@@ -16,80 +16,78 @@
                         <div class="flex flex-col md:flex-row flex-wrap gap-2 justify-center">
                             <fieldset class="border px-4 py-2 rounded">
                                 <legend>Report Type</legend>
-                                <div>
-                                    <input type="radio" name="report_type" value="dlvrychln" required onchange="checkReportType('dlvrychln')">
-                                    <label for="">SMLS Master Unit(For Office) </label>
-                                </div>
-                                <div>
-                                    <input type="radio" name="report_type" value="dlvrychlngd" required onchange="checkReportType('dlvrychlngd')">
-                                    <label for="">SMLS Master Unit(For Godown) </label>
-                                </div>
 
-
+                                <tr>
+                                    <td  style="text-align: center;">
+                                        <span style="font-size:1.5rem">--- FOR OFFICE ---</span>
+                                    </td>
+                                </tr>
 
                                 <div>
-                                    <input type="radio" name="report_type" value="sraluntos" required onchange="checkReportType('sraluntos')">
-                                    <label for="">SMLS All Unit(For Office) </label>
-                                </div>
-
-
-                                <div>
-                                    <input type="radio" name="report_type" value="sraluntgs" required onchange="checkReportType('sraluntgs')">
-                                    <label for="">SMLS All Unit(For Godown) </label>
+                                    <input type="radio" name="report_type" value="dlvrychln" required >
+                                    {{-- onchange="checkReportType('dlvrychln')" --}}
+                                    <label for="">SMLS Master Unit </label>
                                 </div>
 
                                 <div>
-                                    <input type="radio" name="report_type" value="gwsmu" required onchange="checkReportType('gwsmu')">
-                                    <label for="">Godown Wise Stock(Master Unit)</label>
+                                    <input type="radio" name="report_type" value="sraluntos" >
+                                    {{-- required onchange="checkReportType('sraluntos')" --}}
+                                    <label for="">SMLS All Unit </label>
                                 </div>
 
-                                {{-- <div>
-                                    <input type="radio" name="report_type" value="saltxinvs" required onchange="checkReportType('saltxinvs')">
-                                    <label for="">Sale Tax invoice </label>
-                                </div> --}}
+                                <div>
+                                    <input type="radio" name="report_type" value="smsind" >
+                                    <label for="">SMSL Individual Master Unit </label>
+                                </div>
+
+                                <div>
+                                    <input type="radio" name="report_type" value="smsval" >
+                                    <label for="">SMSL Valuation </label>
+                                </div>
+
+
+
+
+                                <tr>
+                                    <td  style="text-align: center;">
+                                        <span style="font-size:1.5rem">--- FOR GODOWN ---</span>
+                                    </td>
+                                </tr>
+
+
+                                <div>
+                                    <input type="radio" name="report_type" value="dlvrychlngd" required >
+                                    {{-- onchange="checkReportType('dlvrychlngd')" --}}
+                                    <label for="">SMLS Master Unit </label>
+                                </div>
+
+
+
+
+
+                                <div>
+                                    <input type="radio" name="report_type" value="sraluntgs" >
+                                    {{-- required onchange="checkReportType('sraluntgs')" --}}
+                                    <label for="">SMLS All Unit </label>
+                                </div>
+
+                                <div>
+                                    <input type="radio" name="report_type" value="gwsmu" required >
+                                    {{-- onchange="checkReportType('gwsmu')" --}}
+                                    <label for="">Godown Wise Master Unit</label>
+                                </div>
 
                                 <div>
                                     <input type="radio" name="report_type" value="gwsau" required onchange="checkReportType('gwsau')">
-                                    <label for="">Godown Wise Stock(All Unit) </label>
-                                </div>
-
-                                <div>
-                                    <input type="radio" name="report_type" value="smsind" required onchange="checkReportType('smsind')">
-                                    <label for="">SMSL Individual Master Unit (For Office) </label>
-                                </div>
-
-
-
-                                {{-- <div>
-                                    <input type="radio" name="report_type" value="purret" required onchange="checkReportType('purret')">
-                                    <label for="">Sale History </label>
+                                    <label for="">Godown Wise All Unit </label>
                                 </div>
 
 
                                 <div>
-                                    <input type="radio" name="report_type" value="tpl" required onchange="checkReportType('tpl')">
-                                    <label for="">Sale Return History</label>
-                                </div> --}}
-
-                                {{-- <div>
-                                    <input type="radio" name="report_type" value="Imppurhist" required onchange="checkReportType('Imppurhist')">
-                                    <label for="">Imported Purchase History</label>
+                                    <input type="radio" name="report_type" value="smsindgs" required onchange="checkReportType('smsindgs')">
+                                    <label for="">SMSL Individual Master Unit </label>
                                 </div>
 
-                                <div>
-                                    <input type="radio" name="report_type" value="locpurhist" required onchange="checkReportType('locpurhist')">
-                                    <label for="">Local Purchase History</label>
-                                </div> --}}
-
-
-                                {{-- <div>
-                                    <input type="radio" name="report_type" value="vchr" required onchange="checkReportType('vchr')">
-                                    <label for="">Voucher</label>
-                                </div>
-                                <div>
-                                    <input type="radio" name="report_type" value="agng" required onchange="checkReportType('agng')">
-                                    <label for="">Aging</label>
-                                </div> --}}
                             </fieldset>
 
                             <fieldset class="border px-6 py-1.5  rounded h-120 ">
@@ -153,7 +151,8 @@
                                 <fieldset class="border px-4 py-2 rounded w-full">
                                     <legend>Godown Selection</legend>
                                     <div class="flex justify-between py-1">
-                                        <select  name="gc" id="gc" required class="w-full" disabled onchange="headSelected()">
+                                        <select  name="gc" id="gc" required class="w-full" >
+                                            {{-- disabled onchange="headSelected()" --}}
                                         </select>
                                     </div>
                                 </fieldset>
@@ -179,7 +178,7 @@
 
                             </div>
 
-                            <div class="flex flex-col md:flex-row w-full gap-2 px-6 pt-4">
+                            <div class="flex flex-col md:flex-row w-full gap-1 px-6 pt-4">
 
 
 
@@ -201,7 +200,7 @@
                             </fieldset>
                         {{-- </div> --}}
 
-                        <div class="flex flex-col md:flex-row w-full gap-2 px-6 pt-4">
+                        <div class="flex flex-col md:flex-row w-full gap-1 px-6 pt-4">
 
                             {{-- <fieldset class="border px-4 py-2 rounded w-full">
                                 <legend>Heads</legend>
@@ -222,7 +221,7 @@
                                 </div>
                             </fieldset> --}}
 
-                            <x-button type="submit">
+                            <x-button type="submit" >
                                 Generate PDF
                             </x-button>
                         </div>
@@ -239,9 +238,6 @@
     const heads = @json($heads);
     const sources = @json($source);
     const specifications = @json($specification);
-
-
-
     const locations = @json($location);
     const subheads = @json($subheads);
     const subheadsci = @json($subheadsci);
@@ -253,7 +249,6 @@
     const funcstkos = @json(route('stockledgers.funcstkos'));
 
 
-    // const head1 = document.getElementById('source_id')
     const head = document.getElementById('head_id')
     const source = document.getElementById('source_id')
     const specification = document.getElementById('brand_id')
@@ -273,95 +268,95 @@
           const value = head.value
           const value1 = source.value
           const value3 = specification.value
-
+          console.info(value)
           //  const value = 6
         subhead.options.length = 0 // Reset List
         //  console.info(rptType)
 
 
         switch (rptType){
-            case 'dlvrychln' :
+//             case 'dlvrychln' :
 
-                fetch(funcstkos + `?head_id=${value} &source_id=${value1} &brand_id=${value3} `,{
-                    method:"GET",
-                    headers: { 'Accept':'application/json','Content-type':'application/json'},
-                    })
-                    .then(response => response.json())
-                    .then( data => {
-                        if(data.length > 0)
-                        {
+//                 fetch(funcstkos + `?head_id=${value} &source_id=${value1} &brand_id=${value3} `,{
+//                     method:"GET",
+//                     headers: { 'Accept':'application/json','Content-type':'application/json'},
+//                     })
+//                     .then(response => response.json())
+//                     .then( data => {
+//                         if(data.length > 0)
+//                         {
 
-                            let a = 0;
-                            data.forEach(e => {
-                                a += 1;
-                                addSelectElement(subhead,e.Subhead,a + ' - ' + e.title)
-                            });
-                            subhead.setAttribute('required','')
-                            subhead.removeAttribute('disabled','')
-                        }else{
-                            subhead.removeAttribute('required','')
-                            subhead.setAttribute('disabled','')
-                        }
-                    })
-                    .catch(error => console.error(error))
-                break;
+//                             let a = 0;
+//                             data.forEach(e => {
+//                                 a += 1;
+//                                 addSelectElement(subhead,e.Subhead,a + ' - ' + e.title)
+//                             });
+//                             subhead.setAttribute('required','')
+//                             subhead.removeAttribute('disabled','')
+//                         }else{
+//                             subhead.removeAttribute('required','')
+//                             subhead.setAttribute('disabled','')
+//                         }
+//                     })
+//                     .catch(error => console.error(error))
+//                 break;
 
-// FOR CONTRACT FILL
-const getSubheadVoucherData = async (value) =>{
-        let data = await fetch(funcstkos + `?head_id=${value} &source_id=${value1} &brand_id=${value3} `,{
-            method:"GET",
-            headers: { 'Accept':'application/json','Content-type':'application/json'},
-            })
-            .then(response => response.json())
-            .then( data => { return data })
-            .catch(error => console.error(error))
-    }
-    const getStkos =async  (value) => {
-        const Stkos = await getSubheadVoucherData(value)
-        return Stkos
-    }
+// // FOR CONTRACT FILL
+// const getSubheadVoucherData = async (value) =>{
+//         let data = await fetch(funcstkos + `?head_id=${value} &source_id=${value1} &brand_id=${value3} `,{
+//             method:"GET",
+//             headers: { 'Accept':'application/json','Content-type':'application/json'},
+//             })
+//             .then(response => response.json())
+//             .then( data => { return data })
+//             .catch(error => console.error(error))
+//     }
+//     const getStkos =async  (value) => {
+//         const Stkos = await getSubheadVoucherData(value)
+//         return Stkos
+//     }
 
 
             case 'dlvrychlngd':
-            fetch(funcstkos + `?head_id=${value} &source_id=${value1} &brand_id=${value3} `,{
-                    method:"GET",
-                    headers: { 'Accept':'application/json','Content-type':'application/json'},
-                    })
-                    .then(response => response.json())
-                    .then( data => {
-                        if(data.length > 0)
-                        {
+//             fetch(funcstkos + `?head_id=${value} &source_id=${value1} &brand_id=${value3} `,{
+//                     method:"GET",
+//                     headers: { 'Accept':'application/json','Content-type':'application/json'},
+//                     })
+//                     .then(response => response.json())
+//                     .then( data => {
+//                         if(data.length > 0)
+//                         {
 
-                            let a = 0;
-                            data.forEach(e => {
+//                             let a = 0;
+//                             data.forEach(e => {
 
-                                a += 1;
-                                addSelectElement(subhead,e.Subhead,a + ' - ' + e.title)
-                            });
-                            subhead.setAttribute('required','')
-                            subhead.removeAttribute('disabled','')
-                        }else{
-                            subhead.removeAttribute('required','')
-                            subhead.setAttribute('disabled','')
-                        }
-                    })
-                    .catch(error => console.error(error))
-                break;
+//                                 a += 1;
+//                                 addSelectElement(subhead,e.Subhead,a + ' - ' + e.title)
+//                             });
+//                             subhead.setAttribute('required','')
+//                             subhead.removeAttribute('disabled','')
+//                         }else{
+//                             subhead.removeAttribute('required','')
+//                             subhead.setAttribute('disabled','')
+//                         }
+//                     })
+//                     .catch(error => console.error(error))
+//                 break;
 
-// FOR CONTRACT FILL
-const getSubheadVoucherData1 = async (value) =>{
-        let data = await fetch(funcstkos + `?head_id=${value} &source_id=${value1} &brand_id=${value3} `,{
-            method:"GET",
-            headers: { 'Accept':'application/json','Content-type':'application/json'},
-            })
-            .then(response => response.json())
-            .then( data => { return data })
-            .catch(error => console.error(error))
-    }
-    const getStkos1 =async  (value) => {
-        const Stkos1 = await getSubheadVoucherData1(value)
-        return Stkos1
-    }
+// // FOR CONTRACT FILL
+// const getSubheadVoucherData1 = async (value) =>{
+//         let data = await fetch(funcstkos + `?head_id=${value} &source_id=${value1} &brand_id=${value3} `,{
+//             method:"GET",
+//             headers: { 'Accept':'application/json','Content-type':'application/json'},
+//             })
+//             .then(response => response.json())
+//             .then( data => { return data })
+//             .catch(error => console.error(error))
+//     }
+//     const getStkos1 =async  (value) => {
+//         const Stkos1 = await getSubheadVoucherData1(value)
+//         return Stkos1
+//     }
 
 
                 case 'sraluntos':
@@ -583,109 +578,91 @@ const getSubheadVoucherData4 = async (value) =>{
 
 
 
-            case 'dlvrychln':
+            // case 'dlvrychln':
                 // Show Head
-                rptType = 'dlvrychln'
-                head.setAttribute('required','')
-                source.setAttribute('required','')
-                specification.setAttribute('required','')
-
-                head.disabled = false
-                source.disabled=false
-                specification.disabled=false
-
-
-
-                head.length = 0
-                source.length=0
-                specification.length=0
-
-
-
-                subhead.removeAttribute('required')
-                subhead.disabled = true
-                subhead.length = 0
-                // For Second Category
-                heads.forEach(e => {
-                    addSelectElement(head,e.id,e.title)
-                });
+                // rptType = 'dlvrychln'
+                // head.setAttribute('required','')
+                // source.setAttribute('required','')
+                // specification.setAttribute('required','')
+                // head.disabled = false
+                // source.disabled=false
+                // specification.disabled=false
+                // head.length = 0
+                // source.length=0
+                // specification.length=0
+                // subhead.removeAttribute('required')
+                // subhead.disabled = true
+                // subhead.length = 0
+                // // For Second Category
+                // heads.forEach(e => {
+                //     addSelectElement(head,e.id,e.title)
+                // });
 
 
-                // For First Category
-                sources.forEach(e => {
-                    addSelectElement(source,e.id,e.title)
-                });
+                // // For First Category
+                // sources.forEach(e => {
+                //     addSelectElement(source,e.id,e.title)
+                // });
 
-                specifications.forEach(e => {
-                    addSelectElement(specification,e.id,e.title)
-                });
+                // specifications.forEach(e => {
+                //     addSelectElement(specification,e.id,e.title)
+                // });
 
+                // // locations.forEach(e => {
+                // //     addSelectElement(locationss,e.id,e.title)
+                // // });
+
+
+                // // sourceSelected()
+                // headSelected()
+                // break;
+
+
+                // case 'gwsmu':
+                // // Show Head
+                // rptType = 'gwsmu'
+                // locationss.setAttribute('required','')
+                // locationss.disabled=false
+                // locationss.length=0
                 // locations.forEach(e => {
                 //     addSelectElement(locationss,e.id,e.title)
                 // });
 
 
                 // sourceSelected()
-                headSelected()
-                break;
-
-
-                case 'gwsmu':
-                // Show Head
-                rptType = 'gwsmu'
-                locationss.setAttribute('required','')
-                locationss.disabled=false
-                locationss.length=0
-                locations.forEach(e => {
-                    addSelectElement(locationss,e.id,e.title)
-                });
-
-
-                // sourceSelected()
                 // headSelected()
-                break;
+                // break;
 
 
+// ;
 
+             case 'dlvrychlngd':
+            //     // Show Head
+                //  rptType = 'dlvrychlngd'
+            //     head.setAttribute('required','')
+            //     source.setAttribute('required','')
 
+            //     head.disabled = false
+            //     source.disabled=false
 
+            //     head.length = 0
+            //     source.length=0
 
+            //     subhead.removeAttribute('required')
+            //     subhead.disabled = true
+            //     subhead.length = 0
+            //     heads.forEach(e => {
+            //         addSelectElement(head,e.id,e.title)
+            //     });
 
+            //     // For First Category
+            //     sources.forEach(e => {
+            //         addSelectElement(source,e.id,e.title)
+            //     });
 
-
-
-
-
-
-
-
-;                case 'dlvrychlngd':
-                // Show Head
-                rptType = 'dlvrychlngd'
-                head.setAttribute('required','')
-                source.setAttribute('required','')
-
-                head.disabled = false
-                source.disabled=false
-
-                head.length = 0
-                source.length=0
-
-                subhead.removeAttribute('required')
-                subhead.disabled = true
-                subhead.length = 0
-                heads.forEach(e => {
-                    addSelectElement(head,e.id,e.title)
-                });
-
-                // For First Category
-                sources.forEach(e => {
-                    addSelectElement(source,e.id,e.title)
-                });
-
-                headSelected()
-                // sourceSelected()
-                break;
+                //  headSelected()
+            //     // sourceSelected()
+                 break;
 
                 case 'sraluntos':
                 // Show Head
@@ -768,6 +745,215 @@ const getSubheadVoucherData4 = async (value) =>{
                 break;
         }
     }
+
+    document.addEventListener('DOMContentLoaded',()=>{
+
+
+                head.setAttribute('required','')
+                source.setAttribute('required','')
+                specification.setAttribute('required','')
+                head.disabled = false
+                source.disabled=false
+                specification.disabled=false
+                head.length = 0
+                source.length=0
+                specification.length=0
+                subhead.removeAttribute('required')
+                subhead.disabled = true
+                subhead.length = 0
+                // For Second Category
+                heads.forEach(e => {
+                    addSelectElement(head,e.id,e.title)
+                });
+
+                // For First Category
+                sources.forEach(e => {
+                    addSelectElement(source,e.id,e.title)
+                });
+
+                specifications.forEach(e => {
+                    addSelectElement(specification,e.id,e.title)
+                });
+
+                // sourceSelected()
+
+
+                locationss.setAttribute('required','')
+                locationss.disabled=false
+                locationss.length=0
+                locations.forEach(e => {
+                    addSelectElement(locationss,e.id,e.title)
+                });
+                headSelected();
+
+            })
+
+
+    head_id.addEventListener("change", () => {
+
+        const value = head.value
+          const value1 = source.value
+          const value3 = specification.value
+          console.info(value)
+          //  const value = 6
+        subhead.options.length = 0 // Reset List
+        fetch(funcstkos + `?head_id=${value} &source_id=${value1} &brand_id=${value3} `,{
+                    method:"GET",
+                    headers: { 'Accept':'application/json','Content-type':'application/json'},
+                    })
+                    .then(response => response.json())
+                    .then( data => {
+                        if(data.length > 0)
+                        {
+
+                            let a = 0;
+                            data.forEach(e => {
+
+                                a += 1;
+                                addSelectElement(subhead,e.Subhead,a + ' - ' + e.title)
+                            });
+                            subhead.setAttribute('required','')
+                            subhead.removeAttribute('disabled','')
+                        }else{
+                            subhead.removeAttribute('required','')
+                            subhead.setAttribute('disabled','')
+                        }
+                    })
+                    .catch(error => console.error(error))
+                // break;
+
+// FOR CONTRACT FILL
+const getSubheadVoucherData1 = async (value) =>{
+        let data = await fetch(funcstkos + `?head_id=${value} &source_id=${value1} &brand_id=${value3} `,{
+            method:"GET",
+            headers: { 'Accept':'application/json','Content-type':'application/json'},
+            })
+            .then(response => response.json())
+            .then( data => { return data })
+            .catch(error => console.error(error))
+    }
+    const getStkos1 =async  (value) => {
+        const Stkos1 = await getSubheadVoucherData1(value)
+        return Stkos1
+    }
+
+});
+
+
+source_id.addEventListener("change", () => {
+
+const value = head.value
+  const value1 = source.value
+  const value3 = specification.value
+  console.info(value)
+  //  const value = 6
+subhead.options.length = 0 // Reset List
+fetch(funcstkos + `?head_id=${value} &source_id=${value1} &brand_id=${value3} `,{
+            method:"GET",
+            headers: { 'Accept':'application/json','Content-type':'application/json'},
+            })
+            .then(response => response.json())
+            .then( data => {
+                if(data.length > 0)
+                {
+
+                    let a = 0;
+                    data.forEach(e => {
+
+                        a += 1;
+                        addSelectElement(subhead,e.Subhead,a + ' - ' + e.title)
+                    });
+                    subhead.setAttribute('required','')
+                    subhead.removeAttribute('disabled','')
+                }else{
+                    subhead.removeAttribute('required','')
+                    subhead.setAttribute('disabled','')
+                }
+            })
+            .catch(error => console.error(error))
+        // break;
+
+// FOR CONTRACT FILL
+const getSubheadVoucherData1 = async (value) =>{
+let data = await fetch(funcstkos + `?head_id=${value} &source_id=${value1} &brand_id=${value3} `,{
+    method:"GET",
+    headers: { 'Accept':'application/json','Content-type':'application/json'},
+    })
+    .then(response => response.json())
+    .then( data => { return data })
+    .catch(error => console.error(error))
+}
+const getStkos1 =async  (value) => {
+const Stkos1 = await getSubheadVoucherData1(value)
+return Stkos1
+}
+
+});
+
+
+brand_id.addEventListener("change", () => {
+
+const value = head.value
+  const value1 = source.value
+  const value3 = specification.value
+  console.info(value)
+  //  const value = 6
+subhead.options.length = 0 // Reset List
+fetch(funcstkos + `?head_id=${value} &source_id=${value1} &brand_id=${value3} `,{
+            method:"GET",
+            headers: { 'Accept':'application/json','Content-type':'application/json'},
+            })
+            .then(response => response.json())
+            .then( data => {
+                if(data.length > 0)
+                {
+
+                    let a = 0;
+                    data.forEach(e => {
+
+                        a += 1;
+                        addSelectElement(subhead,e.Subhead,a + ' - ' + e.title)
+                    });
+                    subhead.setAttribute('required','')
+                    subhead.removeAttribute('disabled','')
+                }else{
+                    subhead.removeAttribute('required','')
+                    subhead.setAttribute('disabled','')
+                }
+            })
+            .catch(error => console.error(error))
+        // break;
+
+// FOR CONTRACT FILL
+const getSubheadVoucherData1 = async (value) =>{
+let data = await fetch(funcstkos + `?head_id=${value} &source_id=${value1} &brand_id=${value3} `,{
+    method:"GET",
+    headers: { 'Accept':'application/json','Content-type':'application/json'},
+    })
+    .then(response => response.json())
+    .then( data => { return data })
+    .catch(error => console.error(error))
+}
+const getStkos1 =async  (value) => {
+const Stkos1 = await getSubheadVoucherData1(value)
+return Stkos1
+}
+
+});
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 </script>
 @endpush
 </x-app-layout>
