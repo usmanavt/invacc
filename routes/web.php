@@ -64,6 +64,9 @@ Route::post('report/fetch',[ReportController::class, 'fetch'])->name('reports.fe
 // Purchase Reports
 Route::get('purrpt',[PurchaseRptController::class, 'index'])->name('purrpt.index');
 Route::get('contlistfill',[PurchaseRptController::class, 'contlistfill'])->name('purrpt.contlistfill');
+Route::get('funcpurcat',[PurchaseRptController::class, 'funcpurcat'])->name('purrpt.funcpurcat');
+
+
 Route::get('cominvsloc',[PurchaseRptController::class, 'cominvsloc'])->name('purrpt.cominvsloc');
 Route::get('cominvsimp',[PurchaseRptController::class, 'cominvsimp'])->name('purrpt.cominvsimp');
 

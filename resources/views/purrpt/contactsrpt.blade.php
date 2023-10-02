@@ -11,7 +11,7 @@
     box-sizing: border-box;
 }
 table{
-    width:100%;
+    width:100%;.
 }
 .ledger {
     border:1px solid lightgray;
@@ -22,11 +22,11 @@ table{
     border-left: 1px solid lightgray;
     border-right: 1px solid lightgray;
     background: #e3e3e3;
-    font-size: 1rem;
+    font-size: 0.9rem;
     margin-top:5px;
     margin-bottom:5px;
     border-collapse: collapse;
-
+    /* border-bottom: 2px double gray; */
 }
 .column-headers th{
     text-align: center;
@@ -34,10 +34,10 @@ table{
 .data {
     border-collapse: collapse;
     font-size: 1rem;
-
 }
 .data tr td{
     border-left: 1px solid lightgray;
+    border-right: 1px solid lightgray;
     border-top: 1px solid lightgray;
     text-align: left;
     font-size: 0.8rem;
@@ -68,7 +68,7 @@ table{
                     {{-- <img src="{{ asset('/images/pipesfittings.jpg') }}" width="90"> --}}
                 </td>
                 <td align="center" style="width:60%;">
-                    <h1>MUHAMMAD HABIB & Co. </h1>
+                    <h1>MUHAMMAD NAZIR & Co</h1>
                 </td>
                 <td align="right" style="width:20%;">
                     &nbsp;&nbsp;&nbsp;&nbsp;
@@ -82,15 +82,25 @@ table{
         <tbody>
             <tr>
                 <td  style="text-align: center;">
-                    <h3 style="font-size:0.7rem">Steam Pipes, Pipe Fittings, Flanges, Valves, S.S.Pipes & Tbues</h3>
-                    <h3 style="font-size:0.7rem">30 KM, Sunder Stop, Multan Road, Lahore</h3>
-                </td>
-            </tr>
+                    <h3 style="font-size:0.7rem">Steam Pipes, Pipe Fitting, Flanges Valves, S.S Pipes</h3>
+                    <h3 style="font-size:0.7rem">Plot # 8 Near Allah Malik Godown Shershah Kabari Bazar,</h3>
+                    <h3 style="font-size:0.7rem">Phone : 021-32588781, 021-32574285 , Fax : 021-32588782</h3>
+                </td>            </tr>
             <tr>
                 <td  style="text-align: center;">
-                    <span style="font-size:3rem;font-weight: bold">Contracts</span>
+                    <span style="font-size:2rem">CONTRACTS </span>
                 </td>
             </tr>
+
+        {{-- <tr>
+
+            <td  style="text-align: center;">
+                <span style="font-size:1.5rem;font-weight: bold">{{ $ltype }}</span>
+            </td>
+
+        </tr> --}}
+
+
         </tbody>
     </table>
 
@@ -104,6 +114,7 @@ table{
                 <td>
                     {{ $data[0]->supname }}
                 </td>
+
                 <td>
                     Invoice No
                 </td>
@@ -132,54 +143,122 @@ table{
     {{-- column headers --}}
     <table class="column-headers ">
         <thead >
+            {{-- <tr> <th class="column-headers" width="50%">OPENING BNALANCE</th></tr> --}}
+            <tr>
+                <td colspan="4" width="28%" style="text-align:center;font-weight: bold;border-right: 1px solid lightgray;"> Material Description</td>
+                <td colspan="2" width="14%" style="text-align:center;font-weight: bold;border-right: 1px solid lightgray;"> Packing Lot</td>
+                <td colspan="2" width="14%" style="text-align: center;font-weight: bold;border-right: 1px solid lightgray;">Quantity</td>
+
+                <td colspan="2" width="16%" style="text-align: center;font-weight: bold;border-right: 1px solid lightgray;">Supplier Value($)</td>
+                <td colspan="2" width="14%" style="text-align: center;font-weight: bold;border-right: 1px solid lightgray;">Invoice Value($)</td>
+                <td colspan="2" width="14%" style="text-align: center;font-weight: bold;border-right: 1px solid lightgray;">Duty Value($)</td>
+            </tr>
+
             <tr>
                 {{-- <td  style="text-align: center font-size:0.5rem;font-weight: bold"> --}}
-                    <th class="column-headers" width="4%">S#</th>
-                    <th class="column-headers" width="40%">Material Name</th>
-                    <th class="column-headers" width="4%">Unit</th>
-                    <th class="column-headers" width="10%">Bundle-I</th>
-                    <th class="column-headers" width="10%">Bundle-II</th>
-                    <th class="column-headers" width="8%">TotPcs</th>
-                    <th class="column-headers" width="8%">Weight</th>
+                    <th class="column-headers" width="3%">S#</th>
+                    <th class="column-headers" width="17%">Material Name</th>
+                    <th class="column-headers" width="5%">Size</th>
+                    <th class="column-headers" width="3%">Unit</th>
+
+
+                    <th class="column-headers" width="7%">Bundle1</th>
+                    <th class="column-headers" width="7%">Bundle2</th>
+
+                    <th class="column-headers" width="7%">In Pcs</th>
+                    <th class="column-headers" width="7%">In Kg</th>
+
                     <th class="column-headers" width="8%">Price</th>
-                    <th class="column-headers" width="8%">Value</th>
-                {{-- </td> --}}
+                    <th class="column-headers" width="8%">Amount</th>
+
+                    <th class="column-headers" width="7%">Price</th>
+                    <th class="column-headers" width="7%">Amount</th>
+
+                    <th class="column-headers" width="7%">Price</th>
+                    <th class="column-headers" width="7%">Amount</th>
+
+
             </tr>
         </thead>
     </table>
 
     <table class="data" cellspacing="0">
         <tbody>
-            {{ $vtotpcs = 0 }}
-            {{ $vwt = 0 }}
-            {{ $vvlues = 0 }}
-            {{-- {{ $pcspbundle2 = 0 }} --}}
+
+            {{ $wt = 0 }};{{ $pcs = 0 }};{{ $supval = 0 }};{{ $invsval = 0 }};{{ $dutval = 0 }}
 
             @for ($i = 0 ; $i < count($data) ; $i++)
+            @if( $i==0 )
+            <tr>
+                <td colspan="20" width="100%" style="text-align: left;font-size:1.2rem;border-bottom: 2px solid rgb(211, 211, 211);"> {{ $data[$i]->Itemgroupe}} </td>
+            </tr>
+        @else
+
+        {{ $srno = $i - 1 }}
+        @if ($data[$i]->Itemgroupe  <> $data[$srno]->Itemgroupe)
+
+        {{-- <tr>
+            <td class="column-headers" colspan="6" width="7%" style="text-align: right;font-weight: bold; border-bottom: 1px solid lightgray;">Sub Total</td>
+            <td colspan="1" width="7%" style="text-align: right;border-bottom: 1px solid lightgray;background: #e3e3e3;font-weight: bold">{{ number_format($pcs,2) }} </td>
+            <td colspan="1" width="7%" style="text-align: right;border-bottom: 1px solid lightgray;background: #e3e3e3;font-weight: bold">{{ number_format($wt,2) }} </td>
+            <td colspan="2" width="8%" style="text-align: right;border-bottom: 1px solid lightgray;background: #e3e3e3;font-weight: bold">{{ number_format($supval,2) }} </td>
+            <td colspan="2" width="7%" style="text-align: right;border-bottom: 1px solid lightgray;background: #e3e3e3;font-weight: bold">{{ number_format($invsval,2) }} </td>
+            <td colspan="3" width="7%" style="text-align: right;border-bottom: 1px solid lightgray;background: #e3e3e3;font-weight: bold">{{ number_format($dutval,2) }} </td>
+
+        </tr> --}}
+
+              <tr>
+                    <td colspan="20" width="100%" style="text-align:left;font-size:1.2rem;border-bottom: 2px solid rgb(211, 211, 211);"> {{ $data[$i]->Itemgroupe}} </td>
+             </tr>
+        @endif
+
+        @endif
+
+
             <tr>
 
-                {{ $vtotpcs += $data[$i]->totpcs }}
-                {{ $vwt += $data[$i]->wt }}
-                {{ $vvlues += $data[$i]->vlues }}
+                {{ $wt += $data[$i]->wt }}.
+                {{ $pcs += $data[$i]->totpcs }}
+                {{ $supval += $data[$i]->vlues }}
+                {{ $invsval += $data[$i]->invsvalue }}
+                {{ $dutval += $data[$i]->dutval }}
 
 
-                <td style="text-align:center" width="4%">{{ $i+1 }}</td>
-                <td style="text-align:left" width="40%">{{ $data[$i]->size }} </td>
-                <td style="text-align:center"  width="4%">{{ $data[$i]->unit }} </td>
-                <td style="text-align:center"  width="10%">{{ $data[$i]->bundle1 }} </td>
-                <td style="text-align:center"  width="10%">{{ $data[$i]->bundle2 }} </td>
-                <td style="text-align:right"  width="8%">{{ number_format($data[$i]->totpcs,0) }} </td>
-                <td style="text-align:right"  width="8%">{{ number_format($data[$i]->wt,1) }} </td>
-                <td style="text-align:right"  width="8%">{{ number_format($data[$i]->price,1) }} </td>
-                <td style="text-align:right"  width="8%">{{ number_format($data[$i]->vlues,0) }} </td>
+
+
+                <td style="text-align:center" width="3%">{{ $i+1 }}</td>
+                <td style="text-align:left" width="17%">{{ $data[$i]->material_title}} </td>
+                <td style="text-align:center" width="5%">{{ $data[$i]->size}} </td>
+                <td style="text-align:center" width="3%">{{ $data[$i]->unit}} </td>
+
+                <td style="text-align:center" width="7%">{{ $data[$i]->bundle1 }} </td>
+                <td style="text-align:center" width="7%">{{ $data[$i]->bundle2 }} </td>
+
+                <td style="text-align:right" width="7%">{{ number_format($data[$i]->totpcs,0) }} </td>
+                <td style="text-align:right" width="7%">{{ number_format($data[$i]->wt,2) }} </td>
+
+                <td style="text-align:right" width="8%">{{ number_format($data[$i]->price,2) }} </td>
+                <td style="text-align:right" width="8%">{{ number_format($data[$i]->vlues,2) }} </td>
+
+                <td style="text-align:right" width="7%">{{ number_format($data[$i]->invsrate,2) }} </td>
+                <td style="text-align:right" width="7%">{{ number_format($data[$i]->invsvalue,2) }} </td>
+
+                <td style="text-align:right" width="7%">{{ number_format($data[$i]->dtyrate,2) }} </td>
+                <td style="text-align:right" width="7%">{{ number_format($data[$i]->dutval,2) }} </td>
+
+
             </tr>
             @endfor
             <tr>
-                <td class="column-headers" colspan="2" width="40%" style="text-align: right;font-weight: bold; border-bottom: 1px solid lightgray;">Total</td>
-                <td class="column-headers" colspan="4" width="8%" style="text-align: right;font-weight: bold;border-bottom: 1px solid lightgray;">{{ number_format($vtotpcs,0) }} </td>
-                <td class="column-headers" colspan="1" width="8%" style="text-align: right;font-weight: bold;border-bottom: 1px solid lightgray;">{{ number_format($vwt,0) }} </td>
-                <td class="column-headers" colspan="2" width="8%" style="text-align: right;font-weight: bold;border-bottom: 1px solid lightgray;">{{ number_format($vvlues,0) }} </td>
-           </tr>
+                <td class="column-headers" colspan="6" width="7%" style="text-align: right;font-weight: bold; border-bottom: 1px solid lightgray;">Grand Total</td>
+                {{-- <td colspan="1" width="7%" style="text-align: right;border-bottom: 1px solid lightgray;background: #e3e3e3;font-weight: bold">Total(s)</td> --}}
+                <td colspan="1" width="7%" style="text-align: right;border-bottom: 1px solid lightgray;background: #e3e3e3;font-weight: bold">{{ number_format($pcs,2) }} </td>
+                <td colspan="1" width="7%" style="text-align: right;border-bottom: 1px solid lightgray;background: #e3e3e3;font-weight: bold">{{ number_format($wt,2) }} </td>
+                <td colspan="2" width="8%" style="text-align: right;border-bottom: 1px solid lightgray;background: #e3e3e3;font-weight: bold">{{ number_format($supval,2) }} </td>
+                <td colspan="2" width="7%" style="text-align: right;border-bottom: 1px solid lightgray;background: #e3e3e3;font-weight: bold">{{ number_format($invsval,2) }} </td>
+                <td colspan="3" width="7%" style="text-align: right;border-bottom: 1px solid lightgray;background: #e3e3e3;font-weight: bold">{{ number_format($dutval,2) }} </td>
+
+            </tr>
 
 
 
@@ -193,7 +272,7 @@ table{
     <div style="margin-top:64px;">
         <table >
 
-            <tr style="margin-top:16px;margin-bottom:16px;">
+            {{-- <tr style="margin-top:16px;margin-bottom:16px;">
                 <td style="width=33%;font-size:80%;text-align:center">
                     --------------------
                 </td>
@@ -210,9 +289,24 @@ table{
                 <td style="width=33%;font-size:80%;text-align:center">
                     Approved By
                 </td>
-            </tr>
+            </tr> --}}
+
+
+
+
+
+
         </table>
+
+
+
+
+
+
     </div>
 
+
+
     </body>
+
 </html>

@@ -88,7 +88,7 @@ table{
                 </td>            </tr>
             <tr>
                 <td  style="text-align: center;">
-                    <span style="font-size:2rem">Stock Movement Ledger "VALUATION" </span>
+                    <span style="font-size:2rem">Godown Wise Stock Movement Ledger "VALUATION"</span>
                 </td>
             </tr>
 
@@ -99,6 +99,15 @@ table{
             </td>
 
         </tr>
+
+        <tr>
+
+            <td  style="text-align: center;">
+                <span style="font-size:1.5rem;font-weight: bold">{{ $data[0]->lidesc }}</span>
+            </td>
+
+        </tr>
+
 
 
         </tbody>

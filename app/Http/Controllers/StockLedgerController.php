@@ -68,12 +68,6 @@ class StockLedgerController extends Controller
     }
 
 
-
-
-
-
-
-
     public function getMPDFSettingsL($orientation = 'Legal-L')
     {
 
@@ -291,7 +285,7 @@ class StockLedgerController extends Controller
                 Session::flash('info','No data available');
                 return redirect()->back();
             }
-            // $mpdf = $this->getMPDFSettingsP();
+            $mpdf = $this->getMPDFSettingsP();
             // $html =  view('stockledgers.gwstkledger')->with('data',$data)->with('fromdate',$fromdate)
             // ->with('todate',$todate)->with('ltype',$ltype)->render();
             // $filename = 'StockLedgerSummary-'.$fromdate.'-'.$todate.'.pdf';
@@ -302,7 +296,7 @@ class StockLedgerController extends Controller
                 $html =  view('stockledgers.gwstkledger')->with('data',$g)->with('fromdate',$fromdate)->with('todate',$todate)
                 ->render();
                 $filename = $g[0]->ldesc  .'-'.$fromdate.'-'.$todate.'.pdf';
-                $mpdf = $this->getMPDFSettingsP();
+                // $mpdf = $this->getMPDFSettingsP();
                 $chunks = explode("chunk", $html);
                 foreach($chunks as $key => $val) {
                     $mpdf->WriteHTML($val);
@@ -337,7 +331,7 @@ class StockLedgerController extends Controller
                 Session::flash('info','No data available');
                 return redirect()->back();
             }
-            // $mpdf = $this->getMPDFSettingsP();
+            $mpdf = $this->getMPDFSettingsL();
             // $html =  view('stockledgers.gwstkledger')->with('data',$data)->with('fromdate',$fromdate)
             // ->with('todate',$todate)->with('ltype',$ltype)->render();
             // $filename = 'StockLedgerSummary-'.$fromdate.'-'.$todate.'.pdf';
@@ -348,7 +342,7 @@ class StockLedgerController extends Controller
                 $html =  view('stockledgers.gwstkledgerau')->with('data',$g)->with('fromdate',$fromdate)->with('todate',$todate)
                 ->render();
                 $filename = $g[0]->ldesc  .'-'.$fromdate.'-'.$todate.'.pdf';
-                $mpdf = $this->getMPDFSettingsL();
+                // $mpdf = $this->getMPDFSettingsL();
                 $chunks = explode("chunk", $html);
                 foreach($chunks as $key => $val) {
                     $mpdf->WriteHTML($val);
@@ -512,6 +506,113 @@ class StockLedgerController extends Controller
             ->with('todate',$todate)->with('ltype',$ltype)->render();
             $filename = 'StockLedgerSummary-'.$fromdate.'-'.$todate.'.pdf';
         }
+
+
+        if($report_type === 'smsvalgs'){
+            $ltype ="Godown Stock";
+            $head_id = $request->head_id;
+            $gc = $request->gc;
+            $head = Category::findOrFail($head_id);
+            if($request->has('subhead_id')){
+                $subhead_id = $request->subhead_id;
+                //  Clear Data from Table
+                DB::table('tmpstockrptpar')->truncate();
+                foreach($request->subhead_id as $id)
+                {
+                    DB::table('tmpstockrptpar')->insert([ 'glcode' => $id ]);
+                }
+            }
+            //  Call Procedure
+            $mpdf = $this->getMPDFSettingsL();
+            $data = DB::select('call procstockledgergsval(?,?,?)',array($fromdate,$todate,$gc));
+            if(!$data)
+            {
+                Session::flash('info','No data available');
+                return redirect()->back();
+            }
+            $collection = collect($data);                   //  Make array a collection
+            $grouped = $collection->groupBy('lid');
+            $grouped->values()->all();        //  values() removes indices of array
+            foreach($grouped as $g){
+                 $html =  view('stockledgers.smsvaluationgs')->with('data',$g)->with('fromdate',$fromdate)->with('todate',$todate)
+                 ->with('headtype',$head->title)->with('ltype',$ltype)->render();
+                //  ->with('hdng1',$hdng1)->with('hdng2',$hdng2)->with('t1',$t1)->with('t2',$t2)->with('t3',$t3)->with('t4',$t4)->with('t5',$t5)
+                // $html =  view('salerpt.glhw')->with('data',$g)->with('fromdate',$fromdate)->with('todate',$todate)->render();
+                $filename = $g[0]->lid  .'-'.$fromdate.'-'.$todate.'.pdf';
+                // $mpdf->SetHTMLFooter('
+                // <table width="100%" style="border-top:1px solid gray">
+                //     <tr>
+                //         <td width="33%">{DATE d-m-Y}</td>
+                //         <td width="33%" align="center">{PAGENO}/{nbpg}</td>
+
+                //     </tr>
+                // </table>');
+                $chunks = explode("chunk", $html);
+                foreach($chunks as $key => $val) {
+                    $mpdf->WriteHTML($val);
+                }
+                $mpdf->AddPage();
+            }
+            return response($mpdf->Output($filename,'I'),200)->header('Content-Type','application/pdf');
+
+        }
+
+
+
+
+        if($report_type === 'smsvalgssmry'){
+            $ltype ="Godown Stock";
+            $head_id = $request->head_id;
+            $gc = $request->gc;
+            $head = Category::findOrFail($head_id);
+            if($request->has('subhead_id')){
+                $subhead_id = $request->subhead_id;
+                //  Clear Data from Table
+                // DB::table('tmpstockrptpar')->truncate();
+                // foreach($request->subhead_id as $id)
+                // {
+                //     DB::table('tmpstockrptpar')->insert([ 'glcode' => $id ]);
+                // }
+            }
+            //  Call Procedure
+            $mpdf = $this->getMPDFSettingsL();
+            $data = DB::select('call procgwstocksmry(?,?)',array($fromdate,$todate));
+            if(!$data)
+            {
+                Session::flash('info','No data available');
+                return redirect()->back();
+            }
+            $collection = collect($data);                   //  Make array a collection
+            $grouped = $collection->groupBy('lid');
+            $grouped->values()->all();        //  values() removes indices of array
+            foreach($grouped as $g){
+                 $html =  view('stockledgers.gwstockvalsumary')->with('data',$g)->with('fromdate',$fromdate)->with('todate',$todate)
+                 ->with('headtype',$head->title)->with('ltype',$ltype)->render();
+                //  ->with('hdng1',$hdng1)->with('hdng2',$hdng2)->with('t1',$t1)->with('t2',$t2)->with('t3',$t3)->with('t4',$t4)->with('t5',$t5)
+                // $html =  view('salerpt.glhw')->with('data',$g)->with('fromdate',$fromdate)->with('todate',$todate)->render();
+                $filename = $g[0]->lid  .'-'.$fromdate.'-'.$todate.'.pdf';
+                // $mpdf->SetHTMLFooter('
+                // <table width="100%" style="border-top:1px solid gray">
+                //     <tr>
+                //         <td width="33%">{DATE d-m-Y}</td>
+                //         <td width="33%" align="center">{PAGENO}/{nbpg}</td>
+
+                //     </tr>
+                // </table>');
+                $chunks = explode("chunk", $html);
+                foreach($chunks as $key => $val) {
+                    $mpdf->WriteHTML($val);
+                }
+                $mpdf->AddPage();
+            }
+            return response($mpdf->Output($filename,'I'),200)->header('Content-Type','application/pdf');
+
+        }
+
+
+
+
+
 
 
 

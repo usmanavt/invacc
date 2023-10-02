@@ -43,6 +43,21 @@ class PurchaseRptController extends Controller
         ->where('MHEAD',$head)->get()->toArray();
     }
 
+    public function funcpurcat(Request $request)
+    {
+    //  dd($request->all());
+        $fromdate = $request->fromdate;
+        $todate = $request->todate;
+        $head = $request->head;
+        return DB::table('vwpurcategory')->select('*')
+        ->whereBetween('invoice_date',[$fromdate,$todate])
+        ->where('MHEAD',$head)->get()->toArray();
+    }
+
+
+
+
+
     public function cominvsloc(Request $request)
     {
         //  dd($request->all());
@@ -63,6 +78,61 @@ class PurchaseRptController extends Controller
         $head = $request->head;
           return DB::table('vwsupcategorycominv')->select('*')->whereBetween('invoice_date',[$fromdate,$todate])->where('MHEAD',$head)->get()->toArray();
     }
+
+    public function getMPDFSettingsLgl($orientation = 'Legal-L')
+    {
+
+        $format;
+        $orientation == 'L' ? $format = 'Legal': 'Legal';
+
+        $mpdf = new PDF( [
+            'mode' => 'utf-8',
+            'format' => $orientation,
+            'margin_header' => '2',
+            'margin_top' => '5',
+            'margin_bottom' => '5',
+            'margin_footer' => '2',
+            'default_font_size' => 9,
+            'margin_left' => '10',
+            'margin_right' => '10',
+        ]);
+        $mpdf->showImageErrors = true;
+        $mpdf->curlAllowUnsafeSslRequests = true;
+        $mpdf->debug = true;
+        return $mpdf;
+    }
+
+    public function getMPDFSettingsA3($orientation = 'A3-L')
+    {
+
+        $format;
+        $orientation == 'L' ? $format = 'A3': 'A3';
+
+        $mpdf = new PDF( [
+            'mode' => 'utf-8',
+            'format' => $orientation,
+            'margin_header' => '2',
+            'margin_top' => '5',
+            'margin_bottom' => '5',
+            'margin_footer' => '2',
+            'default_font_size' => 9,
+            'margin_left' => '10',
+            'margin_right' => '10',
+        ]);
+        $mpdf->showImageErrors = true;
+        $mpdf->curlAllowUnsafeSslRequests = true;
+        $mpdf->debug = true;
+        return $mpdf;
+    }
+
+
+
+
+
+
+
+
+
 
     public function getMPDFSettings($orientation = 'A4')
     {
@@ -86,6 +156,31 @@ class PurchaseRptController extends Controller
         $mpdf->debug = true;
         return $mpdf;
     }
+
+
+    public function getMPDFSettingsA4L($orientation = 'A4-L')
+    {
+
+        $format;
+        $orientation == 'L' ? $format = 'A4': 'A4';
+
+        $mpdf = new PDF( [
+            'mode' => 'utf-8',
+            'format' => $orientation,
+            'margin_header' => '2',
+            'margin_top' => '5',
+            'margin_bottom' => '5',
+            'margin_footer' => '2',
+            'default_font_size' => 9,
+            'margin_left' => '10',
+            'margin_right' => '10',
+        ]);
+        $mpdf->showImageErrors = true;
+        $mpdf->curlAllowUnsafeSslRequests = true;
+        $mpdf->debug = true;
+        return $mpdf;
+    }
+
 
     public function getMPDFSettingsLI($orientation = 'A4-L')
     {
@@ -211,6 +306,7 @@ class PurchaseRptController extends Controller
             $collection = collect($data);                   //  Make array a collection
             $grouped = $collection->groupBy('purid');       //  Sort collection by SupName
             $grouped->values()->all();                       //  values() removes indices of array
+
             foreach($grouped as $g){
                  $html =  view('purrpt.contactsrpt')
                     ->with('data',$g)
@@ -218,14 +314,17 @@ class PurchaseRptController extends Controller
                     ->with('todate',$todate)
                     ->with('headtype',$head->title)->render();
                 $filename = $g[0]->purid  .'-'.$fromdate.'-'.$todate.'.pdf';
-                $mpdf->SetHTMLFooter('
-                <table width="100%" style="border-top:1px solid gray">
-                    <tr>
-                        <td width="33%">{DATE d-m-Y}</td>
-                        <td width="33%" align="center">{PAGENO}/{nbpg}</td>
-                        <td width="33%" style="text-align: right;">' . $filename . '</td>
-                    </tr>
-                </table>');
+                $mpdf = $this->getMPDFSettingsA4L();
+
+
+                // $mpdf->SetHTMLFooter('
+                // <table width="100%" style="border-top:1px solid gray">
+                //     <tr>
+                //         <td width="33%">{DATE d-m-Y}</td>
+                //         <td width="33%" align="center">{PAGENO}/{nbpg}</td>
+                //         <td width="33%" style="text-align: right;">' . $filename . '</td>
+                //     </tr>
+                // </table>');
                 $chunks = explode("chunk", $html);
                 foreach($chunks as $key => $val) {
                     $mpdf->WriteHTML($val);
@@ -234,6 +333,50 @@ class PurchaseRptController extends Controller
             }
             return response($mpdf->Output($filename,'I'),200)->header('Content-Type','application/pdf');
         }
+
+
+        if($report_type === 'gdnrcvd'){
+            //  dd($request->all());
+            $head_id = $request->head_id;
+            $head = Supplier::findOrFail($head_id);
+            if($request->has('subhead_id')){
+                $subhead_id = $request->subhead_id;
+                //  Clear Data from Table
+                DB::table('contparameterrpt')->truncate();
+                foreach($request->subhead_id as $id)
+                {
+                    DB::table('contparameterrpt')->insert([ 'GLCODE' => $id ]);
+                }
+            }
+            //  Call Procedure
+            $data = DB::select('call procgdnpur()');
+            if(!$data)
+            {
+                Session::flash('info','No data available');
+                return redirect()->back();
+            }
+            $collection = collect($data);                   //  Make array a collection
+            $grouped = $collection->groupBy('id');       //  Sort collection by SupName
+            $grouped->values()->all();                       //  values() removes indices of array
+
+            foreach($grouped as $g){
+                 $html =  view('purrpt.gdnreceived')
+                    ->with('data',$g)
+                    ->with('fromdate',$fromdate)
+                    ->with('todate',$todate)
+                    ->with('headtype',$head->title)->render();
+                $filename = $g[0]->id  .'-'.$fromdate.'-'.$todate.'.pdf';
+                $mpdf = $this->getMPDFSettingsA3();
+                $chunks = explode("chunk", $html);
+                foreach($chunks as $key => $val) {
+                    $mpdf->WriteHTML($val);
+                }
+                $mpdf->AddPage();
+            }
+            return response($mpdf->Output($filename,'I'),200)->header('Content-Type','application/pdf');
+        }
+
+
 
         if($report_type === 'loccominvs'){
             $head_id = $request->head_id;

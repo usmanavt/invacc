@@ -17,9 +17,15 @@
                             <fieldset class="border px-4 py-2 rounded">
                                 <legend>Report Type</legend>
                                 <div>
-                                    <input type="radio" name="report_type" value="glhw" required onchange="checkReportType('glhw')">
+                                    <input type="radio" name="report_type" value="glhw" >
                                     <label for="">Contracts </label>
                                 </div>
+                                <div>
+                                    <input type="radio" name="report_type" value="gdnrcvd" >
+                                    <label for="">Godown Receiving </label>
+                                </div>
+
+
 
                                 <div>
                                     <input type="radio" name="report_type" value="gl" required onchange="checkReportType('gl')">
@@ -301,28 +307,28 @@
 
 
 
-            case 'glhw':
-            // console.log(value)
-            fetch(contlistfill + `?todate=${todate.value}&fromdate=${fromdate.value}&head=${value}`,{
-                    method:"GET",
-                    headers: { 'Accept':'application/json','Content-type':'application/json'},
-                    })
-                    .then(response => response.json())
-                    .then( data => {
-                        if(data.length > 0)
-                        {
-                            data.forEach(e => {
-                                addSelectElement(subhead,e.Subhead,e.title)
-                            });
-                            subhead.setAttribute('required','')
-                            subhead.removeAttribute('disabled','')
-                        }else{
-                            subhead.removeAttribute('required','')
-                            subhead.setAttribute('disabled','')
-                        }
-                    })
-                    .catch(error => console.error(error))
-                break;
+            // case 'glhw':
+            // // console.log(value)
+            // fetch(contlistfill + `?todate=${todate.value}&fromdate=${fromdate.value}&head=${value}`,{
+            //         method:"GET",
+            //         headers: { 'Accept':'application/json','Content-type':'application/json'},
+            //         })
+            //         .then(response => response.json())
+            //         .then( data => {
+            //             if(data.length > 0)
+            //             {
+            //                 data.forEach(e => {
+            //                     addSelectElement(subhead,e.Subhead,e.title)
+            //                 });
+            //                 subhead.setAttribute('required','')
+            //                 subhead.removeAttribute('disabled','')
+            //             }else{
+            //                 subhead.removeAttribute('required','')
+            //                 subhead.setAttribute('disabled','')
+            //             }
+            //         })
+            //         .catch(error => console.error(error))
+            //     break;
 
 
                 case 'loccominvs':
@@ -554,22 +560,22 @@ const getCominvsimpVoucherData = async (value) =>{
 
 
 
-                case 'glhw':
-                //  Head Not Required
-                rptType = 'glhw'
-                head.setAttribute('required','')
-                head.disabled = false
-                head.length = 0
-                subhead.removeAttribute('required')
-                subhead.disabled = true
-                subhead.length = 0
-                //  Add in Head added [6,7,8,9] RESTRICT
-                vchrheads.forEach(e => {
-                    // console.info(e)
-                    addSelectElement(head,e.id,e.title)
-                });
-                headSelected()
-                break;
+                // case 'glhw':
+                // //  Head Not Required
+                // rptType = 'glhw'
+                // head.setAttribute('required','')
+                // head.disabled = false
+                // head.length = 0
+                // subhead.removeAttribute('required')
+                // subhead.disabled = true
+                // subhead.length = 0
+                // //  Add in Head added [6,7,8,9] RESTRICT
+                // vchrheads.forEach(e => {
+                //     // console.info(e)
+                //     addSelectElement(head,e.id,e.title)
+                // });
+                // headSelected()
+                // break;
 
             case 'agng':
                 // Show Head
@@ -586,6 +592,128 @@ const getCominvsimpVoucherData = async (value) =>{
                 break;
         }
     }
+
+
+
+ document.addEventListener('DOMContentLoaded',()=>{
+
+    const value = head.value
+    console.log(value);
+    subhead.options.length = 0 // Reset List
+
+    head.setAttribute('required','')
+                head.disabled = false
+                head.length = 0
+                subhead.removeAttribute('required')
+                subhead.disabled = true
+                subhead.length = 0
+                //  Add in Head added [6,7,8,9] RESTRICT
+                vchrheads.forEach(e => {
+                    // console.info(e)
+                    addSelectElement(head,e.id,e.title)
+                });
+                headSelected()
+
+
+
+})
+
+
+head_id.addEventListener("change", () => {
+    const value = head.value
+    // case 'glhw':
+            // console.log(value)
+
+ if(glhw=true)
+
+ {
+        fetch(contlistfill + `?todate=${todate.value}&fromdate=${fromdate.value}&head=${value}`,{
+                    method:"GET",
+                    headers: { 'Accept':'application/json','Content-type':'application/json'},
+                    })
+                    .then(response => response.json())
+                    .then( data => {
+                        if(data.length > 0)
+                        {
+                            data.forEach(e => {
+                                addSelectElement(subhead,e.Subhead,e.title)
+                            });
+                            subhead.setAttribute('required','')
+                            subhead.removeAttribute('disabled','')
+                        }else{
+                            subhead.removeAttribute('required','')
+                            subhead.setAttribute('disabled','')
+                        }
+                    })
+                    .catch(error => console.error(error))
+
+}
+
+if(gdnrcvd=true)
+
+{
+       fetch(funcpurcat + `?todate=${todate.value}&fromdate=${fromdate.value}&head=${value}`,{
+                   method:"GET",
+                   headers: { 'Accept':'application/json','Content-type':'application/json'},
+                   })
+                   .then(response => response.json())
+                   .then( data => {
+                       if(data.length > 0)
+                       {
+                           data.forEach(e => {
+                               addSelectElement(subhead,e.Subhead,e.title)
+                           });
+                           subhead.setAttribute('required','')
+                           subhead.removeAttribute('disabled','')
+                       }else{
+                           subhead.removeAttribute('required','')
+                           subhead.setAttribute('disabled','')
+                       }
+                   })
+                   .catch(error => console.error(error))
+
+}
+
+
+
+
+
+
+
+});
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 </script>
 @endpush
 </x-app-layout>

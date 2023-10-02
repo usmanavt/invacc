@@ -54,16 +54,11 @@
                                     </td>
                                 </tr>
 
-
                                 <div>
                                     <input type="radio" name="report_type" value="dlvrychlngd" required >
                                     {{-- onchange="checkReportType('dlvrychlngd')" --}}
                                     <label for="">SMLS Master Unit </label>
                                 </div>
-
-
-
-
 
                                 <div>
                                     <input type="radio" name="report_type" value="sraluntgs" >
@@ -87,6 +82,19 @@
                                     <input type="radio" name="report_type" value="smsindgs" required onchange="checkReportType('smsindgs')">
                                     <label for="">SMSL Individual Master Unit </label>
                                 </div>
+
+                                <div>
+                                    <input type="radio" name="report_type" value="smsvalgs" >
+                                    <label for="">Godown Wise Valuation </label>
+                                </div>
+
+                                <div>
+                                    <input type="radio" name="report_type" value="smsvalgssmry" >
+                                    <label for="">Godown Wise Valuation Summary </label>
+                                </div>
+
+
+
 
                             </fieldset>
 
