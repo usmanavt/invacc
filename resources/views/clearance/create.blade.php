@@ -1,7 +1,7 @@
 <x-app-layout>
 
     @push('styles')
-    {{-- <link rel="stylesheet" href="{{ asset('css/tabulator_simple.min.css') }}"> --}}
+    <link rel="stylesheet" href="{{ asset('css/tabulator_simple.min.css') }}">
     <link href="https://unpkg.com/tabulator-tables/dist/css/tabulator.min.css" rel="stylesheet">
     <script type="text/javascript" src="https://unpkg.com/tabulator-tables/dist/js/tabulator.min.js"></script>
 
@@ -10,7 +10,7 @@
 
     <x-slot name="header">
         <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-            Duties Clearance
+            Add Duties Clearance
         </h2>
     </x-slot>
 
@@ -30,6 +30,8 @@
                                 <x-input-text title="Invoice #" name="invoiceno"  req required class="" disabled/>
                                 {{-- <x-input-date title="Mac. Date" name="machine_date" id="machine_date" req required class="col-span-2" disabled/> --}}
                                 <x-input-text title="Mac. No" name="machineno" req required class="col-span-2" disabled/>
+                                <x-input-date title="Mac. Date" name="machine_date" req required class="col-span-2" disabled/>
+                                <x-input-date title="Clearance Date" name="invoice_date" req required class="col-span-2" />
 
 
                             </div>
@@ -277,8 +279,8 @@
                 {
                  title:'Com.Invs.Duty.Data', headerHozAlign:"center",
                  columns:[
+                 {title:"PKG", field:"packingwt" , visible:true ,headerSort:false, responsive:0},
                  {title:"Weight", field:"tweight" , visible:true ,headerSort:false, responsive:0},
-                //  {title:"TotalPcs", field:"ttotalpcs" , visible:true ,headerSort:false, responsive:0},
                  {title:"Duty", field:"tvalue" , visible:true ,headerSort:false, responsive:0},
 
                 ]},
@@ -286,8 +288,8 @@
                 {
                  title:'Pending Duty Clearance', headerHozAlign:"center",
                  columns:[
+                 {title:"PKG Bal", field:"packingwtbal" , visible:true ,headerSort:false, responsive:0},
                  {title:"Weight", field:"pweight" , visible:true ,headerSort:false, responsive:0},
-                //  {title:"TotalPcs", field:"ptotalpcs" , visible:true ,headerSort:false, responsive:0},
                  {title:"Duty", field:"ptvalue" , visible:true ,headerSort:false, responsive:0},
 
                 ]}
@@ -309,11 +311,11 @@
 
             // Fill Master Data
 
-            console.log(data.machine_date);
+            // console.log(data.machine_date);
             invoiceno.value = data.invoiceno
             // invoicedate.value=data.invoicedate
             machineno.value = data.machineno
-            // machine_date.value=data.machine_date
+            machine_date.value=data.machine_date
             cominvsid.value = data.id
 
             // invoicedate = data.invoice_date->format('dd/mm/YYYY')
@@ -387,7 +389,7 @@
                         // cominvsid:          obj.comer
 
 
-                        totpcs:             obj.totpcs,
+                        // totpcs:             obj.totpcs,
 
 
                         purval:             0,
@@ -404,6 +406,12 @@
                         gdswt :             obj.gdswt ,
                         dutygdswt :         obj.dutygdswt ,
                         hscode :            obj.hscode,
+
+                        packing:    obj.packing,
+                        packingwtbal:   obj.packingwtbal,
+                        pcsbal: obj.pcsbal,
+
+
                         inkg :              vwinkg,
                         length :            0,
                         gdsprice :          obj.gdsprice,
@@ -450,7 +458,8 @@
                         acd       : obj.acd,
                         ast       : obj.ast,
                         it       : obj.it,
-                        wse      : obj.wse,
+                        wse      : obj.wse
+
 
 
 
@@ -506,6 +515,14 @@
                 var dutygdswt = e.dutygdswt
                 var hscode = e.hscode
 
+                var packing = e.packing
+                var packingwtbal = e.packingwtbal
+                var pcsbal = e.pcsbal
+
+
+
+
+
                 var cd = e.cd
                 var st = e.st
                 var rd = e.rd
@@ -547,6 +564,18 @@
                  e.length = length
                  e.dutygdswt=dutygdswt
                  e.hscode=hscode
+
+                 e.packing=packing
+                 e.packingwtbal=packingwtbal
+                 e.pcsbal=pcsbal
+
+
+
+
+
+
+
+
 
                  e.cd =     cd
                  e.st =     st
@@ -823,10 +852,11 @@ var headerMenu = function(){
 
 var updateValues = (cell) => {
         var data = cell.getData();
-        var sum = (Number(data.bundle1) * Number(data.pcspbundle1)) + (Number(data.bundle2) * Number(data.pcspbundle2))
+        // var sum = (Number(data.bundle1) * Number(data.pcspbundle1)) + (Number(data.bundle2) * Number(data.pcspbundle2))
+
         var row = cell.getRow();
         row.update({
-             "pcs": sum,
+            //  "pcs": sum,
             // "gdspricetot": sum2,
             // "gdspricedtytot":sum3
 
@@ -854,17 +884,17 @@ var updateValues = (cell) => {
                     }
                 },
                 {title:"Id",           field:"id", visible:false},
-                {title:"Material",     field:"material_title",responsive:0},
-                {title:"dimension",    field:"dimension",responsive:0,frozen:true, headerMenu:headerMenu},
-                {title:"Unit",         field:"sku",responsive:0},
-                {title:"Unitid",       field:"sku_id",visible:false},
+                {title:"Packaging Type",     field:"packing",responsive:0},
+                // {title:"dimension",    field:"dimension",responsive:0,frozen:true, headerMenu:headerMenu},
+                // {title:"Unit",         field:"sku",responsive:0},
+                // {title:"Unitid",       field:"sku_id",visible:false},
                 // {title:"contract_id",  field:"contract_id",visible:false},
-                {title:"material_id",  field:"material_id",visible:false},
+                // {title:"material_id",  field:"material_id",visible:false},
                 {title:"supplier_id",  field:"supplier_id",visible:false},
-                {title:"user_id",      field:"user_id",visible:false},
-                {title:"category_id",  field:"category_id",visible:false},
-                {title:"sku_id",       field:"sku_id",visible:false},
-                {title:"dimension_id", field:"dimension_id",visible:false},
+                // {title:"user_id",      field:"user_id",visible:false},
+                // {title:"category_id",  field:"category_id",visible:false},
+                // {title:"sku_id",       field:"sku_id",visible:false},
+                // {title:"dimension_id", field:"dimension_id",visible:false},
                 // {title:"source_id",    field:"source_id",visible:false},
                 // {title:"brand_id",     field:"brand_id",visible:false},
 
@@ -899,69 +929,70 @@ var updateValues = (cell) => {
                             // }
                         },
 
-                        {   title:"Bundle1",headerHozAlign :'center',
+                        {   title:"Nos Of Bundles",headerHozAlign :'center',
                             responsive:0,
-                            field:"bundle1",
+                            field:"packingwtbal",
                             editor:"number",
                             headerVertical:true,
                             bottomCalc:"sum",
                             formatter:"money",
-                            cellEdited: updateValues,
+                            // cellEdited: updateValues,
                             validator:["required","numeric"],
                             cssClass:"bg-green-200 font-semibold",
                             formatterParams:{thousand:",",precision:0},
                         },
 
-                        {   title:"Pcs/Bund",headerHozAlign :'center',
-                            responsive:0,
-                            field:"pcspbundle1",
-                            headerVertical:true,
-                            // bottomCalc:"sum",
-                            formatter:"money",
-                            cellEdited: updateValues,
-                            // cssClass:"bg-green-200 font-semibold",
-                            validator:["required","numeric"],
-                            formatterParams:{thousand:",",precision:0},
-                        },
+                        // {   title:"Pcs/Bund",headerHozAlign :'center',
+                        //     responsive:0,
+                        //     field:"pcspbundle1",
+                        //     headerVertical:true,
+                        //     // bottomCalc:"sum",
+                        //     formatter:"money",
+                        //     cellEdited: updateValues,
+                        //     // cssClass:"bg-green-200 font-semibold",
+                        //     validator:["required","numeric"],
+                        //     formatterParams:{thousand:",",precision:0},
+                        // },
 
-                        {   title:"Bundle2",headerHozAlign :'center',
-                            responsive:0,
-                            field:"bundle2",
-                            editor:"number",
-                            cellEdited: updateValues,
-                            headerVertical:true,
-                            bottomCalc:"sum",
-                            formatter:"money",
-                             cssClass:"bg-green-200 font-semibold",
-                            validator:["required","numeric"],
-                            formatterParams:{thousand:",",precision:0},
-                        },
+                        // {   title:"Bundle2",headerHozAlign :'center',
+                        //     responsive:0,
+                        //     field:"bundle2",
+                        //     editor:"number",
+                        //     cellEdited: updateValues,
+                        //     headerVertical:true,
+                        //     bottomCalc:"sum",
+                        //     formatter:"money",
+                        //      cssClass:"bg-green-200 font-semibold",
+                        //     validator:["required","numeric"],
+                        //     formatterParams:{thousand:",",precision:0},
+                        // },
 
-                        {   title:"Pcs/Bund",headerHozAlign :'center',
-                            responsive:0,
-                            field:"pcspbundle2",
-                            // editor:"number",
-                            headerVertical:true,
-                            cellEdited: updateValues,
-                            // bottomCalc:"sum",
-                            formatter:"money",
-                            // cssClass:"bg-green-200 font-semibold",
-                            validator:["required","numeric"],
-                            formatterParams:{thousand:",",precision:0},
-                        },
+                        // {   title:"Pcs/Bund",headerHozAlign :'center',
+                        //     responsive:0,
+                        //     field:"pcspbundle2",
+                        //     // editor:"number",
+                        //     headerVertical:true,
+                        //     cellEdited: updateValues,
+                        //     // bottomCalc:"sum",
+                        //     formatter:"money",
+                        //     // cssClass:"bg-green-200 font-semibold",
+                        //     validator:["required","numeric"],
+                        //     formatterParams:{thousand:",",precision:0},
+                        // },
 
                         {   title:"Pcs",headerHozAlign :'center',
                             responsive:0,
-                            field:"pcs",
+                            field:"pcsbal",
                             // editor:"number",
                             headerVertical:true,
                             formatter:"money",
+                            visible:false,
                             // cssClass:"bg-green-200 font-semibold",
                             validator:["required","numeric"],
                             formatterParams:{thousand:",",precision:0},
                             formatter:function(cell,row)
                             {
-                                return (cell.getData().bundle1 * cell.getData().pcspbundle1) + (cell.getData().bundle2 * cell.getData().pcspbundle2)
+                                // return (cell.getData().bundle1 * cell.getData().pcspbundle1) + (cell.getData().bundle2 * cell.getData().pcspbundle2)
                             },bottomCalc:"sum",
 
 
@@ -1355,7 +1386,7 @@ var updateValues = (cell) => {
                 // 'challanno' : challanno.value,
                 'machineno' : machineno.value,
                 // 'machine_date' :machine_date.value,
-                // 'invoicedate' : invoicedate.value,
+                'invoice_date' : invoice_date.value,
                 'gdno' : gdno.value,
                 'gd_date' : gd_date.value,
                 'dunitid' : parseFloat(dunitid.value).toFixed(0),

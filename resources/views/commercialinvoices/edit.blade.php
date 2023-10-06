@@ -33,11 +33,24 @@
                                 <x-input-numeric title="Duty.Conv.Rate" name="conversionrate" value="{{ $i->conversionrate }}" req required class=""/>
                                 <x-input-numeric title="Supp.Conv.Rate" name="sconversionrate" value="{{ $i->sconversionrate }}"  req required class=""/>
                                 <x-input-numeric title="Insurance" name="insurance"  value="{{ $i->insurance }}" req required class=""/>
-                                <x-input-numeric title="purid" name="purid"  value="{{ $i->purid }}" hidden/>
+                                <x-input-numeric title="" name="purid"  value="{{ $i->purid }}" hidden/>
                             </div>
                             <div class="grid grid-cols-12 gap-2 py-2 items-center">
                                 <x-input-date title="Mac. Date" name="machine_date" value="{{ $i->machine_date->format('Y-m-d') }}" req required class="col-span-2"/>
                                 <x-input-text title="Machine #" name="machineno" value="{{ $i->machineno }}" req required class="col-span-2"/>
+
+                                    <x-label for="" value="Packaging Type"/>
+                                    <select autocomplete="on" required name="packingid" id ="packingid"   >
+                                        <option value="" selected>--Packing</option>
+                                        @foreach ($packaging as $ptype)
+                                        @if ($i->packingid == $ptype->id)
+                                        <option value="{{$ptype->id}}" selected>{{$ptype->title}}</option>
+                                        @else
+                                        <option value="{{ $ptype->id }}">{{ $ptype->title }}</option>
+                                        @endif
+                                        @endforeach
+                                    </select>
+                                 <x-input-text title="Nos Of Packages" name="packingwt" value="{{ $i->packingwt }}" />
 
                                     <x-label for="" value="Unit as Per Duty Calculation"/>
                                     <select autocomplete="on" required name="dunitid" id ="dunitid"  required >
@@ -924,6 +937,26 @@ var headerMenu = function(){
             // var challanno = document.getElementById("challanno")
             var machineno = document.getElementById("machineno")
             var machine_date = document.getElementById("machine_date")
+            var sid = document.getElementById("packingid");
+            var packingid = sid.options[sid.selectedIndex];
+
+            //  console.log(Number(packingid.value));
+
+            if(Number(packingid.value) <=0){
+                showSnackbar("Packing required packing id ","error");
+                packingid.focus()
+                return;
+            }
+
+
+
+
+            if(Number(packingwt.value) === 0 || packingwt.value === ''  ){
+                showSnackbar("Packing required packingwt ","error");
+                packingwt.focus()
+                return;
+            }
+
 
             if(invoiceno.value === ''){
                 showSnackbar("Invoice # required ","error");
@@ -974,6 +1007,8 @@ var headerMenu = function(){
                 // 'otherchrgs' : parseFloat(otherchrgs.value).toFixed(2),
                 'dunitid' : parseFloat(dunitid.value).toFixed(0),
                 'total' : parseFloat(banktotal.value).toFixed(2),
+                'packingid' :packingid.value,
+                'packingwt' : packingwt.value,
                 'comminvoice' : dynamicTableData
             };
             // All Ok - Proceed

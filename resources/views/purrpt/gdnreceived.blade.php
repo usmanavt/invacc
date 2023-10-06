@@ -271,32 +271,34 @@ table{
                 <td style="text-align:right" width="4%">{{ number_format($data[$i]->gdswt,0) }} </td>
                 <td style="text-align:right" width="3%">{{ $data[$i]->itemlen}} </td>
 
-                <td style="text-align:right" width="3%">{{ number_format($data[$i]->purwte13,0) }} </td>
                 <td style="text-align:right" width="3%">{{ number_format($data[$i]->purpcse13,0) }} </td>
+                <td style="text-align:right" width="3%">{{ number_format($data[$i]->purwte13,0) }} </td>
                 <td style="text-align:right" width="3%">{{ number_format($data[$i]->purfeete13,0) }} </td>
 
-                <td style="text-align:right" width="3%">{{ number_format($data[$i]->purwtgn2,0) }} </td>
                 <td style="text-align:right" width="3%">{{ number_format($data[$i]->purpcsgn2,0) }} </td>
+                <td style="text-align:right" width="3%">{{ number_format($data[$i]->purwtgn2,0) }} </td>
                 <td style="text-align:right" width="3%">{{ number_format($data[$i]->purfeetgn2,0) }} </td>
 
-                <td style="text-align:right" width="3%">{{ number_format($data[$i]->purwtams,0) }} </td>
                 <td style="text-align:right" width="3%">{{ number_format($data[$i]->purpcsams,0) }} </td>
+                <td style="text-align:right" width="3%">{{ number_format($data[$i]->purwtams,0) }} </td>
                 <td style="text-align:right" width="3%">{{ number_format($data[$i]->purfeetams,0) }} </td>
 
-                <td style="text-align:right" width="3%">{{ number_format($data[$i]->purwte24,0) }} </td>
                 <td style="text-align:right" width="3%">{{ number_format($data[$i]->purpcse24,0) }} </td>
+                <td style="text-align:right" width="3%">{{ number_format($data[$i]->purwte24,0) }} </td>
                 <td style="text-align:right" width="3%">{{ number_format($data[$i]->purfeete24,0) }} </td>
 
-                <td style="text-align:right" width="3%">{{ number_format($data[$i]->purwtbs,0) }} </td>
+
                 <td style="text-align:right" width="3%">{{ number_format($data[$i]->purpcsbs,0) }} </td>
+                <td style="text-align:right" width="3%">{{ number_format($data[$i]->purwtbs,0) }} </td>
                 <td style="text-align:right" width="3%">{{ number_format($data[$i]->purfeetbs,0) }} </td>
 
-                <td style="text-align:right" width="4%">{{ number_format($data[$i]->purwttot,0) }} </td>
+
                 <td style="text-align:right" width="4%">{{ number_format($data[$i]->purpcstot,0) }} </td>
+                <td style="text-align:right" width="4%">{{ number_format($data[$i]->purwttot,0) }} </td>
                 <td style="text-align:right" width="4%">{{ number_format($data[$i]->purfeettot,0) }} </td>
 
-                <td style="text-align:right" width="3%">{{ number_format($data[$i]->pendwt,0) }} </td>
                 <td style="text-align:right" width="3%">{{ number_format($data[$i]->pendpcs,0) }} </td>
+                <td style="text-align:right" width="3%">{{ number_format($data[$i]->pendwt,0) }} </td>
                 <td style="text-align:right" width="3%">{{ number_format($data[$i]->pendfeet,0) }} </td>
 
 

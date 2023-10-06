@@ -51,11 +51,12 @@
                             <legend>Invoice Level Entries</legend>
                             <div class="grid grid-cols-12 gap-2 py-2 items-center">
 
-                                <x-input-date title="Inv. Date" id="invoicedate" name="invoicedate" req required class="col-span-2" hidden/>
                                 <x-input-text title="Invoice #" name="invoiceno"  value="{{ $clearance->invoiceno }}"  disabled/>
-                                <x-input-date title="Mac. Date" name="machine_date" req required class="col-span-2" hidden/>
                                 <x-input-text title="Mac. No" name="machineno" value="{{ $clearance->machineno }}"  disabled/>
-                                <x-input-text title="myid" name="id" value="{{ $clearance->id }}"  disabled/>
+                                <x-input-date title="Mac. Date" name="machine_date" req required class="col-span-2" disabled />
+                                <x-input-date title="Clearance Date" id="invoicedate" name="invoicedate" req required class="col-span-2" />
+
+                                <x-input-text title="" name="id" value="{{ $clearance->id }}"  hidden/>
 
                             </div>
                             <div class="grid grid-cols-12 gap-2 py-2 items-center">
@@ -626,15 +627,20 @@ dynamicTable = new Tabulator("#dynamicTable", {
                         cell.getRow().delete();
                     }
                 },
-                {title:"Id",           field:"material_id", visible:false},
-                {title:"Material",     field:"material.title",responsive:0},
-                {title:"dimension",    field:"material.dimension",responsive:0,frozen:true, headerMenu:headerMenu},
-                {title:"Unit",         field:"material.sku",responsive:0},
-                {title:"Unitid",       field:"material.sku_id",visible:false},
+
+                {title:"Id",           field:"id", visible:false},
+                {title:"Packaging Type",     field:"packing",responsive:0},
+
+
+                // {title:"Id",           field:"material_id", visible:false},
+                // {title:"Material",     field:"material.title",responsive:0},
+                // {title:"dimension",    field:"material.dimension",responsive:0,frozen:true, headerMenu:headerMenu},
+                // {title:"Unit",         field:"material.sku",responsive:0},
+                // {title:"Unitid",       field:"material.sku_id",visible:false},
                 {title:"supplier_id",  field:"supplier_id",visible:false},
-                {title:"user_id",      field:"user_id",visible:false},
-                {title:"category_id",  field:"category_id",visible:false},
-                {title:"dimension_id", field:"dimension_id",visible:false},
+                // {title:"user_id",      field:"user_id",visible:false},
+                // {title:"category_id",  field:"category_id",visible:false},
+                // {title:"dimension_id", field:"dimension_id",visible:false},
                 {
                     title:'Quantity', headerHozAlign:"center",
                     columns:[
@@ -651,61 +657,62 @@ dynamicTable = new Tabulator("#dynamicTable", {
                             // }
                         },
 
-                        {   title:"Bundle1",headerHozAlign :'center',
+                        {   title:"Nos Of Bundles",headerHozAlign :'center',
                             responsive:0,
                             field:"bundle1",
                             editor:"number",
                             headerVertical:true,
                             bottomCalc:"sum",
                             formatter:"money",
-                            cellEdited: updateValues,
+                            // cellEdited: updateValues,
                             validator:["required","numeric"],
                             cssClass:"bg-green-200 font-semibold",
                             formatterParams:{thousand:",",precision:0},
                         },
 
-                        {   title:"Pcs/Bund",headerHozAlign :'center',
-                            responsive:0,
-                            field:"pcspbundle1",
-                            headerVertical:true,
-                            // bottomCalc:"sum",
-                            formatter:"money",
-                            cellEdited: updateValues,
-                            // cssClass:"bg-green-200 font-semibold",
-                            validator:["required","numeric"],
-                            formatterParams:{thousand:",",precision:0},
-                        },
+                        // {   title:"Pcs/Bund",headerHozAlign :'center',
+                        //     responsive:0,
+                        //     field:"pcspbundle1",
+                        //     headerVertical:true,
+                        //     // bottomCalc:"sum",
+                        //     formatter:"money",
+                        //     cellEdited: updateValues,
+                        //     // cssClass:"bg-green-200 font-semibold",
+                        //     validator:["required","numeric"],
+                        //     formatterParams:{thousand:",",precision:0},
+                        // },
 
-                        {   title:"Bundle2",headerHozAlign :'center',
-                            responsive:0,
-                            field:"bundle2",
-                            editor:"number",
-                            cellEdited: updateValues,
-                            headerVertical:true,
-                            bottomCalc:"sum",
-                            formatter:"money",
-                             cssClass:"bg-green-200 font-semibold",
-                            validator:["required","numeric"],
-                            formatterParams:{thousand:",",precision:0},
-                        },
+                        // {   title:"Bundle2",headerHozAlign :'center',
+                        //     responsive:0,
+                        //     field:"bundle2",
+                        //     editor:"number",
+                        //     cellEdited: updateValues,
+                        //     headerVertical:true,
+                        //     bottomCalc:"sum",
+                        //     formatter:"money",
+                        //      cssClass:"bg-green-200 font-semibold",
+                        //     validator:["required","numeric"],
+                        //     formatterParams:{thousand:",",precision:0},
+                        // },
 
-                        {   title:"Pcs/Bund",headerHozAlign :'center',
-                            responsive:0,
-                            field:"pcspbundle2",
-                            // editor:"number",
-                            headerVertical:true,
-                            cellEdited: updateValues,
-                            // bottomCalc:"sum",
-                            formatter:"money",
-                            // cssClass:"bg-green-200 font-semibold",
-                            validator:["required","numeric"],
-                            formatterParams:{thousand:",",precision:0},
-                        },
+                        // {   title:"Pcs/Bund",headerHozAlign :'center',
+                        //     responsive:0,
+                        //     field:"pcspbundle2",
+                        //     // editor:"number",
+                        //     headerVertical:true,
+                        //     cellEdited: updateValues,
+                        //     // bottomCalc:"sum",
+                        //     formatter:"money",
+                        //     // cssClass:"bg-green-200 font-semibold",
+                        //     validator:["required","numeric"],
+                        //     formatterParams:{thousand:",",precision:0},
+                        // },
 
 
                     {   title:"Pcs",headerHozAlign :'center',
                             responsive:0,
                             field:"pcs",
+                            visible:false,
                             headerVertical:true,
                             bottomCalc:"sum",
                             formatter:"money",

@@ -199,7 +199,7 @@ function pushDynamicData(data)
 var updateValues = (cell) => {
     var data = cell.getData();
 
-    var sum = (Number(data.bundle1) * Number(data.pcspbundle1)) + (Number(data.bundle2) * Number(data.pcspbundle2))
+    var sum = Number(data.bundle1 * 1)
     // var sum2 = Number(Number(data.gdswt) * Number(data.gdsprice))
 
         if(cell.getData().sku_id==1)
@@ -209,8 +209,12 @@ var updateValues = (cell) => {
          }
          if(cell.getData().sku_id==2)
          {
-             var sum2 =  ( (Number(data.bundle1) * Number(data.pcspbundle1)) + (Number(data.bundle2) * Number(data.pcspbundle2)) ) * Number(data.gdsprice)
-             var sum3 =  ( (Number(data.bundle1) * Number(data.pcspbundle1)) + (Number(data.bundle2) * Number(data.pcspbundle2)) ) * Number(data.dtyrate)
+            //  var sum2 =  ( (Number(data.bundle1) * Number(data.pcspbundle1)) + (Number(data.bundle2) * Number(data.pcspbundle2)) ) * Number(data.gdsprice)
+            //  var sum3 =  ( (Number(data.bundle1) * Number(data.pcspbundle1)) + (Number(data.bundle2) * Number(data.pcspbundle2)) ) * Number(data.dtyrate)
+             var sum2 =   (Number(data.bundle1) * 1)   * Number(data.gdsprice)
+             var sum3 =   (Number(data.bundle1) * 1)  * Number(data.dtyrate)
+
+
          }
 
     var row = cell.getRow();
@@ -291,58 +295,61 @@ dynamicTable = new Tabulator("#dynamicTable", {
         {title:"Brand",             field:"brand_id",       cssClass:"bg-gray-200 font-semibold",visible:false},
         {title:"Brand",             field:"brand",          cssClass:"bg-gray-200 font-semibold",visible:false},
 
-        {   title:"Bundle1",
+        {   title:"Pcs",
             field:"bundle1",
             editor:"number",
             cssClass:"bg-green-200 font-semibold",
             validator:"required",
             formatter:"money",
+            bottomCalc:"sum",
             formatterParams:{thousand:",",precision:2},
             validator:["required","integer"],
             cellEdited: updateValues,
 
             },
 
-        {   title:"Pcs/Bnd1",
-            field:"pcspbundle1",
-            editor:"number",
-            cssClass:"bg-green-200 font-semibold",
-            validator:"required" ,
-            formatter:"money",
-            formatterParams:{thousand:",",precision:2},
-            validator:["required","integer"] ,
-            cellEdited: updateValues  ,
-            },
+        // {   title:"Pcs/Bnd1",
+        //     field:"pcspbundle1",
+        //     editor:"number",
+        //     cssClass:"bg-green-200 font-semibold",
+        //     validator:"required" ,
+        //     formatter:"money",
+        //     formatterParams:{thousand:",",precision:2},
+        //     validator:["required","integer"] ,
+        //     cellEdited: updateValues  ,
+        //     },
 
-        {   title:"Bundle2",
-            field:"bundle2",
-            editor:"number",
-            cssClass:"bg-yellow-200 font-semibold",
-            formatter:"money",
-            formatterParams:{thousand:",",precision:2},
-            validator:["required","integer"],
-            cellEdited: updateValues  ,
-            },
+        // {   title:"Bundle2",
+        //     field:"bundle2",
+        //     editor:"number",
+        //     cssClass:"bg-yellow-200 font-semibold",
+        //     formatter:"money",
+        //     formatterParams:{thousand:",",precision:2},
+        //     validator:["required","integer"],
+        //     cellEdited: updateValues  ,
+        //     },
 
-        {   title:"Pcs/Bnd2",
-            field:"pcspbundle2",
-            editor:"number",
-            cssClass:"bg-yellow-200 font-semibold",
-            formatter:"money",
-            formatterParams:{thousand:",",precision:2},
-            validator:["required","integer"],
-            cellEdited: updateValues ,
-            },
+        // {   title:"Pcs/Bnd2",
+        //     field:"pcspbundle2",
+        //     editor:"number",
+        //     cssClass:"bg-yellow-200 font-semibold",
+        //     formatter:"money",
+        //     formatterParams:{thousand:",",precision:2},
+        //     validator:["required","integer"],
+        //     cellEdited: updateValues ,
+        //     },
 
         {   title:"TotPcs",
             field:"totpcs",
             cssClass:"bg-gray-200 font-semibold",
             bottomCalc:"sum",
             formatter:"money",
+            visible:false,
             formatterParams:{thousand:",",precision:3},
+            cellEdited: updateValues,
             formatter:function(cell,row)
             {
-                return (cell.getData().bundle1 * cell.getData().pcspbundle1) + (cell.getData().bundle2 * cell.getData().pcspbundle2)
+                return Number(cell.getData().bundle1)
             },
              },
 
@@ -415,7 +422,7 @@ dynamicTable = new Tabulator("#dynamicTable", {
                     }
                     else if (cell.getData().sku_id == 2)
                     {
-                        return ((cell.getData().bundle1 * cell.getData().pcspbundle1) + (cell.getData().bundle2 * cell.getData().pcspbundle2)) * (cell.getData().gdsprice)
+                        return (cell.getData().bundle1)  * (cell.getData().gdsprice)
                     }
                     else {
                         // Add for other types
@@ -447,7 +454,7 @@ dynamicTable = new Tabulator("#dynamicTable", {
                     }
                     else if (cell.getData().sku_id == 2)
                     {
-                        return ((cell.getData().bundle1 * cell.getData().pcspbundle1) + (cell.getData().bundle2 * cell.getData().pcspbundle2)) * (cell.getData().dtyrate)
+                        return (cell.getData().bundle1) *  (cell.getData().dtyrate)
                     }
                     else {
                         // Add for other types
@@ -551,7 +558,7 @@ function validateForm()
             }
             if (element.sku_id==2)
             {
-                if(element.bundle1 == 0 || element.pcspbundle1 == 0 || element.gdsprice == 0 )
+                if(element.bundle1 == 0 || element.gdsprice == 0 )
                 {
                     showSnackbar("Please fill Bundle,PcsBundle & Price all rows to proceed","info");
                     return;

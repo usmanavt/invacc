@@ -33,11 +33,11 @@
                                 @endforeach
                             </select>
 
-                            <label for="invoice_date">Invoice Date<x-req /></label>
-                            <input type="date" value="{{ date('Y-m-d') }}" class="col-span-2" id="invoice_date" name="invoice_date" required>
+                            <label for="invoice_date">Contract Date<x-req /></label>
+                            <input type="date" value="{{ date('Y-m-d') }}" class="col-span-2" id="invoice_date" name="Contract_date" required>
 
                             <label for="number">Invoice #<x-req /></label>
-                            <input type="text" class="col-span-2" id="number" name="number" placeholder="Invoice No"
+                            <input type="text" class="col-span-2" id="number" name="number" placeholder="Contract No"
                                 minlength="3" title="minimum 3 characters required" required>
 
 
@@ -227,7 +227,8 @@
     })
     var updateValues = (cell) => {
         var data = cell.getData();
-        var sum = (Number(data.bundle1) * Number(data.pcspbundle1)) + (Number(data.bundle2) * Number(data.pcspbundle2))
+        // var sum = (Number(data.bundle1) * Number(data.pcspbundle1)) + (Number(data.bundle2) * Number(data.pcspbundle2))
+        var sum = (Number(data.bundle1) * 1)
 
          if(cell.getData().sku_id==1)
          {
@@ -236,8 +237,12 @@
          }
          if(cell.getData().sku_id==2)
          {
-             var sum2 =  ( (Number(data.bundle1) * Number(data.pcspbundle1)) + (Number(data.bundle2) * Number(data.pcspbundle2)) ) * Number(data.gdsprice)
-             var sum3 =  ( (Number(data.bundle1) * Number(data.pcspbundle1)) + (Number(data.bundle2) * Number(data.pcspbundle2)) ) * Number(data.dtyrate)
+            //  var sum2 =  ( (Number(data.bundle1) * Number(data.pcspbundle1)) + (Number(data.bundle2) * Number(data.pcspbundle2)) ) * Number(data.gdsprice)
+            //  var sum3 =  ( (Number(data.bundle1) * Number(data.pcspbundle1)) + (Number(data.bundle2) * Number(data.pcspbundle2)) ) * Number(data.dtyrate)
+
+             var sum2 =  ( (Number(data.bundle1) * 1) ) * Number(data.gdsprice)
+             var sum3 =  ( (Number(data.bundle1) * 1) ) * Number(data.dtyrate)
+
          }
 
 
@@ -292,56 +297,59 @@
             {title:"brand_id",          field:"brand_id",       cssClass:"bg-gray-200 font-semibold",visible:false},
             {title:"Brand",             field:"brand",          cssClass:"bg-gray-200 font-semibold",visible:false},
 
-            {   title:"Bundle1",
+            {   title:"Pcs",
                 field:"bundle1",
                 editor:"number",
                 cssClass:"bg-green-200 font-semibold",
                 validator:"required",
                 formatter:"money",
                 formatterParams:{thousand:",",precision:2},
+                bottomCalc:"sum",
                 validator:["required","integer"],
                 cellEdited: updateValues,
                },
 
-            {   title:"Pcs/Bnd1",
-                field:"pcspbundle1",
-                editor:"number",
-                cssClass:"bg-green-200 font-semibold",
-                validator:"required" ,
-                formatter:"money",
-                formatterParams:{thousand:",",precision:2},
-                validator:["required","integer"] ,
-                cellEdited: updateValues   ,
-            },
+            // {   title:"Pcs/Bnd1",
+            //     field:"pcspbundle1",
+            //     editor:"number",
+            //     cssClass:"bg-green-200 font-semibold",
+            //     validator:"required" ,
+            //     formatter:"money",
+            //     formatterParams:{thousand:",",precision:2},
+            //     validator:["required","integer"] ,
+            //     cellEdited: updateValues   ,
+            // },
 
-            {   title:"Bundle2",
-                field:"bundle2",
-                editor:"number",
-                cssClass:"bg-yellow-200 font-semibold",
-                formatter:"money",
-                formatterParams:{thousand:",",precision:2},
-                validator:["required","integer"],
-                cellEdited: updateValues   ,
-            },
+            // {   title:"Bundle2",
+            //     field:"bundle2",
+            //     editor:"number",
+            //     cssClass:"bg-yellow-200 font-semibold",
+            //     formatter:"money",
+            //     formatterParams:{thousand:",",precision:2},
+            //     validator:["required","integer"],
+            //     cellEdited: updateValues   ,
+            // },
 
-            {   title:"Pcs/Bnd2",
-                field:"pcspbundle2",
-                editor:"number",
-                cssClass:"bg-yellow-200 font-semibold",
-                formatter:"money",
-                formatterParams:{thousand:",",precision:2},
-                validator:["required","integer"],
-                cellEdited: updateValues  ,
-            },
+            // {   title:"Pcs/Bnd2",
+            //     field:"pcspbundle2",
+            //     editor:"number",
+            //     cssClass:"bg-yellow-200 font-semibold",
+            //     formatter:"money",
+            //     formatterParams:{thousand:",",precision:2},
+            //     validator:["required","integer"],
+            //     cellEdited: updateValues  ,
+            // },
 
             {   title:"TotPcs",
                 field:"ttpcs",
+                visible:false,
                 cssClass:"bg-gray-200 font-semibold",
                 formatter:"money",
                 formatterParams:{thousand:",",precision:2},
                 formatter:function(cell,row)
                 {
-                    return (cell.getData().bundle1 * cell.getData().pcspbundle1) + (cell.getData().bundle2 * cell.getData().pcspbundle2)
+                    // return (cell.getData().bundle1 * cell.getData().pcspbundle1) + (cell.getData().bundle2 * cell.getData().pcspbundle2)
+                    return (cell.getData().bundle1 * 1)
                 },
                 bottomCalc:"sum" },
 
@@ -410,7 +418,8 @@
                     }
                     else if (cell.getData().sku_id == 2)
                     {
-                        return ((cell.getData().bundle1 * cell.getData().pcspbundle1) + (cell.getData().bundle2 * cell.getData().pcspbundle2)) * (cell.getData().gdsprice)
+                        // return ((cell.getData().bundle1 * cell.getData().pcspbundle1) + (cell.getData().bundle2 * cell.getData().pcspbundle2)) * (cell.getData().gdsprice)
+                        return ((cell.getData().bundle1 * 1) ) * (cell.getData().gdsprice)
                     }
                     else {
                         // Add for other types
@@ -447,7 +456,7 @@
                     }
                     else if (cell.getData().sku_id == 2)
                     {
-                        return ((cell.getData().bundle1 * cell.getData().pcspbundle1) + (cell.getData().bundle2 * cell.getData().pcspbundle2)) * (cell.getData().dtyrate)
+                        return (cell.getData().bundle1 * 1)  * (cell.getData().dtyrate)
                     }
                     else {
                         // Add for other types
@@ -513,7 +522,7 @@
             }
             if (element.sku_id==2)
             {
-                if(element.bundle1 == 0 || element.pcspbundle1 == 0 || element.gdsprice == 0 )
+                if(element.bundle1 == 0 || element.gdsprice == 0 )
                 {
                     showSnackbar("Please fill Bundle,PcsBundle & Price all rows to proceed","info");
                     return;

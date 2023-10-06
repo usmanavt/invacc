@@ -147,14 +147,14 @@
             },
       //      Master Data
             {title: "id",field: "id"},
-            {title: "Dated",field: "created_at"},
+            {title: "Clearance Date",field: "invoice_date"},
             // {title: "Inv Dt",field: "invoice_dated"},
             {title: "Invoice#",field: "invoiceno"},
             {title: "ComInvs#",field: "commercial_invoice_id"},
             {title: "Supplier",field: "supplier.title"},
             // {title: "Mach Date",field: "machine_dated"},
             {title: "Machine #",field: "machineno"},
-            {title: "Pcs",field: "collofcustom"},
+            // {title: "Pcs",field: "collofcustom"},
             {title: "Weight",field: "exataxoffie"},
             {title: "DutyPayed",field: "total",formatterParams:{thousand:",",precision:0}},
 

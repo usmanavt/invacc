@@ -30,7 +30,8 @@ class ContractDetails extends Model
     public function getTtpcsAttribute()
     {
 
-        $calc = ( $this->bundle1 * $this->pcspbundle1 )+( $this->bundle2 * $this->pcspbundle2 ) ;
+        // $calc = ( $this->bundle1 * $this->pcspbundle1 )+( $this->bundle2 * $this->pcspbundle2 ) ;
+        $calc = ( $this->bundle1 * 1 ) ;
         return $calc;
 
     }

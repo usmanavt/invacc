@@ -19,6 +19,8 @@ class PurchaseRptController extends Controller
         $fromdate = $request->fromdate;
         $todate = $request->todate;
 
+
+
         //  dd($fromdate);
         return view('purrpt.index')
         ->with('heads',Supplier::where('status',1)->get())
@@ -38,9 +40,16 @@ class PurchaseRptController extends Controller
         $fromdate = $request->fromdate;
         $todate = $request->todate;
         $head = $request->head;
-        return DB::table('vwsupcategory')->select('*')
-        ->whereBetween('invoice_date',[$fromdate,$todate])
-        ->where('MHEAD',$head)->get()->toArray();
+
+        $fromdate = $request->fromdate;
+        $todate = $request->todate;
+        $head = $request->head;
+        return  DB::select('call proccontrcategory(?,?,?)',array($fromdate,$todate,$head));
+
+
+        // return DB::table('vwsupcategory')->select('*');
+        // ->whereBetween('invoice_date',[$fromdate,$todate])
+        // ->where('MHEAD',$head)->get()->toArray();
     }
 
     public function funcpurcat(Request $request)
@@ -49,13 +58,8 @@ class PurchaseRptController extends Controller
         $fromdate = $request->fromdate;
         $todate = $request->todate;
         $head = $request->head;
-        return DB::table('vwpurcategory')->select('*')
-        ->whereBetween('invoice_date',[$fromdate,$todate])
-        ->where('MHEAD',$head)->get()->toArray();
+        return  DB::select('call procpurcategory(?,?,?)',array($fromdate,$todate,$head));
     }
-
-
-
 
 
     public function cominvsloc(Request $request)
@@ -76,8 +80,20 @@ class PurchaseRptController extends Controller
         $fromdate = $request->fromdate;
         $todate = $request->todate;
         $head = $request->head;
-          return DB::table('vwsupcategorycominv')->select('*')->whereBetween('invoice_date',[$fromdate,$todate])->where('MHEAD',$head)->get()->toArray();
+        return  DB::select('call proccominvcategory(?,?,?)',array($fromdate,$todate,$head));
+        //   return DB::table('vwsupcategorycominv')->select('*')->whereBetween('invoice_date',[$fromdate,$todate])->where('MHEAD',$head)->get()->toArray();
     }
+
+    public function dutycategory(Request $request)
+    {
+    //  dd($request->all());
+        $fromdate = $request->fromdate;
+        $todate = $request->todate;
+        $head = $request->head;
+        return  DB::select('call procdtyclrnccategory(?,?,?)',array($fromdate,$todate,$head));
+        //   return DB::table('vwsupcategorycominv')->select('*')->whereBetween('invoice_date',[$fromdate,$todate])->where('MHEAD',$head)->get()->toArray();
+    }
+
 
     public function getMPDFSettingsLgl($orientation = 'Legal-L')
     {
@@ -116,8 +132,8 @@ class PurchaseRptController extends Controller
             'margin_bottom' => '5',
             'margin_footer' => '2',
             'default_font_size' => 9,
-            'margin_left' => '10',
-            'margin_right' => '10',
+            'margin_left' => '5',
+            'margin_right' => '2',
         ]);
         $mpdf->showImageErrors = true;
         $mpdf->curlAllowUnsafeSslRequests = true;
@@ -303,6 +319,7 @@ class PurchaseRptController extends Controller
                 Session::flash('info','No data available');
                 return redirect()->back();
             }
+            $mpdf = $this->getMPDFSettingsA4L();
             $collection = collect($data);                   //  Make array a collection
             $grouped = $collection->groupBy('purid');       //  Sort collection by SupName
             $grouped->values()->all();                       //  values() removes indices of array
@@ -314,7 +331,7 @@ class PurchaseRptController extends Controller
                     ->with('todate',$todate)
                     ->with('headtype',$head->title)->render();
                 $filename = $g[0]->purid  .'-'.$fromdate.'-'.$todate.'.pdf';
-                $mpdf = $this->getMPDFSettingsA4L();
+
 
 
                 // $mpdf->SetHTMLFooter('
@@ -355,6 +372,7 @@ class PurchaseRptController extends Controller
                 Session::flash('info','No data available');
                 return redirect()->back();
             }
+            $mpdf = $this->getMPDFSettingsA3();
             $collection = collect($data);                   //  Make array a collection
             $grouped = $collection->groupBy('id');       //  Sort collection by SupName
             $grouped->values()->all();                       //  values() removes indices of array
@@ -366,7 +384,50 @@ class PurchaseRptController extends Controller
                     ->with('todate',$todate)
                     ->with('headtype',$head->title)->render();
                 $filename = $g[0]->id  .'-'.$fromdate.'-'.$todate.'.pdf';
-                $mpdf = $this->getMPDFSettingsA3();
+                $chunks = explode("chunk", $html);
+                foreach($chunks as $key => $val) {
+                    $mpdf->WriteHTML($val);
+                }
+                $mpdf->AddPage();
+            }
+            return response($mpdf->Output($filename,'I'),200)->header('Content-Type','application/pdf');
+        }
+
+
+
+
+        if($report_type === 'dtyclrnc'){
+            //  dd($request->all());
+            $head_id = $request->head_id;
+            $head = Supplier::findOrFail($head_id);
+            if($request->has('subhead_id')){
+                $subhead_id = $request->subhead_id;
+                //  Clear Data from Table
+                DB::table('contparameterrpt')->truncate();
+                foreach($request->subhead_id as $id)
+                {
+                    DB::table('contparameterrpt')->insert([ 'GLCODE' => $id ]);
+                }
+            }
+            //  Call Procedure
+            $data = DB::select('call procdutytrans()');
+            if(!$data)
+            {
+                Session::flash('info','No data available');
+                return redirect()->back();
+            }
+            $mpdf = $this->getMPDFSettingsLgl();
+            $collection = collect($data);                   //  Make array a collection
+            $grouped = $collection->groupBy('cominvid');       //  Sort collection by SupName
+            $grouped->values()->all();                       //  values() removes indices of array
+
+            foreach($grouped as $g){
+                 $html =  view('purrpt.dtyclearance')
+                    ->with('data',$g)
+                    ->with('fromdate',$fromdate)
+                    ->with('todate',$todate)
+                    ->with('headtype',$head->title)->render();
+                $filename = $g[0]->cominvid  .'-'.$fromdate.'-'.$todate.'.pdf';
                 $chunks = explode("chunk", $html);
                 foreach($chunks as $key => $val) {
                     $mpdf->WriteHTML($val);
@@ -447,6 +508,7 @@ class PurchaseRptController extends Controller
                 Session::flash('info','No data available');
                 return redirect()->back();
             }
+            $mpdf = $this->getMPDFSettingsA3();
             $collection = collect($data);                   //  Make array a collection
             $grouped = $collection->groupBy('purid');       //  Sort collection by SupName
             $grouped->values()->all();                       //  values() removes indices of array
@@ -454,14 +516,14 @@ class PurchaseRptController extends Controller
                  $html =  view('purrpt.impcominvs')->with('data',$g)->with('fromdate',$fromdate)->with('todate',$todate)->with('headtype',$head->title)->render();
                 // $html =  view('purrpt.glhw')->with('data',$g)->with('fromdate',$fromdate)->with('todate',$todate)->render();
                 $filename = $g[0]->purid  .'-'.$fromdate.'-'.$todate.'.pdf';
-                $mpdf->SetHTMLFooter('
-                <table width="100%" style="border-top:1px solid gray">
-                    <tr>
-                        <td width="33%">{DATE d-m-Y}</td>
-                        <td width="33%" align="center">{PAGENO}/{nbpg}</td>
-                        <td width="33%" style="text-align: right;">' . $filename . '</td>
-                    </tr>
-                </table>');
+                // $mpdf->SetHTMLFooter('
+                // <table width="100%" style="border-top:1px solid gray">
+                //     <tr>
+                //         <td width="33%">{DATE d-m-Y}</td>
+                //         <td width="33%" align="center">{PAGENO}/{nbpg}</td>
+                //         <td width="33%" style="text-align: right;">' . $filename . '</td>
+                //     </tr>
+                // </table>');
                 $chunks = explode("chunk", $html);
                 foreach($chunks as $key => $val) {
                     $mpdf->WriteHTML($val);

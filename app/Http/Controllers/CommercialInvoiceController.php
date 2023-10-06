@@ -21,6 +21,7 @@ use App\Models\PcommercialInvoiceDetails;
 use App\Models\RecivingCompletedDetails;
 use App\Models\PcommercialInvoice;
 use App\Models\Material;
+use App\Models\Packaging;
 use App\Models\Sku;
 
 
@@ -121,9 +122,12 @@ class CommercialInvoiceController extends Controller
 
     public function create()
     {
-         $cd = DB::table('skus')->select('id AS dunitid','title AS dunit')
+        $pack = DB::table('packagings')->select('id AS packid','title AS packing')->get();
+
+
+        $cd = DB::table('skus')->select('id AS dunitid','title AS dunit')
          ->whereIn('id',[1,2])->get();
-        $data=compact('cd');
+        $data=compact('cd','pack');
         return view('commercialinvoices.create')
         ->with('hscodes',Hscode::all())
         ->with('locations',Location::select('id','title')->get())
@@ -164,7 +168,10 @@ class CommercialInvoiceController extends Controller
             $ci->total = $request->total;
             $ci->purid = $request->purid;
 
-
+            // dd($request->$request->packingtype);
+            $ci->packingid = $request->packingid;
+            $ci->packingwt = $request->packingwt;
+            $ci->packingwtbal = $request->packingwt;
             $ci->save();
 
             // $pcontract = Pcontract::where('contract_id',$ci->contract_id)->where('status', '=', 1)->first();
@@ -382,11 +389,13 @@ class CommercialInvoiceController extends Controller
             UPDATE commercial_invoices c
             INNER JOIN (
             SELECT commercial_invoice_id, SUM(pcs) as pcs,SUM(gdswt) AS swt,sum(dutygdswt) as wt,SUM(amtindollar) AS amount
-            ,sum(amtinpkr) as amtinpkr,sum(total) as totduty
+            ,sum(amtinpkr) as amtinpkr,sum(total) as totduty,sum(dtyamtindollar) as dutval
             FROM commercial_invoice_details where  commercial_invoice_id = $ci->id
             GROUP BY commercial_invoice_id
             ) x ON c.id = x.commercial_invoice_id
-            SET c.tpcs = x.pcs,c.twt=x.wt,c.tval=x.amount,c.tduty=totduty,c.tvalpkr=x.amtinpkr,c.tswt=x.swt where  commercial_invoice_id = $ci->id "));
+            SET c.tpcs = x.pcs,c.twt=x.wt,c.tval=x.amount,c.tduty=totduty,c.tvalpkr=x.amtinpkr,c.tswt=x.swt,c.wtbal=x.wt,
+            c.tdutval=x.dutval,c.tdutvalbal=x.dutval,dutybal=totduty,c.pcsbal=x.pcs
+            where  commercial_invoice_id = $ci->id "));
 
 
 
@@ -451,13 +460,22 @@ class CommercialInvoiceController extends Controller
 
     public function edit($id)
     {
+
+
+        // $pack = DB::table('packagings')->select('id AS packid ','title AS packing')->get();
+        // $data1=compact('pack');
+
         $cd = DB::table('skus')->select('id AS dunitid','title AS dunit')
         ->whereIn('id',[1,2])->get();
        $data=compact('cd');
 
+
+
         return view('commercialinvoices.edit')
         ->with('i',CommercialInvoice::whereId($id)->with('commericalInvoiceDetails.material.hscodes')->first())
         ->with('locations',Location::select('id','title')->get())
+        // ->with('pack',Packaging::select('id','title')->get())
+        ->with('packaging',Packaging::all())
         ->with('hscodes',Hscode::all())
         ->with($data);
     }
@@ -496,6 +514,11 @@ class CommercialInvoiceController extends Controller
             $ci->dunitid = $request->dunitid;
             $ci->total = $request->total;
             $ci->purid = $request->purid;
+            $ci->packingid = $request->packingid;
+            $ci->packingwt = $request->packingwt;
+            $ci->packingwtbal = $request->packingwt;
+
+
 
             $ci->save();
 
@@ -790,11 +813,13 @@ class CommercialInvoiceController extends Controller
             UPDATE commercial_invoices c
             INNER JOIN (
             SELECT commercial_invoice_id, SUM(pcs) as pcs,SUM(gdswt) AS swt,sum(dutygdswt) as wt,SUM(amtindollar) AS amount
-            ,sum(amtinpkr) as amtinpkr,sum(total) as totduty
+            ,sum(amtinpkr) as amtinpkr,sum(total) as totduty,sum(dtyamtindollar) as dutval
             FROM commercial_invoice_details where  commercial_invoice_id = $ci->id
             GROUP BY commercial_invoice_id
             ) x ON c.id = x.commercial_invoice_id
-            SET c.tpcs = x.pcs,c.twt=x.wt,c.tval=x.amount,c.tduty=totduty,c.tvalpkr=x.amtinpkr,c.tswt=x.swt where  commercial_invoice_id = $ci->id "));
+            SET c.tpcs = x.pcs,c.twt=x.wt,c.tval=x.amount,c.tduty=totduty,c.tvalpkr=x.amtinpkr,c.tswt=x.swt,c.wtbal=wt,c.tdutval=dutval,
+            c.dutvalbal=dutval,,c.pcsbal=x.pcs
+            where  commercial_invoice_id = $ci->id "));
 
             $lstrt = Clearance::where('commercial_invoice_id',$ci->id)->first();
             if(!$lstrt) {

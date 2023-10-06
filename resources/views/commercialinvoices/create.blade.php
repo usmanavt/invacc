@@ -36,12 +36,28 @@
                                 <x-input-numeric title="Insurance" name="insurance"  req required class=""/>
                             </div>
                             <div class="grid grid-cols-12 gap-2 py-2 items-center">
-                                <x-input-date title="G.D Date" name="machine_date" req required class="col-span-2"/>
-                                <x-input-text title="G.D #" name="machineno" req required class="col-span-2"/>
+                                <x-input-date title="G.D Date" name="machine_date" />
+                                <x-input-text title="G.D #" name="machineno" />
                                 {{-- <div class="col-sm-3 mt-3">
                                     <input class="radio" type="radio" checked="checked" name="unt" value="kg" > Duty as Per kg
                                     <input class="radio" type="radio" name="unt" value="pc" > Duty as Per Pc
                                 </div> --}}
+
+                                {{-- <input type="hidden" id="packingtype" name="packingtype" value=""> --}}
+                                <x-label for="" value="Packaging Type"/>
+                                <select autocomplete="on" required name="packingid" id ="packingid"   >
+                                    <option value="" selected>--Packing</option>
+                                    @foreach ($pack as $ptype)
+                                        <option value="{{ $ptype->packid }}">{{ $ptype->packing }}</option>
+                                    @endforeach
+                                    {{-- <option value="1" selected>{{$sku->dunit}}</option> --}}
+                                </select>
+
+                                {{-- <x-input-text title="packingtype" name="packingtype" /> --}}
+                                <x-input-text title="Nos Of Packages" name="packingwt"  req required class="col-span-2"/>
+
+
+
                                 <x-label for="" value="Unit as Per Duty Calculation"/>
                                 <select autocomplete="on" required name="dunitid" id ="dunitid"  required >
                                     <option value="" selected>--Unit</option>
@@ -409,6 +425,7 @@
 
 
 
+
                     }
                 ])
             }
@@ -416,6 +433,10 @@
 
 
         var calculate = function(){
+
+
+            // packtype = packid.options[packid.selectedIndex].innerText;
+            // console.log(packtype);
 
             if(dunitid.value <= 0)
                 {
@@ -660,14 +681,16 @@
                  e.totallccostwexp = e.total + e.amtinpkr + e.invlvlchrgs
                  e.perpc =  (( e.totallccostwexp + e.otherexpenses) / e.pcs).toFixed(2)
                  e.perkg = (( e.totallccostwexp + e.otherexpenses) / e.gdswt).toFixed(2)
-                 if(e.qtyinfeet.value>0)
+
+                //  console.info(e.qtyinfeet)
+                 if(e.qtyinfeet>0)
                  {
                  e.perft =(( e.totallccostwexp + e.otherexpenses) / e.qtyinfeet).toFixed(2)
                  }
 
-                 if(e.qtyinfeet.value===0)
+                 if(e.qtyinfeet===0)
                  {
-                 e.perft.value =0
+                 e.perft =0
                  }
 
                 //  console.log(e.totallccostwexp)
@@ -1149,9 +1172,13 @@ var headerMenu = function(){
 
             var invoicedate = document.getElementById("invoicedate")
             var invoiceno = document.getElementById("invoiceno")
-            // var challanno = document.getElementById("challanno")
             var machineno = document.getElementById("machineno")
             var machine_date = document.getElementById("machine_date")
+
+            var sid = document.getElementById("packingid");
+            var packingid = sid.options[sid.selectedIndex];
+
+
 
 
             if(invoiceno.value === ''){
@@ -1159,6 +1186,23 @@ var headerMenu = function(){
                 invoiceno.focus()
                 return;
             }
+
+            if(packingid.value <=0){
+                showSnackbar("Packing required ","error");
+                packingid.focus()
+                return;
+            }
+
+            // console.log(Number(packingwt.value));
+            if(Number(packingwt.value) === 0 || packingwt.value === ''   ){
+                showSnackbar("Packing required ","error");
+                packingwt.focus()
+                return;
+            }
+
+
+
+
             if(machineno.value === ''){
                 showSnackbar("machineno # required ","error");
                 machineno.focus()
@@ -1219,7 +1263,10 @@ var headerMenu = function(){
                 'agencychrgs' : parseFloat(agencychrgs.value).toFixed(2),
                 'otherchrgs' : parseFloat(otherchrgs.value).toFixed(2),
                 'dunitid' : parseFloat(dunitid.value).toFixed(0),
+                'packingid' :packingid.value,
+                'packingwt' : packingwt.value,
                 'total' : parseFloat(banktotal.value).toFixed(2),
+
                 'comminvoice' : dynamicTableData
             };
             // All Ok - Proceed
@@ -1247,6 +1294,34 @@ var headerMenu = function(){
                 // disableSubmitButton(false);
             })
         }
+
+
+        const category = document.getElementById('category')
+        const source = document.getElementById('source')
+        const brand = document.getElementById('brand')
+        const dimension = document.getElementById('dimension')
+        const sku = document.getElementById('sku')
+
+
+
+        // function getHiddenValues(el)
+        // {
+        //     switch (el.name)
+        //     {
+        //         case 'packid':
+        //         packingtype.value = el.options[el.selectedIndex].innerText
+        //          console.log(packingtype.value);
+        //             // break;
+
+        //     }
+        // }
+
+
+
+
+
+
+
 
 
 

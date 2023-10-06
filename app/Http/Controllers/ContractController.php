@@ -233,10 +233,11 @@ class ContractController extends Controller
                 $cd->invsrate = $cont['invsrate'];
                 $cd->purval = $cont['gdspricetot'];
                 $cd->dutval = $cont['gdspricedtytot'];
-                $cd->totpcs = $cont['ttpcs'];
+                // $cd->totpcs = $cont['ttpcs'];
+                $cd->totpcs = $cont['bundle1'];
 
                 $cd->tbalwt = $cont['gdswt'];
-                $cd->tbalpcs = $cont['ttpcs'];
+                $cd->tbalpcs = $cont['bundle1'];
                 $cd->tbalsupval = $cont['gdspricetot'];
 
                 $cd->save();
@@ -378,13 +379,13 @@ class ContractController extends Controller
                     $cds->invsrate = $cd->invsrate;
                     $cds->purval = $cd->purval;
                     $cds->dutval = $cd->dutval;
-                    $cds->totpcs = $cd->ttpcs;
+                    $cds->totpcs =$cd->bundle1;
 
 
                     $tcominvs = CommercialInvoice::where('contract_id',$contract->id)->first();
                     if(!$tcominvs) {
                     $cds->tbalwt = $cd->gdswt;
-                    $cds->tbalpcs = $cd->ttpcs;
+                    $cds->tbalpcs = $cd->bundle1;
                     $cds->tbalsupval = $cd->purval;
                     }
 
@@ -422,7 +423,7 @@ class ContractController extends Controller
                     $cds->invsrate = $cd->invsrate;
                     $cds->purval = $cd->purval;
                     $cds->dutval = $cd->dutval;
-                    $cds->totpcs = $cd->ttpcs;
+                    $cds->totpcs = $cd->bundle1;
 
                     $cds->save();
                 }}

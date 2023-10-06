@@ -138,7 +138,7 @@ class ClearanceController extends Controller
             $ci->bank_id = $request->bank_id;
             $ci->cheque_date = $request->cheque_date;
             $ci->cheque_no = $request->cheque_no;
-
+            $ci->invoice_date = $request->invoice_date;
 
             $ci->save();
 
@@ -150,22 +150,23 @@ class ClearanceController extends Controller
                 $c->invoiceno = $request->invoiceno;
                 $c->clearance_id = $ci->id;
                 $c->commercial_invoice_id = $request->cominvsid;
-                $c->material_id = $cid['material_id'];
+                $c->material_id = 0;
                 $c->supplier_id = $cid['supplier_id'];
-                $c->user_id = $cid['user_id'];
-                $c->category_id = $cid['category_id'];
+                $c->user_id = 1;
+                $c->packing = $cid['packing'];
+                $c->category_id = 0;
                 $c->sku_id = $cid['sku_id'];
-                $c->dimension_id = $cid['dimension_id'];
+                $c->dimension_id = 1;
                 $c->pcs = $cid['pcs'];
                 $c->gdswt = $cid['dutygdswt'];
                 $c->gdsprice = $cid['dtyrate'];
                 $c->amtindollar = $cid['dtyamtindollar'];
                 $c->amtinpkr = $cid['dtyamtinpkr'];
 
-                $c->bundle1 = $cid['bundle1'];
-                $c->pcspbundle1 = $cid['pcspbundle1'];
-                $c->bundle2 = $cid['bundle2'];
-                $c->pcspbundle2 = $cid['pcspbundle2'];
+                $c->bundle1 = $cid['packingwtbal'];
+                $c->pcspbundle1 = 0;
+                $c->bundle2 = 0;
+                $c->pcspbundle2 = 0;
 
                 $c->hscode = $cid['hscode'];
                 $c->cd = $cid['cd'];
@@ -174,7 +175,7 @@ class ClearanceController extends Controller
                 $c->acd = $cid['acd'];
                 $c->ast = $cid['ast'];
                 $c->it = $cid['it'];
-                $c->wse = $cid['wse'];
+                // $c->wse = $cid['wse'];
 
 
                 $c->itmratio = $cid['dtyitmratio'];
@@ -190,7 +191,7 @@ class ClearanceController extends Controller
                 $c->acda = $cid['acda'];
                 $c->asta = $cid['asta'];
                 $c->ita = $cid['ita'];
-                $c->wsca = $cid['wsca'];
+                // $c->wsca = $cid['wsca'];
                 $c->total = $cid['total'];
                 $c->perpc = $cid['perpc'];
                 $c->perkg = $cid['perkg'];
@@ -211,20 +212,21 @@ class ClearanceController extends Controller
                 DB::update(DB::raw("
                 UPDATE commercial_invoices c
                 INNER JOIN (
-                SELECT commercial_invoice_id, SUM(total) AS amount,sum(exataxoffie) as wt
-                FROM clearances where  commercial_invoice_id = $ci->commercial_invoice_id
-                GROUP BY commercial_invoice_id
+                SELECT commercial_invoice_id,gdswt AS wt,pcs AS pcs,amtindollar,bundle1 AS nosofpack,total AS amount FROM clearance_completed_details
+                where  commercial_invoice_id = $ci->commercial_invoice_id
                 ) x ON c.id = x.commercial_invoice_id
-                SET c.payed = x.amount,c.dutybal=c.tduty-x.amount,c.wtbal=c.twt-x.wt where  id = $ci->commercial_invoice_id "));
+                SET c.payed = c.payed + x.amount,c.dutybal=c.dutybal-x.amount,c.wtbal=c.wtbal-x.wt,c.packingwtbal=c.packingwtbal-x.nosofpack,
+                c.tdutvalbal=c.tdutvalbal-x.amtindollar,c.pcsbal=c.pcsbal-x.pcs
+                where  id = $ci->commercial_invoice_id "));
 
-                DB::update(DB::raw("
-                UPDATE commercial_invoice_details c
-                INNER JOIN (
-                       SELECT commercial_invoice_id,material_id,SUM(pcs) as pcs,SUM(gdswt) AS wt,SUM(total) AS amount,SUM(bundle1) AS bundle1,SUM(bundle2) AS bundle2
-                    FROM clearance_completed_details where  commercial_invoice_id = $ci->commercial_invoice_id  GROUP BY commercial_invoice_id,material_id
-                 ) x ON c.commercial_invoice_id = x.commercial_invoice_id and c.material_id=x.material_id
-                SET c.dbalwt = c.dutygdswt - x.wt,c.dbalpcs= c.pcs-x.pcs,c.dtybal=c.total-x.amount,c.dbundle1=c.bundle1-x.bundle1,c.dbundle2=c.bundle2-x.bundle2
-                    WHERE   c.commercial_invoice_id = $ci->commercial_invoice_id  "));
+                // DB::update(DB::raw("
+                // UPDATE commercial_invoice_details c
+                // INNER JOIN (
+                //        SELECT commercial_invoice_id,material_id,SUM(pcs) as pcs,SUM(gdswt) AS wt,SUM(total) AS amount,SUM(bundle1) AS bundle1,SUM(bundle2) AS bundle2
+                //     FROM clearance_completed_details where  commercial_invoice_id = $ci->commercial_invoice_id  GROUP BY commercial_invoice_id,material_id
+                //  ) x ON c.commercial_invoice_id = x.commercial_invoice_id and c.material_id=x.material_id
+                // SET c.dbalwt = c.dutygdswt - x.wt,c.dbalpcs= c.pcs-x.pcs,c.dtybal=c.total-x.amount,c.dbundle1=c.bundle1-x.bundle1,c.dbundle2=c.bundle2-x.bundle2
+                //     WHERE   c.commercial_invoice_id = $ci->commercial_invoice_id  "));
 
 
 
@@ -588,12 +590,13 @@ public function update(Request $request)
                 // $c = ClearanceCompletedDetails::where('clearance_id',$clearance->id)->first();
                 $c->invoiceno = $request->invoiceno;
                 // $c->clearance_id = 1;
-                $c->material_id = $cid['material_id'];
+                $c->material_id = 0;
                 $c->supplier_id = $cid['supplier_id'];
-                $c->user_id = $cid['user_id'];
-                $c->category_id = $cid['category_id'];
+                $c->user_id = 1;
+                $c->packing = $cid['packing'];
+                $c->category_id = 0;
                 $c->sku_id = $cid['sku_id'];
-                $c->dimension_id = $cid['dimension_id'];
+                $c->dimension_id = 1;
                 $c->pcs = $cid['pcs'];
                 $c->gdswt = $cid['gdswt'];
                 $c->gdsprice = $cid['gdsprice'];
@@ -601,9 +604,9 @@ public function update(Request $request)
                 $c->amtinpkr = $cid['amtinpkr'];
 
                 $c->bundle1 = $cid['bundle1'];
-                $c->pcspbundle1 = $cid['pcspbundle1'];
-                $c->bundle2 = $cid['bundle2'];
-                $c->pcspbundle2 = $cid['pcspbundle2'];
+                $c->pcspbundle1 = 0;
+                $c->bundle2 = 0;
+                $c->pcspbundle2 = 0;
 
                 $c->hscode = $cid['hscode'];
                 $c->cd = $cid['cd'];
@@ -612,7 +615,7 @@ public function update(Request $request)
                 $c->acd = $cid['acd'];
                 $c->ast = $cid['ast'];
                 $c->it = $cid['it'];
-                $c->wse = $cid['wse'];
+                // $c->wse = $cid['wse'];
                 $c->itmratio = $cid['itmratio'];
                 $c->insuranceperitem = $cid['insuranceperitem'];
                 $c->amountwithoutinsurance = $cid['amountwithoutinsurance'];
@@ -624,7 +627,7 @@ public function update(Request $request)
                 $c->acda = $cid['acda'];
                 $c->asta = $cid['asta'];
                 $c->ita = $cid['ita'];
-                $c->wsca = $cid['wsca'];
+                // $c->wsca = $cid['wsca'];
                 $c->total = $cid['total'];
                 $c->perpc = $cid['perpc'];
                 $c->perkg = $cid['perkg'];
