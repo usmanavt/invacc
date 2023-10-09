@@ -818,7 +818,7 @@ class CommercialInvoiceController extends Controller
             GROUP BY commercial_invoice_id
             ) x ON c.id = x.commercial_invoice_id
             SET c.tpcs = x.pcs,c.twt=x.wt,c.tval=x.amount,c.tduty=totduty,c.tvalpkr=x.amtinpkr,c.tswt=x.swt,c.wtbal=wt,c.tdutval=dutval,
-            c.dutvalbal=dutval,,c.pcsbal=x.pcs
+            c.tdutvalbal=dutval,c.pcsbal=x.pcs
             where  commercial_invoice_id = $ci->id "));
 
             $lstrt = Clearance::where('commercial_invoice_id',$ci->id)->first();

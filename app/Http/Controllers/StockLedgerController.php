@@ -389,7 +389,7 @@ class StockLedgerController extends Controller
             // $nogrp->values()->all();
             // // Now FIlter Collection for grpid == 1
             // $collection = $collection->filter(function ($item){
-            //     return $item->sortid == 1;
+            //     return $item->sort.id == 1;
             // })->values();
             ///// THIS IS CHANGED FOR REPORT//////////
             $grouped = $collection->groupBy('material_id');
@@ -453,7 +453,7 @@ class StockLedgerController extends Controller
             //     return $item->sortid == 1;
             // })->values();
             ///// THIS IS CHANGED FOR REPORT//////////
-            $grouped = $collection->groupBy('lid');
+            $grouped = $collection->groupBy('material_id');
             $grouped->values()->all();        //  values() removes indices of array
             foreach($grouped as $g){
                  $html =  view('stockledgers.indvstockgsmugs')->with('data',$g)->with('fromdate',$fromdate)->with('todate',$todate)

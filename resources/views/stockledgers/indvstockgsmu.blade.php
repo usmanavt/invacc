@@ -141,16 +141,16 @@ table{
     <table class="column-headers">
         <thead>
             <tr>
-                <th class="" width="3%">S#</th>3
+                <th class="" width="2%">S#</th>3
                 <th class="" width="10%">Date</th>
-                <th class="" width="27%">Particular</th>
+                <th class="" width="34%">Particular</th>
                 {{-- <th class="" width="7%">Ref</th> --}}
-                <th class="" width="10%">O/Balance</th>
-                <th class="" width="10%">Purchase</th>
-                <th class="" width="10%">Sale</th>
-                <th class="" width="10%">Purchase Return</th>
-                <th class="" width="10%">Sale Return</th>
-                <th class="" width="10%">C/Balance</th>
+                <th class="" width="9%">Opening <br> Balance</th>
+                <th class="" width="9%">Purchase</th>
+                <th class="" width="9%">Sale</th>
+                <th class="" width="9%">Purchase <br> Return</th>
+                <th class="" width="9%">Sale <br> Return</th>
+                <th class="" width="9%">C/Balance</th>
             </tr>
         </thead>
     </table>
@@ -173,16 +173,16 @@ table{
                 {{-- {{ $balpkr += $data[$i]->BalanceAmtRup }} --}}
                 {{ $sale += $data[$i]->sale }}
 
-                <td class="" width="3%">{{ $i+1 }}</td>
+                <td class="" width="2%">{{ $i+1 }}</td>
                 <td class="" width="10%">{{ $data[$i]->tdate }} </td>
-                <td class="" width="27%">{{ $data[$i]->Descr }} </td>
+                <td class="" width="34%">{{ $data[$i]->Descr }} </td>
                 {{-- <td class="" width="7%">{{ $data[$i]->Ref }} </td> --}}
                 <td style="text-align:center" width="10%">{{ number_format($data[$i]->oqty,0) }} </td>
-                <td style="text-align:center" width="10%">{{ number_format($data[$i]->received,0) }}</td>
-                <td style="text-align:center" width="10%">{{ number_format($data[$i]->sale,0) }} </td>
-                <td style="text-align:center" width="10%">{{ number_format($data[$i]->purret,0) }} </td>
-                <td style="text-align:center" width="10%">{{ number_format($data[$i]->saleret,0) }} </td>
-                <td style="text-align:center" width="10%">{{ number_format($data[$i]->CB,0) }} </td>
+                <td style="text-align:center" width="9%">{{ number_format($data[$i]->received,0) }}</td>
+                <td style="text-align:center" width="9%">{{ number_format($data[$i]->sale,0) }} </td>
+                <td style="text-align:center" width="9%">{{ number_format($data[$i]->purret,0) }} </td>
+                <td style="text-align:center" width="9%">{{ number_format($data[$i]->saleret,0) }} </td>
+                <td style="text-align:center" width="9%">{{ number_format($data[$i]->CB,0) }} </td>
 
             </tr>
             @endfor

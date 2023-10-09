@@ -22,7 +22,9 @@ table{
     background: #e3e3e3;
     margin-top:5px;
     margin-bottom:5px;
-    border-bottom: 2px double gray;
+    border-bottom: 2px double  lightgray;
+    border-collapse: collapse;
+    text-align: center;
 }
 .column-headers th{
     text-align: center;
@@ -115,12 +117,12 @@ table{
     <table class="column-headers">
         <thead>
             <tr>
-                <th class="" width="5%">S#</th>
-                <th class="" width="10%">Date</th>
-                <th class="" width="35%">Particular</th>
-                <th class="" width="10%">Ref</th>
-                <th class="" width="20%">Debit</th>
-                <th class="" width="10%">Credit</th>
+                <th class="column-headers" width="5%">S#</th>
+                <th class="column-headers" width="10%">Date</th>
+                <th class="column-headers" width="45%">Particular</th>
+                <th class="column-headers" width="10%">Ref</th>
+                <th class="column-headers" width="15%">Debit</th>
+                <th class="column-headers" width="15%">Credit</th>
             </tr>
         </thead>
     </table>
@@ -142,24 +144,20 @@ table{
 
 
 
-                <td class="" width="5%">{{ $i+1 }}</td>
-                <td class="" width="10%">{{ $data[$i]->invoice_date }} </td>
-                {{-- <td class="" width="35%">{{ $data[$i]->Descr }}<br>invoice # {{ $data[$i]->invoiceno }} </td> --}}
-                <td class="" width="35%">{{ $data[$i]->Descr }}<br> {{ $data[$i]->Description }} </td>
-                <td class="" width="10%">{{ $data[$i]->Ref }} </td>
-                {{-- <td class="" width="20%">{{ number_format($data[$i]->DebitAmtDlr,2) }} : PKR<br>{{ number_format($data[$i]->CreditAmtDlr,2) }} : USD</td> --}}
-                {{-- <td class="" width="20%">{{ number_format($data[$i]->DebitAmtRup,2) }} : PKR<br>{{ number_format($data[$i]->CreditAmtRup,2) }} : USD</td> --}}
-                <td class="" width="20%">{{ number_format($data[$i]->DebitAmtDlr,2) }}  : {{($data[$i]->cur) }}</td>
-                <td class="" width="20%">{{ number_format($data[$i]->CreditAmtDlr,2) }} : {{($data[$i]->cur) }}<br></td>
+                <td style="text-align:center" width="5%">{{ $i+1 }}</td>
+                <td style="text-align:center" width="10%">{{ $data[$i]->invoice_date }} </td>
+                <td  width="45%"> <span style="font-size:0.8rem;font-weight: bold;color:brown">{{ $data[$i]->Descr }}</span>
+                    <br> {{ $data[$i]->Description }} </td>
+                <td style="text-align:center" width="10%">{{ $data[$i]->Ref }} </td>
+                <td style="text-align:right ;margin-right:10px " width="15%">{{ number_format($data[$i]->DebitAmtDlr,2) }}  : {{($data[$i]->cur) }}</td>
+                <td style="text-align:right ;border-right:1px solid lightgray; margin-right:10px ; " width="15%">{{ number_format($data[$i]->CreditAmtDlr,2) }} : {{($data[$i]->cur) }}<br></td>
 
             </tr>
             @endfor
             <tr>
-                <td colspan="4" width="60%" style="text-align: right;border-bottom: 1px solid lightgray;">Total(s)</td>
-                {{-- <td class="" width="20%" style="text-align: right;border-bottom: 1px solid lightgray;">{{ number_format($debitusd,2) }} : PKR<br>{{ number_format($creditusd,2) }} : USD</td> --}}
-                {{-- <td class="" width="20%" style="text-align: right;border-bottom: 1px solid lightgray;">{{ number_format($creditpkr,2) }} : PKR<br>{{ number_format($creditusd,2) }} : USD</td> --}}
-                <td class="" width="20%" style="text-align: right;border-bottom: 1px solid lightgray;">{{ number_format($debitusd,2) }} </td>
-                <td class="" width="20%" style="text-align: right;border-bottom: 1px solid lightgray;">{{ number_format($creditusd,2) }} </td>
+                <td colspan="4" width="60%" style=" border:1px solid lightgray; text-align: right;font-weight: bold;background: #e3e3e3;border-top: 2px double  lightgray ;">Total(s)</td>
+                <td class="" width="15%" style=" border:1px solid lightgray; text-align: right;font-weight: bold;background: #e3e3e3;border-top: 2px double  lightgray ;">{{ number_format($debitusd,2) }} </td>
+                <td class="" width="15%" style=" border:1px solid lightgray; text-align: right;font-weight: bold;background: #e3e3e3;border-top: 2px double  lightgray ;">{{ number_format($creditusd,2) }} </td>
 
             </tr>
         </tbody>

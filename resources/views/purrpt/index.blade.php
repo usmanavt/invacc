@@ -36,9 +36,14 @@
                                     <label for="">Duty Clearance </label>
                                 </div>
 
+                                <div>
+                                    <input type="radio" name="report_type" value="dtypnding" required onchange="checkReportType('dtypnding')">
+                                    <label for="">Duty Pending </label>
+                                </div>
+
 
                                 <div>
-                                    <input type="radio" name="report_type" value="gl" required onchange="checkReportType('gl')">
+                                    <input type="radio" name="report_type" value="pndcontr" required onchange="checkReportType('pndcontr')">
                                     <label for="">Pending Contracts</label>
                                 </div>
 
@@ -208,6 +213,15 @@
     const contlistfill = @json(route('purrpt.contlistfill'));
     const funcpurcat = @json(route('purrpt.funcpurcat'));
     const dutycategory = @json(route('purrpt.dutycategory'));
+    const pnddutycategory = @json(route('purrpt.pnddutycategory'));
+    const pndcontractcategory = @json(route('purrpt.pndcontractcategory'));
+
+    const compcontractcategory = @json(route('purrpt.compcontractcategory'));
+
+
+
+
+
 
 
     const cominvsloc = @json(route('purrpt.cominvsloc'));
@@ -279,39 +293,39 @@
                 // }
                 // break;
 
-                case  'gl' :
-                list = subheadspend.filter( l => l.MHEAD === value  )
-                // console.info(value)
-                if(list.length > 0)
-                {
-                    list.forEach(e => {
-                        // addSelectElement(subhead,e.Subhead,e.title)
-                        addSelectElement(subhead,e.Subhead,e.title)
-                    });
-                    subhead.setAttribute('required','')
-                    subhead.removeAttribute('disabled','')
-                }else{
-                    subhead.removeAttribute('required','')
-                    subhead.setAttribute('disabled','')
-                }
-                break;
+                // case  'gl' :
+                // list = subheadspend.filter( l => l.MHEAD === value  )
+                // // console.info(value)
+                // if(list.length > 0)
+                // {
+                //     list.forEach(e => {
+                //         // addSelectElement(subhead,e.Subhead,e.title)
+                //         addSelectElement(subhead,e.Subhead,e.title)
+                //     });
+                //     subhead.setAttribute('required','')
+                //     subhead.removeAttribute('disabled','')
+                // }else{
+                //     subhead.removeAttribute('required','')
+                //     subhead.setAttribute('disabled','')
+                // }
+                // break;
 
-                case  'cc' :
-                list = subheadscomp.filter( l => l.MHEAD === value  )
-                // console.info(value)
-                if(list.length > 0)
-                {
-                    list.forEach(e => {
-                        // addSelectElement(subhead,e.Subhead,e.title)
-                        addSelectElement(subhead,e.Subhead,e.title)
-                    });
-                    subhead.setAttribute('required','')
-                    subhead.removeAttribute('disabled','')
-                }else{
-                    subhead.removeAttribute('required','')
-                    subhead.setAttribute('disabled','')
-                }
-                break;
+                // case  'cc' :
+                // list = subheadscomp.filter( l => l.MHEAD === value  )
+                // // console.info(value)
+                // if(list.length > 0)
+                // {
+                //     list.forEach(e => {
+                //         // addSelectElement(subhead,e.Subhead,e.title)
+                //         addSelectElement(subhead,e.Subhead,e.title)
+                //     });
+                //     subhead.setAttribute('required','')
+                //     subhead.removeAttribute('disabled','')
+                // }else{
+                //     subhead.removeAttribute('required','')
+                //     subhead.setAttribute('disabled','')
+                // }
+                // break;
 
 
 
@@ -433,8 +447,121 @@ const getSubheadVoucherData3 = async (value) =>{
     }
 
 
+    case 'dtypnding':
+            //  console.log(todate.value)
+            fetch(pnddutycategory + `?todate=${todate.value}&fromdate=${fromdate.value}&head=${value}`,{
+                    method:"GET",
+                    headers: { 'Accept':'application/json','Content-type':'application/json'},
+                    })
+                    .then(response => response.json())
+                    .then( data => {
+                        if(data.length > 0)
+                        {
+                            data.forEach(e => {
+                                addSelectElement(subhead,e.Subhead,e.title)
+                            });
+                            subhead.setAttribute('required','')
+                            subhead.removeAttribute('disabled','')
+                        }else{
+                            subhead.removeAttribute('required','')
+                            subhead.setAttribute('disabled','')
+                        }
+                    })
+                    .catch(error => console.error(error))
+                break;
+
+// FOR CONTRACT FILL
+const getSubheadVoucherData4 = async (value) =>{
+        let data = await fetch(pnddutycategory + `?todate=${todate.value}&fromdate=${fromdate.value}&head=${value}`,{
+            method:"GET",
+            headers: { 'Accept':'application/json','Content-type':'application/json'},
+            })
+            .then(response => response.json())
+            .then( data => { return data })
+            .catch(error => console.error(error))
+    }
+    const getDtypnding =async  (value) => {
+        const dtypnding = await getSubheadVoucherData4(value)
+        return dtypnding
+    }
 
 
+    case 'pndcontr':
+            //   console.log(todate.value)
+            fetch(pndcontractcategory + `?todate=${todate.value}&fromdate=${fromdate.value}&head=${value}`,{
+                    method:"GET",
+                    headers: { 'Accept':'application/json','Content-type':'application/json'},
+                    })
+                    .then(response => response.json())
+                    .then( data => {
+                        if(data.length > 0)
+                        {
+                            data.forEach(e => {
+                                addSelectElement(subhead,e.Subhead,e.title)
+                            });
+                            subhead.setAttribute('required','')
+                            subhead.removeAttribute('disabled','')
+                        }else{
+                            subhead.removeAttribute('required','')
+                            subhead.setAttribute('disabled','')
+                        }
+                    })
+                    .catch(error => console.error(error))
+                break;
+
+// FOR CONTRACT FILL
+const getSubheadVoucherData5 = async (value) =>{
+        let data = await fetch(pndcontractcategory + `?todate=${todate.value}&fromdate=${fromdate.value}&head=${value}`,{
+            method:"GET",
+            headers: { 'Accept':'application/json','Content-type':'application/json'},
+            })
+            .then(response => response.json())
+            .then( data => { return data })
+            .catch(error => console.error(error))
+    }
+    const getPndcontr =async  (value) => {
+        const pndcontr = await getSubheadVoucherData5(value)
+        return pndcontr
+    }
+
+
+    case 'cc':
+            //   console.log(todate.value)
+            fetch(compcontractcategory + `?todate=${todate.value}&fromdate=${fromdate.value}&head=${value}`,{
+                    method:"GET",
+                    headers: { 'Accept':'application/json','Content-type':'application/json'},
+                    })
+                    .then(response => response.json())
+                    .then( data => {
+                        if(data.length > 0)
+                        {
+                            data.forEach(e => {
+                                addSelectElement(subhead,e.Subhead,e.title)
+                            });
+                            subhead.setAttribute('required','')
+                            subhead.removeAttribute('disabled','')
+                        }else{
+                            subhead.removeAttribute('required','')
+                            subhead.setAttribute('disabled','')
+                        }
+                    })
+                    .catch(error => console.error(error))
+                break;
+
+// FOR CONTRACT FILL
+const getSubheadVoucherData6 = async (value) =>{
+        let data = await fetch(compcontractcategory + `?todate=${todate.value}&fromdate=${fromdate.value}&head=${value}`,{
+            method:"GET",
+            headers: { 'Accept':'application/json','Content-type':'application/json'},
+            })
+            .then(response => response.json())
+            .then( data => { return data })
+            .catch(error => console.error(error))
+    }
+    const getCc =async  (value) => {
+        const cc = await getSubheadVoucherData6(value)
+        return cc
+    }
 
 
 
@@ -583,20 +710,20 @@ const getCominvsimpVoucherData = async (value) =>{
                 subheadavailable = false
                 break;
 
-            case 'gl':
-                //  Show Head
-                 rptType = 'gl'
-                head.setAttribute('required','')
-                head.disabled = false
-                head.length = 0
-                subhead.removeAttribute('required')
-                subhead.disabled = true
-                subhead.length = 0
-                heads.forEach(e => {
-                    addSelectElement(head,e.id,e.title)
-                });
-                headSelected()
-                break;
+            // case 'gl':
+            //     //  Show Head
+            //      rptType = 'gl'
+            //     head.setAttribute('required','')
+            //     head.disabled = false
+            //     head.length = 0
+            //     subhead.removeAttribute('required')
+            //     subhead.disabled = true
+            //     subhead.length = 0
+            //     heads.forEach(e => {
+            //         addSelectElement(head,e.id,e.title)
+            //     });
+            //     headSelected()
+            //     break;
                 case 'cc':
                 //  Show Head
                  rptType = 'cc'
@@ -663,6 +790,53 @@ const getCominvsimpVoucherData = async (value) =>{
                 });
                 headSelected()
                 break;
+
+                case 'dtypnding':
+                // Show Head
+                rptType = 'dtypnding'
+                head.setAttribute('required','')
+                head.disabled = false
+                head.length = 0
+                subhead.removeAttribute('required')
+                subhead.disabled = true
+                subhead.length = 0
+                heads.forEach(e => {
+                    addSelectElement(head,e.id,e.title)
+                });
+                headSelected()
+                break;
+
+                case 'dtypnding':
+                // Show Head
+                rptType = 'dtypnding'
+                head.setAttribute('required','')
+                head.disabled = false
+                head.length = 0
+                subhead.removeAttribute('required')
+                subhead.disabled = true
+                subhead.length = 0
+                heads.forEach(e => {
+                    addSelectElement(head,e.id,e.title)
+                });
+                headSelected()
+                break;
+
+                case 'pndcontr':
+                // Show Head
+                rptType = 'pndcontr'
+                head.setAttribute('required','')
+                head.disabled = false
+                head.length = 0
+                subhead.removeAttribute('required')
+                subhead.disabled = true
+                subhead.length = 0
+                heads.forEach(e => {
+                    addSelectElement(head,e.id,e.title)
+                });
+                headSelected()
+                break;
+
+
 
             case 'impcominvs':
                 // Show Head

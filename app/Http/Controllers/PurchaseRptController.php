@@ -95,6 +95,42 @@ class PurchaseRptController extends Controller
     }
 
 
+    public function pnddutycategory(Request $request)
+    {
+    //  dd($request->all());
+        $fromdate = $request->fromdate;
+        $todate = $request->todate;
+        $head = $request->head;
+        return  DB::select('call procpnddtyclrnccategory(?,?,?)',array($fromdate,$todate,$head));
+        //   return DB::table('vwsupcategorycominv')->select('*')->whereBetween('invoice_date',[$fromdate,$todate])->where('MHEAD',$head)->get()->toArray();
+    }
+
+    public function pndcontractcategory(Request $request)
+    {
+    //  dd($request->all());
+        $fromdate = $request->fromdate;
+        $todate = $request->todate;
+        $head = $request->head;
+        return  DB::select('call procpendcontrcategory(?,?,?)',array($fromdate,$todate,$head));
+        //   return DB::table('vwsupcategorycominv')->select('*')->whereBetween('invoice_date',[$fromdate,$todate])->where('MHEAD',$head)->get()->toArray();
+    }
+
+    public function compcontractcategory(Request $request)
+    {
+    //  dd($request->all());
+        $fromdate = $request->fromdate;
+        $todate = $request->todate;
+        $head = $request->head;
+        return  DB::select('call proccompcontrcategory(?,?,?)',array($fromdate,$todate,$head));
+        //   return DB::table('vwsupcategorycominv')->select('*')->whereBetween('invoice_date',[$fromdate,$todate])->where('MHEAD',$head)->get()->toArray();
+    }
+
+
+
+
+
+
+
     public function getMPDFSettingsLgl($orientation = 'Legal-L')
     {
 
@@ -249,9 +285,9 @@ class PurchaseRptController extends Controller
             $filename = 'TransactionProveLista-'.$fromdate.'-'.$todate.'.pdf';
         }
 
-        if($report_type === 'gl'){
+        if($report_type === 'pndcontr'){
+
             $head_id = $request->head_id;
-            // $head = Head::findOrFail($head_id);
             $head = Supplier::findOrFail($head_id);
             if($request->has('subhead_id')){
                 $subhead_id = $request->subhead_id;
@@ -261,22 +297,40 @@ class PurchaseRptController extends Controller
                 {
                     DB::table('contparameterrpt')->insert([ 'GLCODE' => $id ]);
                 }
-
-                // Add input for Muliple parameters in Procedure
-                $data = DB::select('call procpendcontacts()');
-                if(!$data)
-                {
-                    Session::flash('info','No data available');
-                    return redirect()->back();
-                }
             }
-            $html =  view('purrpt.pendcontractsrpt')->with('data',$data)->render();
-            $filename = 'PendingContracts-'.$fromdate.'-'.$todate.'.pdf';
+            //  Call Procedure
+            $data = DB::select('call procpendcontacts()');
+            if(!$data)
+            {
+                Session::flash('info','No data available');
+                return redirect()->back();
+            }
+            $mpdf = $this->getMPDFSettingsA4L();
+            $collection = collect($data);                   //  Make array a collection
+            $grouped = $collection->groupBy('purid');       //  Sort collection by SupName
+            $grouped->values()->all();                       //  values() removes indices of array
+
+            foreach($grouped as $g){
+                 $html =  view('purrpt.pendcontractsrpt')
+                    ->with('data',$g)
+                    ->with('fromdate',$fromdate)
+                    ->with('todate',$todate)
+                    ->with('headtype',$head->title)->render();
+                $filename = $g[0]->purid  .'-'.$fromdate.'-'.$todate.'.pdf';
+                $chunks = explode("chunk", $html);
+                foreach($chunks as $key => $val) {
+                    $mpdf->WriteHTML($val);
+                }
+                $mpdf->AddPage();
+            }
+            return response($mpdf->Output($filename,'I'),200)->header('Content-Type','application/pdf');
+
+
+
         }
 
         if($report_type === 'cc'){
             $head_id = $request->head_id;
-            // $head = Head::findOrFail($head_id);
             $head = Supplier::findOrFail($head_id);
             if($request->has('subhead_id')){
                 $subhead_id = $request->subhead_id;
@@ -286,16 +340,34 @@ class PurchaseRptController extends Controller
                 {
                     DB::table('contparameterrpt')->insert([ 'GLCODE' => $id ]);
                 }
-                // Add input for Muliple parameters in Procedure
-                $data = DB::select('call procpendcontacts()');
-                if(!$data)
-                {
-                    Session::flash('info','No data available');
-                    return redirect()->back();
-                }
             }
-            $html =  view('purrpt.compcontractsrpt')->with('data',$data)->render();
-            $filename = 'completedContracts-'.$fromdate.'-'.$todate.'.pdf';
+            //  Call Procedure
+            $data = DB::select('call proccompcontacts()');
+            if(!$data)
+            {
+                Session::flash('info','No data available');
+                return redirect()->back();
+            }
+            $mpdf = $this->getMPDFSettingsA4L();
+            $collection = collect($data);                   //  Make array a collection
+            $grouped = $collection->groupBy('purid');       //  Sort collection by SupName
+            $grouped->values()->all();                       //  values() removes indices of array
+
+            foreach($grouped as $g){
+                 $html =  view('purrpt.compcontractsrpt')
+                    ->with('data',$g)
+                    ->with('fromdate',$fromdate)
+                    ->with('todate',$todate)
+                    ->with('headtype',$head->title)->render();
+                $filename = $g[0]->purid  .'-'.$fromdate.'-'.$todate.'.pdf';
+                $chunks = explode("chunk", $html);
+                foreach($chunks as $key => $val) {
+                    $mpdf->WriteHTML($val);
+                }
+                $mpdf->AddPage();
+            }
+            return response($mpdf->Output($filename,'I'),200)->header('Content-Type','application/pdf');
+
 
         }
 
@@ -396,7 +468,7 @@ class PurchaseRptController extends Controller
 
 
 
-        if($report_type === 'dtyclrnc'){
+        if($report_type === 'dtyclrnc' || $report_type === 'dtypnding' ){
             //  dd($request->all());
             $head_id = $request->head_id;
             $head = Supplier::findOrFail($head_id);
@@ -422,7 +494,9 @@ class PurchaseRptController extends Controller
             $grouped->values()->all();                       //  values() removes indices of array
 
             foreach($grouped as $g){
-                 $html =  view('purrpt.dtyclearance')
+
+
+                $html =  view('purrpt.dtyclearance')
                     ->with('data',$g)
                     ->with('fromdate',$fromdate)
                     ->with('todate',$todate)

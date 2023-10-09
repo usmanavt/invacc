@@ -22,7 +22,9 @@ table{
     background: #e3e3e3;
     margin-top:5px;
     margin-bottom:5px;
-    border-bottom: 2px double gray;
+    border-bottom: 2px double  lightgray;
+    border-collapse: collapse;
+    text-align: center;
 }
 .column-headers th{
     text-align: center;
@@ -120,13 +122,13 @@ table{
     <table class="column-headers">
         <thead>
             <tr>
-                <th class="" width="5%">S#</th>
-                <th class="" width="10%">Date</th>
-                <th class="" width="33%">Particular</th>
-                <th class="" width="7%">Ref</th>
-                <th class="" width="15%">Debit</th>
-                <th class="" width="15%">Credit</th>
-                <th class="" width="15%">Balance</th>
+                <th class="column-headers" width="5%">S#</th>
+                <th class="column-headers" width="10%">Date</th>
+                <th class="column-headers" width="33%">Particular</th>
+                <th class="column-headers" width="7%">Ref</th>
+                <th class="column-headers" width="15%">Debit</th>
+                <th class="column-headers" width="15%">Credit</th>
+                <th class="column-headers" width="15%">Balance</th>
             </tr>
         </thead>
     </table>
@@ -151,8 +153,10 @@ table{
 
                 <td class="" width="5%">{{ $i+1 }}</td>
                 <td class="" width="10%">{{ $data[$i]->invoice_date }} </td>
-                {{-- <td class="" width="10%">{{ $data[$i]->invoice_date }} </td> --}}
-                <td class="" width="33%">{{ $data[$i]->Descr }}<br> {{ $data[$i]->DESCRIPTION }} </td>
+                {{-- <td class="" width="33%">{{ $data[$i]->Descr }}<br> {{ $data[$i]->DESCRIPTION }} </td> --}}
+                <td  width="33%"> <span style="font-size:0.8rem;font-weight: bold;color:brown">{{ $data[$i]->Descr }}</span>
+                    <br> {{ $data[$i]->DESCRIPTION }} </td>
+
                 <td class="" width="7%">{{ $data[$i]->Ref }} </td>
 
 

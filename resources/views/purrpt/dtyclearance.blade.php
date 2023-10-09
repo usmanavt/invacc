@@ -250,7 +250,34 @@ table{
 
 
 
+                {{-- <td  width="30%"> <span style="font-size:0.8rem;font-weight: bold;color:brown">{{ $data[$i]->SupName }}</span> --}}
 
+        @if(  $data[$i]->srtid == 1 )
+                <td style="text-align:center" width="2%">{{ $i+1 }}</td>
+                {{-- <td style="text-align:left" width="2%">{{ $data[$i]->srtid}} </td> --}}
+                <td style="text-align:left ;font-weight: bold;color:brown" width="9%">{{ $data[$i]->descr}} </td>
+                <td style="text-align:center;font-weight: bold;color:brown" width="5%">{{ $data[$i]->invoice_date}} </td>
+                <td style="text-align:center;font-weight: bold;color:brown" width="5%">{{ $data[$i]->invoiceno}} </td>
+                <td style="text-align:center;font-weight: bold;color:brown" width="5%">{{ $data[$i]->machine_date}} </td>
+                <td style="text-align:center;font-weight: bold;color:brown" width="5%">{{ $data[$i]->machineno}} </td>
+                <td style="text-align:right;font-weight: bold;color:brown" width="4%">{{ number_format($data[$i]->conversionrate,2) }} </td>
+                <td style="text-align:right;font-weight: bold;color:brown" width="3%">{{ number_format($data[$i]->insurance,0) }} </td>
+                <td style="text-align:right;font-weight: bold;color:brown" width="4%">{{ number_format($data[$i]->packingwt,0) }} </td>
+                <td style="text-align:right;font-weight: bold;color:brown" width="4%">{{ number_format($data[$i]->twt,0) }} </td>
+                <td style="text-align:right;font-weight: bold;color:brown" width="5%">{{ number_format($data[$i]->tduty,0) }} </td>
+                <td style="text-align:right;font-weight: bold;color:brown" width="4%">{{ number_format($data[$i]->dpackingwt,0) }} </td>
+                <td style="text-align:right;font-weight: bold;color:brown" width="4%">{{ number_format($data[$i]->dtwt,0) }} </td>
+                <td style="text-align:right;font-weight: bold;color:brown" width="4%">{{ number_format($data[$i]->cda,0) }} </td>
+                <td style="text-align:right;font-weight: bold;color:brown" width="4%">{{ number_format($data[$i]->sta,0) }} </td>
+                <td style="text-align:right;font-weight: bold;color:brown" width="4%">{{ number_format($data[$i]->rda,0) }} </td>
+                <td style="text-align:right;font-weight: bold;color:brown" width="4%">{{ number_format($data[$i]->acda,0) }} </td>
+                <td style="text-align:right;font-weight: bold;color:brown" width="4%">{{ number_format($data[$i]->asta,0) }} </td>
+                <td style="text-align:right;font-weight: bold;color:brown" width="4%">{{ number_format($data[$i]->ita,0) }} </td>
+                <td style="text-align:right;font-weight: bold;color:brown" width="5%">{{ number_format($data[$i]->dtduty,0) }} </td>
+                <td style="text-align:right;font-weight: bold;color:brown" width="4%">{{ number_format($data[$i]->pndpkgs,0) }} </td>
+                <td style="text-align:right;font-weight: bold;color:brown" width="4%">{{ number_format($data[$i]->pndwt,0) }} </td>
+                <td style="text-align:right;font-weight: bold;color:brown" width="5%">{{ number_format($data[$i]->pndval,0) }} </td>
+    @else
 
 
                 <td style="text-align:center" width="2%">{{ $i+1 }}</td>
@@ -277,6 +304,10 @@ table{
                 <td style="text-align:right" width="4%">{{ number_format($data[$i]->pndpkgs,0) }} </td>
                 <td style="text-align:right" width="4%">{{ number_format($data[$i]->pndwt,0) }} </td>
                 <td style="text-align:right" width="5%">{{ number_format($data[$i]->pndval,0) }} </td>
+    @endif
+
+
+
             </tr>
             @endfor
 

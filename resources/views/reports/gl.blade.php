@@ -22,7 +22,9 @@ table{
     background: #e3e3e3;
     margin-top:5px;
     margin-bottom:5px;
-    border-bottom: 2px double gray;
+    border-bottom: 2px double  lightgray;
+    border-collapse: collapse;
+    text-align: center;
 }
 .column-headers th{
     text-align: center;
@@ -123,13 +125,13 @@ table{
     <table class="column-headers">
         <thead>
             <tr>
-                <th class="" width="5%">S#</th>
-                <th class="" width="10%">Date</th>
-                <th class="" width="30%">Particular</th>
-                <th class="" width="10%">Ref</th>
-                <th class="" width="12%">Debit</th>
-                <th class="" width="12%">Credit</th>
-                <th class="" width="12%">Balance</th>
+                <th class="column-headers" width="5%">S#</th>
+                <th class="column-headers" width="10%">Date</th>
+                <th class="column-headers" width="30%">Particular</th>
+                <th class="column-headers" width="10%">Ref</th>
+                <th class="column-headers" width="15%">Debit</th>
+                <th class="column-headers" width="15%">Credit</th>
+                <th class="column-headers" width="15%">Balance</th>
             </tr>
         </thead>
     </table>
@@ -151,27 +153,32 @@ table{
                 {{-- {{ $balpkr += $data[$i]->balrup }} --}}
                 {{ $balusd += $data[$i]->baldlr }}
 
-                <td class="" width="5%">{{ $i+1 }}</td>
-                <td class="" width="10%">{{ $data[$i]->invoice_date }} </td>
-                <td class="" width="30%">{{ $data[$i]->SupName }}<br> {{ $data[$i]->Description }} </td>
-                <td class="" width="10%">{{ $data[$i]->Ref }} </td>
-                <td class="" width="10%">{{ number_format($data[$i]->DebitAmtDlr,0) }}
+                <td style="text-align:center" width="5%">{{ $i+1 }}</td>
+                <td style="text-align:center" width="10%">{{ $data[$i]->invoice_date }} </td>
+                {{-- <td class="" width="30%">{{ $data[$i]->SupName }}<br> {{ $data[$i]->Description }} </td> --}}
+                <td  width="30%"> <span style="font-size:0.8rem;font-weight: bold;color:brown">{{ $data[$i]->SupName }}</span>
+                    <br> {{ $data[$i]->Description }} </td>
+                <td style="text-align:center" width="10%">{{ $data[$i]->Ref }} </td>
+                <td style="text-align:right" width="15%">{{ number_format($data[$i]->DebitAmtDlr,0) }}
                     {{-- : {{ $data[$i]->cur }} --}}
                     {{-- <br>{{ number_format($data[$i]->CreditAmtDlr,0) }} {{ $data[$i]->cur }}</td> --}}
-                <td class="" width="10%">{{ number_format($data[$i]->CreditAmtDlr,0) }}
+                <td style="text-align:right" width="15%">{{ number_format($data[$i]->CreditAmtDlr,0) }}
                     {{-- : {{ $data[$i]->cur }} --}}
                     {{-- PKR<br>{{ number_format($data[$i]->CreditAmtDlr,0) }} : USD</td> --}}
-                <td class="" width="10%">{{ number_format($data[$i]->baldlr,0) }}</td>
+                <td style="text-align:right" width="15%">{{ number_format($data[$i]->baldlr,0) }}</td>
                 {{-- <td class="" width="10%">{{ number_format($data[$i]->bal,2) }}</td>
                 <td class="" width="10%">{{ number_format($data[$i]->bal,2) }}</td> --}}
                 {{-- : R<br>{{ number_format($data[$i]->baldlr,0) }} : $ --}}
             </tr>
             @endfor
             <tr>
-                <td colspan="4" width="60%" style="text-align: right;border-bottom: 1px solid lightgray;">Total(s)</td>
-                <td class="" width="15%" style="text-align: right;border-bottom: 1px solid lightgray;">{{ number_format($debitusd,0) }}  </td>
+
+
+
+                <td colspan="5" width="100%" style=" border:1px solid lightgray; text-align: right;font-weight: bold;background: #e3e3e3;border-top: 2px double  lightgray ;"> Total(s)</td>
+                <td class="" width="15%" style=" border:1px solid lightgray;. text-align: right;font-weight: bold;background: #e3e3e3;border-top: 2px double   lightgray; ">{{ number_format($debitusd,0) }}  </td>
                 {{-- <br>{{ number_format($creditusd,0) }} --}}
-                <td class="" width="15%" style="text-align: right;border-bottom: 1px solid lightgray;">{{ number_format($creditusd,0) }}</td>
+                <td class="" width="15%" style=" border:1px solid lightgray; text-align: right;font-weight: bold;background: #e3e3e3;border-top: 2px double   lightgray; ">{{ number_format($creditusd,0) }}</td>
                 {{-- : PKR<br>{{ number_format($creditusd,0) }} : USD --}}
                 {{-- <td class="" width="20%" style="text-align: right;border-bottom: 1px solid lightgray;">{{ number_format($balpkr,2) }} : PKR<br>{{ number_format($balusd,2) }} : USD</td> --}}
             </tr>

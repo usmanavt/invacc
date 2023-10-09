@@ -65,8 +65,11 @@ Route::post('report/fetch',[ReportController::class, 'fetch'])->name('reports.fe
 Route::get('purrpt',[PurchaseRptController::class, 'index'])->name('purrpt.index');
 Route::get('contlistfill',[PurchaseRptController::class, 'contlistfill'])->name('purrpt.contlistfill');
 Route::get('funcpurcat',[PurchaseRptController::class, 'funcpurcat'])->name('purrpt.funcpurcat');
-
 Route::get('dutycategory',[PurchaseRptController::class, 'dutycategory'])->name('purrpt.dutycategory');
+Route::get('pnddutycategory',[PurchaseRptController::class, 'pnddutycategory'])->name('purrpt.pnddutycategory');
+Route::get('pndcontractcategory',[PurchaseRptController::class, 'pndcontractcategory'])->name('purrpt.pndcontractcategory');
+
+Route::get('compcontractcategory',[PurchaseRptController::class, 'compcontractcategory'])->name('purrpt.compcontractcategory');
 
 
 
