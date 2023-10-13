@@ -190,7 +190,7 @@ class PurchaseRptController extends Controller
     {
 
         $format;
-        $orientation == 'L' ? $format = 'A4': 'A4';
+        $orientation == 'P' ? $format = 'A4': 'A4';
 
         $mpdf = new PDF( [
             'mode' => 'utf-8',
@@ -534,7 +534,7 @@ class PurchaseRptController extends Controller
             }
             $collection = collect($data);                   //  Make array a collection
 
-            $mpdf = $this->getMPDFSettingsLI();
+            $mpdf = $this->getMPDFSettings();
             $grouped = $collection->groupBy('purid');       //  Sort collection by SupName
             $grouped->values()->all();                       //  values() removes indices of array
             foreach($grouped as $g){
@@ -545,14 +545,14 @@ class PurchaseRptController extends Controller
                    ->with('headtype',$head->title)->render();
 
                 $filename = $g[0]->purid  .'-'.$fromdate.'-'.$todate.'.pdf';
-                $mpdf->SetHTMLFooter('
-                <table width="100%" style="border-top:1px solid gray">
-                    <tr>
-                        <td width="33%">{DATE d-m-Y}</td>
-                        <td width="33%" align="center">{PAGENO}/{nbpg}</td>
-                        <td width="33%" style="text-align: right;">' . $filename . '</td>
-                    </tr>
-                </table>');
+                // $mpdf->SetHTMLFooter('
+                // <table width="100%" style="border-top:1px solid gray">
+                //     <tr>
+                //         <td width="33%">{DATE d-m-Y}</td>
+                //         <td width="33%" align="center">{PAGENO}/{nbpg}</td>
+                //         <td width="33%" style="text-align: right;">' . $filename . '</td>
+                //     </tr>
+                // </table>');
                 $chunks = explode("chunk", $html);
                 foreach($chunks as $key => $val) {
                     $mpdf->WriteHTML($val);

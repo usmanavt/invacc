@@ -6,7 +6,7 @@
     </x-slot>
 
     <div class="py-4">
-        <div class="max-w-5xl mx-auto">
+        <div class="max-w-6xl mx-auto">
             <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
                 <div class="p-6 bg-white border-b border-gray-200">
 
@@ -18,65 +18,70 @@
                                 <legend>Report Type</legend>
                                 <div>
                                     <input type="radio" name="report_type" value="glhw" required onchange="checkReportType('glhw')">
-                                    <label for="">Contracts </label>
+                                    <label for="">CONTRACTS </label>
                                 </div>
 
                                 <div>
                                     <input type="radio" name="report_type" value="gdnrcvd" required onchange="checkReportType('gdnrcvd')" >
-                                    <label for="">Godown Receiving </label>
+                                    <label for="">GOODS RECEIPT NOTE ( GRN ) </label>
                                 </div>
 
                                 <div>
                                     <input type="radio" name="report_type" value="impcominvs" required onchange="checkReportType('impcominvs')">
-                                    <label for="">Imported Commercial Invoices </label>
+                                    <label for="">PURCHASE INVOICE IMPORT </label>
                                 </div>
 
                                 <div>
                                     <input type="radio" name="report_type" value="dtyclrnc" required onchange="checkReportType('dtyclrnc')">
-                                    <label for="">Duty Clearance </label>
+                                    <label for="">CUSTOM DUTY CLEARED </label>
                                 </div>
 
                                 <div>
                                     <input type="radio" name="report_type" value="dtypnding" required onchange="checkReportType('dtypnding')">
-                                    <label for="">Duty Pending </label>
+                                    <label for="">CUSTOM DUTY PENDING </label>
                                 </div>
 
 
                                 <div>
                                     <input type="radio" name="report_type" value="pndcontr" required onchange="checkReportType('pndcontr')">
-                                    <label for="">Pending Contracts</label>
+                                    <label for="">PENDING CONTRACTS</label>
                                 </div>
 
-                                <div>
+                                {{-- <div>
                                     <input type="radio" name="report_type" value="cc" required onchange="checkReportType('cc')">
                                     <label for="">Completed Contracts</label>
-                                </div>
+                                </div> --}}
 
 
 
                                 <div>
                                     <input type="radio" name="report_type" value="loccominvs" required onchange="checkReportType('loccominvs')">
-                                    <label for="">Local Commercial Invoices </label>
+                                    <label for="">PURCHASE INVOICE LOCAL </label>
                                 </div>
                                 <div>
                                     <input type="radio" name="report_type" value="purret" required onchange="checkReportType('purret')">
-                                    <label for="">Purchase Return </label>
+                                    <label for="">PURCHASE RETURN == pending == </label>
                                 </div>
 
 
                                 <div>
                                     <input type="radio" name="report_type" value="tpl" required onchange="checkReportType('tpl')">
-                                    <label for="">Contract History</label>
+                                    <label for="">CONTRACTS HISTORY == pending ==</label>
                                 </div>
 
                                 <div>
                                     <input type="radio" name="report_type" value="Imppurhist" required onchange="checkReportType('Imppurhist')">
-                                    <label for="">Imported Purchase History</label>
+                                    <label for="">COMMERCIAL INVOICE IMPORT HISTORY == pending ==</label>
+                                </div>
+
+                                <div>
+                                    <input type="radio" name="report_type" value="Imppurhist" required onchange="checkReportType('Imppurhist')">
+                                    <label for="">PURCHASE INVOICE HISTORY == pending ==</label>
                                 </div>
 
                                 <div>
                                     <input type="radio" name="report_type" value="locpurhist" required onchange="checkReportType('locpurhist')">
-                                    <label for="">Local Purchase History</label>
+                                    <label for="">Local Purchase History == pending ==</label>
                                 </div>
 
 

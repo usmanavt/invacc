@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+.<!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="utf-8">
@@ -58,6 +58,7 @@ table{
 {{-- https://stackoverflow.com/questions/3341485/how-to-make-a-html-page-in-a4-paper-size-pages?answertab=votes#tab-top --}}
 
     {{-- Report Header --}}
+
     <table>
         <tbody>
             <tr>
@@ -66,7 +67,7 @@ table{
                     {{-- <img src="{{ asset('/images/pipesfittings.jpg') }}" width="90"> --}}
                 </td>
                 <td align="center" style="width:60%;">
-                    <h1>MUHAMMAD HABIB & Co. </h1>
+                    <h1>MUHAMMAD NAZIR & Co</h1>
                 </td>
                 <td align="right" style="width:20%;">
                     &nbsp;&nbsp;&nbsp;&nbsp;
@@ -80,17 +81,25 @@ table{
         <tbody>
             <tr>
                 <td  style="text-align: center;">
-                    <h3 style="font-size:0.7rem">Steam Pipes, Pipe Fittings, Flanges, Valves, S.S.Pipes & Tbues</h3>
-                    <h3 style="font-size:0.7rem">30 KM, Sunder Stop, Multan Road, Lahore</h3>
-                </td>
-            </tr>
+                    <h3 style="font-size:0.7rem">Steam Pipes, Pipe Fitting, Flanges Valves, S.S Pipes</h3>
+                    <h3 style="font-size:0.7rem">Plot # 8 Near Allah Malik Godown Shershah Kabari Bazar,</h3>
+                    <h3 style="font-size:0.7rem">Phone : 021-32588781, 021-32574285 , Fax : 021-32588782</h3>
+                </td>            </tr>
             <tr>
                 <td  style="text-align: center;">
-                    <span style="font-size:2rem;font-weight: bold">Local Purchase Invoices</span>
+                    <span style="font-size:2rem">PURCHASE INVOICE </span>
                 </td>
             </tr>
+
         </tbody>
     </table>
+
+
+
+
+
+
+
 
     {{-- Ledger Info --}}
     <table class="ledger">
@@ -133,16 +142,13 @@ table{
             <tr>
                 {{-- <td  style="text-align: center font-size:0.5rem;font-weight: bold"> --}}
                     <th class="column-headers" width="3%">S#</th>
-                    {{-- <th class="column-headers" width="20%">Category</th> --}}
-                    <th class="column-headers" width="25%">Material Name</th>
-                    <th class="column-headers" width="3%">Unit</th>
-                    <th class="column-headers" width="15%">Brand</th>
+                    <th class="column-headers" width="28%">Material Name</th>
+                    <th class="column-headers" width="5%">Unit</th>
+                    <th class="column-headers" width="18%">Brand</th>
                     <th class="column-headers" width="18%">ForCustomer</th>
-                    <th class="column-headers" width="7%">Qty(Pcs)</th>
-                    <th class="column-headers" width="7%">Qty(Kg)</th>
-                    <th class="column-headers" width="7%">Qty(Feet)</th>
-                    <th class="column-headers" width="7%">Price</th>
-                    <th class="column-headers" width="8%">Value</th>
+                    <th class="column-headers" width="10%">Receiving</th>
+                    <th class="column-headers" width="9%">Price</th>
+                    <th class="column-headers" width="9%">Value</th>
                 {{-- </td> --}}
             </tr>
         </thead>
@@ -159,33 +165,26 @@ table{
             <tr>
 
                 {{-- {{ $vtotpcs += $data[$i]->totpcs }} --}}
-                {{ $vwt += $data[$i]->wt }}
+                {{ $vwt += $data[$i]->purqty }}
                 {{ $vvlues += $data[$i]->vlues }}
 
 
                 <td style="text-align:center" width="3%">{{ $i+1 }}</td>
-                {{-- <td style="text-align:left" width="20%">{{ $data[$i]->category }} </td> --}}
-                <td style="text-align:left" width="25%">{{ $data[$i]->material_title }} </td>
-                <td style="text-align:center" width="3%">{{ $data[$i]->unit }} </td>
-
-                <td style="text-align:center" width="15%">{{ $data[$i]->brand }} </td>
+                <td style="text-align:left" width="28%">{{ $data[$i]->material_title }} </td>
+                <td style="text-align:center" width="5%">{{ $data[$i]->unit }} </td>
+                <td style="text-align:center" width="18%">{{ $data[$i]->brand }} </td>
                 <td style="text-align:center" width="18%">{{ $data[$i]->forcust }} </td>
-
-                <td style="text-align:right" width="7%">{{ number_format($data[$i]->pcs,1) }} </td>
-                <td style="text-align:right" width="7%">{{ number_format($data[$i]->wt,1) }} </td>
-                <td style="text-align:right" width="7%">{{ number_format($data[$i]->feet,1) }} </td>
-
-
-                <td style="text-align:right" width="7%">{{ number_format($data[$i]->price,1) }} </td>
-                <td style="text-align:right" width="8%">{{ number_format($data[$i]->vlues,0) }} </td>
+                <td style="text-align:right" width="10%">{{ number_format($data[$i]->purqty,1) }} </td>
+                <td style="text-align:right" width="9%">{{ number_format($data[$i]->price,1) }} </td>
+                <td style="text-align:right" width="9%">{{ number_format($data[$i]->vlues,0) }} </td>
 
        </tr>
             @endfor
 
             <tr>
-                <td class="column-headers" colspan="2" width="40%" style="text-align: right;font-weight: bold;border-bottom: 1px solid lightgray;">Total</td>
-                <td class="column-headers" colspan="5" width="10%" style="text-align: right;font-weight: bold;border-bottom: 1px solid lightgray;">{{ number_format($vwt,0) }} </td>
-                <td class="column-headers" colspan="8" width="12%" style="text-align: right;font-weight: bold;border-bottom: 1px solid lightgray;">{{ number_format($vvlues,0) }} </td>
+                <td class="column-headers" colspan="2"  style="text-align: right;font-weight: bold;border-bottom: 1px solid lightgray;">Total</td>
+                <td class="column-headers" colspan="4"  style="text-align: right;font-weight: bold;border-bottom: 1px solid lightgray;">{{ number_format($vwt,0) }} </td>
+                <td class="column-headers" colspan="2"  style="text-align: right;font-weight: bold;border-bottom: 1px solid lightgray;">{{ number_format($vvlues,0) }} </td>
            </tr>
 
         </tbody>

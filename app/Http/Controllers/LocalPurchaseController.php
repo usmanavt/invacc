@@ -61,7 +61,7 @@ class LocalPurchaseController  extends Controller
                 ->orWhere('challanno','LIKE','%' . $search . '%');
             })
             ->whereHas('supplier', function ($query) {
-                $query->where('source_id','=','1');
+                $query->where('source_id','<>','2');
             })
         ->with('supplier:id,title')
         ->orderBy($field,$dir)
@@ -111,7 +111,8 @@ class LocalPurchaseController  extends Controller
         $maxgpno = DB::table('commercial_invoices')->select('gpassno')->max('gpassno')+1;
         return view('localpurchase.create',compact('maxgpno'))
         // return \view ('sales.create',compact('maxdcno','maxblno','maxgpno'))
-        ->with('suppliers',Supplier::select('id','title')->where('source_id',1)->get())
+        ->with('suppliers',Supplier::select('id','title')->where('source_id','<>','2')->get())
+        // ->where('source_id',1)->get())
         ->with('locations',Location::select('id','title')->get())
         ->with('skus',Sku::select('id','title')->get());
         // ->with('purunit',Sku::select('id','title')->get());

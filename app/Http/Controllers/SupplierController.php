@@ -53,7 +53,8 @@ class SupplierController extends Controller
 
     public function create()
     {
-        return view('suppliers.create')->with('sources',Source::all());
+        return view('suppliers.create')->with('sources',Source::whereIn('id',[2,13])->get());
+                // ->with('sources',Source::all());
     }
 
     public function store(Request $request)
@@ -102,7 +103,8 @@ class SupplierController extends Controller
 
     public function edit(Supplier $supplier)
     {
-        return view('suppliers.edit')->with('supplier',$supplier)->with('sources',Source::all());
+        // return view('suppliers.create')->with('sources',Source::whereIn('id',[2,13])->get());
+        return view('suppliers.edit')->with('supplier',$supplier)->with('sources',Source::whereIn('id',[2,13])->get());
     }
 
     public function update(Supplier $supplier,Request $request )

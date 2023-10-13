@@ -36,12 +36,11 @@
                             <input type="date" value="{{ date('Y-m-d') }}" class="col-span-2" id="invoice_date" name="invoice_date" required>
 
                             <label for="number">Invoice #<x-req /></label>
-                            <input type="text" class="col-span-2" id="number" name="number" placeholder="Invoice No"
-                                minlength="3" title="minimum 3 characters required" required>
+                            <input type="text" class="col-span-2" id="number" name="number" placeholder="Invoice No" >
 
                                 <label for="gpassno">GatePass #<x-req /></label>
                                 <input type="text" class="col-span-2" id="gpassno" name="gpassno" value="{{$maxgpno}}"  placeholder="gpassno"
-                                    minlength="1" title="minimum 1 characters required" required>
+                                    >
 
 
 
