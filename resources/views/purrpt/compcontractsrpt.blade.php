@@ -153,7 +153,6 @@ table{
                 <td colspan="2" width="18%" style="text-align: center;font-weight: bold;border-right: 1px solid lightgray;">Balance</td>
                 {{-- <td colspan="2" width="14%" style="text-align: center;font-weight: bold;border-right: 1px solid lightgray;">Duty Value($)</td> --}}
             </tr>
-
             <tr>
                 {{-- <td  style="text-align: center font-size:0.5rem;font-weight: bold"> --}}
                     <th class="column-headers" width="3%">S#</th>

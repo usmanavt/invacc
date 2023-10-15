@@ -51,7 +51,7 @@ class PurchasinglocController extends Controller
                 // ->orWhere('invoiceno','LIKE','%' . $search . '%');
             })
             ->whereHas('supplier', function ($query) {
-                $query->where('source_id','=','1');
+                $query->where('source_id','<>','2');
             })
         ->with('supplier:id,title')
         ->orderBy($field,$dir)

@@ -179,13 +179,6 @@ class PurchaseRptController extends Controller
 
 
 
-
-
-
-
-
-
-
     public function getMPDFSettings($orientation = 'A4')
     {
 
@@ -200,8 +193,8 @@ class PurchaseRptController extends Controller
             'margin_bottom' => '5',
             'margin_footer' => '2',
             'default_font_size' => 9,
-            'margin_left' => '3',
-            'margin_right' => '3',
+            'margin_left' => '6',
+            'margin_right' => '6',
         ]);
         $mpdf->showImageErrors = true;
         $mpdf->curlAllowUnsafeSslRequests = true;
@@ -274,16 +267,16 @@ class PurchaseRptController extends Controller
         $temp = storage_path('temp');
         $mpdf = $this->getMPDFSettings();
         //  Get Report
-        if($report_type === 'tpl'){
-            $data = DB::select('call ProcTPL(?,?,1)',array($fromdate,$todate));
-            if(!$data)
-            {
-                Session::flash('info','No data available');
-                return redirect()->back();
-            }
-            $html =  view('reports.tpl')->with('data',$data)->with('fromdate',$fromdate)->with('todate',$todate)->render();
-            $filename = 'TransactionProveLista-'.$fromdate.'-'.$todate.'.pdf';
-        }
+        // if($report_type === 'tpl'){
+        //     $data = DB::select('call ProcTPL(?,?,1)',array($fromdate,$todate));
+        //     if(!$data)
+        //     {
+        //         Session::flash('info','No data available');
+        //         return redirect()->back();
+        //     }
+        //     $html =  view('reports.tpl')->with('data',$data)->with('fromdate',$fromdate)->with('todate',$todate)->render();
+        //     $filename = 'TransactionProveLista-'.$fromdate.'-'.$todate.'.pdf';
+        // }
 
         if($report_type === 'pndcontr'){
 
@@ -324,8 +317,6 @@ class PurchaseRptController extends Controller
                 $mpdf->AddPage();
             }
             return response($mpdf->Output($filename,'I'),200)->header('Content-Type','application/pdf');
-
-
 
         }
 
@@ -391,29 +382,15 @@ class PurchaseRptController extends Controller
                 Session::flash('info','No data available');
                 return redirect()->back();
             }
-            $mpdf = $this->getMPDFSettingsA4L();
+            $mpdf = $this->getMPDFSettings();
             $collection = collect($data);                   //  Make array a collection
             $grouped = $collection->groupBy('purid');       //  Sort collection by SupName
             $grouped->values()->all();                       //  values() removes indices of array
 
             foreach($grouped as $g){
-                 $html =  view('purrpt.contactsrpt')
-                    ->with('data',$g)
-                    ->with('fromdate',$fromdate)
-                    ->with('todate',$todate)
+                 $html =  view('purrpt.contactsrpt')->with('data',$g)->with('fromdate',$fromdate)->with('todate',$todate)
                     ->with('headtype',$head->title)->render();
                 $filename = $g[0]->purid  .'-'.$fromdate.'-'.$todate.'.pdf';
-
-
-
-                // $mpdf->SetHTMLFooter('
-                // <table width="100%" style="border-top:1px solid gray">
-                //     <tr>
-                //         <td width="33%">{DATE d-m-Y}</td>
-                //         <td width="33%" align="center">{PAGENO}/{nbpg}</td>
-                //         <td width="33%" style="text-align: right;">' . $filename . '</td>
-                //     </tr>
-                // </table>');
                 $chunks = explode("chunk", $html);
                 foreach($chunks as $key => $val) {
                     $mpdf->WriteHTML($val);
@@ -422,6 +399,136 @@ class PurchaseRptController extends Controller
             }
             return response($mpdf->Output($filename,'I'),200)->header('Content-Type','application/pdf');
         }
+
+        if($report_type === 'tpl'){
+            //  dd($request->all());
+            $head_id = $request->head_id;
+            $head = Supplier::findOrFail($head_id);
+            if($request->has('subhead_id')){
+                $subhead_id = $request->subhead_id;
+                //  Clear Data from Table
+                DB::table('contparameterrpt')->truncate();
+                foreach($request->subhead_id as $id)
+                {
+                    DB::table('contparameterrpt')->insert([ 'GLCODE' => $id ]);
+                }
+            }
+            //  Call Procedure
+            $data = DB::select('call procpurinvc()');
+            if(!$data)
+            {
+                Session::flash('info','No data available');
+                return redirect()->back();
+            }
+            $mpdf = $this->getMPDFSettings();
+            $collection = collect($data);                   //  Make array a collection
+            $grouped = $collection->groupBy('grp');       //  Sort collection by SupName
+            $grouped->values()->all();                       //  values() removes indices of array
+
+            foreach($grouped as $g){
+                 $html =  view('purrpt.conthistory')->with('data',$g)->with('fromdate',$fromdate)->with('todate',$todate)
+                    ->with('headtype',$head->title)->render();
+                $filename = $g[0]->grp  .'-'.$fromdate.'-'.$todate.'.pdf';
+                $chunks = explode("chunk", $html);
+                foreach($chunks as $key => $val) {
+                    $mpdf->WriteHTML($val);
+                }
+                // $mpdf->AddPage();
+            }
+            return response($mpdf->Output($filename,'I'),200)->header('Content-Type','application/pdf');
+        }
+
+
+        if($report_type === 'impcominvspc'){
+            //  dd($request->all());
+            $head_id = $request->head_id;
+            $head = Supplier::findOrFail($head_id);
+            if($request->has('subhead_id')){
+                $subhead_id = $request->subhead_id;
+                //  Clear Data from Table
+                DB::table('contparameterrpt')->truncate();
+                foreach($request->subhead_id as $id)
+                {
+                    DB::table('contparameterrpt')->insert([ 'GLCODE' => $id ]);
+                }
+            }
+            //  Call Procedure
+            $data = DB::select('call  procpaycriteria()');
+            if(!$data)
+            {
+                Session::flash('info','No data available');
+                return redirect()->back();
+            }
+            $mpdf = $this->getMPDFSettings();
+            $collection = collect($data);                   //  Make array a collection
+            $grouped = $collection->groupBy('grpid');       //  Sort collection by SupName
+            $grouped->values()->all();                       //  values() removes indices of array
+
+            foreach($grouped as $g){
+                 $html =  view('purrpt.imppaycriteria')
+                    ->with('data',$g)
+                    ->with('fromdate',$fromdate)
+                    ->with('todate',$todate)
+                    ->with('headtype',$head->title)->render();
+                $filename = $g[0]->grpid  .'-'.$fromdate.'-'.$todate.'.pdf';
+                $chunks = explode("chunk", $html);
+                foreach($chunks as $key => $val) {
+                    $mpdf->WriteHTML($val);
+                }
+                $mpdf->AddPage();
+            }
+            return response($mpdf->Output($filename,'I'),200)->header('Content-Type','application/pdf');
+        }
+
+
+        if($report_type === 'dtysmry'){
+            //  dd($request->all());
+            $head_id = $request->head_id;
+            $head = Supplier::findOrFail($head_id);
+            if($request->has('subhead_id')){
+                $subhead_id = $request->subhead_id;
+                //  Clear Data from Table
+                DB::table('contparameterrpt')->truncate();
+                foreach($request->subhead_id as $id)
+                {
+                    DB::table('contparameterrpt')->insert([ 'GLCODE' => $id ]);
+                }
+            }
+            //  Call Procedure
+            $data = DB::select('call  procdutysmry()');
+            if(!$data)
+            {
+                Session::flash('info','No data available');
+                return redirect()->back();
+            }
+            $mpdf = $this->getMPDFSettings();
+            $collection = collect($data);                   //  Make array a collection
+            $grouped = $collection->groupBy('grpid');       //  Sort collection by SupName
+            $grouped->values()->all();                       //  values() removes indices of array
+
+            foreach($grouped as $g){
+                 $html =  view('purrpt.dutysmry')
+                    ->with('data',$g)
+                    ->with('fromdate',$fromdate)
+                    ->with('todate',$todate)
+                    ->with('headtype',$head->title)->render();
+                $filename = $g[0]->grpid  .'-'.$fromdate.'-'.$todate.'.pdf';
+                $chunks = explode("chunk", $html);
+                foreach($chunks as $key => $val) {
+                    $mpdf->WriteHTML($val);
+                }
+                $mpdf->AddPage();
+            }
+            return response($mpdf->Output($filename,'I'),200)->header('Content-Type','application/pdf');
+        }
+
+
+
+
+
+
+
+
 
 
         if($report_type === 'gdnrcvd'){
@@ -525,6 +632,8 @@ class PurchaseRptController extends Controller
                     DB::table('contparameterrpt')->insert([ 'GLCODE' => $id ]);
                 }
             }
+
+
             //  Call Procedure
             $data = DB::select('call procpurinvcloc()');
             if(!$data)
@@ -545,14 +654,6 @@ class PurchaseRptController extends Controller
                    ->with('headtype',$head->title)->render();
 
                 $filename = $g[0]->purid  .'-'.$fromdate.'-'.$todate.'.pdf';
-                // $mpdf->SetHTMLFooter('
-                // <table width="100%" style="border-top:1px solid gray">
-                //     <tr>
-                //         <td width="33%">{DATE d-m-Y}</td>
-                //         <td width="33%" align="center">{PAGENO}/{nbpg}</td>
-                //         <td width="33%" style="text-align: right;">' . $filename . '</td>
-                //     </tr>
-                // </table>');
                 $chunks = explode("chunk", $html);
                 foreach($chunks as $key => $val) {
                     $mpdf->WriteHTML($val);
@@ -561,6 +662,49 @@ class PurchaseRptController extends Controller
             }
             return response($mpdf->Output($filename,'I'),200)->header('Content-Type','application/pdf');
         }
+
+        if($report_type === 'locpurhist'){
+            $head_id = $request->head_id;
+            $head = Supplier::findOrFail($head_id);
+            if($request->has('subhead_id')){
+                $subhead_id = $request->subhead_id;
+                //  Clear Data from Table
+                DB::table('contparameterrpt')->truncate();
+                foreach($request->subhead_id as $id)
+                {
+                    DB::table('contparameterrpt')->insert([ 'GLCODE' => $id ]);
+                }
+            }
+
+            //  Call Procedure
+            $data = DB::select('call procpurinvcloc()');
+            if(!$data)
+            {
+                Session::flash('info','No data available');
+                return redirect()->back();
+            }
+            $collection = collect($data);                   //  Make array a collection
+
+            $mpdf = $this->getMPDFSettings();
+            $grouped = $collection->groupBy('grp');       //  Sort collection by SupName
+            $grouped->values()->all();                       //  values() removes indices of array
+            foreach($grouped as $g){
+                $html =  view('purrpt.locpurhistory')
+                   ->with('data',$g)
+                   ->with('fromdate',$fromdate)
+                   ->with('todate',$todate)
+                   ->with('headtype',$head->title)->render();
+
+                $filename = $g[0]->grp  .'-'.$fromdate.'-'.$todate.'.pdf';
+                $chunks = explode("chunk", $html);
+                foreach($chunks as $key => $val) {
+                    $mpdf->WriteHTML($val);
+                }
+                $mpdf->AddPage();
+            }
+            return response($mpdf->Output($filename,'I'),200)->header('Content-Type','application/pdf');
+        }
+
 
         if($report_type === 'impcominvs'){
             //  dd($request->all());
@@ -590,14 +734,6 @@ class PurchaseRptController extends Controller
                  $html =  view('purrpt.impcominvs')->with('data',$g)->with('fromdate',$fromdate)->with('todate',$todate)->with('headtype',$head->title)->render();
                 // $html =  view('purrpt.glhw')->with('data',$g)->with('fromdate',$fromdate)->with('todate',$todate)->render();
                 $filename = $g[0]->purid  .'-'.$fromdate.'-'.$todate.'.pdf';
-                // $mpdf->SetHTMLFooter('
-                // <table width="100%" style="border-top:1px solid gray">
-                //     <tr>
-                //         <td width="33%">{DATE d-m-Y}</td>
-                //         <td width="33%" align="center">{PAGENO}/{nbpg}</td>
-                //         <td width="33%" style="text-align: right;">' . $filename . '</td>
-                //     </tr>
-                // </table>');
                 $chunks = explode("chunk", $html);
                 foreach($chunks as $key => $val) {
                     $mpdf->WriteHTML($val);
@@ -606,6 +742,46 @@ class PurchaseRptController extends Controller
             }
             return response($mpdf->Output($filename,'I'),200)->header('Content-Type','application/pdf');
         }
+
+
+        if($report_type === 'imppurhist'){
+            //  dd($request->all());
+            $head_id = $request->head_id;
+            $head = Supplier::findOrFail($head_id);
+            if($request->has('subhead_id')){
+                $subhead_id = $request->subhead_id;
+                //  Clear Data from Table
+                DB::table('contparameterrpt')->truncate();
+                foreach($request->subhead_id as $id)
+                {
+                    DB::table('contparameterrpt')->insert([ 'GLCODE' => $id ]);
+                }
+            }
+            //  Call Procedure
+            $data = DB::select('call procimpcominvs()');
+            if(!$data)
+            {
+                Session::flash('info','No data available');
+                return redirect()->back();
+            }
+            $mpdf = $this->getMPDFSettingsLI();
+            $collection = collect($data);                   //  Make array a collection
+            $grouped = $collection->groupBy('grp');       //  Sort collection by SupName
+            $grouped->values()->all();                       //  values() removes indices of array
+            foreach($grouped as $g){
+                 $html =  view('purrpt.imppurhistory')->with('data',$g)->with('fromdate',$fromdate)->with('todate',$todate)->with('headtype',$head->title)->render();
+                // $html =  view('purrpt.glhw')->with('data',$g)->with('fromdate',$fromdate)->with('todate',$todate)->render();
+                $filename = $g[0]->grp  .'-'.$fromdate.'-'.$todate.'.pdf';
+                $chunks = explode("chunk", $html);
+                foreach($chunks as $key => $val) {
+                    $mpdf->WriteHTML($val);
+                }
+                $mpdf->AddPage();
+            }
+            return response($mpdf->Output($filename,'I'),200)->header('Content-Type','application/pdf');
+        }
+
+
 
 
         if($report_type === 'vchr'){

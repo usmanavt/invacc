@@ -33,6 +33,36 @@ class ReportController extends Controller
         return DB::table('vwvouchercategory')->select('*')->whereBetween('docdate',[$fromdate,$todate])->where('mheadid',$head)->get()->toArray();
     }
 
+    public function getMPDFSettings($orientation = 'A4')
+    {
+
+        $format;
+        $orientation == 'P' ? $format = 'A4': 'A4';
+
+        $mpdf = new PDF( [
+            'mode' => 'utf-8',
+            'format' => $orientation,
+            'margin_header' => '2',
+            'margin_top' => '5',
+            'margin_bottom' => '5',
+            'margin_footer' => '2',
+            'default_font_size' => 9,
+            'margin_left' => '6',
+            'margin_right' => '6',
+        ]);
+        $mpdf->showImageErrors = true;
+        $mpdf->curlAllowUnsafeSslRequests = true;
+        $mpdf->debug = true;
+        return $mpdf;
+    }
+
+
+
+
+
+
+
+
     public function fetch(Request $request)
     {
         //  https://stackoverflow.com/questions/42555512/how-to-create-temporary-table-in-laravel
@@ -69,17 +99,18 @@ class ReportController extends Controller
                 Session::flash('info','No data available');
                 return redirect()->back();
             }
+            $mpdf = $this->getMPDFSettings();
             $html =  view('reports.tpl')->with('data',$data)->with('fromdate',$fromdate)->with('todate',$todate)->render();
             $filename = 'TransactionProveLista-'.$fromdate.'-'.$todate.'.pdf';
 
-            $mpdf->SetHTMLFooter('
-            <table width="100%" style="border-top:1px solid gray">
-                <tr>
-                    <td width="33%">{DATE d-m-Y}</td>
-                    <td width="33%" align="center">{PAGENO}/{nbpg}</td>
-                    <td width="33%" style="text-align: right;">' . $filename . '</td>
-                </tr>
-            </table>');
+            // $mpdf->SetHTMLFooter('
+            // <table width="100%" style="border-top:1px solid gray">
+            //     <tr>
+            //         <td width="33%">{DATE d-m-Y}</td>
+            //         <td width="33%" align="center">{PAGENO}/{nbpg}</td>
+            //         <td width="33%" style="text-align: right;">' . $filename . '</td>
+            //     </tr>
+            // </table>');
             $chunks = explode("chunk", $html);
             foreach($chunks as $key => $val) {
                 $mpdf->WriteHTML($val);
@@ -107,10 +138,32 @@ class ReportController extends Controller
                 Session::flash('info','No data available');
                 return redirect()->back();
             }
-            $html =  view('reports.gl')->with('data',$data)->with('fromdate',$fromdate)->with('todate',$todate)->render();
-            $filename = 'GeneralLedger-'.$fromdate.'-'.$todate.'.pdf';
-           //  return response($mpdf->Output($filename,'I'),200)->header('Content-Type','application/pdf');
+            $mpdf = $this->getMPDFSettings();
+            // $html =  view('reports.gl')->with('data',$data)->with('fromdate',$fromdate)->with('todate',$todate)->render();
+            // $filename = 'GeneralLedger-'.$fromdate.'-'.$todate.'.pdf';
+
+            $collection = collect($data);                   //  Make array a collection
+            $grouped = $collection->groupBy('Parid');       //  Sort collection by SupName
+            $grouped->values()->all();                       //  values() removes indices of array
+            foreach($grouped as $g){
+                $html =  view('reports.gl')->with('data',$g)->with('fromdate',$fromdate)->with('todate',$todate)->render();
+                // $html =  view('reports.gl')->with('data',$data)->with('fromdate',$fromdate)->with('todate',$todate)->render();
+                $filename = $g[0]->Parid  .'-'.$fromdate.'-'.$todate.'.pdf';
+                $chunks = explode("chunk", $html);
+                foreach($chunks as $key => $val) {
+                    $mpdf->WriteHTML($val);
+                }
+                $mpdf->AddPage();
+            }
+            //  $mpdf->Output($filename,'I');
+            return response($mpdf->Output($filename,'I'),200)->header('Content-Type','application/pdf');
+
+
+
+
         }
+
+
 
         if($report_type === 'glhw'){
             //  dd($request->all());
@@ -132,20 +185,13 @@ class ReportController extends Controller
                 Session::flash('info','No data available');
                 return redirect()->back();
             }
+            $mpdf = $this->getMPDFSettings();
             $collection = collect($data);                   //  Make array a collection
             $grouped = $collection->groupBy('SupName');       //  Sort collection by SupName
             $grouped->values()->all();                       //  values() removes indices of array
             foreach($grouped as $g){
                 $html =  view('reports.glhw')->with('data',$g)->with('fromdate',$fromdate)->with('todate',$todate)->with('headtype',$head->title)->render();
                 $filename = $g[0]->SupName  .'-'.$fromdate.'-'.$todate.'.pdf';
-                $mpdf->SetHTMLFooter('
-                <table width="100%" style="border-top:1px solid gray">
-                    <tr>
-                        <td width="33%">{DATE d-m-Y}</td>
-                        <td width="33%" align="center">{PAGENO}/{nbpg}</td>
-                        <td width="33%" style="text-align: right;">' . $filename . '</td>
-                    </tr>
-                </table>');
                 $chunks = explode("chunk", $html);
                 foreach($chunks as $key => $val) {
                     $mpdf->WriteHTML($val);

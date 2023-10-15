@@ -6,7 +6,7 @@
     </x-slot>
 
     <div class="py-4">
-        <div class="max-w-6xl mx-auto">
+        <div class="max-w-7xl mx-auto">
             <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
                 <div class="p-6 bg-white border-b border-gray-200">
 
@@ -32,13 +32,25 @@
                                 </div>
 
                                 <div>
+                                    <input type="radio" name="report_type" value="impcominvspc" required onchange="checkReportType('impcominvspc')">
+                                    <label for="">PURCHASE INVOICE IMPORT PAYMENT CRITERIA </label>
+                                </div>
+
+
+                                <div>
                                     <input type="radio" name="report_type" value="dtyclrnc" required onchange="checkReportType('dtyclrnc')">
                                     <label for="">CUSTOM DUTY CLEARED </label>
                                 </div>
 
+
                                 <div>
                                     <input type="radio" name="report_type" value="dtypnding" required onchange="checkReportType('dtypnding')">
                                     <label for="">CUSTOM DUTY PENDING </label>
+                                </div>
+
+                                <div>
+                                    <input type="radio" name="report_type" value="dtysmry" required onchange="checkReportType('dtysmry')">
+                                    <label for="">CUSTOM DUTY SUMMARY </label>
                                 </div>
 
 
@@ -66,22 +78,18 @@
 
                                 <div>
                                     <input type="radio" name="report_type" value="tpl" required onchange="checkReportType('tpl')">
-                                    <label for="">CONTRACTS HISTORY == pending ==</label>
+                                    <label for="">CONTRACTS HISTORY</label>
                                 </div>
 
                                 <div>
-                                    <input type="radio" name="report_type" value="Imppurhist" required onchange="checkReportType('Imppurhist')">
-                                    <label for="">COMMERCIAL INVOICE IMPORT HISTORY == pending ==</label>
+                                    <input type="radio" name="report_type" value="imppurhist" required onchange="checkReportType('imppurhist')">
+                                    <label for="">IMPORT PURCHASE HISTORY</label>
                                 </div>
 
-                                <div>
-                                    <input type="radio" name="report_type" value="Imppurhist" required onchange="checkReportType('Imppurhist')">
-                                    <label for="">PURCHASE INVOICE HISTORY == pending ==</label>
-                                </div>
 
                                 <div>
                                     <input type="radio" name="report_type" value="locpurhist" required onchange="checkReportType('locpurhist')">
-                                    <label for="">Local Purchase History == pending ==</label>
+                                    <label for="">LOCAL PURCHASE HISTORY</label>
                                 </div>
 
 
@@ -375,6 +383,54 @@ const getSubheadVoucherData = async (value) =>{
     }
 
 
+
+    case 'tpl':
+            //  console.log(todate.value)
+            fetch(contlistfill + `?todate=${todate.value}&fromdate=${fromdate.value}&head=${value}`,{
+                    method:"GET",
+                    headers: { 'Accept':'application/json','Content-type':'application/json'},
+                    })
+                    .then(response => response.json())
+                    .then( data => {
+                        if(data.length > 0)
+                        {
+                            data.forEach(e => {
+                                addSelectElement(subhead,e.Subhead,e.title)
+                            });
+                            subhead.setAttribute('required','')
+                            subhead.removeAttribute('disabled','')
+                        }else{
+                            subhead.removeAttribute('required','')
+                            subhead.setAttribute('disabled','')
+                        }
+                    })
+                    .catch(error => console.error(error))
+                break;
+
+// FOR CONTRACT FILL
+const getSubheadVoucherData8 = async (value) =>{
+        let data = await fetch(contlistfill + `?todate=${todate.value}&fromdate=${fromdate.value}&head=${value}`,{
+            method:"GET",
+            headers: { 'Accept':'application/json','Content-type':'application/json'},
+            })
+            .then(response => response.json())
+            .then( data => { return data })
+            .catch(error => console.error(error))
+    }
+    const getTpl =async  (value) => {
+        const tpl = await getSubheadVoucherData8(value)
+        return tpl
+    }
+
+
+
+
+
+
+
+
+
+
     case 'gdnrcvd':
             //  console.log(todate.value)
             fetch(funcpurcat + `?todate=${todate.value}&fromdate=${fromdate.value}&head=${value}`,{
@@ -569,6 +625,178 @@ const getSubheadVoucherData6 = async (value) =>{
     }
 
 
+    case 'impcominvspc':
+            //   console.log(todate.value)
+            fetch(cominvsimp + `?todate=${todate.value}&fromdate=${fromdate.value}&head=${value}`,{
+                    method:"GET",
+                    headers: { 'Accept':'application/json','Content-type':'application/json'},
+                    })
+                    .then(response => response.json())
+                    .then( data => {
+                        if(data.length > 0)
+                        {
+                            data.forEach(e => {
+                                addSelectElement(subhead,e.Subhead,e.title)
+                            });
+                            subhead.setAttribute('required','')
+                            subhead.removeAttribute('disabled','')
+                        }else{
+                            subhead.removeAttribute('required','')
+                            subhead.setAttribute('disabled','')
+                        }
+                    })
+                    .catch(error => console.error(error))
+                break;
+
+// FOR CONTRACT FILL
+const getSubheadVoucherData7 = async (value) =>{
+        let data = await fetch(cominvsimp + `?todate=${todate.value}&fromdate=${fromdate.value}&head=${value}`,{
+            method:"GET",
+            headers: { 'Accept':'application/json','Content-type':'application/json'},
+            })
+            .then(response => response.json())
+            .then( data => { return data })
+            .catch(error => console.error(error))
+    }
+    const getImpcominvspc =async  (value) => {
+        const impcominvspc = await getSubheadVoucherData7(value)
+        return impcominvspc
+    }
+
+
+
+
+
+    case 'dtysmry':
+            //   console.log(todate.value)
+            fetch(cominvsimp + `?todate=${todate.value}&fromdate=${fromdate.value}&head=${value}`,{
+                    method:"GET",
+                    headers: { 'Accept':'application/json','Content-type':'application/json'},
+                    })
+                    .then(response => response.json())
+                    .then( data => {
+                        if(data.length > 0)
+                        {
+                            data.forEach(e => {
+                                addSelectElement(subhead,e.Subhead,e.title)
+                            });
+                            subhead.setAttribute('required','')
+                            subhead.removeAttribute('disabled','')
+                        }else{
+                            subhead.removeAttribute('required','')
+                            subhead.setAttribute('disabled','')
+                        }
+                    })
+                    .catch(error => console.error(error))
+                break;
+
+// FOR CONTRACT FILL
+const getSubheadVoucherData11 = async (value) =>{
+        let data = await fetch(cominvsimp + `?todate=${todate.value}&fromdate=${fromdate.value}&head=${value}`,{
+            method:"GET",
+            headers: { 'Accept':'application/json','Content-type':'application/json'},
+            })
+            .then(response => response.json())
+            .then( data => { return data })
+            .catch(error => console.error(error))
+    }
+    const getDtysmry =async  (value) => {
+        const dtysmry = await getSubheadVoucherData11(value)
+        return dtysmry
+    }
+
+
+
+
+
+
+
+
+
+
+    case 'locpurhist':
+            //   console.log(todate.value)
+            fetch(cominvsloc + `?todate=${todate.value}&fromdate=${fromdate.value}&head=${value}`,{
+                    method:"GET",
+                    headers: { 'Accept':'application/json','Content-type':'application/json'},
+                    })
+                    .then(response => response.json())
+                    .then( data => {
+                        if(data.length > 0)
+                        {
+                            data.forEach(e => {
+                                addSelectElement(subhead,e.Subhead,e.title)
+                            });
+                            subhead.setAttribute('required','')
+                            subhead.removeAttribute('disabled','')
+                        }else{
+                            subhead.removeAttribute('required','')
+                            subhead.setAttribute('disabled','')
+                        }
+                    })
+                    .catch(error => console.error(error))
+                break;
+
+// FOR CONTRACT FILL
+const getSubheadVoucherData9 = async (value) =>{
+        let data = await fetch(cominvsloc + `?todate=${todate.value}&fromdate=${fromdate.value}&head=${value}`,{
+            method:"GET",
+            headers: { 'Accept':'application/json','Content-type':'application/json'},
+            })
+            .then(response => response.json())
+            .then( data => { return data })
+            .catch(error => console.error(error))
+    }
+    const getLocpurhist =async  (value) => {
+        const locpurhist = await getSubheadVoucherData9(value)
+        return locpurhist
+    }
+
+    case 'imppurhist':
+            //   console.log(todate.value)
+            fetch(cominvsimp + `?todate=${todate.value}&fromdate=${fromdate.value}&head=${value}`,{
+                    method:"GET",
+                    headers: { 'Accept':'application/json','Content-type':'application/json'},
+                    })
+                    .then(response => response.json())
+                    .then( data => {
+                        if(data.length > 0)
+                        {
+                            data.forEach(e => {
+                                addSelectElement(subhead,e.Subhead,e.title)
+                            });
+                            subhead.setAttribute('required','')
+                            subhead.removeAttribute('disabled','')
+                        }else{
+                            subhead.removeAttribute('required','')
+                            subhead.setAttribute('disabled','')
+                        }
+                    })
+                    .catch(error => console.error(error))
+                break;
+
+// FOR CONTRACT FILL
+const getSubheadVoucherData10 = async (value) =>{
+        let data = await fetch(cominvsimp + `?todate=${todate.value}&fromdate=${fromdate.value}&head=${value}`,{
+            method:"GET",
+            headers: { 'Accept':'application/json','Content-type':'application/json'},
+            })
+            .then(response => response.json())
+            .then( data => { return data })
+            .catch(error => console.error(error))
+    }
+    const getImppurhist =async  (value) => {
+        const imppurhist = await getSubheadVoucherData10(value)
+        return imppurhist
+    }
+
+
+
+
+
+
+
+
 
 
 
@@ -596,9 +824,8 @@ const getSubheadVoucherData6 = async (value) =>{
                 break;
                 // dtyclrnc
 
-
+                // impcominvspc
                 case 'impcominvs':
-            // console.log(value)
             fetch(cominvsimp + `?todate=${todate.value}&fromdate=${fromdate.value}&head=${value}`,{
                     method:"GET",
                     headers: { 'Accept':'application/json','Content-type':'application/json'},
@@ -639,6 +866,7 @@ const getSubheadVoucherData6 = async (value) =>{
         const impcominvs = await getSubheadVoucherData(value)
         return impcominvs
     }
+
 
 
     const addSelectElement = (select,id,value) => {
@@ -704,16 +932,16 @@ const getCominvsimpVoucherData = async (value) =>{
 
     const checkReportType = (type) => {
         switch (type) {
-            case 'tpl':
-                rptType = 'tpl'
-                head.removeAttribute('required')
-                head.disabled = true
-                head.length = 0
-                subhead.removeAttribute('required')
-                subhead.disabled = true
-                subhead.length = 0
-                subheadavailable = false
-                break;
+            // case 'tpl':
+            //     rptType = 'tpl'
+            //     head.removeAttribute('required')
+            //     head.disabled = true
+            //     head.length = 0
+            //     subhead.removeAttribute('required')
+            //     subhead.disabled = true
+            //     subhead.length = 0
+            //     subheadavailable = false
+            //     break;
 
             // case 'gl':
             //     //  Show Head
@@ -753,6 +981,21 @@ const getCominvsimpVoucherData = async (value) =>{
             case 'glhw':
                 // Show Head
                 rptType = 'glhw'
+                head.setAttribute('required','')
+                head.disabled = false
+                head.length = 0
+                subhead.removeAttribute('required')
+                subhead.disabled = true
+                subhead.length = 0
+                heads.forEach(e => {
+                    addSelectElement(head,e.id,e.title)
+                });
+                headSelected()
+                break;
+
+                case 'tpl':
+                // Show Head
+                rptType = 'tpl'
                 head.setAttribute('required','')
                 head.disabled = false
                 head.length = 0
@@ -843,6 +1086,23 @@ const getCominvsimpVoucherData = async (value) =>{
 
 
 
+                case 'impcominvspc':
+                // Show Head
+                rptType = 'impcominvspc'
+                head.setAttribute('required','')
+                head.disabled = false
+                head.length = 0
+                subhead.removeAttribute('required')
+                subhead.disabled = true
+                subhead.length = 0
+                heads.forEach(e => {
+                    addSelectElement(head,e.id,e.title)
+                });
+                headSelected()
+                break;
+
+
+
             case 'impcominvs':
                 // Show Head
                 rptType = 'impcominvs'
@@ -858,7 +1118,33 @@ const getCominvsimpVoucherData = async (value) =>{
                 headSelected()
                 break;
 
-            case 'loccominvs':
+                case 'dtysmry':
+                // Show Head
+                rptType = 'dtysmry'
+                head.setAttribute('required','')
+                head.disabled = false
+                head.length = 0
+                subhead.removeAttribute('required')
+                subhead.disabled = true
+                subhead.length = 0
+                heads.forEach(e => {
+                    addSelectElement(head,e.id,e.title)
+                });
+                headSelected()
+                break;
+
+
+
+
+
+
+
+
+
+
+
+
+                case 'loccominvs':
                 // Show Head
                 rptType = 'loccominvs'
                 head.setAttribute('required','')
@@ -872,6 +1158,57 @@ const getCominvsimpVoucherData = async (value) =>{
                 });
                 headSelected()
                 break;
+
+                case 'cominvsimp':
+                // Show Head
+                rptType = 'cominvsimp'
+                head.setAttribute('required','')
+                head.disabled = false
+                head.length = 0
+                subhead.removeAttribute('required')
+                subhead.disabled = true
+                subhead.length = 0
+                heads.forEach(e => {
+                    addSelectElement(head,e.id,e.title)
+                });
+                headSelected()
+                break;
+
+            case 'imppurhist':
+                // Show Head
+                rptType = 'imppurhist'
+                head.setAttribute('required','')
+                head.disabled = false
+                head.length = 0
+                subhead.removeAttribute('required')
+                subhead.disabled = true
+                subhead.length = 0
+                heads.forEach(e => {
+                    addSelectElement(head,e.id,e.title)
+                });
+                headSelected()
+                break;
+
+
+
+
+
+
+                case 'locpurhist':
+                // Show Head
+                rptType = 'locpurhist'
+                head.setAttribute('required','')
+                head.disabled = false
+                head.length = 0
+                subhead.removeAttribute('required')
+                subhead.disabled = true
+                subhead.length = 0
+                heads.forEach(e => {
+                    addSelectElement(head,e.id,e.title)
+                });
+                headSelected()
+                break;
+
 
 
 
