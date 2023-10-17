@@ -6,17 +6,17 @@
 
     <x-slot name="header">
         <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-            Purchase Invoices ( Local)
+            Purchase Return
             {{-- Create New Customer --}}
-            <a class="text-sm text-green-500 hover:text-gray-900" href="{{route('localpurchase.create')}}">
+            <a class="text-sm text-green-500 hover:text-gray-900" href="{{route('purchasereturn.create')}}">
                 {{-- Add Icon --}}
                 <i class="fa fa-file fa-fw"></i>
                 Add New Record
             </a>
+            {{-- <span> | </span> --}}
+            {{-- <button class="text-sm text-blue-300" onclick="setStatus(1)">Pending</button> --}}
             <span> | </span>
-            <button class="text-sm text-blue-300" onclick="setStatus(1)">Pending</button>
-            <span> | </span>
-            <button class="text-sm text-blue-300" onclick="setStatus(2)">Completed</button>
+            <button class="text-sm text-blue-300" onclick="setStatus(2)">Purchase Return History</button>
         </h2>
     </x-slot>
 
@@ -45,8 +45,8 @@
     var deleteIcon = function(cell, formatterParams, onRendered){ return "<i class='fa fa-trash text-red-600'></i>";};
     var printIcon = function(cell, formatterParams, onRendered){ return "<i class='fa fa-print text-pink-500'></i>";};
 
-    const getMaster = @json(route('localpurchase.master'));
-    const getDetails = @json(route('localpurchase.details'));
+    const getMaster = @json(route('purchasereturn.master'));
+    const getDetails = @json(route('purchasereturn.details'));
     let table;
     let searchValue = "";
     let statusValue="1";  // 1 = Pending, 2 - Completed
@@ -80,7 +80,7 @@
         },
         ajaxURL: getMaster,
         ajaxContentType:"json",
-        initialSort:[ {column:"id", dir:"desc"} ],
+        initialSort:[ {column:"prno", dir:"desc"} ],
         height:"100%",
 
         columns:[
@@ -146,34 +146,26 @@
             },
       //      Master Data
 
-                {
-                title:'Item Description', headerHozAlign:"center",
-                    columns:[
+            // {title: "Dated",field: "created_at"},
 
-                    {title: "id",field: "id"},
-                    {title: "Inv Dt",field: "invoice_date"},
-                    {title: "Invoice#",field: "invoiceno"},
-                    {title: "Supplier",field: "supplier.title"},
-                    {title: "Description",field: "machineno"}
-                    ]},
 
-                {
-                title:'Total', headerHozAlign:"center",
-                columns:[
-                    {title: "Pcs",field: "tpcs"},
-                    {title: "Weight",field: "twt"},
-                    {title: "Feet",field: "miscexpenses"},
-                    {title: "Payble Amount",field: "tval"}
-                ]},
+            {title: "Suppliers",field: "supanme"},
+            {title: "Return Date",field: "prdate"},
+            {title: "Purchase Return id",field: "id"},
+            {title: "Invoice Date",field: "invoice_date"},
+            {title: "Invoice No",field: "invoiceno"},
+            {title: "P.R No",field: "prno"},
+            {title: "Total Wt",field: "prtwt"},
+            {title: "Total Pcs",field: "prtpcs"},
+            {title: "Total Feet",field: "prtfeet"},
 
-                {
-                title:'Pending Against Goods Receive', headerHozAlign:"center",
-                columns:[
-                    {title: "Pcs",field: "dutybal"},
-                    {title: "Weight",field: "wtbal"},
-                    {title: "Feet",field: "agencychrgs"}
-                ]},
 
+
+            // {title: "Customer",field: "custname"},
+            // {title: "W/O GST",field: "rcvblamount"},
+            // {title: "W/GST",field: "totrcvbamount"},
+            // {title: "Delivered",field: "delivered"},
+            // {title: "Pending",field: "salordbal"},
 
             {title:"View" , formatter:viewIcon, hozAlign:"center",headerSort:false, responsive:0,
                 cellClick:function(e, cell){

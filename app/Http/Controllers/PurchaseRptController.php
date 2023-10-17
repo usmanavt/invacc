@@ -298,7 +298,7 @@ class PurchaseRptController extends Controller
                 Session::flash('info','No data available');
                 return redirect()->back();
             }
-            $mpdf = $this->getMPDFSettingsA4L();
+            $mpdf = $this->getMPDFSettings();
             $collection = collect($data);                   //  Make array a collection
             $grouped = $collection->groupBy('purid');       //  Sort collection by SupName
             $grouped->values()->all();                       //  values() removes indices of array
@@ -726,7 +726,7 @@ class PurchaseRptController extends Controller
                 Session::flash('info','No data available');
                 return redirect()->back();
             }
-            $mpdf = $this->getMPDFSettingsA3();
+            $mpdf = $this->getMPDFSettings();
             $collection = collect($data);                   //  Make array a collection
             $grouped = $collection->groupBy('purid');       //  Sort collection by SupName
             $grouped->values()->all();                       //  values() removes indices of array

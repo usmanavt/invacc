@@ -199,7 +199,7 @@ class PurchasinglocController extends Controller
                     SELECT contract_id, SUM(purtotpcs) as pcs,SUM(purtotwt) AS wt,SUM(purtotfeet) AS tfeet
                     FROM purchasings where  contract_id=$ci->contract_id  GROUP BY contract_id
                     ) x ON c.id = x.contract_id
-                    SET c.dutybal = c.dutybal - x.pcs,c.wtbal= c.twt-x.wt,c.agencychrgs=c.otherchrgs-x.tfeet
+                    SET c.dutybal = c.dutybal - x.pcs,c.wtbal= c.twt-x.wt,c.agencychrgs=c.miscexpenses-x.tfeet
                     where  id = $ci->contract_id  "));
 
 
@@ -347,7 +347,7 @@ class PurchasinglocController extends Controller
                     SELECT contract_id, SUM(purtotpcs) as pcs,SUM(purtotwt) AS wt,SUM(purtotfeet) AS tfeet
                     FROM purchasings where  contract_id=$ci->contract_id  GROUP BY contract_id
                     ) x ON c.id = x.contract_id
-                    SET c.dutybal = c.tpcs - x.pcs,c.wtbal= c.twt-x.wt,c.agencychrgs=c.otherchrgs-x.tfeet
+                    SET c.dutybal = c.tpcs - x.pcs,c.wtbal= c.twt-x.wt,c.agencychrgs=c.miscexpenses-x.tfeet
                     where  id = $ci->contract_id  "));
 
 

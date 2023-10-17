@@ -281,7 +281,7 @@
     })
     var updateValues = (cell) => {
         var data = cell.getData();
-        var leninft = Number(data.pcs) * Number(data.length)
+        // var leninft = Number(data.pcs) * Number(data.length)
         if(data.sku==='KG')
          {
 
@@ -303,8 +303,8 @@
         var row = cell.getRow();
         row.update({
             "amtinpkr": sum,
-            "gdspricetot": sum2,
-            "qtyinfeet":leninft
+            "gdspricetot": sum2
+            // "qtyinfeet":leninft
         });
     }
 
@@ -408,16 +408,16 @@
                 bottomCalc:"sum"
                },
 
-               {title:"Length",
-                field:"length",
-                editor:"number",
-                cssClass:"bg-green-200 font-semibold",
-                validator:"required",
-                formatter:"money",
-                formatterParams:{thousand:",",precision:2},
-                validator:["required","integer"],
-                cellEdited: updateValues,
-               },
+            //    {title:"Length",
+            //     field:"length",
+            //     editor:"number",
+            //     cssClass:"bg-green-200 font-semibold",
+            //     validator:"required",
+            //     formatter:"money",
+            //     formatterParams:{thousand:",",precision:2},
+            //     validator:["required","integer"],
+            //     cellEdited: updateValues,
+            //    },
 
 
 

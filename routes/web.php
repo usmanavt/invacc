@@ -41,6 +41,8 @@ use App\Http\Controllers\PurchasingController;
 use App\Http\Controllers\GatepasseController;
 use App\Http\Controllers\OpeningGodownStockController;
 use App\Http\Controllers\PurchasinglocController;
+use App\Http\Controllers\PurchaseReturnController;
+
 
 
 Route::get('/', function () {
@@ -54,6 +56,9 @@ Route::get('/transactons', function () {
     return view('transaction');
 })->middleware(['auth'])->name('transaction');
 
+Route::get('/gtransactons', function () {
+    return view('gtransaction');
+})->middleware(['auth'])->name('gtransaction');
 
 
 // Financial Report
@@ -236,6 +241,16 @@ Route::get('/custorders/getQuotationsDetails', [CustomerOrderController::class, 
 Route::get('/custorders/getcidMaster', [CustomerOrderController::class, 'getMasterqut'])->name('custorders.quotations');
 Route::get('/custorders/getCustordersQuotationsdtl', [CustomerOrderController::class, 'getDetailsqut'])->name('custorders.quotationsdtl');
 Route::resource('customerorder', CustomerOrderController::class);
+
+
+//  Purchase Return
+Route::get('/purchasereturn/getQuotationsMaster', [PurchaseReturnController::class, 'getMaster'])->name('purchasereturn.master');
+Route::get('/purchasereturn/getQuotationsDetails', [PurchaseReturnController::class, 'getDetail'])->name('purchasereturn.details');
+Route::get('/purchasereturn/getcidMaster', [PurchaseReturnController::class, 'getMasterqut'])->name('purchasereturn.quotations');
+Route::get('/purchasereturn/getCustordersQuotationsdtl', [PurchaseReturnController::class, 'getDetailsqut'])->name('purchasereturn.quotationsdtl');
+Route::resource('purchasereturn', PurchaseReturnController::class);
+
+
 
 
 

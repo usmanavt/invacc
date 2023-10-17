@@ -222,7 +222,7 @@ class LocalPurchaseController  extends Controller
             FROM commercial_invoice_details where  commercial_invoice_id = $ci->id
             GROUP BY commercial_invoice_id
             ) x ON c.id = x.commercial_invoice_id
-            SET c.tpcs = x.pcs,c.twt=x.wt,c.otherchrgs=x.feet,c.tval=x.amount,wtbal=x.wt,dutybal=x.pcs,agencychrgs=x.feet where  commercial_invoice_id = $ci->id "));
+            SET c.tpcs = x.pcs,c.twt=x.wt,c.miscexpenses=x.feet,c.tval=x.amount,wtbal=x.wt,dutybal=x.pcs,agencychrgs=x.feet where  commercial_invoice_id = $ci->id "));
 
             DB::insert(DB::raw("
             INSERT INTO office_item_bal(transaction_id,tdate,ttypedesc,ttypeid,material_id,uom,tqtykg,tqtypcs,tqtyfeet,tcostkg,tcostpcs,tcostfeet)
@@ -416,7 +416,7 @@ class LocalPurchaseController  extends Controller
             FROM commercial_invoice_details where  commercial_invoice_id = $commercialinvoice->id
             GROUP BY commercial_invoice_id
             ) x ON c.id = x.commercial_invoice_id
-            SET c.tpcs = x.pcs,c.twt=x.wt,c.otherchrgs=x.feet,c.tval=x.amount,wtbal=x.wt,dutybal=x.pcs,agencychrgs=x.feet where  commercial_invoice_id = $commercialinvoice->id "));
+            SET c.tpcs = x.pcs,c.twt=x.wt,c.miscexpenses=x.feet,c.tval=x.amount,wtbal=x.wt,dutybal=x.pcs,agencychrgs=x.feet where  commercial_invoice_id = $commercialinvoice->id "));
 
 
             DB::delete(DB::raw(" delete from office_item_bal where ttypeid=3 and  transaction_id=$commercialinvoice->id   "));

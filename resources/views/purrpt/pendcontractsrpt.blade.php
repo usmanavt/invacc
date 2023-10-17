@@ -108,36 +108,12 @@ table{
     <table class="ledger">
         <tbody>
             <tr>
-                <td>
-                    Supplier Name
-                </td>
-                <td>
-                    {{ $data[0]->supname }}
-                </td>
 
-                <td>
-                    Contract No
-                </td>
-                <td>
-                    {{ $data[0]->invoiceno }}
-                </td>
+                    <td > Supplier Name:  <span style="font-weight: bold">{{ $data[0]->supname }}</span> </td>
+                    <td > Contract No:  <span style="font-weight: bold">{{ $data[0]->invoiceno }}</span> </td>
+                    <td > Contract Date:  <span style="font-weight: bold">{{ $data[0]->invoice_date }}</span> </td>
             </tr>
-            <tr>
-                <td>
-                    Period
-                </td>
-                <td>
-                    From {{ $fromdate }} to {{ $todate }}
-                </td>
-                <td>
-                    Contract Date
-                </td>
-                <td>
-                    {{ $data[0]->invoice_date }}
-                </td>
 
-
-            </tr>
         </tbody>
     </table>
     {{-- column headers --}}
@@ -145,37 +121,33 @@ table{
         <thead >
             {{-- <tr> <th class="column-headers" width="50%">OPENING BNALANCE</th></tr> --}}
             <tr>
-                <td colspan="4" width="46%" style="text-align:center;font-weight: bold;border-right: 1px solid lightgray;"> Material Description</td>
+                <td colspan="4" width="42%" style="text-align:center;font-weight: bold;border-right: 1px solid lightgray;"> Material Description</td>
                 {{-- <td colspan="2" width="14%" style="text-align:center;font-weight: bold;border-right: 1px solid lightgray;"> Packing Lot</td> --}}
-                <td colspan="2" width="18%" style="text-align: center;font-weight: bold;border-right: 1px solid lightgray;">Cont. Quantity</td>
+                <td colspan="2" width="14%" style="text-align: center;font-weight: bold;border-right: 1px solid lightgray;">Cont. Quantity</td>
 
-                <td colspan="2" width="18%" style="text-align: center;font-weight: bold;border-right: 1px solid lightgray;">Received</td>
-                <td colspan="2" width="18%" style="text-align: center;font-weight: bold;border-right: 1px solid lightgray;">Balance</td>
+                <td colspan="2" width="14%" style="text-align: center;font-weight: bold;border-right: 1px solid lightgray;">Received</td>
+                <td colspan="4" width="30%" style="text-align: center;font-weight: bold;border-right: 1px solid lightgray;">Balance</td>
                 {{-- <td colspan="2" width="14%" style="text-align: center;font-weight: bold;border-right: 1px solid lightgray;">Duty Value($)</td> --}}
             </tr>
 
             <tr>
                 {{-- <td  style="text-align: center font-size:0.5rem;font-weight: bold"> --}}
                     <th class="column-headers" width="3%">S#</th>
-                    <th class="column-headers" width="31%">Material Name</th>
+                    <th class="column-headers" width="27%">Material Name</th>
                     <th class="column-headers" width="9%">Size</th>
                     <th class="column-headers" width="3%">Unit</th>
 
+                    <th class="column-headers" width="7%">Pcs</th>
+                    <th class="column-headers" width="7%">Kg</th>
 
-                    {{-- <th class="column-headers" width="7%">Bundle1</th>
-                    <th class="column-headers" width="7%">Bundle2</th> --}}
+                    <th class="column-headers" width="7%">Pcs</th>
+                    <th class="column-headers" width="7%">Kg</th>
 
-                    <th class="column-headers" width="9%">In Pcs</th>
-                    <th class="column-headers" width="9%">In Kg</th>
+                    <th class="column-headers" width="7%">Pcs</th>
+                    <th class="column-headers" width="7%">Kg</th>
 
-                    <th class="column-headers" width="9%">In Pcs</th>
-                    <th class="column-headers" width="9%">In Kg</th>
-
-                    <th class="column-headers" width="9%">In Pcs</th>
-                    <th class="column-headers" width="9%">In Kg</th>
-
-                    {{-- <th class="column-headers" width="7%">Price</th> --}}
-                    {{-- <th class="column-headers" width="7%">Amount</th> --}}
+                    <th class="column-headers" width="8%">Price</th>
+                    <th class="column-headers" width="8%">Amount</th>
 
 
             </tr>
@@ -185,12 +157,13 @@ table{
     <table class="data" cellspacing="0">
         <tbody>
 
-            {{-- {{ $wt = 0 }};{{ $pcs = 0 }};{{ $supval = 0 }};{{ $invsval = 0 }};{{ $dutval = 0 }} --}}
+            {{ $wt = 0 }};{{ $pcs = 0 }};{{ $supval = 0 }}
+
 
             @for ($i = 0 ; $i < count($data) ; $i++)
             @if( $i==0 )
             <tr>
-                <td colspan="10" width="100%" style="text-align: left;font-size:1.2rem;border-bottom: 2px solid rgb(211, 211, 211);"> {{ $data[$i]->Itemgroupe}} </td>
+                <td colspan="12" width="100%" style="text-align: left;font-size:1.2rem;border-bottom: 2px solid rgb(211, 211, 211);"> {{ $data[$i]->Itemgroupe}} </td>
             </tr>
         @else
 
@@ -208,7 +181,7 @@ table{
         </tr> --}}
 
               <tr>
-                    <td colspan="10" width="100%" style="text-align:left;font-size:1.2rem;border-bottom: 2px solid rgb(211, 211, 211);"> {{ $data[$i]->Itemgroupe}} </td>
+                    <td colspan="12" width="100%" style="text-align:left;font-size:1.2rem;border-bottom: 2px solid rgb(211, 211, 211);"> {{ $data[$i]->Itemgroupe}} </td>
              </tr>
         @endif
 
@@ -217,40 +190,43 @@ table{
 
             <tr>
 
-                {{-- {{ $wt += $data[$i]->wt }}.
-                {{ $pcs += $data[$i]->totpcs }}
-                {{ $rpcs += $data[$i]->vlues }}
-                {{ $rwt += $data[$i]->invsvalue }}
-                {{ $dutval += $data[$i]->dutval }} --}}
+                {{ $wt += $data[$i]->tbalwt }}.
+                {{ $pcs += $data[$i]->tbalpcs }}
+                {{ $supval += $data[$i]->vlues }}
+
 
 
 
 
                 <td style="text-align:center" width="3%">{{ $i+1 }}</td>
-                <td style="text-align:left" width="31%">{{ $data[$i]->material_title}} </td>
+                <td style="text-align:left" width="27%">{{ $data[$i]->material_title}} </td>
                 <td style="text-align:center" width="9%">{{ $data[$i]->size}} </td>
                 <td style="text-align:center" width="3%">{{ $data[$i]->unit}} </td>
 
-                <td style="text-align:right" width="9%">{{ number_format($data[$i]->totpcs,0) }} </td>
-                <td style="text-align:right" width="9%">{{ number_format($data[$i]->wt,2) }} </td>
+                <td style="text-align:right" width="7%">{{ number_format($data[$i]->totpcs,0) }} </td>
+                <td style="text-align:right" width="7%">{{ number_format($data[$i]->wt,2) }} </td>
 
-                <td style="text-align:right" width="9%">{{ number_format($data[$i]->pcsreceived,2) }} </td>
-                <td style="text-align:right" width="9%">{{ number_format($data[$i]->wtreceived,2) }} </td>
+                <td style="text-align:right" width="7%">{{ number_format($data[$i]->pcsreceived,0) }} </td>
+                <td style="text-align:right" width="7%">{{ number_format($data[$i]->wtreceived,2) }} </td>
 
-                <td style="text-align:right" width="9%">{{ number_format($data[$i]->tbalpcs,2) }} </td>
-                <td style="text-align:right" width="9%">{{ number_format($data[$i]->tbalwt,2) }} </td>
+                <td style="text-align:right" width="7%">{{ number_format($data[$i]->tbalpcs,0) }} </td>
+                <td style="text-align:right" width="7%">{{ number_format($data[$i]->tbalwt,2) }} </td>
+
+                <td style="text-align:right" width="8%">{{ number_format($data[$i]->price,2) }} </td>
+                <td style="text-align:right" width="8%">{{ number_format($data[$i]->vlues,2) }} </td>
 
 
 
             </tr>
             @endfor
             <tr>
-                {{-- <td class="column-headers" colspan="3" width="7%" style="text-align: right;font-weight: bold; border-bottom: 1px solid lightgray;">Grand Total</td>
-                <td colspan="2" width="7%" style="text-align: right;border-bottom: 1px solid lightgray;background: #e3e3e3;font-weight: bold">{{ number_format($pcs,2) }} </td>
-                <td colspan="1" width="7%" style="text-align: right;border-bottom: 1px solid lightgray;background: #e3e3e3;font-weight: bold">{{ number_format($wt,2) }} </td>
-                <td colspan="2" width="8%" style="text-align: right;border-bottom: 1px solid lightgray;background: #e3e3e3;font-weight: bold">{{ number_format($supval,2) }} </td>
-                <td colspan="2" width="7%" style="text-align: right;border-bottom: 1px solid lightgray;background: #e3e3e3;font-weight: bold">{{ number_format($invsval,2) }} </td>
-                <td colspan="2" width="7%" style="text-align: right;border-bottom: 1px solid lightgray;background: #e3e3e3;font-weight: bold">{{ number_format($dutval,2) }} </td> --}}
+                <td class="column-headers" colspan="2"  style="text-align: right;font-weight: bold; border-bottom: 1px solid lightgray;">Total</td>
+                <td colspan="7"  style="text-align: right;border-bottom: 1px solid lightgray;background: #e3e3e3;font-weight: bold">{{ number_format($pcs,0) }} </td>
+                <td colspan="1"  style="text-align: right;border-bottom: 1px solid lightgray;background: #e3e3e3;font-weight: bold">{{ number_format($wt,2) }} </td>
+                <td colspan="2"  style="text-align: right;border-bottom: 1px solid lightgray;background: #e3e3e3;font-weight: bold">{{ number_format($supval,2) }} </td>
+                {{-- <td colspan="2"  style="text-align: right;border-bottom: 1px solid lightgray;background: #e3e3e3;font-weight: bold">{{ number_format($supval,2) }} </td> --}}
+                {{-- <td colspan="1"  style="text-align: right;border-bottom: 1px solid lightgray;background: #e3e3e3;font-weight: bold">{{ number_format($invsval,2) }} </td>
+                <td colspan="1"  style="text-align: right;border-bottom: 1px solid lightgray;background: #e3e3e3;font-weight: bold">{{ number_format($dutval,2) }} </td> --}}
 
             </tr>
 

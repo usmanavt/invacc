@@ -43,7 +43,7 @@ table{
 
 .column-headers1 tr{
     border:1px solid lightgray;
-    font-size: 2rem;
+    font-size: 4rem;
     text-align: center;
     font-weight: bold;
     margin-top:5px;

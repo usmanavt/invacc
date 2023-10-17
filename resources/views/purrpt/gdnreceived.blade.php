@@ -123,7 +123,7 @@ table{
                 </td>
 
                 <td>
-                    Contract Id
+                    Contract No
                 </td>
                 <td>
                     {{ $data[0]->contract_id }}
@@ -131,12 +131,12 @@ table{
 
             </tr>
             <tr>
-                <td>
+                {{-- <td>
                     Period
                 </td>
                 <td>
                     From {{ $fromdate }} to {{ $todate }}
-                </td>
+                </td> --}}
                 <td>
                     Invoice Date
                 </td>

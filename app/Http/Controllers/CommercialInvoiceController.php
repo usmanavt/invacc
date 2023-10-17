@@ -393,16 +393,10 @@ class CommercialInvoiceController extends Controller
             FROM commercial_invoice_details where  commercial_invoice_id = $ci->id
             GROUP BY commercial_invoice_id
             ) x ON c.id = x.commercial_invoice_id
-            SET c.tpcs = x.pcs,c.twt=x.wt,c.tval=x.amount,c.tduty=totduty,c.tvalpkr=x.amtinpkr,c.tswt=x.swt,c.wtbal=x.wt,
+            SET c.tpcs = x.pcs,c.twt=x.wt,c.tval=x.amount,c.tduty=totduty,c.tvalpkr=x.amtinpkr,c.tswt=x.swt,
+            c.wtbal=x.wt,
             c.tdutval=x.dutval,c.tdutvalbal=x.dutval,dutybal=totduty,c.pcsbal=x.pcs
             where  commercial_invoice_id = $ci->id "));
-
-
-
-
-
-
-
 
             //****################# Transfert Contract Balance to Contracts
             DB::update(DB::raw("
