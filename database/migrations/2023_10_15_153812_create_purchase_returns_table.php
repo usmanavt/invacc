@@ -21,6 +21,8 @@ class CreatePurchaseReturnsTable extends Migration
             $table->decimal('prtwt', 12, 2)->default(00.00);
             $table->decimal('prtpcs', 12, 2)->default(00.00);
             $table->decimal('prtfeet', 12, 2)->default(00.00);
+            $table->decimal('prtamount', 12, 2)->default(00.00);
+            $table->smallInteger('supplier_id')->default(0);
             $table->timestamps();
         });
     }

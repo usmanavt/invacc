@@ -34,16 +34,13 @@
                                         @endforeach
                                     </select> --}}
                                 <x-input-text title="Supplier Name" name="supname" id="supname" req required class="col-span-2" disabled  />
-                                {{-- <x-input-text title="Quotation No" name="qutno" id="qutno" req required class="col-span-2" disabled  /> --}}
                                 <x-input-date title="Invoice Date" name="invoice_date" id="invoice_date" req required class="col-span-2" disabled  />
                                 <x-input-text title="Invoice No" name="invoiceno" id="invoiceno" req required class="col-span-2" disabled  />
 
                             </div>
                             <div class="grid grid-cols-12 gap-1 py-2 items-center">
-                                <x-input-date title="P.R Date" id="podate" name="podate" req required class="col-span-2" />
-                                {{-- <x-input-text title="P.O #" name="pono" id="pono" req required class="col-span-2"  />
-                                <x-input-date title="Delivery Date" name="deliverydt" req required class="col-span-2"/> --}}
-                                <x-input-text title="P.R No" name="poseqno" id="poseqno" value="{{$maxposeqno}}"    placeholder="poseqno" required   />
+                                <x-input-date title="P.R Date" id="prdate" name="prdate" req required class="col-span-2" />
+                                <x-input-text title="P.R No" name="prno" id="prno" value="{{$maxposeqno}}"      />
 
                             </div>
                         </fieldset>
@@ -226,7 +223,7 @@
             invoice_date.value=data.invoice_date
             invoiceno.value=data.invoiceno
             supplier_id=data.supplier_id
-            // prno.value = data.prno
+            //  prno.value = data.prno
             // qutno.value = data.qutno
             // discntper.value=data.discntper
              supname.value=data.supname
@@ -297,6 +294,13 @@
                         qtyinfeet:           obj.qtyinfeet,
                         gdsprice:             obj.gdsprice,
                         amtinpkr:             obj.amtinpkr,
+
+                        prpcs :              obj.prpcs ,
+                        prgdswt   :           obj.prgdswt,
+                        prqtyinfeet:           obj.prqtyinfeet,
+                        pramtinpkr:             obj.pramtinpkr,
+
+
 
                     }
                 ])
@@ -407,15 +411,32 @@ var tamount=0;
 var updateValues = (cell) => {
         var data = cell.getData();
         // var sum = (Number(data.bundle1) * Number(data.pcspbundle1)) + (Number(data.bundle2) * Number(data.pcspbundle2))
-        var sum = (Number(data.saleqty) * Number(data.price))
-        var varqty = ( Number(data.balqty) - Number(data.saleqty) )
+        // var sum = (Number(data.saleqty) * Number(data.price))
+        // var varqty = ( Number(data.balqty) - Number(data.saleqty) )
+        // var row = cell.getRow();
+
+        if(cell.getData().sku_id===1)
+         {
+             var sum =  Number(data.prgdswt) * Number(data.gdsprice)
+         }
+         if(cell.getData().sku_id===2)
+         {
+            var sum =  Number(data.prpcs) * Number(data.gdsprice)
+         }
+
+         if(cell.getData().sku_id===3)
+         {
+            var sum =  Number(data.prqtyinfeet) * Number(data.gdsprice)
+         }
+
         var row = cell.getRow();
         row.update({
-             "saleamnt": sum,
-             "varqty":varqty,
-             totalVal: sum
-
+            "pramtinpkr": sum,
+            "totalVal": sum
+            // "qtyinfeet":leninft
         });
+
+
     }
 
     var totalVal = function(values, data, calcParams){
@@ -423,7 +444,7 @@ var updateValues = (cell) => {
         values.forEach(function(value){
             calc += Number(value) ;
         });
-        tamount = calc;
+        // tamount = calc;
         // tnetamount();
         return calc;
 
@@ -451,7 +472,7 @@ var updateValues = (cell) => {
                 {title:"Material Name",     field:"matname",responsive:0},
                 {title:"Material Size",    field:"size",responsive:0,frozen:true, headerMenu:headerMenu},
                 {title:"UOM",         field:"unitname",responsive:0, hozAlign:"center"},
-                {title:"Unitid",       field:"sku_id",visible:false},
+                {title:"Unitid",       field:"sku_id",visible:true},
                 // {title:"contract_id",  field:"contract_id",visible:false},
                 {title:"material_id",  field:"material_id",visible:false},
                 {title:"supplier_id",  field:"supplier_id",visible:false},
@@ -470,37 +491,18 @@ var updateValues = (cell) => {
                 {
                     title:'Purchase Qty', headerHozAlign:"center",
                     columns:[
-                        // {   title:"Replace Name",headerHozAlign :'center',
-                        //     field:"repname",
-                        //     // editor:"list",
-                        //     responsive:0,
-                        //     // headerVertical:true,
-                        //     editor:true,
-                        // },
 
-                        // {   title:"Brand",headerHozAlign :'center',
-                        //     field:"mybrand",
-                        //     // editor:"list",
-                        //     responsive:0,
-                        //     // headerVertical:true,
-                        //     editor:true,
-                        // },
-
-
-
-
-
-                        {   title:"Pcs",
+                    {   title:"Pcs",
                             headerHozAlign :'right',
                             hozAlign:"right",
                             responsive:0,
                             field:"pcs",
-                            editor:"number",
+                            // editor:"number",
                             bottomCalc:"sum",
                             formatter:"money",
                             // cellEdited: updateValues,
                             validator:["required","numeric"],
-                            // cssClass:"bg-green-200 font-semibold",
+                            cssClass:"bg-gray-200 font-semibold",
                             formatterParams:{thousand:",",precision:0},
                         },
 
@@ -509,12 +511,12 @@ var updateValues = (cell) => {
                             hozAlign:"right",
                             responsive:0,
                             field:"gdswt",
-                            editor:"number",
+                            // editor:"number",
                             bottomCalc:"sum",
                             formatter:"money",
                             // cellEdited: updateValues,
                             validator:["required","numeric"],
-                            // cssClass:"bg-green-200 font-semibold",
+                            cssClass:"bg-gray-200 font-semibold",
                             formatterParams:{thousand:",",precision:0},
                         },
 
@@ -523,12 +525,12 @@ var updateValues = (cell) => {
                             hozAlign:"right",
                             responsive:0,
                             field:"qtyinfeet",
-                            editor:"number",
+                            // editor:"number",
                             bottomCalc:"sum",
                             formatter:"money",
                             // cellEdited: updateValues,
                             validator:["required","numeric"],
-                            // cssClass:"bg-green-200 font-semibold",
+                            cssClass:"bg-gray-200 font-semibold",
                             formatterParams:{thousand:",",precision:0},
                         },
 
@@ -544,7 +546,7 @@ var updateValues = (cell) => {
                             formatter:"money",
                             cellEdited: updateValues,
                             validator:["required","numeric"],
-                            // cssClass:"bg-green-200 font-semibold",
+                            cssClass:"bg-gray-200 font-semibold",
                             formatterParams:{thousand:",",precision:0},
                         },
 
@@ -555,8 +557,9 @@ var updateValues = (cell) => {
                         field:"amtinpkr",
                         cssClass:"bg-gray-200 font-semibold",
                         formatter:"money",
-                        cssClass:"bg-green-200 font-semibold",
+                        cssClass:"bg-gray-200 font-semibold",
                         formatterParams:{thousand:",",precision:0},
+                        cssClass:"bg-gray-200 font-semibold",
                         // formatter:function(cell,row)
                         // {
                         //     // return (cell.getData().saleqty * cell.getData().price).toFixed(0)
@@ -566,14 +569,18 @@ var updateValues = (cell) => {
 
                     ],
 
-                    title:'Purchase Return Qty', headerHozAlign:"center",
+
+                },
+
+                {
+                title:'Purchase Return Qty', headerHozAlign:"center",
                     columns:[
 
                     {   title:"Pcs",
                             headerHozAlign :'right',
                             hozAlign:"right",
                             responsive:0,
-                            field:"pcs",
+                            field:"prpcs",
                             editor:"number",
                             // headerVertical:true,
                             bottomCalc:"sum",
@@ -582,8 +589,70 @@ var updateValues = (cell) => {
                             validator:["required","numeric"],
                             // cssClass:"bg-green-200 font-semibold",
                             formatterParams:{thousand:",",precision:0},
-                        }],
-                },
+                        },
+
+                        {   title:"Kg",
+                            headerHozAlign :'right',
+                            hozAlign:"right",
+                            responsive:0,
+                            field:"prgdswt",
+                            editor:"number",
+                            // headerVertical:true,
+                            bottomCalc:"sum",
+                            formatter:"money",
+                            cellEdited: updateValues,
+                            validator:["required","numeric"],
+                            // cssClass:"bg-green-200 font-semibold",
+                            formatterParams:{thousand:",",precision:0},
+                        },
+
+                        {   title:"feet",
+                            headerHozAlign :'right',
+                            hozAlign:"right",
+                            responsive:0,
+                            field:"prqtyinfeet",
+                            editor:"number",
+                            // headerVertical:true,
+                            bottomCalc:"sum",
+                            formatter:"money",
+                            cellEdited: updateValues,
+                            validator:["required","numeric"],
+                            // cssClass:"bg-green-200 font-semibold",
+                            formatterParams:{thousand:",",precision:0},
+                        },
+
+                        {title:"Return Amount",
+                        headerHozAlign :'right',
+                        hozAlign:"right",
+                        field:"pramtinpkr",
+                        formatter:"money",
+                        cellEdited: updateValues,
+                        formatterParams:{thousand:",",precision:0},
+                        cssClass:"bg-gray-200 font-semibold",
+                        formatter:function(cell,row)
+                        {
+                            //  return (cell.getData().saleqty * cell.getData().price).toFixed(0)
+
+                             if(cell.getData().sku_id===1)
+                            {
+                                return  Number(cell.getData().prgdswt) * Number(cell.getData().gdsprice)
+                            }
+                            if(cell.getData().sku_id===2)
+                            {
+                                 return  Number(cell.getData().prpcs ) * Number(cell.getData().gdsprice)
+                                //  return Number(cell.getData().gdsprice )
+                            }
+
+                            if(cell.getData().sku_id===3)
+                            {
+                                return  Number(cell.getData().prqtyinfeet ) * Number(cell.getData().gdsprice)
+                            }
+                        },
+                        bottomCalc:totalVal
+                    },
+                    ]},
+
+
 
 
 
@@ -596,16 +665,16 @@ var updateValues = (cell) => {
         function validateForm()
         {
 
-            var pono = document.getElementById("pono")
-            var poseqno = document.getElementById("poseqno")
-            var per= document.getElementById("per");
+            // var pono = document.getElementById("pono")
+            // var poseqno = document.getElementById("poseqno")
+            // var per= document.getElementById("per");
 
-            if(pono.value === '')
-            {
-                showSnackbar("P.O No Required","error");
-                pono.focus();
-                return;
-            }
+            // if(pono.value === '')
+            // {
+            //     showSnackbar("P.O No Required","error");
+            //     pono.focus();
+            //     return;
+            // }
 
 
 
@@ -633,15 +702,13 @@ var updateValues = (cell) => {
 
 
             var data = { 'contracts' : dynamicTableData ,
-        'supplier_id': supplier_id,'deliverydt':deliverydt.value,'purchase_id':purchase_id,'poseqno':poseqno.value,
-        'saletaxper':saletaxper.value,'saletaxamt':saletaxamt.value,'totrcvbamount':totrcvbamount.value,
-        'podate':podate.value,'pono':pono.value,'qutno':qutno.value,'invoice_date':invoice_date.value,'prno':prno.value};
+        'supplier_id': supplier_id,'prdate':prdate.value,'purchase_id':purchase_id,'prno':prno.value };
 
 
 
 
             // All Ok - Proceed
-            fetch(@json(route('customerorder.store')),{
+            fetch(@json(route('purchasereturn.store')),{
                 credentials: 'same-origin', // 'include', default: 'omit'
                 method: 'POST', // 'GET', 'PUT', 'DELETE', etc.
                 // body: formData, // Coordinate the body type with 'Content-Type'
@@ -657,7 +724,7 @@ var updateValues = (cell) => {
             .then( response => {
                 if (response == 'success')
                 {
-                    window.open(window.location.origin + "/customerorder","_self" );
+                    window.open(window.location.origin + "/purchasereturn","_self" );
                 }
             })
             .catch(error => {

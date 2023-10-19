@@ -158,7 +158,7 @@
             {title: "Total Wt",field: "prtwt"},
             {title: "Total Pcs",field: "prtpcs"},
             {title: "Total Feet",field: "prtfeet"},
-
+            {title: "Total Amount",field: "pramount"},
 
 
             // {title: "Customer",field: "custname"},

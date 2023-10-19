@@ -11,7 +11,7 @@ use App\Models\CustomerOrder;
 use App\Models\CustomerOrderDetails;
 
 use App\Models\PurchaseReturn;
-use App\Models\PurchaseReturnDetails;
+use App\Models\PurchaseReturnDetail;
 
 use App\Models\Supplier;
 
@@ -142,61 +142,54 @@ class PurchaseReturnController  extends Controller
         $this->validate($request,[
             // 'saldate' => 'required|min:3|date',
         //    'title'=>'required|min:3|unique:materials'
-             'poseqno' => 'required|min:1|unique:customer_orders',
+            //  'poseqno' => 'required|min:1|unique:customer_orders',
             // 'pono' => 'required|min:1|unique:customer_orders'
             // 'gpno' => 'required|min:1|unique:sale_invoices',
             // 'customer_id' => 'required'
         ]);
         DB::beginTransaction();
         try {
-            $ci = new CustomerOrder();
+            $ci = new PurchaseReturn();
 
-            $ci->quotation_id = $request->quotation_id;
-            $ci->qutdate = $request->qutdate;
-
-            $ci->podate = $request->podate;
-            $ci->deliverydt = $request->deliverydt;
-            $ci->poseqno = $request->poseqno;
-            $ci->pono = $request->pono;
-
-            $ci->pqutno = $request->qutno;
-            $ci->pprno = $request->prno;
-
-            $ci->customer_id = $request->customer_id;
-            // $ci->remarks = $request->remarks;
-
-
-            $ci->discntper = $request->discntper;
-            $ci->discntamt = $request->discntamt;
-            $ci->cartage = $request->cartage;
-            $ci->rcvblamount = $request->rcvblamount;
-            $ci->salordbal = $request->rcvblamount;
-
-            $ci->saletaxper = $request->saletaxper;
-            $ci->saletaxamt = $request->saletaxamt;
-            $ci->totrcvbamount = $request->totrcvbamount;
+            $ci->prdate = $request->prdate;
+            $ci->prno = $request->prno;
+            $ci->commercial_invoice_id = $request->purchase_id;
+            $ci->supplier_id = $request->supplier_id;
             $ci->save();
 
             // Quotation Close
-            $qutclose = Quotation::findOrFail($request->quotation_id);
-            $qutclose->closed = 0;
-            $qutclose->save();
+            // $qutclose = Quotation::findOrFail($request->quotation_id);
+            // $qutclose->closed = 0;
+            // $qutclose->save();
 
 
             foreach ($request->contracts as $cont) {
                 // $material = Material::findOrFail($cont['id']);
-                $lpd = new CustomerOrderDetails();
-                $lpd->sale_invoice_id = $ci->id;
+                $lpd = new PurchaseReturnDetail();
+                $lpd->prid = $ci->id;
                 $lpd->material_id = $cont['material_id'];
-                $lpd->sku_id = $cont['sku_id'];
-                $lpd->repname = $cont['repname'];
-                $lpd->brand = $cont['mybrand'];
-                $lpd->qtykg = $cont['saleqty'];
-                $lpd->balqty = $cont['saleqty'];
-                $lpd->price = $cont['price'];
-                $lpd->saleamnt = $cont['saleamnt'];
+                $lpd->prunitid = $cont['sku_id'];
+                $lpd->prwt = $cont['prgdswt'];
+                $lpd->prpcs = $cont['prpcs'];
+                $lpd->prfeet = $cont['prqtyinfeet'];
+                $lpd->prprice = $cont['gdsprice'];
+                $lpd->pramount = $cont['pramtinpkr'];
                 $lpd->save();
             }
+
+            DB::update(DB::raw("
+            update purchase_returns c
+            INNER JOIN (
+				SELECT prid, SUM(prpcs) as pcs,SUM(prwt) AS wt,sum(prfeet) as ft,SUM(pramount) AS amount
+                FROM purchase_return_details where  prid = $ci->id
+                GROUP BY prid
+            ) x ON c.id = x.prid
+            SET c.prtpcs = x.pcs,c.prtwt=x.wt,c.prtfeet=x.ft,c.prtamount=x.amount where  id = $ci->id
+            "));
+
+
+
+
             // }
             DB::commit();
             Session::flash('success','Contract Information Saved');
@@ -212,23 +205,15 @@ class PurchaseReturnController  extends Controller
     public function edit($id)
     {
 
-        $stockdtl = DB::select('call procdetailquotations(?,?)',array( $id,2 ));
-        $cd = DB::table('customer_order_details')
-        ->join('materials', 'materials.id', '=', 'customer_order_details.material_id')
-        ->join('skus', 'skus.id', '=', 'customer_order_details.sku_id')
-        ->leftJoin('tmptblinvswsstock','tmptblinvswsstock.material_id', '=', 'customer_order_details.material_id')
-        ->select('customer_order_details.*','materials.title as material_title','materials.dimension','skus.title as sku',
-        DB::raw('( CASE customer_order_details.sku_id  WHEN  1 THEN tmptblinvswsstock.qtykg WHEN 2 THEN tmptblinvswsstock.qtypcs WHEN 3 THEN tmptblinvswsstock.qtyfeet  END) AS balqty')
-        ,DB::raw('( CASE customer_order_details.sku_id  WHEN  1 THEN tmptblinvswsstock.qtykg - customer_order_details.qtykg  WHEN 2 THEN tmptblinvswsstock.qtypcs - customer_order_details.qtykg WHEN 3 THEN tmptblinvswsstock.qtyfeet - customer_order_details.qtykg  END) AS varqty') )
-        ->where('sale_invoice_id',$id)->get();
+        $cd = DB::table('vwpreditdtl')->select('vwpreditdtl.*')->where('id',$id)->get();
          $data=compact('cd');
 
 
-        return view('custorders.edit')
-        ->with('customer',Customer::select('id','title')->get())
-        ->with('customerorder',CustomerOrder::findOrFail($id))
-        ->with($data)
-        ->with('skus',Sku::select('id','title')->get());
+        return view('purchasereturn.edit')
+        ->with('supplier',Supplier::select('id','title')->get())
+        ->with('purchasereturn',PurchaseReturn::findOrFail($id))
+        ->with($data);
+        // ->with('skus',Sku::select('id','title')->get());
 
         // return view('contracts.edit')->with('suppliers',Supplier::select('id','title')->get())->with('contract',$contract)->with('cd',ContractDetails::where('contract_id',$contract->id)->get());
     }

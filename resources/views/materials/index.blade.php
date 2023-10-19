@@ -92,9 +92,9 @@
                                 <x-input id="srchi" class="bg-indigo-100 w-96" type="text" maxlength='15' name="srchi"  value="{{request()->input('srchi')}}"   />
                                 @if($errors->has('srchi'))<div class="text-red-500 text-xs">{{ $errors->first('srchi') }}</div>@endif --}}
 
-                                <x-label for="srchl" value="Searc Text For Local Items"/>
-                                <x-input id="srchl" class="bg-indigo-100 w-96" type="text" maxlength='40' name="srchl"  value="{{request()->input('srchl')}}"   />
-                                @if($errors->has('srchl'))<div class="text-red-500 text-xs">{{ $errors->first('srchl') }}</div>@endif
+                                <x-label for="srchi" value="Searc Text For Local Items"/>
+                                <x-input id="srchi" class="bg-indigo-100 w-96" type="text" maxlength='40' name="srchi"  value="{{request()->input('srchi')}}"   />
+                                @if($errors->has('srchi'))<div class="text-red-500 text-xs">{{ $errors->first('srchi') }}</div>@endif
 
                                 <x-label for="srchb" value="Searc Text For Both Items"/>
                                 <x-input id="srchb"  class="bg-indigo-100 w-96" type="text" maxlength='40' name="srchb"  value="{{request()->input('srchb')}}"   />

@@ -11,6 +11,9 @@ use Illuminate\Http\Request;
 use App\Models\ContractDetails;
 use App\Models\PcontractDetails;
 use App\Models\CommercialInvoice;
+use App\Models\Purchasing;
+
+
 
 use \Mpdf\Mpdf as PDF;
 use Illuminate\Support\Facades\Session;
@@ -382,12 +385,12 @@ class ContractController extends Controller
                     $cds->totpcs =$cd->bundle1;
 
 
-                    $tcominvs = CommercialInvoice::where('contract_id',$contract->id)->first();
-                    if(!$tcominvs) {
+                    // $tcominvs = CommercialInvoice::where('contract_id',$contract->id)->first();
+                    // if(!$tcominvs) {
                     $cds->tbalwt = $cd->gdswt;
                     $cds->tbalpcs = $cd->bundle1;
                     $cds->tbalsupval = $cd->purval;
-                    }
+                    // }
 
 
                     $cds->save();
@@ -424,6 +427,9 @@ class ContractController extends Controller
                     $cds->purval = $cd->purval;
                     $cds->dutval = $cd->dutval;
                     $cds->totpcs = $cd->bundle1;
+                    $cds->tbalwt = $cd->gdswt;
+                    $cds->tbalpcs = $cd->bundle1;
+                    $cds->tbalsupval = $cd->purval;
 
                     $cds->save();
                 }}
@@ -494,13 +500,42 @@ class ContractController extends Controller
                     $contract->totalpcs = $sumpcs;
                     $contract->dutyval = $sumdtyval;
 
-                    $cominvs = CommercialInvoice::where('contract_id',$contract->id)->first();
-                    if(!$cominvs) {
-                        $contract->balwt = $sumwt;
-                        $contract->balpcs = $sumpcs;
-                        $contract->balsupval = $sumval;
-                     }
+                    $contract->balpcs = $sumpcs;
+                    $contract->balwt = $sumwt;
+                    $contract->balsupval =$sumval;
+
                     $contract->save();
+
+                    // $cominvs = CommercialInvoice::where('contract_id',$contract->id)->first();
+                    // if(!$cominvs) {
+
+                        // $contract->balsupval = $sumval - ( $sumval - $contract->balsupval   );
+                    //  }
+                    // $contract->save();
+
+                     $gr = Purchasing::where('contract_id',$contract->id)->first();
+                     if($gr) {
+
+                        DB::update(DB::raw("
+                        UPDATE contracts c
+                        INNER JOIN (
+                        SELECT contract_id,SUM(purtotpcs) AS trpcs,SUM(purtotwt) AS trwt FROM purchasings
+                        WHERE contract_id=$contract->id   GROUP BY contract_id
+                            ) x ON c.id = x.contract_id
+                        SET c.balpcs=c.totalpcs-x.trpcs,c.balwt=c.conversion_rate-x.trwt
+                        where  contract_id = $contract->id "));
+
+                        DB::update(DB::raw("
+                        UPDATE contract_details c
+                        INNER JOIN (
+                         SELECT contract_id,material_id,SUM(purpcstot) AS trpcs,SUM(purwttot) AS trwt FROM purchasing_details WHERE contract_id=$contract->id  GROUP BY contract_id,material_id
+                            ) x ON c.contract_id = x.contract_id AND c.material_id=x.material_id
+                        SET c.tbalpcs=c.totpcs-x.trpcs,c.tbalwt=c.gdswt-x.trwt
+                        WHERE  c.contract_id = $contract->id "));
+
+
+
+                    }
 
 
 

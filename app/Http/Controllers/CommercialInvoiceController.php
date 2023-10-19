@@ -612,21 +612,6 @@ class CommercialInvoiceController extends Controller
                 $c->bundle2 = $cid['bundle2'];
 
 
-                // $c->location = $cid['location'];
-                // $location = Location::where("title", $cid['location'])->first();
-                // $c->locid = $location->id;
-
-
-
-                //  $varwt=$bwt - $cid['gdswt'];
-                //  $varpcs=$bpcs- $cid['pcs'];
-                //  $varval=$bval- $cid['amtindollar'];
-
-                // $matsrate = Material::findOrFail($c->material_id);
-                // $matsrate->balkg = $matsrate->balkg + ( $cid['bkg'] - $cid['gdswt'] );
-                // $matsrate->balpcs = $matsrate->balpcs + ( $cid['bpcs'] - $cid['pcs'] );
-                // $matsrate->balfeet = $matsrate->balfeet + ( $cid['bfeet'] - $cid['qtyinfeet'] );
-                // $matsrate->save();
 
                 $c->save();
 
@@ -828,7 +813,28 @@ class CommercialInvoiceController extends Controller
                 }
 
 
-            //****################# Transfert Contract Balance to Contracts
+            //  update from clearance table
+                DB::update(DB::raw("
+                UPDATE commercial_invoices c
+                INNER JOIN (
+                 SELECT commercial_invoice_id,SUM(exataxoffie) AS clrwt,SUM(total) AS clrval FROM clearances WHERE commercial_invoice_id=$ci->id
+                     GROUP BY commercial_invoice_id
+
+                    ) x ON c.id = x.commercial_invoice_id
+                SET c.wtbal=c.twt-x.clrwt,c.payed=x.clrval,c.dutybal=c.tduty-x.clrval
+                WHERE  c.id = $ci->id "));
+
+
+
+
+
+
+
+
+
+
+
+                //****################# Transfert Contract Balance to Contracts
             DB::update(DB::raw("
             UPDATE contracts c
             INNER JOIN (

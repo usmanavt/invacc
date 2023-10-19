@@ -212,11 +212,12 @@ class ClearanceController extends Controller
                 DB::update(DB::raw("
                 UPDATE commercial_invoices c
                 INNER JOIN (
-                SELECT commercial_invoice_id,gdswt AS wt,pcs AS pcs,amtindollar,bundle1 AS nosofpack,total AS amount FROM clearance_completed_details
-                where  commercial_invoice_id = $ci->commercial_invoice_id
+                SELECT commercial_invoice_id,sum(gdswt) AS wt,sum(pcs) AS pcs,sum(amtindollar) as amtindollar,
+                sum(bundle1) AS nosofpack,sum(total) AS amount FROM clearance_completed_details
+                where  commercial_invoice_id = $ci->commercial_invoice_id group by commercial_invoice_id
                 ) x ON c.id = x.commercial_invoice_id
-                SET c.payed = c.payed + x.amount,c.dutybal=c.dutybal-x.amount,c.wtbal=c.wtbal-x.wt,c.packingwtbal=c.packingwtbal-x.nosofpack,
-                c.tdutvalbal=c.tdutvalbal-x.amtindollar,c.pcsbal=c.pcsbal-x.pcs
+                SET c.payed = x.amount,c.dutybal=c.tduty-x.amount,c.wtbal=c.twt-x.wt,c.packingwtbal=c.packingwt-x.nosofpack,
+                c.tdutvalbal=c.tdutval-x.amtindollar,c.pcsbal=c.tpcs-x.pcs
                 where  id = $ci->commercial_invoice_id "));
 
                 // DB::update(DB::raw("
@@ -773,14 +774,26 @@ public function update(Request $request)
             ) x ON c.id = x.clearance_id
             SET c.collofcustom = x.pcs,c.exataxoffie=x.wt,c.total=x.payduty where  clearance_id = $clearance->id  "));
 
+            // DB::update(DB::raw("
+            // UPDATE commercial_invoices c
+            // INNER JOIN (
+            // SELECT commercial_invoice_id, SUM(total) AS amount,sum(exataxoffie) as wt
+            // FROM clearances where  commercial_invoice_id = $clearance->commercial_invoice_id
+            // GROUP BY commercial_invoice_id
+            // ) x ON c.id = x.commercial_invoice_id
+            // SET c.payed = x.amount,c.dutybal=c.tduty-x.amount,c.wtbal=c.twt-x.wt where  id = $clearance->commercial_invoice_id "));
+
             DB::update(DB::raw("
-            UPDATE commercial_invoices c
-            INNER JOIN (
-            SELECT commercial_invoice_id, SUM(total) AS amount,sum(exataxoffie) as wt
-            FROM clearances where  commercial_invoice_id = $clearance->commercial_invoice_id
-            GROUP BY commercial_invoice_id
-            ) x ON c.id = x.commercial_invoice_id
-            SET c.payed = x.amount,c.dutybal=c.tduty-x.amount,c.wtbal=c.twt-x.wt where  id = $clearance->commercial_invoice_id "));
+                UPDATE commercial_invoices c
+                INNER JOIN (
+                SELECT commercial_invoice_id,sum(gdswt) AS wt,sum(pcs) AS pcs,sum(amtindollar) as amtindollar,
+                sum(bundle1) AS nosofpack,sum(total) AS amount FROM clearance_completed_details
+                where  commercial_invoice_id = $clearance->commercial_invoice_id group by commercial_invoice_id
+                ) x ON c.id = x.commercial_invoice_id
+                SET c.payed = x.amount,c.dutybal=c.tduty-x.amount,c.wtbal=c.twt-x.wt,c.packingwtbal=c.packingwt-x.nosofpack,
+                c.tdutvalbal=c.tdutval-x.amtindollar,c.pcsbal=c.tpcs-x.pcs
+                where  id = $clearance->commercial_invoice_id "));
+
 
             DB::update(DB::raw("
             UPDATE commercial_invoice_details c
