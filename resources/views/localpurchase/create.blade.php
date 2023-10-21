@@ -38,12 +38,9 @@
                             <label for="number">Invoice #<x-req /></label>
                             <input type="text" class="col-span-2" id="number" name="number" placeholder="Invoice No" >
 
-                                <label for="gpassno">GatePass #<x-req /></label>
-                                <input type="text" class="col-span-2" id="gpassno" name="gpassno" value="{{$maxgpno}}"  placeholder="gpassno"
+                                {{-- <label for="gpassno">GatePass #<x-req /></label> --}}
+                                <input type="text" class="col-span-2" id="gpassno" name="gpassno" value="{{$maxgpno}}" hidden  placeholder="gpassno"
                                     >
-
-
-
 
                         </div>
 
@@ -53,17 +50,20 @@
                             <fieldset class="border px-4 py-2 rounded">
                                 <legend>Invoice Level Expenses</legend>
                                 <div class="grid grid-cols-12 gap-2 py-2 items-center">
-                                    <x-input-numeric title="Discou(%)" name="insurance" id="insurance"    />
+                                    <x-input-numeric title="Discou(%)" name="insurance" id="insurance" disabled    />
+                                    <input class="checked:bg-blue-500 checked:border-blue-500 focus:outline-none" type="checkbox" name="per" id="per" onclick="EnableDisableTextBox(this)" >
                                     <x-input-numeric title="Discount(Amount)" name="collofcustom"     />
-                                    <x-input-numeric title="Cartage" name="exataxoffie" required  onblur="tnetamount()"  />
-                                    <x-input-numeric title="Loading Charges" name="otherchrgs" required  onblur="tnetamount()"  />
+                                    <x-input-numeric title="Cartage/Loading Charges" name="exataxoffie" required  onblur="tnetamount()"  />
+                                    <x-input-numeric title="Cutting/Reapair Charges" name="otherchrgs" required  onblur="tnetamount()"  />
                                     <x-input-numeric title="Payble Amount" name="bankntotal" disabled />
                                 </div>
                             </fieldset>
 
-
-
-
+                            <div class="flex flex-row px-4 py-2 items-center">
+                                <x-label value="Add Pcs & Feet Size & Press"></x-label>
+                                <x-button id="calculate" class="mx-2" type="button" onclick="calculate()">Generate Item Cost With Other Charges</x-button>
+                                <x-label value="This will prepare your commercial invoice for Submission"></x-label>
+                            </div>
 
 
                         {{-- Contract Details --}}
@@ -149,7 +149,13 @@
     function tnetamount()
         {
 
-            collofcustom.value=(tamount*insurance.value/100).toFixed(0);
+            if (insurance.disabled)
+            {insurance.value=(collofcustom.value/tamount*100).toFixed(2)};
+
+            if (!insurance.disabled)
+            {collofcustom.value=(tamount*insurance.value/100).toFixed(0);};
+
+            // collofcustom.value=(tamount*insurance.value/100).toFixed(0);
             bankntotal.value= ( Number(tamount)-Number(collofcustom.value))+Number(exataxoffie.value) +Number(otherchrgs.value)  ;
             // bankntotal.value=parseFloat( bankntotal.value ) + parseFloat(exataxoffie.values);
         }
@@ -208,12 +214,60 @@
                  qtyinfeet:0,
                  gdsprice:0,
                  length:0,
-                 amtinpkr:0
+                 amtinpkr:0,
+                 cstrt:0,
+                 cstamt:0
 
 
             }
         ])
     }
+
+var calculate = function(){
+    const data = dynamicTable.getData()
+
+    var amtinpkrtotal = 0
+    var amtper = 0
+    var cstrt=0
+    var cstamt=0
+
+    tnetamount();
+
+            data.forEach(e => {
+                amtinpkrtotal += parseFloat(e.amtinpkr)
+                // dtyamtinpkrtotal += parseFloat(e.dtyamtinpkr)
+            });
+
+            data.forEach(e => {
+                e.amtper = parseFloat(e.amtinpkr)/amtinpkrtotal*100
+                e.cstamt= bankntotal.value * parseFloat(e.amtper)/100
+                console.log(bankntotal.value)
+
+                   if(e.sku==='KG')
+                    {
+                        e.cstrt=((bankntotal.value * parseFloat(e.amtper)/100)/e.gdswt).toFixed(3)
+                    }
+                    if(e.sku==='PCS')
+                    {
+                        e.cstrt=((bankntotal.value * parseFloat(e.amtper)/100)/e.pcs).toFixed(3)                    }
+                    if(e.sku==='FEET')
+                    {
+                        e.cstrt=((bankntotal.value * parseFloat(e.amtper)/100)/e.qtyinfeet).toFixed(3)
+                    }
+
+                    cstrt=e.cstrt
+                    cstamt=e.cstamt
+                    // console.log(cstrt)
+            });
+            dynamicTable.setData(data)
+
+        }
+
+
+
+
+
+
 </script>
 @endpush
 
@@ -298,12 +352,17 @@
              var sum =  Number(data.qtyinfeet) * Number(data.gdsprice)
              var sum2 =  Number(data.qtyinfeet) * Number(data.gdsprice)
          }
+         var crt=data.gdsprice
         // var sum = Number(data.gdswt) * Number(data.gdsprice)
         // var sum2 =  Number(data.gdswt) * Number(data.gdsprice)
         var row = cell.getRow();
         row.update({
+            // "amtinpkr": sum,
             "amtinpkr": sum,
-            "gdspricetot": sum2
+            "gdspricetot": sum2,
+             "cstrt":crt,
+            "cstamt":sum
+
             // "qtyinfeet":leninft
         });
     }
@@ -320,6 +379,7 @@
         });
         tamount = calc;
         tnetamount();
+
         // collofcustom.value=(calc*insurance.value/100).toFixed(0);
         // bankntotal.value=calc - collofcustom.value ;
         return calc;
@@ -372,9 +432,9 @@
             // {title:"PurUnit",           field:"purunit",        cssClass:"bg-gray-200 font-semibold",validator:"in:p|k|f",editor:true},
 
 
-            {title:"Replace Description",field:"repname",       cssClass:"bg-gray-200 font-semibold",editor:true},
-            {title:"Brand",              field:"machineno",     cssClass:"bg-gray-200 font-semibold",editor:true},
-            {title:"ForCustomer",        field:"forcust",       cssClass:"bg-gray-200 font-semibold",editor:true},
+            {title:"Replace Description",field:"repname",       editor:true},
+            {title:"Brand",              field:"machineno",     editor:true},
+            {title:"ForCustomer",        field:"forcust",       editor:true},
             // {title:"Source",            field:"source_id",      cssClass:"bg-gray-200 font-semibold",visible:false},
             // {title:"Source",            field:"source",         cssClass:"bg-gray-200 font-semibold",visible:false},
 
@@ -387,7 +447,7 @@
             {   title:"Weight",
                 field:"gdswt",
                 editor:"number",
-                cssClass:"bg-green-200 font-semibold",
+                // cssClass:"bg-green-200 font-semibold",
                 validator:"required",
                 formatter:"money",
                 formatterParams:{thousand:",",precision:2},
@@ -399,7 +459,7 @@
                {title:"Qty(Pcs)",
                 field:"pcs",
                 editor:"number",
-                cssClass:"bg-green-200 font-semibold",
+                // cssClass:"bg-green-200 font-semibold",
                 validator:"required",
                 formatter:"money",
                 formatterParams:{thousand:",",precision:2},
@@ -424,7 +484,7 @@
                {title:"Qty(Feet)",
                 field:"qtyinfeet",
                 editor:"number",
-                cssClass:"bg-green-200 font-semibold",
+                // cssClass:"bg-green-200 font-semibold",
                 validator:"required",
                 formatter:"money",
                 formatterParams:{thousand:",",precision:2},
@@ -438,7 +498,7 @@
                {title:"Price",
                 field:"gdsprice",
                 editor:"number",
-                cssClass:"bg-green-200 font-semibold",
+                // cssClass:"bg-green-200 font-semibold",
                 validator:"required" ,
                 formatter:"money",
                 formatterParams:{thousand:",",precision:2},
@@ -463,8 +523,34 @@
                 // },
                 bottomCalc:totalVal  },
 
+                {title:"CostPrice",
+                field:"cstrt",
+                // editor:"number",
+                cssClass:"bg-gray-200 font-semibold",
+                validator:"required" ,
+                formatter:"money",
+                formatterParams:{thousand:",",precision:3},
+                validator:["required","decimal(10,0)"] ,
+                cellEdited: updateValues   ,
+            },
 
-        ],
+            {title:"CostAmount",
+                field:"cstamt",
+                // editor:"number",
+                cssClass:"bg-gray-200 font-semibold",
+                validator:"required" ,
+                formatter:"money",
+                formatterParams:{thousand:",",precision:2},
+                validator:["required","decimal(10,0)"] ,
+                cellEdited: updateValues   ,
+                bottomCalc:"sum",
+            },
+
+
+
+
+
+         ],
     })
 
     // Validation & Post
@@ -557,16 +643,29 @@
             var input = document.getElementById("supplier_id").focus();
         }
 
-insurance.onblur=function(){
+        function EnableDisableTextBox(per) {
+        var insurance = document.getElementById("insurance");
+        insurance.disabled = per.checked ? false : true;
+        insurance.style.color ="black";
+    }
+
+
+
+
+
+  insurance.onblur=function(){
     per=false
-    collofcustom.value=(tamount * insurance.value/100).toFixed(0);
-    bankntotal.value= ( Number(tamount)-Number(collofcustom.value))+Number(exataxoffie.value) +Number(otherchrgs.value)  ;
+    tnetamount();
+    // collofcustom.value=(tamount * insurance.value/100).toFixed(0);
+    // bankntotal.value= ( Number(tamount)-Number(collofcustom.value))+Number(exataxoffie.value) +Number(otherchrgs.value)  ;
 }
 
 collofcustom.onblur=function(){
-    insurance.value=(collofcustom.value/tamount * 100).toFixed(2);
-    bankntotal.value= ( Number(tamount)-Number(collofcustom.value))+Number(exataxoffie.value) +Number(otherchrgs.value)  ;
+    tnetamount();
+    // insurance.value=(collofcustom.value/tamount * 100).toFixed(2);
+    // bankntotal.value= ( Number(tamount)-Number(collofcustom.value))+Number(exataxoffie.value) +Number(otherchrgs.value)  ;
 }
+
 </script>
 
 

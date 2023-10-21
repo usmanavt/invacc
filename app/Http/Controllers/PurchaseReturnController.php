@@ -207,9 +207,7 @@ class PurchaseReturnController  extends Controller
 
         $cd = DB::table('vwpreditdtl')->select('vwpreditdtl.*')->where('id',$id)->get();
          $data=compact('cd');
-
-
-        return view('purchasereturn.edit')
+         return view('purchasereturn.edit')
         ->with('supplier',Supplier::select('id','title')->get())
         ->with('purchasereturn',PurchaseReturn::findOrFail($id))
         ->with($data);

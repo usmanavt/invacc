@@ -163,7 +163,8 @@
                     {title: "Pcs",field: "tpcs"},
                     {title: "Weight",field: "twt"},
                     {title: "Feet",field: "miscexpenses"},
-                    {title: "Payble Amount",field: "tval"}
+                    {title: "Item Cost",field: "tval"},
+                    {title: "Payble Amount",field: "tduty"}
                 ]},
 
                 {

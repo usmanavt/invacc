@@ -192,6 +192,10 @@ class LocalPurchaseController  extends Controller
                 $lpd->forcust = $cont['forcust'];
                 $lpd->purunit = $cont['purunit'];
 
+                $lpd->perft = $cont['cstrt'];
+                $lpd->pricevaluecostsheet = $cont['cstamt'];
+
+
                 $lpd->length = 0;
                 $lpd->gdsprice = $cont['gdsprice'];
                 $lpd->amtinpkr = $cont['amtinpkr'];
@@ -218,15 +222,16 @@ class LocalPurchaseController  extends Controller
             DB::update(DB::raw("
             UPDATE commercial_invoices c
             INNER JOIN (
-            SELECT commercial_invoice_id, SUM(pcs) as pcs,SUM(gdswt) AS wt,sum(qtyinfeet) as feet,SUM(amtinpkr) AS amount
+            SELECT commercial_invoice_id, SUM(pcs) as pcs,SUM(gdswt) AS wt,sum(qtyinfeet) as feet,SUM(amtinpkr) AS amount,sum(pricevaluecostsheet) as totcost
             FROM commercial_invoice_details where  commercial_invoice_id = $ci->id
             GROUP BY commercial_invoice_id
             ) x ON c.id = x.commercial_invoice_id
-            SET c.tpcs = x.pcs,c.twt=x.wt,c.miscexpenses=x.feet,c.tval=x.amount,wtbal=x.wt,dutybal=x.pcs,agencychrgs=x.feet where  commercial_invoice_id = $ci->id "));
+            SET c.tpcs = x.pcs,c.twt=x.wt,c.miscexpenses=x.feet,c.tval=x.amount,wtbal=x.wt,dutybal=x.pcs,agencychrgs=x.feet,c.tduty=x.totcost
+            where  commercial_invoice_id = $ci->id "));
 
             DB::insert(DB::raw("
             INSERT INTO office_item_bal(transaction_id,tdate,ttypedesc,ttypeid,material_id,uom,tqtykg,tqtypcs,tqtyfeet,tcostkg,tcostpcs,tcostfeet)
-            SELECT a.id AS transid,a.invoice_date,'Lpurchasing',3,b.material_id,sku_id,gdswt,pcs,qtyinfeet,gdsprice,gdsprice,gdsprice FROM commercial_invoices a INNER JOIN  commercial_invoice_details b
+            SELECT a.id AS transid,a.invoice_date,'Lpurchasing',3,b.material_id,sku_id,gdswt,pcs,qtyinfeet,perft,perft,perft FROM commercial_invoices a INNER JOIN  commercial_invoice_details b
             ON a.id=b.commercial_invoice_id WHERE a.id=$ci->id"));
 
 
@@ -254,7 +259,7 @@ class LocalPurchaseController  extends Controller
         ->select('c.id as material_id','c.title','c.category_id','c.category','c.dimension_id','c.dimension','c.sku_id','c.sku','c.brand_id','c.brand'
         ,'b.user_id','b.supplier_id','b.id','b.pcs','b.length','b.qtyinfeet','b.gdsprice','b.amtinpkr','b.perkg','b.purval','b.repname',
         'b.machineno','b.forcust','b.purunit','b.locid','b.location','b.contract_id','d.title as sku',
-        'b.gdswt','pcs','qtyinfeet'
+        'b.gdswt','pcs','qtyinfeet','b.perft','pricevaluecostsheet'
         // DB::raw('( CASE b.sku_id  WHEN  1 THEN b.gdswt WHEN 2 THEN b.pcs WHEN 3 THEN b.qtyinfeet  END) AS gdswt')
         )
         ->where('a.id',$id)->get();
@@ -334,6 +339,13 @@ class LocalPurchaseController  extends Controller
                     $cds->machineno = $cd->machineno;
                     $cds->repname = $cd->repname;
                     $cds->forcust = $cd->forcust;
+
+                    $cds->perft = $cd->perft;
+                    $cds->pricevaluecostsheet = $cd->pricevaluecostsheet;
+
+
+
+
                     // $cds->purunit = $cd->purunit;
 
                     // $cds->gdswt = $cd->gdswt;
@@ -383,6 +395,10 @@ class LocalPurchaseController  extends Controller
                     $cds->dimension_id = $cd->dimension_id;
                     $cds->source_id = $cd->source_id;
                     $cds->brand_id = $cd->brand_id;
+
+                    $cds->perft = $cd->perft;
+                    $cds->pricevaluecostsheet = $cd->pricevaluecostsheet;
+
                     // $cds->gdswt = $cd->gdswt;
                     $cds->perkg = 0;
                     $cds->amtinpkr = $cd->amtinpkr;
@@ -402,9 +418,6 @@ class LocalPurchaseController  extends Controller
                     // if($lpd->sku_id==3)
                         $cds->qtyinfeet = $cd['qtyinfeet'];
                         $cds->bundle2 = $cd['qtyinfeet'];
-
-
-
                     $cds->save();
                 }
             }
@@ -412,23 +425,20 @@ class LocalPurchaseController  extends Controller
             DB::update(DB::raw("
             UPDATE commercial_invoices c
             INNER JOIN (
-            SELECT commercial_invoice_id, SUM(pcs) as pcs,SUM(gdswt) AS wt,sum(qtyinfeet) as feet,SUM(amtinpkr) AS amount
+            SELECT commercial_invoice_id, SUM(pcs) as pcs,SUM(gdswt) AS wt,sum(qtyinfeet) as feet,SUM(amtinpkr) AS amount,sum(pricevaluecostsheet) as totcost
             FROM commercial_invoice_details where  commercial_invoice_id = $commercialinvoice->id
             GROUP BY commercial_invoice_id
             ) x ON c.id = x.commercial_invoice_id
-            SET c.tpcs = x.pcs,c.twt=x.wt,c.miscexpenses=x.feet,c.tval=x.amount,wtbal=x.wt,dutybal=x.pcs,agencychrgs=x.feet where  commercial_invoice_id = $commercialinvoice->id "));
+            SET c.tpcs = x.pcs,c.twt=x.wt,c.miscexpenses=x.feet,c.tval=x.amount,wtbal=x.wt,dutybal=x.pcs,agencychrgs=x.feet,c.tduty=x.totcost
+            where  commercial_invoice_id = $commercialinvoice->id "));
 
 
             DB::delete(DB::raw(" delete from office_item_bal where ttypeid=3 and  transaction_id=$commercialinvoice->id   "));
 
             DB::insert(DB::raw("
             INSERT INTO office_item_bal(transaction_id,tdate,ttypedesc,ttypeid,material_id,uom,tqtykg,tqtypcs,tqtyfeet,tcostkg,tcostpcs,tcostfeet)
-            SELECT a.id AS transid,a.invoice_date,'Lpurchasing',3,b.material_id,sku_id,gdswt,pcs,qtyinfeet,gdsprice,gdsprice,gdsprice FROM commercial_invoices a INNER JOIN  commercial_invoice_details b
+            SELECT a.id AS transid,a.invoice_date,'Lpurchasing',3,b.material_id,sku_id,gdswt,pcs,qtyinfeet,perft,perft,perft FROM commercial_invoices a INNER JOIN  commercial_invoice_details b
             ON a.id=b.commercial_invoice_id WHERE a.id=$commercialinvoice->id"));
-
-
-
-
 
             DB::commit();
             Session::flash('success','Contract Information Saved');
