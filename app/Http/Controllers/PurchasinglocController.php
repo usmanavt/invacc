@@ -216,9 +216,9 @@ class PurchasinglocController extends Controller
              DB::insert(DB::raw("
              INSERT INTO godown_stock ( transaction_id,tdate,ttypeid,tdesc,material_id,
              stkwte13,stkpcse13,stkfeete13,stkwtgn2,stkpcsgn2,stkfeetgn2,stkwtams,stkpcsams,stkfeetams,stkwte24,stkpcse24,stkfeete24,
-             stkwtbs,stkpcsbs,stkfeetbs,stkwtoth,stkpcsoth,stkfeetoth,stkwttot,stkpcstot,stkfeettot )
+             stkwtbs,stkpcsbs,stkfeetbs,stkwtoth,stkpcsoth,stkfeetoth,stkwttot,stkpcstot,stkfeettot,costwt,costpcs,costfeet )
              SELECT a.id,a.purdate,3,'Lpurchasing',material_id,purwte13,purpcse13,purfeete13,purwtgn2,purpcsgn2,purfeetgn2,purwtams,purpcsams,purfeetams,purwte24,purpcse24,purfeete24,
-             purwtbs,purpcsbs,purfeetbs,purwtoth,purpcsoth,purfeetoth,purwttot,purpcstot,purfeettot FROM purchasings a inner join purchasing_details b ON a.id=b.purid AND a.id=$ci->id
+             purwtbs,purpcsbs,purfeetbs,purwtoth,purpcsoth,purfeetoth,purwttot,purpcstot,purfeettot,gdsprice,gdsprice,gdsprice FROM purchasings a inner join purchasing_details b ON a.id=b.purid AND a.id=$ci->id
             "));
 
 
@@ -371,9 +371,9 @@ class PurchasinglocController extends Controller
             DB::insert(DB::raw("
             INSERT INTO godown_stock ( transaction_id,tdate,ttypeid,tdesc,material_id,
             stkwte13,stkpcse13,stkfeete13,stkwtgn2,stkpcsgn2,stkfeetgn2,stkwtams,stkpcsams,stkfeetams,stkwte24,stkpcse24,stkfeete24,
-            stkwtbs,stkpcsbs,stkfeetbs,stkwtoth,stkpcsoth,stkfeetoth,stkwttot,stkpcstot,stkfeettot )
+            stkwtbs,stkpcsbs,stkfeetbs,stkwtoth,stkpcsoth,stkfeetoth,stkwttot,stkpcstot,stkfeettot,costwt,costpcs,costfeet )
             SELECT a.id,a.purdate,3,'Lpurchasing',material_id,purwte13,purpcse13,purfeete13,purwtgn2,purpcsgn2,purfeetgn2,purwtams,purpcsams,purfeetams,purwte24,purpcse24,purfeete24,
-            purwtbs,purpcsbs,purfeetbs,purwtoth,purpcsoth,purfeetoth,purwttot,purpcstot,purfeettot FROM purchasings a inner join purchasing_details b ON a.id=b.purid AND a.id=$ci->id
+            purwtbs,purpcsbs,purfeetbs,purwtoth,purpcsoth,purfeetoth,purwttot,purpcstot,purfeettot,gdsprice,gdsprice,gdsprice FROM purchasings a inner join purchasing_details b ON a.id=b.purid AND a.id=$ci->id
            "));
 
 

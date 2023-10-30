@@ -155,6 +155,8 @@ class PurchaseReturnController  extends Controller
             $ci->prno = $request->prno;
             $ci->commercial_invoice_id = $request->purchase_id;
             $ci->supplier_id = $request->supplier_id;
+            $ci->prinvdate = $request->invoice_date;
+            $ci->prinvno = $request->invoiceno;
             $ci->save();
 
             // Quotation Close
@@ -174,6 +176,13 @@ class PurchaseReturnController  extends Controller
                 $lpd->prfeet = $cont['prqtyinfeet'];
                 $lpd->prprice = $cont['gdsprice'];
                 $lpd->pramount = $cont['pramtinpkr'];
+
+                $lpd->prtbalwt = $cont['prgdswt'];
+                $lpd->prtbalpcs = $cont['prpcs'];
+                $lpd->prtbalfeet = $cont['prqtyinfeet'];
+
+
+
                 $lpd->save();
             }
 
@@ -184,11 +193,16 @@ class PurchaseReturnController  extends Controller
                 FROM purchase_return_details where  prid = $ci->id
                 GROUP BY prid
             ) x ON c.id = x.prid
-            SET c.prtpcs = x.pcs,c.prtwt=x.wt,c.prtfeet=x.ft,c.prtamount=x.amount where  id = $ci->id
+            SET c.prtpcs = x.pcs,c.prtwt=x.wt,c.prtfeet=x.ft,c.prtamount=x.amount,
+            c.prbalpcs = x.pcs,c.prbalwt=x.wt,c.prbalfeet=x.ft
+            where  id = $ci->id
             "));
 
-
-
+            DB::insert(DB::raw("
+            INSERT INTO office_item_bal(transaction_id,tdate,ttypedesc,ttypeid,material_id,uom,tqtykg,tqtypcs,tqtyfeet,tcostkg,tcostpcs,tcostfeet)
+            SELECT a.id AS transid,a.prdate,'Purchase Return',5,b.material_id,b.prunitid,prwt*-1,prpcs*-1,prfeet*-1,prprice,prprice,prprice
+            FROM purchase_returns a INNER JOIN  purchase_return_details b    ON a.id=b.prid
+            WHERE a.id=$ci->id"));
 
             // }
             DB::commit();
@@ -205,153 +219,74 @@ class PurchaseReturnController  extends Controller
     public function edit($id)
     {
 
-        $cd = DB::table('vwpreditdtl')->select('vwpreditdtl.*')->where('id',$id)->get();
+
+        // $cd = DB::table('vwpreditdtl')->select('vwpreditdtl.*')->where('id',$id)->get();
+        $cd = DB::select('call procpurretedit(?)',array( $id ));
          $data=compact('cd');
          return view('purchasereturn.edit')
         ->with('supplier',Supplier::select('id','title')->get())
         ->with('purchasereturn',PurchaseReturn::findOrFail($id))
-        ->with($data);
-        // ->with('skus',Sku::select('id','title')->get());
+        ->with($data)
+        ->with('skus',Sku::select('id','title')->get());
 
         // return view('contracts.edit')->with('suppliers',Supplier::select('id','title')->get())->with('contract',$contract)->with('cd',ContractDetails::where('contract_id',$contract->id)->get());
     }
 
 
-    public function update(Request $request, CustomerOrder $customerorder)
+    public function update(Request $request, PurchaseReturn $purchasereturn)
     {
         //  dd($commercialinvoice->commercial_invoice_id());
             //   dd($request->all());
+
+        $purchasereturn = $request->purchasereturn;
         DB::beginTransaction();
         try {
 
-            //  dd($request->sale_invoice_id);
-            $customerorder = CustomerOrder::findOrFail($request->sale_invoice_id);
-            $customerorder->quotation_id = $request->quotation_id;
-            $customerorder->podate = $request->podate;
-            $customerorder->deliverydt = $request->deliverydt;
-            $customerorder->poseqno = $request->poseqno;
-            $customerorder->pono = $request->pono;
-            $customerorder->pqutno = $request->qutno;
-            $customerorder->qutdate = $request->qutdate;
-            $customerorder->pprno = $request->prno;
-            $customerorder->customer_id = $request->customer_id;
-            // $customerorder->remarks = $request->remarks;
-            $customerorder->discntper = $request->discntper;
-            $customerorder->discntamt = $request->discntamt;
-            $customerorder->cartage = $request->cartage;
+            $ci = PurchaseReturn::findOrFail($request->prid);
+            // dd($request->prid);
+            $ci->prdate = $request->prdate;
+            $ci->prno = $request->prno;
+            $ci->supplier_id = $request->supplier_id;
+            $ci->prinvdate = $request->invoice_date;
+            $ci->prinvno = $request->invoiceno;
+            $ci->save();
 
 
-            $customerorder->rcvblamount = $request->rcvblamount;
-
-            $customerorder->salordbal = $request->rcvblamount-$request->delivered;
-
-
-
-            $customerorder->saletaxper = $request->saletaxper;
-            $customerorder->saletaxamt = $request->saletaxamt;
-            $customerorder->totrcvbamount = $request->totrcvbamount;
-            $customerorder->save();
-
-
-
-            // Get Data
-            $cds = $request->customerorder; // This is array
-            $cds = CustomerOrderDetails::hydrate($cds); // Convert it into Model Collection
-            // Now get old ContractDetails and then get the difference and delete difference
-            $oldcd = CustomerOrderDetails::where('sale_invoice_id',$customerorder->id)->get();
-            $deleted = $oldcd->diff($cds);
-            //  Delete contract details if marked for deletion
-            foreach ($deleted as $d) {
-                $d->delete();
-            }
-            // Now update existing and add new
-            foreach ($cds as $cd) {
-                if($cd->id)
-                {
-                    $cds = CustomerOrderDetails::where('id',$cd->id)->first();
-                    $cds->sale_invoice_id = $customerorder->id;
-                    $cds->material_id = $cd->material_id;
-                    $cds->sku_id = $cd->sku_id;
-                    $cds->repname = $cd['repname'];
-                    $cds->brand = $cd['brand'];
-                    $cds->qtykg = $cd['qtykg'];
-                    $cds->balqty = $cd['qtykg'];
-                    $cds->price = $cd['price'];
-                    $cds->saleamnt = $cd['saleamnt'];
-                    $unit = Sku::where("title", $cd['sku'])->first();
-                     $cds->sku_id = $unit->id;
-                    //  $cds->sku = $cd['sku'];
-
-                 $cds->save();
-                }else
-                {
-                    //  The item is new, Add it
-                     $cds = new CustomerOrderDetails();
-
-                     $cds->sale_invoice_id = $customerorder->id;
-                     $cds->material_id = $cd->material_id;
-                     $cds->sku_id = $cd->sku_id;
-                     $cds->repname = $cd['repname'];
-                     $cds->brand = $cd['brand'];
-                     $cds->qtykg = $cd['qtykg'];
-                     $cds->price = $cd['price'];
-                     $cds->saleamnt = $cd['saleamnt'];
-
-                     $unit = Sku::where("title", $cd['sku'])->first();
-                      $cds->sku_id = $unit->id;
-                     // $cds->sale_invoice_id = $saleinvoices->id;
-                    // $cds->material_id = $cd->material_id;
-                    // $cds->sku_id = $cd->sku_id;
-
-                    // $cds->qtykg = $cd['bundle1'];
-                    // $cds->qtypcs = $cd['bundle2'];
-                    // $cds->qtyfeet = $cd['pcspbundle2'];
-                    // $cds->price = $cd['pcspbundle1'];
-                    // $cds->saleamnt = $cd['ttpcs'];
-                    // $cds->locid = $cd['location'];
-                    // $cds->salunitid = $cd['sku'];
-
-                    // $cds->sale_invoice_id = $custorders->id;
-                    // $cds->material_id = $cd->material_id;
-                    // $cds->sku_id = $cd->sku_id;
-                    // $cds->repname = $cd['repname'];
-                    // $cds->qtykg = $cd['qtykg'];
-                    // $cds->qtypcs = $cd['qtypcs'];
-                    // $cds->qtyfeet = $cd['qtyfeet'];
-                    // $cds->price = $cd['price'];
-                    // $cds->saleamnt = $cd['saleamnt'];
-
-                    //  $location = Location::where("title", $cd['location'])->first();
-                    //  $cds->locid = $location->id;
-                    //  $cds->location = $cd['location'];
-
-                    //  $unit = Sku::where("title", $cd['sku'])->first();
-                    //  $cds->sku_id = $unit->id;
-                    //  $cds->sku = $cd['sku'];
-
-
-                    $cds->save();
+            foreach ($purchasereturn as $cd) {
+                $c = PurchaseReturnDetail::findOrFail($cd['id']);
+                    // $cds = PurchaseReturnDetail::where('id',$cd->id)->first();
+                    $c->prid = $ci->id;
+                    $c->material_id = $cd['material_id'];
+                    $c->prunitid = $cd['sku_id'];
+                    $c->prwt = $cd['prgdswt'];
+                    $c->prpcs = $cd['prpcs'];
+                    $c->prfeet = $cd['prqtyinfeet'];
+                    $c->prprice = $cd['gdsprice'];
+                    $c->pramount = $cd['pramtinpkr'];
+                 $c->save();
                 }
-            }
 
-            //// Details update
-            DB::update(DB::raw("
-            UPDATE customer_order_details c
-            INNER JOIN (
-            SELECT b.custplan_id,a.material_id,SUM(feedqty) AS feedqty  FROM sale_invoices_details a
-				INNER JOIN sale_invoices AS b ON b.id=a.sale_invoice_id WHERE b.custplan_id=$customerorder->id GROUP BY b.custplan_id,a.material_id
-            ) x ON c.sale_invoice_id = x.custplan_id AND c.material_id=x.material_id
-            SET c.balqty = c.qtykg - x.feedqty WHERE  c.sale_invoice_id = $customerorder->id"));
+                DB::update(DB::raw("
+                update purchase_returns c
+                INNER JOIN (
+                    SELECT prid, SUM(prpcs) as pcs,SUM(prwt) AS wt,sum(prfeet) as ft,SUM(pramount) AS amount
+                    FROM purchase_return_details where  prid = $ci->id
+                    GROUP BY prid
+                ) x ON c.id = x.prid
+                SET c.prtpcs = x.pcs,c.prtwt=x.wt,c.prtfeet=x.ft,c.prtamount=x.amount,
+                c.prbalpcs = x.pcs,c.prbalwt=x.wt,c.prbalfeet=x.ft
+                where  id = $ci->id
+                "));
+
+                DB::delete(DB::raw(" delete from office_item_bal where ttypeid=5 and  transaction_id=$ci->id   "));
+
+                DB::insert(DB::raw("
+                INSERT INTO office_item_bal(transaction_id,tdate,ttypedesc,ttypeid,material_id,uom,tqtykg,tqtypcs,tqtyfeet,tcostkg,tcostpcs,tcostfeet)
+                SELECT a.id AS transid,a.prdate,'Purchase Return',5,b.material_id,b.prunitid,prwt*-1,prpcs*-1,prfeet*-1,prprice,prprice,prprice
+                FROM purchase_returns a INNER JOIN  purchase_return_details b    ON a.id=b.prid
+                WHERE a.id=$ci->id"));
 
 
-            ///**** Master Update
-            DB::update(DB::raw("
-            UPDATE customer_orders c
-            INNER JOIN (
-            SELECT custplan_id,SUM(totrcvbamount)-SUM(cartage) AS Dlvred FROM sale_invoices WHERE custplan_id=$customerorder->id
-				GROUP BY custplan_id
-            ) x ON c.id = x.custplan_id
-            SET c.delivered = x.Dlvred,c.salordbal=( coalesce(totrcvbamount,0)-coalesce(cartage,0) )-x.Dlvred WHERE  c.id = $customerorder->id"));
 
 
 

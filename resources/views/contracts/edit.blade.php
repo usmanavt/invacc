@@ -33,11 +33,11 @@
                             </select>
 
                             {{-- Contract Master - Invoice Date --}}
-                            <label for="invoice_date">Invoice Date</label>
+                            <label for="invoice_date">Contract Date</label>
                             <input type="date" class="col-span-2" id="invoice_date" name="invoice_date" value="{{ $contract->invoice_date->format('Y-m-d') }}" required>
 
                             {{-- Contract Master - Invoice Number --}}
-                            <label for="number">Invoice #</label>
+                            <label for="number">Contract #</label>
                             <input type="text" class="col-span-2" id="number" name="number" placeholder="Invoice No"
                                 minlength="3" title="minimum 3 characters required" value="{{ $contract->number }}" required>
 

@@ -36,7 +36,7 @@
                             <label for="invoice_date">Contract Date<x-req /></label>
                             <input type="date" value="{{ date('Y-m-d') }}" class="col-span-2" id="invoice_date" name="Contract_date" required>
 
-                            <label for="number">Invoice #<x-req /></label>
+                            <label for="number">Contract #<x-req /></label>
                             <input type="text" class="col-span-2" id="number" name="number" placeholder="Contract No"
                                 minlength="3" title="minimum 3 characters required" required>
 

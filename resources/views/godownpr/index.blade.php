@@ -6,9 +6,9 @@
 
     <x-slot name="header">
         <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-            Purchase Return Invoice
+            Purchase Return ( For Godown)
             {{-- Create New Customer --}}
-            <a class="text-sm text-green-500 hover:text-gray-900" href="{{route('purchasereturn.create')}}">
+            <a class="text-sm text-green-500 hover:text-gray-900" href="{{route('godownpr.create')}}">
                 {{-- Add Icon --}}
                 <i class="fa fa-file fa-fw"></i>
                 Add New Record
@@ -16,7 +16,7 @@
             {{-- <span> | </span> --}}
             {{-- <button class="text-sm text-blue-300" onclick="setStatus(1)">Pending</button> --}}
             <span> | </span>
-            <button class="text-sm text-blue-300" onclick="setStatus(2)">Purchase Return History</button>
+            <button class="text-sm text-blue-300" onclick="setStatus(2)">Purchase History</button>
         </h2>
     </x-slot>
 
@@ -45,8 +45,8 @@
     var deleteIcon = function(cell, formatterParams, onRendered){ return "<i class='fa fa-trash text-red-600'></i>";};
     var printIcon = function(cell, formatterParams, onRendered){ return "<i class='fa fa-print text-pink-500'></i>";};
 
-    const getMaster = @json(route('purchasereturn.master'));
-    const getDetails = @json(route('purchasereturn.details'));
+    const getMaster = @json(route('godownpr.master'));
+    const getDetails = @json(route('godownpr.details'));
     let table;
     let searchValue = "";
     let statusValue="1";  // 1 = Pending, 2 - Completed
@@ -80,7 +80,7 @@
         },
         ajaxURL: getMaster,
         ajaxContentType:"json",
-        initialSort:[ {column:"prno", dir:"desc"} ],
+        initialSort:[ {column:"contract_id", dir:"desc"} ],
         height:"100%",
 
         columns:[
@@ -149,41 +149,37 @@
             // {title: "Dated",field: "created_at"},
 
 
+            {
+                    title:'Data Description', headerHozAlign:"center",
+                    columns:[
 
+            {title: "Purchase Return Id",field: "id",visible:false},
+            {title: "G.Pass No",field: "gpno"},
+            {title: "Supplier",field: "supplier.title"},
+            {title: "Purchase Invoice No",field: "purinvsno"},
+            // {title: "Purchase Invoice Date",field: "purinvsdt"},
+            {title: "Pur.Ret.Inv.Id",field: "contract_id"},
+            {title: "Pur.Ret.Inv.Date",field: "contract_date"},
+
+        ]},
 
             {
-                title:'Purchase Return Description', headerHozAlign:"center",
+                    title:'Total Quantity', headerHozAlign:"center",
                     columns:[
-            {title: "Suppliers",field: "supname"},
-            {title: "Return Date",field: "prdate"},
-            {title: "Purchase Return id",field: "id"},
-            {title: "Invoice Date",field: "invoice_date"},
-            {title: "Invoice No",field: "invoiceno"},
-            {title: "P.R No",field: "prno"},
-                    ]},
 
-                    {
-        title:'Purchase Return Qty/Pricing', headerHozAlign:"center",
-            columns:[
-            {title: "Total Wt",field: "prtwt"},
-            {title: "Total Pcs",field: "prtpcs"},
-            {title: "Total Feet",field: "prtfeet"},
-            {title: "Total Amount",field: "prtamount"},
-                    ]},
+            {title: "In Pcs",field: "purtotpcs"},
+            {title: "In Kg",field: "purtotwt"},
+            {title: "In Feet",field: "purtotfeet"}]},
 
-          {title:'Pending Data Against Godown GatePass', headerHozAlign:"center",
-            columns:[
-            {title: "Wt",field: "prbalwt"},
-            {title: "Pcs",field: "prbalpcs"},
-            {title: "Feet",field: "prbalfeet"},
-                    ]},
+            // {
+            //         title:'Contract Balance', headerHozAlign:"center",
+            //         columns:[
+
+            // {title: "In Pcs",field: "balpurtotpcs"},
+            // {title: "In Kg",field: "balpurtotwt"},
+            // {title: "In Feet",field: "balpurtotfeet"}]},
 
 
-            // {title: "Customer",field: "custname"},
-            // {title: "W/O GST",field: "rcvblamount"},
-            // {title: "W/GST",field: "totrcvbamount"},
-            // {title: "Delivered",field: "delivered"},
-            // {title: "Pending",field: "salordbal"},
 
             {title:"View" , formatter:viewIcon, hozAlign:"center",headerSort:false, responsive:0,
                 cellClick:function(e, cell){

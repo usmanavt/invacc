@@ -825,15 +825,6 @@ class CommercialInvoiceController extends Controller
                 WHERE  c.id = $ci->id "));
 
 
-
-
-
-
-
-
-
-
-
                 //****################# Transfert Contract Balance to Contracts
             DB::update(DB::raw("
             UPDATE contracts c

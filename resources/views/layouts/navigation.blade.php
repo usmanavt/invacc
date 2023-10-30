@@ -80,7 +80,7 @@
                             <x-dropdown-link href="{{ route('contracts.index') }}">Contracts</x-dropdown-link>
                             <x-dropdown-link href="{{ route('cis.index') }}">Importet Purchase Invoice</x-dropdown-link>
                             <x-dropdown-link href="{{ route('localpurchase.index') }}">Local Purchase Invoice</x-dropdown-link>
-                            <x-dropdown-link href="{{ route('purchasereturn.index') }}">Purchase Return</x-dropdown-link>
+                            <x-dropdown-link href="{{ route('purchasereturn.index') }}">Purchase Return Invoice</x-dropdown-link>
                             <x-dropdown-link href="{{ route('clearance.index') }}">Duty Clearance</x-dropdown-link>
                             <x-dropdown-link href="{{ route('quotations.index') }}">Price Quotation</x-dropdown-link>
                             <x-dropdown-link href="{{ route('customerorder.index') }}">Purchase Order</x-dropdown-link>
@@ -121,22 +121,12 @@
 
                         <x-slot name="content" width="60">
 
-                            {{-- <x-dropdown-link href="{{ route('contracts.index') }}">Contracts</x-dropdown-link> --}}
                             <x-dropdown-link href="{{ route('purchasing.index') }}">Goods Receive Not (I) </x-dropdown-link>
                             <x-dropdown-link href="{{ route('purchasingloc.index') }}">Goods Receive Not (L) </x-dropdown-link>
-                            {{-- <x-dropdown-link href="{{ route('cis.index') }}">Importet Purchase Invoice</x-dropdown-link> --}}
-                            {{-- <x-dropdown-link href="{{ route('localpurchase.index') }}">Local Purchase Invoice</x-dropdown-link> --}}
-                            {{-- <x-dropdown-link href="{{ route('clearance.index') }}">Duty Clearance</x-dropdown-link> --}}
-                            {{-- <x-dropdown-link href="{{ route('quotations.index') }}">Price Quotation</x-dropdown-link> --}}
-                            {{-- <x-dropdown-link href="{{ route('customerorder.index') }}">Purchase Order</x-dropdown-link> --}}
-                            {{-- <x-dropdown-link href="{{ route('saleinvoices.index') }}">Sales Invoice</x-dropdown-link> --}}
                             <x-dropdown-link href="{{ route('gatepasse.index') }}">Gate Pass</x-dropdown-link>
-                            {{-- <x-dropdown-link href="{{ route('salereturn.index') }}">Sales Return</x-dropdown-link> --}}
-                            {{-- <x-dropdown-link href="{{ route('bankpayments.index') }}">Bank Payments</x-dropdown-link> --}}
-                            {{-- <x-dropdown-link href="{{ route('bankrecivings.index') }}">Bank Recivings</x-dropdown-link> --}}
-                            {{-- <x-dropdown-link href="{{ route('cashpayments.index') }}">Cash Payments</x-dropdown-link> --}}
-                            {{-- <x-dropdown-link href="{{ route('cashrecivings.index') }}">Cash Receiving</x-dropdown-link> --}}
-                            {{-- <x-dropdown-link href="{{ route('jv.index') }}">Journal Vouchers</x-dropdown-link> --}}
+                            <x-dropdown-link href="{{ route('godownpr.index') }}">Purchase Return</x-dropdown-link>
+                            <x-dropdown-link href="{{ route('godownsr.index') }}">Sale Return</x-dropdown-link>
+
                         </x-slot>
                     </x-dropdown>
                 </div>

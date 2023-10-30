@@ -1,16 +1,16 @@
 <x-app-layout>
 
     @push('styles')
-    {{-- <link rel="stylesheet" href="{{ asset('css/tabulator_simple.min.css') }}"> --}}
-    <link href="https://unpkg.com/tabulator-tables/dist/css/tabulator.min.css" rel="stylesheet">
-    <script type="text/javascript" src="https://unpkg.com/tabulator-tables/dist/js/tabulator.min.js"></script>
+    <link rel="stylesheet" href="{{ asset('css/tabulator_simple.min.css') }}">
+    {{-- <link href="https://unpkg.com/tabulator-tables/dist/css/tabulator.min.css" rel="stylesheet"> --}}
+    {{-- <script type="text/javascript" src="https://unpkg.com/tabulator-tables/dist/js/tabulator.min.js"></script> --}}
 
     @endpush
 
 
     <x-slot name="header">
         <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-            Create Purchase Return
+            Create Purchase Return Invoice
         </h2>
     </x-slot>
 
@@ -34,13 +34,13 @@
                                         @endforeach
                                     </select> --}}
                                 <x-input-text title="Supplier Name" name="supname" id="supname" req required class="col-span-2" disabled  />
-                                <x-input-date title="Invoice Date" name="invoice_date" id="invoice_date" req required class="col-span-2" disabled  />
-                                <x-input-text title="Invoice No" name="invoiceno" id="invoiceno" req required class="col-span-2" disabled  />
+                                <x-input-date title="Purchase Invoice Date" name="invoice_date" id="invoice_date" req required class="col-span-2" disabled  />
+                                <x-input-text title="Purchase Invoice No" name="invoiceno" id="invoiceno" req required class="col-span-2" disabled  />
 
                             </div>
                             <div class="grid grid-cols-12 gap-1 py-2 items-center">
-                                <x-input-date title="P.R Date" id="prdate" name="prdate" req required class="col-span-2" />
-                                <x-input-text title="P.R No" name="prno" id="prno" value="{{$maxposeqno}}"      />
+                                <x-input-date title="Purchase Return Date" id="prdate" name="prdate" req required class="col-span-2" />
+                                <x-input-text title="Purchase Return No" name="prno" id="prno" value="{{$maxposeqno}}"      />
 
                             </div>
                         </fieldset>
@@ -410,10 +410,6 @@ var tamount=0;
 
 var updateValues = (cell) => {
         var data = cell.getData();
-        // var sum = (Number(data.bundle1) * Number(data.pcspbundle1)) + (Number(data.bundle2) * Number(data.pcspbundle2))
-        // var sum = (Number(data.saleqty) * Number(data.price))
-        // var varqty = ( Number(data.balqty) - Number(data.saleqty) )
-        // var row = cell.getRow();
 
         if(cell.getData().sku_id===1)
          {
@@ -472,21 +468,9 @@ var updateValues = (cell) => {
                 {title:"Material Name",     field:"matname",responsive:0},
                 {title:"Material Size",    field:"size",responsive:0,frozen:true, headerMenu:headerMenu},
                 {title:"UOM",         field:"unitname",responsive:0, hozAlign:"center"},
-                {title:"Unitid",       field:"sku_id",visible:true},
-                // {title:"contract_id",  field:"contract_id",visible:false},
+                {title:"Unitid",       field:"sku_id",visible:false},
                 {title:"material_id",  field:"material_id",visible:false},
                 {title:"supplier_id",  field:"supplier_id",visible:false},
-                // {title:"user_id",      field:"user_id",visible:false},
-                // {title:"category_id",  field:"category_id",visible:false},
-                // {title:"sku_id",       field:"sku_id",visible:false},
-                // {title:"dimension_id", field:"dimension_id",visible:false},
-
-
-                // {title:"StockQty", field:"balqty"},
-
-
-
-                // {title:"Variance", field:"varqty",cellEdited: updateValues,},
 
                 {
                     title:'Purchase Qty', headerHozAlign:"center",
@@ -702,7 +686,7 @@ var updateValues = (cell) => {
 
 
             var data = { 'contracts' : dynamicTableData ,
-        'supplier_id': supplier_id,'prdate':prdate.value,'purchase_id':purchase_id,'prno':prno.value };
+        'supplier_id': supplier_id,'prdate':prdate.value,'purchase_id':purchase_id,'prno':prno.value,'invoice_date':invoice_date.value,'invoiceno':invoiceno.value };
 
 
 

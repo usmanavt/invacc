@@ -1,15 +1,15 @@
 <x-app-layout>
 
     @push('styles')
-    {{-- <link rel="stylesheet" href="{{ asset('css/tabulator_simple.min.css') }}"> --}}
-    <link href="https://unpkg.com/tabulator-tables/dist/css/tabulator.min.css" rel="stylesheet">
-    <script type="text/javascript" src="https://unpkg.com/tabulator-tables/dist/js/tabulator.min.js"></script>
+    <link rel="stylesheet" href="{{ asset('css/tabulator_simple.min.css') }}">
+    {{-- <link href="https://unpkg.com/tabulator-tables/dist/css/tabulator.min.css" rel="stylesheet"> --}}
+    {{-- <script type="text/javascript" src="https://unpkg.com/tabulator-tables/dist/js/tabulator.min.js"></script> --}}
 
     @endpush
 
     <x-slot name="header">
         <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-            Edit Purchase Order
+            Edit Purchase Return Invoice
         </h2>
     </x-slot>
 
@@ -26,30 +26,35 @@
 
 
 
-                            <label for="customer_id">Customer</label>
-                            <select  autocomplete="on" class="col-span-2" name="customer_id" id="customer_id" disabled required>
-                                @foreach($customer as $customer)
-                                    @if ($customer->id == $customerorder->customer_id)
-                                    <option value="{{$customer->id}}" selected> {{$customer->title}} </option>
+                            <label for="supplier_id">Supplier</label>
+                            <select  autocomplete="on" class="col-span-2" name="supplier_id" id="supplier_id" disabled required>
+                                @foreach($supplier as $supplier)
+                                    @if ($supplier->id == $purchasereturn->supplier_id)
+                                    <option value="{{$supplier->id}}" selected> {{$supplier->title}} </option>
                                 @endif
-                                    <option value="{{$customer->id}}"> {{$customer->title}} </option>
+                                    <option value="{{$supplier->id}}"> {{$supplier->title}} </option>
                                 @endforeach
                             </select>
 
-                            <x-input-text title="" name="quotation_id" id="quotation_id" value="{{ $customerorder->quotation_id }}" hidden     />
+                            {{-- <x-input-text title="" name="quotation_id" id="quotation_id" value="{{ $customerorder->quotation_id }}" hidden     />
                             <x-input-text title="Quotation No" name="qutno" id="qutno" value="{{ $customerorder->pqutno }}" disabled     />
                             <x-input-date title="Quotation Date" name="qutdate" id="qutdate" value="{{ $customerorder->qutdate->format('Y-m-d') }}"  class="col-span-2" disabled  />
-                            <x-input-text title="P.R No" name="prno" id="prno" value="{{ $customerorder->pprno }}" disabled     />
+                            <x-input-text title="P.R No" name="prno" id="prno" value="{{ $customerorder->pprno }}" disabled     /> --}}
 
-
-
-
+                            <x-input-date title="Purchase Invoice Date" name="invoice_date" id="invoice_date" req required class="col-span-2"  value="{{ $purchasereturn->prinvdate }}" disabled  />
+                            <x-input-text title="Purchase Invoice No" name="invoiceno" id="invoiceno" req required class="col-span-2" value="{{ $purchasereturn->prinvno }}" disabled  />
                         </div>
                         <div class="grid grid-cols-12 gap-1 py-2 items-center">
-                            <x-input-date title="P.O Date" id="podate" name="podate" value="{{ $customerorder->podate->format('Y-m-d') }}" req required class="col-span-2" />
+                            <x-input-date title="Purchase Return Date" id="prdate" name="prdate" value="{{ $purchasereturn->prdate }}" req required class="col-span-2" />
+                            <x-input-text title="Purchase Return No" name="prno" id="prno" value="{{ $purchasereturn->prno }}"      />
+
+                            <x-input-text title="" name="prid" id="prid" value="{{ $purchasereturn->id }}"      />
+
+
+                                {{-- <x-input-date title="P.O Date" id="podate" name="podate" value="{{ $customerorder->podate->format('Y-m-d') }}" req required class="col-span-2" />
                             <x-input-text title="P.O #" name="pono" id="pono" value="{{ $customerorder->pono }}"  />
                             <x-input-date title="Delivery Date" name="deliverydt" value="{{ $customerorder->deliverydt->format('Y-m-d') }}" />
-                            <x-input-text title="P.O Seq.#" name="poseqno" id="poseqno" value="{{ $customerorder->poseqno }}"    required   />
+                            <x-input-text title="P.O Seq.#" name="poseqno" id="poseqno" value="{{ $customerorder->poseqno }}"    required   /> --}}
 
                             {{-- <label for="">
                                 Remakrs <span class="text-red-500 font-semibold  ">(*)</span>
@@ -64,17 +69,11 @@
 
                         </div>
 
-                        <fieldset class="border px-4 py-2 rounded">
+                        {{-- <fieldset class="border px-4 py-2 rounded">
                             <legend>Invoice Level Expenses</legend>
                             <div class="grid grid-cols-12 gap-2 py-2 items-center">
                                 <x-input-numeric title="Discou(%)" name="discntper" id="discntper" value="{{ $customerorder->discntper }}" disabled    />
-                                    {{-- <div class="basis-0 md:basis-1/5 self-center pt-4"> --}}
-                                        <input class="checked:bg-blue-500 checked:border-blue-500 focus:outline-none" type="checkbox" name="per" id="per" onclick="EnableDisableTextBox(this)" >
-                                        {{-- <label class="inline-block text-gray-800"> --}}
-
-                                        {{-- </label> --}}
-                                    {{-- </div> --}}
-
+                                 <input class="checked:bg-blue-500 checked:border-blue-500 focus:outline-none" type="checkbox" name="per" id="per" onclick="EnableDisableTextBox(this)" >
 
                                 <x-input-numeric title="Discount(Amount)" name="discntamt" id="discntamt" value="{{ $customerorder->discntamt }}"    />
                                 <x-input-numeric title="Payble Amount" name="rcvblamount" value="{{ $customerorder->rcvblamount }}" disabled />
@@ -88,10 +87,7 @@
                                 <x-input-numeric title="Total Amount" name="totrcvbamount" value="{{ $customerorder->totrcvbamount }}" disabled />
                             </div>
 
-
-
-
-                        </fieldset>
+                        </fieldset> --}}
 
                         {{-- Contract Details --}}
                         <x-tabulator-dynamic />
@@ -136,12 +132,6 @@ let dyanmicTable = ""; // Tabulator
 let dynamicTableData = @json($cd);
 
 
-// Populate sku in Tabulator
-const skus = @json($skus);
-        var newList1=[]
-        skus.forEach(e => {
-            newList1.push({value:e.title,label:e.title , id:e.id})
-        });
 
     //  ---------------- For MODAL -----------------------//
     //  Table Filter
@@ -250,64 +240,42 @@ function pushDynamicData(data)
 
 
 var updateValues = (cell) => {
+        var data = cell.getData();
 
-    sum = 0;
-    sum2=0;
-    var data = cell.getData();
-        //   var sum = (Number(data.bundle1) * Number(data.pcspbundle1)) + (Number(data.bundle2) * Number(data.pcspbundle2))
+        if(cell.getData().sku_id===1)
+         {
+             var sum =  Number(data.prgdswt) * Number(data.gdsprice)
+         }
+         if(cell.getData().sku_id===2)
+         {
+            var sum =  Number(data.prpcs) * Number(data.gdsprice)
+         }
+
+         if(cell.getData().sku_id===3)
+         {
+            var sum =  Number(data.prqtyinfeet) * Number(data.gdsprice)
+         }
+
         var row = cell.getRow();
-            var sum = (Number(data.qtykg) * Number(data.price))
-            var varqty = ( Number(data.balqty) - Number(data.qtykg) )
-            // var sum2 = (Number(data.qtykg) * Number(data.price))
-
         row.update({
+            "pramtinpkr": sum,
+            "totalVal": sum
+            // "qtyinfeet":leninft
+        });
 
-            // "rcvblamount":sum2,
-            //  "saleamnt": sum,
-            //  "totval":sum,
-            //  "gdspricetot": sum2
-            "saleamnt": sum,
-            "varqty":varqty,
-            totval: sum
-
-            });
 
     }
-    // var tamount=0;
-    function tnetamount()
-        {
 
-            // tamount=rcvblamount
-            if (discntper.disabled)
-            {discntper.value=(discntamt.value/tamount*100).toFixed(2)};
+    var totalVal = function(values, data, calcParams){
+        var calc = 0;
+        values.forEach(function(value){
+            calc += Number(value) ;
+        });
+        // tamount = calc;
+        // tnetamount();
+        return calc;
 
-            if (!discntper.disabled)
-            {discntamt.value=(tamount*discntper.value/100).toFixed(0);};
-
-
-            rcvblamount.value= ( Number(tamount)-Number(discntamt.value) )  ;
-            saletaxamt.value=(Number(rcvblamount.value) * Number(saletaxper.value) )/100 ;
-            totrcvbamount.value=(Number(rcvblamount.value)+Number(saletaxamt.value)+Number(cartage.value)).toFixed(0);
-
-
-
-        }
-
-
-var totval = function(values, data, calcParams){
-var calc = 0;
-// var abc=0;
-values.forEach(function(value){
-    // if(value > 18){
-        calc += Number(value) ;
-        // abc += Number(value) ;
-    // }
-
-});
- tamount = calc;
-  tnetamount();
-return calc;
-}
+    }
 
 //  Dynamic Table [User data]
 dynamicTable = new Tabulator("#dynamicTable", {
@@ -324,57 +292,181 @@ dynamicTable = new Tabulator("#dynamicTable", {
             }
         },
 
-        {title:"Id",                field:"material_id",    cssClass:"bg-gray-200 font-semibold"},
-        {title:"Material",          field:"material_title", cssClass:"bg-gray-200 font-semibold"},
-        {title:"Dimension",         field:"dimension",      cssClass:"bg-gray-200 font-semibold"},
-        {title:"StockQty",         field:"balqty"   },
-        {title:"VarQty",         field:"varqty",cellEdited: updateValues    },
-        {title:"Replace Description",field:"repname",       cssClass:"bg-gray-200 font-semibold",editor:true},
-        {title:"Brand",             field:"brand",editor:true,         cssClass:"bg-gray-200 font-semibold"},
-        {title:"UOM",               field:"sku"},
+        {title:"Id",           field:"id", visible:false},
+                {title:"Material Name",     field:"matname",responsive:0},
+                {title:"Material Size",    field:"size",responsive:0,frozen:true},
+                {title:"UOM",         field:"unitname",responsive:0, hozAlign:"center"},
+                {title:"Unitid",       field:"sku_id",visible:true},
+                {title:"material_id",  field:"material_id",visible:false},
+                {title:"supplier_id",  field:"supplier_id",visible:false},
+
+                {
+                    title:'Purchase Qty', headerHozAlign:"center",
+                    columns:[
+
+                    {   title:"Pcs",
+                            headerHozAlign :'right',
+                            hozAlign:"right",
+                            responsive:0,
+                            field:"pcs",
+                            // editor:"number",
+                            bottomCalc:"sum",
+                            formatter:"money",
+                            // cellEdited: updateValues,
+                            validator:["required","numeric"],
+                            cssClass:"bg-gray-200 font-semibold",
+                            formatterParams:{thousand:",",precision:0},
+                        },
+
+                        {   title:"Kg",
+                            headerHozAlign :'right',
+                            hozAlign:"right",
+                            responsive:0,
+                            field:"gdswt",
+                            // editor:"number",
+                            bottomCalc:"sum",
+                            formatter:"money",
+                            // cellEdited: updateValues,
+                            validator:["required","numeric"],
+                            cssClass:"bg-gray-200 font-semibold",
+                            formatterParams:{thousand:",",precision:0},
+                        },
+
+                        {   title:"Feet",
+                            headerHozAlign :'right',
+                            hozAlign:"right",
+                            responsive:0,
+                            field:"qtyinfeet",
+                            // editor:"number",
+                            bottomCalc:"sum",
+                            formatter:"money",
+                            // cellEdited: updateValues,
+                            validator:["required","numeric"],
+                            cssClass:"bg-gray-200 font-semibold",
+                            formatterParams:{thousand:",",precision:0},
+                        },
 
 
-        {   title:"Quantity",
-                field:"qtykg",
-                editor:"number",
-                cssClass:"bg-green-200 font-semibold",
-                validator:"required",
-                formatter:"money",
-                formatterParams:{thousand:",",precision:2},
-                validator:["required","integer"],
-                cellEdited: updateValues,
-               },
+                        {   title:"Price",
+                            headerHozAlign :'right',
+                            hozAlign:"right",
+                            responsive:0,
+                            field:"gdsprice",
+                            editor:"number",
+                            // headerVertical:true,
+                            bottomCalc:"sum",
+                            formatter:"money",
+                            cellEdited: updateValues,
+                            validator:["required","numeric"],
+                            cssClass:"bg-gray-200 font-semibold",
+                            formatterParams:{thousand:",",precision:0},
+                        },
 
 
-               { title:"Rate",
-                field:"price",
-                editor:"number",
-                cssClass:"bg-green-200 font-semibold",
-                validator:"required" ,
-                formatter:"money",
-                formatterParams:{thousand:",",precision:2},
-                validator:["required","decimal(10,3)"] ,
-                cellEdited: updateValues   ,
-            },
+                        {title:"Amount",
+                        headerHozAlign :'right',
+                        hozAlign:"right",
+                        field:"amtinpkr",
+                        cssClass:"bg-gray-200 font-semibold",
+                        formatter:"money",
+                        cssClass:"bg-gray-200 font-semibold",
+                        formatterParams:{thousand:",",precision:0},
+                        cssClass:"bg-gray-200 font-semibold",
+                        // formatter:function(cell,row)
+                        // {
+                        //     // return (cell.getData().saleqty * cell.getData().price).toFixed(0)
+                        // },
+                        // bottomCalc:totalVal
+                    },
+
+                    ],
 
 
+                },
 
-            {   title:"Amount",
-                field:"saleamnt",
-                cssClass:"bg-gray-200 font-semibold",
-                formatter:"money",
-                formatterParams:{thousand:",",precision:0},
-                // formatter:function(cell,row)
-                // {
-                //     //  return (cell.getData().bundle1 * cell.getData().pcspbundle1) + (cell.getData().bundle2 * cell.getData().pcspbundle2)
-                //      return  ( cell.getData().qtykg * cell.getData().price)
-                // },
-                bottomCalc:totval  },
+                {
+                title:'Purchase Return Qty', headerHozAlign:"center",
+                    columns:[
 
+                    {   title:"Pcs",
+                            headerHozAlign :'right',
+                            hozAlign:"right",
+                            responsive:0,
+                            field:"prpcs",
+                            editor:"number",
+                            // headerVertical:true,
+                            bottomCalc:"sum",
+                            formatter:"money",
+                            cellEdited: updateValues,
+                            validator:["required","numeric"],
+                            // cssClass:"bg-green-200 font-semibold",
+                            formatterParams:{thousand:",",precision:0},
+                        },
 
+                        {   title:"Kg",
+                            headerHozAlign :'right',
+                            hozAlign:"right",
+                            responsive:0,
+                            field:"prgdswt",
+                            editor:"number",
+                            // headerVertical:true,
+                            bottomCalc:"sum",
+                            formatter:"money",
+                            cellEdited: updateValues,
+                            validator:["required","numeric"],
+                            // cssClass:"bg-green-200 font-semibold",
+                            formatterParams:{thousand:",",precision:0},
+                        },
 
-    ],
-})
+                        {   title:"feet",
+                            headerHozAlign :'right',
+                            hozAlign:"right",
+                            responsive:0,
+                            field:"prqtyinfeet",
+                            editor:"number",
+                            // headerVertical:true,
+                            bottomCalc:"sum",
+                            formatter:"money",
+                            cellEdited: updateValues,
+                            validator:["required","numeric"],
+                            // cssClass:"bg-green-200 font-semibold",
+                            formatterParams:{thousand:",",precision:0},
+                        },
+
+                        {title:"Return Amount",
+                        headerHozAlign :'right',
+                        hozAlign:"right",
+                        field:"pramtinpkr",
+                        formatter:"money",
+                        cellEdited: updateValues,
+                        formatterParams:{thousand:",",precision:0},
+                        cssClass:"bg-gray-200 font-semibold",
+                        formatter:function(cell,row)
+                        {
+                            //  return (cell.getData().saleqty * cell.getData().price).toFixed(0)
+
+                             if(cell.getData().sku_id===1)
+                            {
+                                return  Number(cell.getData().prgdswt) * Number(cell.getData().gdsprice)
+                            }
+                            if(cell.getData().sku_id===2)
+                            {
+                                 return  Number(cell.getData().prpcs ) * Number(cell.getData().gdsprice)
+                                //  return Number(cell.getData().gdsprice )
+                            }
+
+                            if(cell.getData().sku_id===3)
+                            {
+                                return  Number(cell.getData().prqtyinfeet ) * Number(cell.getData().gdsprice)
+                            }
+                        },
+                        bottomCalc:totalVal
+                    },
+                    ]},
+
+            ],
+        })
+
 
 // Add event handler to read keyboard key up event
 document.addEventListener('keyup', (e)=>{
@@ -396,26 +488,26 @@ function disableSubmitButton()
   // Validation & Post
 function validateForm()
 {
-    var sid = document.getElementById("customer_id");
-        var customer_id = sid.options[sid.selectedIndex];
+    var sid = document.getElementById("supplier_id");
+        var supplier_id = sid.options[sid.selectedIndex];
         var deliverydt = document.getElementById("deliverydt");
         var qutno = document.getElementById("qutno");
         var prno = document.getElementById("prno");
         var podate = document.getElementById("podate");
         var quotation_id = document.getElementById("quotation_id");
 
-        var discntper= document.getElementById("discntper");
-        var cartage= document.getElementById("cartage");
-        var discntamt= document.getElementById("discntamt");
-        var rcvblamount= document.getElementById("rcvblamount");
-        var per= document.getElementById("per");
+        // var discntper= document.getElementById("discntper");
+        // var cartage= document.getElementById("cartage");
+        // var discntamt= document.getElementById("discntamt");
+        // var rcvblamount= document.getElementById("rcvblamount");
+        // var per= document.getElementById("per");
 
 
     // Required
-    if(customer_id.value < 0)
+    if(supplier_id.value < 0)
         {
             showSnackbar("Please select From Customer");
-            customer_id.focus();
+            supplier_id.focus();
             return;
         }
         // if(saldate.value === "")
@@ -424,12 +516,12 @@ function validateForm()
         //     saldate.focus();
         //     return;
         // }
-        if(poseqno.value == 0)
-        {
-            showSnackbar("Please add poseqno");
-            poseqno.focus();
-            return;
-        }
+        // if(poseqno.value == 0)
+        // {
+        //     showSnackbar("Please add poseqno");
+        //     poseqno.focus();
+        //     return;
+        // }
 
         // if(prno.value == "")
         // {
@@ -438,16 +530,16 @@ function validateForm()
         //     return;
         // }
 
-        // if(customer_id.value == 0)
+        // if(supplier_id.value == 0)
         // {
 
 
-            if(pono.value == "" )
-            {
-            showSnackbar("Please add pono");
-            pono.focus();
-            return;
-             }
+            // if(pono.value == "" )
+            // {
+            // showSnackbar("Please add pono");
+            // pono.focus();
+            // return;
+            //  }
         // }
 
 
@@ -473,28 +565,21 @@ function validateForm()
             return;
         }
     }
-    // 'total' : parseFloat(banktotal.value).toFixed(2),
     disableSubmitButton(true);
-    //  var data = { 'sales' : dynamicTableData,'contract_id':parseFloat(contract_id.value).toFixed(0),'bankntotal':parseFloat(bankntotal.value).toFixed(0),'collofcustom':parseFloat(exataxoffie.value).toFixed(0),'exataxoffie':parseFloat(exataxoffie.value).toFixed(0) ,'bankcharges':parseFloat(bankcharges.value).toFixed(0) ,'supplier_id': supplier_id.value,'invoice_date':invoice_date.value,'invoiceno':invoiceno.value};
-    //  var data = { 'customerorder' : dynamicTableData,'rcvblamount':rcvblamount.value,'cartage':cartage.value,'discntamt':discntamt.value,'discntper':discntper.value ,
-    //  'customer_id': customer_id.value,'saldate':saldate.value,'qutno':qutno.value,'prno':prno.value,'sale_invoice_id':sale_invoice_id.value,
-    //  'saletaxper':saletaxper.value,'saletaxamt':saletaxamt.value,'totrcvbamount':totrcvbamount.value,
-    //  'valdate':valdate.value,'cashcustomer':cashcustomer.value,'cashcustadrs':cashcustadrs.value};
 
-     // var data = { 'contracts' : dynamicTableData,'banktotal':parseFloat(total.value).toFixed(2),'exataxoffie':parseFloat(exataxoffie.value).toFixed(2),'collofcustom':parseFloat(collofcustom.value).toFixed(2),'bankcharges':parseFloat(bankcharges.value).toFixed(2) ,'supplier_id': supplier_id.value,'invoice_date':invoice_date.value,'invoiceno':number.value};
-    // All Ok - Proceed
+    // var data = { 'purchasereturn' : dynamicTableData,
+    //     'supplier_id': supplier_id.value,'deliverydt':deliverydt.value,'quotation_id':quotation_id.value,'poseqno':poseqno.value,
+    //     'saletaxper':saletaxper.value,'saletaxamt':saletaxamt.value,'totrcvbamount':totrcvbamount.value,
+    //     'podate':podate.value,'pono':pono.value,'qutno':qutno.value,'qutdate':qutdate.value,'prno':prno.value
+    // ,'sale_invoice_id':sale_invoice_id.value};
 
-    var data = { 'customerorder' : dynamicTableData,'rcvblamount':rcvblamount.value,'cartage':cartage.value,'discntamt':discntamt.value,'discntper':discntper.value,'discntper':discntper.value ,
-        'customer_id': customer_id.value,'deliverydt':deliverydt.value,'quotation_id':quotation_id.value,'poseqno':poseqno.value,
-        'saletaxper':saletaxper.value,'saletaxamt':saletaxamt.value,'totrcvbamount':totrcvbamount.value,
-        'podate':podate.value,'pono':pono.value,'qutno':qutno.value,'qutdate':qutdate.value,'prno':prno.value
-    ,'sale_invoice_id':sale_invoice_id.value};
+    var data = { 'purchasereturn' : dynamicTableData ,
+        'supplier_id': supplier_id.value,'prdate':prdate.value,'prid':prid.value,'prno':prno.value,'invoice_date':invoice_date.value,'invoiceno':invoiceno.value };
 
 
 
 
-
-    fetch(@json(route('customerorder.update',$customerorder)),{
+    fetch(@json(route('purchasereturn.update',$purchasereturn)),{
         credentials: 'same-origin', // 'include', default: 'omit'
         method: 'PUT', // 'GET', 'PUT', 'DELETE', etc.
         // body: formData, // Coordinate the body type with 'Content-Type'
@@ -510,7 +595,7 @@ function validateForm()
     .then( response => {
         if (response == 'success')
         {
-            window.open(window.location.origin + "/customerorder","_self" );
+            window.open(window.location.origin + "/purchasereturn","_self" );
         }
     })
     .catch(error => {
@@ -519,29 +604,29 @@ function validateForm()
     })
 }
 
-function EnableDisableTextBox(per) {
-        var discntper = document.getElementById("discntper");
-        discntper.disabled = per.checked ? false : true;
-        discntper.style.color ="black";
-        // if (!discntper.disabled) {
-        //     discntper.focus();
-        // }
-    }
+// function EnableDisableTextBox(per) {
+//         var discntper = document.getElementById("discntper");
+//         discntper.disabled = per.checked ? false : true;
+//         discntper.style.color ="black";
+//         // if (!discntper.disabled) {
+//         //     discntper.focus();
+//         // }
+//     }
 
 
-discntper.onblur=function(){
-    // per=false
+// discntper.onblur=function(){
+//     // per=false
 
-    // discntamt.value=(tamount*discntper.value/100).toFixed(0);
-    tnetamount();
-    }
+//     // discntamt.value=(tamount*discntper.value/100).toFixed(0);
+//     tnetamount();
+//     }
 
 
-discntamt.onblur=function(){
-    // tnetamount1();
-    // discntper.value=(discntamt.value/tamount*100).toFixed(2);
-    tnetamount();
-    }
+// discntamt.onblur=function(){
+//     // tnetamount1();
+//     // discntper.value=(discntamt.value/tamount*100).toFixed(2);
+//     tnetamount();
+//     }
 
 
 </script>

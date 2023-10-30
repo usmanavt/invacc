@@ -188,6 +188,13 @@ class SalesRetunrsController  extends Controller
                 $lpd->price = $cont['price'];
                 $lpd->saleamnt = $cont['saleamnt'];
 
+                $lpd->prtbalwt = $cont['qtykg'];
+                $lpd->prtbalpcs = $cont['qtypcs'];
+                $lpd->prtbalfeet = $cont['qtyfeet'];
+
+
+
+
                 $lpd->qtykgcrt = $cont['salcostkg'];
                 $lpd->qtypcscrt = $cont['salcostpcs'];
                 $lpd->qtyfeetcrt = $cont['salcostfeet'];
@@ -340,6 +347,7 @@ class SalesRetunrsController  extends Controller
             }
             // Now update existing and add new
             foreach ($cds as $cd) {
+                // dd($cd->id);
                 if($cd->id)
                 {
                     $cds = SaleReturnDetails::where('id',$cd->id)->first();
@@ -357,6 +365,14 @@ class SalesRetunrsController  extends Controller
                     $cds->qtykgcrt = $cd['qtykgcrt'];
                     $cds->qtypcscrt = $cd['qtypcscrt'];
                     $cds->qtyfeetcrt = $cd['qtyfeetcrt'];
+
+                    $cds->prtbalwt = $cd['qtykg'];
+                    $cds->prtbalpcs = $cd['qtypcs'];
+                    $cds->prtbalfeet = $cd['qtyfeet'];
+
+
+
+
                     $cds->save();
 
 

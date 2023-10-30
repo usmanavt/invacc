@@ -42,6 +42,9 @@ use App\Http\Controllers\GatepasseController;
 use App\Http\Controllers\OpeningGodownStockController;
 use App\Http\Controllers\PurchasinglocController;
 use App\Http\Controllers\PurchaseReturnController;
+use App\Http\Controllers\GodownprController;
+use App\Http\Controllers\GodownsrController;
+
 
 
 
@@ -252,10 +255,6 @@ Route::resource('purchasereturn', PurchaseReturnController::class);
 
 
 
-
-
-
-
 //  Purchasing Imported
 Route::get('/Purchasing/getPurchasingMaster', [PurchasingController::class, 'getMaster'])->name('purchasing.master');
 Route::get('/Purchasing/getPurchasingDetails', [PurchasingController::class, 'getDetail'])->name('purchasing.details');
@@ -271,7 +270,20 @@ Route::get('/Purchasingloc/P.urinvsDetail', [PurchasinglocController::class, 'ge
 Route::resource('purchasingloc', PurchasinglocController::class);
 
 
+//  Godown purhcase return
+Route::get('/godownpr/getPurchasingMaster', [GodownprController::class, 'getMaster'])->name('godownpr.master');
+Route::get('/godownpr/getPurchasingDetails', [GodownprController::class, 'getDetail'])->name('godownpr.details');
+Route::get('/godownpr/PurinvsMaster', [GodownprController::class, 'getMasterpendipurnvs'])->name('purinvspr.master');
+Route::get('/godownpr/P.urinvsDetail', [GodownprController::class, 'getContractDetails'])->name('purinvspr.detail');
+Route::resource('godownpr', GodownprController::class);
 
+
+//  Godown sale return
+Route::get('/godownsr/getPurchasingMaster', [GodownsrController::class, 'getMaster'])->name('godownsr.master');
+Route::get('/godownsr/getPurchasingDetails', [GodownsrController::class, 'getDetail'])->name('godownsr.details');
+Route::get('/godownsr/PurinvsMaster', [GodownsrController::class, 'getMasterpendipurnvs'])->name('purinvssr.master');
+Route::get('/godownsr/P.urinvsDetail', [GodownsrController::class, 'getContractDetails'])->name('purinvssr.detail');
+Route::resource('godownsr', GodownsrController::class);
 
 
 
