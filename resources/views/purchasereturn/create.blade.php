@@ -292,13 +292,13 @@
                         pcs :           obj.pcs ,
                         gdswt   :           obj.gdswt,
                         qtyinfeet:           obj.qtyinfeet,
-                        prprice:             obj.gdsprice,
+                        prprice:             obj.prprice,
                         amtinpkr:             obj.amtinpkr,
 
                         prpcs :              obj.prpcs ,
-                        prwt   :            obj.prgdswt,
-                        prfeet:             obj.prqtyinfeet,
-                        pramount:         obj.pramtinpkr,
+                        prwt   :            obj.prwt,
+                        prfeet:             obj.prfeet,
+                        pramount:         obj.pramount,
 
 
 
@@ -614,7 +614,6 @@ var updateValues = (cell) => {
                         cssClass:"bg-gray-200 font-semibold",
                         formatter:function(cell,row)
                         {
-                            //  return (cell.getData().saleqty * cell.getData().price).toFixed(0)
 
                              if(cell.getData().sku_id===1)
                             {
