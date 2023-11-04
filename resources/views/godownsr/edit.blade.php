@@ -1,9 +1,9 @@
 <x-app-layout>
 
     @push('styles')
-    <link rel="stylesheet" href="{{ asset('css/tabulator_simple.min.css') }}">
-    {{-- <link href="https://unpkg.com/tabulator-tables/dist/css/tabulator.min.css" rel="stylesheet"> --}}
-    {{-- <script type="text/javascript" src="https://unpkg.com/tabulator-tables/dist/js/tabulator.min.js"></script> --}}
+    {{-- <link rel="stylesheet" href="{{ asset('css/tabulator_simple.min.css') }}"> --}}
+    <link href="https://unpkg.com/tabulator-tables/dist/css/tabulator.min.css" rel="stylesheet">
+    <script type="text/javascript" src="https://unpkg.com/tabulator-tables/dist/js/tabulator.min.js"></script>
 
     @endpush
 
@@ -329,7 +329,7 @@ dynamicTable = new Tabulator("#dynamicTable", {
                 {title:"Unitid",       field:"sku_id",visible:false},
 
                 {
-                    title:'Purchase Return Invoice', headerHozAlign:"center",
+                    title:'Sale Return Invoice', headerHozAlign:"center",
                     columns:[
                         // {   title:"Replace Name",headerHozAlign :'center',field:"repname",responsive:0,editor:true},
                         // {   title:"Brand",headerHozAlign :'center',field:"mybrand",responsive:0,editor:true},

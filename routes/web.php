@@ -45,6 +45,8 @@ use App\Http\Controllers\PurchaseReturnController;
 use App\Http\Controllers\GodownprController;
 use App\Http\Controllers\GodownsrController;
 
+use App\Http\Controllers\SalesInvoiceWopoController;
+
 
 
 
@@ -195,13 +197,28 @@ Route::resource('openinggodownstock', OpeningGodownStockController::class);
 
 
 
-//  Sales Invoices
+//  Sales Invoices with purchase orders
 
 Route::get('/sales/getSalesMaster', [SalesInvoicesController::class, 'getMaster'])->name('sales.master');
 Route::get('/sales/getSalesDetails', [SalesInvoicesController::class, 'getDetail'])->name('sales.details');
 Route::get('/sales/getSalesCustplan', [SalesInvoicesController::class, 'getMastercustplan'])->name('sales.custplan');
 Route::get('/sales/getSalesCustplandtl', [SalesInvoicesController::class, 'getDetailscustplan'])->name('sales.custplandtl');
 Route::resource('saleinvoices', SalesInvoicesController::class);
+
+
+//  Sales Invoices with out purchase orders
+
+Route::get('/salewopo/getSalesMaster', [SalesInvoiceWopoController::class, 'getMaster'])->name('saleswopo.master');
+Route::get('/salewopo/getSalesDetails', [SalesInvoiceWopoController::class, 'getDetail'])->name('saleswopo.details');
+Route::get('/salewopo/getSalesCustplan', [SalesInvoiceWopoController::class, 'getMastercustplan'])->name('saleswopo.custplan');
+Route::get('/salewopo/getSalesCustplandtl', [SalesInvoiceWopoController::class, 'getDetailscustplan'])->name('saleswopo.custplandtl');
+Route::resource('salewopo', SalesInvoiceWopoController::class);
+
+
+
+
+
+
 
 
 

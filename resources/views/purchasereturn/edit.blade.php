@@ -1,9 +1,9 @@
 <x-app-layout>
 
     @push('styles')
-    <link rel="stylesheet" href="{{ asset('css/tabulator_simple.min.css') }}">
-    {{-- <link href="https://unpkg.com/tabulator-tables/dist/css/tabulator.min.css" rel="stylesheet"> --}}
-    {{-- <script type="text/javascript" src="https://unpkg.com/tabulator-tables/dist/js/tabulator.min.js"></script> --}}
+    {{-- <link rel="stylesheet" href="{{ asset('css/tabulator_simple.min.css') }}"> --}}
+    <link href="https://unpkg.com/tabulator-tables/dist/css/tabulator.min.css" rel="stylesheet">
+    <script type="text/javascript" src="https://unpkg.com/tabulator-tables/dist/js/tabulator.min.js"></script>
 
     @endpush
 
@@ -244,21 +244,21 @@ var updateValues = (cell) => {
 
         if(cell.getData().sku_id===1)
          {
-             var sum =  Number(data.prgdswt) * Number(data.gdsprice)
+             var sum =  Number(data.prwt) * Number(data.prprice)
          }
          if(cell.getData().sku_id===2)
          {
-            var sum =  Number(data.prpcs) * Number(data.gdsprice)
+            var sum =  Number(data.prpcs) * Number(data.prprice)
          }
 
          if(cell.getData().sku_id===3)
          {
-            var sum =  Number(data.prqtyinfeet) * Number(data.gdsprice)
+            var sum =  Number(data.prfeet) * Number(data.prprice)
          }
 
         var row = cell.getRow();
         row.update({
-            "pramtinpkr": sum,
+            "pramount": sum,
             "totalVal": sum
             // "qtyinfeet":leninft
         });
@@ -351,7 +351,7 @@ dynamicTable = new Tabulator("#dynamicTable", {
                             headerHozAlign :'right',
                             hozAlign:"right",
                             responsive:0,
-                            field:"gdsprice",
+                            field:"prprice",
                             editor:"number",
                             // headerVertical:true,
                             bottomCalc:"sum",
@@ -407,7 +407,7 @@ dynamicTable = new Tabulator("#dynamicTable", {
                             headerHozAlign :'right',
                             hozAlign:"right",
                             responsive:0,
-                            field:"prgdswt",
+                            field:"prwt",
                             editor:"number",
                             // headerVertical:true,
                             bottomCalc:"sum",
@@ -422,7 +422,7 @@ dynamicTable = new Tabulator("#dynamicTable", {
                             headerHozAlign :'right',
                             hozAlign:"right",
                             responsive:0,
-                            field:"prqtyinfeet",
+                            field:"prfeet",
                             editor:"number",
                             // headerVertical:true,
                             bottomCalc:"sum",
@@ -436,30 +436,27 @@ dynamicTable = new Tabulator("#dynamicTable", {
                         {title:"Return Amount",
                         headerHozAlign :'right',
                         hozAlign:"right",
-                        field:"pramtinpkr",
+                        field:"pramount",
                         formatter:"money",
                         cellEdited: updateValues,
-                        formatterParams:{thousand:",",precision:0},
                         cssClass:"bg-gray-200 font-semibold",
                         formatter:function(cell,row)
                         {
-                            //  return (cell.getData().saleqty * cell.getData().price).toFixed(0)
-
+                            var data = cell.getData()
                              if(cell.getData().sku_id===1)
                             {
-                                return  Number(cell.getData().prgdswt) * Number(cell.getData().gdsprice)
+                                return  Number(cell.getData().prwt) * Number(cell.getData().prprice)
                             }
                             if(cell.getData().sku_id===2)
                             {
-                                 return  Number(cell.getData().prpcs ) * Number(cell.getData().gdsprice)
-                                //  return Number(cell.getData().gdsprice )
+                                 return  Number(cell.getData().prpcs ) * Number(cell.getData().prprice)
                             }
 
                             if(cell.getData().sku_id===3)
                             {
-                                return  Number(cell.getData().prqtyinfeet ) * Number(cell.getData().gdsprice)
+                                return  Number(cell.getData().prfeet ) * Number(cell.getData().prprice)
                             }
-                        },
+                        },formatterParams:{thousand:",",precision:0},
                         bottomCalc:totalVal
                     },
                     ]},

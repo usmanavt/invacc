@@ -171,15 +171,15 @@ class PurchaseReturnController  extends Controller
                 $lpd->prid = $ci->id;
                 $lpd->material_id = $cont['material_id'];
                 $lpd->prunitid = $cont['sku_id'];
-                $lpd->prwt = $cont['prgdswt'];
+                $lpd->prwt = $cont['prwt'];
                 $lpd->prpcs = $cont['prpcs'];
-                $lpd->prfeet = $cont['prqtyinfeet'];
-                $lpd->prprice = $cont['gdsprice'];
-                $lpd->pramount = $cont['pramtinpkr'];
+                $lpd->prfeet = $cont['prfeet'];
+                $lpd->prprice = $cont['prprice'];
+                $lpd->pramount = $cont['pramount'];
 
-                $lpd->prtbalwt = $cont['prgdswt'];
+                $lpd->prtbalwt = $cont['prwt'];
                 $lpd->prtbalpcs = $cont['prpcs'];
-                $lpd->prtbalfeet = $cont['prqtyinfeet'];
+                $lpd->prtbalfeet = $cont['prfeet'];
 
 
 
@@ -258,11 +258,11 @@ class PurchaseReturnController  extends Controller
                     $c->prid = $ci->id;
                     $c->material_id = $cd['material_id'];
                     $c->prunitid = $cd['sku_id'];
-                    $c->prwt = $cd['prgdswt'];
+                    $c->prwt = $cd['prwt'];
                     $c->prpcs = $cd['prpcs'];
-                    $c->prfeet = $cd['prqtyinfeet'];
-                    $c->prprice = $cd['gdsprice'];
-                    $c->pramount = $cd['pramtinpkr'];
+                    $c->prfeet = $cd['prfeet'];
+                    $c->prprice = $cd['prprice'];
+                    $c->pramount = $cd['pramount'];
                  $c->save();
                 }
 

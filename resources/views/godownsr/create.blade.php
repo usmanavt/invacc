@@ -530,7 +530,7 @@ var updateValues = (cell) => {
                 {title:"Unitid",       field:"sku_id",visible:false},
 
                 {
-                    title:'Purchase Return Invoice', headerHozAlign:"center",
+                    title:'Sale Return Invoice', headerHozAlign:"center",
                     columns:[
                         // {   title:"Replace Name",headerHozAlign :'center',field:"repname",responsive:0,editor:true},
                         // {   title:"Brand",headerHozAlign :'center',field:"mybrand",responsive:0,editor:true},

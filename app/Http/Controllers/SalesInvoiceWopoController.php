@@ -26,11 +26,11 @@ use \Mpdf\Mpdf as PDF;
 use Illuminate\Support\Facades\Session;
 
 // LocalPurchaseController
-class SalesInvoicesController  extends Controller
+class SalesInvoiceWopoController  extends Controller
 {
     public function index(Request $request)
     {
-         return view('sales.index');
+         return view('salewopo.index');
 
 
     }
@@ -66,7 +66,7 @@ class SalesInvoicesController  extends Controller
         $size = $request->size;
         $field = $request->sort[0]["field"];     //  Nested Array
         $dir = $request->sort[0]["dir"];         //  Nested Array
-        $cis = SaleInvoices::where('custplan_id','<>','0')
+        $cis = SaleInvoices::where('custplan_id','=','0')
         ->where(function ($query) use ($search){
                 $query->where('dcno','LIKE','%' . $search . '%')
                 // ->orWhere('gpno','LIKE','%' . $search . '%')
@@ -98,11 +98,11 @@ class SalesInvoicesController  extends Controller
         $size = $request->size;
         $field = $request->sort[0]["field"];     //  Nested Array
         $dir = $request->sort[0]["dir"];         //  Nested Array
-        $contracts = DB::table('vwmastercustplan')
+        $contracts = DB::table('vwmatcatfrsale')
         // ->join('suppliers', 'contracts.supplier_id', '=', 'suppliers.id')
         // ->select('contracts.*', 'suppliers.title')
-        ->where('custname', 'like', "%$search%")
-        ->orWhere('pono', 'like', "%$search%")
+        ->where('srchb', 'like', "%$search%")
+        // ->orWhere('pono', 'like', "%$search%")
         ->orderBy($field,$dir)
         ->paginate((int) $size);
         return $contracts;
@@ -113,7 +113,7 @@ class SalesInvoicesController  extends Controller
         $id = $request->id;
         // dd($id);
         //  $contractDetails = DB::table('vwdetailcustplan')->where('sale_invoice_id',$id)->get();
-        $contractDetails = DB::select('call procdetailcustplan(?)',array( $id ));
+        $contractDetails = DB::select('call procdetailsalewopo(?)',array( $id ));
         return response()->json($contractDetails, 200);
     }
 
@@ -131,10 +131,10 @@ class SalesInvoicesController  extends Controller
         $maxgpno = DB::table('sale_invoices')->select('gpno')->max('gpno')+1;
         $maxbillno = DB::table('sale_invoices')->select('billno')->max('billno')+1;
 
-        return \view ('sales.create',compact('maxdcno','maxgpno','maxbillno'))
+        return \view ('salewopo.create',compact('maxdcno','maxgpno','maxbillno'))
         ->with('customers',Customer::select('id','title')->get())
-         ->with('locations',Location::select('id','title')->get());
-        // ->with('skus',Sku::select('id','title')->get());
+        //  ->with('locations',Location::select('id','title')->get());
+         ->with('skus',Sku::select('id','title')->get());
 
         // ->with('maxdcno',lastsalinvno::select('id','poseqno')->get());
 
@@ -158,9 +158,9 @@ class SalesInvoicesController  extends Controller
         try {
             $ci = new SaleInvoices();
 
-            $ci->custplan_id = $request->custplan_id;
-            $ci->pono = $request->pono;
-            $ci->podate = $request->podate;
+            $ci->custplan_id = 0;
+            $ci->pono = 'Without P.O';
+            $ci->podate = $request->deliverydt;
             $ci->saldate = $request->deliverydt;
             $ci->dcno = $request->dcno;
             $ci->gpno = $request->gpno;
@@ -358,38 +358,15 @@ class SalesInvoicesController  extends Controller
     public function edit($id)
     {
 
-        // $planid = SaleInvoices::select('custplan_id')->where('id',$id)->first();
-        // $planid = DB::table('sale_invoices')->where('id',$id)->select('custplan_id')->max('custplan_id');
-         $cd = DB::select('call procdetailcustplanedit (?)',array( $id ));
-        // $cd = DB::table('sale_invoices_details')
-        // ->join('materials', 'materials.id', '=', 'sale_invoices_details.material_id')
-        // ->join('skus', 'skus.id', '=', 'sale_invoices_details.sku_id')
-        // ->join('sale_invoices', 'sale_invoices.id', '=', 'sale_invoices_details.sale_invoice_id')
-        // ->join('customer_orders', 'customer_orders.id', '=', 'sale_invoices_details.sale_invoice_id')
-        // ->join('customer_order_details', 'customer_orders.id', '=', 'customer_order_details.sale_invoice_id')
-        // ->and('customer_order_details.material_id', '=', 'sale_invoices_details.material_id'     )
-
-
-        // ->select('sale_invoices_details.*','customer_order_details.balqty','materials.title as material_title','materials.dimension','skus.title as sku'
-        // , '0 as balqty'
-        // 'tmptblcustplan1.totqty' ,'tmptblcustplan1.wtper','tmptblcustplan1.pcper','tmptblcustplan1.feetper'
-        // ,'tmptblcustplan1.qtykg as sqtykg','tmptblcustplan1.qtypcs as sqtypcs','tmptblcustplan1.qtyfeet as sqtyfeet'
-
-        // DB::raw('( CASE sale_invoices_details.sku_id  WHEN  1 THEN sale_invoices_details.qtykg WHEN 2 THEN sale_invoices_details.qtypcs WHEN 3 THEN sale_invoices_details.qtyfeet  END) AS feedqty')
-        // ,DB::raw('( CASE sale_invoices_details.sku_id  WHEN  1 THEN sale_invoices_details.qtykg WHEN 2 THEN sale_invoices_details.qtypcs WHEN 3 THEN sale_invoices_details.qtyfeet  END) + tmptblcustplan1.balqty AS balqty')
-        // ,DB::raw(' tmptblcustplan1.balqty + sale_invoices_details.feedqty   AS balqty')
-
-        // )
-        // ->where('sale_invoices_details.sale_invoice_id',$id)->get();
+         $cd = DB::select('call procsalewosoedit (?)',array( $id ));
          $data=compact('cd');
          $locations = Location::select('id','title')->where('status',1)->get();
-
-        return view('sales.edit')
+        return view('salewopo.edit')
         ->with('customer',Customer::select('id','title')->get())
         ->with('saleinvoices',SaleInvoices::findOrFail($id))
         ->with($data)
-        ->with('skus',Sku::select('id','title')->get())
-        ->with('locations',Location::select('id','title')->get());
+        ->with('skus',Sku::select('id','title')->get());
+        // ->with('locations',Location::select('id','title')->get());
 
         // return view('contracts.edit')->with('suppliers',Supplier::select('id','title')->get())->with('contract',$contract)->with('cd',ContractDetails::where('contract_id',$contract->id)->get());
     }
@@ -404,9 +381,9 @@ class SalesInvoicesController  extends Controller
 
             //  dd($request->sale_invoice_id);
             $sale_invoices = SaleInvoices::findOrFail($request->sale_invoice_id);
-            $sale_invoices->custplan_id = $request->custplan_id;
-            $sale_invoices->pono = $request->pono;
-            $sale_invoices->podate = $request->podate;
+            $sale_invoices->custplan_id = 0;
+            $sale_invoices->pono = 'Without P.O';
+            $sale_invoices->podate = $request->deliverydt;
             $sale_invoices->saldate = $request->deliverydt;
             $sale_invoices->dcno = $request->dcno;
             $sale_invoices->gpno = $request->gpno;
@@ -422,7 +399,7 @@ class SalesInvoicesController  extends Controller
             $sale_invoices->save();
 
             // Get Data
-            $cds = $request->saleinvoices; // This is array
+            $cds = $request->salewopo; // This is array
             $cds = SaleInvoicesDetails::hydrate($cds); // Convert it into Model Collection
             // Now get old ContractDetails and then get the difference and delete difference
             $oldcd = SaleInvoicesDetails::where('sale_invoice_id',$sale_invoices->id)->get();
