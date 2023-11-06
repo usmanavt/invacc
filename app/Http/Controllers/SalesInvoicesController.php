@@ -186,6 +186,7 @@ class SalesInvoicesController  extends Controller
                 $lpd->qtykg = $cont['qtykg'];
                 $lpd->qtypcs = $cont['qtypcs'];
                 $lpd->qtyfeet = $cont['qtyfeet'];
+                $lpd->unitconver = $cont['unitconver'];
                 $lpd->price = $cont['price'];
                 $lpd->saleamnt = $cont['saleamnt'];
                 $lpd->feedqty = $cont['feedqty'];
@@ -444,6 +445,8 @@ class SalesInvoicesController  extends Controller
                     $cds->qtykg = $cd['qtykg'];
                     $cds->qtypcs = $cd['qtypcs'];
                     $cds->qtyfeet = $cd['qtyfeet'];
+                    $cds->unitconver = $cd['unitconver'];
+
                     $cds->price = $cd['price'];
                     $cds->saleamnt = $cd['saleamnt'];
                     $cds->feedqty = $cd['feedqty'];

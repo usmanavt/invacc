@@ -44,8 +44,12 @@ use App\Http\Controllers\PurchasinglocController;
 use App\Http\Controllers\PurchaseReturnController;
 use App\Http\Controllers\GodownprController;
 use App\Http\Controllers\GodownsrController;
-
 use App\Http\Controllers\SalesInvoiceWopoController;
+use App\Http\Controllers\PaymentController;
+
+
+
+
 
 
 
@@ -261,6 +265,26 @@ Route::get('/custorders/getQuotationsDetails', [CustomerOrderController::class, 
 Route::get('/custorders/getcidMaster', [CustomerOrderController::class, 'getMasterqut'])->name('custorders.quotations');
 Route::get('/custorders/getCustordersQuotationsdtl', [CustomerOrderController::class, 'getDetailsqut'])->name('custorders.quotationsdtl');
 Route::resource('customerorder', CustomerOrderController::class);
+
+
+
+//  Payment Voucher
+Route::get('/payments/getQuotationsMaster', [PaymentController::class, 'getMaster'])->name('custorders.master');
+Route::get('/payments/getQuotationsDetails', [PaymentController::class, 'getDetail'])->name('custorders.details');
+Route::get('/payments/getcidMaster', [PaymentController::class, 'getMasterqut'])->name('custorders.quotations');
+Route::get('/payments/getCustordersQuotationsdtl', [PaymentController::class, 'getDetailsqut'])->name('custorders.quotationsdtl');
+Route::resource('payments', PaymentController::class);
+
+
+
+
+
+
+
+
+
+
+
 
 
 //  Purchase Return

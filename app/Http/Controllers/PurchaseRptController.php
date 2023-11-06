@@ -365,6 +365,7 @@ class PurchaseRptController extends Controller
         if($report_type === 'glhw'){
             //  dd($request->all());
             $head_id = $request->head_id;
+            //  dd($request->all());
             $head = Supplier::findOrFail($head_id);
             if($request->has('subhead_id')){
                 $subhead_id = $request->subhead_id;

@@ -1,9 +1,9 @@
 <x-app-layout>
 
     @push('styles')
-    {{-- <link rel="stylesheet" href="{{ asset('css/tabulator_simple.min.css') }}"> --}}
-    <link href="https://unpkg.com/tabulator-tables/dist/css/tabulator.min.css" rel="stylesheet">
-    <script type="text/javascript" src="https://unpkg.com/tabulator-tables/dist/js/tabulator.min.js"></script>
+    <link rel="stylesheet" href="{{ asset('css/tabulator_simple.min.css') }}">
+    {{-- <link href="https://unpkg.com/tabulator-tables/dist/css/tabulator.min.css" rel="stylesheet"> --}}
+    {{-- <script type="text/javascript" src="https://unpkg.com/tabulator-tables/dist/js/tabulator.min.js"></script> --}}
 
     @endpush
 
@@ -309,18 +309,17 @@ function pushDynamicData(data)
             qtykg=data.feedqty
          }
         //  if(cell.getData().sku_id==2)
-        if(data.sku==='PCS')
+        if(data.sku==='PCS' || data.sku==='METER'  )
          {
+
             var sum = (Number(data.feedqty) * Number(data.price))
-            // var pr1=(Number(data.qtypcs) / Number(data.totqty))*100
             var pr1=(Number(data.feedqty) / Number(data.totqty))*100
             var pr2=( pr1 / Number(data.pcper))*100
-            qtykg=((pr2*Number(data.sqtykg))/100).toFixed(2)
-            qtyfeet=((pr2*Number(data.sqtyfeet))/100).toFixed(2)
-            // qtypcs=((pr2*Number(data.sqtypcs))/100).toFixed(2)
-            qtypcs=data.feedqty
+            qtykg=(((pr2*Number(data.sqtykg))/100) * Number(data.unitconver)).toFixed(2)
+            qtyfeet=(((pr2*Number(data.sqtyfeet))/100)* Number(data.unitconver)).toFixed(2)
+            qtypcs=(Number(data.feedqty) * Number(data.unitconver))
 
-         }
+        }
 
         //  if(cell.getData().sku_id==3)
          if(data.sku==='FEET')
@@ -492,6 +491,8 @@ dynamicTable = new Tabulator("#dynamicTable", {
                 {
                 title:'SALE', headerHozAlign:"center",
                     columns:[
+
+                    {title:"Conversion", field:"unitconver",cellEdited: updateValues,editor:"number"},
 
                 { title:"Quantity",
                 field:"feedqty",

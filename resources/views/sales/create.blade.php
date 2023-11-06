@@ -342,6 +342,7 @@
 
                         price   :           obj.price,
                         saleamnt:           obj.feedqty * obj.price,
+                        unitconver:           1,
 
                     }
                 ])
@@ -456,30 +457,31 @@ var updateValues = (cell) => {
         if(cell.getData().sku_id==1)
          {
 
-            // var pr1=(Number(data.qtykg) / Number(data.totqty))*100
-
             var sum = (Number(data.feedqty) * Number(data.price))
             var pr1=(Number(data.feedqty) / Number(data.totqty))*100
 
             var pr2=( pr1 / Number(data.wtper))*100
             qtypcs=((pr2*Number(data.sqtypcs))/100).toFixed(2)
             qtyfeet=((pr2*Number(data.sqtyfeet))/100).toFixed(2)
-            qtykg=((pr2*Number(data.sqtykg))/100).toFixed(2)
-
+            // qtykg=((pr2*Number(data.sqtykg))/100).toFixed(2)
+            qtykg=Number(data.sqtykg)
 
 
          }
-         if(cell.getData().sku_id==2)
+         if(cell.getData().sku_id==2 || cell.getData().sku_id==6 )
          {
+            // var sum = (Number(data.feedqty) * Number(data.price))
+            // var pr1=(Number(data.feedqty) / Number(data.totqty))*100
+            // var pr2=( pr1 / Number(data.pcper))*100
+            // qtykg=((pr2*Number(data.sqtykg))/100).toFixed(2)
+            // qtyfeet=((pr2*Number(data.sqtyfeet))/100).toFixed(2)
+            // qtypcs=((pr2*Number(data.sqtypcs))/100).toFixed(2)
             var sum = (Number(data.feedqty) * Number(data.price))
-            // var pr1=(Number(data.qtypcs) / Number(data.totqty))*100
             var pr1=(Number(data.feedqty) / Number(data.totqty))*100
             var pr2=( pr1 / Number(data.pcper))*100
-            qtykg=((pr2*Number(data.sqtykg))/100).toFixed(2)
-            qtyfeet=((pr2*Number(data.sqtyfeet))/100).toFixed(2)
-            qtypcs=((pr2*Number(data.sqtypcs))/100).toFixed(2)
-
-
+            qtykg=(((pr2*Number(data.sqtykg))/100) * Number(data.unitconver)).toFixed(2)
+            qtyfeet=(((pr2*Number(data.sqtyfeet))/100)* Number(data.unitconver)).toFixed(2)
+            qtypcs=(Number(data.feedqty) * Number(data.unitconver))
 
          }
 
@@ -491,7 +493,8 @@ var updateValues = (cell) => {
             var pr2=( pr1 / Number(data.feetper))*100
             qtykg=((pr2*Number(data.sqtykg))/100).toFixed(2)
             qtypcs=((pr2*Number(data.sqtypcs))/100).toFixed(2)
-            qtyfeet=((pr2*Number(data.sqtyfeet))/100).toFixed(2)
+            // qtyfeet=((pr2*Number(data.sqtyfeet))/100).toFixed(2)
+            qtyfeet=Number(data.sqtyfeet)
 
          }
 
@@ -688,9 +691,10 @@ var totalVal = function(values, data, calcParams){
                     columns:[
 
 
-                    {title:"Revise Qty", field:"feedqty",cellEdited: updateValues,editor:"number"},
+                    {title:"Conversion", field:"unitconver",cellEdited: updateValues,editor:"number"},
+                    {title:"Quantity", field:"feedqty",cellEdited: updateValues,editor:"number"},
 
-                    {   title:"Sale Price",
+                    {   title:"Price",
                             headerHozAlign :'right',
                             hozAlign:"right",
                             responsive:0,
@@ -762,7 +766,7 @@ var totalVal = function(values, data, calcParams){
             for (let index = 0; index < dynamicTableData.length; index++) {
                 const element = dynamicTableData[index];
 
-                        if(element.feedqty > element.balqty )
+                        if(Number(element.feedqty) > Number(element.balqty) )
                             {
                                 showSnackbar("Sale Qty must be less than Plan qty","info");
                                 return;
@@ -770,7 +774,7 @@ var totalVal = function(values, data, calcParams){
 
                 if( element.sku_id===2)
                 {
-                if(element.feedqty > element.sqtypcs )
+                if(Number(element.feedqty) > Number(element.sqtypcs) )
                              {
 
                                 showSnackbar("sale qty must be less than stock qty","info");
@@ -780,7 +784,7 @@ var totalVal = function(values, data, calcParams){
 
                 if( element.sku_id===1)
                 {
-                if(element.feedqty > element.sqtykg )
+                if(Number(element.feedqty) > Number(element.sqtykg) )
                              {
 
                                 showSnackbar("sale qty must be less than stock qty","info");
@@ -790,7 +794,7 @@ var totalVal = function(values, data, calcParams){
 
                 if( element.sku_id===3)
                 {
-                if(element.feedqty > element.sqtyfeet )
+                if(Number(element.feedqty) > Number(element.sqtyfeet) )
                              {
 
                                 showSnackbar("sale qty must be less than stock qty","info");

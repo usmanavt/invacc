@@ -64,9 +64,9 @@ class QuotationController  extends Controller
     public function getmmfrqut(Request $request)
     {
 
-        //  $custid=$request->customer_id;
-         $custid = 5;
-        //   dd($custid);
+        //   $custid=$request->customer_id;
+        //  $custid = 5;
+
         $search = $request->search;
         $size = $request->size;
         $field = $request->sort[0]["field"];     //  Nested Array
@@ -85,7 +85,9 @@ class QuotationController  extends Controller
         //  ->orWhere('dimension', 'like', "%$search%")
         ->orderBy($field,$dir)
         ->paginate((int) $size);
+        // dd($custid);
         return $contracts;
+
     }
 
 
@@ -218,7 +220,7 @@ class QuotationController  extends Controller
         DB::beginTransaction();
         try {
 
-            // dd($quotation);
+            //  dd($request->customer_id);
             $quotation = Quotation::findOrFail($request->sale_invoice_id);
             $quotation->saldate = $request->saldate;
             $quotation->valdate = $request->valdate;

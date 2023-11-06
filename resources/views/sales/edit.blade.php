@@ -312,18 +312,28 @@ function pushDynamicData(data)
             // qtykg=((pr2*Number(data.sqtykg))/100).toFixed(2)
             qtykg=data.feedqty
          }
-         if(cell.getData().sku_id==2)
+        //  if(cell.getData().sku_id==2)
+        //  {
+        //     var sum = (Number(data.feedqty) * Number(data.price))
+        //     var pr1=(Number(data.feedqty) / Number(data.totqty))*100
+        //     var pr2=( pr1 / Number(data.pcper))*100
+        //     qtykg=((pr2*Number(data.sqtykg))/100).toFixed(2)
+        //     qtyfeet=((pr2*Number(data.sqtyfeet))/100).toFixed(2)
+        //     qtypcs=data.feedqty
+
+        //  }
+
+        if(cell.getData().sku_id==2 || cell.getData().sku_id==6 )
          {
             var sum = (Number(data.feedqty) * Number(data.price))
-            // var pr1=(Number(data.qtypcs) / Number(data.totqty))*100
             var pr1=(Number(data.feedqty) / Number(data.totqty))*100
             var pr2=( pr1 / Number(data.pcper))*100
-            qtykg=((pr2*Number(data.sqtykg))/100).toFixed(2)
-            qtyfeet=((pr2*Number(data.sqtyfeet))/100).toFixed(2)
-            // qtypcs=((pr2*Number(data.sqtypcs))/100).toFixed(2)
-            qtypcs=data.feedqty
+            qtykg=(((pr2*Number(data.sqtykg))/100) * Number(data.unitconver)).toFixed(2)
+            qtyfeet=(((pr2*Number(data.sqtyfeet))/100)* Number(data.unitconver)).toFixed(2)
+            qtypcs=(Number(data.feedqty) * Number(data.unitconver))
 
          }
+
 
          if(cell.getData().sku_id==3)
          {
@@ -484,7 +494,8 @@ dynamicTable = new Tabulator("#dynamicTable", {
                 title:'SALE', headerHozAlign:"center",
                     columns:[
 
-                { title:"Revise Qty",
+                {title:"Conversion", field:"unitconver",cellEdited: updateValues,editor:"number"},
+               { title:"Quantity",
                 field:"feedqty",
                 editor:"number",
                 validator:"required" ,
@@ -494,7 +505,7 @@ dynamicTable = new Tabulator("#dynamicTable", {
                 cellEdited: updateValues   ,
             },
 
-            { title:"Rate",
+            { title:"Price",
                 field:"price",
                 editor:"number",
                 validator:"required" ,

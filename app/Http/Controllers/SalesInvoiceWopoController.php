@@ -177,15 +177,23 @@ class SalesInvoiceWopoController  extends Controller
 
             foreach ($request->sales as $cont) {
                 // $material = Material::findOrFail($cont['id']);
+
+                $unitid = Sku::where("title", $cont['sku'])->first();
+                // $lpd->sku_id = $unitid->id;
+
+                // dd($unitid->id);
                 $lpd = new SaleInvoicesDetails();
                 $lpd->sale_invoice_id = $ci->id;
                 $lpd->material_id = $cont['material_id'];
-                $lpd->sku_id = $cont['sku_id'];
+                $lpd->sku_id = $unitid->id;
                 $lpd->repname = $cont['repname'];
                 $lpd->brand = $cont['mybrand'];
                 $lpd->qtykg = $cont['qtykg'];
                 $lpd->qtypcs = $cont['qtypcs'];
                 $lpd->qtyfeet = $cont['qtyfeet'];
+                $lpd->unitconver = $cont['unitconver'];
+
+
                 $lpd->price = $cont['price'];
                 $lpd->saleamnt = $cont['saleamnt'];
                 $lpd->feedqty = $cont['feedqty'];
@@ -421,6 +429,7 @@ class SalesInvoiceWopoController  extends Controller
                     $cds->qtykg = $cd['qtykg'];
                     $cds->qtypcs = $cd['qtypcs'];
                     $cds->qtyfeet = $cd['qtyfeet'];
+                    $cds->unitconver = $cd['unitconver'];
                     $cds->price = $cd['price'];
                     $cds->saleamnt = $cd['saleamnt'];
                     $cds->feedqty = $cd['feedqty'];

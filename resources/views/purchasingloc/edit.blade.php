@@ -46,7 +46,7 @@
                         </div>
                         <div class="grid grid-cols-12 gap-1 py-2 items-center">
                             <x-input-date title="G.R Date" id="purdate" name="purdate" value="{{ $purchasing->purdate }}"  />
-                            <x-input-text title="G.R Invoice #" name="purinvsno" value="{{ $purchasing->purinvsno }}" />
+                            <x-input-text title="G.R #" name="purinvsno" value="{{ $purchasing->purinvsno }}" />
                             <x-input-text title="Gate Pass#" name="purseqid" id="purseqid" value="{{ $purchasing->purseqid }}"  disabled />
                             <input class="checked:bg-blue-500 checked:border-blue-500 focus:outline-none" type="checkbox" name="per" id="per" onclick="EnableDisableTextBox(this)" >
 
