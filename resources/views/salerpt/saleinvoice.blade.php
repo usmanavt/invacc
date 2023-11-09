@@ -26,11 +26,6 @@ body{
     padding:12px;
 }
 .column-headers{
-    /* border:1px solid lightgray;
-    background: #e3e3e3;
-    margin-top:5px;
-    margin-bottom:5px;
-    border-bottom: 2px double gray; */
 
     border:1px solid black;
     border-left: 1px solid black;
@@ -140,69 +135,44 @@ body{
 
 
     {{-- Ledger Info --}}
-    <table >
+    <table  >
         <tbody>
-            <tr class="hd1">
-                <td > Customer Name:</td>
+            <tr >
+                {{-- <td > Customer Name:</td>
                 <td align ="left" style="font-size:12px;font-weight: bold;" > {{ $data[0]->custname }}</td>
                 <td> Address:</td>
-                <td align ="left" style="font-size:12px;font-weight: bold;" > {{ $data[0]->custadrs }}</td>
-           </tr>
+                <td align ="left" style="font-size:12px;font-weight: bold;" > {{ $data[0]->custadrs }}</td> --}}
+                <td > Customer Name:  <span style="font-weight: bold"> {{ $data[0]->custname }}</span>
+                <td > Address:  <span style="font-weight: bold"> {{ $data[0]->custadrs }}</span> </td>
+
+            </tr>
+        </tbody>
+    </table>
 
 
-
-
+    <table  >
+        <tbody>
             <tr>
-                <td>P.O No:</td>
 
-                <td align ="left" style="font-size:12px;font-weight: bold"  >
-                    {{ $data[0]->pono }}
-                </td>
-                <td >
-                    P.O Date:
-                </td>
-                <td align ="left" style="font-size:12px;font-weight: bold">
-                    {{ $data[0]->podate }}
-                </td>
-            {{-- </tr> --}}
-                {{-- <tr> --}}
-                    <td>
-                        D.C No:
-                    </td>
-                    <td align ="left" style="font-size:12px;font-weight: bold">
-                        {{-- From {{ $fromdate }} to {{ $todate }} --}}
-                        {{ $data[0]->dcno }}
-                    </td>
-                    <td>
-                        Bill No:
-                    </td>
-                    <td align ="left" style="font-size:12px;font-weight: bold">
-                        {{-- From {{ $fromdate }} to {{ $todate }} --}}
-                        {{ $data[0]->billno }}
-                    </td>
-
-
-                    <td>
-                        Delivery Date:
-                    </td>
-                    <td align ="left" style="font-size:12px;font-weight: bold">
-                        {{ $data[0]->saldate }}
-                    </td>
-                </tr>
+                <td >P.O No:  <span style="font-weight: bold"> {{ $data[0]->podate }}</span>
+                <td >D.C No:  <span style="font-weight: bold"> {{ $data[0]->dcno }}</span>
+                <td >Bill No:  <span style="font-weight: bold"> {{ $data[0]->billno }}</span>
+                <td >Delivery Date:  <span style="font-weight: bold">  {{ $data[0]->saldate }}</span>
+            </tr>
         </tbody>
     </table>
     {{-- column headers --}}
     <table class="column-headers ">
         <thead >
-            <tr>
+            <tr >
                 {{-- <td  style="text-align: center font-size:0.5rem;font-weight: bold"> --}}
-                    <th  width="4%">S#</th>
+                    <th   width="4%">S#</th>
                     <th width="44%">Material Name</th>
-                    <th width="6%">Unit</th>
+                    <th width="8%">Unit</th>
                     <th width="15%">Brand</th>
-                    <th width="11%">Quantity</th>
+                    <th width="10%">Quantity</th>
                     <th  width="9%">Price</th>
-                    <th  width="11%">Amount</th>
+                    <th  width="10%">Amount</th>
 
             </tr>
         </thead>
@@ -230,11 +200,11 @@ body{
                             {{ $tqty += $data[$i]->qty }}
                             <td style="font-size:12px;text-align:center" width="4%">{{ $i+1 }}</td>
                             <td style="font-size:12px" width="44%">{{ $data[$i]->matname }} </td>
-                            <td style="text-align:center;font-size:12px" width="6%">{{ $data[$i]->UOM }} </td>
+                            <td style="text-align:center;font-size:12px" width="8%">{{ $data[$i]->UOM }} </td>
                             <td style="text-align:left;font-size:12px" width="15%">{{ $data[$i]->mybrand }} </td>
-                            <td style="font-size:12px" width="11%">{{ number_format($data[$i]->qty,1) }} </td>
+                            <td style="font-size:12px" width="10%">{{ number_format($data[$i]->qty,1) }} </td>
                             <td style="font-size:12px" width="9%">{{ number_format($data[$i]->price,1) }} </td>
-                            <td style="text-align:right;font-size:12px" width="11%">{{ number_format($data[$i]->saleamnt,0) }} </td>
+                            <td style="text-align:right;font-size:12px" width="10%">{{ number_format($data[$i]->saleamnt,0) }} </td>
                         </tr>
                     @endif
                 @endfor

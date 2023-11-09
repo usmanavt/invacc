@@ -312,30 +312,19 @@ function pushDynamicData(data)
             // qtykg=((pr2*Number(data.sqtykg))/100).toFixed(2)
             qtykg=data.feedqty
          }
-        //  if(cell.getData().sku_id==2)
-        //  {
-        //     var sum = (Number(data.feedqty) * Number(data.price))
-        //     var pr1=(Number(data.feedqty) / Number(data.totqty))*100
-        //     var pr2=( pr1 / Number(data.pcper))*100
-        //     qtykg=((pr2*Number(data.sqtykg))/100).toFixed(2)
-        //     qtyfeet=((pr2*Number(data.sqtyfeet))/100).toFixed(2)
-        //     qtypcs=data.feedqty
-
-        //  }
-
-        if(cell.getData().sku_id==2 || cell.getData().sku_id==6 )
+        else if(cell.getData().sku_id==2 )
          {
             var sum = (Number(data.feedqty) * Number(data.price))
             var pr1=(Number(data.feedqty) / Number(data.totqty))*100
             var pr2=( pr1 / Number(data.pcper))*100
-            qtykg=(((pr2*Number(data.sqtykg))/100) * Number(data.unitconver)).toFixed(2)
-            qtyfeet=(((pr2*Number(data.sqtyfeet))/100)* Number(data.unitconver)).toFixed(2)
-            qtypcs=(Number(data.feedqty) * Number(data.unitconver))
+            qtykg=(((pr2*Number(data.sqtykg))/100) ).toFixed(2)
+            qtyfeet=(((pr2*Number(data.sqtyfeet))/100)).toFixed(2)
+            qtypcs=(Number(data.feedqty) )
 
          }
 
 
-         if(cell.getData().sku_id==3)
+         else if(cell.getData().sku_id==3)
          {
             var sum = (Number(data.feedqty) * Number(data.price))
             // var pr1=(Number(data.qtyfeet) / Number(data.totqty))*100
@@ -345,6 +334,16 @@ function pushDynamicData(data)
             qtypcs=((pr2*Number(data.sqtypcs))/100).toFixed(2)
             // qtyfeet=((pr2*Number(data.sqtyfeet))/100).toFixed(2)
             qtyfeet=data.qtyfeet
+
+         }
+         else
+         {
+            var sum = (Number(data.feedqty) * Number(data.price))
+            var pr1=(Number(data.feedqty) / Number(data.totqty))*100
+            var pr2=( pr1 / Number(data.pcper))*100
+            qtykg=(((pr2*Number(data.sqtykg))/100) / Number(data.unitconver)).toFixed(2)
+            qtyfeet=(((pr2*Number(data.sqtyfeet))/100) / Number(data.unitconver)).toFixed(2)
+            qtypcs=(Number(data.feedqty) / Number(data.unitconver)).toFixed(2)
 
          }
 
@@ -618,6 +617,14 @@ function validateForm()
             showSnackbar("Sale Qty must be less than Plan qty","info");
             return;
         }
+
+        if(Number(element.qtypcs) > Number(element.sqtypcs) || Number(element.qtykg) > Number(element.sqtykg) || Number(element.qtyfeet) > Number(element.sqtyfeet) )
+                                {
+
+                                    showSnackbar("sale qty must be less than stock qty","info");
+                                    return;
+                                }
+
     }
     // 'total' : parseFloat(banktotal.value).toFixed(2),
     disableSubmitButton(true);

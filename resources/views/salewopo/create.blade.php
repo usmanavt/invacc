@@ -464,17 +464,18 @@ var updateValues = (cell) => {
             qtyfeet=((pr2*Number(data.sqtyfeet))/100).toFixed(2)
             qtykg=Number(data.feedqty)
          }
-        if(data.sku==='PCS' || data.sku==='METER'  )
+        else if(data.sku==='PCS'   )
         {
+            // || data.sku==='METER'
             var sum = (Number(data.feedqty) * Number(data.price))
             var pr1=(Number(data.feedqty) / Number(data.totqty))*100
             var pr2=( pr1 / Number(data.pcper))*100
-            qtykg=(((pr2*Number(data.sqtykg))/100) * Number(data.unitconver)).toFixed(2)
-            qtyfeet=(((pr2*Number(data.sqtyfeet))/100)* Number(data.unitconver)).toFixed(2)
-            qtypcs=(Number(data.feedqty) * Number(data.unitconver))
+            qtykg=((pr2*Number(data.sqtykg))/100).toFixed(2)
+            qtyfeet=((pr2*Number(data.sqtyfeet))/100).toFixed(2)
+            qtypcs=Number(data.feedqty)
          }
 
-        if(data.sku==='FEET')
+        else if(data.sku==='FEET')
          {
             var sum = (Number(data.feedqty) * Number(data.price))
             // var pr1=(Number(data.qtyfeet) / Number(data.totqty))*100
@@ -485,6 +486,17 @@ var updateValues = (cell) => {
             // qtyfeet=((pr2*Number(data.sqtyfeet))/100).toFixed(2)
             qtyfeet=Number(data.feedqty)
          }
+         else
+        {
+            var sum = (Number(data.feedqty) * Number(data.price))
+            var pr1=(Number(data.feedqty) / Number(data.totqty))*100
+            var pr2=( pr1 / Number(data.pcper))*100
+            qtykg=(((pr2*Number(data.sqtykg))/100) / Number(data.unitconver)).toFixed(2)
+            qtyfeet=(((pr2*Number(data.sqtyfeet))/100) / Number(data.unitconver)).toFixed(2)
+            qtypcs=((Number(data.feedqty) / Number(data.unitconver))).toFixed(2)
+         }
+
+
 
 
         var row = cell.getRow();
@@ -775,37 +787,46 @@ var totalVal = function(values, data, calcParams){
                         //         showSnackbar("Sale Qty must be less than Plan qty","info");
                         //         return;
 
-                if( element.sku==='KG')
-                {
-                if(element.feedqty > element.sqtypcs )
-                             {
+                        //     }
+                            if(Number(element.qtypcs) > Number(element.sqtypcs) || Number(element.qtykg) > Number(element.sqtykg) || Number(element.qtyfeet) > Number(element.sqtyfeet) )
+                                {
 
-                                showSnackbar("sale qty must be less than stock qty","info");
-                                return;
-                            }
-                }
+                                    showSnackbar("sale qty must be less than stock qty","info");
+                                    return;
+                                }
 
-                if( element.sku==='PCS')
-                {
-                if(element.feedqty > element.sqtykg )
-                             {
+                        }
+             //     if( element.sku==='KG')
+            //     {
+            //     if(element.feedqty > element.sqtypcs )
+            //                  {
 
-                                showSnackbar("sale qty must be less than stock qty","info");
-                                return;
-                            }
-                }
+            //                     showSnackbar("sale qty must be less than stock qty","info");
+            //                     return;
+            //                 }
+            //     }
 
-                if( element.sku==='FEET')
-                {
-                if(element.feedqty > element.sqtyfeet )
-                             {
+            //     if( element.sku==='PCS')
+            //     {
+            //     if(element.feedqty > element.sqtykg )
+            //                  {
 
-                                showSnackbar("sale qty must be less than stock qty","info");
-                                return;
-                            }
-                }
+            //                     showSnackbar("sale qty must be less than stock qty","info");
+            //                     return;
+            //                 }
+            //     }
 
-            }
+            //     if( element.sku==='FEET')
+            //     {
+            //     if(element.feedqty > element.sqtyfeet )
+            //                  {
+
+            //                     showSnackbar("sale qty must be less than stock qty","info");
+            //                     return;
+            //                 }
+            //     }
+
+            // }
 
 
             var data = { 'sales' : dynamicTableData,'rcvblamount':rcvblamount.value,'cartage':cartage.value,'discntamt':discntamt.value,'discntper':discntper.value,'discntper':discntper.value ,
