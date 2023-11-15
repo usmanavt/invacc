@@ -173,6 +173,8 @@ class SalesInvoiceWopoController  extends Controller
             $ci->saletaxper = $request->saletaxper;
             $ci->saletaxamt = $request->saletaxamt;
             $ci->totrcvbamount = $request->totrcvbamount;
+            $ci->paymentbal = $request->totrcvbamount;
+
             $ci->save();
 
             foreach ($request->sales as $cont) {
@@ -404,6 +406,7 @@ class SalesInvoiceWopoController  extends Controller
             $sale_invoices->saletaxper = $request->saletaxper;
             $sale_invoices->saletaxamt = $request->saletaxamt;
             $sale_invoices->totrcvbamount = $request->totrcvbamount;
+            $sale_invoices->paymentbal = $request->totrcvbamount;
             $sale_invoices->save();
 
             // Get Data

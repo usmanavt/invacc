@@ -172,7 +172,7 @@
             {title: "PendWt",field: "wtbal"},
         ]},
         {title: "Total LC Amt",field: "full_total",formatterParams:{thousand:",",precision:0}},
-
+        {title: "Invs.Payment.Bal",field: "invoicebal"},
 
 
 

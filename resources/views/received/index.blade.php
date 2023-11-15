@@ -6,9 +6,9 @@
 
     <x-slot name="header">
         <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-            Delivery Challan
+            Received Voucher
             {{-- Create New Customer --}}
-            <a class="text-sm text-green-500 hover:text-gray-900" href="{{route('saleinvoices.create')}}">
+            <a class="text-sm text-green-500 hover:text-gray-900" href="{{route('banktransactionr.create')}}">
                 {{-- Add Icon --}}
                 <i class="fa fa-file fa-fw"></i>
                 Add New Record
@@ -16,9 +16,18 @@
             {{-- <span> | </span> --}}
             {{-- <button class="text-sm text-blue-300" onclick="setStatus(1)">Pending</button> --}}
             <span> | </span>
-            <button class="text-sm text-blue-300" onclick="setStatus(2)">Sales History</button>
+            <button class="text-sm text-blue-300" onclick="setStatus(2)">Received History</button>
         </h2>
     </x-slot>
+
+    {{-- <div class="grid grid-cols-12 gap-2 py-2 items-center">
+
+        <x-input-date title="From" name="fromdt" class="col-span-2" />
+        <x-input-date title="To" name="todt" class="col-span-2" />
+
+    </div> --}}
+
+
 
     {{-- Tabulator --}}
     <div class="py-6">
@@ -45,8 +54,8 @@
     var deleteIcon = function(cell, formatterParams, onRendered){ return "<i class='fa fa-trash text-red-600'></i>";};
     var printIcon = function(cell, formatterParams, onRendered){ return "<i class='fa fa-print text-pink-500'></i>";};
 
-    const getMaster = @json(route('sales.master'));
-    const getDetails = @json(route('sales.details'));
+    const getMaster = @json(route('banktransactionr.master'));
+    const getDetails = @json(route('banktransactionr.details'));
     let table;
     let searchValue = "";
     let statusValue="1";  // 1 = Pending, 2 - Completed
@@ -80,7 +89,7 @@
         },
         ajaxURL: getMaster,
         ajaxContentType:"json",
-        initialSort:[ {column:"dcno", dir:"desc"} ],
+        initialSort:[ {column:"id", dir:"desc"} ],
         height:"100%",
 
         columns:[
@@ -146,48 +155,24 @@
             },
       //      Master Data
 
+            // {title: "Dated",field: "created_at"},
 
-
-            {
-            title:'Data Description', headerHozAlign:"center",
-            columns:[
-
+            // trantype,manhead,subhead,ref,suppliertype,documentdate,amount_fc,conversion_rate,amount_pkr,cheque_date,cheque_no
             {title: "id",field: "id"},
-            {title: "Customer",field: "customer.title"},
-            {title: "P.O No",field: "pono"},
-            {title: "P.O Date",field: "podate"},
-            {title: "D.C No",field: "dcno"},
-            {title: "G.P No",field: "gpno"},
-            {title: "Bill No",field: "billno"},
-            {title: "Invoice Date",field: "saldate"}
-            ]},
-
-            {
-            title:'Total Delivery Goods', headerHozAlign:"center",
-            columns:[
-
-            {title: "Weight",field: "sltwt"},
-            {title: "Pcs",field: "sltpcs"},
-            {title: "Feet",field: "slfeet"},
-            {title: "WO/GST",field: "rcvblamount"},
-            {title: "W/GST",field: "totrcvbamount"}
-            ]},
-
-            {
-            title:'Balance Against GatePass', headerHozAlign:"center",
-            columns:[
-
-            {title: "Weight",field: "balsltwt"},
-            {title: "Pcs",field: "balsltpcs"},
-            {title: "Feet",field: "balslfeet"},
-            ]},
-            {title: "Payment Balane",field: "paymentbal"},
-            // {title: "Total Delivery Against Sale Order",field: "delivered"},
-            // {title: "Sale Order Balance",field: "delivered"},
-
-
-            // {title: "Rcvbl Amount",field: "rcvblamount"},
-            // {title: "Remarks",field: "remarks"},
+            {title: "Transaction Type",field: "trantype"},
+            {title: "Main.Head",field: "manhead"},
+            {title: "Sub.Head",field: "subhead"},
+            {title: "Ref.",field: "ref"},
+            // {title: "Supp.Source",field: "suppliertype"},
+            {title: "Payment Date",field: "documentdate"},
+            // {title: "Amount(FC)",field: "amount_fc",bottomCalc:"sum",},
+            // {title: "ConversionRate",field: "conversion_rate"},
+            {title: "Amount",field: "amount_pkr",bottomCalc:"sum"},
+            {title: "Transaction Bank",field: "bankname"},
+            {title: "ChequeDate",field: "cheque_date"},
+            {title: "ChequeNo",field: "cheque_no"},
+            {title: "Description",field: "description"},
+         //   {title: "Description",field: "description"},
             {title:"View" , formatter:viewIcon, hozAlign:"center",headerSort:false, responsive:0,
                 cellClick:function(e, cell){
                     window.open(window.location + "/" + cell.getRow().getData().id  ,"_self");

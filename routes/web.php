@@ -46,8 +46,7 @@ use App\Http\Controllers\GodownprController;
 use App\Http\Controllers\GodownsrController;
 use App\Http\Controllers\SalesInvoiceWopoController;
 use App\Http\Controllers\PaymentController;
-
-
+use App\Http\Controllers\ReceiveController;
 
 
 
@@ -269,13 +268,19 @@ Route::resource('customerorder', CustomerOrderController::class);
 
 
 //  Payment Voucher
-Route::get('/payments/getQuotationsMaster', [PaymentController::class, 'getMaster'])->name('custorders.master');
-Route::get('/payments/getQuotationsDetails', [PaymentController::class, 'getDetail'])->name('custorders.details');
-Route::get('/payments/getcidMaster', [PaymentController::class, 'getMasterqut'])->name('custorders.quotations');
-Route::get('/payments/getCustordersQuotationsdtl', [PaymentController::class, 'getDetailsqut'])->name('custorders.quotationsdtl');
-Route::resource('payments', PaymentController::class);
+Route::get('/banktransaction/getQuotationsMaster', [PaymentController::class, 'getMaster'])->name('banktransaction.master');
+Route::get('/banktransaction/getQuotationsDetails', [PaymentController::class, 'getDetail'])->name('banktransaction.details');
+Route::get('/banktransaction/getcidMaster', [PaymentController::class, 'getMasterqut'])->name('banktransaction.quotations');
+Route::get('/banktransaction/getCustordersQuotationsdtl', [PaymentController::class, 'getDetailsqut'])->name('banktransaction.quotationsdtl');
+Route::resource('banktransaction', PaymentController::class);
 
 
+//  Received Voucher
+Route::get('/banktransactionr/getQuotationsMaster', [ReceiveController::class, 'getMaster'])->name('banktransactionr.master');
+Route::get('/banktransactionr/getQuotationsDetails', [ReceiveController::class, 'getDetail'])->name('banktransactionr.details');
+Route::get('/banktransactionr/getcidMaster', [ReceiveController::class, 'getMasterqut'])->name('banktransactionr.quotations');
+Route::get('/banktransactionr/getCustordersQuotationsdtl', [ReceiveController::class, 'getDetailsqut'])->name('banktransactionr.quotationsdtl');
+Route::resource('banktransactionr', ReceiveController::class);
 
 
 

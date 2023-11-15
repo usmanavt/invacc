@@ -8,7 +8,7 @@
         <h2 class="font-semibold text-xl text-gray-800 leading-tight">
             Payment Voucher
             {{-- Create New Customer --}}
-            <a class="text-sm text-green-500 hover:text-gray-900" href="{{route('payments.create')}}">
+            <a class="text-sm text-green-500 hover:text-gray-900" href="{{route('banktransaction.create')}}">
                 {{-- Add Icon --}}
                 <i class="fa fa-file fa-fw"></i>
                 Add New Record
@@ -16,9 +16,18 @@
             {{-- <span> | </span> --}}
             {{-- <button class="text-sm text-blue-300" onclick="setStatus(1)">Pending</button> --}}
             <span> | </span>
-            <button class="text-sm text-blue-300" onclick="setStatus(2)">Purchase Orders History</button>
+            <button class="text-sm text-blue-300" onclick="setStatus(2)">Payment History</button>
         </h2>
     </x-slot>
+
+    {{-- <div class="grid grid-cols-12 gap-2 py-2 items-center">
+
+        <x-input-date title="From" name="fromdt" class="col-span-2" />
+        <x-input-date title="To" name="todt" class="col-span-2" />
+
+    </div> --}}
+
+
 
     {{-- Tabulator --}}
     <div class="py-6">
@@ -45,8 +54,8 @@
     var deleteIcon = function(cell, formatterParams, onRendered){ return "<i class='fa fa-trash text-red-600'></i>";};
     var printIcon = function(cell, formatterParams, onRendered){ return "<i class='fa fa-print text-pink-500'></i>";};
 
-    const getMaster = @json(route('custorders.master'));
-    const getDetails = @json(route('custorders.details'));
+    const getMaster = @json(route('banktransaction.master'));
+    const getDetails = @json(route('banktransaction.details'));
     let table;
     let searchValue = "";
     let statusValue="1";  // 1 = Pending, 2 - Completed
@@ -80,7 +89,7 @@
         },
         ajaxURL: getMaster,
         ajaxContentType:"json",
-        initialSort:[ {column:"poseqno", dir:"desc"} ],
+        initialSort:[ {column:"id", dir:"desc"} ],
         height:"100%",
 
         columns:[
@@ -148,20 +157,22 @@
 
             // {title: "Dated",field: "created_at"},
 
-
-            {title: "Quotation No",field: "pqutno"},
-            {title: "Quotation Date",field: "qutdate"},
-            {title: "Sale Order id",field: "id"},
-            {title: "P.O Date",field: "podate"},
-            {title: "P.O No",field: "pono"},
-            {title: "P.O Seq.No",field: "poseqno"},
-            {title: "Delivery Date",field: "deliverydt"},
-            {title: "Customer",field: "custname"},
-            {title: "W/O GST",field: "rcvblamount"},
-            {title: "W/GST",field: "totrcvbamount"},
-            {title: "Delivered",field: "delivered"},
-            {title: "Pending",field: "salordbal"},
-
+            // trantype,manhead,subhead,ref,suppliertype,documentdate,amount_fc,conversion_rate,amount_pkr,cheque_date,cheque_no
+            {title: "id",field: "id"},
+            {title: "Transaction Type",field: "trantype"},
+            {title: "Main.Head",field: "manhead"},
+            {title: "Sub.Head",field: "subhead"},
+            {title: "Ref.",field: "ref"},
+            {title: "Supp.Source",field: "suppliertype"},
+            {title: "Payment Date",field: "documentdate"},
+            {title: "Amount(FC)",field: "amount_fc",bottomCalc:"sum",},
+            {title: "ConversionRate",field: "conversion_rate"},
+            {title: "Amount(LC)",field: "amount_pkr",bottomCalc:"sum",},
+            {title: "Transaction Bank",field: "bankname"},
+            {title: "ChequeDate",field: "cheque_date"},
+            {title: "ChequeNo",field: "cheque_no"},
+            {title: "Description",field: "description"},
+         //   {title: "Description",field: "description"},
             {title:"View" , formatter:viewIcon, hozAlign:"center",headerSort:false, responsive:0,
                 cellClick:function(e, cell){
                     window.open(window.location + "/" + cell.getRow().getData().id  ,"_self");

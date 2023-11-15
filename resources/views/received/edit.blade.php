@@ -9,7 +9,7 @@
 
     <x-slot name="header">
         <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-            Edit Payment Voucher
+            Edit Received Voucher
         </h2>
     </x-slot>
 
@@ -36,19 +36,11 @@
                                             <option value="{{$supplier->id}}"> {{$supplier->title}} </option>
                                         @endforeach
                                     </select> --}}
-                                <x-input-text title="Supplier Name" name="supname" id="supname" class="col-span-2" value="{{ $banktransaction->supname }}" disabled  />
-                                <x-input-date title="Payment Date" name="documentdate" class="col-span-2" value="{{ $banktransaction->documentdate->format('Y-m-d') }}"  />
-
-                                    {{-- <label for="head_id">Payment To<x-req /></label>
-                                    <select autocomplete="on" class="col-span-2" name="customer_id" id="customer_id" >
-                                        <option value="" selected>--Payment Head</option>
-                                        @foreach($heads as $head)
-                                        <option value="{{$head->id}}"> {{$head->title}} </option>
-                                        @endforeach
-                                    </select> --}}
-                                    <x-input-text title="Payment Seq.#" name="transno" id="transno" value="{{ $banktransaction->transno }}"  class="col-span-2"    />
-                                    <x-input-numeric title="" name="paymentid" id="paymentid" value="{{ $banktransaction->id }}" hidden   />
-                                    <x-input-numeric title="" name="supplier_id" id="supplier_id" value="{{ $banktransaction->subhead_id }}"  />
+                                <x-input-text title="Customer Name" name="supname" id="supname" class="col-span-2" value="{{ $banktransaction->supname }}" disabled  />
+                                <x-input-date title="Received Date" name="documentdate" class="col-span-2" value="{{ $banktransaction->documentdate->format('Y-m-d') }}"  />
+                                    <x-input-text title="Received Seq.#" name="transno" id="transno" value="{{ $banktransaction->transno }}"  class="col-span-2"    />
+                                    <x-input-numeric title="" name="receivedid" id="receivedid" value="{{ $banktransaction->id }}" hidden   />
+                                    <x-input-numeric title="" name="subhead_id" id="subhead_id" hidden value="{{ $banktransaction->subhead_id }}"  />
                                     </div>
 
                         <div class="grid grid-cols-12 gap-2 py-2 ">
@@ -69,31 +61,33 @@
                         </div>
 
                         <div class="grid grid-cols-12 gap-2 py-2 items-center">
-                            <x-input-numeric title="Amount(USD)" name="amount_fc" id="amount_fc" class="col-span-2" value="{{ $banktransaction->amount_fc }}"   disabled     />
-                            <x-input-numeric title="Conversion Rate" name="conversion_rate" id="conversion_rate" class="col-span-2" value="{{ $banktransaction->conversion_rate }}" disabled   />
-                            <x-input-numeric title="Amount(PKR)" name="amount_pkr" id="amount_pkr" class="col-span-2" value="{{ $banktransaction->amount_pkr }}" disabled />
-                            <x-input-numeric title="" name="advtxt" id="advtxt"    value="{{ $banktransaction->advance }}" hidden    />
-                             <x-input-numeric title="" name="head_id" class="col-span-2" value="{{ $banktransaction->head_id}}" hidden  />
+                            <x-input-numeric title="Received Amount" name="amount_fc" id="amount_fc" class="col-span-2" value="{{ $banktransaction->amount_fc }}"   disabled     />
+
+                                <label for="">
+                                    Description <span class="text-red-500 font-semibold  ">(*)</span>
+                                    </label>
+                                <textarea name="description" id="description" cols="150" rows="2" maxlength="150" class="col-span-2" required class="rounded"> {{ $banktransaction->description }} </textarea>
+
+                                <label for="">
+                                    Invoice Level Receive <span class="text-red-500 font-semibold  ">(*)</span>
+                                    </label>
+                                <input class="checked:bg-blue-500 checked:border-blue-500 focus:outline-none "  type="checkbox" name="per" id="per" @if( $banktransaction->invslvl==1  )  checked else unchecked @endif   onclick="EnableDisableTextBox(this)" >
+
+
+                                <label for="">
+                                    Advance Receive For Clearance Future Invoices <span class="text-red-500 font-semibold  ">(*)</span>
+                                    </label>
+                                <input class="checked:bg-blue-500 checked:border-blue-500 focus:outline-none"  type="checkbox" name="adv" id="adv" @if( $banktransaction->advance==1  )  checked else unchecked @endif    onclick="advpayment(this)" >
+
+                                <x-input-numeric title="" name="conversion_rate" id="conversion_rate" class="col-span-2" hidden value="{{ $banktransaction->conversion_rate }}" disabled   />
+                                <x-input-numeric title="" name="amount_pkr" id="amount_pkr" class="col-span-2" hidden value="{{ $banktransaction->amount_pkr }}" disabled />
+                                <x-input-numeric title="" name="advtxt" id="advtxt"    value="{{ $banktransaction->advance }}" hidden    />
+                                <x-input-numeric title="" name="head_id" class="col-span-2" value="{{ $banktransaction->head_id}}" hidden  />
+
+
+
+
                         </div>
-
-                        <div class="grid grid-cols-12 gap-2 py-2 items-center">
-                            <label for="">
-                                Description <span class="text-red-500 font-semibold  ">(*)</span>
-                                </label>
-                            <textarea name="description" id="description" cols="150" rows="2" maxlength="150" class="col-span-2" required class="rounded"> {{ $banktransaction->description }} </textarea>
-
-                            <label for="">
-                                Invoice Level Payment <span class="text-red-500 font-semibold  ">(*)</span>
-                                </label>
-                            <input class="checked:bg-blue-500 checked:border-blue-500 focus:outline-none "  type="checkbox" name="per" id="per" @if( $banktransaction->invslvl==1  )  checked else unchecked @endif   onclick="EnableDisableTextBox(this)" >
-
-
-                            <label for="">
-                                Advance Payment For Clearance Future Invoices <span class="text-red-500 font-semibold  ">(*)</span>
-                                </label>
-                            <input class="checked:bg-blue-500 checked:border-blue-500 focus:outline-none"  type="checkbox" name="adv" id="adv" @if( $banktransaction->advance==1  )  checked else unchecked @endif    onclick="advpayment(this)" >
-                        </div>
-
                         </fieldset>
 
                         {{-- Contract Details --}}
@@ -248,14 +242,10 @@ function pushDynamicData(data)
 
 var updateValues = (cell) => {
         var data = cell.getData();
-        var sum = (Number(data.payedusd) * Number(data.convrate))
-        var invbal = (Number(data.invoice_amount) - Number(data.payedusd))
-        // var varqty = ( Number(data.balqty) - Number(data.saleqty) )
+        var invbal = (Number(data.totrcvble) - Number(data.totrcvd))
         var row = cell.getRow();
         row.update({
-             "payedrup": sum,
-             "invoice_bal":invbal,
-             totalVal: sum
+             "invoice_bal":invbal
 
         });
     }
@@ -270,6 +260,7 @@ var updateValues = (cell) => {
         return calc;
 
     }
+
 
 
 
@@ -290,106 +281,107 @@ dynamicTable = new Tabulator("#dynamicTable", {
         },
 
         {title:"invoice Id",           field:"invoice_id",cssClass:"bg-gray-200 font-semibold"},
-                {title:"Invoice No",     field:"invoice_no",responsive:0,cssClass:"bg-gray-200 font-semibold"},
-                {title:"Invoice_Date",    field:"invoice_date",responsive:0,cssClass:"bg-gray-200 font-semibold"},
+                {title:"P.O No",           field:"pono",cssClass:"bg-gray-200 font-semibold"},
+                {title:"Delivery Date",     field:"saldate",responsive:0,cssClass:"bg-gray-200 font-semibold"},
+                {title:"",     field:"saldate",responsive:0,visible:false},
+                {title:"DC No",     field:"dcno",responsive:0,cssClass:"bg-gray-200 font-semibold"},
+                {title:"Bill No",    field:"billno",responsive:0,cssClass:"bg-gray-200 font-semibold"},
 
 
 
                 // {title:"Variance", field:"varqty",cellEdited: updateValues,},
 
                 {
-                    title:'Payable Amount', headerHozAlign:"center",
+                    title:'Receivable Amount', headerHozAlign:"center",
                     columns:[
-                        // {   title:"Replace Name",headerHozAlign :'center',
-                        //     field:"repname",
-                        //     responsive:0,
-                        //     editor:true,
-                        // },
 
-                        // {   title:"Brand",headerHozAlign :'center',
-                        //     field:"mybrand",
-                        //     responsive:0,
-                        //     editor:true,
-                        // },
-
-
-
-
-
-                        {   title:"Payable",
+                        {   title:"Sale Amount",
                             headerHozAlign :'right',
                             hozAlign:"right",
                             responsive:0,
-                            field:"invoice_amount",
+                            field:"dcamount",
                             bottomCalc:"sum",
                             formatter:"money",
-                            cellEdited: updateValues,
                             validator:["required","numeric"],
                             cssClass:"bg-gray-200 font-semibold",
-                            formatterParams:{thousand:",",precision:3},
+                            formatterParams:{thousand:",",precision:2},
                         },
 
-                        {   title:"Currency",
+                        {   title:"Sale Tax(%)",
                             headerHozAlign :'right',
                             hozAlign:"right",
                             responsive:0,
-                            field:"curncy",
+                            field:"staxper",
                             // editor:"number",
                             bottomCalc:"sum",
                             formatter:"money",
-                            cellEdited: updateValues,
                             validator:["required","numeric"],
                             cssClass:"bg-gray-200 font-semibold",
-                            formatterParams:{thousand:",",precision:0},
+                            formatterParams:{thousand:",",precision:2},
                         },
-                    ]},
 
-                {
-                        title:'Amount Payed', headerHozAlign:"center",
-                    columns:[
-
-
-                        {title:"Payed In USD.",
-                        headerHozAlign :'right',
-                        hozAlign:"right",
-                        field:"payedusd",
-                        editor:"number",
-                        cellEdited: updateValues,
-                        formatter:"money",
-                        formatterParams:{thousand:",",precision:3},
-                        // formatter:function(cell,row)
-                        // {
-                        //     return (cell.getData().invoice_amount * cell.getData().convrate).toFixed(0)
-                        // },
-                        bottomCalc:totalVal  },
-
-                        {   title:"Conversion Rate",
+                        {   title:"Sale Tax Amount",
                             headerHozAlign :'right',
                             hozAlign:"right",
                             responsive:0,
-                            editor:"number",
-                            field:"convrate",
-                            // bottomCalc:"sum",
+                            field:"staxamount",
+                            // editor:"number",
+                            bottomCalc:"sum",
                             formatter:"money",
-                            cellEdited: updateValues,
                             validator:["required","numeric"],
-                            // cssClass:"bg-green-200 font-semibold",
-                            formatterParams:{thousand:",",precision:3},
+                            cssClass:"bg-gray-200 font-semibold",
+                            formatterParams:{thousand:",",precision:2},
+                        },
+
+                        {   title:"Cartage",
+                            headerHozAlign :'right',
+                            hozAlign:"right",
+                            responsive:0,
+                            field:"cartage",
+                            // editor:"number",
+                            bottomCalc:"sum",
+                            formatter:"money",
+                            validator:["required","numeric"],
+                            cssClass:"bg-gray-200 font-semibold",
+                            formatterParams:{thousand:",",precision:2},
                         },
 
 
-                        {title:"Payed In Rup.",
+
+
+
+                        {   title:"Total Receivable Amount",
+                            headerHozAlign :'right',
+                            hozAlign:"right",
+                            responsive:0,
+                            field:"totrcvble",
+                            // editor:"number",
+                            bottomCalc:"sum",
+                            formatter:"money",
+                            validator:["required","numeric"],
+                            cssClass:"bg-gray-200 font-semibold",
+                            formatterParams:{thousand:",",precision:2},
+                        },
+
+                    ]},
+
+                {
+                        title:'Amount Received', headerHozAlign:"center",
+                    columns:[
+
+
+                        {title:"Received Amount.",
                         headerHozAlign :'right',
                         hozAlign:"right",
-                        field:"payedrup",
-                        cssClass:"bg-gray-200 font-semibold",
+                        editor:"number",
+                        field:"totrcvd",
                         formatter:"money",
-                        cssClass:"bg-gray-200 font-semibold",
-                        formatterParams:{thousand:",",precision:3},
-                        formatter:function(cell,row)
-                        {
-                            return (cell.getData().payedusd * cell.getData().convrate).toFixed(0)
-                        },
+                        cellEdited: updateValues,
+                        formatterParams:{thousand:",",precision:1},
+                        // formatter:function(cell,row)
+                        // {
+                        //     return (cell.getData().payedusd * cell.getData().convrate).toFixed(0)
+                        // },
                         bottomCalc:totalVal  },
                     ]},
 
@@ -399,21 +391,19 @@ dynamicTable = new Tabulator("#dynamicTable", {
                         field:"invoice_bal",
                         formatter:"money",
                         cssClass:"bg-gray-200 font-semibold",
-                        formatterParams:{thousand:",",precision:3},
+                        formatterParams:{thousand:",",precision:1},
                         formatter:function(cell,row)
                         {
-                            return (cell.getData().invoice_amount - cell.getData().payedusd).toFixed(0)
+                            return (cell.getData().totrcvble - cell.getData().totrcvd).toFixed(0)
                         },
                         bottomCalc:totalVal
 
                     },
 
 
-
-
-
             ],
         })
+
         dynamicTable.on("dataLoaded", function(data){
             //data - all data loaded into the table
         });
@@ -510,15 +500,15 @@ function validateForm()
      // var data = { 'contracts' : dynamicTableData,'banktotal':parseFloat(total.value).toFixed(2),'exataxoffie':parseFloat(exataxoffie.value).toFixed(2),'collofcustom':parseFloat(collofcustom.value).toFixed(2),'bankcharges':parseFloat(bankcharges.value).toFixed(2) ,'supplier_id': supplier_id.value,'invoice_date':invoice_date.value,'invoiceno':number.value};
     // All Ok - Proceed
 
-    var data = { 'banktransaction' : dynamicTableData,'supplier_id':supplier_id.value,'transno':transno.value,'bank_id':bank_id.value,'documentdate':documentdate.value,
+    var data = { 'banktransactionr' : dynamicTableData,'subhead_id':subhead_id.value,'transno':transno.value,'bank_id':bank_id.value,'documentdate':documentdate.value,
             'cheque_no':cheque_no.value,'cheque_date':cheque_date.value,'head_id':head_id.value ,'description': description.value,'transno':transno.value
-        ,'amount_fc':amount_fc.value,'amount_pkr':amount_pkr.value,'conversion_rate':conversion_rate.value,'advtxt':advtxt.value,'paymentid':paymentid.value,'supname':supname.value};
+        ,'amount_fc':amount_fc.value,'amount_pkr':amount_pkr.value,'conversion_rate':conversion_rate.value,'advtxt':advtxt.value,'supname':supname.value,'receivedid':receivedid.value};
 
 
 
 
 
-    fetch(@json(route('banktransaction.update',$banktransaction)),{
+    fetch(@json(route('banktransactionr.update',$banktransaction)),{
         credentials: 'same-origin', // 'include', default: 'omit'
         method: 'PUT', // 'GET', 'PUT', 'DELETE', etc.
         // body: formData, // Coordinate the body type with 'Content-Type'
@@ -534,7 +524,7 @@ function validateForm()
     .then( response => {
         if (response == 'success')
         {
-            window.open(window.location.origin + "/banktransaction","_self" );
+            window.open(window.location.origin + "/banktransactionr","_self" );
         }
     })
     .catch(error => {

@@ -174,7 +174,7 @@
                     {title: "Weight",field: "wtbal"},
                     {title: "Feet",field: "agencychrgs"}
                 ]},
-
+                {title: "SuppPaymentBalance",field: "invoicebal"},
 
             {title:"View" , formatter:viewIcon, hozAlign:"center",headerSort:false, responsive:0,
                 cellClick:function(e, cell){

@@ -17,6 +17,8 @@ use App\Models\Head;
 use App\Models\Bank;
 use App\Models\BankTransaction;
 use App\Models\PaymentDetail;
+use App\Models\ReceiveDetails;
+
 use App\Models\Supplier;
 
 
@@ -27,11 +29,11 @@ use \Mpdf\Mpdf as PDF;
 use Illuminate\Support\Facades\Session;
 
 // LocalPurchaseController
-class PaymentController  extends Controller
+class ReceiveController  extends Controller
 {
     public function index(Request $request)
     {
-         return view('payments.index');
+         return view('received.index');
 
 
     }
@@ -66,8 +68,8 @@ class PaymentController  extends Controller
         $size = $request->size;
         $field = $request->sort[0]["field"];     //  Nested Array
         $dir = $request->sort[0]["dir"];         //  Nested Array
-        $cis1 = DB::select('call procpaymentindex');
-        $cis = DB::table('vwpaymentindex')
+        $cis1 = DB::select('call procreceivedindex');
+        $cis = DB::table('vwreceivedindex')
         // ->join('suppliers', 'contracts.supplier_id', '=', 'suppliers.id')
         // ->select('contracts.*', 'suppliers.title')
         // ->with('customer:id,title')
@@ -85,7 +87,7 @@ class PaymentController  extends Controller
     {
         $search = $request->search;
         $size = $request->size;
-        $contractDetails = CustomerOrderDetails::where('sale_invoice_id',$request->id)
+        $contractDetails = ReceiveDetails::where('sale_invoice_id',$request->id)
         ->paginate((int) $size);
         return $contractDetails;
     }
@@ -97,10 +99,10 @@ class PaymentController  extends Controller
         $size = $request->size;
         $field = $request->sort[0]["field"];     //  Nested Array
         $dir = $request->sort[0]["dir"];         //  Nested Array
-        $contracts = DB::table('vwpaymentmaster')
+        $contracts = DB::table('vwreceivedmaster')
         // ->join('suppliers', 'contracts.supplier_id', '=', 'suppliers.id')
         // ->select('contracts.*', 'suppliers.title')
-        ->where('supname', 'like', "%$search%")
+        ->where('custname', 'like', "%$search%")
         // ->orWhere('prno', 'like', "%$search%")
         ->orderBy($field,$dir)
         ->paginate((int) $size);
@@ -114,7 +116,7 @@ class PaymentController  extends Controller
         $id = $request->id;
         // $abc = DB::select('call proctest0(1)');
         //  $contractDetails = DB::table('vwdetailquotations')->where('sale_invoice_id',$id)->get();
-        $contractDetails = DB::select('call procpaymentdtl(?)',array( $id ));
+        $contractDetails = DB::select('call procreceiveddtl(?)',array( $id ));
         return response()->json($contractDetails, 200);
     }
 
@@ -126,7 +128,7 @@ class PaymentController  extends Controller
         // return view('sales.create')
         // $mycname='MUHAMMAD HABIB & Co.';
         $maxposeqno = DB::table('bank_transactions')->select('*')->max('transno')+1;
-        return \view ('payments.create',compact('maxposeqno'))
+        return \view ('received.create',compact('maxposeqno'))
         ->with('heads',Head::where('status',1)->where('forcp',1)->get())
         ->with('banks',Bank::where('status',1)->get());
     }
@@ -151,25 +153,24 @@ class PaymentController  extends Controller
             $ci->bank_id = $request->bank_id;
             $ci->head_id = $request->head_id;
             $ci->subhead_id = $request->supplier_id;
-            // $ci->transaction_type = 'BPV';
             if($request->bank_id == 1)
             {
-                $ci->transaction_type = 'CPV';
+                $ci->transaction_type = 'CRV';
             }
             if($request->bank_id > 2)
             {
-                $ci->transaction_type = 'BPV';
+                $ci->transaction_type = 'BRV';
             }
             $ci->documentdate = $request->documentdate;
-            $ci->conversion_rate = $request->conversion_rate;
+            $ci->conversion_rate = 0;
             $ci->amount_fc = $request->amount_fc;
-            $ci->amount_pkr = $request->amount_pkr;
+            $ci->amount_pkr = $request->amount_fc;
             $ci->cheque_date = $request->cheque_date;
             $ci->cheque_no = $request->cheque_no;
             $ci->description = $request->description;
             $ci->transno = $request->transno;
             $ci->advance = $request->advtxt;
-            $ci->supname = $request->supname;
+            $ci->supname = $request->custname;
 
 
             $ci->save();
@@ -180,39 +181,39 @@ class PaymentController  extends Controller
             // $qutclose->save();
 
 
-            foreach ($request->banktransaction as $cont) {
+            foreach ($request->banktransactionr as $cont) {
                 // $material = Material::findOrFail($cont['id']);
-                $lpd = new PaymentDetail();
-                $lpd->paymentid = $ci->id;
+                $lpd = new ReceiveDetails();
+                $lpd->receivedid = $ci->id;
                 $lpd->invoice_id = $cont['invoice_id'];
-                $lpd->invoice_no = $cont['invoice_no'];
-                $lpd->invoice_date = $cont['invoice_date'];
-                $lpd->invoice_amount = $cont['invoice_amount'];
-                $lpd->curncy = $cont['curncy'];
-                $lpd->payedusd = $cont['payedusd'];
-                $lpd->convrate = $cont['convrate'];
-                $lpd->payedrup = $cont['payedrup'];
+                $lpd->dcno = $cont['dcno'];
+                $lpd->billno = $cont['billno'];
+                $lpd->saldate = $cont['saldate'];
+                $lpd->staxper = $cont['staxper'];
+                $lpd->staxamount = $cont['staxamount'];
+                $lpd->totrcvble = $cont['totrcvble'];
+                $lpd->totrcvd = $cont['totrcvd'];
+                $lpd->invoice_bal = $cont['invoice_bal'];
+                $lpd->pono = $cont['pono'];
                 $lpd->save();
             }
 
             DB::update(DB::raw("
             UPDATE bank_transactions c
             INNER JOIN (
-            SELECT paymentid,SUM(payedusd) AS payedusd,SUM(payedrup) AS payedrup,max(convrate) AS convrate
-            FROM payment_details WHERE paymentid=$ci->id GROUP BY paymentid
-            ) x ON c.id = x.paymentid
-            SET c.amount_fc = x.payedusd,c.amount_pkr=x.payedrup,c.conversion_rate=x.convrate
+            SELECT receivedid,SUM(totrcvd) AS totrcvd
+            FROM receive_details WHERE receivedid=$ci->id GROUP BY receivedid
+            ) x ON c.id = x.receivedid
+            SET c.amount_fc = x.totrcvd,c.amount_pkr=x.totrcvd,c.conversion_rate=0
             where  c.id = $ci->id "));
 
             DB::update(DB::raw("
-            UPDATE commercial_invoices c
+            UPDATE sale_invoices c
             INNER JOIN (
-            SELECT invoice_id,SUM(payedusd) as payment  FROM payment_details WHERE invoice_id in(select invoice_id from payment_details where paymentid =$ci->id  )  GROUP BY invoice_id
+            SELECT invoice_id,SUM(totrcvd) as received  FROM receive_details WHERE invoice_id in(select invoice_id from receive_details where receivedid =$ci->id  )  GROUP BY invoice_id
             ) x ON c.id = x.invoice_id
-            SET c.invoicebal = ( case when contract_id=0 then c.total else tval end ) -  x.payment
-            where  c.id in(select invoice_id from payment_details where paymentid =$ci->id  ) "));
-
-
+            SET c.paymentbal = totrcvbamount -  x.received
+            where  c.id in(select invoice_id from receive_details where receivedid =$ci->id  ) "));
 
             DB::commit();
             Session::flash('success','Payment Information Saved');
@@ -229,19 +230,19 @@ class PaymentController  extends Controller
     {
 
         // $stockdtl = DB::select('call procdetailquotations(?,?)',array( $id,2 ));
-        $cd = DB::table('payment_details')
+        $cd = DB::table('receive_details')
         // ->join('materials', 'materials.id', '=', 'customer_order_details.material_id')
         // ->join('skus', 'skus.id', '=', 'customer_order_details.sku_id')
         // ->leftJoin('tmptblinvswsstock','tmptblinvswsstock.material_id', '=', 'customer_order_details.material_id')
         // ->select('customer_order_details.*','materials.title as material_title','materials.dimension','skus.title as sku',
         // DB::raw('( CASE customer_order_details.sku_id  WHEN  1 THEN tmptblinvswsstock.qtykg WHEN 2 THEN tmptblinvswsstock.qtypcs WHEN 3 THEN tmptblinvswsstock.qtyfeet  END) AS balqty')
         // ,DB::raw('( CASE customer_order_details.sku_id  WHEN  1 THEN tmptblinvswsstock.qtykg - customer_order_details.qtykg  WHEN 2 THEN tmptblinvswsstock.qtypcs - customer_order_details.qtykg WHEN 3 THEN tmptblinvswsstock.qtyfeet - customer_order_details.qtykg  END) AS varqty') )
-        ->where('paymentid',$id)->get();
+        ->where('receivedid',$id)->get();
          $data=compact('cd');
 
 
-        return view('payments.edit')
-        ->with('suppliers',Supplier::select('id','title')->get())
+        return view('received.edit')
+        ->with('customers',Customer::select('id','title')->get())
         ->with('banktransaction',BankTransaction::findOrFail($id))
         ->with($data)
         ->with('banks',Bank::select('id','title')->get());
@@ -250,33 +251,30 @@ class PaymentController  extends Controller
     }
 
 
-    public function update(Request $request, BankTransaction $banktransaction)
+    public function update(Request $request, BankTransaction $banktransactionr)
     {
         //  dd($commercialinvoice->commercial_invoice_id());
             //   dd($request->all());
         DB::beginTransaction();
         try {
 
-            //  dd($request->sale_invoice_id);
-            $ci = BankTransaction::findOrFail($request->paymentid);
+            $ci = BankTransaction::findOrFail($request->receivedid);
+
             $ci->bank_id = $request->bank_id;
             $ci->head_id = $request->head_id;
-            $ci->subhead_id = $request->supplier_id;
+            $ci->subhead_id = $request->subhead_id;
             if($request->bank_id == 1)
             {
-                $ci->transaction_type = 'CPV';
+                $ci->transaction_type = 'CRV';
             }
             if($request->bank_id > 2)
             {
-                $ci->transaction_type = 'BPV';
+                $ci->transaction_type = 'BRV';
             }
-
-
-
             $ci->documentdate = $request->documentdate;
-            $ci->conversion_rate = $request->conversion_rate;
+            $ci->conversion_rate = 0;
             $ci->amount_fc = $request->amount_fc;
-            $ci->amount_pkr = $request->amount_pkr;
+            $ci->amount_pkr = $request->amount_fc;
             $ci->cheque_date = $request->cheque_date;
             $ci->cheque_no = $request->cheque_no;
             $ci->description = $request->description;
@@ -288,10 +286,10 @@ class PaymentController  extends Controller
 
 
             // Get Data
-            $cds = $request->banktransaction; // This is array
-            $cds = PaymentDetail::hydrate($cds); // Convert it into Model Collection
+            $cds = $request->banktransactionr; // This is array
+            $cds = ReceiveDetails::hydrate($cds); // Convert it into Model Collection
             // Now get old ContractDetails and then get the difference and delete difference
-            $oldcd = PaymentDetail::where('paymentid',$banktransaction->id)->get();
+            $oldcd = ReceiveDetails::where('receivedid',$banktransactionr->id)->get();
             $deleted = $oldcd->diff($cds);
             //  Delete contract details if marked for deletion
             foreach ($deleted as $d) {
@@ -301,52 +299,56 @@ class PaymentController  extends Controller
             foreach ($cds as $cd) {
                 if($cd->id)
                 {
-                    $cds = PaymentDetail::where('id',$cd->id)->first();
-                    $cds->paymentid = $ci->id;
+                    $cds = ReceiveDetails::where('id',$cd->id)->first();
+                    $cds->receivedid = $ci->id;
                     $cds->invoice_id = $cd['invoice_id'];
-                    $cds->invoice_no = $cd['invoice_no'];
-                    $cds->invoice_date = $cd['invoice_date'];
-                    $cds->invoice_amount = $cd['invoice_amount'];
-                    $cds->curncy = $cd['curncy'];
-                    $cds->payedusd = $cd['payedusd'];
-                    $cds->convrate = $cd['convrate'];
-                    $cds->payedrup = $cd['payedrup'];
+                    $cds->dcno = $cd['dcno'];
+                    $cds->billno = $cd['billno'];
+                    $cds->saldate = $cd['saldate'];
+                    $cds->staxper = $cd['staxper'];
+                    $cds->staxamount = $cd['staxamount'];
+                    $cds->totrcvble = $cd['totrcvble'];
+                    $cds->totrcvd = $cd['totrcvd'];
+                    $cds->invoice_bal = $cd['invoice_bal'];
+                    $cds->pono = $cd['pono'];
+
                     $cds->save();
                 }else
                 {
                     //  The item is new, Add it
-                     $cds = new PaymentDetails();
-                     $cds->paymentid = $ci->id;
+                     $cds = new ReceiveDetails();
+                     $cds->receivedid = $ci->id;
                      $cds->invoice_id = $cd['invoice_id'];
-                     $cds->invoice_no = $cd['invoice_no'];
-                     $cds->invoice_date = $cd['invoice_date'];
-                     $cds->invoice_amount = $cd['invoice_amount'];
-                     $cds->curncy = $cd['curncy'];
-                     $cds->payedusd = $cd['payedusd'];
-                     $cds->convrate = $cd['convrate'];
-                     $cds->payedrup = $cd['payedrup'];
-                    $cds->save();
+                     $cds->dcno = $cd['dcno'];
+                     $cds->billno = $cd['billno'];
+                     $cds->saldate = $cd['saldate'];
+                     $cds->staxper = $cd['staxper'];
+                     $cds->staxamount = $cd['staxamount'];
+                     $cds->totrcvble = $cd['totrcvble'];
+                     $cds->totrcvd = $cd['totrcvd'];
+                     $cds->invoice_bal = $cd['invoice_bal'];
+                     $cds->pono = $cd['pono'];
+
+                     $cds->save();
                 }
             }
 
             DB::update(DB::raw("
             UPDATE bank_transactions c
             INNER JOIN (
-            SELECT paymentid,SUM(payedusd) AS payedusd,SUM(payedrup) AS payedrup,max(convrate) AS convrate
-            FROM payment_details WHERE paymentid=$ci->id GROUP BY paymentid
-            ) x ON c.id = x.paymentid
-            SET c.amount_fc = x.payedusd,c.amount_pkr=x.payedrup,c.conversion_rate=x.convrate
+            SELECT receivedid,SUM(totrcvd) AS totrcvd
+            FROM receive_details WHERE receivedid=$ci->id GROUP BY receivedid
+            ) x ON c.id = x.receivedid
+            SET c.amount_fc = x.totrcvd,c.amount_pkr=x.totrcvd,c.conversion_rate=0
             where  c.id = $ci->id "));
 
             DB::update(DB::raw("
-            UPDATE commercial_invoices c
+            UPDATE sale_invoices c
             INNER JOIN (
-            SELECT invoice_id,SUM(payedusd) as payment  FROM payment_details WHERE invoice_id in(select invoice_id from payment_details where paymentid =$ci->id  )  GROUP BY invoice_id
+            SELECT invoice_id,SUM(totrcvd) as received  FROM receive_details WHERE invoice_id in(select invoice_id from receive_details where receivedid =$ci->id  )  GROUP BY invoice_id
             ) x ON c.id = x.invoice_id
-            SET c.invoicebal = ( case when contract_id=0 then c.total else tval end ) -  x.payment
-            where  c.id in(select invoice_id from payment_details where paymentid =$ci->id  ) "));
-
-
+            SET c.paymentbal = totrcvbamount -  x.received
+            where  c.id in(select invoice_id from receive_details where receivedid =$ci->id  ) "));
 
 
 

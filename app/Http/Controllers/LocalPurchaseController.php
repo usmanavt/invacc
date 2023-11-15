@@ -168,6 +168,7 @@ class LocalPurchaseController  extends Controller
             $ci->agencychrgs = 0;
             $ci->otherchrgs = $request->otherchrgs;
             $ci->total = $request->bankntotal;
+            $ci->invoicebal = $request->bankntotal;
             $ci->save();
 
 
@@ -307,6 +308,7 @@ class LocalPurchaseController  extends Controller
             $commercialinvoice->exataxoffie = $request->exataxoffie;
             $commercialinvoice->otherchrgs = $request->otherchrgs;
             $commercialinvoice->total = $request->bankntotal;
+            $commercialinvoice->invoicebal = $request->bankntotal;
             $commercialinvoice->gpassno = $request->gpassno;
             $commercialinvoice->save();
             // Get Data

@@ -18,7 +18,7 @@ class CreatePaymentDetailsTable extends Migration
             $table->Integer('paymentid');
             $table->Integer('invoice_id');
             $table->string('invoice_no', 30);
-            $table->Integer('invoice_date');
+            $table->date('invoice_date');
             $table->decimal('amountrs', 15, 3)->default(00.000);
             $table->decimal('amountdlrs', 15, 3)->default(00.000);
             $table->timestamps();

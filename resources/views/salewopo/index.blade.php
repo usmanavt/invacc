@@ -181,7 +181,7 @@
             {title: "Pcs",field: "balsltpcs"},
             {title: "Feet",field: "balslfeet"},
             ]},
-            // {title: "Pending",field: "ordrbal"},
+            {title: "Payment Balance",field: "paymentbal"},
             // {title: "Total Delivery Against Sale Order",field: "delivered"},
             // {title: "Sale Order Balance",field: "delivered"},
 

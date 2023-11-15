@@ -87,7 +87,8 @@
                             <x-dropdown-link href="{{ route('saleinvoices.index') }}">Sales Invoice ( With PO )</x-dropdown-link>
                             <x-dropdown-link href="{{ route('salewopo.index') }}">Sales Invoice ( With Out PO )</x-dropdown-link>
                             <x-dropdown-link href="{{ route('salereturn.index') }}">Sales Return</x-dropdown-link>
-                            <x-dropdown-link href="{{ route('payments.index') }}">Payments</x-dropdown-link>
+                            <x-dropdown-link href="{{ route('banktransaction.index') }}">Payments Voucher</x-dropdown-link>
+                            <x-dropdown-link href="{{ route('banktransactionr.index') }}">Received Voucher</x-dropdown-link>
                             <x-dropdown-link href="{{ route('bankpayments.index') }}">Bank Payments</x-dropdown-link>
                             <x-dropdown-link href="{{ route('bankrecivings.index') }}">Bank Recivings</x-dropdown-link>
                             <x-dropdown-link href="{{ route('cashpayments.index') }}">Cash Payments</x-dropdown-link>
