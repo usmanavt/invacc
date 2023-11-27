@@ -157,7 +157,7 @@ class ReceiveController  extends Controller
             {
                 $ci->transaction_type = 'CRV';
             }
-            if($request->bank_id > 2)
+            if($request->bank_id > 3)
             {
                 $ci->transaction_type = 'BRV';
             }
@@ -184,6 +184,9 @@ class ReceiveController  extends Controller
             foreach ($request->banktransactionr as $cont) {
                 // $material = Material::findOrFail($cont['id']);
                 $lpd = new ReceiveDetails();
+                if($cont['totrcvd'] <> 0)
+             {
+
                 $lpd->receivedid = $ci->id;
                 $lpd->invoice_id = $cont['invoice_id'];
                 $lpd->dcno = $cont['dcno'];
@@ -196,6 +199,7 @@ class ReceiveController  extends Controller
                 $lpd->invoice_bal = $cont['invoice_bal'];
                 $lpd->pono = $cont['pono'];
                 $lpd->save();
+             }
             }
 
             DB::update(DB::raw("
@@ -206,6 +210,16 @@ class ReceiveController  extends Controller
             ) x ON c.id = x.receivedid
             SET c.amount_fc = x.totrcvd,c.amount_pkr=x.totrcvd,c.conversion_rate=0
             where  c.id = $ci->id "));
+
+            DB::update(DB::raw("
+            UPDATE cheque_transactions c
+            INNER JOIN (SELECT id,documentdate,cheque_no,transaction_type,bank_id FROM bank_transactions WHERE bank_id>3 AND id=$ci->id) x
+            ON c.cheque_no=x.cheque_no and c.bank_id=x.bank_id
+            SET c.clrstatus=1,c.clrdate=x.documentdate,clrid=x.id,c.ref=CONCAT(x.transaction_type,'-',LPAD(x.id,4,'0')) "));
+
+
+
+
 
             DB::update(DB::raw("
             UPDATE sale_invoices c
@@ -299,7 +313,11 @@ class ReceiveController  extends Controller
             foreach ($cds as $cd) {
                 if($cd->id)
                 {
-                    $cds = ReceiveDetails::where('id',$cd->id)->first();
+
+            $cds = ReceiveDetails::where('id',$cd->id)->first();
+            if($cd['totrcvd'] <> 0)
+            {
+
                     $cds->receivedid = $ci->id;
                     $cds->invoice_id = $cd['invoice_id'];
                     $cds->dcno = $cd['dcno'];
@@ -311,12 +329,15 @@ class ReceiveController  extends Controller
                     $cds->totrcvd = $cd['totrcvd'];
                     $cds->invoice_bal = $cd['invoice_bal'];
                     $cds->pono = $cd['pono'];
-
                     $cds->save();
+            }
                 }else
                 {
                     //  The item is new, Add it
                      $cds = new ReceiveDetails();
+                if($cd['totrcvd'] <> 0)
+                {
+
                      $cds->receivedid = $ci->id;
                      $cds->invoice_id = $cd['invoice_id'];
                      $cds->dcno = $cd['dcno'];
@@ -331,6 +352,7 @@ class ReceiveController  extends Controller
 
                      $cds->save();
                 }
+                    }
             }
 
             DB::update(DB::raw("
@@ -350,7 +372,11 @@ class ReceiveController  extends Controller
             SET c.paymentbal = totrcvbamount -  x.received
             where  c.id in(select invoice_id from receive_details where receivedid =$ci->id  ) "));
 
-
+            DB::update(DB::raw("
+            UPDATE cheque_transactions c
+            INNER JOIN (SELECT id,documentdate,cheque_no,transaction_type,bank_id FROM bank_transactions WHERE bank_id>3 AND id=$ci->id) x
+            ON c.cheque_no=x.cheque_no and c.bank_id=x.bank_id
+            SET c.clrstatus=1,c.clrdate=x.documentdate,clrid=x.id,c.ref=CONCAT(x.transaction_type,'-',LPAD(x.id,4,'0')) "));
 
 
             DB::commit();

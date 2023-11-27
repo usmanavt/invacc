@@ -13,7 +13,7 @@
 
                     <form action="{{ route('reports.fetch')}}" method="POST" target="_blank">
                         @csrf
-                        <div class="flex flex-col md:flex-row flex-wrap gap-2 justify-center">
+                        <div class="flex flex-col md:flex-row flex-wrap gap-2   justify-center">
                             <fieldset class="border px-4 py-2 rounded">
                                 <legend>Report Type</legend>
                                 <div>
@@ -27,18 +27,70 @@
                                 <div>
                                     <input type="radio" name="report_type" value="glhw" required onchange="checkReportType('glhw')">
                                     <label for="">General Ledger (Head Wise)</label>
+
+                                    <input class="checked:bg-blue-500 checked:border-blue-500 focus:outline-none"  type="checkbox" name="glhsum" id="glhsum"   onclick="GLHWSUMRY(this)" >
+                                    <label for="">
+                                       <span style="color: brown;font-weight: bold"> Summary </span> <span class="text-red-500 font-semibold  ">(*)</span>
+                                        </label>
+
+
+
                                 </div>
+                                {{-- <div>
+                                    <input type="radio" name="report_type" value="glhws" required onchange="checkReportType('glhws')">
+                                    <label for="">General Ledger Summary (Head Wise)</label>
+                                </div> --}}
+
+                                <div>
+                                    <input type="radio" name="report_type" value="invwspay" required onchange="checkReportType('invwspay')">
+                                    <label for="">Invoice Wise Payment/Collection</label>
+
+                                    <input class="checked:bg-blue-500 checked:border-blue-500 focus:outline-none"  type="checkbox" name="adv" id="adv"   onclick="advpayment(this)" >
+                                    <label for="">
+                                       <span style="color: brown;font-weight: bold"> Show Only Pending Invoices </span> <span class="text-red-500 font-semibold  ">(*)</span>
+                                        </label>
+
+                                </div>
+
+                                <div>
+                                    <input type="radio" name="report_type" value="chktran" required onchange="checkReportType('chktran')">
+                                    <label for="">Cheque Transaction</label>
+
+                                    <input class="checked:bg-blue-500 checked:border-blue-500 focus:outline-none"  type="checkbox" name="chq" id="chq"   onclick="chqcol(this)" >
+                                    <label for="">
+                                       <span style="color: brown;font-weight: bold"> Show Only Pending Cheques </span> <span class="text-red-500 font-semibold  ">(*)</span>
+                                        </label>
+
+                                </div>
+
+
+
+
+
+
+                                {{-- <div>
+                                    <input type="radio" name="report_type" value="invwscol" required onchange="checkReportType('invwscol')">
+                                    <label for="">Invoice Wise Collection</label>
+                                </div> --}}
+
+
                                 <div>
                                     <input type="radio" name="report_type" value="vchr" required onchange="checkReportType('vchr')">
                                     <label for="">Voucher</label>
                                 </div>
                                 <div>
                                     <input type="radio" name="report_type" value="agng" required onchange="checkReportType('agng')">
-                                    <label for="">Aging</label>
+                                    <label for="">Aging Detail</label>
+
+                                    <input class="checked:bg-blue-500 checked:border-blue-500 focus:outline-none"  type="checkbox" name="agdtl" id="agdtl"   onclick="vagng(this)" >
+                                    <label for="">
+                                       <span style="color: brown;font-weight: bold"> Summary </span> <span class="text-red-500 font-semibold  ">(*)</span>
+                                        </label>
+
                                 </div>
                             </fieldset>
 
-                            <fieldset class="border px-4 py-2 rounded">
+                            {{-- <fieldset class="border px-4 py-2 rounded">
                                 <legend>Additional Requests</legend>
                                 <div>
                                     <input type="checkbox" name="additional[]" value="wdrfa">
@@ -56,9 +108,12 @@
                                     <input type="checkbox" name="additional[]" value="wiwcd">
                                     <label for="">With Invoice Wise Collections Details</label>
                                 </div>
-                            </fieldset>
+                            </fieldset> --}}
                         </div>
-
+                        <input type="text" title="t1"  id="p1" name="p1" value="0" hidden  >
+                        <input type="text" title="t2"  id="p2" name="p2" value="0" hidden  >
+                        <input type="text" title="t3"  id="p3" name="p3" value="0" hidden  >
+                        <input type="text" title="t4"  id="p4" name="p4" value="0"   >
                         <div class="flex flex-col md:flex-row w-full gap-2 px-6 pt-4">
 
                             <fieldset class="border px-4 py-2 rounded w-full">
@@ -142,7 +197,43 @@
                     subhead.setAttribute('disabled','')
                 }
                 break;
-            case 'vchr':
+
+                case 'invwspay':
+                list = subheads.filter( l => l.MHEAD === value)
+                if(list.length > 0)
+                {
+                    list.forEach(e => {
+                        addSelectElement(subhead,e.Subhead,e.title)
+                    });
+                    subhead.setAttribute('required','')
+                    subhead.removeAttribute('disabled','')
+                }else{
+                    subhead.removeAttribute('required','')
+                    subhead.setAttribute('disabled','')
+                }
+                break;
+
+                case 'agng':
+                list = subheads.filter( l => l.MHEAD === value)
+                if(list.length > 0)
+                {
+                    list.forEach(e => {
+                        addSelectElement(subhead,e.Subhead,e.title)
+                    });
+                    subhead.setAttribute('required','')
+                    subhead.removeAttribute('disabled','')
+                }else{
+                    subhead.removeAttribute('required','')
+                    subhead.setAttribute('disabled','')
+                }
+                break;
+
+
+
+
+
+
+             case 'vchr':
             // console.log(subhead);
             fetch(vouchers + `?todate=${todate.value}&fromdate=${fromdate.value}&head=${value}`,{
                     method:"GET",
@@ -238,6 +329,37 @@
                 headSelected()
                 break;
 
+                case 'invwspay':
+                // Show Head
+                rptType = 'invwspay'
+                head.setAttribute('required','')
+                head.disabled = false
+                head.length = 0
+                subhead.removeAttribute('required')
+                subhead.disabled = true
+                subhead.length = 0
+                heads.forEach(e => {
+                    addSelectElement(head,e.id,e.title)
+                });
+                headSelected()
+                break;
+
+                case 'agng':
+                // Show Head
+                rptType = 'agng'
+                head.setAttribute('required','')
+                head.disabled = false
+                head.length = 0
+                subhead.removeAttribute('required')
+                subhead.disabled = true
+                subhead.length = 0
+                heads.forEach(e => {
+                    addSelectElement(head,e.id,e.title)
+                });
+                headSelected()
+                break;
+
+
             case 'vchr':
                 //  Head Not Required
                 rptType = 'vchr'
@@ -270,6 +392,84 @@
                 break;
         }
     }
+
+    function advpayment(adv) {
+        var p1 = document.getElementById("p1");
+        // amount_fc.disabled = advtxt.checked ? true : false;
+
+        // amount_fc.disabled = per.checked ? true : false;
+
+        if(adv.checked==true)
+        {
+            p1.value=1;
+        }
+        else
+        {
+            p1.value=0;
+        }
+
+    }
+
+    function chqcol(chq) {
+        var p4 = document.getElementById("p4");
+        // amount_fc.disabled = advtxt.checked ? true : false;
+
+        // amount_fc.disabled = per.checked ? true : false;
+
+        if(chq.checked==true)
+        {
+            p4.value=1;
+        }
+        else
+        {
+            p4.value=0;
+        }
+
+    }
+
+
+
+
+
+    function GLHWSUMRY(glhsum) {
+        var p2 = document.getElementById("p2");
+        // amount_fc.disabled = advtxt.checked ? true : false;
+
+        // amount_fc.disabled = per.checked ? true : false;
+
+        if(glhsum.checked==true)
+        {
+            p2.value=1;
+        }
+        else
+        {
+            p2.value=0;
+        }
+
+    }
+
+
+    function vagng(agdtl) {
+        var p3 = document.getElementById("p3");
+        // amount_fc.disabled = advtxt.checked ? true : false;
+
+        // amount_fc.disabled = per.checked ? true : false;
+
+        if(agdtl.checked==true)
+        {
+            p3.value=1;
+        }
+        else
+        {
+            p3.value=0;
+        }
+
+    }
+
+
+
+
+
 </script>
 @endpush
 </x-app-layout>

@@ -60,18 +60,18 @@
                                     @endforeach
                                 </select>
 
-                                <x-input-numeric title="Conversion Rate" name="conversion_rate" id="conversion_rate" value="1" min="1" step="0.01" required  onblur="convamounttodlr()" value="{{ $bt->conversion_rate }}"/>
-                                <x-input-numeric title="Amount $" name="amount_fc" id="amount_fc" min="1" required  onblur="convamounttodlr()" value="{{ $bt->amount_fc }}"/>
-                                <x-input-numeric title="Amount Rs" name="amount_pkr" id="amount_pkr"  disabled required class="" value="{{ $bt->amount_pkr }}"/>
+                                {{-- <x-input-numeric title="Conversion Rate" name="conversion_rate" id="conversion_rate" value="1" min="1" step="0.01" required  onblur="convamounttodlr()" value="{{ $bt->conversion_rate }}"/> --}}
+                                <x-input-numeric title="Receiving" name="received" id="received"    value="{{ $bt->received }}"/>
+                                <x-input-numeric title="Payment" name="payment" id="payment"    class="" value="{{ $bt->payment }}"/>
                                 <x-input-text title="Cheque #" name="cheque_no" req required class="" value="{{ $bt->cheque_no }}"/>
-                                <x-input-date title="Cheque Date" name="cheque_date" value="{{ $bt->cheque_date->format('Y-m-d') }}" req required/>
+                                <x-input-date title="Cheque Date" name="cheque_date" value="{{ $bt->cheque_date }}" req required/>
 
 
                                 <div class="flex flex-col">
                                     <label for="">
                                         Description <span class="text-red-500 font-semibold">(*)</span>
                                     </label>
-                                    <textarea name="description" id="description" cols="30" rows="3" maxlength="255" required class="rounded">{{ $bt->description }}</textarea>
+                                    <textarea name="description" id="description" cols="30" rows="3" maxlength="255"  class="rounded">{{ $bt->description }}</textarea>
                                 </div>
 
                                 <div class="mt-2">
@@ -106,8 +106,8 @@
 
     const submitButton = document.getElementById('submitButton')
     const conversion_rate = document.getElementById('conversion_rate')
-    const amount_fc = document.getElementById('amount_fc')
-    const amount_pkr = document.getElementById('amount_pkr')
+    const received = document.getElementById('received')
+    const payment = document.getElementById('payment')
     const head = document.getElementById('head_id')
     const subhead = document.getElementById('subhead_id')
     const supplier = document.getElementById('supplier_id')
@@ -165,15 +165,15 @@
         select.appendChild(option)
     }
 
-    const calculate = () =>{
-        amount_pkr.value = (parseFloat(conversion_rate.value) * parseFloat(amount_fc.value)).toFixed(2)
-        submitButton.disabled = false
-    }
+    // const calculate = () =>{
+    //     payment.value = (parseFloat(conversion_rate.value) * parseFloat(received.value)).toFixed(2)
+    //     submitButton.disabled = false
+    // }
 
-    function convamounttodlr()
-        {
-            amount_pkr.value = (parseFloat(conversion_rate.value) * parseFloat(amount_fc.value)).toFixed(2)
-        }
+    // function convamounttodlr()
+    //     {
+    //         amount_pkr.value = (parseFloat(conversion_rate.value) * parseFloat(received.value)).toFixed(2)
+    //     }
 
 </script>
 @endpush

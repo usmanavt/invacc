@@ -1,12 +1,15 @@
 <x-app-layout>
 
     @push('styles')
-    <link rel="stylesheet" href="{{ asset('css/tabulator_simple.min.css') }}">
+    {{-- <link rel="stylesheet" href="{{ asset('css/tabulator_simple.min.css') }}"> --}}
+    <link href="https://unpkg.com/tabulator-tables/dist/css/tabulator.min.css" rel="stylesheet">
+    <script type="text/javascript" src="https://unpkg.com/tabulator-tables/dist/js/tabulator.min.js"></script>
+
     @endpush
 
     <x-slot name="header">
         <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-            Bank Recivings
+            CHEQUE RECEIVING/ISSUING
         </h2>
     </x-slot>
 
@@ -63,9 +66,9 @@
                                     @endforeach
                                 </select>
 
-                                <x-input-numeric title="Conversion Rate" name="conversion_rate" id="conversion_rate" value="1" min="1" step="0.01" required  onblur="convamounttodlr()"/>
-                                <x-input-numeric title="Amount $" name="amount_fc" id="amount_fc" min="1" required  onblur="convamounttodlr()"/>
-                                <x-input-numeric title="Amount Rs" name="amount_pkr" id="amount_pkr"  disabled required class=""/>
+                                {{-- <x-input-numeric title="Conversion Rate" name="conversion_rate" id="conversion_rate" value="1" min="1" step="0.01" required  onblur="convamounttodlr()"/> --}}
+                                <x-input-numeric title="Receiving" name="received" id="received" min="1" required  onblur="convamounttodlr()"/>
+                                <x-input-numeric title="Payment" name="payment" id="payment"   required class=""/>
                                 <x-input-text title="Cheque #" name="cheque_no" req required class=""/>
                                 <x-input-date title="Cheque Date" name="cheque_date" req required/>
 
@@ -74,7 +77,7 @@
                                     <label for="">
                                         Description <span class="text-red-500 font-semibold">(*)</span>
                                     </label>
-                                    <textarea name="description" id="description" cols="30" rows="3" maxlength="255" required class="rounded"></textarea>
+                                    <textarea name="description" id="description" cols="30" rows="3" maxlength="255" class="rounded"></textarea>
                                 </div>
 
                                 <div class="mt-2">
@@ -114,8 +117,8 @@
     let subheads = @json($subheads);
     const submitButton = document.getElementById('submitButton')
     const conversion_rate = document.getElementById('conversion_rate')
-    const amount_fc = document.getElementById('amount_fc')
-    const amount_pkr = document.getElementById('amount_pkr')
+    const received = document.getElementById('received')
+    const payment = document.getElementById('payment')
     const head = document.getElementById('head_id')
     const subhead = document.getElementById('subhead_id')
     const supplier = document.getElementById('supplier_id')
@@ -166,7 +169,7 @@
     }
 
     const calculate = () =>{
-        amount_pkr.value = (parseFloat(conversion_rate.value) * parseFloat(amount_fc.value)).toFixed(2)
+        payment.value = (parseFloat(conversion_rate.value) * parseFloat(received.value)).toFixed(2)
         submitButton.disabled = false
     }
 </script>
@@ -211,19 +214,44 @@
 
         columns:[
             // Master Data
+
+            {
+                title:'CHEQUE TRANSACTION', headerHozAlign:"center",
+                    columns:[
+
             {title:"Id", field:"id" , responsive:0,visible:false},
-            {title:"Bank", field:"bank.title" , visible:true , responsive:0},
-            {title:"Head", field:"head.title" , visible:true , responsive:0},
-            {title:"Subhead", field:"subhead.title" , visible:true , responsive:0},
-            {title:"Supplier", field:"supplier.title" , visible:true , responsive:0},
-            {title:"Customer", field:"customer.title" , visible:true , responsive:0},
-            {title:"Tran", field:"transaction_type" ,  responsive:0,cssClass:'text-green-500 font-semibold'},
-            {title:"Conv. Rate", field:"conversion_rate",hozAlign:"right" ,  responsive:0,formatter:"money",formatterParams:{thousand:",",precision:2}},
-            {title:"Amount $", field:"amount_fc",hozAlign:"right" ,  responsive:0,formatter:"money",formatterParams:{thousand:",",precision:2}},
-            {title:"Amount Rs", field:"amount_pkr",hozAlign:"right" ,  responsive:0,formatter:"money",formatterParams:{thousand:",",precision:0}},
+            {title:"Bank", field:"bank" , visible:true , responsive:0},
+            {title:"Head", field:"mhead" , visible:true , responsive:0},
+            {title:"Subhead", field:"supname" , visible:true , responsive:0},
+            {title:"Entry Date", field:"documentdate" , visible:true , responsive:0},
+            // {title:"Customer", field:"customer.title" , visible:true , responsive:0},
+            // {title:"Tran", field:"transaction_type" ,  responsive:0,cssClass:'text-green-500 font-semibold'},
+            // {title:"Conv. Rate", field:"conversion_rate",hozAlign:"right" ,  responsive:0,formatter:"money",formatterParams:{thousand:",",precision:2}},
+            {title:"Receiving", field:"received",hozAlign:"right" ,  responsive:0,formatter:"money",formatterParams:{thousand:",",precision:2}},
+            {title:"Payment", field:"payment",hozAlign:"right" ,  responsive:0,formatter:"money",formatterParams:{thousand:",",precision:0}},
             {title:"Cheque Date", field:"cheque_date" ,  responsive:0},
             {title:"Cheque #", field:"cheque_no" ,  responsive:0},
-            {title:"Description", field:"description" ,  responsive:0},
+            {title:"Description", field:"description" ,  responsive:0}]},
+
+            {
+                title:'DURATION', headerHozAlign:"center",
+                    columns:[
+
+            {title:"Days", field:"days" ,  responsive:0}]},
+
+            {
+                title:'CLEARANCE STATUS', headerHozAlign:"center",
+                    columns:[
+
+            // {title:"Status", field:"clrstatus" ,  responsive:0},
+            {title:"Status", field:"clrstatus", hozAlign:"center", formatter:"tickCross", headerSort:false},
+            {title:"Date", field:"clrdate" ,  responsive:0},
+            {title:"", field:"clrid" ,  responsive:0,visible:false},
+            {title:"Ref.", field:"ref" ,  responsive:0},
+
+
+        ]},
+
             // {title:"Status", field:"status" ,  responsive:0,
             //     formatter:function(cell){
             //         if(cell.getData().status === 1)
@@ -270,7 +298,7 @@
 
     function convamounttodlr()
         {
-            amount_pkr.value = (parseFloat(conversion_rate.value) * parseFloat(amount_fc.value)).toFixed(2)
+            payment.value = (parseFloat(conversion_rate.value) * parseFloat(received.value)).toFixed(2)
         }
 
 </script>

@@ -179,10 +179,12 @@ class PaymentController  extends Controller
             // $qutclose->closed = 0;
             // $qutclose->save();
 
-
             foreach ($request->banktransaction as $cont) {
                 // $material = Material::findOrFail($cont['id']);
                 $lpd = new PaymentDetail();
+                if($cont['payedusd'] <> 0)
+                {
+
                 $lpd->paymentid = $ci->id;
                 $lpd->invoice_id = $cont['invoice_id'];
                 $lpd->invoice_no = $cont['invoice_no'];
@@ -192,7 +194,9 @@ class PaymentController  extends Controller
                 $lpd->payedusd = $cont['payedusd'];
                 $lpd->convrate = $cont['convrate'];
                 $lpd->payedrup = $cont['payedrup'];
+                $lpd->invoice_bal = $cont['invoice_bal'];
                 $lpd->save();
+                }
             }
 
             DB::update(DB::raw("
@@ -212,6 +216,11 @@ class PaymentController  extends Controller
             SET c.invoicebal = ( case when contract_id=0 then c.total else tval end ) -  x.payment
             where  c.id in(select invoice_id from payment_details where paymentid =$ci->id  ) "));
 
+            DB::update(DB::raw("
+            UPDATE cheque_transactions c
+            INNER JOIN (SELECT id,documentdate,cheque_no,transaction_type,bank_id FROM bank_transactions WHERE bank_id>3 AND id=$ci->id) x
+            ON c.cheque_no=x.cheque_no and c.bank_id=x.bank_id
+            SET c.clrstatus=1,c.clrdate=x.documentdate,clrid=x.id,c.ref=CONCAT(x.transaction_type,'-',LPAD(x.id,4,'0')) "));
 
 
             DB::commit();
@@ -302,6 +311,8 @@ class PaymentController  extends Controller
                 if($cd->id)
                 {
                     $cds = PaymentDetail::where('id',$cd->id)->first();
+                if($cd['payedusd'] <> 0)
+                {
                     $cds->paymentid = $ci->id;
                     $cds->invoice_id = $cd['invoice_id'];
                     $cds->invoice_no = $cd['invoice_no'];
@@ -311,11 +322,15 @@ class PaymentController  extends Controller
                     $cds->payedusd = $cd['payedusd'];
                     $cds->convrate = $cd['convrate'];
                     $cds->payedrup = $cd['payedrup'];
+                    $cds->invoice_bal = $cd['invoice_bal'];
                     $cds->save();
+                }
                 }else
                 {
                     //  The item is new, Add it
                      $cds = new PaymentDetails();
+                if($cd['payedusd'] <> 0)
+                {
                      $cds->paymentid = $ci->id;
                      $cds->invoice_id = $cd['invoice_id'];
                      $cds->invoice_no = $cd['invoice_no'];
@@ -325,7 +340,9 @@ class PaymentController  extends Controller
                      $cds->payedusd = $cd['payedusd'];
                      $cds->convrate = $cd['convrate'];
                      $cds->payedrup = $cd['payedrup'];
+                     $cds->invoice_bal = $cd['invoice_bal'];
                     $cds->save();
+                }
                 }
             }
 
@@ -346,10 +363,11 @@ class PaymentController  extends Controller
             SET c.invoicebal = ( case when contract_id=0 then c.total else tval end ) -  x.payment
             where  c.id in(select invoice_id from payment_details where paymentid =$ci->id  ) "));
 
-
-
-
-
+            DB::update(DB::raw("
+            UPDATE cheque_transactions c
+            INNER JOIN (SELECT id,documentdate,cheque_no,transaction_type,bank_id FROM bank_transactions WHERE bank_id>3 AND id=$ci->id) x
+            ON c.cheque_no=x.cheque_no and c.bank_id=x.bank_id
+            SET c.clrstatus=1,c.clrdate=x.documentdate,clrid=x.id,c.ref=CONCAT(x.transaction_type,'-',LPAD(x.id,4,'0')) "));
 
             DB::commit();
             Session::flash('success','Contract Information Saved');

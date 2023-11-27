@@ -84,7 +84,7 @@ table{
                 </td>            </tr>
             <tr>
                 <td  style="text-align: center;">
-                    <span style="font-size:1.5rem">GENERAL LEDGER HEADER WISE (GLH) </span>
+                    <span style="font-size:1.5rem">SUPPLIER AGEING DETAIL </span>
                 </td>
             </tr>
 
@@ -97,26 +97,39 @@ table{
         <tbody>
             <tr>
                 <td>
-                    Head Name
-                </td>
-                <td>
-                    {{ $data[0]->SupName }}
-                </td>
-                <td>
-                    Head Type
-                </td>
-                <td>
-                    {{ $headtype }}
-                </td>
-            </tr>
-            <tr>
-                <td>
                     Period
                 </td>
                 <td>
                     From {{ $fromdate }} to {{ $todate }}
                 </td>
+                <td>
+                    Head Type
+                </td>
+                <td>
+                    {{ $data[0]->mheadname }}
+                </td>
             </tr>
+
+            <tr>
+                <td>
+                    Supplier Name
+                </td>
+                <td>
+                    {{ $data[0]->supname }}
+                </td>
+                <td>
+                    Phone No
+                </td>
+                <td>
+                    {{ $data[0]->phoneoff }}
+                </td>
+            </tr>
+
+
+
+
+
+
         </tbody>
     </table>
 
@@ -125,47 +138,47 @@ table{
         <thead>
             <tr>
                 <th class="column-headers" width="5%">S#</th>
-                <th class="column-headers" width="10%">Date</th>
-                <th class="column-headers" width="33%">Particular</th>
-                <th class="column-headers" width="7%">Ref</th>
-                <th class="column-headers" width="15%">Debit</th>
-                <th class="column-headers" width="15%">Credit</th>
-                <th class="column-headers" width="15%">Balance</th>
+                <th class="column-headers" width="15%">Ref.</th>
+                <th class="column-headers" width="15%">Invoice<br>Date</th>
+                <th class="column-headers" width="15%">Invoice<br>No</th>
+                <th class="column-headers" width="20%">Invoice<br>Balance</th>
+                <th class="column-headers" width="15%">Ageing<br>Days</th>
+                <th class="column-headers" width="15%">Ageing<br>Months</th>
             </tr>
         </thead>
     </table>
 
     <table class="data" cellspacing="0">
         <tbody>
-            {{-- {{ $debitpkr = 0}} --}}
-            {{ $debitusd = 0 }}
-            {{-- {{ $creditpkr = 0 }} --}}
-            {{ $creditusd = 0 }}
-            {{-- {{ $balpkr = 0 }} --}}
-            {{ $balusd = 0 }}
+            {{ $vinvbal = 0 }}
+            {{-- {{ $vdb = 0 }} --}}
+            {{-- {{ $vcd = 0 }} --}}
+            {{-- {{ $vcb = 0 }} --}}
 
             @for ($i = 0 ; $i < count($data) ; $i++)
             <tr>
-                {{ $debitusd += $data[$i]->DebitAmtDlr }}
-                {{ $creditusd += $data[$i]->CreditAmtDlr }}
-                {{-- {{ $balusd += $data[$i]->BalanceAmtDlr }} --}}
+                {{-- {{ $vob += $data[$i]->OB }} --}}
+                {{-- {{ $vdb += $data[$i]->DEBIT }} --}}
+                {{-- {{ $vcd += $data[$i]->CREDIT }} --}}
+                {{ $vinvbal += $data[$i]->invoicebal }}
 
-                <td class="" width="5%">{{ $i+1 }}</td>
-                <td class="" width="10%">{{ $data[$i]->invoice_date }} </td>
-                <td  width="33%"> <span style="font-size:0.8rem;font-weight: bold;color:brown">{{ $data[$i]->Descr }}</span>
-                    <br> {{ $data[$i]->DESCRIPTION }} </td>
-                <td class="" width="7%">{{ $data[$i]->Ref }} </td>
-                <td class="" width="15%">{{ number_format($data[$i]->DebitAmtDlr,2) }} </td>
-.                <td class="" width="15%">{{ number_format($data[$i]->CreditAmtDlr,2) }}</td>
-                <td class="" width="15%">{{ number_format($data[$i]->BalanceAmtDlr,2) }}</td>
+                <td style="text-align:center"; width="5%">{{ $i+1 }}</td>
+                <td style="text-align: center"; width="15%">{{ $data[$i]->ref }} </td>
+                <td style="text-align: center"; width="15%">{{ $data[$i]->invoice_date }} </td>
+                <td style="text-align: center"; width="15%">{{ $data[$i]->invoiceno }} </td>
+                <td style="text-align: right"; width="20%">{{ number_format($data[$i]->invoicebal,0) }} </td>
+                <td style="text-align: right"; width="15%">{{ number_format($data[$i]->days,0) }} </td>
+                <td style="text-align: right"; width="15%">{{ number_format($data[$i]->mnth,0) }} </td>
+
             </tr>
             @endfor
 
             <tr>
-                {{-- <td colspan="3"  style="text-align: right;border-bottom: 1px solid lightgray;"></td> --}}
-                <td colspan="5"  style="text-align: right;border-bottom: 1px solid lightgray;font-weight: bold">{{ number_format($debitusd,0) }} </td>
-                <td colspan="1"  style="text-align: right;border-bottom: 1px solid lightgray;font-weight: bold">{{ number_format($creditusd,0) }}</td>
-                <td colspan="1"  style="text-align: right;border-bottom: 1px solid lightgray;font-weight: bold"></td>
+                {{-- <td colspan="2"  style="text-align: right;border-bottom: 1px solid lightgray;font-weight: bold"> Total </td> --}}
+                <td colspan="5" style="text-align: right;border-bottom: 1px solid lightgray;font-weight: bold">{{ number_format($vinvbal,0) }} </td>
+                <td colspan="2" style="text-align: right;border-bottom: 1px solid lightgray;font-weight: bold"> </td>
+                {{-- <td colspan="1" style="text-align: right;border-bottom: 1px solid lightgray;font-weight: bold">{{ number_format($vcd,0) }} </td> --}}
+                {{-- <td colspan="1" style="text-align: right;border-bottom: 1px solid lightgray;font-weight: bold">{{ number_format($vcb,2) }} </td> --}}
             </tr>
 
 

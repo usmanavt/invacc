@@ -95,7 +95,7 @@ table{
     {{-- Ledger Info --}}
     <table class="ledger">
         <tbody>
-            <tr>
+            {{-- <tr>
                 <td>
                     Head Name
                 </td>
@@ -108,13 +108,19 @@ table{
                 <td>
                     {{ $headtype }}
                 </td>
-            </tr>
+            </tr> --}}
             <tr>
                 <td>
                     Period
                 </td>
                 <td>
                     From {{ $fromdate }} to {{ $todate }}
+                </td>
+                <td>
+                    Head Type
+                </td>
+                <td>
+                    {{ $data[0]->mheadname }}
                 </td>
             </tr>
         </tbody>
@@ -125,47 +131,45 @@ table{
         <thead>
             <tr>
                 <th class="column-headers" width="5%">S#</th>
-                <th class="column-headers" width="10%">Date</th>
-                <th class="column-headers" width="33%">Particular</th>
-                <th class="column-headers" width="7%">Ref</th>
+                <th class="column-headers" width="35%">Title</th>
+                <th class="column-headers" width="15%">Opening<br>Balance</th>
                 <th class="column-headers" width="15%">Debit</th>
                 <th class="column-headers" width="15%">Credit</th>
-                <th class="column-headers" width="15%">Balance</th>
+                <th class="column-headers" width="15%">Closing<br>Balance</th>
+                {{-- <th class="column-headers" width="15%">Balance</th> --}}
             </tr>
         </thead>
     </table>
 
     <table class="data" cellspacing="0">
         <tbody>
-            {{-- {{ $debitpkr = 0}} --}}
-            {{ $debitusd = 0 }}
-            {{-- {{ $creditpkr = 0 }} --}}
-            {{ $creditusd = 0 }}
-            {{-- {{ $balpkr = 0 }} --}}
-            {{ $balusd = 0 }}
+            {{ $vob = 0 }}
+            {{ $vdb = 0 }}
+            {{ $vcd = 0 }}
+            {{ $vcb = 0 }}
 
             @for ($i = 0 ; $i < count($data) ; $i++)
             <tr>
-                {{ $debitusd += $data[$i]->DebitAmtDlr }}
-                {{ $creditusd += $data[$i]->CreditAmtDlr }}
-                {{-- {{ $balusd += $data[$i]->BalanceAmtDlr }} --}}
+                {{ $vob += $data[$i]->OB }}
+                {{ $vdb += $data[$i]->DEBIT }}
+                {{ $vcd += $data[$i]->CREDIT }}
+                {{ $vcb += $data[$i]->CB }}
 
-                <td class="" width="5%">{{ $i+1 }}</td>
-                <td class="" width="10%">{{ $data[$i]->invoice_date }} </td>
-                <td  width="33%"> <span style="font-size:0.8rem;font-weight: bold;color:brown">{{ $data[$i]->Descr }}</span>
-                    <br> {{ $data[$i]->DESCRIPTION }} </td>
-                <td class="" width="7%">{{ $data[$i]->Ref }} </td>
-                <td class="" width="15%">{{ number_format($data[$i]->DebitAmtDlr,2) }} </td>
-.                <td class="" width="15%">{{ number_format($data[$i]->CreditAmtDlr,2) }}</td>
-                <td class="" width="15%">{{ number_format($data[$i]->BalanceAmtDlr,2) }}</td>
+                <td style="text-align: centre"; width="5%">{{ $i+1 }}</td>
+                <td style="text-align: left"; width="35%">{{ $data[$i]->mhead }} </td>
+                <td style="text-align: right"; width="15%">{{ number_format($data[$i]->OB,0) }} </td>
+                <td style="text-align: right"; width="15%">{{ number_format($data[$i]->DEBIT,0) }}</td>
+                <td style="text-align: right"; width="15%">{{ number_format($data[$i]->CREDIT,0) }}</td>
+                <td style="text-align: right"; width="15%">{{ number_format($data[$i]->CB,0) }}</td>
             </tr>
             @endfor
 
             <tr>
-                {{-- <td colspan="3"  style="text-align: right;border-bottom: 1px solid lightgray;"></td> --}}
-                <td colspan="5"  style="text-align: right;border-bottom: 1px solid lightgray;font-weight: bold">{{ number_format($debitusd,0) }} </td>
-                <td colspan="1"  style="text-align: right;border-bottom: 1px solid lightgray;font-weight: bold">{{ number_format($creditusd,0) }}</td>
-                <td colspan="1"  style="text-align: right;border-bottom: 1px solid lightgray;font-weight: bold"></td>
+                <td colspan="2"  style="text-align: right;border-bottom: 1px solid lightgray;font-weight: bold"> Total </td>
+                <td colspan="1" style="text-align: right;border-bottom: 1px solid lightgray;font-weight: bold">{{ number_format($vob,0) }} </td>
+                <td colspan="1" style="text-align: right;border-bottom: 1px solid lightgray;font-weight: bold">{{ number_format($vdb,0) }} </td>
+                <td colspan="1" style="text-align: right;border-bottom: 1px solid lightgray;font-weight: bold">{{ number_format($vcd,0) }} </td>
+                <td colspan="1" style="text-align: right;border-bottom: 1px solid lightgray;font-weight: bold">{{ number_format($vcb,2) }} </td>
             </tr>
 
 

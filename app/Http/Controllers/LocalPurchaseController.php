@@ -223,7 +223,8 @@ class LocalPurchaseController  extends Controller
             DB::update(DB::raw("
             UPDATE commercial_invoices c
             INNER JOIN (
-            SELECT commercial_invoice_id, SUM(pcs) as pcs,SUM(gdswt) AS wt,sum(qtyinfeet) as feet,SUM(amtinpkr) AS amount,sum(pricevaluecostsheet) as totcost
+            SELECT commercial_invoice_id, SUM(pcs) as pcs,SUM(gdswt) AS wt,sum(qtyinfeet) as feet,SUM(amtinpkr) AS amount,
+            sum(pricevaluecostsheet) as totcost
             FROM commercial_invoice_details where  commercial_invoice_id = $ci->id
             GROUP BY commercial_invoice_id
             ) x ON c.id = x.commercial_invoice_id

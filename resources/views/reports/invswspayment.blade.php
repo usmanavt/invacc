@@ -84,7 +84,7 @@ table{
                 </td>            </tr>
             <tr>
                 <td  style="text-align: center;">
-                    <span style="font-size:2rem">GENERAL LEDGER (GL) </span>
+                    <span style="font-size:2rem">INVOICE WISE PYAMENT DETAILS </span>
                 </td>
             </tr>
 
@@ -97,17 +97,17 @@ table{
         <tbody>
             <tr>
                 <td>
-                    Ledger Type
+                    Supplier Name
                 </td>
                 <td>
-                    {{ $data[0]->Descr }}
+                    {{ $data[0]->supname }}
                 </td>
 
                 <td>
-                    Currency:
+                    Source:
                 </td>
                 <td>
-                    {{ $data[0]->cur }}
+                    {{ $data[0]->src }}
                 </td>
 
 
@@ -127,63 +127,47 @@ table{
     <table class="column-headers">
         <thead>
             <tr>
-                <th class="column-headers" width="5%">S#</th>
-                <th class="column-headers" width="10%">Date</th>
-                <th class="column-headers" width="30%">Particular</th>
-                <th class="column-headers" width="10%">Ref</th>
-                <th class="column-headers" width="15%">Debit</th>
-                <th class="column-headers" width="15%">Credit</th>
-                <th class="column-headers" width="15%">Balance</th>
+                <th class="column-headers" width="4%">S#</th>
+                <th class="column-headers" width="10%">Invoice<br>date</th>
+                <th class="column-headers" width="10%">Invoice<br>No</th>
+                <th class="column-headers" width="26%">Payment<br>Status</th>
+                <th class="column-headers" width="10%">Payment<br>Date</th>
+                <th class="column-headers" width="10%">Payment<br>Ref.</th>
+                <th class="column-headers" width="10%">Payable<br>Amount</th>
+                <th class="column-headers" width="10%">Payment<br>Amount</th>
+                <th class="column-headers" width="10%">Invoice<br>Balance</th>
             </tr>
         </thead>
     </table>
 
     <table class="data" cellspacing="0">
         <tbody>
-            {{-- {{ $debitpkr = 0}} --}}
-            {{ $debitusd = 0 }}
-            {{-- {{ $credit = 0 }} --}}
-            {{ $creditusd = 0 }}
-            {{-- {{ $balpkr = 0 }} --}}
-            {{ $balusd = 0 }}
+            {{ $pble = 0 }}
+            {{ $pmnt = 0 }}
+            {{ $invbal = 0 }}
             @for ($i = 0 ; $i < count($data) ; $i++)
             <tr>
-                {{-- {{ $debitpkr += $data[$i]->DebitAmtRup }} --}}
-                {{ $debitusd += $data[$i]->DebitAmtDlr }}
-                {{-- {{ $credit += $data[$i]->Credit }} --}}
-                {{ $creditusd += $data[$i]->CreditAmtDlr }}
-                {{-- {{ $balpkr += $data[$i]->balrup }} --}}
-                {{ $balusd += $data[$i]->baldlr }}
+                {{ $pble += $data[$i]->payable }}
+                {{ $pmnt += $data[$i]->payment }}
+                {{ $invbal += $data[$i]->invoice_bal }}
 
-                <td style="text-align:center" width="5%">{{ $i+1 }}</td>
+                <td style="text-align:center" width="4%">{{ $i+1 }}</td>
                 <td style="text-align:center" width="10%">{{ $data[$i]->invoice_date }} </td>
-                {{-- <td class="" width="30%">{{ $data[$i]->SupName }}<br> {{ $data[$i]->Description }} </td> --}}
-                <td  width="30%"> <span style="font-size:0.8rem;font-weight: bold;color:brown">{{ $data[$i]->SupName }}</span>
-                    <br> {{ $data[$i]->Description }} </td>
-                <td style="text-align:center" width="10%">{{ $data[$i]->Ref }} </td>
-                <td style="text-align:right" width="15%">{{ number_format($data[$i]->DebitAmtDlr,0) }}
-                    {{-- : {{ $data[$i]->cur }} --}}
-                    {{-- <br>{{ number_format($data[$i]->CreditAmtDlr,0) }} {{ $data[$i]->cur }}</td> --}}
-                <td style="text-align:right" width="15%">{{ number_format($data[$i]->CreditAmtDlr,0) }}
-                    {{-- : {{ $data[$i]->cur }} --}}
-                    {{-- PKR<br>{{ number_format($data[$i]->CreditAmtDlr,0) }} : USD</td> --}}
-                <td style="text-align:right" width="15%">{{ number_format($data[$i]->baldlr,0) }}</td>
-                {{-- <td class="" width="10%">{{ number_format($data[$i]->bal,2) }}</td>
-                <td class="" width="10%">{{ number_format($data[$i]->bal,2) }}</td> --}}
-                {{-- : R<br>{{ number_format($data[$i]->baldlr,0) }} : $ --}}
+                <td style="text-align:center" width="10%">{{ $data[$i]->invoiceno }} </td>
+                <td style="text-align:left" width="26%">{{ $data[$i]->paystatus }} </td>
+                <td style="text-align:center" width="10%">{{ $data[$i]->pdate }} </td>
+                <td style="text-align:center" width="10%">{{ $data[$i]->ref }} </td>
+                <td style="text-align:right" width="10%">{{ number_format($data[$i]->payable,0) }} </td>
+                <td style="text-align:right" width="10%">{{ number_format($data[$i]->payment,0) }} </td>
+                <td style="text-align:right" width="10%">{{ number_format($data[$i]->invoice_bal,0) }} </td>
+
             </tr>
             @endfor
             <tr>
-
-
-
-                <td colspan="4" width="100%" style=" border:1px solid lightgray; text-align: right;font-weight: bold;background: #e3e3e3;border-top: 2px double  lightgray ;"> Total(s)</td>
-                <td colspan="1" width="15%" style=" border:1px solid lightgray;. text-align: right;font-weight: bold;background: #e3e3e3;border-top: 2px double   lightgray; ">{{ number_format($debitusd,0) }}  </td>
-                {{-- <br>{{ number_format($creditusd,0) }} --}}
-                <td colspan="1" width="15%" style=" border:1px solid lightgray; text-align: right;font-weight: bold;background: #e3e3e3;border-top: 2px double   lightgray; ">{{ number_format($creditusd,0) }}</td>
-                <td colspan="1" width="15%" style=" border:1px solid lightgray; text-align: right;font-weight: bold;background: #e3e3e3;border-top: 2px double   lightgray; "></td>
-                {{-- : PKR<br>{{ number_format($creditusd,0) }} : USD --}}
-                {{-- <td class="" width="20%" style="text-align: right;border-bottom: 1px solid lightgray;">{{ number_format($balpkr,2) }} : PKR<br>{{ number_format($balusd,2) }} : USD</td> --}}
+                {{-- <td colspan="4"  style=" border:1px solid lightgray; text-align: right;font-weight: bold;background: #e3e3e3;border-top: 2px double  lightgray ;"> Total(s)</td> --}}
+                {{-- <td colspan="7"  style=" border:1px solid lightgray;. text-align: right;font-weight: bold;background: #e3e3e3;border-top: 2px double   lightgray; ">{{ number_format($pble,0) }}  </td> --}}
+                <td colspan="8"  style=" border:1px solid lightgray; text-align: right;font-weight: bold;background: #e3e3e3;border-top: 2px double   lightgray; ">{{ number_format($pmnt,0) }}</td>
+                <td colspan="1"  style=" border:1px solid lightgray; text-align: right;font-weight: bold;background: #e3e3e3;border-top: 2px double   lightgray; "></td>
             </tr>
         </tbody>
     </table>
