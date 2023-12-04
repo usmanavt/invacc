@@ -47,6 +47,8 @@ use App\Http\Controllers\GodownsrController;
 use App\Http\Controllers\SalesInvoiceWopoController;
 use App\Http\Controllers\PaymentController;
 use App\Http\Controllers\ReceiveController;
+use App\Http\Controllers\GodownMovementController;
+use App\Http\Controllers\GodownMovementControllerR;
 
 
 
@@ -216,6 +218,23 @@ Route::get('/salewopo/getSalesDetails', [SalesInvoiceWopoController::class, 'get
 Route::get('/salewopo/getSalesCustplan', [SalesInvoiceWopoController::class, 'getMastercustplan'])->name('saleswopo.custplan');
 Route::get('/salewopo/getSalesCustplandtl', [SalesInvoiceWopoController::class, 'getDetailscustplan'])->name('saleswopo.custplandtl');
 Route::resource('salewopo', SalesInvoiceWopoController::class);
+
+
+//  Stock Transfer Order
+
+Route::get('/godownmovement/getSalesMaster', [GodownMovementController::class, 'getMaster'])->name('godownmovement.master');
+Route::get('/godownmovement/getSalesDetails', [GodownMovementController::class, 'getDetail'])->name('godownmovement.details');
+Route::get('/godownmovement/getSalesCustplan', [GodownMovementController::class, 'getMastercustplan'])->name('godownmovement.custplan');
+Route::get('/godownmovement/getSalesCustplandtl', [GodownMovementController::class, 'getDetailscustplan'])->name('godownmovement.custplandtl');
+Route::get('/godownmovement/getIndexDetails', [GodownMovementController::class, 'getIndexDetails'])->name('godownmovement.getindex');
+Route::resource('godownmovement', GodownMovementController::class);
+
+Route::get('/godownmovementr/getSalesMaster', [GodownMovementControllerR::class, 'getMaster'])->name('godownmovementr.master');
+Route::get('/godownmovementr/getSalesDetails', [GodownMovementControllerR::class, 'getDetail'])->name('godownmovementr.details');
+Route::get('/godownmovementr/getSalesCustplan', [GodownMovementControllerR::class, 'getMastercustplan'])->name('godownmovementr.custplan');
+Route::get('/godownmovementr/getSalesCustplandtl', [GodownMovementControllerR::class, 'getDetailscustplan'])->name('godownmovementr.custplandtl');
+Route::get('/godownmovementr/getIndexDetails', [GodownMovementControllerR::class, 'getIndexDetails'])->name('godownmovementr.getindex');
+Route::resource('godownmovementr', GodownMovementControllerR::class);
 
 
 

@@ -6,7 +6,7 @@
     </x-slot>
 
     <div class="py-4">
-        <div class="max-w-5xl mx-auto">
+        <div class="max-w-6xl mx-auto">
             <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
                 <div class="p-6 bg-white border-b border-gray-200">
 
@@ -16,7 +16,7 @@
                         <div class="flex flex-col md:flex-row flex-wrap gap-2 justify-center">
                             <fieldset class="border px-4 py-2 rounded">
                                 <legend>Report Type</legend>
-
+                                <input type="text" title="t1"  id="p1" name="p1" value="0" hidden  >
                                 <tr>
                                     <td  style="text-align: center;">
                                         <span style="font-size:1.5rem">--- FOR OFFICE ---</span>
@@ -45,6 +45,15 @@
                                     <label for="">SMSL Valuation </label>
                                 </div>
 
+                                <div>
+                                    <input type="radio" name="report_type" value="sto" >
+                                    <label for="">Stock Transfer Order </label>
+                                    <input class="checked:bg-blue-500 checked:border-blue-500 focus:outline-none"  type="checkbox" name="adv" id="adv"   onclick="psto(this)" >
+                                    <label for="">
+                                       <span style="color: brown;font-weight: bold"> Show Only Pending STO </span> <span class="text-red-500 font-semibold  ">(*)</span>
+                                        </label>
+
+                                </div>
 
 
 
@@ -949,6 +958,22 @@ return Stkos1
 
 });
 
+function psto(adv) {
+        var p1 = document.getElementById("p1");
+        // amount_fc.disabled = advtxt.checked ? true : false;
+
+        // amount_fc.disabled = per.checked ? true : false;
+
+        if(adv.checked==true)
+        {
+            p1.value=1;
+        }
+        else
+        {
+            p1.value=0;
+        }
+
+    }
 
 
 </script>

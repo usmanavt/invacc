@@ -13,7 +13,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 class Voucher extends Base
 {
     use HasFactory;
-    protected $dates = ['document_date'];
+    // protected $dates = ['document_date'];
     protected $fillable = [
         'transaction',
         'document_date','transaction_type','head_id','subhead_id','supplier_id','customer_id','jvno','amount','description'

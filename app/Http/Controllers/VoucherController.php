@@ -50,8 +50,9 @@ class VoucherController extends Controller
 
     public function create()
     {
-        return view('journalvouchers.create')
-        ->with('heads',Head::select(['id','title'])->where('status',1)->get()) //
+        $maxjvno = DB::table('vouchers')->select('jvno')->max('jvno')+1;
+        return view('journalvouchers.create',compact('maxjvno'))
+        ->with('heads',Head::select(['id','title'])->where('forjv',1)->get()) //
         ->with('subheads',DB::table('VwCategory')->select('*')->get()->toArray());
     }
 
@@ -73,8 +74,9 @@ class VoucherController extends Controller
                 $v = new Voucher();
                 $v->transaction = $transaction_id;
                 $v->document_date = $request->document_date;
+                $v->jvno = $request->document_no;
                 $v->transaction_type = $vuch['transaction_type'];
-                $v->jvno = $vuch['jvno'];
+                // $v->jvno = $vuch['jvno'];
                 $v->amount = $vuch['amount'];
                 $v->description = $vuch['description'];
                 foreach($sub as $s)
@@ -100,10 +102,12 @@ class VoucherController extends Controller
     {
         $vouchers = Voucher::where('transaction',$id)->get();
         $dd = Voucher::select('document_date')->where('transaction',$id)->first();
+        $dd1 = Voucher::select('jvno')->where('transaction',$id)->first();
         return view('journalvouchers.edit')
         ->with('jvs',$vouchers)
         ->with('transaction',$id)
         ->with('document_date',$dd->document_date)
+        ->with('jvno',$dd1->jvno)
         ->with('heads',Head::select(['id','title'])->where('status',1)->get()) //
         ->with('subheads',DB::table('VwCategory')->select('*')->get()->toArray());
     }
@@ -112,19 +116,25 @@ class VoucherController extends Controller
     {
         // dd($request->all());
         $vouchers = $request->vouchers;
+        // $mydate = $request->document_date;
+        // $myjvno = $request->jvno;
         $transactions = Voucher::where('transaction',$vouchers[0]['transaction'])->delete();
         DB::beginTransaction();
         try {
             foreach($vouchers as $vuch)
             {
                 $v = new Voucher();
+                $v->jvno = $request->document_no;
+                //    dd($request->all());
+
+                $v->document_date = $request->jvdate;
                 $v->head_title = $vuch['head_title'];
                 $v->subhead_title = $vuch['subhead_title'];
                 $sub = DB::select('select * from VwCategory where mtitle = ? AND title = ? LIMIT 1', [ $vuch['head_title'], $vuch['subhead_title']]);
                 $v->transaction = $vuch['transaction'];
-                $v->document_date = $vuch['document_date'];
+                // $v->document_date = $vuch['document_date'];
                 $v->transaction_type = $vuch['transaction_type'];
-                $v->jvno = $vuch['jvno'];
+                // $v->jvno = $vuch['jvno'];
                 $v->amount = $vuch['amount'];
                 $v->description = $vuch['description'];
                 foreach($sub as $s)

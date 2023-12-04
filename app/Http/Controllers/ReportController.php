@@ -17,7 +17,7 @@ class ReportController extends Controller
         return view('reports.index')
         ->with('heads',Head::where('status',1)->whereIn('id',[32,33,34,100,101,102,103,104,105,106,107,110,111,112,113,114])->get())
         ->with('glheads',Head::where('status',1)->whereIn('id',[1,2,30,36,37,38])->get())
-        ->with('vchrheads',Head::where('status',1)->whereIn('id',[6,7,8,9,50])->get())
+        ->with('vchrheads',Head::where('status',1)->whereIn('id',[5,6,7,8,9,50])->get())
         ->with('subheads',DB::table('vwcategory')->select('*')->get()->toArray())
         // ->with('vchrcats',DB::table('vwvouchercategory')->select('*')->get()->toArray())
         ;
@@ -428,10 +428,6 @@ class ReportController extends Controller
                     {
                         $html =  view('reports.agingsalesumary')->with('data',$g)->with('fromdate',$fromdate)->with('todate',$todate)->with('headtype',$head->title)->render();
                     }
-
-
-
-
                 }
                 $filename = $g[0]->supplier_id  .'-'.$fromdate.'-'.$todate.'.pdf';
                 $chunks = explode("chunk", $html);
@@ -445,19 +441,6 @@ class ReportController extends Controller
 
             // return;
         }
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
@@ -479,7 +462,16 @@ class ReportController extends Controller
             }
             //  Call Procedure
             // $data = DB::select('call ProcGLHW(?,?,?)',array($fromdate,$todate,$head_id));
-            $data = DB::select('call procvoucherrpt()');
+            if($head_id == 5)
+                {
+                    $data = DB::select('call procvoucherrptjv()');
+                }
+            else
+                {
+                    $data = DB::select('call procvoucherrpt()');
+                }
+
+
             if(!$data)
             {
                 Session::flash('info','No data available');
@@ -487,16 +479,34 @@ class ReportController extends Controller
             }
             $mpdf = $this->getMPDFSettings();
             $collection = collect($data);                   //  Make array a collection
-            $grouped = $collection->groupBy('transno');       //  Sort collection by SupName
-            $grouped->values()->all();                       //  values() removes indices of array
-            foreach($grouped as $g){
-                $html =  view('reports.voucher')->with('data',$g)->with('fromdate',$fromdate)->with('todate',$todate)->with('headtype',$head->title)->render();
-                $filename = $g[0]->transno  .'-'.$fromdate.'-'.$todate.'.pdf';
-                $chunks = explode("chunk", $html);
-                foreach($chunks as $key => $val) {
-                    $mpdf->WriteHTML($val);
+
+
+            // $grouped1 = $collection->groupBy('transno');       //  Sort collection by SupName
+            // $grouped1->values()->all();
+
+            // foreach($grouped1 as $g)
+            // {
+                $grouped = $collection->groupBy('jvno');       //  Sort collection by SupName
+                $grouped->values()->all();                       //  values() removes indices of array
+                foreach($grouped as $g)
+                {
+
+                if($head_id == 5)
+                {
+                    $html =  view('reports.vouchergv')->with('data',$g)->with('fromdate',$fromdate)->with('todate',$todate)->with('headtype',$head->title)->render();
                 }
-                $mpdf->AddPage();
+                else
+                {
+                    $html =  view('reports.voucher')->with('data',$g)->with('fromdate',$fromdate)->with('todate',$todate)->with('headtype',$head->title)->render();
+                }
+                    $filename = $g[0]->transno  .'-'.$fromdate.'-'.$todate.'.pdf';
+                    $chunks = explode("chunk", $html);
+                    foreach($chunks as $key => $val) {
+                        $mpdf->WriteHTML($val);
+                    }
+                    // $mpdf->AddPage();
+                // }
+            // $mpdf->AddPage();
             }
             //  $mpdf->Output($filename,'I');
             return response($mpdf->Output($filename,'I'),200)->header('Content-Type','application/pdf');

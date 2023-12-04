@@ -64,15 +64,13 @@ class QuotationController  extends Controller
     public function getmmfrqut(Request $request)
     {
 
-        //   $custid=$request->customer_id;
-        //  $custid = 5;
-
         $search = $request->search;
         $size = $request->size;
         $field = $request->sort[0]["field"];     //  Nested Array
         $dir = $request->sort[0]["dir"];         //  Nested Array
-         $contracts = DB::table('mmfrquotation')
-        // $contracts = DB::select(' call procmmfrquotation(?)',array( 5 ))
+        $vrtype = $request->p1;
+        // $abc = DB::select(' call procmmfrquotation(?)',array( $search ));
+        $contracts = DB::table('mmfrquotation')
         // ->join('suppliers', 'contracts.supplier_id', '=', 'suppliers.id')
         // ->select('contracts.*', 'suppliers.title')
         //  ->where('customer_id',$custid)
@@ -85,7 +83,7 @@ class QuotationController  extends Controller
         //  ->orWhere('dimension', 'like', "%$search%")
         ->orderBy($field,$dir)
         ->paginate((int) $size);
-        // dd($custid);
+
         return $contracts;
 
     }
@@ -105,7 +103,7 @@ class QuotationController  extends Controller
         // $maxblno = DB::table('sale_invoices')->select('*')->max('prno')+1;
         // $maxgpno = DB::table('sale_invoices')->select('*')->max('gpno')+1;
         return \view ('quotations.create',compact('maxdcno','mycname'))
-        ->with('customers',Customer::select('id','title')->get())
+        ->with('customers',Customer::select('id','title')->where('id','<>','1')->get())
         ->with('locations',Location::select('id','title')->get())
         ->with('skus',Sku::select('id','title')->get());
 
@@ -128,6 +126,7 @@ class QuotationController  extends Controller
         ]);
         DB::beginTransaction();
         try {
+
             $ci = new Quotation();
             $ci->saldate = $request->saldate;
             $ci->valdate = $request->valdate;

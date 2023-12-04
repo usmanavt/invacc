@@ -24,6 +24,7 @@
                         <fieldset class="border px-4 py-2 rounded">
                             <legend>Transaction Date</legend>
                             <x-input-date title="Dcoument Date" name="document_date" req required/>
+                            <x-input-text title="Dcoument No" name="document_no" value="{{$maxjvno}}"/>
                         </fieldset>
                         {{-- Dynamic Tabulator --}}
                         <x-tabulator-dynamic />
@@ -105,7 +106,8 @@
             {title:"Subhead", width:150, field:"subhead_title",headerSort: false, editor:"list", responsive:0,validator:['required'], editorParams:{
                 values: subheadsList
             }},
-            {title:"JV #", width:100,validator:['required'],  field:"jvno",headerSort: false, responsive:0, editor:"input",cssClass:"bg-green-200 font-semibold"},
+            // {title:"JV #", width:100,validator:['required'],  field:"jvno",headerSort: false, responsive:0, editor:"input",cssClass:"bg-green-200 font-semibold"},
+            // {title:"JV #", width:100,validator:['required'],  field:"jvno",headerSort: false, responsive:0, editor:"input",cssClass:"bg-green-200 font-semibold"},
             {title:"Amount (PKR)", field:"amount",headerSort: false, editor:"number", responsive:0,cssClass:"bg-green-200 font-semibold",validator:['required','numeric']},
             {title:"Description", width:300, field:"description",headerSort: false, responsive:0,validator:['required'],  editor:"input",cssClass:"bg-green-200 font-semibold"},
         ],
@@ -159,6 +161,7 @@
         //  Now Post Data
         var mydata = {
             'document_date': document.getElementById('document_date').value,
+            'document_no': document.getElementById('document_no').value,
             'voucher': data
         }
         fetch(@json(route('jv.store')),{

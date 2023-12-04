@@ -22,6 +22,14 @@
                         <div class="flex flex-col justify-start items-center">
                             <form action="{{ route('jv.edit',$transaction) }}" method="post" class="flex flex-col">
                                 @csrf
+                                <fieldset class="border px-4 py-2 rounded">
+                                    <legend>Transaction Date</legend>
+                                    <x-input-date title="Dcoument Date" name="jvdate" value="{{ $document_date }}" />
+                                    <x-input-text title="Dcoument No" name="document_no" value="{{ $jvno }}"  />
+                                </fieldset>
+
+
+
                                 @method('PUT')
                                 <input type="hidden" name="id" value="{{ $transaction }}">
                                 {{-- Dynamic Tabulator --}}
@@ -110,7 +118,7 @@
             {title:"Subhead", width:150, field:"subhead_title",headerSort: false, editor:"list",validator:['required'], editorParams:{
                 values: subheadsList
             }},
-            {title:"JV #", width:100,validator:['required'],  field:"jvno",headerSort: false, editor:"input",cssClass:"bg-green-200 font-semibold"},
+            // {title:"JV #", width:100,validator:['required'],  field:"jvno",headerSort: false, editor:"input",cssClass:"bg-green-200 font-semibold"},
             {title:"Amount (PKR)", field:"amount",headerSort: false, editor:"number",cssClass:"bg-green-200 font-semibold",validator:['required','numeric']},
             {title:"Description", width:300, field:"description",headerSort: false,validator:['required'],  editor:"input",cssClass:"bg-green-200 font-semibold"},
         ],
@@ -144,7 +152,7 @@
             e.document_date = document_date
         })
         //  Now Post Data
-        var mydata = {
+        var mydata = {'document_no':document_no.value,'jvdate':jvdate.value,
             'vouchers': data
         }
         fetch(@json(route('jv.update',$transaction)),{

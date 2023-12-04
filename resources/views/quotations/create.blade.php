@@ -23,15 +23,15 @@
                     <div class="grid grid-cols-1">
                         {{-- Contract Master --}}
                         <div class="grid grid-cols-12 gap-1 py-1 items-center">
-
+                            {{-- onchange="return showcategory()" --}}
                             <label for="customer_id">Customer<x-req /></label>
-                            <select autocomplete="on" class="col-span-2" name="customer_id" id="customer_id" required>
-                                <option value="" selected>--Customer</option>
+                            <select autocomplete="on" class="col-span-2" name="customer_id" id="customer_id"    >
+                                <option value = "" selected>--Customer</option>
                                 @foreach($customers as $customer)
                                 <option value="{{$customer->id}}"> {{$customer->title}} </option>
                                 @endforeach
                             </select>
-.
+                            <input type="text" title="t1"  id="p1" name="p1"    >
                             <label for="saldate">Quotation Date<x-req /></label>
                             <input type="date" value="{{ date('Y-m-d') }}" class="col-span-2"  id="saldate" name="saldate" required>
 
@@ -460,7 +460,7 @@ const skus = @json($skus);
         var data = { 'contracts' : dynamicTableData,'rcvblamount':rcvblamount.value,'cartage':cartage.value,'discntamt':discntamt.value,'discntper':discntper.value,'discntper':discntper.value ,
         'customer_id': customer_id.value,'saldate':saldate.value,'qutno':qutno.value,'prno':prno.value,
         'saletaxper':saletaxper.value,'saletaxamt':saletaxamt.value,'totrcvbamount':totrcvbamount.value,
-        'valdate':valdate.value,'cashcustomer':cashcustomer.value,'cashcustadrs':cashcustadrs.value};
+        'valdate':valdate.value,'cashcustomer':cashcustomer.value,'cashcustadrs':cashcustadrs.value,'p1':p1.value};
         // All Ok - Proceed
         fetch(@json(route('quotations.store')),{
             credentials: 'same-origin', // 'include', default: 'omit'
@@ -503,12 +503,61 @@ discntamt.onblur=function(){
 
 
 
+customer_id.addEventListener("change", () => {
+    var sid = document.getElementById("customer_id");
+        var customer_id = sid.options[sid.selectedIndex];
+        p1.value=customer_id.value;
+//  const value = customer_id.value
+// console.log(value)
+//   console.info(customer_id.value)
+  //  const value = 6
+// subhead.options.length = 0 // Reset List
+// fetch(funcstkos + `?head_id=${value} &source_id=${value1} &brand_id=${value3} `,{
+//             method:"GET",
+//             headers: { 'Accept':'application/json','Content-type':'application/json'},
+//             })
+//             .then(response => response.json())
+//             .then( data => {
+//                 if(data.length > 0)
+//                 {
 
+//                     let a = 0;
+//                     data.forEach(e => {
+
+//                         a += 1;
+//                         addSelectElement(subhead,e.Subhead,a + ' - '+ e.Subhead + ' - ' + e.title)
+//                     });
+//                     subhead.setAttribute('required','')
+//                     subhead.removeAttribute('disabled','')
+//                 }else{
+//                     subhead.removeAttribute('required','')
+//                     subhead.setAttribute('disabled','')
+//                 }
+//             })
+//             .catch(error => console.error(error))
+//         // break;
+
+// // FOR CONTRACT FILL
+// const getSubheadVoucherData1 = async (value) =>{
+// let data = await fetch(funcstkos + `?head_id=${value} &source_id=${value1} &brand_id=${value3} `,{
+//     method:"GET",
+//     headers: { 'Accept':'application/json','Content-type':'application/json'},
+//     })
+//     .then(response => response.json())
+//     .then( data => { return data })
+//     .catch(error => console.error(error))
+// }
+// const getStkos1 =async  (value) => {
+// const Stkos1 = await getSubheadVoucherData1(value)
+// return Stkos1
+// }
+
+});
 
 </script>
 
 
-@endpush/
+@endpush
 
 {{-- required  onblur="Discper()" --}}
 {{-- required  onblur="DiscAmount()" --}}

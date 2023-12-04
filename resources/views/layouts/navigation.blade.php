@@ -94,6 +94,7 @@
                             {{-- <x-dropdown-link href="{{ route('cashpayments.index') }}">Cash Payments</x-dropdown-link> --}}
                             {{-- <x-dropdown-link href="{{ route('cashrecivings.index') }}">Cash Receiving</x-dropdown-link> --}}
                             <x-dropdown-link href="{{ route('jv.index') }}">Journal Vouchers</x-dropdown-link>
+                            <x-dropdown-link href="{{ route('godownmovement.index') }}">Stock Transfer Order</x-dropdown-link>
                         </x-slot>
                     </x-dropdown>
                 </div>
@@ -129,6 +130,7 @@
                             <x-dropdown-link href="{{ route('gatepasse.index') }}">Gate Pass</x-dropdown-link>
                             <x-dropdown-link href="{{ route('godownpr.index') }}">Purchase Return</x-dropdown-link>
                             <x-dropdown-link href="{{ route('godownsr.index') }}">Sale Return</x-dropdown-link>
+                            <x-dropdown-link href="{{ route('godownmovementr.index') }}">Goods Movement GatePass</x-dropdown-link>
 
                         </x-slot>
                     </x-dropdown>

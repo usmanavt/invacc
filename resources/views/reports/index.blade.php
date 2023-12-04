@@ -113,7 +113,7 @@
                         <input type="text" title="t1"  id="p1" name="p1" value="0" hidden  >
                         <input type="text" title="t2"  id="p2" name="p2" value="0" hidden  >
                         <input type="text" title="t3"  id="p3" name="p3" value="0" hidden  >
-                        <input type="text" title="t4"  id="p4" name="p4" value="0"   >
+                        <input type="text" title="t4"  id="p4" name="p4" value="0" hidden   >
                         <div class="flex flex-col md:flex-row w-full gap-2 px-6 pt-4">
 
                             <fieldset class="border px-4 py-2 rounded w-full">

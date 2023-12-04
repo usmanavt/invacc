@@ -60,8 +60,12 @@ class LocalPurchaseController  extends Controller
                 $query->where('invoiceno','LIKE','%' . $search . '%')
                 ->orWhere('challanno','LIKE','%' . $search . '%');
             })
-            ->whereHas('supplier', function ($query) {
-                $query->where('source_id','<>','2');
+            ->whereHas('supplier', function ($query) use ($search) {
+                $query->where('source_id','<>','2')
+                ->orWhere('title','LIKE','%' . $search . '%');
+
+
+
             })
         ->with('supplier:id,title')
         ->orderBy($field,$dir)

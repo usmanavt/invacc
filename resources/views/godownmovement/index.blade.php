@@ -4,20 +4,19 @@
     <link rel="stylesheet" href="{{ asset('css/tabulator_simple.min.css') }}">
     @endpush
 
-
     <x-slot name="header">
         <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-            Purchase Invoices ( Local)
+            Stock Transfer Order
             {{-- Create New Customer --}}
-            <a class="text-sm text-green-500 hover:text-gray-900" href="{{route('localpurchase.create')}}">
+            <a class="text-sm text-green-500 hover:text-gray-900" href="{{route('godownmovement.create')}}">
                 {{-- Add Icon --}}
                 <i class="fa fa-file fa-fw"></i>
                 Add New Record
             </a>
+            {{-- <span> | </span> --}}
+            {{-- <button class="text-sm text-blue-300" onclick="setStatus(1)">Pending</button> --}}
             <span> | </span>
-            <button class="text-sm text-blue-300" onclick="setStatus(1)">Pending</button>
-            <span> | </span>
-            <button class="text-sm text-blue-300" onclick="setStatus(2)">Completed</button>
+            <button class="text-sm text-blue-300" onclick="setStatus(2)">Stock Transfer History</button>
         </h2>
     </x-slot>
 
@@ -34,36 +33,30 @@
     </div>
 
 
-
-
-
 @push('scripts')
 <script src="{{ asset('js/tabulator.min.js') }}"></script>
 @endpush
 
 @push('scripts')
 <script>
-
-
-
-
     var hideIcon = function(cell, formatterParams, onRendered){ return "<i class='fa fa-eye text-green-600'></i>";};
     var viewIcon = function(cell, formatterParams, onRendered){ return "<i class='fa fa-binoculars text-purple-600'></i>";};
     var editIcon = function(cell, formatterParams, onRendered){ return "<i class='fa fa-edit text-blue-600'></i>";};
     var deleteIcon = function(cell, formatterParams, onRendered){ return "<i class='fa fa-trash text-red-600'></i>";};
     var printIcon = function(cell, formatterParams, onRendered){ return "<i class='fa fa-print text-pink-500'></i>";};
 
-    const getMaster = @json(route('localpurchase.master'));
-    const getDetails = @json(route('localpurchase.details'));
+    // const getMaster = @json(route('godownmovement.master'));
+    const getDetails = @json(route('godownmovement.details'));
+
+    const getMaster = @json(route('godownmovement.getindex'));
+
     let table;
     let searchValue = "";
     let statusValue="1";  // 1 = Pending, 2 - Completed
     //  Status Setter
-
-
     function setStatus(status)
         {
-        statusValue = status
+            statusValue = status
             table.setData(getMaster,{search:searchValue,status:statusValue});
         }
     //  Table Filter
@@ -73,13 +66,6 @@
         table.setData(getMaster,{search:searchValue,status:statusValue});
     }
     // The Table for Items Modal
-
-
-
-
-
-
-
     table = new Tabulator("#tableData", {
         autoResize:true,
         responsiveLayout:"collapse",
@@ -97,7 +83,7 @@
         },
         ajaxURL: getMaster,
         ajaxContentType:"json",
-        initialSort:[ {column:"id", dir:"desc"} ],
+        initialSort:[ {column:"stono", dir:"desc"} ],
         height:"100%",
 
         columns:[
@@ -115,10 +101,6 @@
                     r.childNodes[0].classList.add('fa-eye-slash','text-gray-500')
                     r.childNodes[0].classList.remove('fa-eye','text-gray-400')
                 }
-
-
-
-
                 subTable = new Tabulator(tableHolder, {
                     layout:"fitData",                       //fit columns to width of table
                     responsiveLayout:"collapse",            //hide columns that dont fit on the table
@@ -167,42 +149,45 @@
             },
       //      Master Data
 
-                {
-                title:'Item Description', headerHozAlign:"center",
-                    columns:[
 
-                    {title: "id",field: "id"},
-                    {title: "Inv Dt",field: "invoice_date"},
-                    {title: "Invoice#",field: "invoiceno"},
-                    {title: "Supplier",field: "supplier.title"},
-                    {title: "Description",field: "machineno"}
-                    ]},
 
-                {
-                title:'Total', headerHozAlign:"center",
-                columns:[
-                    {title: "Pcs",field: "tpcs"},
-                    {title: "Weight",field: "twt"},
-                    {title: "Feet",field: "miscexpenses"},
-                    {title: "Item Cost",field: "tval"},
-                    {title: "Payble Amount",field: "tduty"}
-                ]},
+            {
+            title:'Data Description', headerHozAlign:"center",
+            columns:[
 
-                {
-                title:'Pending Against Goods Receive', headerHozAlign:"center",
-                columns:[
-                    {title: "Pcs",field: "dutybal"},
-                    {title: "Weight",field: "wtbal"},
-                    {title: "Feet",field: "agencychrgs"}
-                ]},
-                {title: "SuppPaymentBalance",field: "invoicebal"},
+            {title: "id",field: "id"},
+            {title: "STO Date",field: "stodate"},
+            {title: "STO No",field: "stono"},
+            {title: "Transfer From",field: "fromloc"},
+            {title: "Transfer To",field: "toloc"},
+            ]},
 
+            {
+            title:'Total Goods For Transfer', headerHozAlign:"center",
+            columns:[
+
+            {title: "Weight",field: "tqtywt"},
+            {title: "Pcs",field: "tqtypcs"},
+            {title: "Feet",field: "tqtyfeet"},
+            // {title: "WO/GST",field: "rcvblamount"},
+            // {title: "W/GST",field: "totrcvbamount"}
+            ]},
+
+            {
+            title:'Godown Movement Status', headerHozAlign:"center",
+            columns:[
+
+            {title: "Status",field: "clrldstatus", formatter:"tickCross", headerSort:false},
+            {title: "Movement Date",field: "sclrdate"},
+            {title: "Movement No",field: "clrdid"},
+            ]},
+            {title: "Goods Value",field: "goodsval"},
             {title:"View" , formatter:viewIcon, hozAlign:"center",headerSort:false, responsive:0,
                 cellClick:function(e, cell){
                     window.open(window.location + "/" + cell.getRow().getData().id  ,"_self");
                 }
             },
-            {title:"Edit" , formatter:editIcon, hozAlign:"center",headerSort:false, responsive:0,
+            {title:"Edit" ,  formatter:editIcon, hozAlign:"center",headerSort:false, responsive:0,
                 cellClick:function(e, cell){
                     console.log(cell.getRow().getData())
                     window.open(window.location + "/" + cell.getRow().getData().id + "/edit" ,"_self");

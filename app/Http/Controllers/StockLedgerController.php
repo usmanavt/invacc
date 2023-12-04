@@ -508,6 +508,68 @@ class StockLedgerController extends Controller
         }
 
 
+
+
+        if($report_type === 'sto'){
+
+            // $ltype ="Office Stock";
+            $head_id = $request->head_id;
+            // $head = Head::findOrFail($head_id);
+            $head = Category::findOrFail($head_id);
+            $par1=$request->p1;
+            if($request->has('subhead_id')){
+                $subhead_id = $request->subhead_id;
+
+
+                //  Clear Data from Table
+                // DB::table('tmpstockrptpar')->truncate();
+                // foreach($request->subhead_id as $id)
+                // {
+                //     DB::table('tmpstockrptpar')->insert([ 'glcode' => $id ]);
+                // }
+            }
+            //  Call Procedure
+            $mpdf = $this->getMPDFSettingsP();
+            $data = DB::select('call procstorpt(?,?,?)',array($fromdate,$todate,$par1));
+            if(!$data)
+            {
+                Session::flash('info','No data available');
+                return redirect()->back();
+            }
+            $collection = collect($data);                   //  Make array a collection
+            $grouped = $collection->groupBy('stono');
+            $grouped->values()->all();        //  values() removes indices of array
+            foreach($grouped as $g){
+                 $html =  view('stockledgers.sto')->with('data',$g)->with('fromdate',$fromdate)->with('todate',$todate)
+                 ->with('headtype',$head->title)->render();
+                $filename = $g[0]->stono .'-'.$fromdate.'-'.$todate.'.pdf';
+                $chunks = explode("chunk", $html);
+                foreach($chunks as $key => $val) {
+                    $mpdf->WriteHTML($val);
+                }
+                $mpdf->AddPage();
+            }
+            return response($mpdf->Output($filename,'I'),200)->header('Content-Type','application/pdf');
+
+
+
+
+
+
+        }
+
+
+
+
+
+
+
+
+
+
+
+
+
         if($report_type === 'smsvalgs'){
             $ltype ="Godown Stock";
             $head_id = $request->head_id;
