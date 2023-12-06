@@ -18,11 +18,13 @@ table{
     padding:12px;
 }
 .column-headers{
-    border:1px solid lightgray;
+    border:1px solid gray;
+    border-collapse: collapse;
+
     background: #e3e3e3;
     margin-top:5px;
     margin-bottom:5px;
-    border-bottom: 2px double gray;
+    border-bottom: 1px double black;
 }
 .column-headers th{
     text-align: center;
@@ -153,16 +155,17 @@ table{
     <table class="column-headers">
         <thead>
             <tr>
-                <th class="" width="2%">S#</th>3
-                <th class="" width="10%">Date</th>
-                <th class="" width="34%">Particular</th>
-                {{-- <th class="" width="7%">Ref</th> --}}
-                <th class="" width="9%">Opening <br> Balance </th>
-                <th class="" width="9%">Purchase</th>
-                <th class="" width="9%">Sale</th>
-                <th class="" width="9%">Purchase <br> Return</th>
-                <th class="" width="9%">Sale <br> Return</th>
-                <th class="" width="9%">Closing <br>Balance</th>
+                <th class="column-headers"  width="4%">S#</th>3
+                <th class="column-headers"  width="8%">Date</th>
+                <th class="column-headers"  width="32%">Particular</th>
+                <th class="column-headers"  width="7%">Opening <br> Balance </th>
+                <th class="column-headers"  width="7%">Purchase</th>
+                <th class="column-headers"  width="7%">Sale</th>
+                <th class="column-headers"  width="7%">Purchase <br> Return</th>
+                <th class="column-headers"  width="7%">Sale <br> Return</th>
+                <th class="column-headers"  width="7%">Godown <br>Received</th>
+                <th class="column-headers"  width="7%">Godown <br>Issued</th>
+                <th class="column-headers"  width="7%">Closing <br>Balance</th>
             </tr>
         </thead>
     </table>
@@ -185,16 +188,21 @@ table{
                 {{-- {{ $balpkr += $data[$i]->BalanceAmtRup }} --}}
                 {{ $sale += $data[$i]->sale }}
 
-                <td class="" width="2%">{{ $i+1 }}</td>
-                <td class="" width="10%">{{ $data[$i]->tdate }} </td>
-                <td class="" width="34%">{{ $data[$i]->Descr }} </td>
+                <td style="text-align:center" width="4%">{{ $i+1 }}</td>
+                <td style="text-align:center" width="8%">{{ $data[$i]->tdate }} </td>
+                <td class="" width="32%">{{ $data[$i]->Descr }} </td>
                 {{-- <td class="" width="7%">{{ $data[$i]->Ref }} </td> --}}
-                <td style="text-align:center" width="9%">{{ number_format($data[$i]->oqty,0) }} </td>
-                <td style="text-align:center" width="9%">{{ number_format($data[$i]->received,0) }}</td>
-                <td style="text-align:center" width="9%">{{ number_format($data[$i]->sale,0) }} </td>
-                <td style="text-align:center" width="9%">{{ number_format($data[$i]->purret,0) }} </td>
-                <td style="text-align:center" width="9%">{{ number_format($data[$i]->saleret,0) }} </td>
-                <td style="text-align:center" width="9%">{{ number_format($data[$i]->CB,0) }} </td>
+                <td style="text-align:center" width="7%">{{ number_format($data[$i]->oqty,1) }} </td>
+                <td style="text-align:center" width="7%">{{ number_format($data[$i]->received,1) }}</td>
+                <td style="text-align:center" width="7%">{{ number_format($data[$i]->sale,1) }} </td>
+                <td style="text-align:center" width="7%">{{ number_format($data[$i]->purret,1) }} </td>
+                <td style="text-align:center" width="7%">{{ number_format($data[$i]->saleret,1) }} </td>
+
+                <td style="text-align:center" width="7%">{{ number_format($data[$i]->gmin,1) }} </td>
+                <td style="text-align:center" width="7%">{{ number_format($data[$i]->gmout,1) }} </td>
+
+
+                <td style="text-align:center;color:brown;font-weight:bold" width="7%">{{ number_format($data[$i]->CB,0) }} </td>
 
             </tr>
             @endfor
@@ -206,7 +214,7 @@ table{
             </tr> --}}
 
             <tr>
-                <td colspan="9" width="100%" style="text-align: right;border-bottom: 1px solid lightgray;"></td>
+                <td colspan="11" width="100%" style="text-align: right;border-bottom: 1px solid lightgray;"></td>
                 {{-- <td class="" width="12%" style="text-align: right;border-bottom: 1px solid lightgray;">{{ number_format($debitpkr,2) }} : R<br>{{ number_format($debitusd,2) }} : $</td>
                 <td class="" width="12%" style="text-align: right;border-bottom: 1px solid lightgray;">{{ number_format($creditpkr,2) }}: R<br>{{ number_format($creditusd,2) }} : $</td>
                 <td class="" width="12%" style="text-align: right;border-bottom: 1px solid lightgray;">{{ number_format($balpkr,2) }}: R<br>{{ number_format($balusd,2) }} : $</td> --}}

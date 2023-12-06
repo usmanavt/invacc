@@ -460,21 +460,21 @@ var updateValues = (cell) => {
        // var sum = (Number(data.saleqty) * Number(data.price))
 
         // if(cell.getData().sku_id==1)
-        if(data.sku==='KG' )
-        {
+ //       if(data.sku==='KG' )
+ //       {
 
-            var sum = (Number(data.feedqty) * Number(data.price))
-            var pr1=(Number(data.feedqty) / Number(data.totqty))*100
-            var pr2=( pr1 / Number(data.wtper))*100
-            qtypcs=((pr2*Number(data.sqtypcs))/100).toFixed(2)
-            qtyfeet=((pr2*Number(data.sqtyfeet))/100).toFixed(2)
-            qtykg=Number(data.feedqty)
-            var itmcost=Number(data.salcostkg)
-            price=Number(data.salcostkg)
-            saleamnt=Number(data.salcostkg)*Number(data.feedqty)
-         }
-        else if(data.sku==='PCS'   )
-        {
+//            var sum = (Number(data.feedqty) * Number(data.price))
+//            var pr1=(Number(data.feedqty) / Number(data.totqty))*100
+//            var pr2=( pr1 / Number(data.wtper))*100
+//            qtypcs=((pr2*Number(data.sqtypcs))/100).toFixed(2)
+//            qtyfeet=((pr2*Number(data.sqtyfeet))/100).toFixed(2)
+//            qtykg=Number(data.feedqty)
+//            var itmcost=Number(data.salcostkg)
+//            price=Number(data.salcostkg)
+//            saleamnt=Number(data.salcostkg)*Number(data.feedqty)
+//         }
+//        else if(data.sku==='PCS'   )
+//        {
             // || data.sku==='METER'
             var sum = (Number(data.feedqty) * Number(data.price))
             var pr1=(Number(data.feedqty) / Number(data.totqty))*100
@@ -484,30 +484,30 @@ var updateValues = (cell) => {
             qtypcs=Number(data.feedqty)
             price=Number(data.salcostpcs)
             saleamnt=Number(data.salcostpcs)*Number(data.feedqty)
-         }
+//         }
 
-        else if(data.sku==='FEET')
-         {
-            var sum = (Number(data.feedqty) * Number(data.price))
-            // var pr1=(Number(data.qtyfeet) / Number(data.totqty))*100
-            var pr1=(Number(data.feedqty) / Number(data.totqty))*100
-            var pr2=( pr1 / Number(data.feetper))*100
-            qtykg=((pr2*Number(data.sqtykg))/100).toFixed(2)
-            qtypcs=((pr2*Number(data.sqtypcs))/100).toFixed(2)
-            qtyfeet=Number(data.feedqty)
-            price=Number(data.salcostfeet)
-            saleamnt=Number(data.salcostfeet)*Number(data.feedqty)
+//        else if(data.sku==='FEET')
+//         {
+//            var sum = (Number(data.feedqty) * Number(data.price))
+//            // var pr1=(Number(data.qtyfeet) / Number(data.totqty))*100
+//            var pr1=(Number(data.feedqty) / Number(data.totqty))*100
+//            var pr2=( pr1 / Number(data.feetper))*100
+//            qtykg=((pr2*Number(data.sqtykg))/100).toFixed(2)
+//            qtypcs=((pr2*Number(data.sqtypcs))/100).toFixed(2)
+//            qtyfeet=Number(data.feedqty)
+//            price=Number(data.salcostfeet)
+//            saleamnt=Number(data.salcostfeet)*Number(data.feedqty)
 
-         }
-         else
-        {
-            var sum = (Number(data.feedqty) * Number(data.price))
-            var pr1=(Number(data.feedqty) / Number(data.totqty))*100
-            var pr2=( pr1 / Number(data.pcper))*100
-            qtykg=(((pr2*Number(data.sqtykg))/100) / Number(data.unitconver)).toFixed(2)
-            qtyfeet=(((pr2*Number(data.sqtyfeet))/100) / Number(data.unitconver)).toFixed(2)
-            qtypcs=((Number(data.feedqty) / Number(data.unitconver))).toFixed(2)
-         }
+//         }
+//         else
+//        {
+//            var sum = (Number(data.feedqty) * Number(data.price))
+//            var pr1=(Number(data.feedqty) / Number(data.totqty))*100
+//            var pr2=( pr1 / Number(data.pcper))*100
+//            qtykg=(((pr2*Number(data.sqtykg))/100) / Number(data.unitconver)).toFixed(2)
+//            qtyfeet=(((pr2*Number(data.sqtyfeet))/100) / Number(data.unitconver)).toFixed(2)
+//            qtypcs=((Number(data.feedqty) / Number(data.unitconver))).toFixed(2)
+//         }
 
 
 

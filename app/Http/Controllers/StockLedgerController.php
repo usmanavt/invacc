@@ -91,6 +91,30 @@ class StockLedgerController extends Controller
         return $mpdf;
     }
 
+    public function getMPDFSettingsA4L($orientation = 'A4-L')
+    {
+
+        $format;
+        $orientation == 'L' ? $format = 'A4': 'A4';
+
+        $mpdf = new PDF( [
+            'mode' => 'utf-8',
+            'format' => $orientation,
+            'margin_header' => '2',
+            'margin_top' => '5',
+            'margin_bottom' => '5',
+            'margin_footer' => '2',
+            'default_font_size' => 9,
+            'margin_left' => '10',
+            'margin_right' => '10',
+        ]);
+        $mpdf->showImageErrors = true;
+        $mpdf->curlAllowUnsafeSslRequests = true;
+        $mpdf->debug = true;
+        return $mpdf;
+    }
+
+
     public function getMPDFSettingsP($orientation = 'A4')
     {
 
@@ -114,6 +138,28 @@ class StockLedgerController extends Controller
         return $mpdf;
     }
 
+    public function getMPDFSettingsA3($orientation = 'A3-L')
+    {
+
+        $format;
+        $orientation == 'L' ? $format = 'A3': 'A3';
+
+        $mpdf = new PDF( [
+            'mode' => 'utf-8',
+            'format' => $orientation,
+            'margin_header' => '2',
+            'margin_top' => '5',
+            'margin_bottom' => '5',
+            'margin_footer' => '2',
+            'default_font_size' => 9,
+            'margin_left' => '10',
+            'margin_right' => '10',
+        ]);
+        $mpdf->showImageErrors = true;
+        $mpdf->curlAllowUnsafeSslRequests = true;
+        $mpdf->debug = true;
+        return $mpdf;
+    }
 
 
     public function fetch(Request $request)
@@ -331,7 +377,7 @@ class StockLedgerController extends Controller
                 Session::flash('info','No data available');
                 return redirect()->back();
             }
-            $mpdf = $this->getMPDFSettingsL();
+            $mpdf = $this->getMPDFSettingsA3();
             // $html =  view('stockledgers.gwstkledger')->with('data',$data)->with('fromdate',$fromdate)
             // ->with('todate',$todate)->with('ltype',$ltype)->render();
             // $filename = 'StockLedgerSummary-'.$fromdate.'-'.$todate.'.pdf';
@@ -434,7 +480,7 @@ class StockLedgerController extends Controller
                 }
             }
             //  Call Procedure
-            $mpdf = $this->getMPDFSettingsP();
+            $mpdf = $this->getMPDFSettingsA4L();
             $data = DB::select('call procindvstockgs(?,?,?)',array($fromdate,$todate,$gc));
             if(!$data)
             {
@@ -557,16 +603,6 @@ class StockLedgerController extends Controller
 
 
         }
-
-
-
-
-
-
-
-
-
-
 
 
 

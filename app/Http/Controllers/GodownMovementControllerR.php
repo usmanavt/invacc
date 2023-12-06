@@ -253,7 +253,7 @@ class GodownMovementControllerR  extends Controller
                 DB::insert(DB::raw("
                 INSERT INTO godown_stock(transaction_id,tdate,ttypeid,tdesc,material_id,stkwte13,stkpcse13,stkfeete13,stkwtgn2,stkpcsgn2,stkfeetgn2,stkwtams,stkpcsams,stkfeetams,stkwte24,stkpcse24,
                 stkfeete24,stkwtbs,stkpcsbs,stkfeetbs,stkwtoth,stkpcsoth,stkfeetoth,stkwttot,stkpcstot,stkfeettot,costwt,costpcs,costfeet)
-                SELECT clrdid,clrddate,7,'GM From',material_id,qtykg*-1,qtypcs*-1,qtyfeet*-1,0,0,0 ,0,0,0 ,0,0,0 ,0,0,0 ,0,0,0 ,qtykg*-1,
+                SELECT a.id,clrddate,7,'GM From',material_id,qtykg*-1,qtypcs*-1,qtyfeet*-1,0,0,0 ,0,0,0 ,0,0,0 ,0,0,0 ,0,0,0 ,qtykg*-1,
                 qtypcs*-1,qtyfeet*-1,qtykgcrt,qtypcscrt,qtyfeetcrt
                 FROM godown_movements AS a INNER JOIN godown_movement_details AS b ON a.id=b.godown_movement_id AND a.id=$ci->id"));
             }
@@ -263,7 +263,7 @@ class GodownMovementControllerR  extends Controller
                 DB::insert(DB::raw("
                 INSERT INTO godown_stock(transaction_id,tdate,ttypeid,tdesc,material_id,stkwte13,stkpcse13,stkfeete13,stkwtgn2,stkpcsgn2,stkfeetgn2,stkwtams,stkpcsams,stkfeetams,stkwte24,stkpcse24,
                 stkfeete24,stkwtbs,stkpcsbs,stkfeetbs,stkwtoth,stkpcsoth,stkfeetoth,stkwttot,stkpcstot,stkfeettot,costwt,costpcs,costfeet)
-                SELECT clrdid,clrddate,7,'GM From',material_id,0,0,0,qtykg*-1,qtypcs*-1,qtyfeet*-1 ,0,0,0 ,0,0,0 ,0,0,0 ,0,0,0 ,qtykg*-1,
+                SELECT a.id,clrddate,7,'GM From',material_id,0,0,0,qtykg*-1,qtypcs*-1,qtyfeet*-1 ,0,0,0 ,0,0,0 ,0,0,0 ,0,0,0 ,qtykg*-1,
                 qtypcs*-1,qtyfeet*-1,qtykgcrt,qtypcscrt,qtyfeetcrt
                 FROM godown_movements AS a INNER JOIN godown_movement_details AS b ON a.id=b.godown_movement_id AND a.id=$ci->id"));
             }
@@ -273,7 +273,7 @@ class GodownMovementControllerR  extends Controller
                 DB::insert(DB::raw("
                 INSERT INTO godown_stock(transaction_id,tdate,ttypeid,tdesc,material_id,stkwte13,stkpcse13,stkfeete13,stkwtgn2,stkpcsgn2,stkfeetgn2,stkwtams,stkpcsams,stkfeetams,stkwte24,stkpcse24,
                 stkfeete24,stkwtbs,stkpcsbs,stkfeetbs,stkwtoth,stkpcsoth,stkfeetoth,stkwttot,stkpcstot,stkfeettot,costwt,costpcs,costfeet)
-                SELECT clrdid,clrddate,7,'GM From',material_id,0,0,0,0,0,0,qtykg*-1,qtypcs*-1,qtyfeet*-1 ,0,0,0 ,0,0,0 ,0,0,0 ,qtykg*-1,
+                SELECT a.id,clrddate,7,'GM From',material_id,0,0,0,0,0,0,qtykg*-1,qtypcs*-1,qtyfeet*-1 ,0,0,0 ,0,0,0 ,0,0,0 ,qtykg*-1,
                 qtypcs*-1,qtyfeet*-1,qtykgcrt,qtypcscrt,qtyfeetcrt
                 FROM godown_movements AS a INNER JOIN godown_movement_details AS b ON a.id=b.godown_movement_id AND a.id=$ci->id"));
             }
@@ -282,7 +282,7 @@ class GodownMovementControllerR  extends Controller
                 DB::insert(DB::raw("
                 INSERT INTO godown_stock(transaction_id,tdate,ttypeid,tdesc,material_id,stkwte13,stkpcse13,stkfeete13,stkwtgn2,stkpcsgn2,stkfeetgn2,stkwtams,stkpcsams,stkfeetams,stkwte24,stkpcse24,
                 stkfeete24,stkwtbs,stkpcsbs,stkfeetbs,stkwtoth,stkpcsoth,stkfeetoth,stkwttot,stkpcstot,stkfeettot,costwt,costpcs,costfeet)
-                SELECT clrdid,clrddate,7,'GM From',material_id,0,0,0,0,0,0,0,0,0,qtykg*-1,qtypcs*-1,qtyfeet*-1  ,0,0,0 ,0,0,0 ,qtykg*-1,
+                SELECT a.id,clrddate,7,'GM From',material_id,0,0,0,0,0,0,0,0,0,qtykg*-1,qtypcs*-1,qtyfeet*-1  ,0,0,0 ,0,0,0 ,qtykg*-1,
                 qtypcs*-1,qtyfeet*-1,qtykgcrt,qtypcscrt,qtyfeetcrt
                 FROM godown_movements AS a INNER JOIN godown_movement_details AS b ON a.id=b.godown_movement_id AND a.id=$ci->id"));
             }
@@ -292,7 +292,7 @@ class GodownMovementControllerR  extends Controller
                 DB::insert(DB::raw("
                 INSERT INTO godown_stock(transaction_id,tdate,ttypeid,tdesc,material_id,stkwte13,stkpcse13,stkfeete13,stkwtgn2,stkpcsgn2,stkfeetgn2,stkwtams,stkpcsams,stkfeetams,stkwte24,stkpcse24,
                 stkfeete24,stkwtbs,stkpcsbs,stkfeetbs,stkwtoth,stkpcsoth,stkfeetoth,stkwttot,stkpcstot,stkfeettot,costwt,costpcs,costfeet)
-                SELECT clrdid,clrddate,7,'GM From',material_id,0,0,0,0,0,0,0,0,0,0,0,0,qtykg*-1,qtypcs*-1,qtyfeet*-1 ,0,0,0 ,qtykg*-1,
+                SELECT a.id,clrddate,7,'GM From',material_id,0,0,0,0,0,0,0,0,0,0,0,0,qtykg*-1,qtypcs*-1,qtyfeet*-1 ,0,0,0 ,qtykg*-1,
                 qtypcs*-1,qtyfeet*-1,qtykgcrt,qtypcscrt,qtyfeetcrt
                 FROM godown_movements AS a INNER JOIN godown_movement_details AS b ON a.id=b.godown_movement_id AND a.id=$ci->id"));
             }
@@ -301,7 +301,7 @@ class GodownMovementControllerR  extends Controller
                 DB::insert(DB::raw("
                 INSERT INTO godown_stock(transaction_id,tdate,ttypeid,tdesc,material_id,stkwte13,stkpcse13,stkfeete13,stkwtgn2,stkpcsgn2,stkfeetgn2,stkwtams,stkpcsams,stkfeetams,stkwte24,stkpcse24,
                 stkfeete24,stkwtbs,stkpcsbs,stkfeetbs,stkwtoth,stkpcsoth,stkfeetoth,stkwttot,stkpcstot,stkfeettot,costwt,costpcs,costfeet)
-                SELECT clrdid,clrddate,7,'GM From',material_id,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,qtykg*-1,qtypcs*-1,qtyfeet*-1  ,qtykg*-1,
+                SELECT a.id,clrddate,7,'GM From',material_id,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,qtykg*-1,qtypcs*-1,qtyfeet*-1  ,qtykg*-1,
                 qtypcs*-1,qtyfeet*-1,qtykgcrt,qtypcscrt,qtyfeetcrt
                 FROM godown_movements AS a INNER JOIN godown_movement_details AS b ON a.id=b.godown_movement_id AND a.id=$ci->id"));
             }
@@ -316,7 +316,7 @@ class GodownMovementControllerR  extends Controller
                 DB::insert(DB::raw("
                 INSERT INTO godown_stock(transaction_id,tdate,ttypeid,tdesc,material_id,stkwte13,stkpcse13,stkfeete13,stkwtgn2,stkpcsgn2,stkfeetgn2,stkwtams,stkpcsams,stkfeetams,stkwte24,stkpcse24,
                 stkfeete24,stkwtbs,stkpcsbs,stkfeetbs,stkwtoth,stkpcsoth,stkfeetoth,stkwttot,stkpcstot,stkfeettot,costwt,costpcs,costfeet)
-                SELECT clrdid,clrddate,8,'GM From',material_id,qtykg,qtypcs,qtyfeet,0,0,0 ,0,0,0 ,0,0,0 ,0,0,0 ,0,0,0 ,qtykg,
+                SELECT a.id,clrddate,8,'GM To',material_id,qtykg,qtypcs,qtyfeet,0,0,0 ,0,0,0 ,0,0,0 ,0,0,0 ,0,0,0 ,qtykg,
                 qtypcs,qtyfeet,qtykgcrt,qtypcscrt,qtyfeetcrt
                 FROM godown_movements AS a INNER JOIN godown_movement_details AS b ON a.id=b.godown_movement_id AND a.id=$ci->id"));
             }
@@ -326,7 +326,7 @@ class GodownMovementControllerR  extends Controller
                 DB::insert(DB::raw("
                 INSERT INTO godown_stock(transaction_id,tdate,ttypeid,tdesc,material_id,stkwte13,stkpcse13,stkfeete13,stkwtgn2,stkpcsgn2,stkfeetgn2,stkwtams,stkpcsams,stkfeetams,stkwte24,stkpcse24,
                 stkfeete24,stkwtbs,stkpcsbs,stkfeetbs,stkwtoth,stkpcsoth,stkfeetoth,stkwttot,stkpcstot,stkfeettot,costwt,costpcs,costfeet)
-                SELECT clrdid,clrddate,8,'GM From',material_id,0,0,0,qtykg,qtypcs,qtyfeet ,0,0,0 ,0,0,0 ,0,0,0 ,0,0,0 ,qtykg,
+                SELECT a.id,clrddate,8,'GM To',material_id,0,0,0,qtykg,qtypcs,qtyfeet ,0,0,0 ,0,0,0 ,0,0,0 ,0,0,0 ,qtykg,
                 qtypcs,qtyfeet,qtykgcrt,qtypcscrt,qtyfeetcrt
                 FROM godown_movements AS a INNER JOIN godown_movement_details AS b ON a.id=b.godown_movement_id AND a.id=$ci->id"));
             }
@@ -336,7 +336,7 @@ class GodownMovementControllerR  extends Controller
                 DB::insert(DB::raw("
                 INSERT INTO godown_stock(transaction_id,tdate,ttypeid,tdesc,material_id,stkwte13,stkpcse13,stkfeete13,stkwtgn2,stkpcsgn2,stkfeetgn2,stkwtams,stkpcsams,stkfeetams,stkwte24,stkpcse24,
                 stkfeete24,stkwtbs,stkpcsbs,stkfeetbs,stkwtoth,stkpcsoth,stkfeetoth,stkwttot,stkpcstot,stkfeettot,costwt,costpcs,costfeet)
-                SELECT clrdid,clrddate,8,'GM From',material_id,0,0,0,0,0,0,qtykg,qtypcs,qtyfeet ,0,0,0 ,0,0,0 ,0,0,0 ,qtykg,
+                SELECT a.id,clrddate,8,'GM To',material_id,0,0,0,0,0,0,qtykg,qtypcs,qtyfeet ,0,0,0 ,0,0,0 ,0,0,0 ,qtykg,
                 qtypcs,qtyfeet,qtykgcrt,qtypcscrt,qtyfeetcrt
                 FROM godown_movements AS a INNER JOIN godown_movement_details AS b ON a.id=b.godown_movement_id AND a.id=$ci->id"));
             }
@@ -345,7 +345,7 @@ class GodownMovementControllerR  extends Controller
                 DB::insert(DB::raw("
                 INSERT INTO godown_stock(transaction_id,tdate,ttypeid,tdesc,material_id,stkwte13,stkpcse13,stkfeete13,stkwtgn2,stkpcsgn2,stkfeetgn2,stkwtams,stkpcsams,stkfeetams,stkwte24,stkpcse24,
                 stkfeete24,stkwtbs,stkpcsbs,stkfeetbs,stkwtoth,stkpcsoth,stkfeetoth,stkwttot,stkpcstot,stkfeettot,costwt,costpcs,costfeet)
-                SELECT clrdid,clrddate,8,'GM From',material_id,0,0,0,0,0,0,0,0,0,qtykg,qtypcs,qtyfeet  ,0,0,0 ,0,0,0 ,qtykg,
+                SELECT a.id,clrddate,8,'GM To',material_id,0,0,0,0,0,0,0,0,0,qtykg,qtypcs,qtyfeet  ,0,0,0 ,0,0,0 ,qtykg,
                 qtypcs,qtyfeet,qtykgcrt,qtypcscrt,qtyfeetcrt
                 FROM godown_movements AS a INNER JOIN godown_movement_details AS b ON a.id=b.godown_movement_id AND a.id=$ci->id"));
             }
@@ -355,7 +355,7 @@ class GodownMovementControllerR  extends Controller
                 DB::insert(DB::raw("
                 INSERT INTO godown_stock(transaction_id,tdate,ttypeid,tdesc,material_id,stkwte13,stkpcse13,stkfeete13,stkwtgn2,stkpcsgn2,stkfeetgn2,stkwtams,stkpcsams,stkfeetams,stkwte24,stkpcse24,
                 stkfeete24,stkwtbs,stkpcsbs,stkfeetbs,stkwtoth,stkpcsoth,stkfeetoth,stkwttot,stkpcstot,stkfeettot,costwt,costpcs,costfeet)
-                SELECT clrdid,clrddate,8,'GM From',material_id,0,0,0,0,0,0,0,0,0,0,0,0,qtykg,qtypcs,qtyfeet ,0,0,0 ,qtykg,
+                SELECT a.id,clrddate,8,'GM To',material_id,0,0,0,0,0,0,0,0,0,0,0,0,qtykg,qtypcs,qtyfeet ,0,0,0 ,qtykg,
                 qtypcs,qtyfeet,qtykgcrt,qtypcscrt,qtyfeetcrt
                 FROM godown_movements AS a INNER JOIN godown_movement_details AS b ON a.id=b.godown_movement_id AND a.id=$ci->id"));
             }
@@ -364,7 +364,7 @@ class GodownMovementControllerR  extends Controller
                 DB::insert(DB::raw("
                 INSERT INTO godown_stock(transaction_id,tdate,ttypeid,tdesc,material_id,stkwte13,stkpcse13,stkfeete13,stkwtgn2,stkpcsgn2,stkfeetgn2,stkwtams,stkpcsams,stkfeetams,stkwte24,stkpcse24,
                 stkfeete24,stkwtbs,stkpcsbs,stkfeetbs,stkwtoth,stkpcsoth,stkfeetoth,stkwttot,stkpcstot,stkfeettot,costwt,costpcs,costfeet)
-                SELECT clrdid,clrddate,8,'GM From',material_id,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,qtykg,qtypcs,qtyfeet  ,qtykg,
+                SELECT a.id,clrddate,8,'GM To',material_id,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,qtykg,qtypcs,qtyfeet  ,qtykg,
                 qtypcs,qtyfeet,qtykgcrt,qtypcscrt,qtyfeetcrt
                 FROM godown_movements AS a INNER JOIN godown_movement_details AS b ON a.id=b.godown_movement_id AND a.id=$ci->id"));
             }
@@ -430,7 +430,7 @@ class GodownMovementControllerR  extends Controller
                 DB::insert(DB::raw("
                 INSERT INTO godown_stock(transaction_id,tdate,ttypeid,tdesc,material_id,stkwte13,stkpcse13,stkfeete13,stkwtgn2,stkpcsgn2,stkfeetgn2,stkwtams,stkpcsams,stkfeetams,stkwte24,stkpcse24,
                 stkfeete24,stkwtbs,stkpcsbs,stkfeetbs,stkwtoth,stkpcsoth,stkfeetoth,stkwttot,stkpcstot,stkfeettot,costwt,costpcs,costfeet)
-                SELECT clrdid,clrddate,7,'GM From',material_id,qtykg*-1,qtypcs*-1,qtyfeet*-1,0,0,0 ,0,0,0 ,0,0,0 ,0,0,0 ,0,0,0 ,qtykg*-1,
+                SELECT a.id,clrddate,7,'GM From',material_id,qtykg*-1,qtypcs*-1,qtyfeet*-1,0,0,0 ,0,0,0 ,0,0,0 ,0,0,0 ,0,0,0 ,qtykg*-1,
                 qtypcs*-1,qtyfeet*-1,qtykgcrt,qtypcscrt,qtyfeetcrt
                 FROM godown_movements AS a INNER JOIN godown_movement_details AS b ON a.id=b.godown_movement_id AND a.id=$ci->id"));
             }
@@ -440,7 +440,7 @@ class GodownMovementControllerR  extends Controller
                 DB::insert(DB::raw("
                 INSERT INTO godown_stock(transaction_id,tdate,ttypeid,tdesc,material_id,stkwte13,stkpcse13,stkfeete13,stkwtgn2,stkpcsgn2,stkfeetgn2,stkwtams,stkpcsams,stkfeetams,stkwte24,stkpcse24,
                 stkfeete24,stkwtbs,stkpcsbs,stkfeetbs,stkwtoth,stkpcsoth,stkfeetoth,stkwttot,stkpcstot,stkfeettot,costwt,costpcs,costfeet)
-                SELECT clrdid,clrddate,7,'GM From',material_id,0,0,0,qtykg*-1,qtypcs*-1,qtyfeet*-1 ,0,0,0 ,0,0,0 ,0,0,0 ,0,0,0 ,qtykg*-1,
+                SELECT a.id,clrddate,7,'GM From',material_id,0,0,0,qtykg*-1,qtypcs*-1,qtyfeet*-1 ,0,0,0 ,0,0,0 ,0,0,0 ,0,0,0 ,qtykg*-1,
                 qtypcs*-1,qtyfeet*-1,qtykgcrt,qtypcscrt,qtyfeetcrt
                 FROM godown_movements AS a INNER JOIN godown_movement_details AS b ON a.id=b.godown_movement_id AND a.id=$ci->id"));
             }
@@ -450,7 +450,7 @@ class GodownMovementControllerR  extends Controller
                 DB::insert(DB::raw("
                 INSERT INTO godown_stock(transaction_id,tdate,ttypeid,tdesc,material_id,stkwte13,stkpcse13,stkfeete13,stkwtgn2,stkpcsgn2,stkfeetgn2,stkwtams,stkpcsams,stkfeetams,stkwte24,stkpcse24,
                 stkfeete24,stkwtbs,stkpcsbs,stkfeetbs,stkwtoth,stkpcsoth,stkfeetoth,stkwttot,stkpcstot,stkfeettot,costwt,costpcs,costfeet)
-                SELECT clrdid,clrddate,7,'GM From',material_id,0,0,0,0,0,0,qtykg*-1,qtypcs*-1,qtyfeet*-1 ,0,0,0 ,0,0,0 ,0,0,0 ,qtykg*-1,
+                SELECT a.id,clrddate,7,'GM From',material_id,0,0,0,0,0,0,qtykg*-1,qtypcs*-1,qtyfeet*-1 ,0,0,0 ,0,0,0 ,0,0,0 ,qtykg*-1,
                 qtypcs*-1,qtyfeet*-1,qtykgcrt,qtypcscrt,qtyfeetcrt
                 FROM godown_movements AS a INNER JOIN godown_movement_details AS b ON a.id=b.godown_movement_id AND a.id=$ci->id"));
             }
@@ -459,7 +459,7 @@ class GodownMovementControllerR  extends Controller
                 DB::insert(DB::raw("
                 INSERT INTO godown_stock(transaction_id,tdate,ttypeid,tdesc,material_id,stkwte13,stkpcse13,stkfeete13,stkwtgn2,stkpcsgn2,stkfeetgn2,stkwtams,stkpcsams,stkfeetams,stkwte24,stkpcse24,
                 stkfeete24,stkwtbs,stkpcsbs,stkfeetbs,stkwtoth,stkpcsoth,stkfeetoth,stkwttot,stkpcstot,stkfeettot,costwt,costpcs,costfeet)
-                SELECT clrdid,clrddate,7,'GM From',material_id,0,0,0,0,0,0,0,0,0,qtykg*-1,qtypcs*-1,qtyfeet*-1  ,0,0,0 ,0,0,0 ,qtykg*-1,
+                SELECT a.id,clrddate,7,'GM From',material_id,0,0,0,0,0,0,0,0,0,qtykg*-1,qtypcs*-1,qtyfeet*-1  ,0,0,0 ,0,0,0 ,qtykg*-1,
                 qtypcs*-1,qtyfeet*-1,qtykgcrt,qtypcscrt,qtyfeetcrt
                 FROM godown_movements AS a INNER JOIN godown_movement_details AS b ON a.id=b.godown_movement_id AND a.id=$ci->id"));
             }
@@ -469,7 +469,7 @@ class GodownMovementControllerR  extends Controller
                 DB::insert(DB::raw("
                 INSERT INTO godown_stock(transaction_id,tdate,ttypeid,tdesc,material_id,stkwte13,stkpcse13,stkfeete13,stkwtgn2,stkpcsgn2,stkfeetgn2,stkwtams,stkpcsams,stkfeetams,stkwte24,stkpcse24,
                 stkfeete24,stkwtbs,stkpcsbs,stkfeetbs,stkwtoth,stkpcsoth,stkfeetoth,stkwttot,stkpcstot,stkfeettot,costwt,costpcs,costfeet)
-                SELECT clrdid,clrddate,7,'GM From',material_id,0,0,0,0,0,0,0,0,0,0,0,0,qtykg*-1,qtypcs*-1,qtyfeet*-1 ,0,0,0 ,qtykg*-1,
+                SELECT a.id,clrddate,7,'GM From',material_id,0,0,0,0,0,0,0,0,0,0,0,0,qtykg*-1,qtypcs*-1,qtyfeet*-1 ,0,0,0 ,qtykg*-1,
                 qtypcs*-1,qtyfeet*-1,qtykgcrt,qtypcscrt,qtyfeetcrt
                 FROM godown_movements AS a INNER JOIN godown_movement_details AS b ON a.id=b.godown_movement_id AND a.id=$ci->id"));
             }
@@ -478,7 +478,7 @@ class GodownMovementControllerR  extends Controller
                 DB::insert(DB::raw("
                 INSERT INTO godown_stock(transaction_id,tdate,ttypeid,tdesc,material_id,stkwte13,stkpcse13,stkfeete13,stkwtgn2,stkpcsgn2,stkfeetgn2,stkwtams,stkpcsams,stkfeetams,stkwte24,stkpcse24,
                 stkfeete24,stkwtbs,stkpcsbs,stkfeetbs,stkwtoth,stkpcsoth,stkfeetoth,stkwttot,stkpcstot,stkfeettot,costwt,costpcs,costfeet)
-                SELECT clrdid,clrddate,7,'GM From',material_id,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,qtykg*-1,qtypcs*-1,qtyfeet*-1  ,qtykg*-1,
+                SELECT a.id,clrddate,7,'GM From',material_id,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,qtykg*-1,qtypcs*-1,qtyfeet*-1  ,qtykg*-1,
                 qtypcs*-1,qtyfeet*-1,qtykgcrt,qtypcscrt,qtyfeetcrt
                 FROM godown_movements AS a INNER JOIN godown_movement_details AS b ON a.id=b.godown_movement_id AND a.id=$ci->id"));
             }
@@ -493,7 +493,7 @@ class GodownMovementControllerR  extends Controller
                 DB::insert(DB::raw("
                 INSERT INTO godown_stock(transaction_id,tdate,ttypeid,tdesc,material_id,stkwte13,stkpcse13,stkfeete13,stkwtgn2,stkpcsgn2,stkfeetgn2,stkwtams,stkpcsams,stkfeetams,stkwte24,stkpcse24,
                 stkfeete24,stkwtbs,stkpcsbs,stkfeetbs,stkwtoth,stkpcsoth,stkfeetoth,stkwttot,stkpcstot,stkfeettot,costwt,costpcs,costfeet)
-                SELECT clrdid,clrddate,8,'GM To',material_id,qtykg,qtypcs,qtyfeet,0,0,0 ,0,0,0 ,0,0,0 ,0,0,0 ,0,0,0 ,qtykg,
+                SELECT a.id,clrddate,8,'GM To',material_id,qtykg,qtypcs,qtyfeet,0,0,0 ,0,0,0 ,0,0,0 ,0,0,0 ,0,0,0 ,qtykg,
                 qtypcs,qtyfeet,qtykgcrt,qtypcscrt,qtyfeetcrt
                 FROM godown_movements AS a INNER JOIN godown_movement_details AS b ON a.id=b.godown_movement_id AND a.id=$ci->id"));
             }
@@ -503,7 +503,7 @@ class GodownMovementControllerR  extends Controller
                 DB::insert(DB::raw("
                 INSERT INTO godown_stock(transaction_id,tdate,ttypeid,tdesc,material_id,stkwte13,stkpcse13,stkfeete13,stkwtgn2,stkpcsgn2,stkfeetgn2,stkwtams,stkpcsams,stkfeetams,stkwte24,stkpcse24,
                 stkfeete24,stkwtbs,stkpcsbs,stkfeetbs,stkwtoth,stkpcsoth,stkfeetoth,stkwttot,stkpcstot,stkfeettot,costwt,costpcs,costfeet)
-                SELECT clrdid,clrddate,8,'GM To',material_id,0,0,0,qtykg,qtypcs,qtyfeet ,0,0,0 ,0,0,0 ,0,0,0 ,0,0,0 ,qtykg,
+                SELECT a.id,clrddate,8,'GM To',material_id,0,0,0,qtykg,qtypcs,qtyfeet ,0,0,0 ,0,0,0 ,0,0,0 ,0,0,0 ,qtykg,
                 qtypcs,qtyfeet,qtykgcrt,qtypcscrt,qtyfeetcrt
                 FROM godown_movements AS a INNER JOIN godown_movement_details AS b ON a.id=b.godown_movement_id AND a.id=$ci->id"));
             }
@@ -513,7 +513,7 @@ class GodownMovementControllerR  extends Controller
                 DB::insert(DB::raw("
                 INSERT INTO godown_stock(transaction_id,tdate,ttypeid,tdesc,material_id,stkwte13,stkpcse13,stkfeete13,stkwtgn2,stkpcsgn2,stkfeetgn2,stkwtams,stkpcsams,stkfeetams,stkwte24,stkpcse24,
                 stkfeete24,stkwtbs,stkpcsbs,stkfeetbs,stkwtoth,stkpcsoth,stkfeetoth,stkwttot,stkpcstot,stkfeettot,costwt,costpcs,costfeet)
-                SELECT clrdid,clrddate,8,'GM To',material_id,0,0,0,0,0,0,qtykg,qtypcs,qtyfeet ,0,0,0 ,0,0,0 ,0,0,0 ,qtykg,
+                SELECT a.id,clrddate,8,'GM To',material_id,0,0,0,0,0,0,qtykg,qtypcs,qtyfeet ,0,0,0 ,0,0,0 ,0,0,0 ,qtykg,
                 qtypcs,qtyfeet,qtykgcrt,qtypcscrt,qtyfeetcrt
                 FROM godown_movements AS a INNER JOIN godown_movement_details AS b ON a.id=b.godown_movement_id AND a.id=$ci->id"));
             }
@@ -522,7 +522,7 @@ class GodownMovementControllerR  extends Controller
                 DB::insert(DB::raw("
                 INSERT INTO godown_stock(transaction_id,tdate,ttypeid,tdesc,material_id,stkwte13,stkpcse13,stkfeete13,stkwtgn2,stkpcsgn2,stkfeetgn2,stkwtams,stkpcsams,stkfeetams,stkwte24,stkpcse24,
                 stkfeete24,stkwtbs,stkpcsbs,stkfeetbs,stkwtoth,stkpcsoth,stkfeetoth,stkwttot,stkpcstot,stkfeettot,costwt,costpcs,costfeet)
-                SELECT clrdid,clrddate,8,'GM To',material_id,0,0,0,0,0,0,0,0,0,qtykg,qtypcs,qtyfeet  ,0,0,0 ,0,0,0 ,qtykg,
+                SELECT a.id,clrddate,8,'GM To',material_id,0,0,0,0,0,0,0,0,0,qtykg,qtypcs,qtyfeet  ,0,0,0 ,0,0,0 ,qtykg,
                 qtypcs,qtyfeet,qtykgcrt,qtypcscrt,qtyfeetcrt
                 FROM godown_movements AS a INNER JOIN godown_movement_details AS b ON a.id=b.godown_movement_id AND a.id=$ci->id"));
             }
@@ -532,7 +532,7 @@ class GodownMovementControllerR  extends Controller
                 DB::insert(DB::raw("
                 INSERT INTO godown_stock(transaction_id,tdate,ttypeid,tdesc,material_id,stkwte13,stkpcse13,stkfeete13,stkwtgn2,stkpcsgn2,stkfeetgn2,stkwtams,stkpcsams,stkfeetams,stkwte24,stkpcse24,
                 stkfeete24,stkwtbs,stkpcsbs,stkfeetbs,stkwtoth,stkpcsoth,stkfeetoth,stkwttot,stkpcstot,stkfeettot,costwt,costpcs,costfeet)
-                SELECT clrdid,clrddate,8,'GM To',material_id,0,0,0,0,0,0,0,0,0,0,0,0,qtykg,qtypcs,qtyfeet ,0,0,0 ,qtykg,
+                SELECT a.id,clrddate,8,'GM To',material_id,0,0,0,0,0,0,0,0,0,0,0,0,qtykg,qtypcs,qtyfeet ,0,0,0 ,qtykg,
                 qtypcs,qtyfeet,qtykgcrt,qtypcscrt,qtyfeetcrt
                 FROM godown_movements AS a INNER JOIN godown_movement_details AS b ON a.id=b.godown_movement_id AND a.id=$ci->id"));
             }
@@ -541,7 +541,7 @@ class GodownMovementControllerR  extends Controller
                 DB::insert(DB::raw("
                 INSERT INTO godown_stock(transaction_id,tdate,ttypeid,tdesc,material_id,stkwte13,stkpcse13,stkfeete13,stkwtgn2,stkpcsgn2,stkfeetgn2,stkwtams,stkpcsams,stkfeetams,stkwte24,stkpcse24,
                 stkfeete24,stkwtbs,stkpcsbs,stkfeetbs,stkwtoth,stkpcsoth,stkfeetoth,stkwttot,stkpcstot,stkfeettot,costwt,costpcs,costfeet)
-                SELECT clrdid,clrddate,8,'GM To',material_id,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,qtykg,qtypcs,qtyfeet  ,qtykg,
+                SELECT a.id,clrddate,8,'GM To',material_id,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,qtykg,qtypcs,qtyfeet  ,qtykg,
                 qtypcs,qtyfeet,qtykgcrt,qtypcscrt,qtyfeetcrt
                 FROM godown_movements AS a INNER JOIN godown_movement_details AS b ON a.id=b.godown_movement_id AND a.id=$ci->id"));
             }

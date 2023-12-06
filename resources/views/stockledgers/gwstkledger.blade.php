@@ -122,15 +122,19 @@ table{
         <thead >
             <tr>
                 {{-- <td  style="text-align: center font-size:0.5rem;font-weight: bold"> --}}
-                    <th class="column-headers" width="5%">S#</th>
-                    <th class="column-headers" width="35%">Material Name</th>
-                    <th class="column-headers" width="6%">Unit</th>
-                    <th class="column-headers" width="9%">Opening<br>Balance</th>
-                    <th class="column-headers" width="9%">Purchasing</th>
-                    <th class="column-headers" width="9%">Sale</th>
-                    <th class="column-headers" width="9%">Purchase<br>Return</th>
-                    <th class="column-headers" width="9%">Sale<br>Return</th>
-                    <th class="column-headers" width="9%">Closing<br>Balance</th>
+                    <th class="column-headers" width="3%">S#</th>
+                    <th class="column-headers" width="28%">Material Name</th>
+                    <th class="column-headers" width="5%">Unit</th>
+                    <th class="column-headers" width="8%">Opening<br>Balance</th>
+                    <th class="column-headers" width="8%">Purchase</th>
+                    <th class="column-headers" width="8%">Sale</th>
+                    <th class="column-headers" width="8%">Purchase<br>Return</th>
+                    <th class="column-headers" width="8%">Sale<br>Return</th>
+
+                    <th class="column-headers" width="8%">Godown<br>In</th>
+                    <th class="column-headers" width="8%">Godown<br>Out</th>
+
+                    <th class="column-headers" width="8%">Closing<br>Balance</th>
 
             </tr>
         </thead>
@@ -150,14 +154,14 @@ table{
 
             @if( $i==0 )
                 <tr>
-                    <td colspan="9" width="100%" style="text-align: left;font-size:1.2rem;border-bottom: 2px solid rgb(211, 211, 211);"> {{ $data[$i]->Itemgroupe}} </td>
+                    <td colspan="11" width="100%" style="text-align: left;font-size:1.2rem;border-bottom: 2px solid rgb(211, 211, 211);"> {{ $data[$i]->Itemgroupe}} </td>
                 </tr>
             @else
 
             {{ $srno = $i - 1 }}
             @if ($data[$i]->Itemgroupe  <> $data[$srno]->Itemgroupe)
                 <tr>
-                        <td colspan="9" width="100%" style="text-align:left;font-size:1.2rem;border-bottom: 2px solid rgb(211, 211, 211);"> {{ $data[$i]->Itemgroupe}} </td>
+                        <td colspan="11" width="100%" style="text-align:left;font-size:1.2rem;border-bottom: 2px solid rgb(211, 211, 211);"> {{ $data[$i]->Itemgroupe}} </td>
                 </tr>
             @endif
             @endif
@@ -174,22 +178,26 @@ table{
                 {{ $vcb += $data[$i]->CB }}
 
 
-                <td style="text-align:center" width="5%">{{ $i+1 }}</td>
-                <td width="35%">{{ $data[$i]->matname}} </td>
-                <td style="text-align:center" width="6%">{{ $data[$i]->unit }} </td>
-                <td style="text-align:right" width="9%">{{ number_format($data[$i]->OBALANCE,0) }} </td>
-                <td style="text-align:right" width="9%">{{ number_format($data[$i]->PURQTY,0) }} </td>
-                <td style="text-align:right" width="9%">{{ number_format($data[$i]->SALQTY,0) }} </td>
-                <td style="text-align:right" width="9%">{{ number_format($data[$i]->PURRET,0) }} </td>
-                <td style="text-align:right" width="9%">{{ number_format($data[$i]->SALRET,0) }} </td>
-                <td style="text-align:right" width="9%">{{ number_format($data[$i]->CB,0) }} </td>
+                <td style="text-align:center" width="3%">{{ $i+1 }}</td>
+                <td width="28%">{{ $data[$i]->matname}} </td>
+                <td style="text-align:center" width="5%">{{ $data[$i]->unit }} </td>
+                <td style="text-align:right" width="8%">{{ number_format($data[$i]->OBALANCE,0) }} </td>
+                <td style="text-align:right" width="8%">{{ number_format($data[$i]->PURQTY,0) }} </td>
+                <td style="text-align:right" width="8%">{{ number_format($data[$i]->SALQTY,0) }} </td>
+                <td style="text-align:right" width="8%">{{ number_format($data[$i]->PURRET,0) }} </td>
+                <td style="text-align:right" width="8%">{{ number_format($data[$i]->SALRET,0) }} </td>
+
+                <td style="text-align:right" width="8%">{{ number_format($data[$i]->gmin,0) }} </td>
+                <td style="text-align:right" width="8%">{{ number_format($data[$i]->gmout,0) }} </td>
+
+                <td style="text-align:right" width="8%">{{ number_format($data[$i]->CB,0) }} </td>
             </tr>
             @endfor
             <tr>
-                <td colspan="4" width="9%" style="text-align: right;border-bottom: 1px solid lightgray;">{{ number_format($vob,0) }} </td>
-                <td colspan="1" width="9%" style="text-align: right;border-bottom: 1px solid lightgray;">{{ number_format($vrcvd,0) }} </td>
-                <td colspan="1" width="9%" style="text-align: right;border-bottom: 1px solid lightgray;">{{ number_format($vsl,0) }} </td>
-                <td colspan="4" width="9%" style="text-align: right;border-bottom: 1px solid lightgray;">{{ number_format($vcb,0) }} </td>
+                <td colspan="4"  style="text-align: right;border-bottom: 1px solid lightgray;">{{ number_format($vob,0) }} </td>
+                <td colspan="1"  style="text-align: right;border-bottom: 1px solid lightgray;">{{ number_format($vrcvd,0) }} </td>
+                <td colspan="1"  style="text-align: right;border-bottom: 1px solid lightgray;">{{ number_format($vsl,0) }} </td>
+                <td colspan="6"  style="text-align: right;border-bottom: 1px solid lightgray;">{{ number_format($vcb,0) }} </td>
 
 
             </tr>

@@ -123,41 +123,56 @@ table{
         <thead >
             {{-- <tr> <th class="column-headers" width="50%">OPENING BNALANCE</th></tr> --}}
             <tr>
-                <td colspan="2" width="28%" style="text-align:center;font-weight: bold;border-right: 1px solid lightgray;"> Material Description</td>
+                <td colspan="2" width="22%" style="text-align:center;font-weight: bold;border-right: 1px solid lightgray;"> Material Description</td>
                 <td colspan="3" width="12%" style="text-align:center;font-weight: bold;border-right: 1px solid lightgray;"> Opening Balance</td>
-                <td colspan="3" width="12%" style="text-align: center;font-weight: bold;border-right: 1px solid lightgray;"> Purchase</td>
-                <td colspan="3" width="12%" style="text-align: center;font-weight: bold;border-right: 1px solid lightgray;"> Sale</td>
-                <td colspan="3" width="12%" style="text-align: center;font-weight: bold;border-right: 1px solid lightgray;"> Purchase Return</td>
-                <td colspan="3" width="12%" style="text-align: center;font-weight: bold;border-right: 1px solid lightgray;"> Sale Return</td>
+                <td colspan="3" width="9%" style="text-align: center;font-weight: bold;border-right: 1px solid lightgray;"> Purchase</td>
+                <td colspan="3" width="9%" style="text-align: center;font-weight: bold;border-right: 1px solid lightgray;"> Sale</td>
+                <td colspan="3" width="9%" style="text-align: center;font-weight: bold;border-right: 1px solid lightgray;"> Purchase Return</td>
+                <td colspan="3" width="9%" style="text-align: center;font-weight: bold;border-right: 1px solid lightgray;"> Sale Return</td>
+
+
+                <td colspan="3" width="9%" style="text-align: center;font-weight: bold;border-right: 1px solid lightgray;"> Godown-In</td>
+                <td colspan="3" width="9%" style="text-align: center;font-weight: bold;border-right: 1px solid lightgray;"> Godown-Out</td>
+
+
+
                 <td colspan="3" width="12%" style="text-align: center;font-weight: bold;border-right: 1px solid lightgray;"> Closing Balance</td> --}}
             </tr>
 
             <tr>
                 {{-- <td  style="text-align: center font-size:0.5rem;font-weight: bold"> --}}
                     <th class="column-headers" width="3%">S#</th>
-                    <th class="column-headers" width="25%"></th>
+                    <th class="column-headers" width="19%"></th>
                     {{-- <th class="column-headers" width="3%">Unit</th> --}}
 
                     <th class="column-headers" width="4%">Kg</th>
                     <th class="column-headers" width="4%">Pcs</th>
                     <th class="column-headers" width="4%">Feet</th>
 
-                    <th class="column-headers" width="4%">Kg</th>
-                    <th class="column-headers" width="4%">Pcs</th>
-                    <th class="column-headers" width="4%">Feet</th>
+                    <th class="column-headers" width="3%">Kg</th>
+                    <th class="column-headers" width="3%">Pcs</th>
+                    <th class="column-headers" width="3%">Feet</th>
 
-                    <th class="column-headers" width="4%">Kg</th>
-                    <th class="column-headers" width="4%">Pcs</th>
-                    <th class="column-headers" width="4%">Feet</th>
+                    <th class="column-headers" width="3%">Kg</th>
+                    <th class="column-headers" width="3%">Pcs</th>
+                    <th class="column-headers" width="3%">Feet</th>
 
-                    <th class="column-headers" width="4%">Kg</th>
-                    <th class="column-headers" width="4%">Pcs</th>
-                    <th class="column-headers" width="4%">Feet</th>
+                    <th class="column-headers" width="3%">Kg</th>
+                    <th class="column-headers" width="3%">Pcs</th>
+                    <th class="column-headers" width="3%">Feet</th>
 
 
-                    <th class="column-headers" width="4%">Kg</th>
-                    <th class="column-headers" width="4%">Pcs</th>
-                    <th class="column-headers" width="4%">Feet</th>
+                    <th class="column-headers" width="3%">Kg</th>
+                    <th class="column-headers" width="3%">Pcs</th>
+                    <th class="column-headers" width="3%">Feet</th>
+
+                    <th class="column-headers" width="3%">Kg</th>
+                    <th class="column-headers" width="3%">Pcs</th>
+                    <th class="column-headers" width="3%">Feet</th>
+
+                    <th class="column-headers" width="3%">Kg</th>
+                    <th class="column-headers" width="3%">Pcs</th>
+                    <th class="column-headers" width="3%">Feet</th>
 
                     <th class="column-headers" width="4%">Kg</th>
                     <th class="column-headers" width="4%">Pcs</th>
@@ -177,19 +192,22 @@ table{
             {{ $swt = 0 }};{{ $spcs = 0 }}; {{ $sfeet = 0 }}
             {{ $cwt = 0 }};{{ $cpcs = 0 }}; {{ $cfeet = 0 }}
 
+            {{ $gwt = 0 }};{{ $gpcs = 0 }}; {{ $gfeet = 0 }}
+            {{ $giwt = 0 }};{{ $gipcs = 0 }}; {{ $gifeet = 0 }}
+
 
             @for ($i = 0 ; $i < count($data) ; $i++)
 
             @if( $i==0 )
             <tr>
-                <td colspan="20" width="100%" style="text-align: left;font-size:1.2rem;border-bottom: 2px solid rgb(211, 211, 211);"> {{ $data[$i]->Itemgroupe}} </td>
+                <td colspan="26" width="100%" style="text-align: left;font-size:1.2rem;border-bottom: 2px solid rgb(211, 211, 211);"> {{ $data[$i]->Itemgroupe}} </td>
             </tr>
         @else
 
         {{ $srno = $i - 1 }}
         @if ($data[$i]->Itemgroupe  <> $data[$srno]->Itemgroupe)
             <tr>
-                    <td colspan="20" width="100%" style="text-align:left;font-size:1.2rem;border-bottom: 2px solid rgb(211, 211, 211);"> {{ $data[$i]->Itemgroupe}} </td>
+                    <td colspan="26" width="100%" style="text-align:left;font-size:1.2rem;border-bottom: 2px solid rgb(211, 211, 211);"> {{ $data[$i]->Itemgroupe}} </td>
             </tr>
         @endif
         @endif
@@ -201,34 +219,46 @@ table{
                 {{ $swt += $data[$i]->sqtykg }};{{ $spcs += $data[$i]->sqtypcs }};{{ $sfeet += $data[$i]->sqtyfeet }}
                 {{ $cwt += $data[$i]->cbkg }};{{ $cpcs += $data[$i]->cbpcs }};{{ $cfeet += $data[$i]->cbfeet }}
 
-
-
+                {{ $gwt += $data[$i]->gmqtykg }};{{ $gpcs += $data[$i]->gmqtypcs }};{{ $gfeet += $data[$i]->gmqtyfeet }}
+                {{ $giwt += $data[$i]->gmiqtykg }};{{ $gipcs += $data[$i]->gmiqtypcs }};{{ $gifeet += $data[$i]->gmiqtyfeet }}
 
 
 
                 <td style="text-align:center" width="3%">{{ $i+1 }}</td>
-                <td width="25%">{{ $data[$i]->matname}} </td>
+                <td width="19%">{{ $data[$i]->matname}} </td>
                 {{-- <td style="text-align:center" width="6%">{{ $data[$i]->unit }} </td> --}}
 
                 <td style="text-align:right" width="4%">{{ number_format($data[$i]->oqtykg,0) }} </td>
                 <td style="text-align:right" width="4%">{{ number_format($data[$i]->oqtypcs,0) }} </td>
                 <td style="text-align:right" width="4%">{{ number_format($data[$i]->oqtyfeet,0) }} </td>
 
-                <td style="text-align:right" width="4%">{{ number_format($data[$i]->pqtykg,0) }} </td>
-                <td style="text-align:right" width="4%">{{ number_format($data[$i]->pqtypcs,0) }} </td>
-                <td style="text-align:right" width="4%">{{ number_format($data[$i]->pqtyfeet,0) }} </td>
+                <td style="text-align:right" width="3%">{{ number_format($data[$i]->pqtykg,0) }} </td>
+                <td style="text-align:right" width="3%">{{ number_format($data[$i]->pqtypcs,0) }} </td>
+                <td style="text-align:right" width="3%">{{ number_format($data[$i]->pqtyfeet,0) }} </td>
 
-                <td style="text-align:right" width="4%">{{ number_format($data[$i]->sqtykg,0) }} </td>
-                <td style="text-align:right" width="4%">{{ number_format($data[$i]->sqtypcs,0) }} </td>
-                <td style="text-align:right" width="4%">{{ number_format($data[$i]->sqtyfeet,0) }} </td>
+                <td style="text-align:right" width="3%">{{ number_format($data[$i]->sqtykg,0) }} </td>
+                <td style="text-align:right" width="3%">{{ number_format($data[$i]->sqtypcs,0) }} </td>
+                <td style="text-align:right" width="3%">{{ number_format($data[$i]->sqtyfeet,0) }} </td>
 
-                <td style="text-align:right" width="4%">{{ number_format($data[$i]->prqtykg,0) }} </td>
-                <td style="text-align:right" width="4%">{{ number_format($data[$i]->prqtypcs,0) }} </td>
-                <td style="text-align:right" width="4%">{{ number_format($data[$i]->prqtyfeet,0) }} </td>
+                <td style="text-align:right" width="3%">{{ number_format($data[$i]->prqtykg,0) }} </td>
+                <td style="text-align:right" width="3%">{{ number_format($data[$i]->prqtypcs,0) }} </td>
+                <td style="text-align:right" width="3%">{{ number_format($data[$i]->prqtyfeet,0) }} </td>
 
-                <td style="text-align:right" width="4%">{{ number_format($data[$i]->srqtykg,0) }} </td>
-                <td style="text-align:right" width="4%">{{ number_format($data[$i]->srqtypcs,0) }} </td>
-                <td style="text-align:right" width="4%">{{ number_format($data[$i]->srqtyfeet,0) }} </td>
+                <td style="text-align:right" width="3%">{{ number_format($data[$i]->srqtykg,0) }} </td>
+                <td style="text-align:right" width="3%">{{ number_format($data[$i]->srqtypcs,0) }} </td>
+                <td style="text-align:right" width="3%">{{ number_format($data[$i]->srqtyfeet,0) }} </td>
+
+
+                <td style="text-align:right" width="3%">{{ number_format($data[$i]->gmqtykg,0) }} </td>
+                <td style="text-align:right" width="3%">{{ number_format($data[$i]->gmqtypcs,0) }} </td>
+                <td style="text-align:right" width="3%">{{ number_format($data[$i]->gmqtyfeet,0) }} </td>
+
+                <td style="text-align:right" width="3%">{{ number_format($data[$i]->gmiqtykg,0) }} </td>
+                <td style="text-align:right" width="3%">{{ number_format($data[$i]->gmiqtypcs,0) }} </td>
+                <td style="text-align:right" width="3%">{{ number_format($data[$i]->gmiqtyfeet,0) }} </td>
+
+
+
 
                 <td style="text-align:right" width="4%">{{ number_format($data[$i]->cbkg,0) }} </td>
                 <td style="text-align:right" width="4%">{{ number_format($data[$i]->cbpcs,0) }} </td>
@@ -240,21 +270,28 @@ table{
             <tr>
                 {{-- <td colspan="20" width="100%" style="text-align: right;border-bottom: 1px solid lightgray;"></td> --}}
 
-                <td colspan="3" width="4%" style="text-align: right;border-bottom: 1px solid lightgray;">{{ number_format($owt,0) }} </td>
-                <td colspan="1" width="4%" style="text-align: right;border-bottom: 1px solid lightgray;">{{ number_format($opcs,0) }} </td>
-                <td colspan="1" width="4%" style="text-align: right;border-bottom: 1px solid lightgray;">{{ number_format($ofeet,0) }} </td>
+                <td colspan="3"  style="text-align: right;font-weight: bold;border-bottom: 1px solid lightgray;">{{ number_format($owt,0) }} </td>
+                <td colspan="1"  style="text-align: right;font-weight: bold;border-bottom: 1px solid lightgray;">{{ number_format($opcs,0) }} </td>
+                <td colspan="1"  style="text-align: right;font-weight: bold;border-bottom: 1px solid lightgray;">{{ number_format($ofeet,0) }} </td>
 
-                <td colspan="1" width="4%" style="text-align: right;border-bottom: 1px solid lightgray;">{{ number_format($pwt,0) }} </td>
-                <td colspan="1" width="4%" style="text-align: right;border-bottom: 1px solid lightgray;">{{ number_format($ppcs,0) }} </td>
-                <td colspan="1" width="4%" style="text-align: right;border-bottom: 1px solid lightgray;">{{ number_format($pfeet,0) }} </td>
+                <td colspan="1"  style="text-align: right;font-weight: bold;border-bottom: 1px solid lightgray;">{{ number_format($pwt,0) }} </td>
+                <td colspan="1"  style="text-align: right;font-weight: bold;border-bottom: 1px solid lightgray;">{{ number_format($ppcs,0) }} </td>
+                <td colspan="1"  style="text-align: right;font-weight: bold;border-bottom: 1px solid lightgray;">{{ number_format($pfeet,0) }} </td>
 
-                <td colspan="1" width="4%" style="text-align: right;border-bottom: 1px solid lightgray;">{{ number_format($swt,0) }} </td>
-                <td colspan="1" width="4%" style="text-align: right;border-bottom: 1px solid lightgray;">{{ number_format($spcs,0) }} </td>
-                <td colspan="1" width="4%" style="text-align: right;border-bottom: 1px solid lightgray;">{{ number_format($sfeet,0) }} </td>
+                <td colspan="1"  style="text-align: right;font-weight: bold;border-bottom: 1px solid lightgray;">{{ number_format($swt,0) }} </td>
+                <td colspan="1"  style="text-align: right;font-weight: bold;border-bottom: 1px solid lightgray;">{{ number_format($spcs,0) }} </td>
+                <td colspan="1"  style="text-align: right;font-weight: bold;border-bottom: 1px solid lightgray;">{{ number_format($sfeet,0) }} </td>
 
-                <td colspan="7" width="4%" style="text-align: right;border-bottom: 1px solid lightgray;">{{ number_format($cwt,0) }} </td>
-                <td colspan="1" width="4%" style="text-align: right;border-bottom: 1px solid lightgray;">{{ number_format($cpcs,0) }} </td>
-                <td colspan="1" width="4%" style="text-align: right;border-bottom: 1px solid lightgray;">{{ number_format($cfeet,0) }} </td>
+                <td colspan="7"  style="text-align: right;font-weight: bold;border-bottom: 1px solid lightgray;">{{ number_format($gwt,0) }} </td>
+                <td colspan="1"  style="text-align: right;font-weight: bold;border-bottom: 1px solid lightgray;">{{ number_format($gpcs,0) }} </td>
+                <td colspan="1"  style="text-align: right;font-weight: bold;border-bottom: 1px solid lightgray;">{{ number_format($gfeet,0) }} </td>
+
+                <td colspan="1"  style="text-align: right;font-weight: bold;border-bottom: 1px solid lightgray;">{{ number_format($giwt,0) }} </td>
+                <td colspan="1"  style="text-align: right;font-weight: bold;border-bottom: 1px solid lightgray;">{{ number_format($gipcs,0) }} </td>
+                <td colspan="1"  style="text-align: right;font-weight: bold;border-bottom: 1px solid lightgray;">{{ number_format($gifeet,0) }} </td>
+                <td colspan="1"  style="text-align: right;font-weight: bold;border-bottom: 1px solid lightgray;">{{ number_format($cwt,0) }} </td>
+                <td colspan="1"  style="text-align: right;font-weight: bold;border-bottom: 1px solid lightgray;">{{ number_format($cpcs,0) }} </td>
+                <td colspan="1"  style="text-align: right;font-weight: bold;border-bottom: 1px solid lightgray;">{{ number_format($cfeet,0) }} </td>
 
 
 
