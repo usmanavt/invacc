@@ -245,9 +245,11 @@ class SalesRetunrsController  extends Controller
 
 
             DB::insert(DB::raw("
-            INSERT INTO office_item_bal(transaction_id,tdate,ttypedesc,ttypeid,material_id,uom,tqtykg,tqtypcs,tqtyfeet,tcostkg,tcostpcs,tcostfeet)
-            SELECT a.id AS transid,a.rdate,'SaleRet',6,b.material_id,sku_id,qtykg,qtypcs,qtyfeet,qtykgcrt,qtypcscrt,qtyfeetcrt FROM sale_returns  a INNER JOIN  sale_return_details b
-            ON a.id=b.sale_return_id WHERE a.id=$ci->id"));
+            INSERT INTO office_item_bal(transaction_id,tdate,ttypedesc,ttypeid,material_id,uom,tqtykg,tqtypcs,tqtyfeet,tcostkg,tcostpcs,tcostfeet,transvalue)
+            SELECT a.id AS transid,a.rdate,'SaleRet',6,b.material_id,b.sku_id,qtykg,qtypcs,qtyfeet,qtykgcrt,qtypcscrt,qtyfeetcrt
+            ,( case c.sku_id when 1 then qtykg * qtykgcrt  when 2 then qtypcs * qtypcscrt when 3 then qtyfeet * qtyfeetcrt END ) AS transvalue
+            FROM sale_returns  a INNER JOIN  sale_return_details b
+            ON a.id=b.sale_return_id inner join materials as c on b.material_id=c.id WHERE a.id=$ci->id"));
 
 
 
@@ -471,12 +473,17 @@ class SalesRetunrsController  extends Controller
 
             DB::delete(DB::raw(" delete from office_item_bal where ttypeid=6 and  transaction_id=$salereturn->id   "));
 
+            // DB::insert(DB::raw("
+            // INSERT INTO office_item_bal(transaction_id,tdate,ttypedesc,ttypeid,material_id,uom,tqtykg,tqtypcs,tqtyfeet,tcostkg,tcostpcs,tcostfeet)
+            // SELECT a.id AS transid,a.rdate,'SaleRet',6,b.material_id,sku_id,qtykg,qtypcs,qtyfeet,qtykgcrt,qtypcscrt,qtyfeetcrt FROM sale_returns  a INNER JOIN  sale_return_details b
+            // ON a.id=b.sale_return_id WHERE a.id=$salereturn->id"));
+
             DB::insert(DB::raw("
-            INSERT INTO office_item_bal(transaction_id,tdate,ttypedesc,ttypeid,material_id,uom,tqtykg,tqtypcs,tqtyfeet,tcostkg,tcostpcs,tcostfeet)
-            SELECT a.id AS transid,a.rdate,'SaleRet',6,b.material_id,sku_id,qtykg,qtypcs,qtyfeet,qtykgcrt,qtypcscrt,qtyfeetcrt FROM sale_returns  a INNER JOIN  sale_return_details b
-            ON a.id=b.sale_return_id WHERE a.id=$salereturn->id"));
-
-
+            INSERT INTO office_item_bal(transaction_id,tdate,ttypedesc,ttypeid,material_id,uom,tqtykg,tqtypcs,tqtyfeet,tcostkg,tcostpcs,tcostfeet,transvalue)
+            SELECT a.id AS transid,a.rdate,'SaleRet',6,b.material_id,b.sku_id,qtykg,qtypcs,qtyfeet,qtykgcrt,qtypcscrt,qtyfeetcrt
+            ,( case c.sku_id when 1 then qtykg * qtykgcrt  when 2 then qtypcs * qtypcscrt when 3 then qtyfeet * qtyfeetcrt END ) AS transvalue
+            FROM sale_returns  a INNER JOIN  sale_return_details b
+            ON a.id=b.sale_return_id inner join materials as c on b.material_id=c.id WHERE a.id=$salereturn->id"));
 
 
             DB::commit();

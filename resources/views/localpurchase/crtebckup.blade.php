@@ -94,7 +94,7 @@
 
 @push('scripts')
 <script>
-    // let supplierId = document.getElementById('supplier_id');
+    let supplierId = document.getElementById('supplier_id');
     let table;
     let searchValue = "";
     const deleteIcon = function(cell,formatterParams){return "<i class='fa fa-trash text-red-500'></i>";};
@@ -133,13 +133,13 @@
     document.addEventListener('keyup', (e)=>{
         //  We are using ctrl key + 'ArrowUp' to show Modal
         if(e.ctrlKey && e.keyCode == 32){
-            // if (
-                // supplierId.options[supplierId.selectedIndex].value != ""
-                // ||
-                // supplierId.options[supplierId.selectedIndex].value != 0 )  {
+            if (
+                supplierId.options[supplierId.selectedIndex].value != ""
+                ||
+                supplierId.options[supplierId.selectedIndex].value != 0 )  {
                     // console.log(supplierId.options[supplierId.selectedIndex].value)
                     showModal()
-            // }
+            }
         }
     })
     // Ensure Buttons Are Closed
@@ -276,10 +276,8 @@ var calculate = function(){
     //  Table Filter
     function dataFilter(element)
     {
-        // searchValue = element.value;
-        // table.setData(getMaster,{search:searchValue,supplierId:supplierId.options[supplierId.selectedIndex].value});
         searchValue = element.value;
-        table.setData(getMaster,{search:searchValue});
+        table.setData(getMaster,{search:searchValue,supplierId:supplierId.options[supplierId.selectedIndex].value});
     }
     //  The Table for Materials Modal
     table = new Tabulator("#tableData", {
@@ -295,8 +293,7 @@ var calculate = function(){
         paginationSize:10,
         paginationSizeSelector:[10,25,50,100],
         ajaxParams: function(){
-            // return {search:searchValue,supplierId:supplierId.options[supplierId.selectedIndex].value};
-             return {search:searchValue};
+            return {search:searchValue,supplierId:supplierId.options[supplierId.selectedIndex].value};
         },
         ajaxURL: getMaster,
         ajaxContentType:"json",

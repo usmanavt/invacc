@@ -101,13 +101,14 @@
 
 @push('scripts')
 <script>
-    window.onload = function() {
-            var input = document.getElementById("customer_id").focus();
-        }
+    let customerDropdown;
     let table;
     let searchValue = "";
     const deleteIcon = function(cell,formatterParams){return "<i class='fa fa-trash text-red-500'></i>";};
 
+    window.onload = function() {
+        customerDropdown = document.getElementById("customer_id").focus();
+    }
 // Populate sku in Tabulator
 const skus = @json($skus);
         var newList1=[]
@@ -131,6 +132,7 @@ const skus = @json($skus);
     document.addEventListener('keyup', (e)=>{
         //  We are using ctrl key + 'ArrowUp' to show Modal
         if(e.ctrlKey && e.keyCode == 32){
+
             showModal()
         }
     })
@@ -176,7 +178,10 @@ const skus = @json($skus);
 @push('scripts')
 <script>
     //  ---------------- For MODAL -----------------------//
-    function showModal(){ modal.style.display = "block"}
+    function showModal(){
+        modal.style.display = "block"
+        console.log(customerDropdown)
+    }
     function closeModal(){  modal.style.display = "none"}
     //  When the user clicks anywhere outside of the modal, close it
     window.onclick = function(event) {

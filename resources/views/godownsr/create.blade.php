@@ -354,6 +354,10 @@
 
                         //  dtyrate:            obj.dtyrate,
                          gdsprice:            obj.gdsprice,
+                         prgpkgrate:obj.qtykgcrt,
+                         prgppcsrate:obj.qtypcscrt,
+                         prgpfeetrate:obj.qtyfeetcrt,
+
                         //  invsrate:            obj.invsrate,
                         //  purval:            obj.purval,
                         //  dutval:            obj.dutval,
@@ -637,11 +641,9 @@ var updateValues = (cell) => {
 
 
 
-
-
-                        // {title:"dtyrate",           field:"dtyrate", visible:false},
-                        // {title:"gdsprice",           field:"gdsprice", visible:false},
-                        // {title:"invsrate",           field:"invsrate", visible:false},
+                        {title:"qtykgcrt",           field:"prgpkgrate", visible:true},
+                         {title:"qtypcscrt",           field:"prgppcsrate", visible:true},
+                        {title:"qtyfeetcrt",           field:"prgpfeetrate", visible:true},
                         // {title:"bundle1",           field:"bundle1", visible:false},
                         // {title:"bundle2",           field:"bundle2", visible:false},
 

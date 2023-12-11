@@ -194,41 +194,28 @@ class GodownMovementController  extends Controller
             $ci->save();
 
             foreach ($request->godownmovement as $cont) {
-                // dd($request->all());
-                // $material = Material::findOrFail($cont['id']);
 
                 $unitid = Sku::where("title", $cont['sku'])->first();
-                // $lpd->sku_id = $unitid->id;
-
-                // dd($unitid->id);
                 $lpd = new GodownMovementDetails();
                 $lpd->godown_movement_id = $ci->id;
                 $lpd->material_id = $cont['material_id'];
                 $lpd->sku_id = $unitid->id;
-                // $lpd->repname = $cont['repname'];
-                // $lpd->brand = $cont['mybrand'];
                 $lpd->qtykg = $cont['qtykg'];
                 $lpd->qtypcs = $cont['qtypcs'];
                 $lpd->qtyfeet = $cont['qtyfeet'];
                 $lpd->unitconver = 1;
-
-
                 $lpd->price = $cont['price'];
                 $lpd->saleamnt = $cont['saleamnt'];
                 $lpd->feedqty = $cont['feedqty'];
-
                 $lpd->qtykgcrt = $cont['salcostkg'];
                 $lpd->qtypcscrt = $cont['salcostpcs'];
                 $lpd->qtyfeetcrt = $cont['salcostfeet'];
-
                 $lpd->sqtykg = $cont['sqtykg'];
                 $lpd->sqtypcs = $cont['sqtypcs'];
                 $lpd->sqtyfeet = $cont['sqtyfeet'];
-
                 $lpd->wtper = $cont['wtper'];
                 $lpd->pcper = $cont['pcper'];
                 $lpd->feetper = $cont['feetper'];
-
                 $lpd->salewt = $cont['qtykg'];
                 $lpd->salepcs = $cont['qtypcs'];
                 $lpd->salefeet = $cont['qtyfeet'];
@@ -296,7 +283,7 @@ class GodownMovementController  extends Controller
         DB::beginTransaction();
         try {
 
-            //  dd($request->sale_invoice_id);
+            //  dd($request->all);
             $ci = GodownMovement::findOrFail($request->godown_movement_id);
 
             $ci->stodate = $request->stodate;
@@ -306,7 +293,10 @@ class GodownMovementController  extends Controller
             $ci->mremarks = $request->mremarks;
             $ci->save();
 
-            // Get Data
+
+
+
+
             $cds = $request->godownmovement; // This is array
             $cds = GodownMovementDetails::hydrate($cds); // Convert it into Model Collection
             // Now get old ContractDetails and then get the difference and delete difference
@@ -321,79 +311,67 @@ class GodownMovementController  extends Controller
                 if($cd->id)
                 {
                     $cds = GodownMovementDetails::where('id',$cd->id)->first();
+                    // $cds->machine_date = $cd->invoice_date;
+
                     $cds->godown_movement_id = $ci->id;
-                    $cds->material_id = $cd->material_id;
-                    $cds->sku_id = $cd->sku_id;
-                    // $cds->repname = $cd['repname'];
-                    // $cds->brand = $cd['brand'];
+                    $cds->material_id = $cd['material_id'];
+                    $unitid = Sku::where("title", $cd['sku'])->first();
+                    $cds->sku_id = $unitid->id;
                     $cds->qtykg = $cd['qtykg'];
                     $cds->qtypcs = $cd['qtypcs'];
                     $cds->qtyfeet = $cd['qtyfeet'];
-                    // $cds->unitconver = $cd['unitconver'];
+                    $cds->unitconver = 1;
                     $cds->price = $cd['price'];
                     $cds->saleamnt = $cd['saleamnt'];
                     $cds->feedqty = $cd['feedqty'];
-                    $unit = Sku::where("title", $cd['sku'])->first();
-                    // $cds->sku_id = $unit->id;
+                    $cds->qtykgcrt = $cd['qtykgcrt'];
+                    $cds->qtypcscrt = $cd['qtypcscrt'];
+                    $cds->qtyfeetcrt = $cd['qtyfeetcrt'];
+                    $cds->sqtykg = $cd['sqtykg'];
+                    $cds->sqtypcs = $cd['sqtypcs'];
+                    $cds->sqtyfeet = $cd['sqtyfeet'];
+                    $cds->wtper = $cd['wtper'];
+                    $cds->pcper = $cd['pcper'];
+                    $cds->feetper = $cd['feetper'];
                     $cds->salewt = $cd['qtykg'];
                     $cds->salepcs = $cd['qtypcs'];
                     $cds->salefeet = $cd['qtyfeet'];
 
-
                     $cds->save();
+                }else
+                {
+                    //  The item is new, Add it
 
-
-                    // $lstrt = CreateSaleRate::where('customer_id',$request->customer_id)->where('material_id',$cd->material_id)->first();
-                    // if(!$lstrt) {
-                    //     $abc = new CreateSaleRate();
-                    //     $abc->customer_id=$request->customer_id;
-                    //     $abc->material_id=$cd->material_id;
-                    //     $abc->salrate=$cd['price'];;
-                    //     $abc->save();
-                    // }
-                    // else
-                    //     {
-                    //     $lstrt->salrate=$cd['price'];;
-                    //     $lstrt->save();
-                    //     }
-
-
-
-
-
-                    //  $cds->save();
-                // }
-                //     //  The item is new, Add it
-                //      $cds = new SaleInvoicesDetails();
-                //      $cds->sale_invoice_id = $sale_invoices->id;
-                //      $cds->material_id = $cd->material_id;
-                //      $cds->sku_id = $cd->sku_id;
-                //      $cds->repname = $cd['repname'];
-                //      $cds->brand = $cd['brand'];
-                //      $cds->qtykg = $cd['qtykg'];
-                //      $cds->qtypcs = $cd['qtypcs'];
-                //      $cds->qtyfeet = $cd['qtyfeet'];
-                //      $cds->price = $cd['price'];
-                //      $cds->saleamnt = $cd['saleamnt'];
-                //      $unit = Sku::where("title", $cd['sku'])->first();
-                //       $cds->sku_id = $unit->id;
-
-
-                //     $cds->save();
-                // }
+                    $cds = new GodownMovementDetails();
+                    // $cds->godown_movement_id = $ci->id;
+                    $cds->material_id = $cd['material_id'];
+                    $unitid = Sku::where("title", $cd['sku'])->first();
+                    $cds->sku_id = $unitid->id;
+                    $cds->qtykg = $cd['qtykg'];
+                    $cds->qtypcs = $cd['qtypcs'];
+                    $cds->qtyfeet = $cd['qtyfeet'];
+                    $cds->unitconver = 1;
+                    $cds->price = $cd['price'];
+                    $cds->saleamnt = $cd['saleamnt'];
+                    $cds->feedqty = $cd['feedqty'];
+                    $cds->qtykgcrt = $cd['salcostkg'];
+                    $cds->qtypcscrt = $cd['salcostpcs'];
+                    $cds->qtyfeetcrt = $cd['salcostfeet'];
+                    $cds->sqtykg = $cd['sqtykg'];
+                    $cds->sqtypcs = $cd['sqtypcs'];
+                    $cds->sqtyfeet = $cd['sqtyfeet'];
+                    $cds->wtper = $cd['wtper'];
+                    $cds->pcper = $cd['pcper'];
+                    $cds->feetper = $cd['feetper'];
+                    $cds->salewt = $cd['qtykg'];
+                    $cds->salepcs = $cd['qtypcs'];
+                    $cds->salefeet = $cd['qtyfeet'];
+                    $cds->save();
+                }
             }
-            // $dlvrd = SaleInvoices::where('custplan_id',$sale_invoices->custplan_id)->sum('totrcvbamount');
-            // $custordr = CustomerOrder::where('id',$sale_invoices->custplan_id)->first();
-
-            // $custordr->delivered = $dlvrd;
-            // $custordr->save();
-
-            // $sordrbal = SaleInvoices::where('id',$sale_invoices->id)->first();
-            // $sordrbal->ordrbal= $custordr->totrcvbamount - $dlvrd;
-            // $sordrbal->save();
 
 
-        }
+            // Get Data
 
         DB::update(DB::raw("
         UPDATE godown_movements c

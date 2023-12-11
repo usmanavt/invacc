@@ -121,7 +121,7 @@ table{
         <thead >
             {{-- <tr> <th class="column-headers" width="50%">OPENING BNALANCE</th></tr> --}}
             <tr>
-                <td colspan="2" width="28%" style="text-align:center;font-weight: bold;border-right: 1px solid lightgray;"> Material Description</td>
+                <td colspan="3" width="28%" style="text-align:center;font-weight: bold;border-right: 1px solid lightgray;"> Material Description</td>
                 <td colspan="3" width="12%" style="text-align:center;font-weight: bold;border-right: 1px solid lightgray;"> Opening Balance</td>
                 <td colspan="3" width="12%" style="text-align: center;font-weight: bold;border-right: 1px solid lightgray;"> Purchase</td>
                 <td colspan="3" width="12%" style="text-align: center;font-weight: bold;border-right: 1px solid lightgray;"> Sale</td>
@@ -133,8 +133,8 @@ table{
             <tr>
                 {{-- <td  style="text-align: center font-size:0.5rem;font-weight: bold"> --}}
                     <th class="column-headers" width="3%">S#</th>
-                    <th class="column-headers" width="25%"></th>
-                    {{-- <th class="column-headers" width="3%">Unit</th> --}}
+                    <th class="column-headers" width="20%"></th>
+                    <th class="column-headers" width="5%">Unit</th>
 
                     <th class="column-headers" width="4%">Qty</th>
                     <th class="column-headers" width="4%">Rate</th>
@@ -180,14 +180,14 @@ table{
             @for ($i = 0 ; $i < count($data) ; $i++)
             @if( $i==0 )
             <tr>
-                <td colspan="20" width="100%" style="text-align: left;font-size:1.2rem;border-bottom: 2px solid rgb(211, 211, 211);"> {{ $data[$i]->Itemgroupe}} </td>
+                <td colspan="21" width="100%" style="text-align: left;font-size:1.2rem;border-bottom: 2px solid rgb(211, 211, 211);"> {{ $data[$i]->Itemgroupe}} </td>
             </tr>
         @else
 
         {{ $srno = $i - 1 }}
         @if ($data[$i]->Itemgroupe  <> $data[$srno]->Itemgroupe)
             <tr>
-                    <td colspan="20" width="100%" style="text-align:left;font-size:1.2rem;border-bottom: 2px solid rgb(211, 211, 211);"> {{ $data[$i]->Itemgroupe}} </td>
+                    <td colspan="21" width="100%" style="text-align:left;font-size:1.2rem;border-bottom: 2px solid rgb(211, 211, 211);"> {{ $data[$i]->Itemgroupe}} </td>
              </tr>
         @endif
         @endif
@@ -206,31 +206,31 @@ table{
 
 
                 <td style="text-align:center" width="3%">{{ $i+1 }}</td>
-                <td width="25%">{{ $data[$i]->matname}} </td>
-                {{-- <td style="text-align:center" width="6%">{{ $data[$i]->unit }} </td> --}}
+                <td width="20%">{{ $data[$i]->matname}} </td>
+                <td style="text-align:center" width="5%">{{ $data[$i]->unit }} </td>
 
                 <td style="text-align:right" width="4%">{{ number_format($data[$i]->oqty,0) }} </td>
-                <td style="text-align:right" width="4%">{{ number_format($data[$i]->orate,1) }} </td>
+                <td style="text-align:right" width="4%">{{ number_format($data[$i]->orate,2) }} </td>
                 <td style="text-align:right" width="4%">{{ number_format($data[$i]->oval,0) }} </td>
 
                 <td style="text-align:right" width="4%">{{ number_format($data[$i]->purqty,0) }} </td>
-                <td style="text-align:right" width="4%">{{ number_format($data[$i]->prate,1) }} </td>
+                <td style="text-align:right" width="4%">{{ number_format($data[$i]->prate,2) }} </td>
                 <td style="text-align:right" width="4%">{{ number_format($data[$i]->pval,0) }} </td>
 
                 <td style="text-align:right" width="4%">{{ number_format($data[$i]->salqty,0) }} </td>
-                <td style="text-align:right" width="4%">{{ number_format($data[$i]->srate,1) }} </td>
+                <td style="text-align:right" width="4%">{{ number_format($data[$i]->srate,2) }} </td>
                 <td style="text-align:right" width="4%">{{ number_format($data[$i]->sval,0) }} </td>
 
                 <td style="text-align:right" width="4%">{{ number_format($data[$i]->purret,0) }} </td>
-                <td style="text-align:right" width="4%">{{ number_format($data[$i]->prrate,1) }} </td>
+                <td style="text-align:right" width="4%">{{ number_format($data[$i]->prrate,2) }} </td>
                 <td style="text-align:right" width="4%">{{ number_format($data[$i]->prval,0) }} </td>
 
                 <td style="text-align:right" width="4%">{{ number_format($data[$i]->salret,0) }} </td>
-                <td style="text-align:right" width="4%">{{ number_format($data[$i]->srrate,1) }} </td>
+                <td style="text-align:right" width="4%">{{ number_format($data[$i]->srrate,2) }} </td>
                 <td style="text-align:right" width="4%">{{ number_format($data[$i]->srval,0) }} </td>
 
                 <td style="text-align:right" width="4%">{{ number_format($data[$i]->cb,0) }} </td>
-                <td style="text-align:right" width="4%">{{ number_format($data[$i]->cbrate,1) }} </td>
+                <td style="text-align:right" width="4%">{{ number_format($data[$i]->cbrate,2) }} </td>
                 <td style="text-align:right" width="4%">{{ number_format($data[$i]->cbval,0) }} </td>
 
 
@@ -238,24 +238,24 @@ table{
             @endfor
             <tr>
 
-                <td colspan="2" width="8%" style="text-align: right;border-bottom: 1px solid lightgray;background: #e3e3e3;font-weight: bold">Total(s)</td>
-                <td colspan="1" width="4%" style="text-align: right;border-bottom: 1px solid lightgray;background: #e3e3e3;font-weight: bold">{{ number_format($oqty,0) }} </td>
-                <td colspan="2" width="4%" style="text-align: right;border-bottom: 1px solid lightgray;background: #e3e3e3;font-weight: bold">{{ number_format($oval,0) }} </td>
+                <td colspan="3"  style="text-align: right;border-bottom: 1px solid lightgray;background: #e3e3e3;font-weight: bold">Total(s)</td>
+                <td colspan="1"  style="text-align: right;border-bottom: 1px solid lightgray;background: #e3e3e3;font-weight: bold">{{ number_format($oqty,0) }} </td>
+                <td colspan="2"  style="text-align: right;border-bottom: 1px solid lightgray;background: #e3e3e3;font-weight: bold">{{ number_format($oval,0) }} </td>
 
-                <td colspan="1" width="4%" style="text-align: right;border-bottom: 1px solid lightgray;background: #e3e3e3;font-weight: bold">{{ number_format($purqty,0) }} </td>
-                <td colspan="2" width="4%" style="text-align: right;border-bottom: 1px solid lightgray;background: #e3e3e3;font-weight: bold">{{ number_format($pval,0) }} </td>
+                <td colspan="1"  style="text-align: right;border-bottom: 1px solid lightgray;background: #e3e3e3;font-weight: bold">{{ number_format($purqty,0) }} </td>
+                <td colspan="2"  style="text-align: right;border-bottom: 1px solid lightgray;background: #e3e3e3;font-weight: bold">{{ number_format($pval,0) }} </td>
 
-                <td colspan="1" width="4%" style="text-align: right;border-bottom: 1px solid lightgray;background: #e3e3e3;font-weight: bold">{{ number_format($salqty,0) }} </td>
-                <td colspan="2" width="4%" style="text-align: right;border-bottom: 1px solid lightgray;background: #e3e3e3;font-weight: bold">{{ number_format($sval,0) }} </td>
+                <td colspan="1"  style="text-align: right;border-bottom: 1px solid lightgray;background: #e3e3e3;font-weight: bold">{{ number_format($salqty,0) }} </td>
+                <td colspan="2"  style="text-align: right;border-bottom: 1px solid lightgray;background: #e3e3e3;font-weight: bold">{{ number_format($sval,0) }} </td>
 
-                <td colspan="1" width="4%" style="text-align: right;border-bottom: 1px solid lightgray;background: #e3e3e3;font-weight: bold">{{ number_format($purret,0) }} </td>
-                <td colspan="2" width="4%" style="text-align: right;border-bottom: 1px solid lightgray;background: #e3e3e3;font-weight: bold">{{ number_format($prval,0) }} </td>
+                <td colspan="1"  style="text-align: right;border-bottom: 1px solid lightgray;background: #e3e3e3;font-weight: bold">{{ number_format($purret,0) }} </td>
+                <td colspan="2"  style="text-align: right;border-bottom: 1px solid lightgray;background: #e3e3e3;font-weight: bold">{{ number_format($prval,0) }} </td>
 
-                <td colspan="1" width="4%" style="text-align: right;border-bottom: 1px solid lightgray;background: #e3e3e3;font-weight: bold">{{ number_format($salret,0) }} </td>
-                <td colspan="2" width="4%" style="text-align: right;border-bottom: 1px solid lightgray;background: #e3e3e3;font-weight: bold">{{ number_format($srval,0) }} </td>
+                <td colspan="1"  style="text-align: right;border-bottom: 1px solid lightgray;background: #e3e3e3;font-weight: bold">{{ number_format($salret,0) }} </td>
+                <td colspan="2"  style="text-align: right;border-bottom: 1px solid lightgray;background: #e3e3e3;font-weight: bold">{{ number_format($srval,0) }} </td>
 
-                <td colspan="1" width="4%" style="text-align: right;border-bottom: 1px solid lightgray;background: #e3e3e3;font-weight: bold">{{ number_format($cb,0) }} </td>
-                <td colspan="2" width="4%" style="text-align: right;border-bottom: 1px solid lightgray;background: #e3e3e3;font-weight: bold">{{ number_format($cbval,0) }} </td>
+                <td colspan="1"  style="text-align: right;border-bottom: 1px solid lightgray;background: #e3e3e3;font-weight: bold">{{ number_format($cb,0) }} </td>
+                <td colspan="2"  style="text-align: right;border-bottom: 1px solid lightgray;background: #e3e3e3;font-weight: bold">{{ number_format($cbval,0) }} </td>
 
             </tr>
 

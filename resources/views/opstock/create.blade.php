@@ -325,7 +325,7 @@
             detailsUrl = `${getDetails}/?id=${data.id}`
             fetchDataFromServer(detailsUrl)
             adopted = true
-            calculateButton.disabled = false
+            // calculateButton.disabled = false
             closeModal()
         })
     </script>

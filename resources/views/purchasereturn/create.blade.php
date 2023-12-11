@@ -1,9 +1,9 @@
 <x-app-layout>
 
     @push('styles')
-    {{-- <link rel="stylesheet" href="{{ asset('css/tabulator_simple.min.css') }}"> --}}
-    <link href="https://unpkg.com/tabulator-tables/dist/css/tabulator.min.css" rel="stylesheet">
-    <script type="text/javascript" src="https://unpkg.com/tabulator-tables/dist/js/tabulator.min.js"></script>
+    <link rel="stylesheet" href="{{ asset('css/tabulator_simple.min.css') }}">
+    {{-- <link href="https://unpkg.com/tabulator-tables/dist/css/tabulator.min.css" rel="stylesheet"> --}}
+    {{-- <script type="text/javascript" src="https://unpkg.com/tabulator-tables/dist/js/tabulator.min.js"></script> --}}
 
     @endpush
 
@@ -526,12 +526,12 @@ var updateValues = (cell) => {
                             field:"prprice",
                             editor:"number",
                             // headerVertical:true,
-                            bottomCalc:"sum",
+             //               bottomCalc:"sum",
                             formatter:"money",
                             cellEdited: updateValues,
                             validator:["required","numeric"],
                             cssClass:"bg-gray-200 font-semibold",
-                            formatterParams:{thousand:",",precision:0},
+                            formatterParams:{thousand:",",precision:2},
                         },
 
 
@@ -539,6 +539,7 @@ var updateValues = (cell) => {
                         headerHozAlign :'right',
                         hozAlign:"right",
                         field:"amtinpkr",
+                        bottomCalc:"sum",
                         cssClass:"bg-gray-200 font-semibold",
                         formatter:"money",
                         cssClass:"bg-gray-200 font-semibold",

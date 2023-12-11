@@ -225,10 +225,11 @@ class GatepasseController extends Controller
              DB::insert(DB::raw("
              INSERT INTO godown_stock ( transaction_id,tdate,ttypeid,tdesc,material_id,
              stkwte13,stkpcse13,stkfeete13,stkwtgn2,stkpcsgn2,stkfeetgn2,stkwtams,stkpcsams,stkfeetams,stkwte24,stkpcse24,stkfeete24,
-             stkwtbs,stkpcsbs,stkfeetbs,stkwtoth,stkpcsoth,stkfeetoth,stkwttot,stkpcstot,stkfeettot,costwt,costpcs,costfeet )
+             stkwtbs,stkpcsbs,stkfeetbs,stkwtoth,stkpcsoth,stkfeetoth,stkwttot,stkpcstot,stkfeettot,costwt,costpcs,costfeet,transvalue )
              SELECT a.id,a.gpdate,4,'gatepass',material_id,gpwte13*-1,gppcse13*-1,gpfeete13*-1,gpwtgn2*-1,gppcsgn2*-1,gpfeetgn2*-1,gpwtams*-1,gppcsams*-1,gpfeetams*-1,gpwte24*-1,gppcse24*-1,gpfeete24*-1,
              gpwtbs*-1,gppcsbs*-1,gpfeetbs*-1,gpwtoth*-1,gppcsoth*-1,gpfeetoth*-1,gpwttot*-1,gppcstot*-1,gpfeettot*-1
              , gpkgrate,gppcsrate,gpfeetrate
+             ,( case b.sku_id when 1 then gpwttot * gpkgrate  when 2 then gppcstot * gppcsrate when 3 then gpfeettot * gpfeetrate END )*-1 AS transvalue
              FROM gatepasses a inner JOIN gatepasse_details b ON a.id=b.gpid AND a.id=$ci->id
 
             "));
@@ -383,17 +384,28 @@ class GatepasseController extends Controller
 
             DB::delete(DB::raw(" delete from godown_stock where ttypeid=4 and  transaction_id=$ci->id   "));
 
-            DB::insert(DB::raw("
-            INSERT INTO godown_stock ( transaction_id,tdate,ttypeid,tdesc,material_id,
-            stkwte13,stkpcse13,stkfeete13,stkwtgn2,stkpcsgn2,stkfeetgn2,stkwtams,stkpcsams,stkfeetams,stkwte24,stkpcse24,stkfeete24,
-            stkwtbs,stkpcsbs,stkfeetbs,stkwtoth,stkpcsoth,stkfeetoth,stkwttot,stkpcstot,stkfeettot,costwt,costpcs,costfeet )
-            SELECT a.id,a.gpdate,4,'gatepass',material_id,gpwte13*-1,gppcse13*-1,gpfeete13*-1,gpwtgn2*-1,gppcsgn2*-1,gpfeetgn2*-1,gpwtams*-1,gppcsams*-1,gpfeetams*-1,gpwte24*-1,gppcse24*-1,gpfeete24*-1,
-            gpwtbs*-1,gppcsbs*-1,gpfeetbs*-1,gpwtoth*-1,gppcsoth*-1,gpfeetoth*-1,gpwttot*-1,gppcstot*-1,gpfeettot*-1
-            , gpkgrate,gppcsrate,gpfeetrate
-            FROM gatepasses a inner JOIN gatepasse_details b ON a.id=b.gpid AND a.id=$ci->id
+        //     DB::insert(DB::raw("
+        //     INSERT INTO godown_stock ( transaction_id,tdate,ttypeid,tdesc,material_id,
+        //     stkwte13,stkpcse13,stkfeete13,stkwtgn2,stkpcsgn2,stkfeetgn2,stkwtams,stkpcsams,stkfeetams,stkwte24,stkpcse24,stkfeete24,
+        //     stkwtbs,stkpcsbs,stkfeetbs,stkwtoth,stkpcsoth,stkfeetoth,stkwttot,stkpcstot,stkfeettot,costwt,costpcs,costfeet )
+        //     SELECT a.id,a.gpdate,4,'gatepass',material_id,gpwte13*-1,gppcse13*-1,gpfeete13*-1,gpwtgn2*-1,gppcsgn2*-1,gpfeetgn2*-1,gpwtams*-1,gppcsams*-1,gpfeetams*-1,gpwte24*-1,gppcse24*-1,gpfeete24*-1,
+        //     gpwtbs*-1,gppcsbs*-1,gpfeetbs*-1,gpwtoth*-1,gppcsoth*-1,gpfeetoth*-1,gpwttot*-1,gppcstot*-1,gpfeettot*-1
+        //     , gpkgrate,gppcsrate,gpfeetrate
+        //     FROM gatepasses a inner JOIN gatepasse_details b ON a.id=b.gpid AND a.id=$ci->id
 
-           "));
+        //    "));
 
+        DB::insert(DB::raw("
+        INSERT INTO godown_stock ( transaction_id,tdate,ttypeid,tdesc,material_id,
+        stkwte13,stkpcse13,stkfeete13,stkwtgn2,stkpcsgn2,stkfeetgn2,stkwtams,stkpcsams,stkfeetams,stkwte24,stkpcse24,stkfeete24,
+        stkwtbs,stkpcsbs,stkfeetbs,stkwtoth,stkpcsoth,stkfeetoth,stkwttot,stkpcstot,stkfeettot,costwt,costpcs,costfeet,transvalue )
+        SELECT a.id,a.gpdate,4,'gatepass',material_id,gpwte13*-1,gppcse13*-1,gpfeete13*-1,gpwtgn2*-1,gppcsgn2*-1,gpfeetgn2*-1,gpwtams*-1,gppcsams*-1,gpfeetams*-1,gpwte24*-1,gppcse24*-1,gpfeete24*-1,
+        gpwtbs*-1,gppcsbs*-1,gpfeetbs*-1,gpwtoth*-1,gppcsoth*-1,gpfeetoth*-1,gpwttot*-1,gppcstot*-1,gpfeettot*-1
+        , gpkgrate,gppcsrate,gpfeetrate
+        ,( case b.sku_id when 1 then gpwttot * gpkgrate  when 2 then gppcstot * gppcsrate when 3 then gpfeettot * gpfeetrate END )*-1 AS transvalue
+        FROM gatepasses a inner JOIN gatepasse_details b ON a.id=b.gpid AND a.id=$ci->id
+
+       "));
 
 
 

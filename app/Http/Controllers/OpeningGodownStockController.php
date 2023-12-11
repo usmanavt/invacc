@@ -200,17 +200,20 @@ class OpeningGodownStockController  extends Controller
             DB::insert(DB::raw("
             INSERT INTO godown_stock ( transaction_id,tdate,ttypeid,tdesc,material_id,
             stkwte13,stkpcse13,stkfeete13,stkwtgn2,stkpcsgn2,stkfeetgn2,stkwtams,stkpcsams,stkfeetams,stkwte24,stkpcse24,stkfeete24,
-            stkwtbs,stkpcsbs,stkfeetbs,stkwtoth,stkpcsoth,stkfeetoth,stkwttot,stkpcstot,stkfeettot,costwt,costpcs,costfeet )
-            SELECT id,opdate,1,'OPENING',material_id,
+            stkwtbs,stkpcsbs,stkfeetbs,stkwtoth,stkpcsoth,stkfeetoth,stkwttot,stkpcstot,stkfeettot,costwt,costpcs,costfeet,transvalue )
+            SELECT a.id,opdate,1,'OPENING',material_id,
             ostkwte13,ostkpcse13,ostkfeete13,ostkwtgn2,ostkpcsgn2,ostkfeetgn2,ostkwtams,ostkpcsams,ostkfeetams,ostkwte24,ostkpcse24,ostkfeete24,
-            ostkwtbs,ostkpcsbs,ostkfeetbs,ostkwtoth,ostkpcsoth,ostkfeetoth,ostkwttot,ostkpcstot,ostkfeettot,ocostwt,ocostpcs,ocostfeet
-            FROM opening_godown_stocks where id=$ci->id
+            ostkwtbs,ostkpcsbs,ostkfeetbs,ostkwtoth,ostkpcsoth,ostkfeetoth,ostkwttot,ostkpcstot,ostkfeettot,ocostwt,ocostpcs,ocostfeet,
+            ( case b.sku_id when 1 then ostkwttot * ocostwt  when 2 then ostkpcstot * ocostpcs when 3 then ostkfeettot * ocostfeet END ) AS trasnval
+            FROM opening_godown_stocks AS a INNER JOIN materials AS b ON a.material_id=b.id where  a.id=$ci->id
 
            "));
 
            DB::insert(DB::raw("
-            INSERT INTO office_item_bal(transaction_id,tdate,ttypedesc,ttypeid,material_id,uom,tqtykg,tqtypcs,tqtyfeet,tcostkg,tcostpcs,tcostfeet)
-            SELECT a.id AS transid,opdate,'OPENING',1,a.material_id,b.sku_id,ostkwttot,ostkpcstot,ostkfeettot,ocostwt,ocostpcs,ocostfeet FROM opening_godown_stocks AS a INNER JOIN  materials b
+            INSERT INTO office_item_bal(transaction_id,tdate,ttypedesc,ttypeid,material_id,uom,tqtykg,tqtypcs,tqtyfeet,tcostkg,tcostpcs,tcostfeet,transvalue)
+            SELECT a.id AS transid,opdate,'OPENING',1,a.material_id,b.sku_id,ostkwttot,ostkpcstot,ostkfeettot,ocostwt,ocostpcs,ocostfeet
+            ,( case b.sku_id when 1 then ostkwttot * ocostwt  when 2 then ostkpcstot * ocostpcs when 3 then ostkfeettot * ocostfeet END ) AS trasnval
+            FROM opening_godown_stocks AS a INNER JOIN  materials b
             ON a.material_id=b.id WHERE a.id=$ci->id"));
 
             // $ci->invoiceno = $request->number;
@@ -381,24 +384,59 @@ class OpeningGodownStockController  extends Controller
             DB::delete(DB::raw(" delete from godown_stock where ttypeid=1 and  transaction_id=$openinggodownstock->id  "));
 
 
+
             DB::insert(DB::raw("
             INSERT INTO godown_stock ( transaction_id,tdate,ttypeid,tdesc,material_id,
             stkwte13,stkpcse13,stkfeete13,stkwtgn2,stkpcsgn2,stkfeetgn2,stkwtams,stkpcsams,stkfeetams,stkwte24,stkpcse24,stkfeete24,
-            stkwtbs,stkpcsbs,stkfeetbs,stkwtoth,stkpcsoth,stkfeetoth,stkwttot,stkpcstot,stkfeettot,costwt,costpcs,costfeet )
-            SELECT id,opdate,1,'OPENING',material_id,
+            stkwtbs,stkpcsbs,stkfeetbs,stkwtoth,stkpcsoth,stkfeetoth,stkwttot,stkpcstot,stkfeettot,costwt,costpcs,costfeet,transvalue )
+            SELECT a.id,opdate,1,'OPENING',material_id,
             ostkwte13,ostkpcse13,ostkfeete13,ostkwtgn2,ostkpcsgn2,ostkfeetgn2,ostkwtams,ostkpcsams,ostkfeetams,ostkwte24,ostkpcse24,ostkfeete24,
-            ostkwtbs,ostkpcsbs,ostkfeetbs,ostkwtoth,ostkpcsoth,ostkfeetoth,ostkwttot,ostkpcstot,ostkfeettot,ocostwt,ocostpcs,ocostfeet
-            FROM opening_godown_stocks where id=$openinggodownstock->id
-
-           "));
-
-           DB::delete(DB::raw(" delete from office_item_bal where ttypeid=1 and  transaction_id=$openinggodownstock->id  "));
+            ostkwtbs,ostkpcsbs,ostkfeetbs,ostkwtoth,ostkpcsoth,ostkfeetoth,ostkwttot,ostkpcstot,ostkfeettot,ocostwt,ocostpcs,ocostfeet,
+            ( case b.sku_id when 1 then ostkwttot * ocostwt  when 2 then ostkpcstot * ocostpcs when 3 then ostkfeettot * ocostfeet END ) AS trasnval
+            FROM opening_godown_stocks AS a INNER JOIN materials AS b ON a.material_id=b.id where  a.id=$openinggodownstock->id "));
 
 
-           DB::insert(DB::raw("
-            INSERT INTO office_item_bal(transaction_id,tdate,ttypedesc,ttypeid,material_id,uom,tqtykg,tqtypcs,tqtyfeet,tcostkg,tcostpcs,tcostfeet)
-            SELECT a.id AS transid,opdate,'OPENING',1,a.material_id,b.sku_id,ostkwttot,ostkpcstot,ostkfeettot,ocostwt,ocostpcs,ocostfeet FROM opening_godown_stocks AS a INNER JOIN  materials b
+            DB::delete(DB::raw(" delete from office_item_bal where ttypeid=1 and  transaction_id=$openinggodownstock->id  "));
+            DB::insert(DB::raw("
+            INSERT INTO office_item_bal(transaction_id,tdate,ttypedesc,ttypeid,material_id,uom,tqtykg,tqtypcs,tqtyfeet,tcostkg,tcostpcs,tcostfeet,transvalue)
+            SELECT a.id AS transid,opdate,'OPENING',1,a.material_id,b.sku_id,ostkwttot,ostkpcstot,ostkfeettot,ocostwt,ocostpcs,ocostfeet
+            ,( case b.sku_id when 1 then ostkwttot * ocostwt  when 2 then ostkpcstot * ocostpcs when 3 then ostkfeettot * ocostfeet END ) AS trasnval
+            FROM opening_godown_stocks AS a INNER JOIN  materials b
             ON a.material_id=b.id WHERE a.id=$openinggodownstock->id"));
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        //     DB::insert(DB::raw("
+        //     INSERT INTO godown_stock ( transaction_id,tdate,ttypeid,tdesc,material_id,
+        //     stkwte13,stkpcse13,stkfeete13,stkwtgn2,stkpcsgn2,stkfeetgn2,stkwtams,stkpcsams,stkfeetams,stkwte24,stkpcse24,stkfeete24,
+        //     stkwtbs,stkpcsbs,stkfeetbs,stkwtoth,stkpcsoth,stkfeetoth,stkwttot,stkpcstot,stkfeettot,costwt,costpcs,costfeet )
+        //     SELECT id,opdate,1,'OPENING',material_id,
+        //     ostkwte13,ostkpcse13,ostkfeete13,ostkwtgn2,ostkpcsgn2,ostkfeetgn2,ostkwtams,ostkpcsams,ostkfeetams,ostkwte24,ostkpcse24,ostkfeete24,
+        //     ostkwtbs,ostkpcsbs,ostkfeetbs,ostkwtoth,ostkpcsoth,ostkfeetoth,ostkwttot,ostkpcstot,ostkfeettot,ocostwt,ocostpcs,ocostfeet
+        //     FROM opening_godown_stocks where id=$openinggodownstock->id
+
+        //    "));
+
+        //    DB::delete(DB::raw(" delete from office_item_bal where ttypeid=1 and  transaction_id=$openinggodownstock->id  "));
+
+
+        //    DB::insert(DB::raw("
+        //     INSERT INTO office_item_bal(transaction_id,tdate,ttypedesc,ttypeid,material_id,uom,tqtykg,tqtypcs,tqtyfeet,tcostkg,tcostpcs,tcostfeet)
+        //     SELECT a.id AS transid,opdate,'OPENING',1,a.material_id,b.sku_id,ostkwttot,ostkpcstot,ostkfeettot,ocostwt,ocostpcs,ocostfeet FROM opening_godown_stocks AS a INNER JOIN  materials b
+        //     ON a.material_id=b.id WHERE a.id=$openinggodownstock->id"));
 
 
 

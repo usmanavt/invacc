@@ -230,10 +230,11 @@ class GodownprController extends Controller
                     DB::insert(DB::raw("
                     INSERT INTO godown_stock ( transaction_id,tdate,ttypeid,tdesc,material_id,
                     stkwte13,stkpcse13,stkfeete13,stkwtgn2,stkpcsgn2,stkfeetgn2,stkwtams,stkpcsams,stkfeetams,stkwte24,stkpcse24,stkfeete24,
-                    stkwtbs,stkpcsbs,stkfeetbs,stkwtoth,stkpcsoth,stkfeetoth,stkwttot,stkpcstot,stkfeettot,costwt,costpcs,costfeet )
+                    stkwtbs,stkpcsbs,stkfeetbs,stkwtoth,stkpcsoth,stkfeetoth,stkwttot,stkpcstot,stkfeettot,costwt,costpcs,costfeet,transvalue )
                      SELECT a.id,a.contract_date,5,'Purchase Return',material_id,prgpwte13*-1,prgppcse13*-1,prgpfeete13*-1,prgpwtgn2*-1,prgppcsgn2*-1,prgpfeetgn2*-1,
                      prgpwtams*-1,prgppcsams*-1,prgpfeetams*-1,prgpwte24*-1,prgppcse24*-1, prgpfeete24*-1,prgpwtbs*-1,prgppcsbs*-1,prgpfeetbs*-1,
                      prgpwtoth*-1,prgppcsoth*-1,prgpfeetoth*-1,prgpwttot*-1,prgppcstot*-1,prgpfeettot*-1,prgpkgrate,prgppcsrate,prgpfeetrate
+                     ,( case b.sku_id when 1 then prgpwttot * prgpkgrate  when 2 then prgppcstot * prgppcsrate when 3 then prgpfeettot * prgpfeetrate END )*-1 AS transvalue
                      FROM godownprs a inner join godownpr_details b ON a.id=b.gprid
                     AND a.id=$ci->id
                    "));
@@ -372,16 +373,28 @@ class GodownprController extends Controller
 
              DB::delete(DB::raw(" delete from godown_stock where ttypeid=5 and  transaction_id=$ci->id  "));
 
-             DB::insert(DB::raw("
-             INSERT INTO godown_stock ( transaction_id,tdate,ttypeid,tdesc,material_id,
-             stkwte13,stkpcse13,stkfeete13,stkwtgn2,stkpcsgn2,stkfeetgn2,stkwtams,stkpcsams,stkfeetams,stkwte24,stkpcse24,stkfeete24,
-             stkwtbs,stkpcsbs,stkfeetbs,stkwtoth,stkpcsoth,stkfeetoth,stkwttot,stkpcstot,stkfeettot,costwt,costpcs,costfeet )
-              SELECT a.id,a.contract_date,5,'Purchase Return',material_id,prgpwte13*-1,prgppcse13*-1,prgpfeete13*-1,prgpwtgn2*-1,prgppcsgn2*-1,prgpfeetgn2*-1,
-              prgpwtams*-1,prgppcsams*-1,prgpfeetams*-1,prgpwte24*-1,prgppcse24*-1,prgpfeete24*-1,prgpwtbs*-1,prgppcsbs*-1,prgpfeetbs*-1,prgpwtoth*-1,
-              prgppcsoth*-1,prgpfeetoth*-1,prgpwttot*-1,prgppcstot*-1,prgpfeettot*-1,prgpkgrate,prgppcsrate,prgpfeetrate
-              FROM godownprs a inner join godownpr_details b ON a.id=b.gprid
-             AND a.id=$ci->id
-            "));
+            //  DB::insert(DB::raw("
+            //  INSERT INTO godown_stock ( transaction_id,tdate,ttypeid,tdesc,material_id,
+            //  stkwte13,stkpcse13,stkfeete13,stkwtgn2,stkpcsgn2,stkfeetgn2,stkwtams,stkpcsams,stkfeetams,stkwte24,stkpcse24,stkfeete24,
+            //  stkwtbs,stkpcsbs,stkfeetbs,stkwtoth,stkpcsoth,stkfeetoth,stkwttot,stkpcstot,stkfeettot,costwt,costpcs,costfeet )
+            //   SELECT a.id,a.contract_date,5,'Purchase Return',material_id,prgpwte13*-1,prgppcse13*-1,prgpfeete13*-1,prgpwtgn2*-1,prgppcsgn2*-1,prgpfeetgn2*-1,
+            //   prgpwtams*-1,prgppcsams*-1,prgpfeetams*-1,prgpwte24*-1,prgppcse24*-1,prgpfeete24*-1,prgpwtbs*-1,prgppcsbs*-1,prgpfeetbs*-1,prgpwtoth*-1,
+            //   prgppcsoth*-1,prgpfeetoth*-1,prgpwttot*-1,prgppcstot*-1,prgpfeettot*-1,prgpkgrate,prgppcsrate,prgpfeetrate
+            //   FROM godownprs a inner join godownpr_details b ON a.id=b.gprid
+            //  AND a.id=$ci->id
+            // "));
+
+            DB::insert(DB::raw("
+            INSERT INTO godown_stock ( transaction_id,tdate,ttypeid,tdesc,material_id,
+            stkwte13,stkpcse13,stkfeete13,stkwtgn2,stkpcsgn2,stkfeetgn2,stkwtams,stkpcsams,stkfeetams,stkwte24,stkpcse24,stkfeete24,
+            stkwtbs,stkpcsbs,stkfeetbs,stkwtoth,stkpcsoth,stkfeetoth,stkwttot,stkpcstot,stkfeettot,costwt,costpcs,costfeet,transvalue )
+             SELECT a.id,a.contract_date,5,'Purchase Return',material_id,prgpwte13*-1,prgppcse13*-1,prgpfeete13*-1,prgpwtgn2*-1,prgppcsgn2*-1,prgpfeetgn2*-1,
+             prgpwtams*-1,prgppcsams*-1,prgpfeetams*-1,prgpwte24*-1,prgppcse24*-1, prgpfeete24*-1,prgpwtbs*-1,prgppcsbs*-1,prgpfeetbs*-1,
+             prgpwtoth*-1,prgppcsoth*-1,prgpfeetoth*-1,prgpwttot*-1,prgppcstot*-1,prgpfeettot*-1,prgpkgrate,prgppcsrate,prgpfeetrate
+             ,( case b.sku_id when 1 then prgpwttot * prgpkgrate  when 2 then prgppcstot * prgppcsrate when 3 then prgpfeettot * prgpfeetrate END )*-1 AS transvalue
+             FROM godownprs a inner join godownpr_details b ON a.id=b.gprid
+            AND a.id=$ci->id
+           "));
 
 
 

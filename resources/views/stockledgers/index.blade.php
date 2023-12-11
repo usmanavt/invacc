@@ -97,10 +97,10 @@
                                     <label for="">Godown Wise Valuation </label>
                                 </div>
 
-                                <div>
+                                {{-- <div>
                                     <input type="radio" name="report_type" value="smsvalgssmry" >
                                     <label for="">Godown Wise Valuation Summary </label>
-                                </div>
+                                </div> --}}
 
 
 

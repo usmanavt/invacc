@@ -422,8 +422,8 @@ class CommercialInvoiceController extends Controller
             DB::update(DB::raw(" update purchasings set closed=0 where id=$ci->purid "));
 
             DB::insert(DB::raw("
-            INSERT INTO office_item_bal(transaction_id,tdate,ttypedesc,ttypeid,material_id,uom,tqtykg,tqtypcs,tqtyfeet,tcostkg,tcostpcs,tcostfeet)
-            SELECT a.id AS transid,a.invoice_date,'Ipurchasing',2,b.material_id,sku_id,gdswt,pcs,qtyinfeet,perkg,perpc,perft FROM commercial_invoices a INNER JOIN  commercial_invoice_details b
+            INSERT INTO office_item_bal(transaction_id,tdate,ttypedesc,ttypeid,material_id,uom,tqtykg,tqtypcs,tqtyfeet,tcostkg,tcostpcs,tcostfeet,transvalue)
+            SELECT a.id AS transid,a.invoice_date,'Ipurchasing',2,b.material_id,sku_id,gdswt,pcs,qtyinfeet,perkg,perpc,perft,totallccostwexp FROM commercial_invoices a INNER JOIN  commercial_invoice_details b
             ON a.id=b.commercial_invoice_id WHERE a.id=$ci->id"));
 
 
@@ -432,11 +432,11 @@ class CommercialInvoiceController extends Controller
             DB::update(DB::raw("
             UPDATE godown_stock c
             INNER JOIN (
-            SELECT b.purid,material_id,perpc,perkg,perft
+            SELECT b.purid,material_id,perpc,perkg,perft,totallccostwexp
             FROM commercial_invoice_details as a inner join commercial_invoices as b
             on a.commercial_invoice_id=b.id  where  b.purid = $ci->purid
             ) x ON c.transaction_id = x.purid and c.material_id=x.material_id
-            SET c.costwt=x.perkg,c.costpcs=x.perpc,c.costfeet=x.perft WHERE  c.transaction_id = $ci->purid "));
+            SET c.costwt=x.perkg,c.costpcs=x.perpc,c.costfeet=x.perft,c.transvalue=x.totallccostwexp WHERE  c.transaction_id = $ci->purid "));
 
             DB::commit();
             Session::flash('success',"Commerical Invoice#[$ci->id] Created with Reciving# & Duty Clearance#[$ci->id]");
@@ -849,19 +849,19 @@ class CommercialInvoiceController extends Controller
             DB::delete(DB::raw(" delete from office_item_bal where ttypeid=2 and  transaction_id=$ci->id   "));
 
             DB::insert(DB::raw("
-            INSERT INTO office_item_bal(transaction_id,tdate,ttypedesc,ttypeid,material_id,uom,tqtykg,tqtypcs,tqtyfeet,tcostkg,tcostpcs,tcostfeet)
-            SELECT a.id AS transid,a.invoice_date,'Ipurchasing',2,b.material_id,sku_id,gdswt,pcs,qtyinfeet,perkg,perpc,perft FROM commercial_invoices a INNER JOIN  commercial_invoice_details b
+            INSERT INTO office_item_bal(transaction_id,tdate,ttypedesc,ttypeid,material_id,uom,tqtykg,tqtypcs,tqtyfeet,tcostkg,tcostpcs,tcostfeet,transvalue)
+            SELECT a.id AS transid,a.invoice_date,'Ipurchasing',2,b.material_id,sku_id,gdswt,pcs,qtyinfeet,perkg,perpc,perft,totallccostwexp FROM commercial_invoices a INNER JOIN  commercial_invoice_details b
             ON a.id=b.commercial_invoice_id WHERE a.id=$ci->id"));
 
             //****################# Transfert item cost to godown stock table
             DB::update(DB::raw("
             UPDATE godown_stock c
             INNER JOIN (
-            SELECT b.purid,material_id,perpc,perkg,perft
+            SELECT b.purid,material_id,perpc,perkg,perft,totallccostwexp
             FROM commercial_invoice_details as a inner join commercial_invoices as b
             on a.commercial_invoice_id=b.id  where  b.purid = $ci->purid
             ) x ON c.transaction_id = x.purid and c.material_id=x.material_id
-            SET c.costwt=x.perkg,c.costpcs=x.perpc,c.costfeet=x.perft WHERE ttypeid=2 and   c.transaction_id = $ci->purid "));
+            SET c.costwt=x.perkg,c.costpcs=x.perpc,c.costfeet=x.perft,c.transvalue=x.totallccostwexp WHERE ttypeid=2 and   c.transaction_id = $ci->purid "));
 
 
 

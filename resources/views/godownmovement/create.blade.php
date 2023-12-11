@@ -756,7 +756,7 @@ var totalVal = function(values, data, calcParams){
                     // {title:"feedqty", field:"feedqty",cellEdited: updateValues,editor:"number"},
 
                     {
-                    title:'SALE', headerHozAlign:"center",
+                    title:'Transfer', headerHozAlign:"center",
                     columns:[
 
 
@@ -830,6 +830,14 @@ var totalVal = function(values, data, calcParams){
                                     showSnackbar("sale qty must be less than stock qty","info");
                                     return;
                                 }
+                                if(Number(element.feedqty ) <= 0 )
+                                    {
+                                        showSnackbar("Transfer Qty must be Greater than 0","info");
+                                        return;
+                                    }
+
+
+
 
                         }
              //     if( element.sku==='KG')
@@ -873,7 +881,7 @@ var totalVal = function(values, data, calcParams){
                 method: 'POST', // 'GET', 'PUT', 'DELETE', etc.
                 // body: formData, // Coordinate the body type with 'Content-Type'
                 body:JSON.stringify(data),
-                headers: new Headers({
+                headers: new Headers({S
                     "Content-Type": "application/json",
                     "Accept": "application/json",
                     "X-Requested-With": "XMLHttpRequest",

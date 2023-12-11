@@ -241,40 +241,36 @@ table{
                 {{-- <td style="text-align:center" width="6%">{{ $data[$i]->unit }} </td> --}}
 
                 <td style="text-align:right" width="4%">{{ number_format($data[$i]->oqty,0) }} </td>
-                <td style="text-align:right" width="4%">{{ number_format($data[$i]->orate,1) }} </td>
+                <td style="text-align:right" width="4%">{{ number_format($data[$i]->orate,2) }} </td>
                 <td style="text-align:right" width="4%">{{ number_format($data[$i]->oval,0) }} </td>
 
                 <td style="text-align:right" width="3%">{{ number_format($data[$i]->purqty,0) }} </td>
-                <td style="text-align:right" width="3%">{{ number_format($data[$i]->prate,1) }} </td>
+                <td style="text-align:right" width="3%">{{ number_format($data[$i]->prate,2) }} </td>
                 <td style="text-align:right" width="3%">{{ number_format($data[$i]->pval,0) }} </td>
 
                 <td style="text-align:right" width="3%">{{ number_format($data[$i]->salqty,0) }} </td>
-                <td style="text-align:right" width="3%">{{ number_format($data[$i]->srate,1) }} </td>
+                <td style="text-align:right" width="3%">{{ number_format($data[$i]->srate,2) }} </td>
                 <td style="text-align:right" width="3%">{{ number_format($data[$i]->sval,0) }} </td>
 
                 <td style="text-align:right" width="3%">{{ number_format($data[$i]->purret,0) }} </td>
-                <td style="text-align:right" width="3%">{{ number_format($data[$i]->prrate,1) }} </td>
+                <td style="text-align:right" width="3%">{{ number_format($data[$i]->prrate,2) }} </td>
                 <td style="text-align:right" width="3%">{{ number_format($data[$i]->prval,0) }} </td>
 
                 <td style="text-align:right" width="3%">{{ number_format($data[$i]->salret,0) }} </td>
-                <td style="text-align:right" width="3%">{{ number_format($data[$i]->srrate,1) }} </td>
+                <td style="text-align:right" width="3%">{{ number_format($data[$i]->srrate,2) }} </td>
                 <td style="text-align:right" width="3%">{{ number_format($data[$i]->srval,0) }} </td>
 
 
                 <td style="text-align:right" width="3%">{{ number_format($data[$i]->gminqty,0) }} </td>
-                <td style="text-align:right" width="3%">{{ number_format($data[$i]->gminrate,1) }} </td>
+                <td style="text-align:right" width="3%">{{ number_format($data[$i]->gminrate,2) }} </td>
                 <td style="text-align:right" width="3%">{{ number_format($data[$i]->gminval,0) }} </td>
 
                 <td style="text-align:right" width="3%">{{ number_format($data[$i]->gmoutqty,0) }} </td>
-                <td style="text-align:right" width="3%">{{ number_format($data[$i]->gmoutrate,1) }} </td>
+                <td style="text-align:right" width="3%">{{ number_format($data[$i]->gmoutrate,2) }} </td>
                 <td style="text-align:right" width="3%">{{ number_format($data[$i]->gmoutval,0) }} </td>
 
-
-
-
-
                 <td style="text-align:right" width="4%">{{ number_format($data[$i]->cb,0) }} </td>
-                <td style="text-align:right" width="4%">{{ number_format($data[$i]->cbrate,1) }} </td>
+                <td style="text-align:right" width="4%">{{ number_format($data[$i]->cbrate,2) }} </td>
                 <td style="text-align:right" width="4%">{{ number_format($data[$i]->cbval,0) }} </td>
 
 

@@ -62,7 +62,7 @@
                                 Remarks <span class="text-red-500 font-semibold">(*)</span>
                             </label>
                             <textarea name="mremarks" id="mremarks" cols="50" rows="2" maxlength="200" required class="rounded"></textarea>
-                            <x-input-numeric title="" name="godown_movement_id" id="godown_movement_id" value="{{ $godownmovement->id }}" hidden  />
+                            <x-input-numeric title="" name="godown_movement_id" id="godown_movement_id" value="{{ $godownmovement->id }}"   />
 
                         </div>
                     </fieldset>
@@ -597,11 +597,11 @@ function validateForm()
     // Qty Required
     for (let index = 0; index < dynamicTableData.length; index++) {
         const element = dynamicTableData[index];
-        // if(Number(element.feedqty ) > Number(element.balqty)+Number(element.balqty) )
-        // {
-        //     showSnackbar("Sale Qty must be less than Plan qty","info");
-        //     return;
-        // }
+         if(Number(element.feedqty ) <= 0 )
+         {
+             showSnackbar("Transfer Qty must be Greater than 0","info");
+             return;
+         }
     }
     // 'total' : parseFloat(banktotal.value).toFixed(2),
     disableSubmitButton(true);

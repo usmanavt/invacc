@@ -199,8 +199,8 @@ class PurchaseReturnController  extends Controller
             "));
 
             DB::insert(DB::raw("
-            INSERT INTO office_item_bal(transaction_id,tdate,ttypedesc,ttypeid,material_id,uom,tqtykg,tqtypcs,tqtyfeet,tcostkg,tcostpcs,tcostfeet)
-            SELECT a.id AS transid,a.prdate,'Purchase Return',5,b.material_id,b.prunitid,prwt*-1,prpcs*-1,prfeet*-1,prprice,prprice,prprice
+            INSERT INTO office_item_bal(transaction_id,tdate,ttypedesc,ttypeid,material_id,uom,tqtykg,tqtypcs,tqtyfeet,tcostkg,tcostpcs,tcostfeet,transvalue)
+            SELECT a.id AS transid,a.prdate,'Purchase Return',5,b.material_id,b.prunitid,prwt*-1,prpcs*-1,prfeet*-1,prprice,prprice,prprice,pramount*-1
             FROM purchase_returns a INNER JOIN  purchase_return_details b    ON a.id=b.prid
             WHERE a.id=$ci->id"));
 
@@ -281,8 +281,8 @@ class PurchaseReturnController  extends Controller
                 DB::delete(DB::raw(" delete from office_item_bal where ttypeid=5 and  transaction_id=$ci->id   "));
 
                 DB::insert(DB::raw("
-                INSERT INTO office_item_bal(transaction_id,tdate,ttypedesc,ttypeid,material_id,uom,tqtykg,tqtypcs,tqtyfeet,tcostkg,tcostpcs,tcostfeet)
-                SELECT a.id AS transid,a.prdate,'Purchase Return',5,b.material_id,b.prunitid,prwt*-1,prpcs*-1,prfeet*-1,prprice,prprice,prprice
+                INSERT INTO office_item_bal(transaction_id,tdate,ttypedesc,ttypeid,material_id,uom,tqtykg,tqtypcs,tqtyfeet,tcostkg,tcostpcs,tcostfeet,transvalue)
+                SELECT a.id AS transid,a.prdate,'Purchase Return',5,b.material_id,b.prunitid,prwt*-1,prpcs*-1,prfeet*-1,prprice,prprice,prprice,pramount*-1
                 FROM purchase_returns a INNER JOIN  purchase_return_details b    ON a.id=b.prid
                 WHERE a.id=$ci->id"));
 

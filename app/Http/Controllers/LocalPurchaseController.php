@@ -79,6 +79,11 @@ class LocalPurchaseController  extends Controller
         $size = $request->size;
         $field = $request->sort[0]["field"];     //  Nested Array
         $dir = $request->sort[0]["dir"];         //  Nested Array
+        $supplierId = $request->supplierId;
+
+        //  dd($supplierId);
+        // return $supplierId;
+
         //  With Tables
         $materials = Material::where(function ($query) use ($search){
             $query->where('source_id','<>',2)
@@ -236,8 +241,8 @@ class LocalPurchaseController  extends Controller
             where  commercial_invoice_id = $ci->id "));
 
             DB::insert(DB::raw("
-            INSERT INTO office_item_bal(transaction_id,tdate,ttypedesc,ttypeid,material_id,uom,tqtykg,tqtypcs,tqtyfeet,tcostkg,tcostpcs,tcostfeet)
-            SELECT a.id AS transid,a.invoice_date,'Lpurchasing',3,b.material_id,sku_id,gdswt,pcs,qtyinfeet,perft,perft,perft FROM commercial_invoices a INNER JOIN  commercial_invoice_details b
+            INSERT INTO office_item_bal(transaction_id,tdate,ttypedesc,ttypeid,material_id,uom,tqtykg,tqtypcs,tqtyfeet,tcostkg,tcostpcs,tcostfeet,transvalue)
+            SELECT a.id AS transid,a.invoice_date,'Lpurchasing',3,b.material_id,sku_id,gdswt,pcs,qtyinfeet,perft,perft,perft,pricevaluecostsheet FROM commercial_invoices a INNER JOIN  commercial_invoice_details b
             ON a.id=b.commercial_invoice_id WHERE a.id=$ci->id"));
 
 
@@ -350,9 +355,6 @@ class LocalPurchaseController  extends Controller
                     $cds->perft = $cd->perft;
                     $cds->pricevaluecostsheet = $cd->pricevaluecostsheet;
 
-
-
-
                     // $cds->purunit = $cd->purunit;
 
                     // $cds->gdswt = $cd->gdswt;
@@ -379,12 +381,6 @@ class LocalPurchaseController  extends Controller
                 // if($lpd->sku_id==3)
                   $cds->qtyinfeet = $cd['qtyinfeet'];
                   $cds->bundle2 = $cd['qtyinfeet'];
-
-
-
-
-
-
 
                     $cds->save();
                 }else
@@ -442,10 +438,20 @@ class LocalPurchaseController  extends Controller
 
             DB::delete(DB::raw(" delete from office_item_bal where ttypeid=3 and  transaction_id=$commercialinvoice->id   "));
 
+            // DB::insert(DB::raw("
+            // INSERT INTO office_item_bal(transaction_id,tdate,ttypedesc,ttypeid,material_id,uom,tqtykg,tqtypcs,tqtyfeet,tcostkg,tcostpcs,tcostfeet)
+            // SELECT a.id AS transid,a.invoice_date,'Lpurchasing',3,b.material_id,sku_id,gdswt,pcs,qtyinfeet,perft,perft,perft FROM commercial_invoices a INNER JOIN  commercial_invoice_details b
+            // ON a.id=b.commercial_invoice_id WHERE a.id=$commercialinvoice->id"));
+
             DB::insert(DB::raw("
-            INSERT INTO office_item_bal(transaction_id,tdate,ttypedesc,ttypeid,material_id,uom,tqtykg,tqtypcs,tqtyfeet,tcostkg,tcostpcs,tcostfeet)
-            SELECT a.id AS transid,a.invoice_date,'Lpurchasing',3,b.material_id,sku_id,gdswt,pcs,qtyinfeet,perft,perft,perft FROM commercial_invoices a INNER JOIN  commercial_invoice_details b
+            INSERT INTO office_item_bal(transaction_id,tdate,ttypedesc,ttypeid,material_id,uom,tqtykg,tqtypcs,tqtyfeet,tcostkg,tcostpcs,tcostfeet,transvalue)
+            SELECT a.id AS transid,a.invoice_date,'Lpurchasing',3,b.material_id,sku_id,gdswt,pcs,qtyinfeet,perft,perft,perft,pricevaluecostsheet FROM commercial_invoices a INNER JOIN  commercial_invoice_details b
             ON a.id=b.commercial_invoice_id WHERE a.id=$commercialinvoice->id"));
+
+
+
+
+
 
             DB::commit();
             Session::flash('success','Contract Information Saved');

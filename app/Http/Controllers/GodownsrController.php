@@ -176,14 +176,13 @@ class GodownsrController extends Controller
                 $c->prgppcstot = $cid['purpcstot'];
                 $c->prgpfeettot = $cid['purfeettot'];
 
-                $c->prgpkgrate = $cid['gdsprice'];
-                $c->prgppcsrate = $cid['gdsprice'];
-                $c->prgpfeetrate = $cid['gdsprice'];
+                $c->prgpkgrate = $cid['prgpkgrate'];
+                $c->prgppcsrate = $cid['prgppcsrate'];
+                $c->prgpfeetrate = $cid['prgpfeetrate'];
 
                 $c->save();
 
             }
-
 
             DB::update(DB::raw("
             update godownsrs c
@@ -219,10 +218,11 @@ class GodownsrController extends Controller
                     DB::insert(DB::raw("
                     INSERT INTO godown_stock ( transaction_id,tdate,ttypeid,tdesc,material_id,
                     stkwte13,stkpcse13,stkfeete13,stkwtgn2,stkpcsgn2,stkfeetgn2,stkwtams,stkpcsams,stkfeetams,stkwte24,stkpcse24,stkfeete24,
-                    stkwtbs,stkpcsbs,stkfeetbs,stkwtoth,stkpcsoth,stkfeetoth,stkwttot,stkpcstot,stkfeettot,costwt,costpcs,costfeet )
+                    stkwtbs,stkpcsbs,stkfeetbs,stkwtoth,stkpcsoth,stkfeetoth,stkwttot,stkpcstot,stkfeettot,costwt,costpcs,costfeet,transvalue )
                      SELECT a.id,a.contract_date,6,'Sale Return',material_id,prgpwte13,prgppcse13,prgpfeete13,prgpwtgn2,prgppcsgn2,prgpfeetgn2,
                      prgpwtams,prgppcsams,prgpfeetams,prgpwte24,prgppcse24, prgpfeete24,prgpwtbs,prgppcsbs,prgpfeetbs,
                      prgpwtoth,prgppcsoth,prgpfeetoth,prgpwttot,prgppcstot,prgpfeettot,prgpkgrate,prgppcsrate,prgpfeetrate
+                     ,( case b.sku_id when 1 then prgpwttot * prgpkgrate  when 2 then prgppcstot * prgppcsrate when 3 then prgpfeettot * prgpfeetrate END ) AS transvalue
                      FROM godownsrs a inner join godownsr_details b ON a.id=b.gprid
                     AND a.id=$ci->id
                    "));
@@ -360,17 +360,28 @@ class GodownsrController extends Controller
 
                     DB::delete(DB::raw(" delete from godown_stock where ttypeid=6 and  transaction_id=$ci->id  "));
 
-                    DB::insert(DB::raw("
-                    INSERT INTO godown_stock ( transaction_id,tdate,ttypeid,tdesc,material_id,
-                    stkwte13,stkpcse13,stkfeete13,stkwtgn2,stkpcsgn2,stkfeetgn2,stkwtams,stkpcsams,stkfeetams,stkwte24,stkpcse24,stkfeete24,
-                    stkwtbs,stkpcsbs,stkfeetbs,stkwtoth,stkpcsoth,stkfeetoth,stkwttot,stkpcstot,stkfeettot,costwt,costpcs,costfeet )
-                     SELECT a.id,a.contract_date,6,'Sale Return',material_id,prgpwte13,prgppcse13,prgpfeete13,prgpwtgn2,prgppcsgn2,prgpfeetgn2,
-                     prgpwtams,prgppcsams,prgpfeetams,prgpwte24,prgppcse24, prgpfeete24,prgpwtbs,prgppcsbs,prgpfeetbs,
-                     prgpwtoth,prgppcsoth,prgpfeetoth,prgpwttot,prgppcstot,prgpfeettot,prgpkgrate,prgppcsrate,prgpfeetrate
-                     FROM godownsrs a inner join godownsr_details b ON a.id=b.gprid
-                    AND a.id=$ci->id
-                   "));
+                //     DB::insert(DB::raw("
+                //     INSERT INTO godown_stock ( transaction_id,tdate,ttypeid,tdesc,material_id,
+                //     stkwte13,stkpcse13,stkfeete13,stkwtgn2,stkpcsgn2,stkfeetgn2,stkwtams,stkpcsams,stkfeetams,stkwte24,stkpcse24,stkfeete24,
+                //     stkwtbs,stkpcsbs,stkfeetbs,stkwtoth,stkpcsoth,stkfeetoth,stkwttot,stkpcstot,stkfeettot,costwt,costpcs,costfeet )
+                //      SELECT a.id,a.contract_date,6,'Sale Return',material_id,prgpwte13,prgppcse13,prgpfeete13,prgpwtgn2,prgppcsgn2,prgpfeetgn2,
+                //      prgpwtams,prgppcsams,prgpfeetams,prgpwte24,prgppcse24, prgpfeete24,prgpwtbs,prgppcsbs,prgpfeetbs,
+                //      prgpwtoth,prgppcsoth,prgpfeetoth,prgpwttot,prgppcstot,prgpfeettot,prgpkgrate,prgppcsrate,prgpfeetrate
+                //      FROM godownsrs a inner join godownsr_details b ON a.id=b.gprid
+                //     AND a.id=$ci->id
+                //    "));
 
+                DB::insert(DB::raw("
+                INSERT INTO godown_stock ( transaction_id,tdate,ttypeid,tdesc,material_id,
+                stkwte13,stkpcse13,stkfeete13,stkwtgn2,stkpcsgn2,stkfeetgn2,stkwtams,stkpcsams,stkfeetams,stkwte24,stkpcse24,stkfeete24,
+                stkwtbs,stkpcsbs,stkfeetbs,stkwtoth,stkpcsoth,stkfeetoth,stkwttot,stkpcstot,stkfeettot,costwt,costpcs,costfeet,transvalue )
+                 SELECT a.id,a.contract_date,6,'Sale Return',material_id,prgpwte13,prgppcse13,prgpfeete13,prgpwtgn2,prgppcsgn2,prgpfeetgn2,
+                 prgpwtams,prgppcsams,prgpfeetams,prgpwte24,prgppcse24, prgpfeete24,prgpwtbs,prgppcsbs,prgpfeetbs,
+                 prgpwtoth,prgppcsoth,prgpfeetoth,prgpwttot,prgppcstot,prgpfeettot,prgpkgrate,prgppcsrate,prgpfeetrate
+                 ,( case b.sku_id when 1 then prgpwttot * prgpkgrate  when 2 then prgppcstot * prgppcsrate when 3 then prgpfeettot * prgpfeetrate END ) AS transvalue
+                 FROM godownsrs a inner join godownsr_details b ON a.id=b.gprid
+                AND a.id=$ci->id
+               "));
 
 
 
