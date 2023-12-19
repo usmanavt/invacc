@@ -36,9 +36,9 @@
                                 @endforeach
                             </select>
 
-                            <x-input-text title="P.Invoice ID" name="contract_id" id="contract_id" value="{{ $purchasing->contract_id }}" disabled  />
-                            <x-input-date title="P.Invoice Date" id="contract_date" name="contract_date" value="{{ $purchasing->contract_date }}"  disabled />
-                            <x-input-text title="P.Invice#" id="continvsno" name="continvsno" value="{{ $purchasing->continvsno }}"  disabled />
+                            <x-input-text title="Purchase.Invoice ID" name="contract_id" id="contract_id" value="{{ $purchasing->contract_id }}" disabled  />
+                            <x-input-date title="Purchase.Invoice Date" id="contract_date" name="contract_date" value="{{ $purchasing->contract_date }}"  disabled />
+                            <x-input-text title="Purchase.Invice#" id="continvsno" name="continvsno" value="{{ $purchasing->continvsno }}"  disabled />
                             <x-input-numeric title="" name="purid" id="purid" value="{{ $purchasing->id }}" hidden  />
 
 
@@ -47,17 +47,17 @@
                         <div class="grid grid-cols-12 gap-1 py-2 items-center">
                             <x-input-date title="G.R Date" id="purdate" name="purdate" value="{{ $purchasing->purdate }}"  />
                             <x-input-text title="G.R #" name="purinvsno" value="{{ $purchasing->purinvsno }}" />
-                            <x-input-text title="Gate Pass#" name="purseqid" id="purseqid" value="{{ $purchasing->purseqid }}"  disabled />
-                            <input class="checked:bg-blue-500 checked:border-blue-500 focus:outline-none" type="checkbox" name="per" id="per" onclick="EnableDisableTextBox(this)" >
+                            <x-input-text title="" name="purseqid" id="purseqid" value="{{ $purchasing->purseqid }}"  hidden />
+                            {{-- <input class="checked:bg-blue-500 checked:border-blue-500 focus:outline-none" type="checkbox" name="per" id="per" onclick="EnableDisableTextBox(this)" > --}}
 
 
-                            {{-- <label for="">
+                            <label for="">
                                 Remakrs <span class="text-red-500 font-semibold  ">(*)</span>
                             </label>
-                            <textarea name="remarks" id="remarks" cols="100" rows="2" maxlength="150" required class="rounded">
-                                {{ $customerorder->remarks }}
+                            <textarea name="remarks" id="remarks" cols="10" rows="2" maxlength="200"  class="col-span-2" required class="rounded">
+                                {{ $purchasing->remarks }}
 
-                            </textarea> --}}
+                            </textarea>
                         </div>
                     </fieldset>
 
@@ -584,7 +584,7 @@ function validateForm()
 
     var data = { 'purchasingloc' : dynamicTableData,
         'supplier_id': supplier_id.value,'contract_id':contract_id.value,'contract_date':contract_date.value,'purseqid':purseqid.value,
-                          'purdate':purdate.value,'purinvsno':purinvsno.value,'purid':purid.value      };
+                          'purdate':purdate.value,'purinvsno':purinvsno.value,'purid':purid.value,'remarks':remarks.value      };
 
 
 

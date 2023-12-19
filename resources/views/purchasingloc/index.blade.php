@@ -165,7 +165,12 @@
 
             {title: "In Pcs",field: "purtotpcs"},
             {title: "In Kg",field: "purtotwt"},
-            {title: "In Feet",field: "purtotfeet"}]},
+            {title: "In Feet",field: "purtotfeet"},
+            {title: "remarks",field: "remarks"}
+        ]
+
+
+        },
 
             // {
             //         title:'Contract Balance', headerHozAlign:"center",

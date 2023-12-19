@@ -1,9 +1,9 @@
 <x-app-layout>
 
     @push('styles')
-    <link rel="stylesheet" href="{{ asset('css/tabulator_simple.min.css') }}">
-    {{-- <link href="https://unpkg.com/tabulator-tables/dist/css/tabulator.min.css" rel="stylesheet"> --}}
-    {{-- <script type="text/javascript" src="https://unpkg.com/tabulator-tables/dist/js/tabulator.min.js"></script> --}}
+    {{-- <link rel="stylesheet" href="{{ asset('css/tabulator_simple.min.css') }}"> --}}
+    <link href="https://unpkg.com/tabulator-tables/dist/css/tabulator.min.css" rel="stylesheet">
+    <script type="text/javascript" src="https://unpkg.com/tabulator-tables/dist/js/tabulator.min.js"></script>
     @endpush
 
     <x-slot name="header">
@@ -40,6 +40,10 @@
                             <label for="invoiceno">Invoice #</label>
                             <input type="text" class="col-span-2" id="invoiceno" name="invoiceno" placeholder="Invoice No"
                                 minlength="3" title="minimum 3 characters required" value="{{ $commercialInvoice->invoiceno }}" required>
+
+                            <label for="challanno">Bill #<x-req /></label>
+                            <input type="text" class="col-span-2" id="challanno" name="challanno" value="{{ $commercialInvoice->challanno }}" >
+
 
                                 {{-- <label for="gpassno">GatePass #<x-req /></label> --}}
                                 <input type="text" class="col-span-2" id="gpassno" name="gpassno" value="{{ $commercialInvoice->gpassno }}" hidden   placeholder="gpassno"
@@ -424,7 +428,7 @@ dynamicTable = new Tabulator("#dynamicTable", {
             validator:"required",
             formatter:"money",
             formatterParams:{thousand:",",precision:2},
-            validator:["required","integer"],
+            // validator:["required","integer"],
             cellEdited: updateValues,
             bottomCalc:"sum"
 
@@ -459,7 +463,7 @@ dynamicTable = new Tabulator("#dynamicTable", {
                 validator:"required",
                 formatter:"money",
                 formatterParams:{thousand:",",precision:2},
-                 validator:["required","integer"],
+                //  validator:["required","integer"],
                  cellEdited: updateValues,
                  bottomCalc:"sum"
                },
@@ -596,7 +600,10 @@ function validateForm()
     // }
     // 'total' : parseFloat(banktotal.value).toFixed(2),
     disableSubmitButton(true);
-     var data = { 'localpurchase' : dynamicTableData,'contract_id':parseFloat(contract_id.value).toFixed(0),'bankntotal':parseFloat(bankntotal.value).toFixed(0),'collofcustom':parseFloat(collofcustom.value).toFixed(0),'exataxoffie':parseFloat(exataxoffie.value).toFixed(0) ,'insurance':parseFloat(insurance.value).toFixed(2) ,'supplier_id': supplier_id.value,'invoice_date':invoice_date.value,'invoiceno':invoiceno.value,'otherchrgs':otherchrgs.value,'gpassno':gpassno.value};
+     var data = { 'localpurchase' : dynamicTableData,'contract_id':parseFloat(contract_id.value).toFixed(0),'bankntotal':parseFloat(bankntotal.value).toFixed(0),
+     'collofcustom':parseFloat(collofcustom.value).toFixed(0),'exataxoffie':parseFloat(exataxoffie.value).toFixed(0) ,
+     'insurance':parseFloat(insurance.value).toFixed(2) ,'supplier_id': supplier_id.value,'invoice_date':invoice_date.value,'invoiceno':invoiceno.value,
+     'otherchrgs':otherchrgs.value,'gpassno':gpassno.value,'challanno':challanno.value};
     // var data = { 'contracts' : dynamicTableData,'banktotal':parseFloat(total.value).toFixed(2),'exataxoffie':parseFloat(exataxoffie.value).toFixed(2),'collofcustom':parseFloat(collofcustom.value).toFixed(2),'insurance':parseFloat(insurance.value).toFixed(2) ,'supplier_id': supplier_id.value,'invoice_date':invoice_date.value,'invoiceno':number.value};
     // All Ok - Proceed
     fetch(@json(route('localpurchase.update',$commercialInvoice)),{

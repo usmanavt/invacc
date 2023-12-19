@@ -34,9 +34,9 @@
                                         @endforeach
                                     </select> --}}
                                 <x-input-text title="Supplier Name" name="supname" id="supname" req required class="col-span-2" disabled  />
-                                <x-input-text title="P.Invoice id" name="contract_id" id="contract_id" req required class="col-span-2" disabled  />
-                                <x-input-date title="P.Invoice Date" id="contract_date" name="contract_date" req required class="col-span-2" disabled />
-                                <x-input-text title="P.Invice#" id="continvsno" name="continvsno" req required class="col-span-2" disabled />
+                                <x-input-text title="Purchase.Invoice id" name="contract_id" id="contract_id"  disabled  />
+                                <x-input-date title="Purchase.Invoice Date" id="contract_date" name="contract_date"  disabled />
+                                <x-input-text title="Purchase.Invice#" id="continvsno" name="continvsno"   disabled />
 
                                 {{-- <x-input-date title="Receiving Date" name="purdate" id="purdate"    /> --}}
                                 {{-- <x-input-text title="P.R No" name="prno" id="prno" req required class="col-span-2" disabled  /> --}}
@@ -44,18 +44,19 @@
                             </div>
                             <div class="grid grid-cols-12 gap-1 py-2 items-center">
                                 <x-input-date title="G.R Date" id="purdate" name="purdate"  />
-                                <x-input-text title="G.R #" name="purinvsno" />
-                                <x-input-text title="GatePass#" name="purseqid" id="purseqid" value="{{$maxpurseqid}}"  disabled />
-                                <input class="checked:bg-blue-500 checked:border-blue-500 focus:outline-none" type="checkbox" name="per" id="per" onclick="EnableDisableTextBox(this)" >
+                                <x-input-text title="G.R #" name="purinvsno" class="col-span-2" />
+                                {{-- <input class="checked:bg-blue-500 checked:border-blue-500 focus:outline-none" type="checkbox" name="per" id="per" onclick="EnableDisableTextBox(this)" > --}}
 
                                 {{-- <x-input-text title="P.O Seq.#" name="poseqno" id="poseqno" value="{{$maxpurseqid}}"    placeholder="poseqno" required   /> --}}
 
 
-                                {{-- <label for="">
+                                <label for="">
                                     Remakrs <span class="text-red-500 font-semibold  ">(*)</span>
                                 </label>
-                                <textarea name="remarks" id="remarks" cols="100" rows="2" maxlength="150" required class="rounded"></textarea> --}}
+                                <textarea name="remarks" id="remarks" cols="10" rows="2" maxlength="200" class="col-span-2" class="rounded"></textarea>
+
                             </div>
+                            <x-input-text title="" name="purseqid" id="purseqid" value="{{$maxpurseqid}}"  hidden />
                         </fieldset>
 
                         {{-- <fieldset class="border px-4 py-2 rounded">
@@ -717,7 +718,7 @@ var updateValues = (cell) => {
 
             var data = { 'purchasingloc' : dynamicTableData,
         'supplier_id': supplier_id,'contract_id':contract_id.value,'contract_date':contract_date.value,'purseqid':purseqid.value,
-                          'purdate':purdate.value,'purinvsno':purinvsno.value      };
+                          'purdate':purdate.value,'purinvsno':purinvsno.value,'remarks':remarks.value      };
 
             // All Ok - Proceed
             fetch(@json(route('purchasingloc.store')),{

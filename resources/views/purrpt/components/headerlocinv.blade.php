@@ -47,11 +47,6 @@
 }
 
 
-
-
-
-
-
 </style>
 </head>
 
@@ -127,9 +122,10 @@
     <tbody>
         <tr>
             <td > Invoice No:  <span style="font-weight: bold">{{ $data[0]->invoiceno }}</span> </td>
+            <td > Bill No:  <span style="font-weight: bold">{{ $data[0]->challanno }}</span> </td>
             <td > Invoice Date:  <span style="font-weight: bold">{{ $data[0]->invoice_date }}</span> </td>
-            <td > G.R No:  <span style="font-weight: bold">{{ $data[0]->gpassno }}</span> </td>
-            <td > GatePass No:  <span style="font-weight: bold">{{ $data[0]->GRGP }}</span> </td>
+            <td > G.R No:  <span style="font-weight: bold">{{ $data[0]->purinvsno }}</span> </td>
+            {{-- <td > GatePass No:  <span style="font-weight: bold">{{ $data[0]->GRGP }}</span> </td> --}}
         </tr>
     </tbody>
 </table>

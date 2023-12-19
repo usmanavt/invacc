@@ -26,6 +26,12 @@
                                     <legend>Transaction Date</legend>
                                     <x-input-date title="Dcoument Date" name="jvdate" value="{{ $document_date }}" />
                                     <x-input-text title="Dcoument No" name="document_no" value="{{ $jvno }}"  />
+                                    <x-input-text title="Cheque No" name="cheque_no" id="cheque_no" value="{{ $cheque_no }}" req required class="col-span-2" disabled  />
+                                    <input class="checked:bg-blue-500 checked:border-blue-500 focus:outline-none" type="checkbox" name="per" id="per" onclick="EnableDisableTextBox(this)" >
+                                    <label for="">
+                                        <span style="color: brown;font-weight: bold"> J.V Against Cheque Collection </span> <span class="text-red-500 font-semibold  ">(*)</span>
+                                         </label>
+
                                 </fieldset>
 
 
@@ -152,7 +158,7 @@
             e.document_date = document_date
         })
         //  Now Post Data
-        var mydata = {'document_no':document_no.value,'jvdate':jvdate.value,
+        var mydata = {'document_no':document_no.value,'jvdate':jvdate.value,'cheque_no':cheque_no.value,
             'vouchers': data
         }
         fetch(@json(route('jv.update',$transaction)),{
@@ -178,6 +184,21 @@
             showSnackbar("Errors occured","red");
         })
     }
+
+    function EnableDisableTextBox(per) {
+        var cheque_no = document.getElementById("cheque_no");
+        cheque_no.disabled = per.checked ? false : true;
+        cheque_no.style.color ="black";
+        cheque_no.value="";
+        // if (!discntper.disabled) {
+        //     discntper.focus();
+        // }
+    }
+
+
+
+
+
 </script>
 @endpush
 

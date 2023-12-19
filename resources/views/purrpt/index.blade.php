@@ -59,10 +59,10 @@
                                     <label for="">PENDING CONTRACTS</label>
                                 </div>
 
-                                {{-- <div>
+                                <div>
                                     <input type="radio" name="report_type" value="cc" required onchange="checkReportType('cc')">
-                                    <label for="">Completed Contracts</label>
-                                </div> --}}
+                                    <label for="">COMPLETED CONTRACTS</label>
+                                </div>
 
 
 
@@ -134,9 +134,31 @@
                                 </div>
 
                                 <fieldset class="border px-4 py-2 rounded w-full">
+                                    <legend>Category Selection</legend>
+
+
+
+                                    <div class="flex justify-between py-1">
+                                        <select autocomplete="on" name="source_id" id="source_id" required>
+                                            {{-- <option disabled selected value="">--Select</option> --}}
+                                            @foreach ($sources as $source)
+                                                <option value="{{ $source->id }}">{{ $source->title }}</option>
+                                            @endforeach
+                                        </select>
+
+                                    </div>
+
+
+
+
+
+
+                                </fieldset>
+
+                                <fieldset class="border px-4 py-2 rounded w-full">
                                     <legend>Supplier Selection</legend>
                                     <div class="flex justify-between py-1">
-                                        <select  name="head_id" id="head_id" required class="w-full" disabled onchange="headSelected()">
+                                        <select  name="head_id" id="head_id" required class="w-full"  onchange="headSelected()">
                                         </select>
                                     </div>
                                 </fieldset>
@@ -224,6 +246,10 @@
 
     const vchrheads = @json($vchrheads);
     const contlistfill = @json(route('purrpt.contlistfill'));
+
+    const funcgetsuplr = @json(route('purrpt.funcgetsuplr'));
+
+
     const funcpurcat = @json(route('purrpt.funcpurcat'));
     const dutycategory = @json(route('purrpt.dutycategory'));
     const pnddutycategory = @json(route('purrpt.pnddutycategory'));
@@ -259,91 +285,6 @@
          subhead.options.length = 0 // Reset List
         //   console.info(value)
         switch (rptType){
-            // case 'glhw':
-            //     list = subheads.filter( l => l.MHEAD === Number(value)  )
-            //     if(list.length > 0)
-            //     {
-            //         list.forEach(e => {
-            //             addSelectElement(subhead,e.Subhead,e.title)
-            //         });
-            //         subhead.setAttribute('required','')
-            //         subhead.removeAttribute('disabled','')
-            //     }else{
-            //         subhead.removeAttribute('required','')
-            //         subhead.setAttribute('disabled','')
-            //     }
-            //     break;
-
-
-        // switch (rptType){
-            // case 'impcominvs':
-            //     list = subheadsci.filter( l => l.MHEAD === Number(value)  )
-            //     if(list.length > 0)
-            //     {
-            //         list.forEach(e => {
-            //             addSelectElement(subhead,e.Subhead,e.title)
-            //         });
-            //         subhead.setAttribute('required','')
-            //         subhead.removeAttribute('disabled','')
-            //     }else{
-            //         subhead.removeAttribute('required','')
-            //         subhead.setAttribute('disabled','')
-            //     }
-            //     break;
-
-                // case 'loccominvs':
-                // list = subheadsciloc.filter( l => l.MHEAD === Number(value)  )
-                // if(list.length > 0)
-                // {
-                //     list.forEach(e => {
-                //         addSelectElement(subhead,e.Subhead,e.title)
-                //     });
-                //     subhead.setAttribute('required','')
-                //     subhead.removeAttribute('disabled','')
-                // }else{
-                //     subhead.removeAttribute('required','')
-                //     subhead.setAttribute('disabled','')
-                // }
-                // break;
-
-                // case  'gl' :
-                // list = subheadspend.filter( l => l.MHEAD === value  )
-                // // console.info(value)
-                // if(list.length > 0)
-                // {
-                //     list.forEach(e => {
-                //         // addSelectElement(subhead,e.Subhead,e.title)
-                //         addSelectElement(subhead,e.Subhead,e.title)
-                //     });
-                //     subhead.setAttribute('required','')
-                //     subhead.removeAttribute('disabled','')
-                // }else{
-                //     subhead.removeAttribute('required','')
-                //     subhead.setAttribute('disabled','')
-                // }
-                // break;
-
-                // case  'cc' :
-                // list = subheadscomp.filter( l => l.MHEAD === value  )
-                // // console.info(value)
-                // if(list.length > 0)
-                // {
-                //     list.forEach(e => {
-                //         // addSelectElement(subhead,e.Subhead,e.title)
-                //         addSelectElement(subhead,e.Subhead,e.title)
-                //     });
-                //     subhead.setAttribute('required','')
-                //     subhead.removeAttribute('disabled','')
-                // }else{
-                //     subhead.removeAttribute('required','')
-                //     subhead.setAttribute('disabled','')
-                // }
-                // break;
-
-
-
-
-
                 case 'glhw':
             //  console.log(todate.value)
             fetch(contlistfill + `?todate=${todate.value}&fromdate=${fromdate.value}&head=${value}`,{
@@ -852,7 +793,8 @@ const getSubheadVoucherData10 = async (value) =>{
 
         }
 
-    // FOR CONTRACT FILL
+
+        // FOR CONTRACT FILL
     const getSubheadVoucherData = async (value) =>{
         let data = await fetch(cominvsimp + `?todate=${todate.value}&fromdate=${fromdate.value}&head=${value}`,{
             method:"GET",
@@ -960,15 +902,15 @@ const getCominvsimpVoucherData = async (value) =>{
                 case 'cc':
                 //  Show Head
                  rptType = 'cc'
-                head.setAttribute('required','')
-                head.disabled = false
-                head.length = 0
+                // head.setAttribute('required','')
+                // head.disabled = false
+                // head.length = 0
                 subhead.removeAttribute('required')
                 subhead.disabled = true
                 subhead.length = 0
-                heads.forEach(e => {
-                    addSelectElement(head,e.id,e.title)
-                });
+                // heads.forEach(e => {
+                //     addSelectElement(head,e.id,e.title)
+                // });
                 headSelected()
                 break;
 
@@ -981,30 +923,30 @@ const getCominvsimpVoucherData = async (value) =>{
             case 'glhw':
                 // Show Head
                 rptType = 'glhw'
-                head.setAttribute('required','')
-                head.disabled = false
-                head.length = 0
+                // head.setAttribute('required','')
+                // head.disabled = false
+                // head.length = 0
                 subhead.removeAttribute('required')
                 subhead.disabled = true
                 subhead.length = 0
-                heads.forEach(e => {
-                    addSelectElement(head,e.id,e.title)
-                });
+                // heads.forEach(e => {
+                //     addSelectElement(head,e.id,e.title)
+                // });
                 headSelected()
                 break;
 
                 case 'tpl':
                 // Show Head
                 rptType = 'tpl'
-                head.setAttribute('required','')
-                head.disabled = false
-                head.length = 0
+                // head.setAttribute('required','')
+                // head.disabled = false
+                // head.length = 0
                 subhead.removeAttribute('required')
                 subhead.disabled = true
                 subhead.length = 0
-                heads.forEach(e => {
-                    addSelectElement(head,e.id,e.title)
-                });
+                // heads.forEach(e => {
+                //     addSelectElement(head,e.id,e.title)
+                // });
                 headSelected()
                 break;
 
@@ -1012,75 +954,75 @@ const getCominvsimpVoucherData = async (value) =>{
                 case 'gdnrcvd':
                 // Show Head
                 rptType = 'gdnrcvd'
-                head.setAttribute('required','')
-                head.disabled = false
-                head.length = 0
+                // head.setAttribute('required','')
+                // head.disabled = false
+                // head.length = 0
                 subhead.removeAttribute('required')
                 subhead.disabled = true
                 subhead.length = 0
-                heads.forEach(e => {
-                    addSelectElement(head,e.id,e.title)
-                });
+                // heads.forEach(e => {
+                //     addSelectElement(head,e.id,e.title)
+                // });
                 headSelected()
                 break;
 
                 case 'dtyclrnc':
                 // Show Head
                 rptType = 'dtyclrnc'
-                head.setAttribute('required','')
-                head.disabled = false
-                head.length = 0
+                // head.setAttribute('required','')
+                // head.disabled = false
+                // head.length = 0
                 subhead.removeAttribute('required')
                 subhead.disabled = true
                 subhead.length = 0
-                heads.forEach(e => {
-                    addSelectElement(head,e.id,e.title)
-                });
+                // heads.forEach(e => {
+                //     addSelectElement(head,e.id,e.title)
+                // });
                 headSelected()
                 break;
 
                 case 'dtypnding':
                 // Show Head
                 rptType = 'dtypnding'
-                head.setAttribute('required','')
-                head.disabled = false
-                head.length = 0
+                // head.setAttribute('required','')
+                // head.disabled = false
+                // head.length = 0
                 subhead.removeAttribute('required')
                 subhead.disabled = true
                 subhead.length = 0
-                heads.forEach(e => {
-                    addSelectElement(head,e.id,e.title)
-                });
+                // heads.forEach(e => {
+                //     addSelectElement(head,e.id,e.title)
+                // });
                 headSelected()
                 break;
 
                 case 'dtypnding':
                 // Show Head
                 rptType = 'dtypnding'
-                head.setAttribute('required','')
-                head.disabled = false
-                head.length = 0
+                // head.setAttribute('required','')
+                // head.disabled = false
+                // head.length = 0
                 subhead.removeAttribute('required')
                 subhead.disabled = true
                 subhead.length = 0
-                heads.forEach(e => {
-                    addSelectElement(head,e.id,e.title)
-                });
+                // heads.forEach(e => {
+                //     addSelectElement(head,e.id,e.title)
+                // });
                 headSelected()
                 break;
 
                 case 'pndcontr':
                 // Show Head
                 rptType = 'pndcontr'
-                head.setAttribute('required','')
-                head.disabled = false
-                head.length = 0
+                // head.setAttribute('required','')
+                // head.disabled = false
+                // head.length = 0
                 subhead.removeAttribute('required')
                 subhead.disabled = true
                 subhead.length = 0
-                heads.forEach(e => {
-                    addSelectElement(head,e.id,e.title)
-                });
+                // heads.forEach(e => {
+                //     addSelectElement(head,e.id,e.title)
+                // });
                 headSelected()
                 break;
 
@@ -1089,15 +1031,15 @@ const getCominvsimpVoucherData = async (value) =>{
                 case 'impcominvspc':
                 // Show Head
                 rptType = 'impcominvspc'
-                head.setAttribute('required','')
-                head.disabled = false
-                head.length = 0
+                // head.setAttribute('required','')
+                // head.disabled = false
+                // head.length = 0
                 subhead.removeAttribute('required')
                 subhead.disabled = true
                 subhead.length = 0
-                heads.forEach(e => {
-                    addSelectElement(head,e.id,e.title)
-                });
+                // heads.forEach(e => {
+                //     addSelectElement(head,e.id,e.title)
+                // });
                 headSelected()
                 break;
 
@@ -1106,30 +1048,30 @@ const getCominvsimpVoucherData = async (value) =>{
             case 'impcominvs':
                 // Show Head
                 rptType = 'impcominvs'
-                head.setAttribute('required','')
-                head.disabled = false
-                head.length = 0
+                // head.setAttribute('required','')
+                // head.disabled = false
+                // head.length = 0
                 subhead.removeAttribute('required')
                 subhead.disabled = true
                 subhead.length = 0
-                heads.forEach(e => {
-                    addSelectElement(head,e.id,e.title)
-                });
+                // heads.forEach(e => {
+                //     addSelectElement(head,e.id,e.title)
+                // });
                 headSelected()
                 break;
 
                 case 'dtysmry':
                 // Show Head
                 rptType = 'dtysmry'
-                head.setAttribute('required','')
-                head.disabled = false
-                head.length = 0
+                // head.setAttribute('required','')
+                // head.disabled = false
+                // head.length = 0
                 subhead.removeAttribute('required')
                 subhead.disabled = true
                 subhead.length = 0
-                heads.forEach(e => {
-                    addSelectElement(head,e.id,e.title)
-                });
+                // heads.forEach(e => {
+                //     addSelectElement(head,e.id,e.title)
+                // });
                 headSelected()
                 break;
 
@@ -1147,45 +1089,45 @@ const getCominvsimpVoucherData = async (value) =>{
                 case 'loccominvs':
                 // Show Head
                 rptType = 'loccominvs'
-                head.setAttribute('required','')
-                head.disabled = false
-                head.length = 0
+                // head.setAttribute('required','')
+                // head.disabled = false
+                // head.length = 0
                 subhead.removeAttribute('required')
                 subhead.disabled = true
                 subhead.length = 0
-                heads.forEach(e => {
-                    addSelectElement(head,e.id,e.title)
-                });
+                // heads.forEach(e => {
+                //     addSelectElement(head,e.id,e.title)
+                // });
                 headSelected()
                 break;
 
                 case 'cominvsimp':
                 // Show Head
                 rptType = 'cominvsimp'
-                head.setAttribute('required','')
-                head.disabled = false
-                head.length = 0
+                // head.setAttribute('required','')
+                // head.disabled = false
+                // head.length = 0
                 subhead.removeAttribute('required')
                 subhead.disabled = true
                 subhead.length = 0
-                heads.forEach(e => {
-                    addSelectElement(head,e.id,e.title)
-                });
+                // heads.forEach(e => {
+                //     addSelectElement(head,e.id,e.title)
+                // });
                 headSelected()
                 break;
 
             case 'imppurhist':
                 // Show Head
                 rptType = 'imppurhist'
-                head.setAttribute('required','')
-                head.disabled = false
-                head.length = 0
+                // head.setAttribute('required','')
+                // head.disabled = false
+                // head.length = 0
                 subhead.removeAttribute('required')
                 subhead.disabled = true
                 subhead.length = 0
-                heads.forEach(e => {
-                    addSelectElement(head,e.id,e.title)
-                });
+                // heads.forEach(e => {
+                //     addSelectElement(head,e.id,e.title)
+                // });
                 headSelected()
                 break;
 
@@ -1197,15 +1139,15 @@ const getCominvsimpVoucherData = async (value) =>{
                 case 'locpurhist':
                 // Show Head
                 rptType = 'locpurhist'
-                head.setAttribute('required','')
-                head.disabled = false
-                head.length = 0
+                // head.setAttribute('required','')
+                // head.disabled = false
+                // head.length = 0
                 subhead.removeAttribute('required')
                 subhead.disabled = true
                 subhead.length = 0
-                heads.forEach(e => {
-                    addSelectElement(head,e.id,e.title)
-                });
+                // heads.forEach(e => {
+                //     addSelectElement(head,e.id,e.title)
+                // });
                 headSelected()
                 break;
 
@@ -1232,13 +1174,13 @@ const getCominvsimpVoucherData = async (value) =>{
             case 'agng':
                 // Show Head
                 rptType = 'agng'
-                head.setAttribute('required','')
-                head.disabled = false
-                head.length = 0
-                heads.forEach(e => {
-                    // console.info(e)
-                    addSelectElement(head,e.id,e.title)
-                });
+                // head.setAttribute('required','')
+                // head.disabled = false
+                // head.length = 0
+                // heads.forEach(e => {
+                //     // console.info(e)
+                //     addSelectElement(head,e.id,e.title)
+                // });
                 subhead.setAttribute('required','')
                 subhead.disabled = false
                 break;
@@ -1247,23 +1189,153 @@ const getCominvsimpVoucherData = async (value) =>{
 
 
     document.addEventListener('DOMContentLoaded',()=>{
-        heads.forEach(e => {
-                    addSelectElement(head,e.id,e.title)
-                });
-                headSelected()
+        // heads.forEach(e => {
+        //             addSelectElement(head,e.id,e.title)
+        //         });
+        //         headSelected()
+
+                // sources.forEach(e => {
+                //     addSelectElement(source,e.id,e.title)
+                // });
+
+                var sid = document.getElementById("source_id");
+    var source_id = sid.options[sid.selectedIndex];
+
+
+    const value = source_id.value
+
+//   console.info(value)
+  //  const value = 6
+fetch(funcgetsuplr + `?source_id=${value} `,{
+            method:"GET",
+            headers: { 'Accept':'application/json','Content-type':'application/json'},
+            })
+            .then(response => response.json())
+            .then( data => {
+                if(data.length > 0)
+                {
+
+
+                //     head.length = 0
+                // heads.forEach(e => {
+
+                //     addSelectElement(head,e.id,e.title)
+                // });
+
+
+                head.length = 0
+                    let a = 0;
+                    data.forEach(e => {
+
+                        a += 1;
+                        addSelectElement(head,e.id,e.title)
+                    });
+                    // heads.setAttribute('required','')
+                    // heads.removeAttribute('disabled','')
+                }else{
+                    // heads.removeAttribute('required','')
+                    // heads.setAttribute('disabled','')
+                }
+            })
+            .catch(error => console.error(error))
+        // break;
+
+// FOR CONTRACT FILL
+const getSubheadVoucherData1 = async (value) =>{
+let data = await fetch(funcgetsuplr + `?source_id=${value} `,{
+    method:"GET",
+    headers: { 'Accept':'application/json','Content-type':'application/json'},
+    })
+    .then(response => response.json())
+    .then( data => { return data })
+    .catch(error => console.error(error))
+}
+const getFuncgetsuplr =async  (value) => {
+const Funcgetsuplr = await getSubheadVoucherData1(value)
+return Funcgetsuplr
+}
+
+
+
+
+
+
 
 
     });
 
-    // head_id.addEventListener("change", () => {
+ source_id.addEventListener("change", () => {
 
-    //     if('glhw' === true)
-    //     {
-    //         console.log('glhw')
+    var sid = document.getElementById("source_id");
+    var source_id = sid.options[sid.selectedIndex];
 
-    //     }
 
-    // });
+    const value = source_id.value
+
+//   console.info(value)
+  //  const value = 6
+fetch(funcgetsuplr + `?source_id=${value} `,{
+            method:"GET",
+            headers: { 'Accept':'application/json','Content-type':'application/json'},
+            })
+            .then(response => response.json())
+            .then( data => {
+                if(data.length > 0)
+                {
+
+
+                //     head.length = 0
+                // heads.forEach(e => {
+
+                //     addSelectElement(head,e.id,e.title)
+                // });
+
+
+                head.length = 0
+                subhead.length=0
+                    let a = 0;
+                    data.forEach(e => {
+
+                        a += 1;
+                        addSelectElement(head,e.id,e.title)
+                    });
+                    // heads.setAttribute('required','')
+                    // heads.removeAttribute('disabled','')
+                }else{
+                    // heads.removeAttribute('required','')
+                    // heads.setAttribute('disabled','')
+                }
+            })
+            .catch(error => console.error(error))
+        // break;
+
+// FOR CONTRACT FILL
+const getSubheadVoucherData1 = async (value) =>{
+let data = await fetch(funcgetsuplr + `?source_id=${value} `,{
+    method:"GET",
+    headers: { 'Accept':'application/json','Content-type':'application/json'},
+    })
+    .then(response => response.json())
+    .then( data => { return data })
+    .catch(error => console.error(error))
+}
+const getFuncgetsuplr =async  (value) => {
+const Funcgetsuplr = await getSubheadVoucherData1(value)
+return Funcgetsuplr
+}
+
+});
+
+
+
+head_id.addEventListener("change", () => {
+
+
+
+
+
+
+});
 
 
 </script>

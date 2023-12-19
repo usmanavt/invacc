@@ -70,7 +70,7 @@ class BankRecivingsController extends Controller
         // ->join('suppliers', 'contracts.supplier_id', '=', 'suppliers.id')
         // ->select('contracts.*', 'suppliers.title')
         // ->with('customer:id,title')
-        ->where('bank', 'like', "%$search%")
+        ->where('cheque_no', 'like', "%$search%")
         // ->orWhere('trantype', 'like', "%$search%")
         //  ->orWhere('ref', 'like', "%$search%")
         ->orderBy($field,$dir)
@@ -100,7 +100,7 @@ class BankRecivingsController extends Controller
     {
         // dd($request->all());
         $this->validate($request,[
-            'bank_id' => 'required',
+            // 'bank_id' => 'required',
             'head_id' => 'required',
             // 'conversion_rate' => 'required|numeric',
             // 'received' => 'required|numeric',
@@ -113,16 +113,18 @@ class BankRecivingsController extends Controller
         DB::beginTransaction();
         try {
             $bt = new ChequeTransaction();
-            $bt->bank_id = $request->bank_id;
-            // $bt->transaction_type = 'BRV';
+            // $bt->bank_id = $request->bank_id;
             $bt->head_id = $request->head_id;
-            // $bt->conversion_rate = $request->conversion_rate;
             $bt->received = $request->received;
+            // $bt->chqinvbal = $request->received * -1;
+
             $bt->payment = $request->received * $request->conversion_rate;
             $bt->cheque_no = $request->cheque_no;
             $bt->cheque_date = $request->cheque_date;
             $bt->description = $request->description;
             $bt->documentdate = $request->documentdate;
+            $bt->banknaration = $request->banknaration;
+
             if($request->has('subhead_id'))     $bt->subhead_id = $request->subhead_id;
             if($request->has('supplier_id'))    $bt->supplier_id = $request->supplier_id;
             if($request->has('customer_id'))    $bt->customer_id = $request->customer_id;
@@ -152,7 +154,7 @@ class BankRecivingsController extends Controller
     {
         // dd($request->all(),$bt);
         $this->validate($request,[
-            'bank_id' => 'required',
+            // 'bank_id' => 'required',
             'head_id' => 'required',
             // 'conversion_rate' => 'required|numeric',
             // 'received' => 'required|numeric',
@@ -164,7 +166,7 @@ class BankRecivingsController extends Controller
         DB::beginTransaction();
         try {
             $bt = ChequeTransaction::findOrFail($request->id);
-            $bt->bank_id = $request->bank_id;
+            // $bt->bank_id = $request->bank_id;
             $bt->head_id = $request->head_id;
             // $bt->conversion_rate = $request->conversion_rate;
             $bt->received = $request->received;
@@ -172,6 +174,8 @@ class BankRecivingsController extends Controller
             $bt->cheque_no = $request->cheque_no;
             $bt->cheque_date = $request->cheque_date;
             $bt->description = $request->description;
+            $bt->banknaration = $request->banknaration;
+            $bt->documentdate = $request->documentdate;
             if($request->has('subhead_id')){$bt->subhead_id = $request->subhead_id;}else { $bt->subhead_id= 0;}
             if($request->has('supplier_id')){ $bt->supplier_id = $request->supplier_id;} else { $bt->supplier_id = 0;}
             if($request->has('customer_id')) { $bt->customer_id = $request->customer_id;} else { $bt->customer_id = 0;}

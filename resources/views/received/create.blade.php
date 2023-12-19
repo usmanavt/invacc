@@ -55,14 +55,23 @@
                         </div>
 
                         <div class="grid grid-cols-12 gap-2 py-2 items-center">
-                            <x-input-numeric title="Received Amount" name="amount_fc" id="amount_fc" class="col-span-2" disabled     />
+
+                            <x-input-numeric title="Prvs. Credit Amount" name="prvscrdtamt" id="prvscrdtamt" class="col-span-2" disabled     />
+                            <x-input-numeric title="Prvs. Invs.Clrd Amount" name="prvsinvsamt" id="prvsinvsamt" class="col-span-2" disabled     />
+                            <x-input-numeric title="Credit Amount" name="amount_fc" id="amount_fc" class="col-span-2" disabled     />
+                            <input class="checked:bg-blue-500 checked:border-blue-500 focus:outline-none" type="checkbox" name="per" id="per" onclick="EnableDisableTextBox(this)" >
+
+
+                        </div>
+
+                        <div>
                             <label for="">
                                 Description <span class="text-red-500 font-semibold  ">(*)</span>
                                 </label>
                             <textarea name="description" id="description" cols="150" rows="2" maxlength="150" class="col-span-2" required class="rounded"></textarea>
                             <label for="">
 
-                                Invoice Level Receive <span class="text-red-500 font-semibold  ">(*)</span>
+                                {{-- Invoice Level Receive <span class="text-red-500 font-semibold  ">(*)</span>
                             </label>
                             <input class="checked:bg-blue-500 checked:border-blue-500 focus:outline-none"  type="checkbox" name="per" id="per" checked=true onclick="EnableDisableTextBox(this)" >
 
@@ -70,7 +79,7 @@
                         <label for="">
                             Advance Received For Clearance Future Invoices <span class="text-red-500 font-semibold  ">(*)</span>
                             </label>
-                        <input class="checked:bg-blue-500 checked:border-blue-500 focus:outline-none"  type="checkbox" name="adv" id="adv"  onclick="advpayment(this)" >
+                        <input class="checked:bg-blue-500 checked:border-blue-500 focus:outline-none"  type="checkbox" name="adv" id="adv"  onclick="advpayment(this)" > --}}
 
 
                             <x-input-numeric title="" name="conversion_rate" id="conversion_rate"  class="col-span-2" hidden   />
@@ -231,9 +240,9 @@
                 {title:"Id", field:"id" , responsive:0},
                 {title:"", field:"mheadid" , responsive:0,visible:false},
                 {title:"Master Head", field:"mhead" , responsive:0},
-
                 {title:"Sub Head", field:"custname" , visible:true ,headerSort:false, responsive:0},
-                // {title:"P.R No", field:"prno" , visible:true ,headerSort:false, responsive:0},
+                {title:"Cheque No", field:"cheque_no" , visible:true ,headerSort:false, responsive:0},
+                {title:"Cheque Date", field:"cheque_date" , visible:true ,headerSort:false, responsive:0},
                 // {title:"Quotation Values", field:"totrcvbamount", visible:true ,headerSort:false, responsive:0},
                 // {title:"Valid Date", field:"dvaldate" , responsive:0},
 
@@ -258,6 +267,14 @@
              supplier_id=data.id
              head_id = data.head_id
              custname.value=data.custname
+             cheque_no.value=data.cheque_no
+             cheque_date.value=data.cheque_date
+
+             prvscrdtamt.value=data.crdtcust
+             prvsinvsamt.value=data.invsclrd
+             amount_fc.value=data.AdvanceAmount
+
+
             detailsUrl = `${getDetails}/?id=${data.id}`
             fetchDataFromServer(detailsUrl)
             adopted = true
@@ -403,6 +420,12 @@ var headerMenu = function(){
 var tamount=0;
     function tnetamount()
         {
+
+
+            // console.log(tamount)
+            amount_fc.value= (prvsinvsamt.value - prvscrdtamt.value) + tamount
+            // console.log(amount_fc.value)
+
             //  discntamt.value=0;
             //   rcvblamount.value=0;
             // discntamt.value=(tamount*discntper.value/100).toFixed(0);
@@ -420,14 +443,14 @@ var tamount=0;
 
 var updateValues = (cell) => {
         var data = cell.getData();
-        // var sum = (Number(data.payedusd) * Number(data.convrate))
+        var sum = (Number(data.totrcvd) )
         var invbal = (Number(data.totrcvble) - Number(data.totrcvd))
         // var varqty = ( Number(data.balqty) - Number(data.saleqty) )
         var row = cell.getRow();
         row.update({
             //  "payedrup": sum,
-             "invoice_bal":invbal
-            //  totalVal: sum
+             "invoice_bal":invbal,
+             totalVal1: sum
 
         });
     }
@@ -437,11 +460,25 @@ var updateValues = (cell) => {
         values.forEach(function(value){
             calc += Number(value) ;
         });
+        // tamount = calc;
+        // tnetamount();
+        return calc;
+
+    }
+
+
+    var totalVal1 = function(values, data, calcParams){
+        var calc = 0;
+        values.forEach(function(value){
+            calc += Number(value) ;
+        });
         tamount = calc;
         tnetamount();
         return calc;
 
     }
+
+
 
 
 
@@ -563,7 +600,7 @@ var updateValues = (cell) => {
                         // {
                         //     return (cell.getData().payedusd * cell.getData().convrate).toFixed(0)
                         // },
-                        bottomCalc:totalVal  },
+                        bottomCalc:totalVal1  },
                     ]},
 
                     {title:"Invoice Balance.",
@@ -665,16 +702,16 @@ var updateValues = (cell) => {
 
         function EnableDisableTextBox(per) {
         var amount_fc = document.getElementById("amount_fc");
-        amount_fc.disabled = per.checked ? true : false;
+        amount_fc.disabled = per.checked ? false : true;
         amount_fc.style.color ="black";
-        amount_fc.value =0;
+        // amount_fc.value =0;
 
 
-        var conversion_rate = document.getElementById("conversion_rate");
-        conversion_rate.disabled = per.checked ? true : false;
-        conversion_rate.style.color ="black";
-        amount_pkr.value =0;
-        conversion_rate.value =1;
+        // var conversion_rate = document.getElementById("conversion_rate");
+        // conversion_rate.disabled = per.checked ? true : false;
+        // conversion_rate.style.color ="black";
+        // amount_pkr.value =0;
+        // conversion_rate.value =1;
 
 
     }

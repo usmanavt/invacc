@@ -76,18 +76,20 @@ class LocalPurchaseController  extends Controller
     public function matMaster(Request $request)
     {
         $search = $request->search;
+        $supplierId = $request->supplierId;
         $size = $request->size;
         $field = $request->sort[0]["field"];     //  Nested Array
         $dir = $request->sort[0]["dir"];         //  Nested Array
-        $supplierId = $request->supplierId;
+        // $xyz = $request->supplierId;
 
-        //  dd($supplierId);
+        //   dd($supplierId);
         // return $supplierId;
 
         //  With Tables
         $materials = Material::where(function ($query) use ($search){
-            $query->where('source_id','<>',2)
-            ->where('srchi','LIKE','%' . $search. '%');
+            $query->where('source_id','<>',2);
+            // $query->where('brand_id','=',$supplierId)
+            // ->where('srchi','LIKE','%' . $search. '%');
         })
         ->orderBy($field,$dir)
         ->paginate((int) $size);
@@ -103,6 +105,29 @@ class LocalPurchaseController  extends Controller
         ->paginate((int) $size);
         return $contractDetails;
     }
+
+    public function getLocPurIndex(Request $request)
+    {
+
+        $search = $request->search;
+        $size = $request->size;
+        $field = $request->sort[0]["field"];     //  Nested Array
+        $dir = $request->sort[0]["dir"];         //  Nested Array
+        // $cis1 = DB::select('call procpaymentindex');
+        $cis = DB::table('vwlocpurindex')
+        // ->join('suppliers', 'contracts.supplier_id', '=', 'suppliers.id')
+        // ->select('contracts.*', 'suppliers.title')
+        // ->with('customer:id,title')
+        ->where('invoiceno', 'like', "%$search%")
+        ->orWhere('supname', 'like', "%$search%")
+        //  ->orWhere('ref', 'like', "%$search%")
+        ->orderBy($field,$dir)
+        ->paginate((int) $size);
+        return $cis;
+
+    }
+
+
 
 
     // public function getDetails(Request $request)
@@ -153,7 +178,7 @@ class LocalPurchaseController  extends Controller
             $ci->invoiceno = $request->number;
             $ci->gpassno = $request->gpassno;
             $ci->contract_id = 0;
-            $ci->challanno = $request->number;
+            $ci->challanno = $request->challanno;
             $ci->supplier_id = $request->supplier_id;
             $ci->machine_date = $request->invoice_date;
             // $ci->machineno = $request->number;
@@ -304,7 +329,7 @@ class LocalPurchaseController  extends Controller
             $commercialinvoice->invoice_date = $request->invoice_date;
             $commercialinvoice->supplier_id = $request->supplier_id;
             $commercialinvoice->contract_id = 0;
-            $commercialinvoice->challanno = $request->invoiceno;
+            $commercialinvoice->challanno = $request->challanno;
             $commercialinvoice->machine_date = $request->invoice_date;
             $commercialinvoice->machineno = $request->invoiceno;
 

@@ -75,6 +75,7 @@ class VoucherController extends Controller
                 $v->transaction = $transaction_id;
                 $v->document_date = $request->document_date;
                 $v->jvno = $request->document_no;
+                $v->cheque_no = $request->cheque_no;
                 $v->transaction_type = $vuch['transaction_type'];
                 // $v->jvno = $vuch['jvno'];
                 $v->amount = $vuch['amount'];
@@ -88,6 +89,13 @@ class VoucherController extends Controller
                 }
                 $v->save();
             }
+
+            DB::update(DB::raw("
+            UPDATE cheque_transactions c
+            INNER JOIN (SELECT distinct jvno,document_date,cheque_no,'JV' as transaction_type,subhead_id as bank_id FROM vouchers WHERE head_id=34 AND jvno=$v->jvno) x
+            ON c.cheque_no=x.cheque_no
+            SET c.bank_id=x.bank_id, c.clrstatus=1,c.clrdate=x.document_date,clrid=x.jvno,c.ref=CONCAT(x.transaction_type,'-',LPAD(x.jvno,4,'0')) "));
+
             DB::commit();
             Session::flash('success','Journal Voucer created');
             return response()->json(['success'],200);
@@ -103,10 +111,12 @@ class VoucherController extends Controller
         $vouchers = Voucher::where('transaction',$id)->get();
         $dd = Voucher::select('document_date')->where('transaction',$id)->first();
         $dd1 = Voucher::select('jvno')->where('transaction',$id)->first();
+        $dd2 = Voucher::select('cheque_no')->where('transaction',$id)->first();
         return view('journalvouchers.edit')
         ->with('jvs',$vouchers)
         ->with('transaction',$id)
         ->with('document_date',$dd->document_date)
+        ->with('cheque_no',$dd2->cheque_no)
         ->with('jvno',$dd1->jvno)
         ->with('heads',Head::select(['id','title'])->where('status',1)->get()) //
         ->with('subheads',DB::table('VwCategory')->select('*')->get()->toArray());
@@ -128,6 +138,7 @@ class VoucherController extends Controller
                 //    dd($request->all());
 
                 $v->document_date = $request->jvdate;
+                $v->cheque_no = $request->cheque_no;
                 $v->head_title = $vuch['head_title'];
                 $v->subhead_title = $vuch['subhead_title'];
                 $sub = DB::select('select * from VwCategory where mtitle = ? AND title = ? LIMIT 1', [ $vuch['head_title'], $vuch['subhead_title']]);
@@ -144,6 +155,17 @@ class VoucherController extends Controller
                 }
                 $v->save();
             }
+
+            DB::update(DB::raw("
+            UPDATE cheque_transactions c
+            INNER JOIN (SELECT distinct jvno,document_date,cheque_no,'JV' as transaction_type,subhead_id as bank_id FROM vouchers WHERE head_id=34 AND jvno=$v->jvno) x
+            ON c.cheque_no=x.cheque_no
+            SET c.bank_id=x.bank_id, c.clrstatus=1,c.clrdate=x.document_date,clrid=x.jvno,c.ref=CONCAT(x.transaction_type,'-',LPAD(x.jvno,4,'0')) "));
+
+
+
+
+
             DB::commit();
             Session::flash('success','Journal Voucer Updated');
             return response()->json(['success'],200);

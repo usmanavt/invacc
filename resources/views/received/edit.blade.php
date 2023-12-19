@@ -49,9 +49,11 @@
                             <select autocomplete="on"  name="bank_id" id="bank_id" class="col-span-2" >
                                 <option value="" selected>--Payment From</option>
                                 @foreach($banks as $bank)
-                                @if ($bank->id == $banktransaction->bank_id)
-                                    <option value="{{$bank->id}}" selected> {{$bank->title}} </option>
-                                @endif
+                                {{-- @if ($bank->id == $banktransaction->bank_id) --}}
+                                    {{-- <option value="{{$bank->id}}" selected> {{$bank->title}} </option> --}}
+                                    <option value="{{ $bank->id }}" @if ($bank->id == $banktransaction->bank_id) selected @endif>{{$bank->title}}</option>
+
+                                {{-- @endif --}}
                                 @endforeach
                             </select>
 
@@ -61,14 +63,14 @@
                         </div>
 
                         <div class="grid grid-cols-12 gap-2 py-2 items-center">
-                            <x-input-numeric title="Received Amount" name="amount_fc" id="amount_fc" class="col-span-2" value="{{ $banktransaction->amount_fc }}"   disabled     />
+                            <x-input-numeric title="Received Amount" name="amount_fc" id="amount_fc" class="col-span-2" value="{{ $banktransaction->amount_fc }}"      />
 
                                 <label for="">
                                     Description <span class="text-red-500 font-semibold  ">(*)</span>
                                     </label>
                                 <textarea name="description" id="description" cols="150" rows="2" maxlength="150" class="col-span-2" required class="rounded"> {{ $banktransaction->description }} </textarea>
 
-                                <label for="">
+                                {{-- <label for="">
                                     Invoice Level Receive <span class="text-red-500 font-semibold  ">(*)</span>
                                     </label>
                                 <input class="checked:bg-blue-500 checked:border-blue-500 focus:outline-none "  type="checkbox" name="per" id="per" @if( $banktransaction->invslvl==1  )  checked else unchecked @endif   onclick="EnableDisableTextBox(this)" >
@@ -77,7 +79,7 @@
                                 <label for="">
                                     Advance Receive For Clearance Future Invoices <span class="text-red-500 font-semibold  ">(*)</span>
                                     </label>
-                                <input class="checked:bg-blue-500 checked:border-blue-500 focus:outline-none"  type="checkbox" name="adv" id="adv" @if( $banktransaction->advance==1  )  checked else unchecked @endif    onclick="advpayment(this)" >
+                                <input class="checked:bg-blue-500 checked:border-blue-500 focus:outline-none"  type="checkbox" name="adv" id="adv" @if( $banktransaction->advance==1  )  checked else unchecked @endif    onclick="advpayment(this)" > --}}
 
                                 <x-input-numeric title="" name="conversion_rate" id="conversion_rate" class="col-span-2" hidden value="{{ $banktransaction->conversion_rate }}" disabled   />
                                 <x-input-numeric title="" name="amount_pkr" id="amount_pkr" class="col-span-2" hidden value="{{ $banktransaction->amount_pkr }}" disabled />

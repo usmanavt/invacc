@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Models\Head;
 use App\Models\Supplier;
+use App\Models\Source;
+
 use \Mpdf\Mpdf as PDF;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -18,10 +20,10 @@ class PurchaseRptController extends Controller
 
         $fromdate = $request->fromdate;
         $todate = $request->todate;
+        $xyz = $request->source_id;
 
 
 
-        //  dd($fromdate);
         return view('purrpt.index')
         ->with('heads',Supplier::where('status',1)->get())
         ->with('glheads',Supplier::where('status',1)->get())
@@ -31,7 +33,9 @@ class PurchaseRptController extends Controller
         ->with('subheadsciloc',DB::table('vwsupcategoryloccominv')->select('*')->whereBetween('invoice_date',[$fromdate,$todate])->get()->toArray())
         ->with('subheadspend',DB::table('vwpendcontinvs')->select('*')->get()->toArray())
         ->with('subheadscomp',DB::table('vwcompcontinvs')->select('*')->get()->toArray())
+        ->with('sources',Source::whereIn('id',[2,13])->get())
         ;
+
     }
 
     public function contlistfill(Request $request)
@@ -60,6 +64,16 @@ class PurchaseRptController extends Controller
         $head = $request->head;
         return  DB::select('call procpurcategory(?,?,?)',array($fromdate,$todate,$head));
     }
+
+
+    public function funcgetsuplr(Request $request)
+    {
+    //  dd($request->all());
+
+        $src = $request->source_id;
+        return  DB::select('call procgetsupplier(?)',array($src));
+    }
+
 
 
     public function cominvsloc(Request $request)

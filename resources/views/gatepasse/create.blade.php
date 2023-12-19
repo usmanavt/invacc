@@ -740,9 +740,9 @@ var updateValues = (cell) => {
         }
 
         function EnableDisableTextBox(per) {
-        var purseqid = document.getElementById("purseqid");
-        purseqid.disabled = per.checked ? false : true;
-        purseqid.style.color ="black";
+        var gpseqid = document.getElementById("gpseqid");
+        gpseqid.disabled = per.checked ? false : true;
+        gpseqid.style.color ="black";
         // if (!discntper.disabled) {
         //     discntper.focus();
         // }

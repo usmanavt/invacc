@@ -103,7 +103,7 @@ class ReceiveController  extends Controller
         // ->join('suppliers', 'contracts.supplier_id', '=', 'suppliers.id')
         // ->select('contracts.*', 'suppliers.title')
         ->where('custname', 'like', "%$search%")
-        // ->orWhere('prno', 'like', "%$search%")
+        ->orWhere('cheque_no', 'like', "%$search%")
         ->orderBy($field,$dir)
         ->paginate((int) $size);
         return $contracts;
@@ -163,8 +163,19 @@ class ReceiveController  extends Controller
             }
             $ci->documentdate = $request->documentdate;
             $ci->conversion_rate = 0;
-            $ci->amount_fc = $request->amount_fc;
-            $ci->amount_pkr = $request->amount_fc;
+            if($request->amount_fc<=0)
+            {
+
+                $ci->amount_fc = 0;
+                $ci->amount_pkr = 0;
+
+            }
+            else
+            {
+                $ci->amount_fc = $request->amount_fc;
+                $ci->amount_pkr = $request->amount_fc;
+
+            }
             $ci->cheque_date = $request->cheque_date;
             $ci->cheque_no = $request->cheque_no;
             $ci->description = $request->description;
@@ -202,20 +213,33 @@ class ReceiveController  extends Controller
              }
             }
 
-            DB::update(DB::raw("
-            UPDATE bank_transactions c
-            INNER JOIN (
-            SELECT receivedid,SUM(totrcvd) AS totrcvd
-            FROM receive_details WHERE receivedid=$ci->id GROUP BY receivedid
-            ) x ON c.id = x.receivedid
-            SET c.amount_fc = x.totrcvd,c.amount_pkr=x.totrcvd,c.conversion_rate=0
-            where  c.id = $ci->id "));
+            // DB::update(DB::raw("
+            // UPDATE bank_transactions c
+            // INNER JOIN (
+            // SELECT receivedid,SUM(totrcvd) AS totrcvd
+            // FROM receive_details WHERE receivedid=$ci->id GROUP BY receivedid
+            // ) x ON c.id = x.receivedid
+            // SET c.amount_fc = x.totrcvd,c.amount_pkr=x.totrcvd,c.conversion_rate=0
+            // where  c.id = $ci->id "));
+
+            // dd($ci->cheque_no);
 
             DB::update(DB::raw("
             UPDATE cheque_transactions c
             INNER JOIN (SELECT id,documentdate,cheque_no,transaction_type,bank_id FROM bank_transactions WHERE bank_id>3 AND id=$ci->id) x
-            ON c.cheque_no=x.cheque_no and c.bank_id=x.bank_id
-            SET c.clrstatus=1,c.clrdate=x.documentdate,clrid=x.id,c.ref=CONCAT(x.transaction_type,'-',LPAD(x.id,4,'0')) "));
+            ON c.cheque_no=x.cheque_no
+            SET c.bank_id=x.bank_id, c.clrstatus=1,c.clrdate=x.documentdate,clrid=x.id,c.ref=CONCAT(x.transaction_type,'-',LPAD(x.id,4,'0')) "));
+
+            DB::update(DB::raw("
+            UPDATE cheque_transactions c
+            INNER JOIN (
+            SELECT cheque_no,SUM(totrcvd) AS invsamount,max(b.amount_fc) as chqamount    FROM receive_details AS a INNER JOIN bank_transactions AS b
+				ON a.receivedid=b.id WHERE b.cheque_no= (select cheque_no from bank_transactions where id=$ci->id)  GROUP BY cheque_no
+            ) x ON c.cheque_no = x.cheque_no
+            SET c.invsclrd = x.invsamount,c.crdtcust=x.chqamount
+            WHERE  c.cheque_no =  (select cheque_no from bank_transactions where id=$ci->id)  "));
+
+
 
 
 
@@ -245,6 +269,7 @@ class ReceiveController  extends Controller
 
         // $stockdtl = DB::select('call procdetailquotations(?,?)',array( $id,2 ));
         $cd = DB::table('receive_details')
+        // receive_details
         // ->join('materials', 'materials.id', '=', 'customer_order_details.material_id')
         // ->join('skus', 'skus.id', '=', 'customer_order_details.sku_id')
         // ->leftJoin('tmptblinvswsstock','tmptblinvswsstock.material_id', '=', 'customer_order_details.material_id')
@@ -287,8 +312,22 @@ class ReceiveController  extends Controller
             }
             $ci->documentdate = $request->documentdate;
             $ci->conversion_rate = 0;
-            $ci->amount_fc = $request->amount_fc;
-            $ci->amount_pkr = $request->amount_fc;
+
+            if($request->amount_fc<=0)
+            {
+
+                $ci->amount_fc = 0;
+                $ci->amount_pkr = 0;
+
+            }
+            else
+            {
+                $ci->amount_fc = $request->amount_fc;
+                $ci->amount_pkr = $request->amount_fc;
+
+            }
+
+
             $ci->cheque_date = $request->cheque_date;
             $ci->cheque_no = $request->cheque_no;
             $ci->description = $request->description;
@@ -317,6 +356,8 @@ class ReceiveController  extends Controller
             $cds = ReceiveDetails::where('id',$cd->id)->first();
             if($cd['totrcvd'] <> 0)
             {
+
+
 
                     $cds->receivedid = $ci->id;
                     $cds->invoice_id = $cd['invoice_id'];
@@ -355,14 +396,23 @@ class ReceiveController  extends Controller
                     }
             }
 
+
+
+            // DB::update(DB::raw("
+            // UPDATE bank_transactions c
+            // INNER JOIN (
+            // SELECT receivedid,SUM(totrcvd) AS totrcvd
+            // FROM receive_details WHERE receivedid=$ci->id GROUP BY receivedid
+            // ) x ON c.id = x.receivedid
+            // SET c.amount_fc = x.totrcvd,c.amount_pkr=x.totrcvd,c.conversion_rate=0
+            // where  c.id = $ci->id "));
+
             DB::update(DB::raw("
-            UPDATE bank_transactions c
-            INNER JOIN (
-            SELECT receivedid,SUM(totrcvd) AS totrcvd
-            FROM receive_details WHERE receivedid=$ci->id GROUP BY receivedid
-            ) x ON c.id = x.receivedid
-            SET c.amount_fc = x.totrcvd,c.amount_pkr=x.totrcvd,c.conversion_rate=0
-            where  c.id = $ci->id "));
+            UPDATE cheque_transactions c
+            INNER JOIN (SELECT id,documentdate,cheque_no,transaction_type,bank_id FROM bank_transactions WHERE bank_id>3 AND id=$ci->id) x
+            ON c.cheque_no=x.cheque_no
+            SET c.bank_id=x.bank_id, c.clrstatus=1,c.clrdate=x.documentdate,clrid=x.id,c.ref=CONCAT(x.transaction_type,'-',LPAD(x.id,4,'0')) "));
+
 
             DB::update(DB::raw("
             UPDATE sale_invoices c
@@ -377,6 +427,18 @@ class ReceiveController  extends Controller
             INNER JOIN (SELECT id,documentdate,cheque_no,transaction_type,bank_id FROM bank_transactions WHERE bank_id>3 AND id=$ci->id) x
             ON c.cheque_no=x.cheque_no and c.bank_id=x.bank_id
             SET c.clrstatus=1,c.clrdate=x.documentdate,clrid=x.id,c.ref=CONCAT(x.transaction_type,'-',LPAD(x.id,4,'0')) "));
+
+
+            DB::update(DB::raw("
+            UPDATE cheque_transactions c
+            INNER JOIN (
+            SELECT cheque_no,SUM(totrcvd) AS invsamount,max(b.amount_fc) as chqamount    FROM receive_details AS a INNER JOIN bank_transactions AS b
+				ON a.receivedid=b.id WHERE b.cheque_no= (select cheque_no from bank_transactions where id=$ci->id )  GROUP BY cheque_no
+            ) x ON c.cheque_no = x.cheque_no
+            SET c.invsclrd = x.invsamount,c.crdtcust=x.chqamount
+            WHERE  c.cheque_no =  (select cheque_no from bank_transactions where id=$ci->id) "));
+
+
 
 
             DB::commit();

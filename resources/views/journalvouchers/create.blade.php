@@ -21,11 +21,25 @@
                     <div class="flex">
                         <form action="{{ route('jv.store') }}" method="post" >
                         @csrf
-                        <fieldset class="border px-4 py-2 rounded">
+                        <fieldset class="max-w-7xl border px-4 py-2 gap-4 rounded">
                             <legend>Transaction Date</legend>
                             <x-input-date title="Dcoument Date" name="document_date" req required/>
                             <x-input-text title="Dcoument No" name="document_no" value="{{$maxjvno}}"/>
+                            <x-input-text title="Cheque No" name="cheque_no" id="cheque_no" req required class="col-span-2" disabled  />
+                            <input class="checked:bg-blue-500 checked:border-blue-500 focus:outline-none" type="checkbox" name="per" id="per" onclick="EnableDisableTextBox(this)" >
+                            <label for="">
+                                <span style="color: brown;font-weight: bold"> J.V Against Cheque Collection </span> <span class="text-red-500 font-semibold  ">(*)</span>
+                                 </label>
+
                         </fieldset>
+
+                        {{-- <fieldset class="border px-4 py-2 gap-2 rounded">
+                            <legend>J.V Against Cheque Collection</legend>
+                            <x-input-text title="Cheque No" name="cheque_no" id="cheque_no" req required class="col-span-2"  />
+                            <input class="checked:bg-blue-500 checked:border-blue-500 focus:outline-none" type="checkbox" name="per" id="per" onclick="EnableDisableTextBox(this)" >
+                        </fieldset> --}}
+
+
                         {{-- Dynamic Tabulator --}}
                         <x-tabulator-dynamic />
 
@@ -162,6 +176,7 @@
         var mydata = {
             'document_date': document.getElementById('document_date').value,
             'document_no': document.getElementById('document_no').value,
+            'cheque_no': document.getElementById('cheque_no').value,
             'voucher': data
         }
         fetch(@json(route('jv.store')),{
@@ -187,6 +202,20 @@
             showSnackbar("Errors occured","red");
         })
     }
+
+    function EnableDisableTextBox(per) {
+        var cheque_no = document.getElementById("cheque_no");
+        cheque_no.disabled = per.checked ? false : true;
+        cheque_no.style.color ="black";
+        cheque_no.value="";
+        // if (!discntper.disabled) {
+        //     discntper.focus();
+        // }
+    }
+
+
+
+
 </script>
 @endpush
 </x-app-layout>

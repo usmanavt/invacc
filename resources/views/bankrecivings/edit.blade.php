@@ -20,14 +20,16 @@
                                 @csrf
                                 @method('PUT')
                                 <input type="hidden" name="id" value="{{ $bt->id }}">
-                                <label for="">Bank</label>
+                                {{-- <label for="">Bank</label>
                                 <select autocomplete="on" name="bank_id" required>
                                     <option disabled selected value="">--Select</option>
                                     @foreach ($banks as $bank)
                                         <option value="{{ $bank->id }}" @if($bank->id === $bt->bank_id) selected @endif>{{ $bank->title }}</option>
                                     @endforeach
-                                </select>
+                                </select> --}}
                                 {{-- Head --}}
+                                <x-input-date title="Document Date" name="documentdate" value="{{ $bt->documentdate }}"/>
+                                <x-input-text title="Bank Naration" name="banknaration" value="{{ $bt->banknaration }}"/>
                                 <label for="">Head</label>
                                 <select autocomplete="on" name="head_id" id="head_id" required onchange="populateSelect()">
                                     <option disabled selected value="">--Select</option>

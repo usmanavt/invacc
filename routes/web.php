@@ -86,6 +86,7 @@ Route::get('pndcontractcategory',[PurchaseRptController::class, 'pndcontractcate
 
 Route::get('compcontractcategory',[PurchaseRptController::class, 'compcontractcategory'])->name('purrpt.compcontractcategory');
 
+Route::get('funcgetsuplr',[PurchaseRptController::class, 'funcgetsuplr'])->name('purrpt.funcgetsuplr');
 
 
 Route::get('cominvsloc',[PurchaseRptController::class, 'cominvsloc'])->name('purrpt.cominvsloc');
@@ -190,7 +191,7 @@ Route::get('/localpurchase/getPurchaseMaster', [LocalPurchaseController::class, 
 Route::get('/localpurchase/getPurchaseDetails', [LocalPurchaseController::class, 'getDetail'])->name('localpurchase.details');
 Route::get('/localpurchase/getLocmatMaster', [LocalPurchaseController::class, 'matMaster'])->name('locmat.master');
 
-
+Route::get('/localpurchase/getLocPurIndex', [LocalPurchaseController::class, 'getLocPurIndex'])->name('locmatindex.master');
 
 Route::resource('localpurchase', LocalPurchaseController::class);
 

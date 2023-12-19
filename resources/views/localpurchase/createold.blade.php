@@ -133,13 +133,12 @@
     document.addEventListener('keyup', (e)=>{
         //  We are using ctrl key + 'ArrowUp' to show Modal
         if(e.ctrlKey && e.keyCode == 32){
-            if (
-                supplierId.options[supplierId.selectedIndex].value != ""
-                ||
-                supplierId.options[supplierId.selectedIndex].value != 0 )  {
-                    // console.log(supplierId.options[supplierId.selectedIndex].value)
+            // if (
+            //     supplierId.options[supplierId.selectedIndex].value != ""
+            //     ||
+            //     supplierId.options[supplierId.selectedIndex].value != 0 )  {
                     showModal()
-            }
+            // }
         }
     })
     // Ensure Buttons Are Closed
@@ -277,7 +276,8 @@ var calculate = function(){
     function dataFilter(element)
     {
         searchValue = element.value;
-        table.setData(getMaster,{search:searchValue,supplierId:supplierId.options[supplierId.selectedIndex].value});
+        // table.setData(getMaster,{search:searchValue});
+        table.setData(getMaster,{search:searchValue,supplierId:101});
     }
     //  The Table for Materials Modal
     table = new Tabulator("#tableData", {
@@ -293,7 +293,8 @@ var calculate = function(){
         paginationSize:10,
         paginationSizeSelector:[10,25,50,100],
         ajaxParams: function(){
-            return {search:searchValue,supplierId:supplierId.options[supplierId.selectedIndex].value};
+            // return {search:searchValue};
+            return {search:searchValue,supplierId:101};
         },
         ajaxURL: getMaster,
         ajaxContentType:"json",

@@ -1,9 +1,9 @@
 <x-app-layout>
 
     @push('styles')
-    <link rel="stylesheet" href="{{ asset('css/tabulator_simple.min.css') }}">
-    {{-- <link href="https://unpkg.com/tabulator-tables/dist/css/tabulator.min.css" rel="stylesheet"> --}}
-    {{-- <script type="text/javascript" src="https://unpkg.com/tabulator-tables/dist/js/tabulator.min.js"></script> --}}
+    {{-- <link rel="stylesheet" href="{{ asset('css/tabulator_simple.min.css') }}"> --}}
+    <link href="https://unpkg.com/tabulator-tables/dist/css/tabulator.min.css" rel="stylesheet">
+    <script type="text/javascript" src="https://unpkg.com/tabulator-tables/dist/js/tabulator.min.js"></script>
     @endpush
 
 
@@ -22,7 +22,7 @@
 
                     <div class="grid grid-cols-1">
                         {{-- Contract Master --}}
-                        <div class="grid grid-cols-12 gap-2 py-2 items-center">
+                        <div class="grid grid-cols-12 gap-1 py-2 items-center">
 
                             <label for="supplier_id">Supplier<x-req /></label>
                             <select autocomplete="on" class="col-span-2" name="supplier_id" id="supplier_id" required>
@@ -38,9 +38,13 @@
                             <label for="number">Invoice #<x-req /></label>
                             <input type="text" class="col-span-2" id="number" name="number" placeholder="Invoice No" >
 
+                            <label for="challanno">Bill #<x-req /></label>
+                            <input type="text" class="col-span-2" id="challanno" name="challanno"  >
+
+
+
                                 {{-- <label for="gpassno">GatePass #<x-req /></label> --}}
-                                <input type="text" class="col-span-2" id="gpassno" name="gpassno" value="{{$maxgpno}}" hidden  placeholder="gpassno"
-                                    >
+                                <input type="text" class="col-span-2" id="gpassno" name="gpassno" value="{{$maxgpno}}" hidden  placeholder="gpassno">
 
                         </div>
 
@@ -454,7 +458,7 @@ var calculate = function(){
                 validator:"required",
                 formatter:"money",
                 formatterParams:{thousand:",",precision:2},
-                validator:["required","integer"],
+                // validator:["required","integer"],
                 cellEdited: updateValues,
                 bottomCalc:"sum"
                },
@@ -491,7 +495,7 @@ var calculate = function(){
                 validator:"required",
                 formatter:"money",
                 formatterParams:{thousand:",",precision:2},
-                validator:["required","integer"],
+                // validator:["required","integer"],
                 cellEdited: updateValues,
                 bottomCalc:"sum"
                },
@@ -614,7 +618,9 @@ var calculate = function(){
         //     // }
         // }
         disableSubmitButton(true);
-        var data = { 'contracts' : dynamicTableData,'bankntotal':bankntotal.value,'otherchrgs':otherchrgs.value,'exataxoffie':exataxoffie.value,'collofcustom':collofcustom.value,'insurance':insurance.value ,'supplier_id': supplier_id.value,'invoice_date':invoice_date.value,'number':number.value,'gpassno':gpassno.value};
+        var data = { 'contracts' : dynamicTableData,'bankntotal':bankntotal.value,'otherchrgs':otherchrgs.value,'exataxoffie':exataxoffie.value,
+        'collofcustom':collofcustom.value,'insurance':insurance.value ,'supplier_id': supplier_id.value,'invoice_date':invoice_date.value,
+        'number':number.value,'gpassno':gpassno.value,'challanno':challanno.value};
         // All Ok - Proceed
         fetch(@json(route('localpurchase.store')),{
             credentials: 'same-origin', // 'include', default: 'omit'

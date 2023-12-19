@@ -53,8 +53,8 @@
     var deleteIcon = function(cell, formatterParams, onRendered){ return "<i class='fa fa-trash text-red-600'></i>";};
     var printIcon = function(cell, formatterParams, onRendered){ return "<i class='fa fa-print text-pink-500'></i>";};
 
-    const getMaster = @json(route('localpurchase.master'));
-    const getDetails = @json(route('localpurchase.details'));
+    const getMaster = @json(route('locmatindex.master'));
+    // const getDetails = @json(route('localpurchase.details'));
     let table;
     let searchValue = "";
     let statusValue="1";  // 1 = Pending, 2 - Completed
@@ -174,7 +174,8 @@
                     {title: "id",field: "id"},
                     {title: "Inv Dt",field: "invoice_date"},
                     {title: "Invoice#",field: "invoiceno"},
-                    {title: "Supplier",field: "supplier.title"},
+                    {title: "Bill #",field: "challanno"},
+                    {title: "Supplier",field: "supname"},
                     {title: "Description",field: "machineno"}
                     ]},
 

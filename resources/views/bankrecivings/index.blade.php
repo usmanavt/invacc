@@ -26,14 +26,15 @@
                             <form action="{{ route('bankrecivings.store') }}" method="post" class="flex flex-col" id="createForm">
                                 @csrf
                                 <x-input-date title="Document Date" name="documentdate" req required/>
-                                <label for="">Bank</label>
+                                {{-- <label for="">Bank</label>
                                 <select name="bank_id" required autocomplete="on">
                                     <option disabled selected value="">--Select</option>
                                     @foreach ($banks as $bank)
                                         <option value="{{ $bank->id }}">{{ $bank->title }}</option>
                                     @endforeach
-                                </select>
+                                </select> --}}
                                 {{-- Head --}}
+                                <x-input-text title="Bank Naration" name="banknaration" req required class=""/>
                                 <label for="">Head</label>
                                 <select name="head_id" id="head_id" required autocomplete="on">
                                     <option disabled selected value="">--Select</option>
@@ -116,7 +117,7 @@
 <script>
     let subheads = @json($subheads);
     const submitButton = document.getElementById('submitButton')
-    const conversion_rate = document.getElementById('conversion_rate')
+    // const conversion_rate = document.getElementById('conversion_rate')
     const received = document.getElementById('received')
     const payment = document.getElementById('payment')
     const head = document.getElementById('head_id')
@@ -169,8 +170,8 @@
     }
 
     const calculate = () =>{
-        payment.value = (parseFloat(conversion_rate.value) * parseFloat(received.value)).toFixed(2)
-        submitButton.disabled = false
+        // payment.value = (parseFloat(conversion_rate.value) * parseFloat(received.value)).toFixed(2)
+        // submitButton.disabled = false
     }
 </script>
 @endpush
@@ -220,13 +221,10 @@
                     columns:[
 
             {title:"Id", field:"id" , responsive:0,visible:false},
-            {title:"Bank", field:"bank" , visible:true , responsive:0},
+            {title:"Cheque Bank", field:"bank" , visible:true , responsive:0},
             {title:"Head", field:"mhead" , visible:true , responsive:0},
             {title:"Subhead", field:"supname" , visible:true , responsive:0},
             {title:"Entry Date", field:"documentdate" , visible:true , responsive:0},
-            // {title:"Customer", field:"customer.title" , visible:true , responsive:0},
-            // {title:"Tran", field:"transaction_type" ,  responsive:0,cssClass:'text-green-500 font-semibold'},
-            // {title:"Conv. Rate", field:"conversion_rate",hozAlign:"right" ,  responsive:0,formatter:"money",formatterParams:{thousand:",",precision:2}},
             {title:"Receiving", field:"received",hozAlign:"right" ,  responsive:0,formatter:"money",formatterParams:{thousand:",",precision:2}},
             {title:"Payment", field:"payment",hozAlign:"right" ,  responsive:0,formatter:"money",formatterParams:{thousand:",",precision:0}},
             {title:"Cheque Date", field:"cheque_date" ,  responsive:0},
@@ -244,11 +242,15 @@
                     columns:[
 
             // {title:"Status", field:"clrstatus" ,  responsive:0},
+            {title:"AmountCredit", field:"AmountCredit", hozAlign:"center",  headerSort:false},
+            {title:"AmountInvoiceCleared", field:"AmountInvsCleared", hozAlign:"center",  headerSort:false},
+            {title:"AmountInvsBal", field:"invsbal", hozAlign:"center",  headerSort:false},
+
             {title:"Status", field:"clrstatus", hozAlign:"center", formatter:"tickCross", headerSort:false},
             {title:"Date", field:"clrdate" ,  responsive:0},
             {title:"", field:"clrid" ,  responsive:0,visible:false},
             {title:"Ref.", field:"ref" ,  responsive:0},
-
+            {title:"Deposit Bank", field:"dbank" ,  responsive:0},
 
         ]},
 
@@ -298,7 +300,7 @@
 
     function convamounttodlr()
         {
-            payment.value = (parseFloat(conversion_rate.value) * parseFloat(received.value)).toFixed(2)
+            // payment.value = (parseFloat(conversion_rate.value) * parseFloat(received.value)).toFixed(2)
         }
 
 </script>
