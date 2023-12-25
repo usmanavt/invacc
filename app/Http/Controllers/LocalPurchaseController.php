@@ -48,6 +48,13 @@ class LocalPurchaseController  extends Controller
     //     return $localpurchase;
     // }
 
+
+
+
+
+
+
+
     public function getMaster(Request $request)
     {
         $status =$request->status ;
@@ -80,16 +87,16 @@ class LocalPurchaseController  extends Controller
         $size = $request->size;
         $field = $request->sort[0]["field"];     //  Nested Array
         $dir = $request->sort[0]["dir"];         //  Nested Array
-        // $xyz = $request->supplierId;
+        $xyz = $request->abc;
 
-        //   dd($supplierId);
+        //  dd($xyz);
         // return $supplierId;
 
         //  With Tables
         $materials = Material::where(function ($query) use ($search){
-            $query->where('source_id','<>',2);
-            // $query->where('brand_id','=',$supplierId)
-            // ->where('srchi','LIKE','%' . $search. '%');
+            $query->where('source_id','<>',2)
+        //    ->where('brand_id','=',101)
+            ->where('srchi','LIKE','%' . $search. '%');
         })
         ->orderBy($field,$dir)
         ->paginate((int) $size);

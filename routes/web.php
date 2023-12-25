@@ -92,6 +92,10 @@ Route::get('funcgetsuplr',[PurchaseRptController::class, 'funcgetsuplr'])->name(
 Route::get('cominvsloc',[PurchaseRptController::class, 'cominvsloc'])->name('purrpt.cominvsloc');
 Route::get('cominvsimp',[PurchaseRptController::class, 'cominvsimp'])->name('purrpt.cominvsimp');
 
+Route::get('funcpurretcategory',[PurchaseRptController::class, 'funcpurretcategory'])->name('purrpt.funcpurretcategory');
+
+
+
 Route::get('xyz',[PurchaseRptController::class, 'xyz'])->name('purrpt.xyz');
 Route::post('purrpt/fetch',[PurchaseRptController::class, 'fetch'])->name('purrpt.fetch');
 
@@ -106,9 +110,17 @@ Route::get('salerpt',[SaleRptController::class, 'index'])->name('salerpt.index')
 Route::post('salerpt/fetch',[SaleRptController::class, 'fetch'])->name('salerpt.fetch');
 Route::get('funcquotation',[SaleRptController::class, 'funcquotation'])->name('salerpt.funcquotation');
 Route::get('funccustorder',[SaleRptController::class, 'funccustorder'])->name('salerpt.funccustorder');
+Route::get('funcpendcustorder',[SaleRptController::class, 'funcpendcustorder'])->name('salerpt.funcpendcustorder');
+Route::get('funcsalretcat',[SaleRptController::class, 'funcsalretcat'])->name('salerpt.funcsalretcat');
+
+
 Route::get('funcdlvrychln',[SaleRptController::class, 'funcdlvrychln'])->name('salerpt.funcdlvrychln');
 Route::get('funcsalinvs',[SaleRptController::class, 'funcsalinvs'])->name('salerpt.funcsalinvs');
 Route::get('funcsaltxinvs',[SaleRptController::class, 'funcsaltxinvs'])->name('salerpt.funcsaltxinvs');
+
+
+Route::get('funcsalhist',[SaleRptController::class, 'funcsalhist'])->name('salerpt.funcsalhist');
+
 
 
 // Material Stock Reports
@@ -190,7 +202,6 @@ Route::resource('cis', CommercialInvoiceController::class);
 Route::get('/localpurchase/getPurchaseMaster', [LocalPurchaseController::class, 'getMaster'])->name('localpurchase.master');
 Route::get('/localpurchase/getPurchaseDetails', [LocalPurchaseController::class, 'getDetail'])->name('localpurchase.details');
 Route::get('/localpurchase/getLocmatMaster', [LocalPurchaseController::class, 'matMaster'])->name('locmat.master');
-
 Route::get('/localpurchase/getLocPurIndex', [LocalPurchaseController::class, 'getLocPurIndex'])->name('locmatindex.master');
 
 Route::resource('localpurchase', LocalPurchaseController::class);

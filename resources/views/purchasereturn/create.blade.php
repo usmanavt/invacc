@@ -298,7 +298,7 @@
                         prpcs :              obj.prpcs ,
                         prwt   :            obj.prwt,
                         prfeet:             obj.prfeet,
-                        pramount:         obj.pramount,
+                        pramount:         obj.pramount
 
 
 
@@ -501,7 +501,7 @@ var updateValues = (cell) => {
                             // cellEdited: updateValues,
                             validator:["required","numeric"],
                             cssClass:"bg-gray-200 font-semibold",
-                            formatterParams:{thousand:",",precision:0},
+                            formatterParams:{thousand:",",precision:2},
                         },
 
                         {   title:"Feet",
@@ -515,7 +515,7 @@ var updateValues = (cell) => {
                             // cellEdited: updateValues,
                             validator:["required","numeric"],
                             cssClass:"bg-gray-200 font-semibold",
-                            formatterParams:{thousand:",",precision:0},
+                            formatterParams:{thousand:",",precision:2},
                         },
 
 
@@ -613,24 +613,24 @@ var updateValues = (cell) => {
                         formatter:"money",
                         cellEdited: updateValues,
                         cssClass:"bg-gray-200 font-semibold",
-                        formatter:function(cell,row)
-                        {
+                     //   formatter:function(cell,row)
+                     //   {
+//
+//                             if(cell.getData().sku_id===1)
+//                            {
+//                                return  Number(cell.getData().prwt) * Number(cell.getData().prprice)
+//                            }
+//                            if(cell.getData().sku_id===2)
+//                            {
+//                                 return  Number(cell.getData().prpcs ) * Number(cell.getData().prprice)
+//                                //  return Number(cell.getData().prprice )
+//                            }
 
-                             if(cell.getData().sku_id===1)
-                            {
-                                return  Number(cell.getData().prwt) * Number(cell.getData().prprice)
-                            }
-                            if(cell.getData().sku_id===2)
-                            {
-                                 return  Number(cell.getData().prpcs ) * Number(cell.getData().prprice)
-                                //  return Number(cell.getData().prprice )
-                            }
-
-                            if(cell.getData().sku_id===3)
-                            {
-                                return  Number(cell.getData().prfeet ) * Number(cell.getData().prprice)
-                            }
-                        },formatterParams:{thousand:",",precision:0},
+//                            if(cell.getData().sku_id===3)
+//                            {
+//                                return  Number(cell.getData().prfeet ) * Number(cell.getData().prprice)
+//                            }
+//                        },formatterParams:{thousand:",",precision:0},
                         bottomCalc:totalVal
                     },
                     ]},

@@ -72,7 +72,7 @@
                                 </div>
                                 <div>
                                     <input type="radio" name="report_type" value="purret" required onchange="checkReportType('purret')">
-                                    <label for="">PURCHASE RETURN == pending == </label>
+                                    <label for="">PURCHASE RETURN </label>
                                 </div>
 
 
@@ -265,6 +265,9 @@
 
     const cominvsloc = @json(route('purrpt.cominvsloc'));
     const cominvsimp = @json(route('purrpt.cominvsimp'));
+
+    const funcpurretcategory = @json(route('purrpt.funcpurretcategory'));
+
 
 
 
@@ -732,6 +735,43 @@ const getSubheadVoucherData10 = async (value) =>{
     }
 
 
+    case 'purret':
+            //   console.log(todate.value)
+            fetch(funcpurretcategory + `?todate=${todate.value}&fromdate=${fromdate.value}&head=${value}`,{
+                    method:"GET",
+                    headers: { 'Accept':'application/json','Content-type':'application/json'},
+                    })
+                    .then(response => response.json())
+                    .then( data => {
+                        if(data.length > 0)
+                        {
+                            data.forEach(e => {
+                                addSelectElement(subhead,e.Subhead,e.title)
+                            });
+                            subhead.setAttribute('required','')
+                            subhead.removeAttribute('disabled','')
+                        }else{
+                            subhead.removeAttribute('required','')
+                            subhead.setAttribute('disabled','')
+                        }
+                    })
+                    .catch(error => console.error(error))
+                break;
+
+// FOR CONTRACT FILL
+const getSubheadVoucherData15 = async (value) =>{
+        let data = await fetch(funcpurretcategory + `?todate=${todate.value}&fromdate=${fromdate.value}&head=${value}`,{
+            method:"GET",
+            headers: { 'Accept':'application/json','Content-type':'application/json'},
+            })
+            .then(response => response.json())
+            .then( data => { return data })
+            .catch(error => console.error(error))
+    }
+    const getPurret =async  (value) => {
+        const purret = await getSubheadVoucherData15(value)
+        return purret
+    }
 
 
 
@@ -1100,6 +1140,25 @@ const getCominvsimpVoucherData = async (value) =>{
                 // });
                 headSelected()
                 break;
+
+                case 'purret':
+                // Show Head
+                rptType = 'purret'
+                // head.setAttribute('required','')
+                // head.disabled = false
+                // head.length = 0
+                subhead.removeAttribute('required')
+                subhead.disabled = true
+                subhead.length = 0
+                // heads.forEach(e => {
+                //     addSelectElement(head,e.id,e.title)
+                // });
+                headSelected()
+                break;
+
+
+
+
 
                 case 'cominvsimp':
                 // Show Head

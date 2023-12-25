@@ -91,7 +91,7 @@ padding-left: 8px;
     {{-- Report Header --}}
 
     <table class="mhd">
-        <tbody><tr><td> PURCHASE ORDER </td></tr></tbody>
+        <tbody><tr><td> PENDING PURCHASE ORDER </td></tr></tbody>
     </table>
 
 
@@ -146,7 +146,7 @@ padding-left: 8px;
                     Qut.Date:
                 </td>
                 <td align ="left" style="font-size:12px;font-weight: bold"  >
-                     {{ $data[0]->qutdate }}
+                    {{ $data[0]->qutdate }}
                 </td>
                 <td>
                     Qut.No:
@@ -183,12 +183,13 @@ padding-left: 8px;
                 {{-- <td  style="text-align: center font-size:0.5rem;font-weight: bold"> --}}
                     <th class="" width="4%">S#</th>
                     {{-- <th class="" width="16%">Group Name</th> --}}
-                    <th class="" width="40%">Material Name</th>
+                    <th class="" width="35%">Material Name</th>
                     <th class="" width="7%">Unit</th>
-                    <th class="" width="20%">Brand</th>
+                    <th class="" width="15%">Brand</th>
                     <th class="" width="9%">Quantity</th>
                     <th class="" width="9%">Price</th>
                     <th class="" width="11%">Amount</th>
+                    <th class="" width="10%">BalQty</th>
 
             </tr>
         </thead>
@@ -216,12 +217,13 @@ padding-left: 8px;
                             {{ $vvlues += $data[$i]->saleamnt }}
                             <td class="" width="4%">{{ $i+1 }}</td>
                             {{-- <td class="" width="16%">{{ $data[$i]->grpname }} </td> --}}
-                            <td style="font-size:12px" width="40%">{{ $data[$i]->matname }} </td>
+                            <td style="font-size:12px" width="35%">{{ $data[$i]->matname }} </td>
                             <td style="text-align:center;font-size:12px" width="7%">{{ $data[$i]->UOM }} </td>
-                            <td style="text-align:left;font-size:12px" width="20%">{{ $data[$i]->mybrand }} </td>
+                            <td style="text-align:left;font-size:12px" width="15%">{{ $data[$i]->mybrand }} </td>
                             <td style="font-size:12px" width="9%">{{ number_format($data[$i]->qty,1) }} </td>
                             <td style="font-size:12px" width="9%">{{ number_format($data[$i]->price,1) }} </td>
                             <td style="text-align:right;font-size:12px" width="11%">{{ number_format($data[$i]->saleamnt,0) }} </td>
+                            <td style="text-align:right;font-size:12px;color:brown;font-weight: bold" width="10%">{{ number_format($data[$i]->balqty,0) }} </td>
                         </tr>
                     @endif
                 @endfor
@@ -263,12 +265,13 @@ padding-left: 8px;
                                 {{ $vvlues += $data[$i]->saleamnt }}
                                 <td style="font-size:12px" width="4%">{{ $i+1 }}</td>
                                 {{-- <td class="" width="16%">{{ $data[$i]->grpname }} </td> --}}
-                                <td style="font-size:12px;border-right: 1.5px solid burlywood;font-weight: bold;" width="40%">{{ $data[$i]->matname }} </td>
+                                <td style="font-size:12px;border-right: 1.5px solid burlywood;font-weight: bold;" width="35%">{{ $data[$i]->matname }} </td>
                                 <td style="text-align:center;font-size:12px ;font-weight: bold;" width="7%">{{ $data[$i]->UOM }} </td>
-                                <td style="text-align:left;font-size:12px;border-right: 1.5px solid burlywood;font-weight: bold;" width="20%">{{ $data[$i]->mybrand }} </td>
+                                <td style="text-align:left;font-size:12px;border-right: 1.5px solid burlywood;font-weight: bold;" width="15%">{{ $data[$i]->mybrand }} </td>
                                 <td style="text-align:right;font-size:12px;border-right: 1.5px solid burlywood;font-weight: bold;" width="9%">{{ number_format($data[$i]->qty,1) }} </td>
                                 <td style="text-align:right;font-size:12px;border-right: 1.5px solid burlywood;font-weight: bold;" width="9%">{{ number_format($data[$i]->price,1) }} </td>
                                 <td style="text-align:right;font-size:12px;font-weight: bold" width="11%">{{ number_format($data[$i]->saleamnt,0) }} </td>
+                                <td style="text-align:right;font-size:12px;font-weight: bold" width="10%">{{ number_format($data[$i]->balqty,0) }} </td>
 
                             </tr>
                         @endif

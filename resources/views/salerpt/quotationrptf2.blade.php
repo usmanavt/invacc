@@ -91,7 +91,7 @@ padding-left: 8px;
     {{-- Report Header --}}
 
     <table class="mhd">
-        <tbody><tr><td> PURCHASE ORDER </td></tr></tbody>
+        <tbody><tr><td> PRICE QUITATION </td></tr></tbody>
     </table>
 
 
@@ -139,43 +139,43 @@ padding-left: 8px;
 
 
     {{-- Ledger Info --}}
+
     <table class="ledger">
         <tbody>
             <tr>
                 <td>
-                    Qut.Date:
+                    Quotation No:
                 </td>
                 <td align ="left" style="font-size:12px;font-weight: bold"  >
-                     {{ $data[0]->qutdate }}
+                    {{ $data[0]->qutno }}
+                </td>
+                <td >
+                    Quotation Date:
+                </td>
+                <td align ="left" style="font-size:12px;font-weight: bold">
+                    {{ $data[0]->saldate }}
                 </td>
                 <td>
-                    Qut.No:
+                    P.R No:
                 </td>
-                <td align ="left" style="font-size:12px;font-weight: bold"  >
-                    {{ $data[0]->pqutno }}
+                <td align ="left" style="font-size:12px;font-weight: bold">
+                    {{-- From {{ $fromdate }} to {{ $todate }} --}}
+                    {{ $data[0]->prno }}
                 </td>
 
                 <td>
-                    P.O No:
-                </td>
-                <td align ="left" style="font-size:12px;font-weight: bold"  >
-                    {{ $data[0]->pono }}
-                </td>
-                <td >
-                    P.O Date:
+                    Valid Date:
                 </td>
                 <td align ="left" style="font-size:12px;font-weight: bold">
-                    {{ $data[0]->podate }}
+                    {{ $data[0]->valdate }}
                 </td>
-                    <td>
-                        Dlvry.Date:
-                    </td>
-                    <td align ="left" style="font-size:12px;font-weight: bold">
-                        {{ $data[0]->deliverydt }}
-                    </td>
-                </tr>
+            </tr>
         </tbody>
     </table>
+
+
+
+
     {{-- column headers --}}
     <table class="column-headers ">
         <thead >
@@ -277,7 +277,7 @@ padding-left: 8px;
                     {{-- border:1px solid burlywood; --}}
 
 
-                    {{-- <h3 style="font-size:1rem">Term and condition: {{ $hdng3 }}</h3> --}}
+                    <h3 style="font-size:1rem">Term and condition: {{ $hdng3 }}</h3>
                 </tbody>
                 </table>
             </div>

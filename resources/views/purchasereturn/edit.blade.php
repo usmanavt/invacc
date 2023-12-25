@@ -359,7 +359,7 @@ dynamicTable = new Tabulator("#dynamicTable", {
                             cellEdited: updateValues,
                             validator:["required","numeric"],
                             cssClass:"bg-gray-200 font-semibold",
-                            formatterParams:{thousand:",",precision:0},
+                            formatterParams:{thousand:",",precision:2},
                         },
 
 
@@ -415,7 +415,7 @@ dynamicTable = new Tabulator("#dynamicTable", {
                             cellEdited: updateValues,
                             validator:["required","numeric"],
                             // cssClass:"bg-green-200 font-semibold",
-                            formatterParams:{thousand:",",precision:0},
+                            formatterParams:{thousand:",",precision:2},
                         },
 
                         {   title:"feet",
@@ -430,7 +430,7 @@ dynamicTable = new Tabulator("#dynamicTable", {
                             cellEdited: updateValues,
                             validator:["required","numeric"],
                             // cssClass:"bg-green-200 font-semibold",
-                            formatterParams:{thousand:",",precision:0},
+                            formatterParams:{thousand:",",precision:2},
                         },
 
                         {title:"Return Amount",
@@ -440,23 +440,23 @@ dynamicTable = new Tabulator("#dynamicTable", {
                         formatter:"money",
                         cellEdited: updateValues,
                         cssClass:"bg-gray-200 font-semibold",
-                        formatter:function(cell,row)
-                        {
-                            var data = cell.getData()
-                             if(cell.getData().sku_id===1)
-                            {
-                                return  Number(cell.getData().prwt) * Number(cell.getData().prprice)
-                            }
-                            if(cell.getData().sku_id===2)
-                            {
-                                 return  Number(cell.getData().prpcs ) * Number(cell.getData().prprice)
-                            }
+                        // formatter:function(cell,row)
+                        // {
+                        //     var data = cell.getData()
+                        //      if(cell.getData().sku_id===1)
+                        //     {
+                        //         return  Number(cell.getData().prwt) * Number(cell.getData().prprice)
+                        //     }
+                        //     if(cell.getData().sku_id===2)
+                        //     {
+                        //          return  Number(cell.getData().prpcs ) * Number(cell.getData().prprice)
+                        //     }
 
-                            if(cell.getData().sku_id===3)
-                            {
-                                return  Number(cell.getData().prfeet ) * Number(cell.getData().prprice)
-                            }
-                        },formatterParams:{thousand:",",precision:0},
+                        //     if(cell.getData().sku_id===3)
+                        //     {
+                        //         return  Number(cell.getData().prfeet ) * Number(cell.getData().prprice)
+                        //     }
+                        // },formatterParams:{thousand:",",precision:0},
                         bottomCalc:totalVal
                     },
                     ]},

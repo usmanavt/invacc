@@ -41,6 +41,7 @@
                             <label for="challanno">Bill #<x-req /></label>
                             <input type="text" class="col-span-2" id="challanno" name="challanno"  >
 
+                            <input type="text"  id="abc" name="abc"  >
 
 
                                 {{-- <label for="gpassno">GatePass #<x-req /></label> --}}
@@ -137,6 +138,8 @@
     document.addEventListener('keyup', (e)=>{
         //  We are using ctrl key + 'ArrowUp' to show Modal
         if(e.ctrlKey && e.keyCode == 32){
+            var abc= document.getElementById("abc")
+            console.log(abc.value)
             // if (
                 // supplierId.options[supplierId.selectedIndex].value != ""
                 // ||

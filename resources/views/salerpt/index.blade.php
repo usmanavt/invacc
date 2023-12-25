@@ -20,11 +20,32 @@
                                 <div>
                                     <input type="radio" name="report_type" value="quotation" required onchange="checkReportType('quotation')">
                                     <label for="">Price Quotation </label>
+                                    <input class="checked:bg-blue-500 checked:border-blue-500 focus:outline-none"  type="checkbox" name="chq" id="chq"   onclick="chqcol(this)" >
+                                    <label for="">
+                                       <span style="color: brown;font-weight: bold"> Format II </span> <span class="text-red-500 font-semibold  "></span>
+                                        </label>
+                                        <input type="text" title="t1"  id="p1" name="p1" value="0" hidden   >
+
                                 </div>
                                 <div>
                                     <input type="radio" name="report_type" value="custorder" required onchange="checkReportType('custorder')">
                                     <label for="">Purchase Order </label>
+
+                                    <input class="checked:bg-blue-500 checked:border-blue-500 focus:outline-none"  type="checkbox" name="comp" id="comp"   onclick="chqcomp(this)" >
+
+                                    <label for="">
+                                        <span style="color: brown;font-weight: bold"> Show Only Completed P.O </span> <span class="text-red-500 font-semibold  "></span>
+                                         </label>
+                                         <input type="text" title="t1"  id="p2" name="p2" value="0" hidden   >
+
+
+
                                 </div>
+                                <div>
+                                    <input type="radio" name="report_type" value="pendcustorder" required onchange="checkReportType('pendcustorder')">
+                                    <label for="">Pending Purchase Order </label>
+                                </div>
+
                                 <div>
                                     <input type="radio" name="report_type" value="dlvrychln" required onchange="checkReportType('dlvrychln')">
                                     <label for="">Delivery Challan </label>
@@ -38,15 +59,15 @@
                                     <label for="">Commercial Invoice </label>
                                 </div>
                                 <div>
-                                    <input type="radio" name="report_type" value="loccominvs" required onchange="checkReportType('loccominvs')">
-                                    <label for="">Credit Note </label>
+                                    <input type="radio" name="report_type" value="salret" required onchange="checkReportType('salret')">
+                                    <label for="">Sale Return Invoice </label>
                                 </div>
                                 <div>
-                                    <input type="radio" name="report_type" value="purret" required onchange="checkReportType('purret')">
+                                    <input type="radio" name="report_type" value="salhist" required onchange="checkReportType('salhist')">
                                     <label for="">Sale History </label>
                                 </div>
                                 <div>
-                                    <input type="radio" name="report_type" value="tpl" required onchange="checkReportType('tpl')">
+                                    <input type="radio" name="report_type" value="salrethist" required onchange="checkReportType('salrethist')">
                                     <label for="">Sale Return History</label>
                                 </div>
                                 <br>
@@ -63,7 +84,7 @@
                                     <label for="">
                                         Customer Address <span class="text-red-500 font-semibold w-10 ">(*)</span>
                                     </label>
-                                    <textarea name="csdrs" id="csdrs" cols="40" rows="5" maxlength="255"  class="rounded">
+                                    <textarea name="csdrs" id="csdrs" cols="40" rows="5" maxlength="255"   class="rounded">
                                         Steam Pipes, Pipe Fitting, Flanges Valves, S.S Pipes
                                         Plot # 8 Near Allah Malik Godown Shershah Kabari Bazar,
                                         Phone : 021-32588781, 021-32574285 , Fax : 021-32588782
@@ -142,9 +163,18 @@
     const vchrheads = @json($vchrheads);
     const funcquotation = @json(route('salerpt.funcquotation'));
     const funccustorder = @json(route('salerpt.funccustorder'));
+    const funcpendcustorder = @json(route('salerpt.funcpendcustorder'));
+
+
+
+
     const funcdlvrychln = @json(route('salerpt.funcdlvrychln'));
     const funcsalinvs = @json(route('salerpt.funcsalinvs'));
     const funcsaltxinvs = @json(route('salerpt.funcsaltxinvs'));
+    const funcsalhist = @json(route('salerpt.funcsalhist'));
+
+    const funcsalretcat = @json(route('salerpt.funcsalretcat'));
+
 
     const head = document.getElementById('head_id')
     const subhead = document.getElementById('subhead_id')
@@ -238,6 +268,62 @@ const getSubheadVoucherData1 = async (value) =>{
         const custorder = await getSubheadVoucherData1(value)
         return custorder
     }
+
+
+    case 'pendcustorder':
+            // console.log(value)
+            fetch(funcpendcustorder + `?head=${value}`,{
+                    method:"GET",
+                    headers: { 'Accept':'application/json','Content-type':'application/json'},
+                    })
+                    .then(response => response.json())
+                    .then( data => {
+                        if(data.length > 0)
+                        {
+                            data.forEach(e => {
+                                addSelectElement(subhead,e.Subhead,e.title)
+                            });
+                            subhead.setAttribute('required','')
+                            subhead.removeAttribute('disabled','')
+                        }else{
+                            subhead.removeAttribute('required','')
+                            subhead.setAttribute('disabled','')
+                        }
+                    })
+                    .catch(error => console.error(error))
+                break;
+
+// // FOR CONTRACT FILL
+const getSubheadVoucherData10 = async (value) =>{
+        let data = await fetch(funcpendcustorder + `?head=${value}`,{
+            method:"GET",
+            headers: { 'Accept':'application/json','Content-type':'application/json'},
+            })
+            .then(response => response.json())
+            .then( data => { return data })
+            .catch(error => console.error(error))
+    }
+    const getPendCustorder =async  (value) => {
+        const pendcustorder = await getSubheadVoucherData10(value)
+        return pendcustorder
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
     case 'dlvrychln':
             // console.log(value)
@@ -356,6 +442,126 @@ const getSubheadVoucherData4 = async (value) =>{
         return saltxinvs
     }
 
+    case 'salhist':
+            // console.log(value)
+            fetch(funcsalhist + `?todate=${todate.value}&fromdate=${fromdate.value}&head=${value}`,{
+                    method:"GET",
+                    headers: { 'Accept':'application/json','Content-type':'application/json'},
+                    })
+                    .then(response => response.json())
+                    .then( data => {
+                        if(data.length > 0)
+                        {
+                            data.forEach(e => {
+                                addSelectElement(subhead,e.Subhead,e.title)
+                            });
+                            subhead.setAttribute('required','')
+                            subhead.removeAttribute('disabled','')
+                        }else{
+                            subhead.removeAttribute('required','')
+                            subhead.setAttribute('disabled','')
+                        }
+                    })
+                    .catch(error => console.error(error))
+                break;
+
+// FOR CONTRACT FILL
+const getSubheadVoucherData11 = async (value) =>{
+        let data = await fetch(funcsalhist + `?todate=${todate.value}&fromdate=${fromdate.value}&head=${value}`,{
+            method:"GET",
+            headers: { 'Accept':'application/json','Content-type':'application/json'},
+            })
+            .then(response => response.json())
+            .then( data => { return data })
+            .catch(error => console.error(error))
+    }
+    const getSalhist =async  (value) => {
+        const salhist = await getSubheadVoucherData11(value)
+        return salhist
+    }
+
+
+
+    case 'salret':
+            // console.log(value)
+            fetch(funcsalretcat + `?todate=${todate.value}&fromdate=${fromdate.value}&head=${value}`,{
+                    method:"GET",
+                    headers: { 'Accept':'application/json','Content-type':'application/json'},
+                    })
+                    .then(response => response.json())
+                    .then( data => {
+                        if(data.length > 0)
+                        {
+                            data.forEach(e => {
+                                addSelectElement(subhead,e.Subhead,e.title)
+                            });
+                            subhead.setAttribute('required','')
+                            subhead.removeAttribute('disabled','')
+                        }else{
+                            subhead.removeAttribute('required','')
+                            subhead.setAttribute('disabled','')
+                        }
+                    })
+                    .catch(error => console.error(error))
+                break;
+
+// FOR CONTRACT FILL
+const getSubheadVoucherData13 = async (value) =>{
+        let data = await fetch(funcsalretcat + `?todate=${todate.value}&fromdate=${fromdate.value}&head=${value}`,{
+            method:"GET",
+            headers: { 'Accept':'application/json','Content-type':'application/json'},
+            })
+            .then(response => response.json())
+            .then( data => { return data })
+            .catch(error => console.error(error))
+    }
+    const getSalret =async  (value) => {
+        const salret = await getSubheadVoucherData13(value)
+        return salret
+    }
+
+
+    case 'salrethist':
+            // console.log(value)
+            fetch(funcsalretcat + `?todate=${todate.value}&fromdate=${fromdate.value}&head=${value}`,{
+                    method:"GET",
+                    headers: { 'Accept':'application/json','Content-type':'application/json'},
+                    })
+                    .then(response => response.json())
+                    .then( data => {
+                        if(data.length > 0)
+                        {
+                            data.forEach(e => {
+                                addSelectElement(subhead,e.Subhead,e.title)
+                            });
+                            subhead.setAttribute('required','')
+                            subhead.removeAttribute('disabled','')
+                        }else{
+                            subhead.removeAttribute('required','')
+                            subhead.setAttribute('disabled','')
+                        }
+                    })
+                    .catch(error => console.error(error))
+                break;
+
+// FOR CONTRACT FILL
+const getSubheadVoucherData14 = async (value) =>{
+        let data = await fetch(funcsalretcat + `?todate=${todate.value}&fromdate=${fromdate.value}&head=${value}`,{
+            method:"GET",
+            headers: { 'Accept':'application/json','Content-type':'application/json'},
+            })
+            .then(response => response.json())
+            .then( data => { return data })
+            .catch(error => console.error(error))
+    }
+    const getSalrethist =async  (value) => {
+        const salrethist = await getSubheadVoucherData14(value)
+        return salrethist
+    }
+
+
+
+
 
 
 
@@ -377,20 +583,20 @@ const getSubheadVoucherData4 = async (value) =>{
             //     }
             //     break;
 
-                case 'loccominvs':
-                list = subheadsciloc.filter( l => l.MHEAD === Number(value)  )
-                if(list.length > 0)
-                {
-                    list.forEach(e => {
-                        addSelectElement(subhead,e.Subhead,e.title)
-                    });
-                    subhead.setAttribute('required','')
-                    subhead.removeAttribute('disabled','')
-                }else{
-                    subhead.removeAttribute('required','')
-                    subhead.setAttribute('disabled','')
-                }
-                break;
+                // case 'salret':
+                // list = subheadsciloc.filter( l => l.MHEAD === Number(value)  )
+                // if(list.length > 0)
+                // {
+                //     list.forEach(e => {
+                //         addSelectElement(subhead,e.Subhead,e.title)
+                //     });
+                //     subhead.setAttribute('required','')
+                //     subhead.removeAttribute('disabled','')
+                // }else{
+                //     subhead.removeAttribute('required','')
+                //     subhead.setAttribute('disabled','')
+                // }
+                // break;
 
                 // case 'salinvs':
                 // list = subheads.filter( l => l.MHEAD === Number(value)  )
@@ -550,6 +756,20 @@ const getSubheadVoucherData4 = async (value) =>{
                 headSelected()
                 break;
 
+                case 'pendcustorder':
+                // Show Head
+                rptType = 'pendcustorder'
+                head.setAttribute('required','')
+                head.disabled = false
+                head.length = 0
+                subhead.removeAttribute('required')
+                subhead.disabled = true
+                subhead.length = 0
+                heads.forEach(e => {
+                    addSelectElement(head,e.id,e.title)
+                });
+                headSelected()
+                break;
 
 
 
@@ -571,9 +791,10 @@ const getSubheadVoucherData4 = async (value) =>{
                 headSelected()
                 break;
 
-            case 'loccominvs':
+
+                case 'salhist':
                 // Show Head
-                rptType = 'loccominvs'
+                rptType = 'salhist'
                 head.setAttribute('required','')
                 head.disabled = false
                 head.length = 0
@@ -585,6 +806,44 @@ const getSubheadVoucherData4 = async (value) =>{
                 });
                 headSelected()
                 break;
+
+
+
+
+
+                case 'salret':
+                // Show Head
+                rptType = 'salret'
+                head.setAttribute('required','')
+                head.disabled = false
+                head.length = 0
+                subhead.removeAttribute('required')
+                subhead.disabled = true
+                subhead.length = 0
+                heads.forEach(e => {
+                    addSelectElement(head,e.id,e.title)
+                });
+                headSelected()
+                break;
+
+                case 'salrethist':
+                // Show Head
+                rptType = 'salrethist'
+                head.setAttribute('required','')
+                head.disabled = false
+                head.length = 0
+                subhead.removeAttribute('required')
+                subhead.disabled = true
+                subhead.length = 0
+                heads.forEach(e => {
+                    addSelectElement(head,e.id,e.title)
+                });
+                headSelected()
+                break;
+
+
+
+
 
 
 
@@ -620,6 +879,41 @@ const getSubheadVoucherData4 = async (value) =>{
                 break;
         }
     }
+
+    function chqcol(chqcomp) {
+        var p1 = document.getElementById("p1");
+        // amount_fc.disabled = advtxt.checked ? true : false;
+
+        // amount_fc.disabled = per.checked ? true : false;
+
+        if(chqcomp.checked==true)
+        {
+            p1.value=1;
+        }
+        else
+        {
+            p1.value=0;
+        }
+
+    }
+
+    function chqcomp(chqcomp) {
+        var p2 = document.getElementById("p2");
+        // amount_fc.disabled = advtxt.checked ? true : false;
+
+        // amount_fc.disabled = per.checked ? true : false;
+
+        if(chqcomp.checked==true)
+        {
+            p2.value=1;
+        }
+        else
+        {
+            p2.value=0;
+        }
+
+    }
+
 </script>
 @endpush
 </x-app-layout>

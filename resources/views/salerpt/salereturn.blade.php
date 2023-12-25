@@ -26,15 +26,20 @@ body{
     padding:12px;
 }
 .column-headers{
-    border:1px solid lightgray;
+
+    border:1px solid black;
+    border-left: 1px solid black;
+    border-right: 1px solid black;
     background: #e3e3e3;
+    font-size: 1rem;
     margin-top:5px;
-    margin-bottom:5px;
-    border-bottom: 2px double gray;
+    /* margin-bottom:5px; */
+    border-collapse: collapse;
+
 }
-.column-headers th{
+/* .column-headers th{
     text-align: center;
-}
+} */
 
 .data1{
 
@@ -48,6 +53,22 @@ body{
 .data {
     border-collapse: collapse;
 }
+
+.hd1{
+
+    border-left: 1px solid black;
+    border-right: 1px solid black;
+    border-top: 1px solid black;
+    border-bottom: 1px solid black;
+    text-align: center;
+    /* font-weight: bold; */
+    /* font-size: 2rem; */
+    font-style: normal;
+}
+
+
+
+
 .data tr td{
     border-left: 1px solid lightgray;
     border-right: 1px solid lightgray;
@@ -71,124 +92,89 @@ body{
 
 /* styles.css */
 
-.mhd
-{
 
-font-size: 2.5rem;
-border:3px solid black;
-padding-top: 3px;
-padding-left: 8px;
-
-}
 </style>
 </head>
-
-
-
-<body>
+    <body>
 {{-- https://stackoverflow.com/questions/3341485/how-to-make-a-html-page-in-a4-paper-size-pages?answertab=votes#tab-top --}}
 
     {{-- Report Header --}}
 
-    <table class="mhd">
-        <tbody><tr><td> PURCHASE ORDER </td></tr></tbody>
-    </table>
+    <table class="hd1">
+        <tbody>
+              <tr>
+                <td >
+                    <span style="font-size:2.5rem;font-weight: bold;">SALE RETURN INVOICE</span>
 
-
-    {{-- align ="left" style="width:100%;" --}}
-    <table  >
-        <tbody  >
-
-            <tr style="width:100%;"  >
-                <td  style="width:60%;font-size:32px;" >  From  :  </td>
-                <td style="width:10%;font-size:32px;"  > &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </td>
-                <td  style="width:30;font-size:32px;" > To  :  </td>
-
+                </td>
             </tr>
-            <tr align ="left" style="width:100%;"  >
-                <td align ="left" style="width:100%;font-size:32px;">
-                    <h3> {{ $hdng1 }} </h3>
-                    <h6> {{ $hdng2 }} </h6>
-                    {{-- <h6> {{ $hdng2 }} </h6> --}}
-                </td>
-                <td style="width:10%;font-size:32px;"  > &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </td>
-                <td align ="left" style="width:100%;font-size:32px;vertical-align: top;">
-                    <h3> {{ $data[0]->custname }} </h3>
-                    <h6> {{ $data[0]->custadrs }} </h6>
-                    {{-- <h6> {{ $hdng2 }} </h6> --}}
-
-                </td>
-
-.            </tr>
-    </tbody>
+        </tbody>
     </table>
 
-    {{-- <table align ="right" style="width:50%;">
-        <tbody >
+    <table class="hd1" >
+        <tbody>
+              <tr>
+                <td>
+                    <span style="font-size:2rem;">{{ $hdng1 }}</span>
+                </td>
+            </tr>
+        </tbody>
+    </table>
 
-            <tr> <td> <h2> to  : </h2> </td> </tr>
-            <tr  >
-                <td align ="left" style="width:20%;">
-                    <h2> {{ $data[0]->custname }} </h2>
-               </td>
-             </tr>
-    </tbody>
-    </table> --}}
+    <table class="hd1" >
+        <tbody>
+              <tr >
+                <td style="Padding:5px 130px 30px 130px " >
+                    <span style= "font-size:1rem;font-weight: bold">{{ $hdng2 }}</span>
+                </td>
+            </tr>
+        </tbody>
+    </table>
 
-    {{-- Address --}}
+
 
 
     {{-- Ledger Info --}}
-    <table class="ledger">
+    <table  >
+        <tbody>
+            <tr >
+                {{-- <td > Customer Name:</td>
+                <td align ="left" style="font-size:12px;font-weight: bold;" > {{ $data[0]->custname }}</td>
+                <td> Address:</td>
+                <td align ="left" style="font-size:12px;font-weight: bold;" > {{ $data[0]->custadrs }}</td> --}}
+                <td > Customer Name:  <span style="font-weight: bold"> {{ $data[0]->custname }}</span>
+                <td > Address:  <span style="font-weight: bold"> {{ $data[0]->custadrs }}</span> </td>
+
+            </tr>
+        </tbody>
+    </table>
+
+
+    <table  >
         <tbody>
             <tr>
-                <td>
-                    Qut.Date:
-                </td>
-                <td align ="left" style="font-size:12px;font-weight: bold"  >
-                     {{ $data[0]->qutdate }}
-                </td>
-                <td>
-                    Qut.No:
-                </td>
-                <td align ="left" style="font-size:12px;font-weight: bold"  >
-                    {{ $data[0]->pqutno }}
-                </td>
 
-                <td>
-                    P.O No:
-                </td>
-                <td align ="left" style="font-size:12px;font-weight: bold"  >
-                    {{ $data[0]->pono }}
-                </td>
-                <td >
-                    P.O Date:
-                </td>
-                <td align ="left" style="font-size:12px;font-weight: bold">
-                    {{ $data[0]->podate }}
-                </td>
-                    <td>
-                        Dlvry.Date:
-                    </td>
-                    <td align ="left" style="font-size:12px;font-weight: bold">
-                        {{ $data[0]->deliverydt }}
-                    </td>
-                </tr>
+                <td >Return Date:  <span style="font-weight: bold"> {{ $data[0]->podate }}</span>
+                <td >Return No:  <span style="font-weight: bold"> {{ $data[0]->billno }}</span>
+                <td >D.C Date:  <span style="font-weight: bold">  {{ $data[0]->saldate }}</span>
+                <td >D.C No:  <span style="font-weight: bold"> {{ $data[0]->dcno }}</span>
+
+
+            </tr>
         </tbody>
     </table>
     {{-- column headers --}}
     <table class="column-headers ">
         <thead >
-            <tr>
+            <tr >
                 {{-- <td  style="text-align: center font-size:0.5rem;font-weight: bold"> --}}
-                    <th class="" width="4%">S#</th>
-                    {{-- <th class="" width="16%">Group Name</th> --}}
-                    <th class="" width="40%">Material Name</th>
-                    <th class="" width="7%">Unit</th>
-                    <th class="" width="20%">Brand</th>
-                    <th class="" width="9%">Quantity</th>
-                    <th class="" width="9%">Price</th>
-                    <th class="" width="11%">Amount</th>
+                    <th   width="4%">S#</th>
+                    <th width="44%">Material Name</th>
+                    <th width="8%">Unit</th>
+                    <th width="15%">Brand</th>
+                    <th width="10%">Quantity</th>
+                    <th  width="9%">Price</th>
+                    <th  width="10%">Amount</th>
 
             </tr>
         </thead>
@@ -196,7 +182,7 @@ padding-left: 8px;
 
     <div style="height:500px;border:1px solid;">
 
-        <table>
+        {{-- <table>
             <tbody>
                   <tr>
                     <td  style="text-align: left;">
@@ -204,29 +190,28 @@ padding-left: 8px;
                     </td>
                 </tr>
             </tbody>
-        </table>
+        </table> --}}
 
         <table class="data" cellspacing="10">
             <tbody>
-                {{ $vvlues = 0 }}
+                {{ $tqty = 0 }}
 
                 @for ($i = 0 ; $i < count($data) ; $i++)
                     @if ($data[$i]->grpid  == 1)
                         <tr>
-                            {{ $vvlues += $data[$i]->saleamnt }}
-                            <td class="" width="4%">{{ $i+1 }}</td>
-                            {{-- <td class="" width="16%">{{ $data[$i]->grpname }} </td> --}}
-                            <td style="font-size:12px" width="40%">{{ $data[$i]->matname }} </td>
-                            <td style="text-align:center;font-size:12px" width="7%">{{ $data[$i]->UOM }} </td>
-                            <td style="text-align:left;font-size:12px" width="20%">{{ $data[$i]->mybrand }} </td>
-                            <td style="font-size:12px" width="9%">{{ number_format($data[$i]->qty,1) }} </td>
+                            {{ $tqty += $data[$i]->qty }}
+                            <td style="font-size:12px;text-align:center" width="4%">{{ $i+1 }}</td>
+                            <td style="font-size:12px" width="44%">{{ $data[$i]->matname }} </td>
+                            <td style="text-align:center;font-size:12px" width="8%">{{ $data[$i]->UOM }} </td>
+                            <td style="text-align:left;font-size:12px" width="15%">{{ $data[$i]->mybrand }} </td>
+                            <td style="font-size:12px" width="10%">{{ number_format($data[$i]->qty,1) }} </td>
                             <td style="font-size:12px" width="9%">{{ number_format($data[$i]->price,1) }} </td>
-                            <td style="text-align:right;font-size:12px" width="11%">{{ number_format($data[$i]->saleamnt,0) }} </td>
+                            <td style="text-align:right;font-size:12px" width="10%">{{ number_format($data[$i]->saleamnt,0) }} </td>
                         </tr>
                     @endif
                 @endfor
                 <tr>
-                    <td colspan="8" width="100%" style="text-align: right;border-bottom: 1px solid lightgray;"></td>
+                    <td colspan="7" width="100%" style="text-align: right;border-bottom: 1px solid lightgray;"></td>
                     {{-- <td colspan="4" width="8%" style="text-align: right;border-bottom: 1px solid lightgray;">{{ number_format($vtotpcs,0) }} </td> --}}
                     {{-- <td class="1" width="8%" style="text-align: right;border-bottom: 1px solid lightgray;">{{ number_format($vwt,0) }} </td> --}}
                     {{-- <td class="2" width="8%" style="text-align: right;border-bottom: 1px solid lightgray;">{{ number_format($vvlues,0) }} </td> --}}
@@ -258,7 +243,7 @@ padding-left: 8px;
                 <tbody>
                     {{ $vvlues = 0 }}
                     @for ($i = 0 ; $i < count($data) ; $i++)
-                        @if ($data[$i]->grpid  > 1)
+                        @if ($data[$i]->grpid  > 1 and $data[$i]->grpid <>5 )
                             <tr>
                                 {{ $vvlues += $data[$i]->saleamnt }}
                                 <td style="font-size:12px" width="4%">{{ $i+1 }}</td>
@@ -288,18 +273,11 @@ padding-left: 8px;
 
         {{-- <table > --}}
 
-
-
-
-
-
-
-
-            <div style="margin-top:100px;">
+            <div style="margin-top:80px;">
             <table>
                 <tbody>
 
-                    <tr style="margin-top:16px;margin-bottom:16px;" >
+                    <tr style="margin-top:14px;margin-bottom:16px;" >
                         <td style="width=33%;font-size:80%;text-align:center">
                             --------------------
                         </td>

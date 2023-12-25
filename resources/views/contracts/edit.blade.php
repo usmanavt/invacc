@@ -302,7 +302,7 @@ dynamicTable = new Tabulator("#dynamicTable", {
             validator:"required",
             formatter:"money",
             bottomCalc:"sum",
-            formatterParams:{thousand:",",precision:2},
+            formatterParams:{thousand:",",precision:0},
             validator:["required","integer"],
             cellEdited: updateValues,
 
@@ -345,7 +345,7 @@ dynamicTable = new Tabulator("#dynamicTable", {
             bottomCalc:"sum",
             formatter:"money",
             visible:false,
-            formatterParams:{thousand:",",precision:3},
+            formatterParams:{thousand:",",precision:0},
             cellEdited: updateValues,
             formatter:function(cell,row)
             {
@@ -402,8 +402,9 @@ dynamicTable = new Tabulator("#dynamicTable", {
         {   title:"Supp.Val($)",
             field:"purval",
             cssClass:"bg-gray-200 font-semibold",
-             bottomCalc:"sum",
-            bottomCalcParams:{precision:0} ,
+            bottomCalc:"sum",
+            formatterParams:{thousand:",",precision:3},
+            bottomCalcParams:{precision:3} ,
             formatter:"money",
             formatterParams:{
                 decimal:".",
