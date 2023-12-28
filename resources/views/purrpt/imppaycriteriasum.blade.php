@@ -142,26 +142,28 @@ table{
     <table class="column-headers ">
         <thead >
             {{-- <tr> <th class="column-headers" width="50%">OPENING BNALANCE</th></tr> --}}
-            {{-- <tr>
-                <td colspan="4" width="64%" style="text-align:center;font-weight: bold;border-right: 1px solid lightgray;"> Material Description</td>
-                <td colspan="2" width="16%" style="text-align: center;font-weight: bold;border-right: 1px solid lightgray;">Quantity</td>
-                <td colspan="2" width="20%" style="text-align: center;font-weight: bold;border-right: 1px solid lightgray;">Supplier Value($)</td>
-            </tr> --}}
+            <tr>
+                <td colspan="5" width="44%" style="text-align:center;font-weight: bold;border-right: 1px solid lightgray;"> Invoice Description</td>
+                <td colspan="3" width="24%" style="text-align: center;font-weight: bold;border-right: 1px solid lightgray;">Bank Payable</td>
+                <td colspan="3" width="24%" style="text-align: center;font-weight: bold;border-right: 1px solid lightgray;">Cash Payable</td>
+                {{-- <td colspan="1" width="8%" style="text-align: center;font-weight: bold;border-right: 1px solid lightgray;">Invoice Balance</td> --}}
+            </tr>
 
             <tr>
                 {{-- <td  style="text-align: center font-size:0.5rem;font-weight: bold"> --}}
                     <th class="column-headers" width="3%">S#</th>
-                    <th class="column-headers" width="20%">Supplier Name</th>
-                    <th class="column-headers" width="11%">G.D No</th>
-                    <th class="column-headers" width="9%">G.D Date</th>
-                    <th class="column-headers" width="8%">Weight <br>(Kg)</th>
+                    <th class="column-headers" width="15%">Supplier Name</th>
+                    <th class="column-headers" width="10%">G.D No</th>
+                    <th class="column-headers" width="8%">G.D Date</th>
+                    <th class="column-headers" width="8%">Weight</th>
 
-                    <th class="column-headers" width="7%">Payment<br>Type</th>
-                    <th class="column-headers" width="9%">Payable<br>Amount</th>
-                    <th class="column-headers" width="9%">Payment<br>Date</th>
-                    <th class="column-headers" width="6%">Ref.</th>
-                    <th class="column-headers" width="9%">Payment</th>
-                    <th class="column-headers" width="9%">Balance</th>
+                    <th class="column-headers" width="8%">Payable</th>
+                    <th class="column-headers" width="8%">Payment</th>
+                    <th class="column-headers" width="8%">Balance<br>
+                    <th class="column-headers" width="8%">Payable</th>
+                    <th class="column-headers" width="8%">Payment</th>
+                    <th class="column-headers" width="8%">Balance</th>
+                    <th class="column-headers" width="8%">Invoice<br>Balance</th>
 
 
 
@@ -175,52 +177,39 @@ table{
             {{ $cash = 0 }};{{ $bnk = 0 }};{{ $tot = 0 }}
 
             @for ($i = 0 ; $i < count($data) ; $i++)
-            {{-- @if( $i==0 )
-            <tr>
-                <td colspan="10" width="100%" style="text-align: left;font-size:1.2rem;border-bottom: 2px solid rgb(211, 211, 211);"> {{ $data[$i]->Itemgroupe}} </td>
-            </tr>
-        @else
-
-        {{ $srno = $i - 1 }}
-        @if ($data[$i]->Itemgroupe  <> $data[$srno]->Itemgroupe)
-
-.
-              <tr>
-                    <td colspan="10" width="100%" style="text-align:left;font-size:1.2rem;border-bottom: 2px solid rgb(211, 211, 211);"> {{ $data[$i]->Itemgroupe}} </td>
-             </tr>
-        @endif
-
-        @endif --}}
 
 
             <tr>
 
-                {{ $cash += $data[$i]->cashpayable }}.
-                {{ $bnk += $data[$i]->payment }}
+                {{-- {{ $cash += $data[$i]->cashpayable }}. --}}
+                {{-- {{ $bnk += $data[$i]->payment }} --}}
                 {{-- {{ $tot += $data[$i]->amtdlr }} --}}
 
 
 
                 <td style="text-align:center" width="3%">{{ $i+1 }}</td>
-                <td style="text-align:left" width="20%">{{ $data[$i]->supname}} </td>
-                <td style="text-align:center" width="11%">{{ $data[$i]->machineno}} </td>
-                <td style="text-align:center" width="9%">{{ $data[$i]->machine_date}} </td>
-                <td style="text-align:center" width="8%">{{ $data[$i]->gdswt}} </td>
-                <td style="text-align:center" width="7%">{{ $data[$i]->ptype}} </td>
-                <td style="text-align:right" width="9%">{{ number_format($data[$i]->cashpayable,2) }} </td>
-                <td style="text-align:center" width="9%">{{ $data[$i]->pdate}} </td>
-                <td style="text-align:center" width="6%">{{ $data[$i]->ref}} </td>
-                <td style="text-align:right" width="9%">{{ number_format($data[$i]->payment,2) }} </td>
-                <td style="text-align:right" width="9%">{{ number_format($data[$i]->amountbal,2) }} </td>
+                <td style="text-align:left" width="15%">{{ $data[$i]->supname}} </td>
+                <td style="text-align:center" width="10%">{{ $data[$i]->machineno}} </td>
+                <td style="text-align:center" width="8%">{{ $data[$i]->machine_date}} </td>
+                <td style="text-align:center" width="8%">{{ $data[$i]->supwt}} </td>
+
+                <td style="text-align:right" width="8%">{{ number_format($data[$i]->cashpayable,2) }} </td>
+                <td style="text-align:right" width="8%">{{ number_format($data[$i]->cashpayment,2) }} </td>
+                <td style="text-align:right" width="8%">{{ number_format($data[$i]->cashbalance,2) }} </td>
+
+                <td style="text-align:right" width="8%">{{ number_format($data[$i]->bankpayable,2) }} </td>
+                <td style="text-align:right" width="8%">{{ number_format($data[$i]->bnkpayment,2) }} </td>
+                <td style="text-align:right" width="8%">{{ number_format($data[$i]->bankbalance,2) }} </td>
+                <td style="text-align:right" width="8%">{{ number_format($data[$i]->gbalance,2) }} </td>
 
             </tr>
             @endfor
-            <tr>
+            {{-- <tr>
                 <td class="column-headers" colspan="6"  style="text-align: right;font-weight: bold; border-bottom: 1px solid lightgray;">Total</td>
                 <td class="column-headers" colspan="1"  style="text-align: right;border-bottom: 1px solid lightgray;background: #e3e3e3;font-weight: bold">{{ number_format($cash,2) }} </td>
                 <td class="column-headers" colspan="3"  style="text-align: right;border-bottom: 1px solid lightgray;background: #e3e3e3;font-weight: bold">{{ number_format($bnk,2) }} </td>
                 <td class="column-headers" colspan="1"  style=" color:brown;font-weight:bold;  text-align: right;border-bottom: 1px solid lightgray;background: #e3e3e3;font-weight: bold">{{ number_format($tot,2) }} </td>
-            </tr>
+            </tr> --}}
 
 
 

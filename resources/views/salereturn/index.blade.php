@@ -152,7 +152,7 @@
             columns:[
             {title: "id",field: "id"},
             {title: "Customer",field: "customer.title"},
-            {title: "Return Date",field: "rdate"},
+            {title: "Return Date",field:  "rdate"},
             {title: "D.C No",field: "dcno"},
             {title: "G.P No",field: "gpno"},
             {title: "Bill No",field: "billno"},

@@ -664,11 +664,8 @@ var headerMenu = function(){
                 // {
                 // title:'Revise WSE', headerHozAlign:"center",
                     // columns:[
-                {title:"Rvs WSE Rate",  field:"wse",headerVertical:true,   formatter:"money",editor:"number",
-                        formatterParams:{thousand:",",precision:2},          responsive:0},
-                    // ]
-                // },
-
+                // {title:"Rvs WSE Rate",  field:"wse",headerVertical:true, formatter:"money",editor:"number",
+                //         formatterParams:{thousand:",",precision:2}, responsive:0},
                 {
                     title:'Price',
                     columns:[
@@ -823,8 +820,8 @@ var headerMenu = function(){
                             {title:"AST",               field:"asta",  formatter:"money",
                         formatterParams:{thousand:",",precision:0},           responsive:0,bottomCalc:"sum",bottomCalcParams:{precision:0}},
                             {title:"IT",                field:"ita",  formatter:"money",
-                        formatterParams:{thousand:",",precision:0},            responsive:0,bottomCalc:"sum",bottomCalcParams:{precision:0}},
-                            {title:"WSE",               field:"wsca",  formatter:"money",
+                        // formatterParams:{thousand:",",precision:0},            responsive:0,bottomCalc:"sum",bottomCalcParams:{precision:0}},
+                        //     {title:"WSE",               field:"wsca",  formatter:"money",
                         formatterParams:{thousand:",",precision:0},           responsive:0,bottomCalc:"sum",bottomCalcParams:{precision:0}},
                             {title:"DutyGDCal.", cssClass:"bg-green-200 font-semibold",  field:"goods_received", headerVertical:true,  formatter:"money",formatterParams:{thousand:",",precision:0},
                          responsive:0,bottomCalc:"sum",bottomCalcParams:{precision:0}},

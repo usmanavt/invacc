@@ -65,12 +65,13 @@ class QuotationController  extends Controller
     {
 
         $search = $request->search;
+        $customerid = $request->customerid;
         $size = $request->size;
         $field = $request->sort[0]["field"];     //  Nested Array
         $dir = $request->sort[0]["dir"];         //  Nested Array
         $vrtype = $request->p1;
-        // $abc = DB::select(' call procmmfrquotation(?)',array( $search ));
-        $contracts = DB::table('mmfrquotation')
+         $abc = DB::select(' call procmmfrquotation(?)',array( $customerid ));
+        $contracts = DB::table('tmpmmmaterial')
         // ->join('suppliers', 'contracts.supplier_id', '=', 'suppliers.id')
         // ->select('contracts.*', 'suppliers.title')
         //  ->where('customer_id',$custid)

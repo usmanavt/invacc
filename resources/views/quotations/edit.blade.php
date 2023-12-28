@@ -1,9 +1,9 @@
 <x-app-layout>
 
     @push('styles')
-    <link rel="stylesheet" href="{{ asset('css/tabulator_simple.min.css') }}">
-    {{-- <link href="https://unpkg.com/tabulator-tables/dist/css/tabulator.min.css" rel="stylesheet"> --}}
-    {{-- <script type="text/javascript" src="https://unpkg.com/tabulator-tables/dist/js/tabulator.min.js"></script> --}}
+    {{-- <link rel="stylesheet" href="{{ asset('css/tabulator_simple.min.css') }}"> --}}
+    <link href="https://unpkg.com/tabulator-tables/dist/css/tabulator.min.css" rel="stylesheet">
+    <script type="text/javascript" src="https://unpkg.com/tabulator-tables/dist/js/tabulator.min.js"></script>
 
     @endpush
 
@@ -127,6 +127,7 @@
 
     @push('scripts')
 <script>
+let customerid = document.getElementById('customer_id');
 let table;
 let searchValue = "";
 console.log(@json($cd))
@@ -163,6 +164,7 @@ const skus = @json($skus);
     //  Table Filter
     function dataFilter(element)
     {
+        table.setData(getMaster,{search:searchValue,customerid:customerid.options[customerid.selectedIndex].value});
         searchValue = element.value;
         table.setData(getMaster,{search:searchValue});
     }
@@ -180,6 +182,7 @@ const skus = @json($skus);
         paginationSize:15,
         paginationSizeSelector:[10,15,20,30],
         ajaxParams: function(){
+            return {search:searchValue,customerid:customerid.options[customerid.selectedIndex].value};
             return {search:searchValue};
         },
         ajaxURL: getMaster,
@@ -190,13 +193,13 @@ const skus = @json($skus);
         columns:[
             // Master Data
             {title:"Id", field:"id" , responsive:0},
-            {title:"Customer", field:"custname" ,headerSortStartingDir:"asc" , responsive:0},
+            // {title:"Customer", field:"custname" ,headerSortStartingDir:"asc" , responsive:0},
             {title:"Material", field:"title" ,headerSort:false, responsive:0},
             {title:"Searching Text", field:"srchb" ,headerSortStartingDir:"asc" , responsive:0},
             {title:"Items", field:"category" ,headerSortStartingDir:"asc" , responsive:0},
             {title:"Category_Id", field:"category_id",visible:false ,headerSortStartingDir:"asc" , responsive:0},
             {title:"Dimesion", field:"dimension" ,  responsive:0},
-            {title:"Category", field:"category" ,headerSortStartingDir:"asc" , responsive:0},
+            {title:"Category", field:"category" ,headerSortStartingDir:"asc",visible:false , responsive:0},
             {title:"Last Sale Price", field:"pcspbundle1" ,  responsive:0},
             {title:"Sku", field:"sku" ,  responsive:0},
             // {title:"Brand", field:"brand" ,  responsive:0},
@@ -432,7 +435,17 @@ dynamicTable = new Tabulator("#dynamicTable", {
 document.addEventListener('keyup', (e)=>{
     //  We are using ctrl key + 'ArrowUp' to show Modal
     if(e.ctrlKey && e.keyCode == 32){
-        showModal()
+
+        if (
+                customerid.options[customerid.selectedIndex].value != ""
+                ||
+                customerid.options[customerid.selectedIndex].value != 0 )  {
+                    console.log(customerid.options[customerid.selectedIndex].value)
+                    showModal()
+            }
+
+
+        // showModal()
     }
 })
 // Ensure Buttons Are Closed

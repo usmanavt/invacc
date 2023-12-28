@@ -31,7 +31,7 @@
                                 <option value="{{$customer->id}}"> {{$customer->title}} </option>
                                 @endforeach
                             </select>
-                            <input type="text" title="t1"  id="p1" name="p1"    >
+                            {{-- <input type="text" title="t1"  id="p1" name="p1"    > --}}
                             <label for="saldate">Quotation Date<x-req /></label>
                             <input type="date" value="{{ date('Y-m-d') }}" class="col-span-2"  id="saldate" name="saldate" required>
 
@@ -101,6 +101,7 @@
 
 @push('scripts')
 <script>
+    let customerid = document.getElementById('customer_id');
     let customerDropdown;
     let table;
     let searchValue = "";
@@ -133,7 +134,20 @@ const skus = @json($skus);
         //  We are using ctrl key + 'ArrowUp' to show Modal
         if(e.ctrlKey && e.keyCode == 32){
 
-            showModal()
+            if (
+                customerid.options[customerid.selectedIndex].value != ""
+                ||
+                customerid.options[customerid.selectedIndex].value != 0 )  {
+                    console.log(customerid.options[customerid.selectedIndex].value)
+                    showModal()
+            }
+
+
+
+
+
+
+            // showModal()
         }
     })
     // Ensure Buttons Are Closed
@@ -239,6 +253,7 @@ const skus = @json($skus);
     //  Table Filter
     function dataFilter(element)
     {
+        table.setData(getMaster,{search:searchValue,customerid:customerid.options[customerid.selectedIndex].value});
         searchValue = element.value;
         table.setData(getMaster,{search:searchValue});
     }
@@ -256,6 +271,7 @@ const skus = @json($skus);
         paginationSize:10,
         paginationSizeSelector:[10,25,50,100],
         ajaxParams: function(){
+            return {search:searchValue,customerid:customerid.options[customerid.selectedIndex].value};
             return {search:searchValue};
         },
         ajaxURL: getMaster,
@@ -265,13 +281,13 @@ const skus = @json($skus);
         columns:[
             // Master Data
             {title:"Id", field:"id" , responsive:0},
-            {title:"Customer", field:"custname" , headerSortStartingDir:"asc" , responsive:0},
+          //  {title:"Customer", field:"custname" , headerSortStartingDir:"asc" , responsive:0},
             {title:"Material", field:"title" , headerSort:false, responsive:0},
             {title:"Searching Text", field:"srchb" ,  responsive:0},
             {title:"Items", field:"category" , headerSortStartingDir:"asc" , responsive:0},
             {title:"Category_Id", field:"category_id",visible:false ,headerSortStartingDir:"asc" , responsive:0},
             {title:"Dimesion", field:"dimension" ,  responsive:0},
-            {title:"Category", field:"source" , headerSortStartingDir:"asc" , responsive:0},
+            {title:"Category", field:"source" , headerSortStartingDir:"asc",visible:false , responsive:0},
 
             {title:"Last Sale Price", field:"pcspbundle1" ,  responsive:0},
             {title:"Unit", field:"sku" ,  responsive:0},

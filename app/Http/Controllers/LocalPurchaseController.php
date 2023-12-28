@@ -83,19 +83,19 @@ class LocalPurchaseController  extends Controller
     public function matMaster(Request $request)
     {
         $search = $request->search;
-        $supplierId = $request->supplierId;
+        // $supplierId = $request->supplierId;
         $size = $request->size;
         $field = $request->sort[0]["field"];     //  Nested Array
         $dir = $request->sort[0]["dir"];         //  Nested Array
-        $xyz = $request->abc;
 
-        //  dd($xyz);
+
+        //  dd($request->all());
         // return $supplierId;
 
         //  With Tables
         $materials = Material::where(function ($query) use ($search){
             $query->where('source_id','<>',2)
-        //    ->where('brand_id','=',101)
+        //    ->where('brand_id','=',$supplierId)
             ->where('srchi','LIKE','%' . $search. '%');
         })
         ->orderBy($field,$dir)

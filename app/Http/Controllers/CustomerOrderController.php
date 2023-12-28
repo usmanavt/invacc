@@ -83,12 +83,6 @@ class CustomerOrderController  extends Controller
         ->paginate((int) $size);
         return $cis;
 
-
-
-
-
-
-
     }
 
 

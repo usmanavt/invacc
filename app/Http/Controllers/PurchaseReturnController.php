@@ -170,7 +170,7 @@ class PurchaseReturnController  extends Controller
                 $lpd = new PurchaseReturnDetail();
                 $lpd->prid = $ci->id;
                 $lpd->material_id = $cont['material_id'];
-                $lpd->prunitid = $cont['sku_id'];
+                $lpd->prunitid = $cont['prunitid'];
                 $lpd->prwt = $cont['prwt'];
                 $lpd->prpcs = $cont['prpcs'];
                 $lpd->prfeet = $cont['prfeet'];
@@ -257,7 +257,7 @@ class PurchaseReturnController  extends Controller
                     // $cds = PurchaseReturnDetail::where('id',$cd->id)->first();
                     $c->prid = $ci->id;
                     $c->material_id = $cd['material_id'];
-                    $c->prunitid = $cd['sku_id'];
+                    $c->prunitid = $cd['prunitid'];
                     $c->prwt = $cd['prwt'];
                     $c->prpcs = $cd['prpcs'];
                     $c->prfeet = $cd['prfeet'];

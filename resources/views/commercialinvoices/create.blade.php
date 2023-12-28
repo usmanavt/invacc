@@ -388,7 +388,7 @@
                         dutygdswt :         obj.dutygdswt ,
                         inkg :              vwinkg,
                         length :            obj.length,
-                        gdsprice :          obj.gdsprice,
+                        gdsprice :          obj.gdsprice ,
                         dtyrate :           obj.dtyrate,
                         invsrate:           obj.invsrate,
                         amtindollar :       obj.purval  ,
@@ -915,12 +915,12 @@ var headerMenu = function(){
                     ]
                 },
 
-                {
-                title:'Revise WSE', headerHozAlign:"center",
-                    columns:[
-                {title:"WSC",  field:"wse",   formatter:"money",editor:"number",
-                        formatterParams:{thousand:",",precision:2},          responsive:0}]
-                },
+                // {
+                // title:'Revise WSE', headerHozAlign:"center",
+                //     columns:[
+                // {title:"WSC",  field:"wse",   formatter:"money",editor:"number",
+                //         formatterParams:{thousand:",",precision:2},         responsive:0}]
+                // },
 
                 {
                     title:'Price',
@@ -933,7 +933,7 @@ var headerMenu = function(){
                             headerVertical:true,
                             // cssClass:"bg-green-200 font-semibold",
                             validator:["required","numeric"],
-                            formatterParams:{thousand:",",precision:2}
+                            formatterParams:{thousand:",",precision:5}
                         },
 
                     ]
@@ -948,7 +948,7 @@ var headerMenu = function(){
                             headerVertical:true,
                             formatter:"money",
                             // bottomCalcFormatter:"money",
-                            formatterParams:{thousand:",",precision:2},
+                            formatterParams:{thousand:",",precision:3},
                             bottomCalc:"sum",bottomCalcParams:{precision:0},
                         },
                         {   title:"Supp.Val(Rs)",

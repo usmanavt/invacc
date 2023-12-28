@@ -369,7 +369,7 @@ dynamicTable = new Tabulator("#dynamicTable", {
             editor:"number",
             cssClass:"bg-green-200 font-semibold",
             formatter:"money",
-            formatterParams:{thousand:",",precision:3},
+            formatterParams:{thousand:",",precision:5},
             validator:["required","numeric"],
             cellEdited:updateValues,
         },

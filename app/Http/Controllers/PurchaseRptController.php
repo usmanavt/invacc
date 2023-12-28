@@ -474,8 +474,8 @@ class PurchaseRptController extends Controller
                     DB::table('contparameterrpt')->insert([ 'GLCODE' => $id ]);
                 }
             }
-            //  Call Procedure
-            $data = DB::select('call  procpaycriteria()');
+            //  Call Procedure procinvspmntstatus ( For Detail)
+            $data = DB::select('CALL procpaycriteria ()');
             if(!$data)
             {
                 Session::flash('info','No data available');
@@ -487,7 +487,7 @@ class PurchaseRptController extends Controller
             $grouped->values()->all();                       //  values() removes indices of array
 
             foreach($grouped as $g){
-                 $html =  view('purrpt.imppaycriteria')
+                 $html =  view('purrpt.imppaycriteriasum')
                     ->with('data',$g)
                     ->with('fromdate',$fromdate)
                     ->with('todate',$todate)
@@ -497,7 +497,7 @@ class PurchaseRptController extends Controller
                 foreach($chunks as $key => $val) {
                     $mpdf->WriteHTML($val);
                 }
-                $mpdf->AddPage();
+                // $mpdf->AddPage();
             }
             return response($mpdf->Output($filename,'I'),200)->header('Content-Type','application/pdf');
         }
