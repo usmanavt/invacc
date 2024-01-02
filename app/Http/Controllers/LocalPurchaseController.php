@@ -91,9 +91,13 @@ class LocalPurchaseController  extends Controller
 
         //  dd($request->all());
         // return $supplierId;
-
+        // $contracts = DB::table('vwmastercustplan')
         //  With Tables
-        $materials = Material::where(function ($query) use ($search){
+        $materials = Material::
+        // $materials=DB::table('materials')
+        // ->join('last_sale_rate', 'materials.id', '=', 'last_sale_rate.material_id')
+    //    ->select('materials.*', 'last_sale_rate.salrate')
+        where(function ($query) use ($search){
             $query->where('source_id','<>',2)
         //    ->where('brand_id','=',$supplierId)
             ->where('srchi','LIKE','%' . $search. '%');

@@ -174,18 +174,19 @@ table{
     <table class="data" cellspacing="0">
         <tbody>
 
-            {{ $cash = 0 }};{{ $bnk = 0 }};{{ $tot = 0 }}
+            {{ $cashpbl = 0 }};{{ $cashpmt = 0 }};{{ $cashbal = 0 }}
+            {{ $bankhpbl = 0 }};{{ $bankpmt = 0 }};{{ $bankbal = 0 }}
+            {{ $totalbal = 0 }}
+
 
             @for ($i = 0 ; $i < count($data) ; $i++)
 
 
             <tr>
 
-                {{-- {{ $cash += $data[$i]->cashpayable }}. --}}
-                {{-- {{ $bnk += $data[$i]->payment }} --}}
-                {{-- {{ $tot += $data[$i]->amtdlr }} --}}
-
-
+                {{ $bankhpbl += $data[$i]->bankpayable }};{{ $bankpmt += $data[$i]->bnkpayment }}; {{ $bankbal += $data[$i]->bankbalance }}
+                {{ $cashpbl += $data[$i]->cashpayable }};{{ $cashpmt += $data[$i]->cashpayment }}; {{ $cashbal += $data[$i]->cashbalance }}
+                {{ $totalbal += $data[$i]->gbalance }}
 
                 <td style="text-align:center" width="3%">{{ $i+1 }}</td>
                 <td style="text-align:left" width="15%">{{ $data[$i]->supname}} </td>
@@ -193,23 +194,30 @@ table{
                 <td style="text-align:center" width="8%">{{ $data[$i]->machine_date}} </td>
                 <td style="text-align:center" width="8%">{{ $data[$i]->supwt}} </td>
 
-                <td style="text-align:right" width="8%">{{ number_format($data[$i]->cashpayable,2) }} </td>
-                <td style="text-align:right" width="8%">{{ number_format($data[$i]->cashpayment,2) }} </td>
-                <td style="text-align:right" width="8%">{{ number_format($data[$i]->cashbalance,2) }} </td>
-
                 <td style="text-align:right" width="8%">{{ number_format($data[$i]->bankpayable,2) }} </td>
                 <td style="text-align:right" width="8%">{{ number_format($data[$i]->bnkpayment,2) }} </td>
                 <td style="text-align:right" width="8%">{{ number_format($data[$i]->bankbalance,2) }} </td>
+
+                <td style="text-align:right" width="8%">{{ number_format($data[$i]->cashpayable,2) }} </td>
+                <td style="text-align:right" width="8%">{{ number_format($data[$i]->cashpayment,2) }} </td>
+                <td style="text-align:right" width="8%">{{ number_format($data[$i]->cashbalance,2) }} </td>
                 <td style="text-align:right" width="8%">{{ number_format($data[$i]->gbalance,2) }} </td>
+
 
             </tr>
             @endfor
-            {{-- <tr>
-                <td class="column-headers" colspan="6"  style="text-align: right;font-weight: bold; border-bottom: 1px solid lightgray;">Total</td>
-                <td class="column-headers" colspan="1"  style="text-align: right;border-bottom: 1px solid lightgray;background: #e3e3e3;font-weight: bold">{{ number_format($cash,2) }} </td>
-                <td class="column-headers" colspan="3"  style="text-align: right;border-bottom: 1px solid lightgray;background: #e3e3e3;font-weight: bold">{{ number_format($bnk,2) }} </td>
-                <td class="column-headers" colspan="1"  style=" color:brown;font-weight:bold;  text-align: right;border-bottom: 1px solid lightgray;background: #e3e3e3;font-weight: bold">{{ number_format($tot,2) }} </td>
-            </tr> --}}
+            <tr>
+                <td class="column-headers" colspan="2"  style="text-align: right;font-weight: bold; border-bottom: 1px solid lightgray;">Total</td>
+                <td class="column-headers" colspan="4"  style="text-align: right;border-bottom: 1px solid lightgray;background: #e3e3e3;font-weight: bold">{{ number_format($bankhpbl,2) }} </td>
+                <td class="column-headers" colspan="1"  style="text-align: right;border-bottom: 1px solid lightgray;background: #e3e3e3;font-weight: bold">{{ number_format($bankpmt,2) }} </td>
+                <td class="column-headers" colspan="1"  style=" color:brown;font-weight:bold;  text-align: right;border-bottom: 1px solid lightgray;background: #e3e3e3;font-weight: bold">{{ number_format($bankbal,2) }} </td>
+
+                <td class="column-headers" colspan="1"  style="text-align: right;border-bottom: 1px solid lightgray;background: #e3e3e3;font-weight: bold">{{ number_format($cashpbl,2) }} </td>
+                <td class="column-headers" colspan="1"  style="text-align: right;border-bottom: 1px solid lightgray;background: #e3e3e3;font-weight: bold">{{ number_format($cashpmt,2) }} </td>
+                <td class="column-headers" colspan="1"  style=" color:brown;font-weight:bold;  text-align: right;border-bottom: 1px solid lightgray;background: #e3e3e3;font-weight: bold">{{ number_format($cashbal,2) }} </td>
+                <td class="column-headers" colspan="1"  style=" color:brown;font-weight:bold;  text-align: right;border-bottom: 1px solid lightgray;background: #e3e3e3;font-weight: bold">{{ number_format($totalbal,2) }} </td>
+
+            </tr>
 
 
 

@@ -69,9 +69,9 @@ class QuotationController  extends Controller
         $size = $request->size;
         $field = $request->sort[0]["field"];     //  Nested Array
         $dir = $request->sort[0]["dir"];         //  Nested Array
-        $vrtype = $request->p1;
-         $abc = DB::select(' call procmmfrquotation(?)',array( $customerid ));
-        $contracts = DB::table('tmpmmmaterial')
+        // $vrtype = $request->p1;
+        //  $abc = DB::select(' call procmmfrquotation(?)',array( $customerid ));
+        // $contracts = DB::table('tmpmmmaterial')
         // ->join('suppliers', 'contracts.supplier_id', '=', 'suppliers.id')
         // ->select('contracts.*', 'suppliers.title')
         //  ->where('customer_id',$custid)
@@ -80,8 +80,26 @@ class QuotationController  extends Controller
         // ->where('dimension','LIKE','%' . substr($search,3,10) . '%')
 
         //  ->where('custname', 'like', "%$search%")
-         ->where('srchb', 'like', "%$search%")
+        //  ->where('srchb', 'like', "%$search%")
         //  ->orWhere('dimension', 'like', "%$search%")
+
+        $contracts=DB::table('materials as a')
+        ->leftJoin('last_sale_rate AS b', function($join) use ($customerid){
+            $join->on('a.id', '=', 'b.material_id')
+                 ->where('b.customer_id', '=', $customerid);
+        })
+
+        // ->leftJoin('last_sale_rate', 'materials.id', '=', 'last_sale_rate.material_id')
+        // ->where('customer_id','=',$customerid)
+       ->select('a.id','a.title','a.srchb','a.category','a.category_id','a.dimension','a.dimension_id','b.salrate  as pcspbundle1'
+       ,DB::raw('case when b.sunitid<>0 then b.sunitname else a.sku end as sku'))
+
+        ->where(function ($query) use ($search){
+            $query->where('srchb','LIKE','%' . $search. '%');
+        //    ->where('brand_id','=',$supplierId)
+            // ->where('srchb','LIKE','%' . $search. '%');
+        })
+
         ->orderBy($field,$dir)
         ->paginate((int) $size);
 

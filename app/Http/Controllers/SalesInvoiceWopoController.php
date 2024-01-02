@@ -216,6 +216,28 @@ class SalesInvoiceWopoController  extends Controller
                 $lpd->salepcs = $cont['qtypcs'];
                 $lpd->salefeet = $cont['qtyfeet'];
 
+                $lstrt = CreateSaleRate::where('customer_id',$request->customer_id)->where('material_id',$cont['material_id'])->first();
+                if(!$lstrt) {
+                    $abc = new CreateSaleRate();
+                    $abc->customer_id=$request->customer_id;
+                    $abc->material_id=$cont['material_id'];
+                    $abc->salrate=$cont['price'];
+                    $abc->sunitid=$unitid->id;
+                    $abc->sunitname=$cont['sku'];
+                    $abc->tranid=$ci->id;
+                    $abc->save();
+                }
+                else
+                    {
+                        $lstrt->material_id=$cont['material_id'];
+                        $lstrt->salrate=$cont['price'];
+                        $lstrt->sunitid=$unitid->id;
+                        $lstrt->sunitname=$cont['sku'];
+                        $lstrt->tranid=$ci->id;
+                        $lstrt->save();
+                    }
+
+
 
                 $lpd->save();
 
@@ -245,22 +267,6 @@ class SalesInvoiceWopoController  extends Controller
 
             // }
 
-            $lstrt = CreateSaleRate::where('customer_id',$request->customer_id)->where('material_id',$cont['material_id'])->first();
-            if(!$lstrt) {
-                $abc = new CreateSaleRate();
-                $abc->customer_id=$request->customer_id;
-                $abc->material_id=$cont['material_id'];
-                $abc->salrate=$cont['price'];
-                $abc->save();
-            }
-            else
-                {
-                // $abc->customer_id=$request->customer_id;
-                // $abc->material_id=$cont['material_id'];
-
-                $lstrt->salrate=$cont['price'];
-                $lstrt->save();
-                }
 
                 // $lwsstk = ItemBal::where('locid',$location->id)->where('material_id',$cont['material_id'])->first();
                 // ;
@@ -444,6 +450,38 @@ class SalesInvoiceWopoController  extends Controller
                     $cds->salepcs = $cd['qtypcs'];
                     $cds->salefeet = $cd['qtyfeet'];
 
+                    // $lstrt = CreateSaleRate::where('customer_id',$request->customer_id)->where('material_id',$cd['material_id'])->first();
+                    $lstrt = CreateSaleRate::where('tranid',$sale_invoices->id)->where('material_id',$cd['material_id'])->first();
+                    if(!$lstrt) {
+                        $abc = new CreateSaleRate();
+                        $abc->customer_id=$request->customer_id;
+                        $abc->material_id=$cd['material_id'];
+                        $abc->salrate=$cd['price'];
+                        $abc->sunitid=$unit->id;
+                        $abc->sunitname=$cd['sku'];
+                        $abc->tranid=$sale_invoices->id;
+                        $abc->save();
+                    }
+                    else
+                        {
+                            $lstrt->material_id=$cd['material_id'];
+                            $lstrt->customer_id=$request->customer_id;
+                            $lstrt->salrate=$cd['price'];
+                            $lstrt->sunitid=$unit->id;
+                            $lstrt->sunitname=$cd['sku'];;
+
+                            $lstrt->save();
+                        }
+
+
+
+
+
+
+
+
+
+
 
                     $cds->save();
 
@@ -478,19 +516,6 @@ class SalesInvoiceWopoController  extends Controller
 
 
 
-                    $lstrt = CreateSaleRate::where('customer_id',$request->customer_id)->where('material_id',$cd->material_id)->first();
-                    if(!$lstrt) {
-                        $abc = new CreateSaleRate();
-                        $abc->customer_id=$request->customer_id;
-                        $abc->material_id=$cd->material_id;
-                        $abc->salrate=$cd['price'];;
-                        $abc->save();
-                    }
-                    else
-                        {
-                        $lstrt->salrate=$cd['price'];;
-                        $lstrt->save();
-                        }
 
 
 

@@ -32,8 +32,15 @@
                                 </div>
 
                                 <div>
+                                    <input type="radio" name="report_type" value="impcominvs1" required onchange="checkReportType('impcominvs1')">
+                                    <label for="">COMMERCIAL INVOICE IMPORT </label>
+                                </div>
+
+
+
+                                <div>
                                     <input type="radio" name="report_type" value="impcominvspc" required onchange="checkReportType('impcominvspc')">
-                                    <label for="">PURCHASE INVOICE IMPORT PAYMENT CRITERIA </label>
+                                    <label for="">IMPORT PAYABLE SUMMARY </label>
                                 </div>
 
 
@@ -735,6 +742,47 @@ const getSubheadVoucherData10 = async (value) =>{
     }
 
 
+    case 'impcominvs1':
+            //   console.log(todate.value)
+            fetch(cominvsimp + `?todate=${todate.value}&fromdate=${fromdate.value}&head=${value}`,{
+                    method:"GET",
+                    headers: { 'Accept':'application/json','Content-type':'application/json'},
+                    })
+                    .then(response => response.json())
+                    .then( data => {
+                        if(data.length > 0)
+                        {
+                            data.forEach(e => {
+                                addSelectElement(subhead,e.Subhead,e.title)
+                            });
+                            subhead.setAttribute('required','')
+                            subhead.removeAttribute('disabled','')
+                        }else{
+                            subhead.removeAttribute('required','')
+                            subhead.setAttribute('disabled','')
+                        }
+                    })
+                    .catch(error => console.error(error))
+                break;
+
+// FOR CONTRACT FILL
+const getSubheadVoucherData19 = async (value) =>{
+        let data = await fetch(cominvsimp + `?todate=${todate.value}&fromdate=${fromdate.value}&head=${value}`,{
+            method:"GET",
+            headers: { 'Accept':'application/json','Content-type':'application/json'},
+            })
+            .then(response => response.json())
+            .then( data => { return data })
+            .catch(error => console.error(error))
+    }
+    const getImpcominvs1 =async  (value) => {
+        const impcominvs1 = await getSubheadVoucherData19(value)
+        return impcominvs1
+    }
+
+
+
+
     case 'purret':
             //   console.log(todate.value)
             fetch(funcpurretcategory + `?todate=${todate.value}&fromdate=${fromdate.value}&head=${value}`,{
@@ -772,8 +820,6 @@ const getSubheadVoucherData15 = async (value) =>{
         const purret = await getSubheadVoucherData15(value)
         return purret
     }
-
-
 
 
 
@@ -832,7 +878,6 @@ const getSubheadVoucherData15 = async (value) =>{
 
 
         }
-
 
         // FOR CONTRACT FILL
     const getSubheadVoucherData = async (value) =>{
@@ -1099,6 +1144,27 @@ const getCominvsimpVoucherData = async (value) =>{
                 // });
                 headSelected()
                 break;
+
+                case 'impcominvs1':
+                // Show Head
+                rptType = 'impcominvs1'
+                // head.setAttribute('required','')
+                // head.disabled = false
+                // head.length = 0
+                subhead.removeAttribute('required')
+                subhead.disabled = true
+                subhead.length = 0
+                // heads.forEach(e => {
+                //     addSelectElement(head,e.id,e.title)
+                // });
+                headSelected()
+                break;
+
+
+
+
+
+
 
                 case 'dtysmry':
                 // Show Head

@@ -185,17 +185,6 @@ class CommercialInvoiceController extends Controller
 
 
 
-            $vartxt = 'Tonage';
-            $varmac = $ci->machineno;
-            $vardta = $vartxt . ' ' . $varmac;
-
-            $subhead = new Subhead();
-            $subhead->head_id = 111;
-            $subhead->title =  $vardta;
-            $subhead->commercial_invoice_id = $ci->id;
-            $subhead->status = 1;
-            $subhead->ob = 0;
-            $subhead->save();
 
             //  Commercial Invoice Details
             foreach ($comminvoice as $cid) {
@@ -282,7 +271,6 @@ class CommercialInvoiceController extends Controller
                 $c->save();
 
 
-                // $tsumwt3 =  CommercialInvoiceDetails::where('contract_id',$c->contract_id)->where('material_id',$c->material_id) ->sum('gdswt');
                 // $tsumpcs3 = CommercialInvoiceDetails::where('contract_id',$c->contract_id)->where('material_id',$c->material_id)->sum('pcs');
                 // $tsumval3 = CommercialInvoiceDetails::where('contract_id',$c->contract_id)->where('material_id',$c->material_id)->sum('amtindollar');
 
@@ -329,13 +317,23 @@ class CommercialInvoiceController extends Controller
                 // $cpdtl1->closed = 1;
                 // $cpdtl1->save();
 
-
-
-
-
-
-
             }
+
+
+            $vtotwt =  CommercialInvoiceDetails::where('commercial_invoice_id',$ci->id)->sum('gdswt');
+            $vartxt = $vtotwt;
+            // 'Tonage';
+            $varmac = $ci->machineno;
+            $vardta = $vartxt . ' ' . $varmac;
+
+            $subhead = new Subhead();
+            $subhead->head_id = 111;
+            $subhead->title =  $vardta;
+            $subhead->commercial_invoice_id = $ci->id;
+            $subhead->status = 1;
+            $subhead->ob = 0;
+            $subhead->save();
+
 
 
                 // $sumwt = $vartwt1 -  CommercialInvoiceDetails::where('commercial_invoice_id',$cpdtl->commercial_invoice_id)->sum('gdswt');
@@ -517,18 +515,7 @@ class CommercialInvoiceController extends Controller
             $ci->save();
 
 
-            //  Update Subhead
-            $vartxt = 'Tonage';
-            $varmac = $ci->machineno;
-            $vardta = $vartxt . ' ' . $varmac;
-            $subhead = Subhead::where('commercial_invoice_id',$ci->id)->first();
-            // $subhead = new Subhead();
-            // $subhead->head_id = 111;
-            $subhead->title =  $vardta;
-            // $subhead->commercial_invoice_id = $reciving->commercial_invoice_id;
-            // $subhead->status = 1;
-            // $subhead->ob = 0;
-            $subhead->save();
+
 
             foreach ($comminvoice as $cid) {
                 $c = CommercialInvoiceDetails::findOrFail($cid['id']);
@@ -610,8 +597,6 @@ class CommercialInvoiceController extends Controller
                 $c->dbundle2 = $cid['bundle2'];
                 $c->bundle1 = $cid['bundle1'];
                 $c->bundle2 = $cid['bundle2'];
-
-
 
                 $c->save();
 
@@ -784,6 +769,21 @@ class CommercialInvoiceController extends Controller
                 // $test = DB::update(DB::raw('UPDATE users SET name='.$name.' WHERE id =3'));
 
             }
+
+
+            $vtotwt =  CommercialInvoiceDetails::where('commercial_invoice_id',$ci->id)->sum('gdswt');
+            $vartxt = $vtotwt;
+            // 'Tonage';
+            $varmac = $ci->machineno;
+            $vardta = $vartxt . ' ' . $varmac;
+
+            $subhead = Subhead::where('commercial_invoice_id',$ci->id)->first();
+            $subhead->head_id = 111;
+            $subhead->title =  $vardta;
+            // $subhead->commercial_invoice_id = $ci->id;
+            $subhead->status = 1;
+            $subhead->ob = 0;
+            $subhead->save();
 
 
 

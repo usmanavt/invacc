@@ -184,7 +184,7 @@ table{
             {{ $wt = 0 }};{{ $pcs = 0 }};{{ $supval = 0 }};{{ $invsval = 0 }};{{ $dutval = 0 }}
 
             @for ($i = 0 ; $i < count($data) ; $i++)
-            @if( $i==0 )
+            {{-- @if( $i==0 )
             <tr>
                 <td colspan="10" width="100%" style="text-align: left;font-size:1.2rem;border-bottom: 2px solid rgb(211, 211, 211);"> {{ $data[$i]->Itemgroupe}} </td>
             </tr>
@@ -199,7 +199,7 @@ table{
              </tr>
         @endif
 
-        @endif
+        @endif --}}
 
 
             <tr>

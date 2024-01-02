@@ -158,17 +158,18 @@ table{
         <tbody>
 
             {{ $wt = 0 }};{{ $pcs = 0 }};{{ $supval = 0 }}
-
+            {{ $rwt = 0 }};{{ $rpcs = 0 }}
+            {{ $cwt = 0 }};{{ $cpcs = 0 }}
 
             @for ($i = 0 ; $i < count($data) ; $i++)
-            @if( $i==0 )
+            {{-- @if( $i==0 )
             <tr>
                 <td colspan="12" width="100%" style="text-align: left;font-size:1.2rem;border-bottom: 2px solid rgb(211, 211, 211);"> {{ $data[$i]->Itemgroupe}} </td>
             </tr>
         @else
 
         {{ $srno = $i - 1 }}
-        @if ($data[$i]->Itemgroupe  <> $data[$srno]->Itemgroupe)
+        @if ($data[$i]->Itemgroupe  <> $data[$srno]->Itemgroupe) --}}
 
         {{-- <tr>
             <td class="column-headers" colspan="6" width="7%" style="text-align: right;font-weight: bold; border-bottom: 1px solid lightgray;">Sub Total</td>
@@ -180,15 +181,24 @@ table{
 
         </tr> --}}
 
-              <tr>
+              {{-- <tr>
                     <td colspan="12" width="100%" style="text-align:left;font-size:1.2rem;border-bottom: 2px solid rgb(211, 211, 211);"> {{ $data[$i]->Itemgroupe}} </td>
              </tr>
         @endif
 
-        @endif
+        @endif --}}
 
 
             <tr>
+
+
+                {{ $cwt += $data[$i]->wt }}.
+                {{ $cpcs += $data[$i]->totpcs }}
+
+
+                {{ $rwt += $data[$i]->wtreceived }}.
+                {{ $rpcs += $data[$i]->pcsreceived }}
+
 
                 {{ $wt += $data[$i]->tbalwt }}.
                 {{ $pcs += $data[$i]->tbalpcs }}
@@ -221,12 +231,23 @@ table{
             @endfor
             <tr>
                 <td class="column-headers" colspan="2"  style="text-align: right;font-weight: bold; border-bottom: 1px solid lightgray;">Total</td>
-                <td colspan="7"  style="text-align: right;border-bottom: 1px solid lightgray;background: #e3e3e3;font-weight: bold">{{ number_format($pcs,0) }} </td>
+
+                <td colspan="3"  style="text-align: right;border-bottom: 1px solid lightgray;background: #e3e3e3;font-weight: bold">{{ number_format($cpcs,0) }} </td>
+                <td colspan="1"  style="text-align: right;border-bottom: 1px solid lightgray;background: #e3e3e3;font-weight: bold">{{ number_format($cwt,2) }} </td>
+
+
+                <td colspan="1"  style="text-align: right;border-bottom: 1px solid lightgray;background: #e3e3e3;font-weight: bold">{{ number_format($rpcs,0) }} </td>
+                <td colspan="1"  style="text-align: right;border-bottom: 1px solid lightgray;background: #e3e3e3;font-weight: bold">{{ number_format($rwt,2) }} </td>
+
+
+
+
+                <td colspan="1"  style="text-align: right;border-bottom: 1px solid lightgray;background: #e3e3e3;font-weight: bold">{{ number_format($pcs,0) }} </td>
                 <td colspan="1"  style="text-align: right;border-bottom: 1px solid lightgray;background: #e3e3e3;font-weight: bold">{{ number_format($wt,2) }} </td>
                 <td colspan="2"  style="text-align: right;border-bottom: 1px solid lightgray;background: #e3e3e3;font-weight: bold">{{ number_format($supval,2) }} </td>
-                {{-- <td colspan="2"  style="text-align: right;border-bottom: 1px solid lightgray;background: #e3e3e3;font-weight: bold">{{ number_format($supval,2) }} </td> --}}
-                {{-- <td colspan="1"  style="text-align: right;border-bottom: 1px solid lightgray;background: #e3e3e3;font-weight: bold">{{ number_format($invsval,2) }} </td>
-                <td colspan="1"  style="text-align: right;border-bottom: 1px solid lightgray;background: #e3e3e3;font-weight: bold">{{ number_format($dutval,2) }} </td> --}}
+
+
+
 
             </tr>
 

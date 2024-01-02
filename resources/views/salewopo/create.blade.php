@@ -1,9 +1,9 @@
 <x-app-layout>
 
     @push('styles')
-    {{-- <link rel="stylesheet" href="{{ asset('css/tabulator_simple.min.css') }}"> --}}
-    <link href="https://unpkg.com/tabulator-tables/dist/css/tabulator.min.css" rel="stylesheet">
-    <script type="text/javascript" src="https://unpkg.com/tabulator-tables/dist/js/tabulator.min.js"></script>
+    <link rel="stylesheet" href="{{ asset('css/tabulator_simple.min.css') }}">
+    {{-- <link href="https://unpkg.com/tabulator-tables/dist/css/tabulator.min.css" rel="stylesheet"> --}}
+    {{-- <script type="text/javascript" src="https://unpkg.com/tabulator-tables/dist/js/tabulator.min.js"></script> --}}
 
     @endpush
 
@@ -28,7 +28,7 @@
 
                                 <label for="customer_id">Customer<x-req /></label>
                                     <select autocomplete="on" class="col-span-2" name="customer_id" id="customer_id" >
-                                        <option value="" selected>--Customer</option>
+                                        {{-- <option value="" selected></option> --}}
                                         @foreach($customers as $customer)
                                         <option value="{{$customer->id}}"> {{$customer->title}} </option>
                                         @endforeach

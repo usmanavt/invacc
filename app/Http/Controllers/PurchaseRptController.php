@@ -822,7 +822,7 @@ class PurchaseRptController extends Controller
 
 
 
-        if($report_type === 'impcominvs'){
+        if($report_type === 'impcominvs' || $report_type === 'impcominvs1' ){
             //  dd($request->all());
             $head_id = $request->head_id;
             $head = Supplier::findOrFail($head_id);
@@ -847,7 +847,16 @@ class PurchaseRptController extends Controller
             $grouped = $collection->groupBy('purid');       //  Sort collection by SupName
             $grouped->values()->all();                       //  values() removes indices of array
             foreach($grouped as $g){
-                 $html =  view('purrpt.impcominvs')->with('data',$g)->with('fromdate',$fromdate)->with('todate',$todate)->with('headtype',$head->title)->render();
+
+                if($report_type === 'impcominvs')
+                {
+                $html =  view('purrpt.impcominvs')->with('data',$g)->with('fromdate',$fromdate)->with('todate',$todate)->with('headtype',$head->title)->render();
+                }
+                if($report_type === 'impcominvs1')
+                {
+                $html =  view('purrpt.impcominvs1')->with('data',$g)->with('fromdate',$fromdate)->with('todate',$todate)->with('headtype',$head->title)->render();
+                }
+
                 // $html =  view('purrpt.glhw')->with('data',$g)->with('fromdate',$fromdate)->with('todate',$todate)->render();
                 $filename = $g[0]->purid  .'-'.$fromdate.'-'.$todate.'.pdf';
                 $chunks = explode("chunk", $html);

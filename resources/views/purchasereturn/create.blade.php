@@ -411,16 +411,16 @@ var tamount=0;
 var updateValues = (cell) => {
         var data = cell.getData();
 
-        if(cell.getData().prunitid===1)
+        if(cell.getData().prunitid==1)
          {
              var sum =  Number(data.prwt) * Number(data.prprice)
          }
-         if(cell.getData().prunitid===2)
+         if(cell.getData().prunitid==2)
          {
             var sum =  Number(data.prpcs) * Number(data.prprice)
          }
 
-         if(cell.getData().prunitid===3)
+         if(cell.getData().prunitid==3)
          {
             var sum =  Number(data.prfeet) * Number(data.prprice)
          }
@@ -468,7 +468,7 @@ var updateValues = (cell) => {
                 {title:"Material Name",     field:"matname",responsive:0},
                 {title:"Material Size",    field:"size",responsive:0,frozen:true, headerMenu:headerMenu},
                 {title:"UOM",         field:"unitname",responsive:0, hozAlign:"center"},
-                {title:"Unitid",       field:"prunitid",visible:false},
+                {title:"Unitid",       field:"prunitid",visible:true},
                 {title:"material_id",  field:"material_id",visible:false},
                 {title:"supplier_id",  field:"supplier_id",visible:false},
 

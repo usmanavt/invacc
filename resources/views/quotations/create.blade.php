@@ -1,9 +1,9 @@
 <x-app-layout>
 
     @push('styles')
-    {{-- <link rel="stylesheet" href="{{ asset('css/tabulator_simple.min.css') }}"> --}}
-    <link href="https://unpkg.com/tabulator-tables/dist/css/tabulator.min.css" rel="stylesheet">
-    <script type="text/javascript" src="https://unpkg.com/tabulator-tables/dist/js/tabulator.min.js"></script>
+    <link rel="stylesheet" href="{{ asset('css/tabulator_simple.min.css') }}">
+    {{-- <link href="https://unpkg.com/tabulator-tables/dist/css/tabulator.min.css" rel="stylesheet"> --}}
+    {{-- <script type="text/javascript" src="https://unpkg.com/tabulator-tables/dist/js/tabulator.min.js"></script> --}}
 
     @endpush
 
@@ -259,9 +259,12 @@ const skus = @json($skus);
     }
     //  The Table for Materials Modal
     table = new Tabulator("#tableData", {
-        autoResize:true,
+        //autoResize:true,
+        width:"1200px",
+        height:"600px",
         responsiveLayout:"collapse",
         layout:"fitData",
+        layout:'fitDataTable',
         index:"id",
         placeholder:"No Data Available",
         pagination:true,
@@ -481,7 +484,7 @@ const skus = @json($skus);
         var data = { 'contracts' : dynamicTableData,'rcvblamount':rcvblamount.value,'cartage':cartage.value,'discntamt':discntamt.value,'discntper':discntper.value,'discntper':discntper.value ,
         'customer_id': customer_id.value,'saldate':saldate.value,'qutno':qutno.value,'prno':prno.value,
         'saletaxper':saletaxper.value,'saletaxamt':saletaxamt.value,'totrcvbamount':totrcvbamount.value,
-        'valdate':valdate.value,'cashcustomer':cashcustomer.value,'cashcustadrs':cashcustadrs.value,'p1':p1.value};
+        'valdate':valdate.value,'cashcustomer':cashcustomer.value,'cashcustadrs':cashcustadrs.value};
         // All Ok - Proceed
         fetch(@json(route('quotations.store')),{
             credentials: 'same-origin', // 'include', default: 'omit'

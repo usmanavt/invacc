@@ -184,17 +184,17 @@ table{
     <table class="data" cellspacing="0">
         <tbody>
 
-            {{-- {{ $wt = 0 }};{{ $pcs = 0 }};{{ $supval = 0 }};{{ $invsval = 0 }};{{ $dutval = 0 }} --}}
+            {{ $wt = 0 }};{{ $pcs = 0 }};{{ $rpcs = 0 }};{{ $rwt = 0 }};{{ $bpcs = 0 }};{{ $bwt = 0 }}
 
             @for ($i = 0 ; $i < count($data) ; $i++)
-            @if( $i==0 )
+            {{-- @if( $i==0 )
             <tr>
                 <td colspan="10" width="100%" style="text-align: left;font-size:1.2rem;border-bottom: 2px solid rgb(211, 211, 211);"> {{ $data[$i]->Itemgroupe}} </td>
             </tr>
         @else
 
         {{ $srno = $i - 1 }}
-        @if ($data[$i]->Itemgroupe  <> $data[$srno]->Itemgroupe)
+        @if ($data[$i]->Itemgroupe  <> $data[$srno]->Itemgroupe) --}}
 
         {{-- <tr>
             <td class="column-headers" colspan="6" width="7%" style="text-align: right;font-weight: bold; border-bottom: 1px solid lightgray;">Sub Total</td>
@@ -206,22 +206,22 @@ table{
 
         </tr> --}}
 
-              <tr>
+              {{-- <tr>
                     <td colspan="10" width="100%" style="text-align:left;font-size:1.2rem;border-bottom: 2px solid rgb(211, 211, 211);"> {{ $data[$i]->Itemgroupe}} </td>
              </tr>
         @endif
 
-        @endif
+        @endif --}}
 
 
             <tr>
 
-                {{-- {{ $wt += $data[$i]->wt }}.
+                {{ $wt += $data[$i]->wt }}.
                 {{ $pcs += $data[$i]->totpcs }}
-                {{ $rpcs += $data[$i]->vlues }}
-                {{ $rwt += $data[$i]->invsvalue }}
-                {{ $dutval += $data[$i]->dutval }} --}}
-
+                {{ $rpcs += $data[$i]->pcsreceived }}
+                {{ $rwt += $data[$i]->wtreceived }}
+                {{ $bpcs += $data[$i]->tbalpcs }}
+                {{ $bwt += $data[$i]->tbalwt }}
 
 
 
@@ -244,12 +244,13 @@ table{
             </tr>
             @endfor
             <tr>
-                {{-- <td class="column-headers" colspan="3" width="7%" style="text-align: right;font-weight: bold; border-bottom: 1px solid lightgray;">Grand Total</td>
-                <td colspan="2" width="7%" style="text-align: right;border-bottom: 1px solid lightgray;background: #e3e3e3;font-weight: bold">{{ number_format($pcs,2) }} </td>
-                <td colspan="1" width="7%" style="text-align: right;border-bottom: 1px solid lightgray;background: #e3e3e3;font-weight: bold">{{ number_format($wt,2) }} </td>
-                <td colspan="2" width="8%" style="text-align: right;border-bottom: 1px solid lightgray;background: #e3e3e3;font-weight: bold">{{ number_format($supval,2) }} </td>
-                <td colspan="2" width="7%" style="text-align: right;border-bottom: 1px solid lightgray;background: #e3e3e3;font-weight: bold">{{ number_format($invsval,2) }} </td>
-                <td colspan="2" width="7%" style="text-align: right;border-bottom: 1px solid lightgray;background: #e3e3e3;font-weight: bold">{{ number_format($dutval,2) }} </td> --}}
+                <td class="column-headers" colspan="2"  style="text-align: right;font-weight: bold; border-bottom: 1px solid lightgray;">Total</td>
+                <td colspan="3"  style="text-align: right;border-bottom: 1px solid lightgray;background: #e3e3e3;font-weight: bold">{{ number_format($pcs,0) }} </td>
+                <td colspan="1"  style="text-align: right;border-bottom: 1px solid lightgray;background: #e3e3e3;font-weight: bold">{{ number_format($wt,2) }} </td>
+                <td colspan="1"  style="text-align: right;border-bottom: 1px solid lightgray;background: #e3e3e3;font-weight: bold">{{ number_format($rpcs,0) }} </td>
+                <td colspan="1"  style="text-align: right;border-bottom: 1px solid lightgray;background: #e3e3e3;font-weight: bold">{{ number_format($rwt,2) }} </td>
+                <td colspan="1"  style="text-align: right;border-bottom: 1px solid lightgray;background: #e3e3e3;font-weight: bold">{{ number_format($bpcs,0) }} </td>
+                <td colspan="1"  style="text-align: right;border-bottom: 1px solid lightgray;background: #e3e3e3;font-weight: bold">{{ number_format($bwt,2) }} </td>
 
             </tr>
 
