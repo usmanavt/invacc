@@ -175,7 +175,10 @@ class QuotationController  extends Controller
                 $lpd->repname = $cont['repname'];
                 $lpd->mybrand = $cont['mybrand'];
                 $lpd->qtykg = $cont['bundle1'];
-                $lpd->price = $cont['pcspbundle1'];
+                $lpd->price = $cont['price'];
+                $lpd->lstslprice = $cont['pcspbundle1'];
+                $lpd->mrktprice1 = $cont['mrktprice1'];
+                $lpd->mrktprice2 = $cont['mrktprice2'];
                 $lpd->saleamnt = $cont['ttpcs'];
 
                 // $location = Location::where("title", $cont['location'])->first();
@@ -279,9 +282,11 @@ class QuotationController  extends Controller
                     $cds->repname = $cd['repname'];
                     $cds->mybrand = $cd['mybrand'];
                     $cds->qtykg = $cd['qtykg'];
-                    // $cds->qtypcs = $cd['qtypcs'];
-                    // $cds->qtyfeet = $cd['qtyfeet'];
                     $cds->price = $cd['price'];
+                    $cds->lstslprice = $cd['lstslprice'];
+                    $cds->mrktprice1 = $cd['mrktprice1'];
+                    $cds->mrktprice2 = $cd['mrktprice2'];
+
                     $cds->saleamnt = $cd['saleamnt'];
 
                     //  $location = Location::where("title", $cd['location'])->first();

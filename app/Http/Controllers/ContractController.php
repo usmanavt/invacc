@@ -35,8 +35,9 @@ class ContractController extends Controller
         $dir = $request->sort[0]["dir"];         //  Nested Array
         //  With Tables
         $contracts = Contract::where(function ($query) use ($search){
-                $query->where('id','LIKE','%' . $search . '%')
+                $query->where('conversion_rate','LIKE','%' . $search . '%')
                 ->orWhere('number','LIKE','%' . $search . '%');
+
             })
 
             // ->whereHas('supplier', function ($query) {

@@ -83,7 +83,28 @@ class ReportController extends Controller
         return $mpdf;
     }
 
+    public function getMPDFSettingsL($orientation = 'Legal-L')
+    {
 
+        $format;
+        $orientation == 'L' ? $format = 'Legal': 'Legal';
+
+        $mpdf = new PDF( [
+            'mode' => 'utf-8',
+            'format' => $orientation,
+            'margin_header' => '2',
+            'margin_top' => '5',
+            'margin_bottom' => '5',
+            'margin_footer' => '2',
+            'default_font_size' => 9,
+            'margin_left' => '10',
+            'margin_right' => '10',
+        ]);
+        $mpdf->showImageErrors = true;
+        $mpdf->curlAllowUnsafeSslRequests = true;
+        $mpdf->debug = true;
+        return $mpdf;
+    }
 
 
 
@@ -156,7 +177,10 @@ class ReportController extends Controller
                 ]);
             }
             // Add input for Muliple parameters in Procedure
-            $data = DB::select('call ProcGL(?,?)',array($fromdate,$todate));
+            if($request->p5 == 0)
+            { $data = DB::select('call ProcGL(?,?,?)',array($fromdate,$todate,1));}
+            else
+            { $data = DB::select('call ProcGL(?,?,?)',array($fromdate,$todate,2));}
             if(!$data)
             {
                 Session::flash('info','No data available');
@@ -167,17 +191,20 @@ class ReportController extends Controller
             // $filename = 'GeneralLedger-'.$fromdate.'-'.$todate.'.pdf';
 
             $collection = collect($data);                   //  Make array a collection
+
             $grouped = $collection->groupBy('Parid');       //  Sort collection by SupName
             $grouped->values()->all();                       //  values() removes indices of array
             foreach($grouped as $g){
-                $html =  view('reports.gl')->with('data',$g)->with('fromdate',$fromdate)->with('todate',$todate)->render();
-                // $html =  view('reports.gl')->with('data',$data)->with('fromdate',$fromdate)->with('todate',$todate)->render();
+                if($request->p5 == 0)
+                { $html =  view('reports.gl')->with('data',$g)->with('fromdate',$fromdate)->with('todate',$todate)->render(); }
+                else
+                { $html =  view('reports.glf2')->with('data',$g)->with('fromdate',$fromdate)->with('todate',$todate)->render(); }
                 $filename = $g[0]->Parid  .'-'.$fromdate.'-'.$todate.'.pdf';
                 $chunks = explode("chunk", $html);
                 foreach($chunks as $key => $val) {
                     $mpdf->WriteHTML($val);
                 }
-                $mpdf->AddPage();
+                // $mpdf->AddPage();
             }
             //  $mpdf->Output($filename,'I');
             return response($mpdf->Output($filename,'I'),200)->header('Content-Type','application/pdf');
@@ -213,7 +240,7 @@ class ReportController extends Controller
             }
             $mpdf = $this->getMPDFSettings();
             $collection = collect($data);                   //  Make array a collection
-            $grouped = $collection->groupBy('SupName');       //  Sort collection by SupName
+            $grouped = $collection->groupBy('SubHead');       //  Sort collection by SupName
             $grouped->values()->all();                       //  values() removes indices of array
             foreach($grouped as $g){
 
@@ -228,7 +255,7 @@ class ReportController extends Controller
 
 
 
-               $filename = $g[0]->SupName  .'-'.$fromdate.'-'.$todate.'.pdf';
+               $filename = $g[0]->SubHead  .'-'.$fromdate.'-'.$todate.'.pdf';
 
                $chunks = explode("chunk", $html);
                 foreach($chunks as $key => $val) {
@@ -268,7 +295,7 @@ class ReportController extends Controller
                 Session::flash('info','No data available');
                 return redirect()->back();
             }
-            $mpdf = $this->getMPDFSettingsA4L();
+            $mpdf = $this->getMPDFSettingsL();
             $collection = collect($data);                   //  Make array a collection
             $grouped = $collection->groupBy('grp');       //  Sort collection by SupName
             $grouped->values()->all();                       //  values() removes indices of array

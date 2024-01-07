@@ -174,6 +174,8 @@ class SalesInvoiceWopoController  extends Controller
             $ci->saletaxamt = $request->saletaxamt;
             $ci->totrcvbamount = $request->totrcvbamount;
             $ci->paymentbal = $request->totrcvbamount;
+            $ci->saldescription = $request->saldescription;
+
 
             $ci->save();
 
@@ -415,6 +417,8 @@ class SalesInvoiceWopoController  extends Controller
             $sale_invoices->saletaxamt = $request->saletaxamt;
             $sale_invoices->totrcvbamount = $request->totrcvbamount;
             $sale_invoices->paymentbal = $request->totrcvbamount;
+            $sale_invoices->saldescription = $request->saldescription;
+
             $sale_invoices->save();
 
             // Get Data

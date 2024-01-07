@@ -74,8 +74,13 @@
                         <div class="flex flex-row px-4 py-2 items-center">
                             <x-label value="Add Pcs & Feet Size & Press"></x-label>
                             <x-button id="calculate" class="mx-2" type="button" onclick="calculate()">Calculate</x-button>
-                            <x-label value="This will prepare your commercial invoice for Submission"></x-label>
-                            {{-- <input class="checked:bg-blue-500 checked:border-blue-500 focus:outline-none" title="W/Qutation" type="checkbox" value="checked" name="woq" id="woq"   > --}}
+                            {{-- <x-label value="This will prepare your commercial invoice for Submission"></x-label> --}}
+                            <label for="">
+                                Descripiton <span class="text-red-500 font-semibold"></span>
+                            </label>
+                            <textarea name="sretdescription" id="sretdescription" cols="30" rows="2" maxlength="150" required class="rounded">  </textarea>
+
+
                         </div>
 
 
@@ -822,7 +827,7 @@ var updateValues = (cell) => {
             var data = { 'sales' : dynamicTableData,'rcvblamount':rcvblamount.value,
         'customer_id': customer_id,'dcdate':dcdate.value,'invoice_id':invoice_id,
         'saletaxper':saletaxper.value,'saletaxamt':saletaxamt.value,'totrcvbamount':totrcvbamount.value,
-        'dcno':dcno.value,'gpno':gpno.value,'billno':billno.value,'rdate':rdate.value};
+        'dcno':dcno.value,'gpno':gpno.value,'billno':billno.value,'rdate':rdate.value,'sretdescription':sretdescription.value};
 
 
 

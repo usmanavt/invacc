@@ -1,9 +1,9 @@
 <x-app-layout>
 
     @push('styles')
-    <link rel="stylesheet" href="{{ asset('css/tabulator_simple.min.css') }}">
-    {{-- <link href="https://unpkg.com/tabulator-tables/dist/css/tabulator.min.css" rel="stylesheet"> --}}
-    {{-- <script type="text/javascript" src="https://unpkg.com/tabulator-tables/dist/js/tabulator.min.js"></script> --}}
+    {{-- <link rel="stylesheet" href="{{ asset('css/tabulator_simple.min.css') }}"> --}}
+    <link href="https://unpkg.com/tabulator-tables/dist/css/tabulator.min.css" rel="stylesheet">
+    <script type="text/javascript" src="https://unpkg.com/tabulator-tables/dist/js/tabulator.min.js"></script>
 
     @endpush
 
@@ -37,15 +37,16 @@
                                 {{-- <x-input-text title="P.O No" name="pono" id="pono" req required class="col-span-2" disabled  /> --}}
                                 {{-- <x-input-date title="P.O Date" name="podate" id="podate" req required class="col-span-2" disabled  /> --}}
                                 <x-input-text title="G.Pass No" name="gpno" id="gpno" value="{{$maxgpno}}"     required   />
+                                <x-input-date title="Deilivery Date" id="deliverydt" name="deliverydt" req required class="col-span-2" />
                             </div>
                             <div class="grid grid-cols-12 gap-1 py-2 items-center">
-                                <x-input-date title="Deilivery Date" id="deliverydt" name="deliverydt" req required class="col-span-2" />
                                 <x-input-text title="DC No" name="dcno" id="dcno" value="{{$maxdcno}}"     required   />
                                 <x-input-text title="Bill No" name="billno" id="billno" value="{{$maxbillno}}"     required   />
-                                {{-- <label for="">
-                                    Remakrs <span class="text-red-500 font-semibold  ">(*)</span>
+                                <label for="">
+                                    Descripiton <span class="text-red-500 font-semibold"></span>
                                 </label>
-                                <textarea name="remarks" id="remarks" cols="100" rows="2" maxlength="150" required class="rounded"></textarea> --}}
+                                <textarea name="saldescription" id="saldescription" cols="30" rows="2" maxlength="150" required class="rounded"></textarea>
+
                             </div>
                         </fieldset>
 
@@ -700,8 +701,8 @@ var totalVal = function(values, data, calcParams){
                     columns:[
 
 
-                    {title:"Conversion", field:"unitconver",cellEdited: updateValues,editor:"number"},
-                    {title:"Quantity", field:"feedqty",cellEdited: updateValues,editor:"number"},
+                    {title:"Conversion", field:"unitconver",cellEdited: updateValues,editor:"number",responsive:0},
+                    {title:"Quantity", field:"feedqty",cellEdited: updateValues,editor:"number",responsive:0,},
 
                     {   title:"Price",
                             headerHozAlign :'right',
@@ -720,6 +721,7 @@ var totalVal = function(values, data, calcParams){
                         {title:"Sale Amount",
                         headerHozAlign :'right',
                         hozAlign:"right",
+                        responsive:0,
                         field:"saleamnt",
                         bottomCalc:"sum",
                         cssClass:"bg-green-200 font-semibold",
@@ -832,7 +834,7 @@ var totalVal = function(values, data, calcParams){
             var data = { 'sales' : dynamicTableData,'rcvblamount':rcvblamount.value,'cartage':cartage.value,'discntamt':discntamt.value,'discntper':discntper.value,'discntper':discntper.value ,
         'customer_id': customer_id.value,'deliverydt':deliverydt.value,'custplan_id':custplan_id,
         'saletaxper':saletaxper.value,'saletaxamt':saletaxamt.value,'totrcvbamount':totrcvbamount.value,
-        'dcno':dcno.value,'gpno':gpno.value,'billno':billno.value};
+        'dcno':dcno.value,'gpno':gpno.value,'billno':billno.value,'saldescription':saldescription.value};
 
             // All Ok - Proceed
             fetch(@json(route('salewopo.store')),{

@@ -23,6 +23,15 @@
                                 <div>
                                     <input type="radio" name="report_type" value="gl" required onchange="checkReportType('gl')">
                                     <label for="">General Ledger</label>
+
+                                    <input class="checked:bg-blue-500 checked:border-blue-500 focus:outline-none"  type="checkbox" name="imppurf2" id="imppurf2"   onclick="imppur(this)" >
+                                    <label for="">
+                                       <span style="color: brown;font-weight: bold"> Import Purchase Detail </span> <span class="text-red-500 font-semibold  "></span>
+                                        </label>
+
+
+
+
                                 </div>
                                 <div>
                                     <input type="radio" name="report_type" value="glhw" required onchange="checkReportType('glhw')">
@@ -114,6 +123,7 @@
                         <input type="text" title="t2"  id="p2" name="p2" value="0" hidden  >
                         <input type="text" title="t3"  id="p3" name="p3" value="0" hidden  >
                         <input type="text" title="t4"  id="p4" name="p4" value="0" hidden   >
+                        <input type="text" title="t5"  id="p5" name="p5" value="0" hidden   >
                         <div class="flex flex-col md:flex-row w-full gap-2 px-6 pt-4">
 
                             <fieldset class="border px-4 py-2 rounded w-full">
@@ -465,6 +475,27 @@
         }
 
     }
+
+
+    function imppur(imppurf2) {
+        var p5 = document.getElementById("p5");
+        // amount_fc.disabled = advtxt.checked ? true : false;
+
+        // amount_fc.disabled = per.checked ? true : false;
+
+        if(imppurf2.checked==true)
+        {
+            p5.value=1;
+        }
+        else
+        {
+            p5.value=0;
+        }
+
+    }
+
+
+
 
 
 

@@ -49,21 +49,13 @@
                             <x-input-text title="Purchase Return No" name="prno" id="prno" value="{{ $purchasereturn->prno }}"      />
 
                             <x-input-text title="" name="prid" id="prid" value="{{ $purchasereturn->id }}"      />
+                                <label for="">
+                                    Descripiton <span class="text-red-500 font-semibold"></span>
+                                </label>
+                                <textarea name="retdescription" id="retdescription" cols="30" rows="2" maxlength="150" required class="rounded"> {{ $purchasereturn->retdescription }} </textarea>
 
 
-                                {{-- <x-input-date title="P.O Date" id="podate" name="podate" value="{{ $customerorder->podate->format('Y-m-d') }}" req required class="col-span-2" />
-                            <x-input-text title="P.O #" name="pono" id="pono" value="{{ $customerorder->pono }}"  />
-                            <x-input-date title="Delivery Date" name="deliverydt" value="{{ $customerorder->deliverydt->format('Y-m-d') }}" />
-                            <x-input-text title="P.O Seq.#" name="poseqno" id="poseqno" value="{{ $customerorder->poseqno }}"    required   /> --}}
-
-                            {{-- <label for="">
-                                Remakrs <span class="text-red-500 font-semibold  ">(*)</span>
-                            </label>
-                            <textarea name="remarks" id="remarks" cols="100" rows="2" maxlength="150" required class="rounded">
-                                {{ $customerorder->remarks }}
-
-                            </textarea> --}}
-                        </div>
+                            </div>
                     </fieldset>
 
 
@@ -571,7 +563,8 @@ function validateForm()
     // ,'sale_invoice_id':sale_invoice_id.value};
 
     var data = { 'purchasereturn' : dynamicTableData ,
-        'supplier_id': supplier_id.value,'prdate':prdate.value,'prid':prid.value,'prno':prno.value,'invoice_date':invoice_date.value,'invoiceno':invoiceno.value };
+        'supplier_id': supplier_id.value,'prdate':prdate.value,'prid':prid.value,'prno':prno.value,'invoice_date':invoice_date.value,
+        'invoiceno':invoiceno.value,'retdescription':retdescription.value };
 
 
 

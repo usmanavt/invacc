@@ -1,9 +1,9 @@
 <x-app-layout>
 
     @push('styles')
-    <link rel="stylesheet" href="{{ asset('css/tabulator_simple.min.css') }}">
-    {{-- <link href="https://unpkg.com/tabulator-tables/dist/css/tabulator.min.css" rel="stylesheet"> --}}
-    {{-- <script type="text/javascript" src="https://unpkg.com/tabulator-tables/dist/js/tabulator.min.js"></script> --}}
+    {{-- <link rel="stylesheet" href="{{ asset('css/tabulator_simple.min.css') }}"> --}}
+    <link href="https://unpkg.com/tabulator-tables/dist/css/tabulator.min.css" rel="stylesheet">
+    <script type="text/javascript" src="https://unpkg.com/tabulator-tables/dist/js/tabulator.min.js"></script>
 
     @endpush
 
@@ -240,6 +240,7 @@ const skus = @json($skus);
                 dtyrate:0,
                 invsrate:0,
                 gdspricetot:0,
+                price:0,
                 repname:'',
                 mybrand:'',
             }
@@ -322,8 +323,8 @@ const skus = @json($skus);
         //   var sum = (Number(data.bundle1) * Number(data.pcspbundle1)) + (Number(data.bundle2) * Number(data.pcspbundle2))
         var row = cell.getRow();
 
-          var sum = (Number(data.bundle1) * Number(data.pcspbundle1))
-          var sum2 = (Number(data.bundle1) * Number(data.pcspbundle1))
+          var sum = (Number(data.bundle1) * Number(data.price))
+          var sum2 = (Number(data.bundle1) * Number(data.price))
 
         row.update({
 
@@ -376,20 +377,58 @@ const skus = @json($skus);
                         validator:["required"]
                     }
             },
-            {   title:"Quantity",
-                field:"bundle1",
-                editor:"number",
-                cssClass:"bg-green-200 font-semibold",
+
+            {title:"LastSalePrice",
+                field:"pcspbundle1",
+                // editor:"number",
+                cssClass:"bg-gray-200 font-semibold",
                 validator:"required",
                 formatter:"money",
                 formatterParams:{thousand:",",precision:2},
-                validator:["required","integer"],
+                // validator:["required","integer"],
                 cellEdited: updateValues,
                },
-            {   title:"Rate",
-                field:"pcspbundle1",
+
+
+            {   title:"Quantity",
+                field:"bundle1",
                 editor:"number",
-                cssClass:"bg-green-200 font-semibold",
+                // cssClass:"bg-green-200 font-semibold",
+                validator:"required",
+                formatter:"money",
+                formatterParams:{thousand:",",precision:2},
+                // validator:["required","integer"],
+                cellEdited: updateValues,
+               },
+
+
+               {title:"MarketPrice1",
+                field:"mrktprice1",
+                editor:"number",
+                // cssClass:"bg-green-200 font-semibold",
+                validator:"required",
+                formatter:"money",
+                formatterParams:{thousand:",",precision:2},
+                // validator:["required","integer"],
+                cellEdited: updateValues,
+               },
+
+               {title:"MarketPrice2",
+                field:"mrktprice2",
+                editor:"number",
+                // cssClass:"bg-green-200 font-semibold",
+                validator:"required",
+                formatter:"money",
+                formatterParams:{thousand:",",precision:2},
+                // validator:["required","integer"],
+                cellEdited: updateValues,
+               },
+
+
+             {   title:"SalePrice",
+                field:"price",
+                editor:"number",
+                // cssClass:"bg-green-200 font-semibold",
                 validator:"required" ,
                 formatter:"money",
                 formatterParams:{thousand:",",precision:2},
@@ -400,10 +439,10 @@ const skus = @json($skus);
                 field:"ttpcs",
                 cssClass:"bg-gray-200 font-semibold",
                 formatter:"money",
-                formatterParams:{thousand:",",precision:3},
+                formatterParams:{thousand:",",precision:2},
                 formatter:function(cell,row)
                 {
-                    return (cell.getData().bundle1 * cell.getData().pcspbundle1) + (cell.getData().bundle2 * cell.getData().pcspbundle2)
+                    return (cell.getData().bundle1 * cell.getData().price) + (cell.getData().bundle2 * cell.getData().price)
                 },
                 bottomCalc:totalVal  },
         ],
@@ -472,7 +511,7 @@ const skus = @json($skus);
         for (let index = 0; index < dynamicTableData.length; index++) {
             const element = dynamicTableData[index];
 
-            if(element.bundle1 == 0 || element.pcspbundle1 == 0 || element.ttpcs == 0   )
+            if(element.bundle1 == 0 || element.price == 0 || element.ttpcs == 0   )
             // || element.gdsprice == 0 || element.gdswt == 0 ttpcs
             {
                   showSnackbar( "Please fill Bundle,PcsBundle,Weight & Price all rows to proceed","info");

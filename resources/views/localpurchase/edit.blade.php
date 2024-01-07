@@ -71,12 +71,12 @@
                         <div class="flex flex-row px-4 py-2 items-center">
                             <x-label value="Add Pcs & Feet Size & Press"></x-label>
                             <x-button id="calculate" class="mx-2" type="button" onclick="calculate()">Generate Item Cost With Other Charges</x-button>
-                            <x-label value="This will prepare your commercial invoice for Submission"></x-label>
+                            {{-- <x-label value="This will prepare your commercial invoice for Submission"></x-label> --}}
+                            <label for="">
+                                Descripiton <span class="text-red-500 font-semibold"></span>
+                            </label>
+                            <textarea name="comdescription" id="comdescription" cols="30" rows="2" maxlength="150" required class="rounded"> {{ $commercialInvoice->comdescription }} </textarea>
                         </div>
-
-
-
-
 
 
                         {{-- Contract Details --}}
@@ -603,7 +603,7 @@ function validateForm()
      var data = { 'localpurchase' : dynamicTableData,'contract_id':parseFloat(contract_id.value).toFixed(0),'bankntotal':parseFloat(bankntotal.value).toFixed(0),
      'collofcustom':parseFloat(collofcustom.value).toFixed(0),'exataxoffie':parseFloat(exataxoffie.value).toFixed(0) ,
      'insurance':parseFloat(insurance.value).toFixed(2) ,'supplier_id': supplier_id.value,'invoice_date':invoice_date.value,'invoiceno':invoiceno.value,
-     'otherchrgs':otherchrgs.value,'gpassno':gpassno.value,'challanno':challanno.value};
+     'otherchrgs':otherchrgs.value,'gpassno':gpassno.value,'challanno':challanno.value,'comdescription':comdescription.value};
     // var data = { 'contracts' : dynamicTableData,'banktotal':parseFloat(total.value).toFixed(2),'exataxoffie':parseFloat(exataxoffie.value).toFixed(2),'collofcustom':parseFloat(collofcustom.value).toFixed(2),'insurance':parseFloat(insurance.value).toFixed(2) ,'supplier_id': supplier_id.value,'invoice_date':invoice_date.value,'invoiceno':number.value};
     // All Ok - Proceed
     fetch(@json(route('localpurchase.update',$commercialInvoice)),{

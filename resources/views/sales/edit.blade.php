@@ -1,9 +1,9 @@
 <x-app-layout>
 
     @push('styles')
-    <link rel="stylesheet" href="{{ asset('css/tabulator_simple.min.css') }}">
-    {{-- <link href="https://unpkg.com/tabulator-tables/dist/css/tabulator.min.css" rel="stylesheet"> --}}
-    {{-- <script type="text/javascript" src="https://unpkg.com/tabulator-tables/dist/js/tabulator.min.js"></script> --}}
+    {{-- <link rel="stylesheet" href="{{ asset('css/tabulator_simple.min.css') }}"> --}}
+    <link href="https://unpkg.com/tabulator-tables/dist/css/tabulator.min.css" rel="stylesheet">
+    <script type="text/javascript" src="https://unpkg.com/tabulator-tables/dist/js/tabulator.min.js"></script>
 
     @endpush
 
@@ -46,14 +46,15 @@
                                 <x-input-text title="G.Pass No" name="gpno" id="gpno" value="{{ $saleinvoices->gpno }}"     required   />
 
 
-
-
-
                         </div>
                         <div class="grid grid-cols-12 gap-1 py-2 items-center">
                             <x-input-date title="Deilivery Date" id="deliverydt" name="deliverydt" req required class="col-span-2" value="{{ $saleinvoices->saldate->format('Y-m-d') }}" />
                             <x-input-text title="DC No" name="dcno" id="dcno" value="{{ $saleinvoices->dcno }}"     required   />
                             <x-input-text title="Bill No" name="billno" id="billno" value="{{ $saleinvoices->billno }}"     required   />
+                                <label for="">
+                                    Descripiton <span class="text-red-500 font-semibold"></span>
+                                </label>
+                                <textarea name="saldescription" id="saldescription" cols="30" rows="2" maxlength="150" required class="rounded"> {{ $saleinvoices->saldescription }} </textarea>
 
 
                             {{-- <x-input-date title="P.O Date" id="podate" name="podate" value="{{ $customerorder->podate->format('Y-m-d') }}" req required class="col-span-2" />
@@ -96,6 +97,7 @@
                                 <x-input-numeric title="Sale Tax(Rs)" name="saletaxamt" value="{{ $saleinvoices->saletaxamt }}" disabled    />
                                 <x-input-numeric title="Cartage" name="cartage" value="{{ $saleinvoices->cartage }}"  required  onblur="tnetamount()"  />
                                 <x-input-numeric title="Total Amount" name="totrcvbamount" value="{{ $saleinvoices->totrcvbamount }}" disabled />
+
                             </div>
 
 
@@ -484,7 +486,7 @@ dynamicTable = new Tabulator("#dynamicTable", {
           //      },
 
                 {title:"Replace Description",field:"repname", editor:true},
-                {title:"Brand",             field:"brand",editor:true},
+                {title:"Brand", field:"brand",visible:false},
 
 
                 ]},
@@ -641,7 +643,7 @@ function validateForm()
         'customer_id': customer_id.value,'deliverydt':deliverydt.value,'custplan_id':custplan_id.value,
         'saletaxper':saletaxper.value,'saletaxamt':saletaxamt.value,'totrcvbamount':totrcvbamount.value,
         'podate':podate.value,'pono':pono.value,'dcno':dcno.value,'gpno':gpno.value,'billno':billno.value
-    ,'sale_invoice_id':sale_invoice_id.value};
+    ,'sale_invoice_id':sale_invoice_id.value,'saldescription':saldescription.value};
 
 
 
@@ -698,15 +700,7 @@ discntamt.onblur=function(){
 
 
 </script>
-
-
 @endpush
-
-
-
-
-
-
 </x-app-layout>
 
 

@@ -86,7 +86,7 @@
                                 <x-input-numeric title="Weigh Bridge" name="weighbridge" required  onblur="calculateBankCharges()"/>
                                 <x-input-numeric title="Misc Exp" name="miscexpenses" required  onblur="calculateBankCharges()"/>
                                 <x-input-numeric title="Agency Chgs" name="agencychrgs" required  onblur="calculateBankCharges()"/>
-                                <x-input-numeric title="Other Chgs ($)" name="otherchrgs" hidden required  onblur="calculateBankCharges()"/>
+                                <x-input-numeric title="Other Chgs ($)" name="otherchrgs"  required  onblur="calculateBankCharges()"/>
                                 <x-input-numeric title="Total" name="banktotal" disabled />
 
                             </div>
@@ -95,7 +95,13 @@
                         <div class="flex flex-row px-4 py-2 items-center">
                             <x-label value="Add Pcs & Feet Size & Press"></x-label>
                             <x-button id="calculate" class="mx-2" type="button" onclick="calculate()">Calculate</x-button>
-                            <x-label value="This will prepare your commercial invoice for Submission"></x-label>
+                            <x-label value="   "></x-label>
+
+                            <label for="">
+                                Descripiton <span class="text-red-500 font-semibold"></span>
+                            </label>
+                            <textarea name="comdescription" id="comdescription" cols="30" rows="2" maxlength="150" required class="rounded"></textarea>
+
                         </div>
                        <x-tabulator-dynamic />
 
@@ -192,7 +198,7 @@
 
         function calculateBankCharges()
         {
-            var t =  parseFloat(bankcharges.value) + parseFloat(collofcustom.value) + parseFloat(exataxoffie.value) + parseFloat(lngnshipdochrgs.value) + parseFloat(localcartage.value) + parseFloat(miscexplunchetc.value) + parseFloat(customsepoy.value) + parseFloat(weighbridge.value) + parseFloat(miscexpenses.value) + parseFloat(agencychrgs.value) //+ parseFloat(otherchrgs.value)
+            var t =  parseFloat(bankcharges.value) + parseFloat(collofcustom.value) + parseFloat(exataxoffie.value) + parseFloat(lngnshipdochrgs.value) + parseFloat(localcartage.value) + parseFloat(miscexplunchetc.value) + parseFloat(customsepoy.value) + parseFloat(weighbridge.value) + parseFloat(miscexpenses.value) + parseFloat(agencychrgs.value) + parseFloat(otherchrgs.value)
             // var t = parseFloat(bankcharges.value) + parseFloat(collofcustom.value)
             banktotal.value = t.toFixed(2)
             // console.log(banktotal.value);
@@ -1266,7 +1272,7 @@ var headerMenu = function(){
                 'packingid' :packingid.value,
                 'packingwt' : packingwt.value,
                 'total' : parseFloat(banktotal.value).toFixed(2),
-
+                'comdescription':comdescription.value,
                 'comminvoice' : dynamicTableData
             };
             // All Ok - Proceed
@@ -1303,18 +1309,6 @@ var headerMenu = function(){
         const sku = document.getElementById('sku')
 
 
-
-        // function getHiddenValues(el)
-        // {
-        //     switch (el.name)
-        //     {
-        //         case 'packid':
-        //         packingtype.value = el.options[el.selectedIndex].innerText
-        //          console.log(packingtype.value);
-        //             // break;
-
-        //     }
-        // }
 
 
 

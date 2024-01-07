@@ -48,7 +48,7 @@
                                     </select> --}}
                                     <x-input-text title="Payment Seq.#" name="transno" id="transno" value="{{ $banktransaction->transno }}"  class="col-span-2"    />
                                     <x-input-numeric title="" name="paymentid" id="paymentid" value="{{ $banktransaction->id }}" hidden   />
-                                    <x-input-numeric title="" name="supplier_id" id="supplier_id" value="{{ $banktransaction->subhead_id }}"  />
+                                    <x-input-numeric title="" name="supplier_id" id="supplier_id" value="{{ $banktransaction->subhead_id }}" hidden  />
                                     </div>
 
                         <div class="grid grid-cols-12 gap-2 py-2 ">
@@ -81,6 +81,7 @@
                                 Description <span class="text-red-500 font-semibold  ">(*)</span>
                                 </label>
                             <textarea name="description" id="description" cols="150" rows="2" maxlength="150" class="col-span-2" required class="rounded"> {{ $banktransaction->description }} </textarea>
+                            <x-input-text title="G.D No For Import Expenses" name="impgdno" id="impgdno"   class="col-span-2"  value="{{ $banktransaction->impgdno }}" disabled  />
 
                             <label for="">
                                 Invoice Level Payment <span class="text-red-500 font-semibold  ">(*)</span>
@@ -512,7 +513,7 @@ function validateForm()
 
     var data = { 'banktransaction' : dynamicTableData,'supplier_id':supplier_id.value,'transno':transno.value,'bank_id':bank_id.value,'documentdate':documentdate.value,
             'cheque_no':cheque_no.value,'cheque_date':cheque_date.value,'head_id':head_id.value ,'description': description.value,'transno':transno.value
-        ,'amount_fc':amount_fc.value,'amount_pkr':amount_pkr.value,'conversion_rate':conversion_rate.value,'advtxt':advtxt.value,'paymentid':paymentid.value,'supname':supname.value};
+        ,'amount_fc':amount_fc.value,'amount_pkr':amount_pkr.value,'conversion_rate':conversion_rate.value,'advtxt':advtxt.value,'paymentid':paymentid.value,'supname':supname.value,'impgdno':impgdno.value};
 
 
 
@@ -558,6 +559,11 @@ function EnableDisableTextBox(per) {
 
 
     }
+
+    var impgdno = document.getElementById("impgdno");
+        impgdno.disabled = per.checked ? true : false;
+        impgdno.style.color ="black";
+        // impgdno.value ='';
 
     function advpayment(adv) {
         var advtxt = document.getElementById("advtxt");

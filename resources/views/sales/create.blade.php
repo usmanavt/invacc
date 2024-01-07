@@ -1,9 +1,9 @@
 <x-app-layout>
 
     @push('styles')
-    <link rel="stylesheet" href="{{ asset('css/tabulator_simple.min.css') }}">
-    {{-- <link href="https://unpkg.com/tabulator-tables/dist/css/tabulator.min.css" rel="stylesheet"> --}}
-    {{-- <script type="text/javascript" src="https://unpkg.com/tabulator-tables/dist/js/tabulator.min.js"></script> --}}
+    {{-- <link rel="stylesheet" href="{{ asset('css/tabulator_simple.min.css') }}"> --}}
+    <link href="https://unpkg.com/tabulator-tables/dist/css/tabulator.min.css" rel="stylesheet">
+    <script type="text/javascript" src="https://unpkg.com/tabulator-tables/dist/js/tabulator.min.js"></script>
 
     @endpush
 
@@ -68,8 +68,16 @@
                         <div class="flex flex-row px-4 py-2 items-center">
                             <x-label value="Add Pcs & Feet Size & Press"></x-label>
                             <x-button id="calculate" class="mx-2" type="button" onclick="calculate()">Calculate</x-button>
-                            <x-label value="This will prepare your commercial invoice for Submission"></x-label>
+                            {{-- <x-label value="This will prepare your commercial invoice for Submission"></x-label> --}}
                             {{-- <input class="checked:bg-blue-500 checked:border-blue-500 focus:outline-none" title="W/Qutation" type="checkbox" value="checked" name="woq" id="woq"   > --}}
+                            <label for="">
+                                Descripiton <span class="text-red-500 font-semibold"></span>
+                            </label>
+                            <textarea name="saldescription" id="saldescription" cols="30" rows="2" maxlength="150" required class="rounded"></textarea>
+
+
+
+
                         </div>
 
 
@@ -649,7 +657,7 @@ var totalVal = function(values, data, calcParams){
                             bottomCalc:"sum",
                             formatter:"money",
                             cellEdited: updateValues,
-                            validator:["required","numeric"],
+                            validator:["required",".numeric"],
                             cssClass:"bg-gray-200 font-semibold",
                             formatterParams:{thousand:",",precision:2},
                         },
@@ -678,7 +686,7 @@ var totalVal = function(values, data, calcParams){
                         },
 
                         {   title:"Brand",headerHozAlign :'center',
-                            field:"mybrand",
+                            field:"mybrand",visible:false,
                             editor:true,
                         },
 
@@ -694,7 +702,7 @@ var totalVal = function(values, data, calcParams){
 
 
                     {title:"Conversion", field:"unitconver",cellEdited: updateValues,editor:"number"},
-                    {title:"Quantity", field:"feedqty",cellEdited: updateValues,editor:"number"},
+                    {title:"Quantity", field:"feedqty",cellEdited: updateValues,editor:"number",responsive:0},
 
                     {   title:"Price",
                             headerHozAlign :'right',
@@ -717,6 +725,7 @@ var totalVal = function(values, data, calcParams){
                         bottomCalc:"sum",
                         cssClass:"bg-green-200 font-semibold",
                         formatter:"money",
+                        responsive:0,
                         formatterParams:{thousand:",",precision:3},
                         formatter:function(cell,row)
                         {
@@ -825,7 +834,7 @@ var totalVal = function(values, data, calcParams){
             var data = { 'sales' : dynamicTableData,'rcvblamount':rcvblamount.value,'cartage':cartage.value,'discntamt':discntamt.value,'discntper':discntper.value,'discntper':discntper.value ,
         'customer_id': customer_id,'deliverydt':deliverydt.value,'custplan_id':custplan_id,
         'saletaxper':saletaxper.value,'saletaxamt':saletaxamt.value,'totrcvbamount':totrcvbamount.value,
-        'podate':podate.value,'pono':pono.value,'dcno':dcno.value,'gpno':gpno.value,'billno':billno.value};
+        'podate':podate.value,'pono':pono.value,'dcno':dcno.value,'gpno':gpno.value,'billno':billno.value,'saldescription':saldescription.value};
 
             // All Ok - Proceed
             fetch(@json(route('saleinvoices.store')),{

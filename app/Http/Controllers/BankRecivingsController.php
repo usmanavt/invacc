@@ -71,7 +71,7 @@ class BankRecivingsController extends Controller
         // ->select('contracts.*', 'suppliers.title')
         // ->with('customer:id,title')
         ->where('cheque_no', 'like', "%$search%")
-        // ->orWhere('trantype', 'like', "%$search%")
+        ->orWhere('supname', 'like', "%$search%")
         //  ->orWhere('ref', 'like', "%$search%")
         ->orderBy($field,$dir)
         ->paginate((int) $size);

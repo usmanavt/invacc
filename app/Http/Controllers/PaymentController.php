@@ -9,6 +9,8 @@ use App\Models\QuotationDetails;
 
 use App\Models\CustomerOrder;
 use App\Models\CustomerOrderDetails;
+use App\Models\CommercialInvoice;
+
 
 use App\Models\Material;
 use App\Models\Customer;
@@ -73,7 +75,7 @@ class PaymentController  extends Controller
         // ->with('customer:id,title')
         ->where('subhead', 'like', "%$search%")
         ->orWhere('trantype', 'like', "%$search%")
-        //  ->orWhere('ref', 'like', "%$search%")
+        ->orWhere('impgdno', 'like', "%$search%")
         ->orderBy($field,$dir)
         ->paginate((int) $size);
         return $cis;
@@ -151,6 +153,8 @@ class PaymentController  extends Controller
             $ci->bank_id = $request->bank_id;
             $ci->head_id = $request->head_id;
             $ci->subhead_id = $request->supplier_id;
+            $ci->impgdno = $request->impgdno;
+
             // $ci->transaction_type = 'BPV';
             if($request->bank_id == 1)
             {
@@ -198,6 +202,91 @@ class PaymentController  extends Controller
                 $lpd->save();
                 }
             }
+
+            $lstrt = CommercialInvoice::where('machineno',$ci->impgdno)->first();
+            if($lstrt) {
+
+                //  dd($ci->subhead_id);
+             if($ci->subhead_id==371)
+                { $lstrt->bankcharges=$request->amount_fc;
+                $lstrt->total= $lstrt->bankcharges+$lstrt->collofcustom+$lstrt->exataxoffie+$lstrt->localcartage+$lstrt->customsepoy+$lstrt->weighbridge+$lstrt->lngnshipdochrgs
+                +$lstrt->agencychrgs+$lstrt->miscexpenses+$lstrt->otherchrgs;
+
+                $lstrt->save()
+            ;}
+
+            elseif($ci->subhead_id==372)
+                { $lstrt->collofcustom=$request->amount_fc;
+                    $lstrt->total= $lstrt->bankcharges+$lstrt->collofcustom+$lstrt->exataxoffie+$lstrt->localcartage+$lstrt->customsepoy+$lstrt->weighbridge+$lstrt->lngnshipdochrgs
+                    +$lstrt->agencychrgs+$lstrt->miscexpenses+$lstrt->otherchrgs;
+
+                    $lstrt->save()
+            ;}
+
+            elseif($ci->subhead_id==373)
+                { $lstrt->exataxoffie=$request->amount_fc;
+                $lstrt->save()
+            ;}
+
+            elseif($ci->subhead_id==374)
+                { $lstrt->localcartage=$request->amount_fc;
+                    $lstrt->total= $lstrt->bankcharges+$lstrt->collofcustom+$lstrt->exataxoffie+$lstrt->localcartage+$lstrt->customsepoy+$lstrt->weighbridge+$lstrt->lngnshipdochrgs
+                    +$lstrt->agencychrgs+$lstrt->miscexpenses+$lstrt->otherchrgs;
+
+                    $lstrt->save()
+            ;}
+
+            elseif($ci->subhead_id==375)
+                { $lstrt->customsepoy=$request->amount_fc;
+                    $lstrt->total= $lstrt->bankcharges+$lstrt->collofcustom+$lstrt->exataxoffie+$lstrt->localcartage+$lstrt->customsepoy+$lstrt->weighbridge+$lstrt->lngnshipdochrgs
+                    +$lstrt->agencychrgs+$lstrt->miscexpenses+$lstrt->otherchrgs;
+
+                    $lstrt->save()
+            ;}
+
+            elseif($ci->subhead_id==376)
+                { $lstrt->weighbridge=$request->amount_fc;
+                    $lstrt->total= $lstrt->bankcharges+$lstrt->collofcustom+$lstrt->exataxoffie+$lstrt->localcartage+$lstrt->customsepoy+$lstrt->weighbridge+$lstrt->lngnshipdochrgs
+                    +$lstrt->agencychrgs+$lstrt->miscexpenses+$lstrt->otherchrgs;
+
+                    $lstrt->save()
+            ;}
+
+            elseif($ci->subhead_id==377)
+                { $lstrt->lngnshipdochrgs=$request->amount_fc;
+                    $lstrt->total= $lstrt->bankcharges+$lstrt->collofcustom+$lstrt->exataxoffie+$lstrt->localcartage+$lstrt->customsepoy+$lstrt->weighbridge+$lstrt->lngnshipdochrgs
+                    +$lstrt->agencychrgs+$lstrt->miscexpenses+$lstrt->otherchrgs;
+
+                    $lstrt->save()
+            ;}
+
+            elseif($ci->subhead_id==378)
+                { $lstrt->agencychrgs=$request->amount_fc;
+                    $lstrt->total= $lstrt->bankcharges+$lstrt->collofcustom+$lstrt->exataxoffie+$lstrt->localcartage+$lstrt->customsepoy+$lstrt->weighbridge+$lstrt->lngnshipdochrgs
+                    +$lstrt->agencychrgs+$lstrt->miscexpenses+$lstrt->otherchrgs;
+
+                    $lstrt->save()
+            ;}
+
+            elseif($ci->subhead_id==379)
+                { $lstrt->miscexpenses=$request->amount_fc;
+                    $lstrt->total= $lstrt->bankcharges+$lstrt->collofcustom+$lstrt->exataxoffie+$lstrt->localcartage+$lstrt->customsepoy+$lstrt->weighbridge+$lstrt->lngnshipdochrgs
+                    +$lstrt->agencychrgs+$lstrt->miscexpenses+$lstrt->otherchrgs;
+
+                    $lstrt->save()
+            ;}
+
+            elseif($ci->subhead_id==380)
+                { $lstrt->otherchrgs=$request->amount_fc;
+                    $lstrt->total= $lstrt->bankcharges+$lstrt->collofcustom+$lstrt->exataxoffie+$lstrt->localcartage+$lstrt->customsepoy+$lstrt->weighbridge+$lstrt->lngnshipdochrgs
+                    +$lstrt->agencychrgs+$lstrt->miscexpenses+$lstrt->otherchrgs;
+
+                    $lstrt->save()
+            ;}
+
+            }
+
+
 
             DB::update(DB::raw("
             UPDATE bank_transactions c
@@ -271,6 +360,7 @@ class PaymentController  extends Controller
             $ci->bank_id = $request->bank_id;
             $ci->head_id = $request->head_id;
             $ci->subhead_id = $request->supplier_id;
+            $ci->impgdno = $request->impgdno;
             if($request->bank_id == 1)
             {
                 $ci->transaction_type = 'CPV';
@@ -293,6 +383,95 @@ class PaymentController  extends Controller
             $ci->advance = $request->advtxt;
             $ci->supname = $request->supname;
             $ci->save();
+
+            $lstrt = CommercialInvoice::where('machineno',$ci->impgdno)->first();
+            if($lstrt) {
+
+                //  dd($ci->subhead_id);
+             if($ci->subhead_id==371)
+                { $lstrt->bankcharges=$request->amount_fc;
+                $lstrt->total= $lstrt->bankcharges+$lstrt->collofcustom+$lstrt->exataxoffie+$lstrt->localcartage+$lstrt->customsepoy+$lstrt->weighbridge+$lstrt->lngnshipdochrgs
+                +$lstrt->agencychrgs+$lstrt->miscexpenses+$lstrt->otherchrgs;
+
+                $lstrt->save()
+            ;}
+
+            elseif($ci->subhead_id==372)
+                { $lstrt->collofcustom=$request->amount_fc;
+                    $lstrt->total= $lstrt->bankcharges+$lstrt->collofcustom+$lstrt->exataxoffie+$lstrt->localcartage+$lstrt->customsepoy+$lstrt->weighbridge+$lstrt->lngnshipdochrgs
+                    +$lstrt->agencychrgs+$lstrt->miscexpenses+$lstrt->otherchrgs;
+
+                    $lstrt->save()
+            ;}
+
+            elseif($ci->subhead_id==373)
+                { $lstrt->exataxoffie=$request->amount_fc;
+                $lstrt->save()
+            ;}
+
+            elseif($ci->subhead_id==374)
+                { $lstrt->localcartage=$request->amount_fc;
+                    $lstrt->total= $lstrt->bankcharges+$lstrt->collofcustom+$lstrt->exataxoffie+$lstrt->localcartage+$lstrt->customsepoy+$lstrt->weighbridge+$lstrt->lngnshipdochrgs
+                    +$lstrt->agencychrgs+$lstrt->miscexpenses+$lstrt->otherchrgs;
+
+                    $lstrt->save()
+            ;}
+
+            elseif($ci->subhead_id==375)
+                { $lstrt->customsepoy=$request->amount_fc;
+                    $lstrt->total= $lstrt->bankcharges+$lstrt->collofcustom+$lstrt->exataxoffie+$lstrt->localcartage+$lstrt->customsepoy+$lstrt->weighbridge+$lstrt->lngnshipdochrgs
+                    +$lstrt->agencychrgs+$lstrt->miscexpenses+$lstrt->otherchrgs;
+
+                    $lstrt->save()
+            ;}
+
+            elseif($ci->subhead_id==376)
+                { $lstrt->weighbridge=$request->amount_fc;
+                    $lstrt->total= $lstrt->bankcharges+$lstrt->collofcustom+$lstrt->exataxoffie+$lstrt->localcartage+$lstrt->customsepoy+$lstrt->weighbridge+$lstrt->lngnshipdochrgs
+                    +$lstrt->agencychrgs+$lstrt->miscexpenses+$lstrt->otherchrgs;
+
+                    $lstrt->save()
+            ;}
+
+            elseif($ci->subhead_id==377)
+                { $lstrt->lngnshipdochrgs=$request->amount_fc;
+                    $lstrt->total= $lstrt->bankcharges+$lstrt->collofcustom+$lstrt->exataxoffie+$lstrt->localcartage+$lstrt->customsepoy+$lstrt->weighbridge+$lstrt->lngnshipdochrgs
+                    +$lstrt->agencychrgs+$lstrt->miscexpenses+$lstrt->otherchrgs;
+
+                    $lstrt->save()
+            ;}
+
+            elseif($ci->subhead_id==378)
+                { $lstrt->agencychrgs=$request->amount_fc;
+                    $lstrt->total= $lstrt->bankcharges+$lstrt->collofcustom+$lstrt->exataxoffie+$lstrt->localcartage+$lstrt->customsepoy+$lstrt->weighbridge+$lstrt->lngnshipdochrgs
+                    +$lstrt->agencychrgs+$lstrt->miscexpenses+$lstrt->otherchrgs;
+
+                    $lstrt->save()
+            ;}
+
+            elseif($ci->subhead_id==379)
+                { $lstrt->miscexpenses=$request->amount_fc;
+                    $lstrt->total= $lstrt->bankcharges+$lstrt->collofcustom+$lstrt->exataxoffie+$lstrt->localcartage+$lstrt->customsepoy+$lstrt->weighbridge+$lstrt->lngnshipdochrgs
+                    +$lstrt->agencychrgs+$lstrt->miscexpenses+$lstrt->otherchrgs;
+
+                    $lstrt->save()
+            ;}
+
+            elseif($ci->subhead_id==380)
+                { $lstrt->otherchrgs=$request->amount_fc;
+                    $lstrt->total= $lstrt->bankcharges+$lstrt->collofcustom+$lstrt->exataxoffie+$lstrt->localcartage+$lstrt->customsepoy+$lstrt->weighbridge+$lstrt->lngnshipdochrgs
+                    +$lstrt->agencychrgs+$lstrt->miscexpenses+$lstrt->otherchrgs;
+
+                    $lstrt->save()
+            ;}
+
+            }
+
+
+
+
+
+
 
 
 

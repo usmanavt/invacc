@@ -63,18 +63,20 @@
 
                         <div class="grid grid-cols-12 gap-2 py-2 items-center">
                             <label for="">
-                                Description <span class="text-red-500 font-semibold  ">(*)</span>
+                                Description <span class="text-red-500 font-semibold  "></span>
                                 </label>
                             <textarea name="description" id="description" cols="150" rows="2" maxlength="150" class="col-span-2" required class="rounded"></textarea>
 
+                            <x-input-text title="G.D No For Import Expenses" name="impgdno" id="impgdno" disabled req required class="col-span-2"  />
+
                             <label for="">
-                                Invoice Level Payment <span class="text-red-500 font-semibold  ">(*)</span>
+                                Invoice Level Payment <span class="text-red-500 font-semibold  "></span>
                                 </label>
                             <input class="checked:bg-blue-500 checked:border-blue-500 focus:outline-none"  type="checkbox" name="per" id="per" checked=true onclick="EnableDisableTextBox(this)" >
 
 
                             <label for="">
-                                Advance Payment For Clearance Future Invoices <span class="text-red-500 font-semibold  ">(*)</span>
+                                Advance Payment For Clearance Future Invoices <span class="text-red-500 font-semibold  "></span>
                                 </label>
                             <input class="checked:bg-blue-500 checked:border-blue-500 focus:outline-none"  type="checkbox" name="adv" id="adv"  onclick="advpayment(this)" >
 
@@ -632,7 +634,7 @@ var updateValues = (cell) => {
 
             var data = { 'banktransaction' : dynamicTableData,'supplier_id':supplier_id,'transno':transno.value,'bank_id':bank_id.value,'documentdate':documentdate.value,
             'cheque_no':cheque_no.value,'cheque_date':cheque_date.value,'head_id':head_id ,'description': description.value,'transno':transno.value
-        ,'amount_fc':amount_fc.value,'amount_pkr':amount_pkr.value,'conversion_rate':conversion_rate.value,'advtxt':advtxt.value,'supname':supname.value};
+        ,'amount_fc':amount_fc.value,'amount_pkr':amount_pkr.value,'conversion_rate':conversion_rate.value,'advtxt':advtxt.value,'supname':supname.value,'impgdno':impgdno.value};
 
 
             // All Ok - Proceed
@@ -673,6 +675,11 @@ var updateValues = (cell) => {
         conversion_rate.style.color ="black";
         amount_pkr.value =0;
         conversion_rate.value =1;
+
+        var impgdno = document.getElementById("impgdno");
+        impgdno.disabled = per.checked ? true : false;
+        impgdno.style.color ="black";
+        impgdno.value ='';
 
 
     }

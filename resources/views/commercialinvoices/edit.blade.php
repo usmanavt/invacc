@@ -76,7 +76,7 @@
                             <legend>Invoice Level Expenses</legend>
                             <div class="grid grid-cols-12 gap-2 py-2 items-center">
 
-                                <x-input-numeric title="Bank Chrgs" name="bankcharges" value="{{ $i->bankcharges }}"  required  onblur="calculateBankCharges()"/>
+                                <x-input-numeric title="BANK CHARGES" name="bankcharges" value="{{ $i->bankcharges }}"  required  onblur="calculateBankCharges()"/>
                                 <x-input-numeric title="Cust Coll" name="collofcustom" value="{{ $i->collofcustom }}"  required  onblur="calculateBankCharges()"/>
                                 <x-input-numeric title="Ex Tax of" name="exataxoffie" value="{{ $i->exataxoffie }}"  required  onblur="calculateBankCharges()"/>
                                 <x-input-numeric title="Ship Doc Chg" name="lngnshipdochrgs" value="{{ $i->lngnshipdochrgs }}"  required  onblur="calculateBankCharges()"/>
@@ -86,7 +86,7 @@
                                 <x-input-numeric title="Weigh Bridge" name="weighbridge" value="{{ $i->weighbridge }}"  required  onblur="calculateBankCharges()"/>
                                 <x-input-numeric title="Misc Exp" name="miscexpenses" value="{{ $i->miscexpenses }}"  required  onblur="calculateBankCharges()"/>
                                 <x-input-numeric title="Agency Chgs" name="agencychrgs" value="{{ $i->agencychrgs }}"  required  onblur="calculateBankCharges()"/>
-                                {{-- <x-input-numeric title="Other Chgs($)" name="otherchrgs" value="{{ $i->otherchrgs }}"  required  onblur="calculateBankCharges()"/> --}}
+                                <x-input-numeric title="Other Chgs($)" name="otherchrgs" value="{{ $i->otherchrgs }}"  required  onblur="calculateBankCharges()"/>
                                 <x-input-numeric title="Total" name="banktotal" value="{{ $i->total}}"  disabled />
 
                             </div>
@@ -96,7 +96,21 @@
                         <div class="flex flex-row px-4 py-2 items-center">
                             <x-label value="Add Pcs & Feet Size & Press"></x-label>
                             <x-button id="calculate" class="mx-2" onclick="calculate();calculate();calculate();">Calculate</x-button>
-                            <x-label value="This will prepare your commercial invoice for Submission"></x-label>
+                            {{-- <x-label value="This will prepare your commercial invoice for Submission"></x-label> --}}
+
+                            <label for="">
+                                Descripiton <span class="text-red-500 font-semibold"></span>
+                            </label>
+                            <textarea name="comdescription" id="comdescription" cols="30" rows="2" maxlength="150" required class="rounded">  {{ $i->comdescription }} </textarea>
+
+                            <input class="checked:bg-blue-500 checked:border-blue-500 focus:outline-none"  type="checkbox" name="cjv" id="cjv"   onclick="jvevent(this)" >
+                            <label for="">
+                                <span style="color: brown;font-weight: bold" >  Generate J.V Against Invoice Level Expenses </span> <span class="text-red-500 font-semibold  "></span>
+                                 </label>
+
+                                 <input type="text" title="jv1"  id="jv1" name="jv1" value="0" hidden    >
+
+
                         </div>
                         <x-tabulator-dynamic />
 
@@ -162,14 +176,14 @@
         let weighbridge= document.getElementById("weighbridge")
         let miscexpenses= document.getElementById("miscexpenses")
         let agencychrgs= document.getElementById("agencychrgs")
-     //   let otherchrgs= document.getElementById("otherchrgs")
+        let otherchrgs= document.getElementById("otherchrgs")
         let banktotal= document.getElementById("banktotal")
         // Important Rates
         let conversionrate = document.getElementById("conversionrate");
         let sconversionrate = document.getElementById("sconversionrate");
 
         var insurance = document.getElementById("insurance");
-        // var otherchrgs = document.getElementById("otherchrgs");
+        //var otherchrgs = document.getElementById("otherchrgs");
 
         //  Add Event on  Page Load
         document.addEventListener('DOMContentLoaded',()=>{
@@ -179,7 +193,7 @@
         // Calculate Bank Charges [ onblur ]
         function calculateBankCharges()
         {
-            var t =  parseFloat(bankcharges.value) + parseFloat(collofcustom.value) + parseFloat(exataxoffie.value) + parseFloat(lngnshipdochrgs.value) + parseFloat(localcartage.value) + parseFloat(miscexplunchetc.value) + parseFloat(customsepoy.value) + parseFloat(weighbridge.value) + parseFloat(miscexpenses.value) + parseFloat(agencychrgs.value) //+ parseFloat(otherchrgs.value)
+            var t =  parseFloat(bankcharges.value) + parseFloat(collofcustom.value) + parseFloat(exataxoffie.value) + parseFloat(lngnshipdochrgs.value) + parseFloat(localcartage.value) + parseFloat(miscexplunchetc.value) + parseFloat(customsepoy.value) + parseFloat(weighbridge.value) + parseFloat(miscexpenses.value) + parseFloat(agencychrgs.value) + parseFloat(otherchrgs.value)
             // var t = parseFloat(bankcharges.value) + parseFloat(collofcustom.value)
             banktotal.value = t.toFixed(2)
             // console.log(banktotal.value);
@@ -1001,12 +1015,14 @@ var headerMenu = function(){
                 'weighbridge' : parseFloat(weighbridge.value).toFixed(2),
                 'miscexpenses' : parseFloat(miscexpenses.value).toFixed(2),
                 'agencychrgs' : parseFloat(agencychrgs.value).toFixed(2),
-                // 'otherchrgs' : parseFloat(otherchrgs.value).toFixed(2),
+                'otherchrgs' : parseFloat(otherchrgs.value).toFixed(2),
                 'dunitid' : parseFloat(dunitid.value).toFixed(0),
                 'total' : parseFloat(banktotal.value).toFixed(2),
                 'packingid' :packingid.value,
                 'packingwt' : packingwt.value,
-                'comminvoice' : dynamicTableData
+                'jv1':jv1.value,
+                'comdescription':comdescription.value,
+                'comminvoice' : dynamicTableData,
             };
             // All Ok - Proceed
             fetch(@json(route('cis.update','$i->id')),{
@@ -1033,7 +1049,29 @@ var headerMenu = function(){
                 // disableSubmitButton(false);
             })
         }
-    </script>
+
+        function jvevent(cjv) {
+        var jv1 = document.getElementById("jv1");
+        // amount_fc.disabled = advtxt.checked ? true : false;
+
+        // amount_fc.disabled = per.checked ? true : false;
+
+        if(cjv.checked==true)
+        {
+            jv1.value=1;
+        }
+        else
+        {
+            jv1.value=0;
+        }
+
+    }
+
+
+
+
+
+</script>
 @endpush
 
 </x-app-layout>

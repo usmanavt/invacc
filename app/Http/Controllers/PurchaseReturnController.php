@@ -157,6 +157,8 @@ class PurchaseReturnController  extends Controller
             $ci->supplier_id = $request->supplier_id;
             $ci->prinvdate = $request->invoice_date;
             $ci->prinvno = $request->invoiceno;
+            $ci->retdescription = $request->retdescription;
+
             $ci->save();
 
             // Quotation Close
@@ -249,6 +251,8 @@ class PurchaseReturnController  extends Controller
             $ci->supplier_id = $request->supplier_id;
             $ci->prinvdate = $request->invoice_date;
             $ci->prinvno = $request->invoiceno;
+            $ci->retdescription = $request->retdescription;
+
             $ci->save();
 
 

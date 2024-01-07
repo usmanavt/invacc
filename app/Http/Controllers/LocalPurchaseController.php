@@ -192,8 +192,10 @@ class LocalPurchaseController  extends Controller
             $ci->challanno = $request->challanno;
             $ci->supplier_id = $request->supplier_id;
             $ci->machine_date = $request->invoice_date;
-            // $ci->machineno = $request->number;
             $ci->conversionrate = 0;
+            $ci->comdescription = $request->comdescription;
+
+
 
             if (!empty($request->insurance)) {
                 $ci->insurance = $request->insurance;
@@ -343,6 +345,9 @@ class LocalPurchaseController  extends Controller
             $commercialinvoice->challanno = $request->challanno;
             $commercialinvoice->machine_date = $request->invoice_date;
             $commercialinvoice->machineno = $request->invoiceno;
+            $commercialinvoice->comdescription = $request->comdescription;
+
+
 
             if (!empty($commercialinvoice->insurance)) {
                 $commercialinvoice->insurance = $request->insurance;

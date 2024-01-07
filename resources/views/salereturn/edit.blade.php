@@ -95,7 +95,11 @@
                                 <x-input-numeric title="Sale Tax(Rs)" name="saletaxamt" value="{{ $salereturn->saletaxamt }}" disabled    />
                                 <x-input-numeric title="Total Amount" name="totrcvbamount" value="{{ $salereturn->totrcvbamount }}" disabled />
                                 <x-input-numeric title="" name="sale_return_id" id="sale_return_id" value="{{ $salereturn->id }}"   />
-                            </div>
+                                    <label for="">
+                                        Descripiton <span class="text-red-500 font-semibold"></span>
+                                    </label>
+                                    <textarea name="sretdescription" id="sretdescription" cols="30" rows="2" maxlength="150" required class="rounded"> {{ $salereturn->sretdescription }} </textarea>
+                                </div>
 
 
 
@@ -610,7 +614,7 @@ function validateForm()
     var data = { 'salereturn' : dynamicTableData,'rcvblamount':rcvblamount.value,
         'customer_id': customer_id.value,'dcdate':dcdate.value,'sale_return_id':sale_return_id.value,
         'saletaxper':saletaxper.value,'saletaxamt':saletaxamt.value,'totrcvbamount':totrcvbamount.value,
-        'dcno':dcno.value,'gpno':gpno.value,'billno':billno.value,'rdate':rdate.value};
+        'dcno':dcno.value,'gpno':gpno.value,'billno':billno.value,'rdate':rdate.value,'sretdescription':sretdescription.value};
 
 
 

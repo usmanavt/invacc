@@ -23,6 +23,8 @@ use App\Models\PcommercialInvoice;
 use App\Models\Material;
 use App\Models\Packaging;
 use App\Models\Sku;
+use App\Models\Voucher;
+
 
 
 class CommercialInvoiceController extends Controller
@@ -146,7 +148,7 @@ class CommercialInvoiceController extends Controller
             $ci->invoice_date = $request->invoicedate;
             $ci->invoiceno = $request->invoiceno;
             $ci->contract_id = $request->contract_id;
-            // $ci->challanno = $request->challanno;
+            $ci->comdescription = $request->comdescription;
             $ci->supplier_id = $comminvoice[0]['supplier_id'];
             $ci->machine_date = $request->machine_date;
             $ci->machineno = $request->machineno;
@@ -486,7 +488,7 @@ class CommercialInvoiceController extends Controller
             // dd($request->all());
             $ci->invoice_date = $request->invoicedate;
             $ci->invoiceno = $request->invoiceno;
-            // $ci->challanno = $request->challanno;
+            $ci->comdescription = $request->comdescription;
             $ci->machine_date = $request->machine_date;
             $ci->machineno = $request->machineno;
             $ci->conversionrate = $request->conversionrate;
@@ -611,159 +613,7 @@ class CommercialInvoiceController extends Controller
                 //  $spcs=0;
                 //  $sval=0;
 
-                //  $tcontmbal = ContractDetails::where('contract_id',$c->contract_id)->where('material_id',$c->material_id)->first();
-                //  $tcontmbal->tbalwt = $tcontmbal->tbalwt + $varwt;
-                //  $tcontmbal->tbalpcs=$tcontmbal->tbalpcs + $varpcs;
-                //  $tcontmbal->tbalsupval=$tcontmbal->tbalsupval + $varval;
-                //  $tcontmbal->save();
 
-
-
-                //  dd($swt);
-
-
-
-
-                // $pcontractdtl = PcontractDetails::where('commercial_invoice_id',$ci->id)
-                // ->where('material_id',$cid['material_id'])
-                // ->where('status', '=', 0)->first();
-                // $vartpcs2=$pcontractdtl->totpcs - $cid['pcs'] ;
-                // $vartwt2=$pcontractdtl->gdswt - $cid['gdswt'] ;
-                // $varval2=$pcontractdtl->purval - $cid['amtindollar'];
-                // dd($c->all());
-
-
-
-                // $pcontractdtl = PcontractDetails::where('commercial_invoice_id',$cid['commercial_invoice_id'])
-                // ->where('material_id',$cid['material_id'])
-                // ->where('status', '=', 1)->first();
-                // $pcontractdtl->totpcs=$vartpcs2;
-                // $pcontractdtl->gdswt=$vartwt2;
-                // $pcontractdtl->purval=$varval2;
-                // $pcontractdtl->save();
-
-
-
-
-                // $cpdtl1 =PcommercialInvoiceDetails::where('commercial_invoice_id',$cid['commercial_invoice_id'])
-                // ->where('material_id',$cid['material_id'])
-                // ->where('status', '=', 1)->first();
-                // $cpdtl1->pcs = $cid['pcs'];
-                // $cpdtl1->gdswt = $cid['dutygdswt'];
-                // $cpdtl1->gdsprice = $cid['dtyrate'];
-                // $cpdtl1->dutyval = $cid['dtyamtindollar'];
-                // $cpdtl1->save();
-
-
-
-
-
-
-                // Update Auto Pending Clearance [COpy of CIDetails]
-                // $cpd = ClearancePendingDetails::where('commercial_invoice_id',$cid['commercial_invoice_id'])->where('material_id',$cid['material_id'])->first();
-                // $cpd->clearance_id = $ci->id;
-                // $cpd->machine_date = $ci->machine_date;
-                // $cpd->machineno = $cl->machineno;
-                // $cpd->invoiceno = $cl->invoiceno;
-                // $cpd->commercial_invoice_id =  $c->commercial_invoice_id;
-                // $cpd->contract_id = $cid['contract_id'];
-                // $cpd->material_id = $cid['material_id'];
-                // $cpd->supplier_id = $cid['supplier_id'];
-                // $cpd->user_id = $cid['user_id'];
-                // $cpd->category_id = $cid['category_id'];
-                // $cpd->sku_id = $cid['sku_id'];
-                // $cpd->dimension_id = $cid['dimension_id'];
-                // // $cpd->source_id = $cid['source_id'];
-                // // $cpd->brand_id = $cid['brand_id'];
-
-                // $cpd->pcs = $cid['pcs'];
-                // $cpd->gdswt = $cid['gdswt'];
-                // $cpd->inkg = $cid['inkg'];
-                // $cpd->pcs_pending = $cid['pcs'];
-                // $cpd->gdsprice = $cid['dtyrate'];
-                // // $cpd->dtyrate = $cid['dtyrate'];
-                // $cpd->amtindollar = $cid['amtindollar'];
-                // $cpd->amtinpkr = $cid['amtinpkr'];
-
-                // $cpd->hscode = $cid['hscode'];
-                // $cpd->cd = $cid['cd'];
-                // $cpd->st = $cid['st'];
-                // $cpd->rd = $cid['rd'];
-                // $cpd->acd = $cid['acd'];
-                // $cpd->ast = $cid['ast'];
-                // $cpd->it = $cid['it'];
-                // $cpd->wse = $cid['wse'];
-
-                // $cpd->length = $cid['length'];
-                // $cpd->itmratio = $cid['itmratio'];
-                // $cpd->insuranceperitem = $cid['insuranceperitem'];
-                // $cpd->amountwithoutinsurance = $cid['amountwithoutinsurance'];
-                // $cpd->onepercentdutypkr = $cid['onepercentdutypkr'];
-                // $cpd->pricevaluecostsheet = $cid['pricevaluecostsheet'];
-                // $cpd->totallccostwexp = $cid['totallccostwexp'];
-
-                // $cpd->cda = $cid['cda'];
-                // $cpd->sta = $cid['sta'];
-                // $cpd->rda = $cid['rda'];
-                // $cpd->acda = $cid['acda'];
-                // $cpd->asta = $cid['asta'];
-                // $cpd->ita = $cid['ita'];
-                // $cpd->wsca = $cid['wsca'];
-                // $cpd->total = $cid['total'];
-                // $cpd->perpc = $cid['perpc'];
-                // $cpd->perkg = $cid['perkg'];
-                // $cpd->perft = $cid['perft'];
-                // $cpd->otherexpenses = $cid['otherexpenses'];
-                // $cpd->save();
-
-
-
-//              for pcontacts edit
-
-                // $pcontract = Pcontract::where('commercial_invoice_id',$ci->id)
-                // ->where('status', '=', 0)->first();
-                // $vartpcs1=$pcontract->totalpcs;
-                // $vartwt1=$pcontract->conversion_rate;
-                // $varval1=$pcontract->insurance;
-
-
-                // $sumwt = $vartwt1 -  CommercialInvoiceDetails::where('commercial_invoice_id',$ci->id)->sum('gdswt');
-                // $sumpcs = $vartpcs1 -  CommercialInvoiceDetails::where('commercial_invoice_id',$ci->id)->sum('pcs');
-                // $sumval = $varval1 -  CommercialInvoiceDetails::where('commercial_invoice_id',$ci->id)->sum('amtindollar');
-                // $pcontract = Pcontract::where('commercial_invoice_id',$ci->id)
-                // ->where('status', '=', 1)->first();
-                // $pcontract->conversion_rate = $sumwt;
-                // $pcontract->insurance = $sumval;
-                // $pcontract->totalpcs = $sumpcs;
-                // $pcontract->save();
-
-
-                // $sumwt3 =  CommercialInvoiceDetails::where('commercial_invoice_id',$ci->id)->sum('dutygdswt');
-                // $sumpcs3 = CommercialInvoiceDetails::where('commercial_invoice_id',$ci->id)->sum('pcs');
-                // $sumval3 = CommercialInvoiceDetails::where('commercial_invoice_id',$ci->id)->sum('dtyamtindollar');
-
-                // $pci = PcommercialInvoice::where('commercial_invoice_id',$ci->id)
-                // ->where('status', '=', 1)->first();
-                // $pci->totpcs = $sumpcs3;
-                // $pci->totwt = $sumwt3;
-                // $pci->dutyval = $sumval3;
-                // $pci->save();
-
-                // $pci1 = commercialInvoice::where('id',$pci->commercial_invoice_id)->first();
-                // $pci1->tpcs = $sumpcs3;
-                // $pci1->twt = $sumwt3;
-                // $pci1->tval = $sumval3;
-                // $pci1->save();
-
-                // $sumtwt =  ContractDetails::where('contract_id',$c->contract_id)->sum('tbalwt');
-                // $sumtpcs =  ContractDetails::where('contract_id',$c->contract_id)->sum('tbalpcs');
-                // $sumtval =  ContractDetails::where('contract_id',$c->contract_id)->sum('tbalsupval');
-
-                // $contsumry = Contract::where('id',$c->contract_id)->first();
-                //     $contsumry->balwt = $sumtwt;
-                //     $contsumry->balpcs = $sumtpcs;
-                //     $contsumry->balsupval =$sumtval;
-                //     $contsumry->save();
 
                     //  *******#########################3
                 // $test = DB::update(DB::raw('UPDATE users SET name='.$name.' WHERE id =3'));
@@ -852,6 +702,52 @@ class CommercialInvoiceController extends Controller
             INSERT INTO office_item_bal(transaction_id,tdate,ttypedesc,ttypeid,material_id,uom,tqtykg,tqtypcs,tqtyfeet,tcostkg,tcostpcs,tcostfeet,transvalue)
             SELECT a.id AS transid,a.invoice_date,'Ipurchasing',2,b.material_id,sku_id,gdswt,pcs,qtyinfeet,perkg,perpc,perft,totallccostwexp FROM commercial_invoices a INNER JOIN  commercial_invoice_details b
             ON a.id=b.commercial_invoice_id WHERE a.id=$ci->id"));
+
+//    dd($request->jv1);
+if($request->jv1==1)
+{
+            $lstrt = Voucher::where('vgdno',$ci->machineno)->first();
+            if(!$lstrt) {
+
+                        // FOR GENERATE JV AGAINTST CLEARANCE INVOICE LEVEL EXPENSES
+                        DB::insert(DB::raw("
+                        INSERT INTO  vouchers(TRANSACTION,vgdno,vcominvno,document_date,transaction_type,head_id,head_title,subhead_id,subhead_title,jvno,amount,DESCRIPTION)
+                        SELECT (SELECT MAX(TRANSACTION)+1  FROM vouchers) AS transaction,machineno,id,invoice_date AS document_date,'DEBIT' AS transaction_type,108 AS head_id,'MAIN HEAD COUNT' AS head_title,
+                        36 AS subhead_id,'IMPORT PURCHASE' AS subhead_title,(SELECT MAX(jvno)+1  FROM vouchers) AS jvno,total AS amount,'' AS descripion
+                        FROM commercial_invoices WHERE machineno='$ci->machineno'
+                        UNION all
+                        SELECT (SELECT MAX(TRANSACTION)+1  FROM vouchers) as transaction,machineno,b.id,b.invoice_date,'CREDIT',a.head_id,c.title AS mhead,a.subhead_id,supname AS subhead,(SELECT MAX(jvno)+1  FROM vouchers) as jvno,a.amount_fc,a.description
+                        FROM bank_transactions AS a INNER join commercial_invoices AS b ON a.impgdno=b.machineno INNER JOIN heads AS c
+                        ON a.head_id=c.id INNER JOIN subheads AS d ON a.subhead_id=d.id WHERE machineno='$ci->machineno' "));
+                        }
+            else
+                        {
+
+                            $trno=$lstrt->transaction;
+                            $vjvno=$lstrt->jvno;
+                            DB::delete(DB::raw(" delete FROM vouchers WHERE vcominvno=$ci->id   "));
+                            DB::insert(DB::raw("
+                            INSERT INTO  vouchers(TRANSACTION,vgdno,vcominvno,document_date,transaction_type,head_id,head_title,subhead_id,subhead_title,jvno,amount,DESCRIPTION)
+                            SELECT $trno AS transaction,machineno,id,invoice_date AS document_date,'DEBIT' AS transaction_type,108 AS head_id,'MAIN HEAD COUNT' AS head_title,
+                            36 AS subhead_id,'IMPORT PURCHASE' AS subhead_title,$vjvno AS jvno,total AS amount,'' AS descripion
+                            FROM commercial_invoices WHERE machineno='$ci->machineno'
+                            UNION all
+                            SELECT $trno as transaction,machineno,b.id,b.invoice_date,'CREDIT',a.head_id,c.title AS mhead,a.subhead_id,supname AS subhead,
+                            $vjvno as jvno,a.amount_fc,a.description
+                            FROM bank_transactions AS a INNER join commercial_invoices AS b ON a.impgdno=b.machineno INNER JOIN heads AS c
+                            ON a.head_id=c.id INNER JOIN subheads AS d ON a.subhead_id=d.id WHERE machineno='$ci->machineno' "));
+
+
+                        }
+
+}
+
+
+
+
+
+
+
 
             //****################# Transfert item cost to godown stock table
             DB::update(DB::raw("

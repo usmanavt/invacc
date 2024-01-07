@@ -163,6 +163,7 @@
             {title: "Main.Head",field: "manhead"},
             {title: "Sub.Head",field: "subhead"},
             {title: "Ref.",field: "ref"},
+            {title: "G.D No For Import.",field: "impgdno",hozAlign:"center"},
             {title: "Supp.Source",field: "suppliertype"},
             {title: "Payment Date",field: "documentdate"},
             {title: "Amount(FC)",field: "amount_fc",bottomCalc:"sum",},

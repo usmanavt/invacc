@@ -172,6 +172,8 @@ class SalesRetunrsController  extends Controller
             $ci->saletaxper = $request->saletaxper;
             $ci->saletaxamt = $request->saletaxamt;
             $ci->totrcvbamount = $request->totrcvbamount;
+            $ci->sretdescription = $request->sretdescription;
+
             $ci->save();
 
             foreach ($request->sales as $cont) {
@@ -335,6 +337,8 @@ class SalesRetunrsController  extends Controller
             $salereturn->saletaxper = $request->saletaxper;
             $salereturn->saletaxamt = $request->saletaxamt;
             $salereturn->totrcvbamount = $request->totrcvbamount;
+            $salereturn->sretdescription = $request->sretdescription;
+
             $salereturn->save();
 
             // Get Data
