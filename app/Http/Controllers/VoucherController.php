@@ -92,7 +92,7 @@ class VoucherController extends Controller
 
             DB::update(DB::raw("
             UPDATE cheque_transactions c
-            INNER JOIN (SELECT distinct jvno,document_date,cheque_no,'JV' as transaction_type,subhead_id as bank_id FROM vouchers WHERE head_id=34 AND jvno=$v->jvno) x
+            INNER JOIN (SELECT distinct jvno,document_date,cheque_no,'JV' as transaction_type,subhead_id as bank_id FROM vouchers WHERE  jvno=$v->jvno) x
             ON c.cheque_no=x.cheque_no
             SET c.bank_id=x.bank_id, c.clrstatus=1,c.clrdate=x.document_date,clrid=x.jvno,c.ref=CONCAT(x.transaction_type,'-',LPAD(x.jvno,4,'0')) "));
 
@@ -158,7 +158,7 @@ class VoucherController extends Controller
 
             DB::update(DB::raw("
             UPDATE cheque_transactions c
-            INNER JOIN (SELECT distinct jvno,document_date,cheque_no,'JV' as transaction_type,subhead_id as bank_id FROM vouchers WHERE head_id=34 AND jvno=$v->jvno) x
+            INNER JOIN (SELECT distinct jvno,document_date,cheque_no,'JV' as transaction_type,subhead_id as bank_id FROM vouchers WHERE  jvno=$v->jvno) x
             ON c.cheque_no=x.cheque_no
             SET c.bank_id=x.bank_id, c.clrstatus=1,c.clrdate=x.document_date,clrid=x.jvno,c.ref=CONCAT(x.transaction_type,'-',LPAD(x.jvno,4,'0')) "));
 

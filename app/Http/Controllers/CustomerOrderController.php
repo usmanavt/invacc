@@ -189,6 +189,7 @@ class CustomerOrderController  extends Controller
             // Quotation Close
             $qutclose = Quotation::findOrFail($request->quotation_id);
             $qutclose->closed = 0;
+            $qutclose->fstatus = 1;
             $qutclose->save();
 
 

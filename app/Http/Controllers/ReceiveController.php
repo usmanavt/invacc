@@ -226,7 +226,7 @@ class ReceiveController  extends Controller
 
             DB::update(DB::raw("
             UPDATE cheque_transactions c
-            INNER JOIN (SELECT id,documentdate,cheque_no,transaction_type,bank_id FROM bank_transactions WHERE bank_id>3 AND id=$ci->id) x
+            INNER JOIN (SELECT id,documentdate,cheque_no,transaction_type,bank_id FROM bank_transactions WHERE  id=$ci->id) x
             ON c.cheque_no=x.cheque_no
             SET c.bank_id=x.bank_id, c.clrstatus=1,c.clrdate=x.documentdate,clrid=x.id,c.ref=CONCAT(x.transaction_type,'-',LPAD(x.id,4,'0')) "));
 
@@ -409,7 +409,7 @@ class ReceiveController  extends Controller
 
             DB::update(DB::raw("
             UPDATE cheque_transactions c
-            INNER JOIN (SELECT id,documentdate,cheque_no,transaction_type,bank_id FROM bank_transactions WHERE bank_id>3 AND id=$ci->id) x
+            INNER JOIN (SELECT id,documentdate,cheque_no,transaction_type,bank_id FROM bank_transactions WHERE  id=$ci->id) x
             ON c.cheque_no=x.cheque_no
             SET c.bank_id=x.bank_id, c.clrstatus=1,c.clrdate=x.documentdate,clrid=x.id,c.ref=CONCAT(x.transaction_type,'-',LPAD(x.id,4,'0')) "));
 
@@ -424,7 +424,7 @@ class ReceiveController  extends Controller
 
             DB::update(DB::raw("
             UPDATE cheque_transactions c
-            INNER JOIN (SELECT id,documentdate,cheque_no,transaction_type,bank_id FROM bank_transactions WHERE bank_id>3 AND id=$ci->id) x
+            INNER JOIN (SELECT id,documentdate,cheque_no,transaction_type,bank_id FROM bank_transactions WHERE  id=$ci->id) x
             ON c.cheque_no=x.cheque_no and c.bank_id=x.bank_id
             SET c.clrstatus=1,c.clrdate=x.documentdate,clrid=x.id,c.ref=CONCAT(x.transaction_type,'-',LPAD(x.id,4,'0')) "));
 

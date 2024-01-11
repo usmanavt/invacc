@@ -152,7 +152,7 @@ class QuotationController  extends Controller
             $ci->qutno = $request->qutno;
             $ci->prno = $request->prno;
             $ci->customer_id = $request->customer_id;
-
+            $ci->fstatus = 0;
 
             $ci->cashcustomer = $request->cashcustomer;
             $ci->cashcustadrs = $request->cashcustadrs;
@@ -180,6 +180,9 @@ class QuotationController  extends Controller
                 $lpd->mrktprice1 = $cont['mrktprice1'];
                 $lpd->mrktprice2 = $cont['mrktprice2'];
                 $lpd->saleamnt = $cont['ttpcs'];
+                $lpd->supp1 = $cont['supp1'];
+                $lpd->supp2 = $cont['supp2'];
+
 
                 // $location = Location::where("title", $cont['location'])->first();
                 // $lpd->locid = $location->id;
@@ -286,8 +289,10 @@ class QuotationController  extends Controller
                     $cds->lstslprice = $cd['lstslprice'];
                     $cds->mrktprice1 = $cd['mrktprice1'];
                     $cds->mrktprice2 = $cd['mrktprice2'];
-
                     $cds->saleamnt = $cd['saleamnt'];
+                    $cds->supp1 = $cd['supp1'];
+                    $cds->supp2 = $cd['supp2'];
+
 
                     //  $location = Location::where("title", $cd['location'])->first();
                     //  $cds->locid = $location->id;

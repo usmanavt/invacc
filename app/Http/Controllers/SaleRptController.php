@@ -143,6 +143,74 @@ public function funcsalretcat(Request $request)
         return $mpdf;
     }
 
+
+    public function getMPDFSettingslndscap($orientation = 'A4-L')
+    {
+
+        $format;
+        $orientation == 'L' ? $format = 'A4': 'A4';
+
+        $mpdf = new PDF( [
+            'mode' => 'utf-8',
+            'format' => $orientation,
+            'margin_header' => '2',
+            'margin_top' => '5',
+            'margin_bottom' => '5',
+            'margin_footer' => '2',
+            'default_font_size' => 9,
+            'margin_left' => '10',
+            'margin_right' => '10',
+        ]);
+        $mpdf->showImageErrors = true;
+        $mpdf->curlAllowUnsafeSslRequests = true;
+        $mpdf->debug = true;
+        return $mpdf;
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    public function getMPDFSettingsL($orientation = 'Legal-L')
+    {
+
+        $format;
+        $orientation == 'L' ? $format = 'Legal': 'Legal';
+
+        $mpdf = new PDF( [
+            'mode' => 'utf-8',
+            'format' => $orientation,
+            'margin_header' => '2',
+            'margin_top' => '5',
+            'margin_bottom' => '5',
+            'margin_footer' => '2',
+            'default_font_size' => 9,
+            'margin_left' => '10',
+            'margin_right' => '10',
+        ]);
+        $mpdf->showImageErrors = true;
+        $mpdf->curlAllowUnsafeSslRequests = true;
+        $mpdf->debug = true;
+        return $mpdf;
+    }
+
+
+
+
+
+
     public function vouchers(Request $request)
     {
         // dd($request->all());
@@ -225,7 +293,17 @@ public function funcsalretcat(Request $request)
         }
         //  Call Procedure
         $mpdf = $this->getMPDFSettings();
-        $data = DB::select('call procsaletaxinvoice()');
+        if($report_type === 'saltxinvs')
+        {
+            $data = DB::select('call procsaletaxinvoice()');
+        }
+        else
+        {
+            $data = DB::select('call procsaleinvoice()');
+        }
+
+
+
         if(!$data)
         {
             Session::flash('info','No data available');
@@ -548,7 +626,7 @@ public function funcsalretcat(Request $request)
                 }
             }
             //  Call Procedure
-            $mpdf = $this->getMPDFSettings();
+            // $mpdf = $this->getMPDFSettingslndscap();
             $data = DB::select('call procquotation()');
             if(!$data)
             {
@@ -569,14 +647,16 @@ public function funcsalretcat(Request $request)
             ///// THIS IS CHANGED FOR REPORT//////////
             $grouped = $collection->groupBy('id');
             $grouped->values()->all();        //  values() removes indices of array
+
             foreach($grouped as $g){
+                // $mpdf = $this->getMPDFSettingslndscap();
                  $html =  view('salerpt.quotationrptf1')->with('data',$g)->with('nogrp',$nogrp)->with('fromdate',$fromdate)->with('todate',$todate)
                  ->with('headtype',$head->title)
                  ->with('hdng1',$hdng1)->with('hdng2',$hdng2)->with('t1',$t1)->with('t2',$t2)->with('t3',$t3)->with('t4',$t4)->with('t5',$t5)
                  ->render();
                 // $html =  view('salerpt.glhw')->with('data',$g)->with('fromdate',$fromdate)->with('todate',$todate)->render();
                 $filename = $g[0]->id  .'-'.$fromdate.'-'.$todate.'.pdf';
-                // $mpdf = $this->getMPDFSettings();
+
                 $mpdf->SetHTMLFooter('
                 <table width="100%" style="border-top:1px solid gray">
                     <tr>
@@ -643,13 +723,14 @@ public function funcsalretcat(Request $request)
                  ->render();
                 // $html =  view('salerpt.glhw')->with('data',$g)->with('fromdate',$fromdate)->with('todate',$todate)->render();
                 $filename = $g[0]->id  .'-'.$fromdate.'-'.$todate.'.pdf';
-                $mpdf->SetHTMLFooter('
-                <table width="100%" style="border-top:1px solid gray">
-                    <tr>
-                        <td width="33%">{DATE d-m-Y}</td>
-                        <td width="33%" align="center">{PAGENO}/{nbpg}</td>
-                    </tr>
-                </table>');
+                $mpdf = $this->getMPDFSettingslndscap();
+                // $mpdf->SetHTMLFooter('
+                // <table width="100%" style="border-top:1px solid gray">
+                //     <tr>
+                //         <td width="33%">{DATE d-m-Y}</td>
+                //         <td width="33%" align="center">{PAGENO}/{nbpg}</td>
+                //     </tr>
+                // </table>');
                 $chunks = explode("chunk", $html);
                 foreach($chunks as $key => $val) {
                     $mpdf->WriteHTML($val);

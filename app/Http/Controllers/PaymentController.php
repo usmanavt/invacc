@@ -207,8 +207,9 @@ class PaymentController  extends Controller
             if($lstrt) {
 
                 //  dd($ci->subhead_id);
+             $tamount = BankTransaction::where('impgdno',$ci->impgdno)->where('subhead_id',$ci->subhead_id)->sum('amount_fc');
              if($ci->subhead_id==371)
-                { $lstrt->bankcharges=$request->amount_fc;
+                { $lstrt->bankcharges=$tamount;
                 $lstrt->total= $lstrt->bankcharges+$lstrt->collofcustom+$lstrt->exataxoffie+$lstrt->localcartage+$lstrt->customsepoy+$lstrt->weighbridge+$lstrt->lngnshipdochrgs
                 +$lstrt->agencychrgs+$lstrt->miscexpenses+$lstrt->otherchrgs;
 
@@ -216,7 +217,7 @@ class PaymentController  extends Controller
             ;}
 
             elseif($ci->subhead_id==372)
-                { $lstrt->collofcustom=$request->amount_fc;
+                { $lstrt->collofcustom=$tamount;
                     $lstrt->total= $lstrt->bankcharges+$lstrt->collofcustom+$lstrt->exataxoffie+$lstrt->localcartage+$lstrt->customsepoy+$lstrt->weighbridge+$lstrt->lngnshipdochrgs
                     +$lstrt->agencychrgs+$lstrt->miscexpenses+$lstrt->otherchrgs;
 
@@ -224,12 +225,14 @@ class PaymentController  extends Controller
             ;}
 
             elseif($ci->subhead_id==373)
-                { $lstrt->exataxoffie=$request->amount_fc;
+                { $lstrt->exataxoffie=$tamount;
+                    $lstrt->total= $lstrt->bankcharges+$lstrt->collofcustom+$lstrt->exataxoffie+$lstrt->localcartage+$lstrt->customsepoy+$lstrt->weighbridge+$lstrt->lngnshipdochrgs
+                    +$lstrt->agencychrgs+$lstrt->miscexpenses+$lstrt->otherchrgs;
                 $lstrt->save()
             ;}
 
             elseif($ci->subhead_id==374)
-                { $lstrt->localcartage=$request->amount_fc;
+                { $lstrt->localcartage=$tamount;
                     $lstrt->total= $lstrt->bankcharges+$lstrt->collofcustom+$lstrt->exataxoffie+$lstrt->localcartage+$lstrt->customsepoy+$lstrt->weighbridge+$lstrt->lngnshipdochrgs
                     +$lstrt->agencychrgs+$lstrt->miscexpenses+$lstrt->otherchrgs;
 
@@ -237,7 +240,7 @@ class PaymentController  extends Controller
             ;}
 
             elseif($ci->subhead_id==375)
-                { $lstrt->customsepoy=$request->amount_fc;
+                { $lstrt->customsepoy=$tamount;
                     $lstrt->total= $lstrt->bankcharges+$lstrt->collofcustom+$lstrt->exataxoffie+$lstrt->localcartage+$lstrt->customsepoy+$lstrt->weighbridge+$lstrt->lngnshipdochrgs
                     +$lstrt->agencychrgs+$lstrt->miscexpenses+$lstrt->otherchrgs;
 
@@ -245,7 +248,7 @@ class PaymentController  extends Controller
             ;}
 
             elseif($ci->subhead_id==376)
-                { $lstrt->weighbridge=$request->amount_fc;
+                { $lstrt->weighbridge=$tamount;
                     $lstrt->total= $lstrt->bankcharges+$lstrt->collofcustom+$lstrt->exataxoffie+$lstrt->localcartage+$lstrt->customsepoy+$lstrt->weighbridge+$lstrt->lngnshipdochrgs
                     +$lstrt->agencychrgs+$lstrt->miscexpenses+$lstrt->otherchrgs;
 
@@ -253,7 +256,7 @@ class PaymentController  extends Controller
             ;}
 
             elseif($ci->subhead_id==377)
-                { $lstrt->lngnshipdochrgs=$request->amount_fc;
+                { $lstrt->lngnshipdochrgs=$tamount;
                     $lstrt->total= $lstrt->bankcharges+$lstrt->collofcustom+$lstrt->exataxoffie+$lstrt->localcartage+$lstrt->customsepoy+$lstrt->weighbridge+$lstrt->lngnshipdochrgs
                     +$lstrt->agencychrgs+$lstrt->miscexpenses+$lstrt->otherchrgs;
 
@@ -261,7 +264,7 @@ class PaymentController  extends Controller
             ;}
 
             elseif($ci->subhead_id==378)
-                { $lstrt->agencychrgs=$request->amount_fc;
+                { $lstrt->agencychrgs=$tamount;
                     $lstrt->total= $lstrt->bankcharges+$lstrt->collofcustom+$lstrt->exataxoffie+$lstrt->localcartage+$lstrt->customsepoy+$lstrt->weighbridge+$lstrt->lngnshipdochrgs
                     +$lstrt->agencychrgs+$lstrt->miscexpenses+$lstrt->otherchrgs;
 
@@ -269,7 +272,7 @@ class PaymentController  extends Controller
             ;}
 
             elseif($ci->subhead_id==379)
-                { $lstrt->miscexpenses=$request->amount_fc;
+                { $lstrt->miscexpenses=$tamount;
                     $lstrt->total= $lstrt->bankcharges+$lstrt->collofcustom+$lstrt->exataxoffie+$lstrt->localcartage+$lstrt->customsepoy+$lstrt->weighbridge+$lstrt->lngnshipdochrgs
                     +$lstrt->agencychrgs+$lstrt->miscexpenses+$lstrt->otherchrgs;
 
@@ -277,7 +280,7 @@ class PaymentController  extends Controller
             ;}
 
             elseif($ci->subhead_id==380)
-                { $lstrt->otherchrgs=$request->amount_fc;
+                { $lstrt->otherchrgs=$tamount;
                     $lstrt->total= $lstrt->bankcharges+$lstrt->collofcustom+$lstrt->exataxoffie+$lstrt->localcartage+$lstrt->customsepoy+$lstrt->weighbridge+$lstrt->lngnshipdochrgs
                     +$lstrt->agencychrgs+$lstrt->miscexpenses+$lstrt->otherchrgs;
 
@@ -388,8 +391,9 @@ class PaymentController  extends Controller
             if($lstrt) {
 
                 //  dd($ci->subhead_id);
+             $tamount = BankTransaction::where('impgdno',$ci->impgdno)->where('subhead_id',$ci->subhead_id)->sum('amount_fc');
              if($ci->subhead_id==371)
-                { $lstrt->bankcharges=$request->amount_fc;
+                { $lstrt->bankcharges=$tamount;
                 $lstrt->total= $lstrt->bankcharges+$lstrt->collofcustom+$lstrt->exataxoffie+$lstrt->localcartage+$lstrt->customsepoy+$lstrt->weighbridge+$lstrt->lngnshipdochrgs
                 +$lstrt->agencychrgs+$lstrt->miscexpenses+$lstrt->otherchrgs;
 
@@ -397,7 +401,7 @@ class PaymentController  extends Controller
             ;}
 
             elseif($ci->subhead_id==372)
-                { $lstrt->collofcustom=$request->amount_fc;
+                { $lstrt->collofcustom=$tamount;
                     $lstrt->total= $lstrt->bankcharges+$lstrt->collofcustom+$lstrt->exataxoffie+$lstrt->localcartage+$lstrt->customsepoy+$lstrt->weighbridge+$lstrt->lngnshipdochrgs
                     +$lstrt->agencychrgs+$lstrt->miscexpenses+$lstrt->otherchrgs;
 
@@ -405,12 +409,14 @@ class PaymentController  extends Controller
             ;}
 
             elseif($ci->subhead_id==373)
-                { $lstrt->exataxoffie=$request->amount_fc;
+                { $lstrt->exataxoffie=$tamount;
+                    $lstrt->total= $lstrt->bankcharges+$lstrt->collofcustom+$lstrt->exataxoffie+$lstrt->localcartage+$lstrt->customsepoy+$lstrt->weighbridge+$lstrt->lngnshipdochrgs
+                    +$lstrt->agencychrgs+$lstrt->miscexpenses+$lstrt->otherchrgs;
                 $lstrt->save()
             ;}
 
             elseif($ci->subhead_id==374)
-                { $lstrt->localcartage=$request->amount_fc;
+                { $lstrt->localcartage=$tamount;
                     $lstrt->total= $lstrt->bankcharges+$lstrt->collofcustom+$lstrt->exataxoffie+$lstrt->localcartage+$lstrt->customsepoy+$lstrt->weighbridge+$lstrt->lngnshipdochrgs
                     +$lstrt->agencychrgs+$lstrt->miscexpenses+$lstrt->otherchrgs;
 
@@ -418,7 +424,7 @@ class PaymentController  extends Controller
             ;}
 
             elseif($ci->subhead_id==375)
-                { $lstrt->customsepoy=$request->amount_fc;
+                { $lstrt->customsepoy=$tamount;
                     $lstrt->total= $lstrt->bankcharges+$lstrt->collofcustom+$lstrt->exataxoffie+$lstrt->localcartage+$lstrt->customsepoy+$lstrt->weighbridge+$lstrt->lngnshipdochrgs
                     +$lstrt->agencychrgs+$lstrt->miscexpenses+$lstrt->otherchrgs;
 
@@ -426,7 +432,7 @@ class PaymentController  extends Controller
             ;}
 
             elseif($ci->subhead_id==376)
-                { $lstrt->weighbridge=$request->amount_fc;
+                { $lstrt->weighbridge=$tamount;
                     $lstrt->total= $lstrt->bankcharges+$lstrt->collofcustom+$lstrt->exataxoffie+$lstrt->localcartage+$lstrt->customsepoy+$lstrt->weighbridge+$lstrt->lngnshipdochrgs
                     +$lstrt->agencychrgs+$lstrt->miscexpenses+$lstrt->otherchrgs;
 
@@ -434,7 +440,7 @@ class PaymentController  extends Controller
             ;}
 
             elseif($ci->subhead_id==377)
-                { $lstrt->lngnshipdochrgs=$request->amount_fc;
+                { $lstrt->lngnshipdochrgs=$tamount;
                     $lstrt->total= $lstrt->bankcharges+$lstrt->collofcustom+$lstrt->exataxoffie+$lstrt->localcartage+$lstrt->customsepoy+$lstrt->weighbridge+$lstrt->lngnshipdochrgs
                     +$lstrt->agencychrgs+$lstrt->miscexpenses+$lstrt->otherchrgs;
 
@@ -442,7 +448,7 @@ class PaymentController  extends Controller
             ;}
 
             elseif($ci->subhead_id==378)
-                { $lstrt->agencychrgs=$request->amount_fc;
+                { $lstrt->agencychrgs=$tamount;
                     $lstrt->total= $lstrt->bankcharges+$lstrt->collofcustom+$lstrt->exataxoffie+$lstrt->localcartage+$lstrt->customsepoy+$lstrt->weighbridge+$lstrt->lngnshipdochrgs
                     +$lstrt->agencychrgs+$lstrt->miscexpenses+$lstrt->otherchrgs;
 
@@ -450,7 +456,7 @@ class PaymentController  extends Controller
             ;}
 
             elseif($ci->subhead_id==379)
-                { $lstrt->miscexpenses=$request->amount_fc;
+                { $lstrt->miscexpenses=$tamount;
                     $lstrt->total= $lstrt->bankcharges+$lstrt->collofcustom+$lstrt->exataxoffie+$lstrt->localcartage+$lstrt->customsepoy+$lstrt->weighbridge+$lstrt->lngnshipdochrgs
                     +$lstrt->agencychrgs+$lstrt->miscexpenses+$lstrt->otherchrgs;
 
@@ -458,7 +464,7 @@ class PaymentController  extends Controller
             ;}
 
             elseif($ci->subhead_id==380)
-                { $lstrt->otherchrgs=$request->amount_fc;
+                { $lstrt->otherchrgs=$tamount;
                     $lstrt->total= $lstrt->bankcharges+$lstrt->collofcustom+$lstrt->exataxoffie+$lstrt->localcartage+$lstrt->customsepoy+$lstrt->weighbridge+$lstrt->lngnshipdochrgs
                     +$lstrt->agencychrgs+$lstrt->miscexpenses+$lstrt->otherchrgs;
 
