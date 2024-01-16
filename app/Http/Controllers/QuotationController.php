@@ -9,6 +9,9 @@ use App\Models\QuotationDetails;
 use App\Models\Material;
 use App\Models\Customer;
 use App\Models\Sku;
+use App\Models\CustomerOrder;
+
+
 use Illuminate\Http\Request;
 // use App\Models\ContractDetails;
 use App\Models\Location;
@@ -47,6 +50,27 @@ class QuotationController  extends Controller
          ->orderBy($field,$dir)
         ->paginate((int) $size);
         return $cis;
+    }
+
+
+    public function qutIndex(Request $request)
+    {
+
+        $search = $request->search;
+        $size = $request->size;
+        $field = $request->sort[0]["field"];     //  Nested Array
+        $dir = $request->sort[0]["dir"];         //  Nested Array
+        $cis = DB::table('quotationindex')
+        // ->join('suppliers', 'contracts.supplier_id', '=', 'suppliers.id')
+        // ->select('contracts.*', 'suppliers.title')
+        // ->with('customer:id,title')
+        ->where('custname', 'like', "%$search%")
+        ->orWhere('qutno', 'like', "%$search%")
+        // ->orWhere('impgdno', 'like', "%$search%")
+        ->orderBy($field,$dir)
+        ->paginate((int) $size);
+        return $cis;
+
     }
 
 
@@ -179,10 +203,12 @@ class QuotationController  extends Controller
                 $lpd->lstslprice = $cont['pcspbundle1'];
                 $lpd->mrktprice1 = $cont['mrktprice1'];
                 $lpd->mrktprice2 = $cont['mrktprice2'];
+                $lpd->mrktprice3 = $cont['mrktprice3'];
                 $lpd->saleamnt = $cont['ttpcs'];
                 $lpd->supp1 = $cont['supp1'];
                 $lpd->supp2 = $cont['supp2'];
-
+                $lpd->supp3 = $cont['supp3'];
+                $lpd->tqtpendqty = $cont['bundle1'];
 
                 // $location = Location::where("title", $cont['location'])->first();
                 // $lpd->locid = $location->id;
@@ -193,6 +219,29 @@ class QuotationController  extends Controller
                 // $lpd->sku = $cont['sku'];
                 $lpd->save();
             }
+
+            DB::update(DB::raw("
+            update quotations c
+            INNER JOIN (
+                SELECT sale_invoice_id, SUM(qtykg) as qty,sum(saleamnt) as amount  FROM quotation_details where  sale_invoice_id = $ci->id  GROUP BY sale_invoice_id
+                        ) x ON c.id = x.sale_invoice_id
+            SET c.tqqty = x.qty,c.tqpendqty=x.qty,c.tqpendval=amount where  id = $ci->id
+            "));
+
+
+
+                // DB::update(DB::raw("
+                // UPDATE quotations c
+                // INNER JOIN (
+                // SELECT quotation_id,SUM(qtykg) AS qty,SUM(saleamnt) AS amount FROM customer_order_details WHERE quotation_id=$ci->id GROUP BY quotation_id
+                // ) x ON c.id = x.quotation_id
+                // SET c.tqpendqty = c.tqqty - coalesce(x.qty,0), c.tqpendval = c.rcvblamount - coalesce(x.amount,0) WHERE  c.id = $ci->id"));
+
+
+
+
+
+
             // }
             DB::commit();
             Session::flash('success','Contract Information Saved');
@@ -261,6 +310,7 @@ class QuotationController  extends Controller
             $quotation->saletaxper = $request->saletaxper;
             $quotation->saletaxamt = $request->saletaxamt;
             $quotation->totrcvbamount = $request->totrcvbamount;
+            $quotation->closed = $request->p5;
 
             $quotation->save();
             // Get Data
@@ -341,6 +391,48 @@ class QuotationController  extends Controller
                     $cds->save();
                 }
             }
+
+            DB::update(DB::raw("
+            update quotations c
+            INNER JOIN (
+                SELECT sale_invoice_id, SUM(qtykg) as qty  FROM quotation_details where  sale_invoice_id = $quotation->id  GROUP BY sale_invoice_id
+                        ) x ON c.id = x.sale_invoice_id
+            SET c.tqqty = x.qty where  c.id = $quotation->id
+            "));
+
+
+            $lstrt = CustomerOrder::where('quotation_id',$quotation->id)->first();
+            if($lstrt) {
+
+
+            DB::update(DB::raw("
+            UPDATE quotations c
+            INNER JOIN (
+            SELECT quotation_id,SUM(b.qtykg) AS qty,SUM(b.saleamnt) AS amount from customer_orders as a inner join customer_order_details as b on a.id=b.sale_invoice_id
+            WHERE quotation_id=$quotation->id GROUP BY quotation_id
+            ) x ON c.id = x.quotation_id
+            SET c.tqpendqty = c.tqqty - coalesce(x.qty,0), c.tqpendval = c.rcvblamount - coalesce(x.amount,0) WHERE  c.id = $quotation->id"));
+
+            DB::update(DB::raw("
+            UPDATE quotation_details c
+            INNER JOIN (
+            SELECT quotation_id,material_id,SUM(b.qtykg) AS qty,SUM(b.saleamnt) AS amount from customer_orders as a inner join customer_order_details as b
+            on a.id=b.sale_invoice_id   WHERE quotation_id=$quotation->id GROUP BY quotation_id,material_id
+            ) x ON c.sale_invoice_id = x.quotation_id and c.material_id=x.material_id
+            SET c.tqtpendqty = c.qtykg - coalesce(x.qty,0) WHERE  c.sale_invoice_id = $quotation->id"));
+            }
+
+
+
+
+
+
+
+
+
+
+
+
             DB::commit();
             Session::flash('success','Contract Information Saved');
             return response()->json(['success'],200);

@@ -229,8 +229,7 @@ function pushDynamicData(data)
     //  dyanmicTable.setData()
      dynamicTable.setData(dynamicTableData);
 }
-
-
+//  dfakdfjkdsajfkdsajfkadsjfksdjfk
 var updateValues = (cell) => {
         var data = cell.getData();
 

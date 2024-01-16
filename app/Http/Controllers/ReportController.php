@@ -138,6 +138,8 @@ class ReportController extends Controller
         $mpdf->debug = true;
         //  Get Report
         if($report_type === 'tpl'){
+            $hdng1 = $request->cname;
+            $hdng2 = $request->csdrs;
             $data = DB::select('call ProcTPL(?,?,1)',array($fromdate,$todate));
             if(!$data)
             {
@@ -145,7 +147,7 @@ class ReportController extends Controller
                 return redirect()->back();
             }
             $mpdf = $this->getMPDFSettings();
-            $html =  view('reports.tpl')->with('data',$data)->with('fromdate',$fromdate)->with('todate',$todate)->render();
+            $html =  view('reports.tpl')->with('hdng1',$hdng1)->with('hdng2',$hdng2)->with('data',$data)->with('fromdate',$fromdate)->with('todate',$todate)->render();
             $filename = 'TransactionProveLista-'.$fromdate.'-'.$todate.'.pdf';
 
             // $mpdf->SetHTMLFooter('
@@ -167,6 +169,8 @@ class ReportController extends Controller
 
         if($report_type === 'gl'){
             // dd($request->all());
+            $hdng1 = $request->cname;
+            $hdng2 = $request->csdrs;
             $subhead_id = $request->subhead_id;
             //  Truncate Table Data
             DB::table('glparameterrpt')->truncate();
@@ -177,10 +181,10 @@ class ReportController extends Controller
                 ]);
             }
             // Add input for Muliple parameters in Procedure
-            if($request->p5 == 0)
-            { $data = DB::select('call ProcGL(?,?,?)',array($fromdate,$todate,1));}
-            else
-            { $data = DB::select('call ProcGL(?,?,?)',array($fromdate,$todate,2));}
+            // if($request->p5 == 0)
+            $data = DB::select('call ProcGL(?,?,?)',array($fromdate,$todate,1));
+            // else
+            // { $data = DB::select('call ProcGL(?,?,?)',array($fromdate,$todate,2));}
             if(!$data)
             {
                 Session::flash('info','No data available');
@@ -196,9 +200,9 @@ class ReportController extends Controller
             $grouped->values()->all();                       //  values() removes indices of array
             foreach($grouped as $g){
                 if($request->p5 == 0)
-                { $html =  view('reports.gl')->with('data',$g)->with('fromdate',$fromdate)->with('todate',$todate)->render(); }
+                { $html =  view('reports.gl')->with('hdng1',$hdng1)->with('hdng2',$hdng2)->with('data',$g)->with('fromdate',$fromdate)->with('todate',$todate)->render(); }
                 else
-                { $html =  view('reports.glf2')->with('data',$g)->with('fromdate',$fromdate)->with('todate',$todate)->render(); }
+                { $html =  view('reports.glf2')->with('hdng1',$hdng1)->with('hdng2',$hdng2)->with('data',$g)->with('fromdate',$fromdate)->with('todate',$todate)->render(); }
                 $filename = $g[0]->Parid  .'-'.$fromdate.'-'.$todate.'.pdf';
                 $chunks = explode("chunk", $html);
                 foreach($chunks as $key => $val) {
@@ -218,6 +222,8 @@ class ReportController extends Controller
 
         if($report_type === 'glhw'){
             //  dd($request->all());
+            $hdng1 = $request->cname;
+            $hdng2 = $request->csdrs;
             $head_id = $request->head_id;
             $vrtype = $request->p2;
             //  dd($vrtype);
@@ -246,11 +252,11 @@ class ReportController extends Controller
 
              if($vrtype == 0)
               {
-                $html =  view('reports.glhw')->with('data',$g)->with('fromdate',$fromdate)->with('todate',$todate)->with('headtype',$head->title)->render();
+                $html =  view('reports.glhw')->with('hdng1',$hdng1)->with('hdng2',$hdng2)->with('data',$g)->with('fromdate',$fromdate)->with('todate',$todate)->with('headtype',$head->title)->render();
                }
               else
               {
-                $html =  view('reports.glhwsummary')->with('data',$g)->with('fromdate',$fromdate)->with('todate',$todate)->with('headtype',$head->title)->render();
+                $html =  view('reports.glhwsummary')->with('hdng1',$hdng1)->with('hdng2',$hdng2)->with('data',$g)->with('fromdate',$fromdate)->with('todate',$todate)->with('headtype',$head->title)->render();
                }
 
 
@@ -277,6 +283,8 @@ class ReportController extends Controller
         if($report_type === 'chktran'){
             //  dd($request->all());
             // $head_id = $request->head_id;
+            $hdng1 = $request->cname;
+            $hdng2 = $request->csdrs;
             $vrtype4 = $request->p4;
             //  dd($vrtype);
             // $head = Head::findOrFail($head_id);
@@ -303,7 +311,7 @@ class ReportController extends Controller
 
             //  if($vrtype4 == 0)
             //   {
-                $html =  view('reports.chequecoll')->with('data',$g)->with('fromdate',$fromdate)->with('todate',$todate)->render();
+                $html =  view('reports.chequecoll')->with('hdng1',$hdng1)->with('hdng2',$hdng2)->with('data',$g)->with('fromdate',$fromdate)->with('todate',$todate)->render();
             //    }
             //   else
             //   {
@@ -339,6 +347,8 @@ class ReportController extends Controller
 
         if($report_type === 'invwspay'){
             //  dd($request->all());
+            $hdng1 = $request->cname;
+            $hdng2 = $request->csdrs;
             $head_id = $request->head_id;
             $par1=$request->p1;
             $head = Head::findOrFail($head_id);
@@ -373,11 +383,11 @@ class ReportController extends Controller
 
                 if($head_id == 32)
                 {
-                $html =  view('reports.invswspayment')->with('data',$g)->with('fromdate',$fromdate)->with('todate',$todate)->with('headtype',$head->title)->render();
+                $html =  view('reports.invswspayment')->with('hdng1',$hdng1)->with('hdng2',$hdng2)->with('data',$g)->with('fromdate',$fromdate)->with('todate',$todate)->with('headtype',$head->title)->render();
                 }
                 if($head_id == 33)
                 {
-                $html =  view('reports.invswscollection')->with('data',$g)->with('fromdate',$fromdate)->with('todate',$todate)->with('headtype',$head->title)->render();
+                $html =  view('reports.invswscollection')->with('hdng1',$hdng1)->with('hdng2',$hdng2)->with('data',$g)->with('fromdate',$fromdate)->with('todate',$todate)->with('headtype',$head->title)->render();
                 }
                 $filename = $g[0]->supplier_id  .'-'.$fromdate.'-'.$todate.'.pdf';
                 $chunks = explode("chunk", $html);
@@ -396,6 +406,8 @@ class ReportController extends Controller
 
         if($report_type === 'agng'){
             //  dd($request->all());
+            $hdng1 = $request->cname;
+            $hdng2 = $request->csdrs;
             $head_id = $request->head_id;
             $par3=$request->p3;
             $head = Head::findOrFail($head_id);
@@ -433,13 +445,13 @@ class ReportController extends Controller
                     if( $par3 == 0)
                     {
 
-                            $html =  view('reports.agingdtl')->with('data',$g)->with('fromdate',$fromdate)->with('todate',$todate)->with('headtype',$head->title)->render();
+                            $html =  view('reports.agingdtl')->with('hdng1',$hdng1)->with('hdng2',$hdng2)->with('data',$g)->with('fromdate',$fromdate)->with('todate',$todate)->with('headtype',$head->title)->render();
 
                     }
                     else
                     {
 
-                            $html =  view('reports.agingsumary')->with('data',$g)->with('fromdate',$fromdate)->with('todate',$todate)->with('headtype',$head->title)->render();
+                            $html =  view('reports.agingsumary')->with('hdng1',$hdng1)->with('hdng2',$hdng2)->with('data',$g)->with('fromdate',$fromdate)->with('todate',$todate)->with('headtype',$head->title)->render();
 
                     }
 
@@ -448,12 +460,12 @@ class ReportController extends Controller
                 {
                     if( $par3 == 0)
                     {
-                        $html =  view('reports.agingdtlsale')->with('data',$g)->with('fromdate',$fromdate)->with('todate',$todate)->with('headtype',$head->title)->render();
+                        $html =  view('reports.agingdtlsale')->with('hdng1',$hdng1)->with('hdng2',$hdng2)->with('data',$g)->with('fromdate',$fromdate)->with('todate',$todate)->with('headtype',$head->title)->render();
                     }
 
                     else
                     {
-                        $html =  view('reports.agingsalesumary')->with('data',$g)->with('fromdate',$fromdate)->with('todate',$todate)->with('headtype',$head->title)->render();
+                        $html =  view('reports.agingsalesumary')->with('hdng1',$hdng1)->with('hdng2',$hdng2)->with('data',$g)->with('fromdate',$fromdate)->with('todate',$todate)->with('headtype',$head->title)->render();
                     }
                 }
                 $filename = $g[0]->supplier_id  .'-'.$fromdate.'-'.$todate.'.pdf';
@@ -474,7 +486,8 @@ class ReportController extends Controller
 
 
         if($report_type === 'vchr'){
-
+            $hdng1 = $request->cname;
+            $hdng2 = $request->csdrs;
 
             $head_id = $request->head_id;
             $head = Head::findOrFail($head_id);
@@ -520,11 +533,11 @@ class ReportController extends Controller
 
                 if($head_id == 5)
                 {
-                    $html =  view('reports.vouchergv')->with('data',$g)->with('fromdate',$fromdate)->with('todate',$todate)->with('headtype',$head->title)->render();
+                    $html =  view('reports.vouchergv')->with('hdng1',$hdng1)->with('hdng2',$hdng2)->with('data',$g)->with('fromdate',$fromdate)->with('todate',$todate)->with('headtype',$head->title)->render();
                 }
                 else
                 {
-                    $html =  view('reports.voucher')->with('data',$g)->with('fromdate',$fromdate)->with('todate',$todate)->with('headtype',$head->title)->render();
+                    $html =  view('reports.voucher')->with('hdng1',$hdng1)->with('hdng2',$hdng2)->with('data',$g)->with('fromdate',$fromdate)->with('todate',$todate)->with('headtype',$head->title)->render();
                 }
                     $filename = $g[0]->transno  .'-'.$fromdate.'-'.$todate.'.pdf';
                     $chunks = explode("chunk", $html);

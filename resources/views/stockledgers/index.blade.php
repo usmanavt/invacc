@@ -6,7 +6,7 @@
     </x-slot>
 
     <div class="py-4">
-        <div class="max-w-6xl mx-auto">
+        <div class="max-w-7xl mx-auto">
             <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
                 <div class="p-6 bg-white border-b border-gray-200">
 
@@ -107,7 +107,7 @@
 
                             </fieldset>
 
-                            <fieldset class="border px-6 py-1.5  rounded h-120 ">
+                            <fieldset class="border px-6 py-1.5  rounded h-200 ">
                                 <legend>Report Criteria</legend>
                                 {{-- <div>
                                     <input type="checkbox" name="additional[]" value="wdrfa">

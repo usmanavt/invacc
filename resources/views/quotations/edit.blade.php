@@ -59,8 +59,9 @@
 
                             <textarea name="cashcustadrs" id="cashcustadrs" cols="50" rows="1" maxlength="150" required class="rounded">
                             {{ $quotation->cashcustadrs }} </textarea>
-                        </div>
 
+                        </div>
+                        <input type="text"  id="p5" name="p5" value="{{ $quotation->closed }}" hidden   >
                         {{-- <div class="flex flex-col-12"> --}}
 
                             {{-- <div class="flex flex-col"> --}}
@@ -91,6 +92,13 @@
                                 <x-input-numeric title="Sale Tax(Rs)" name="saletaxamt" value="{{ $quotation->saletaxamt }}" disabled    />
                                 <x-input-numeric title="Cartage" name="cartage" value="{{ $quotation->cartage }}"  required  onblur="tnetamount()"  />
                                 <x-input-numeric title="Total Amount" name="totrcvbamount" value="{{ $quotation->totrcvbamount }}" disabled />
+                            </div>
+                            <div>
+                                <input class="checked:bg-blue-500 checked:border-blue-500 focus:outline-none" {{ $quotation->closed === 0 ? 'checked' : '' }}  type="checkbox" name="qutclose" id="qutclose"   onclick="imppur(this)" >
+                                <label for="">
+                                   <span style="color: brown;font-weight: bold"> Quotation  Close </span> <span class="text-red-500 font-semibold  "> </span>
+                                    </label>
+
                             </div>
 
 
@@ -264,6 +272,9 @@ function pushDynamicData(data)
         dimension_id:data.dimension_id,
         dimension:data.dimension,
 
+
+
+
         bundle1:0,
         bundle2:0,
         price:data.pcspbundle1,
@@ -383,68 +394,102 @@ dynamicTable = new Tabulator("#dynamicTable", {
                 cellEdited: updateValues,
                },
 
-              {   title:"Quantity",
+            {
+            title:'Market Suppliers', headerHozAlign:"center",
+            columns:[
+
+            {title:"1st",field:"supp1",width:200,editor:true,responsive:0,headerHozAlign:"center"},
+            {title:"2nd",field:"supp2",width:200,editor:true,responsive:0,headerHozAlign:"center"},
+            {title:"3rd",field:"supp3",width:200,editor:true,responsive:0,headerHozAlign:"center"},
+
+
+        ]},
+
+
+        {
+            title:'Market Price', headerHozAlign:"center",
+            columns:[
+
+            {title:"1st",field:"mrktprice1",width:100,responsive:0,formatter:"money",headerHozAlign:"center",editor:"number"},
+            {title:"2nd",field:"mrktprice2",width:100,responsive:0,formatter:"money",headerHozAlign:"center",editor:"number"},
+            {title:"3rd",field:"mrktprice3",width:100,responsive:0,formatter:"money",headerHozAlign:"center",editor:"number"},
+        ]},
+
+
+
+
+
+
+
+
+            //    {title:"Supplier1",
+            //     field:"supp1",
+            //     width:300,
+            //     editor:true,
+            //     responsive:0,
+            //     validator:"required",
+            //     formatter:"money",
+            //     // formatterParams:{thousand:",",precision:2},
+            //     // validator:["required","integer"],
+            //     // cellEdited: updateValues,
+            //    },
+
+
+            //    {title:"MarketPrice1",
+            //     field:"mrktprice1",
+            //     editor:"number",
+            //     responsive:0,
+            //     validator:"required",
+            //     formatter:"money",
+            //     formatterParams:{thousand:",",precision:2},
+            //     // validator:["required","integer"],
+            //     cellEdited: updateValues,
+            //    },
+
+            //    {title:"Supplier1",
+            //     field:"supp2",
+            //     width:300,
+            //     editor:true,
+            //     responsive:0,
+            //     validator:"required",
+            //     formatter:"money",
+            //     // formatterParams:{thousand:",",precision:2},
+            //     // validator:["required","integer"],
+            //     // cellEdited: updateValues,
+            //    },
+
+
+
+            //    {title:"MarketPrice2",
+            //     field:"mrktprice2",
+            //     editor:"number",
+            //     responsive:0,
+            //     validator:"required",
+            //     formatter:"money",
+            //     formatterParams:{thousand:",",precision:2},
+            //     // validator:["required","integer"],
+            //     cellEdited: updateValues,
+            //    },
+
+
+            {
+            title:'Sale', headerHozAlign:"center",
+            columns:[
+
+            {   title:"Quantity",
                 field:"qtykg",
                 editor:"number",
+                bottomCalc:"sum",
                 responsive:0,
                 validator:"required",
                 formatter:"money",
                 formatterParams:{thousand:",",precision:2},
-                validator:["required","integer"],
-                cellEdited: updateValues,
-               },
-
-               {title:"Supplier1",
-                field:"supp1",
-                width:300,
-                editor:true,
-                responsive:0,
-                validator:"required",
-                formatter:"money",
-                // formatterParams:{thousand:",",precision:2},
-                // validator:["required","integer"],
-                // cellEdited: updateValues,
-               },
-
-
-               {title:"MarketPrice1",
-                field:"mrktprice1",
-                editor:"number",
-                responsive:0,
-                validator:"required",
-                formatter:"money",
-                formatterParams:{thousand:",",precision:2},
-                // validator:["required","integer"],
-                cellEdited: updateValues,
-               },
-
-               {title:"Supplier1",
-                field:"supp2",
-                width:300,
-                editor:true,
-                responsive:0,
-                validator:"required",
-                formatter:"money",
-                // formatterParams:{thousand:",",precision:2},
-                // validator:["required","integer"],
-                // cellEdited: updateValues,
-               },
-
-
-
-               {title:"MarketPrice2",
-                field:"mrktprice2",
-                editor:"number",
-                responsive:0,
-                validator:"required",
-                formatter:"money",
-                formatterParams:{thousand:",",precision:2},
-                // validator:["required","integer"],
+                validator:["required","dec(12,2)"],
                 cellEdited: updateValues,
                },
 
 
-               { title:"Price",
+            { title:"Price",
                 field:"price",
                 editor:"number",
                 responsive:0,
@@ -468,7 +513,7 @@ dynamicTable = new Tabulator("#dynamicTable", {
                 //      return  ( cell.getData().qtykg * cell.getData().price)
                 // },
                 bottomCalc:totval  },
-
+            ]}
 
 
     ],
@@ -586,7 +631,7 @@ function validateForm()
      var data = { 'quotations' : dynamicTableData,'rcvblamount':rcvblamount.value,'cartage':cartage.value,'discntamt':discntamt.value,'discntper':discntper.value ,
      'customer_id': customer_id.value,'saldate':saldate.value,'qutno':qutno.value,'prno':prno.value,'sale_invoice_id':sale_invoice_id.value,
      'saletaxper':saletaxper.value,'saletaxamt':saletaxamt.value,'totrcvbamount':totrcvbamount.value,
-     'valdate':valdate.value,'cashcustomer':cashcustomer.value,'cashcustadrs':cashcustadrs.value};
+     'valdate':valdate.value,'cashcustomer':cashcustomer.value,'cashcustadrs':cashcustadrs.value,'p5':p5.value};
 
      // var data = { 'contracts' : dynamicTableData,'banktotal':parseFloat(total.value).toFixed(2),'exataxoffie':parseFloat(exataxoffie.value).toFixed(2),'collofcustom':parseFloat(collofcustom.value).toFixed(2),'bankcharges':parseFloat(bankcharges.value).toFixed(2) ,'supplier_id': supplier_id.value,'invoice_date':invoice_date.value,'invoiceno':number.value};
     // All Ok - Proceed
@@ -627,7 +672,30 @@ discntamt.onblur=function(){
     tnetamount();
 }
 
+
+function imppur(qutclose) {
+    var p5 = document.getElementById("p5");
+    // amount_fc.disabled = advtxt.checked ? true : false;
+    // amount_fc.disabled = per.checked ? true : false;
+
+    if(qutclose.checked==true)
+    {
+        p5.value=0;
+    }
+    else
+    {
+        p5.value=1;
+    }
+
+}
+
+
 </script>
+
+
+
+
+
 
 
 @endpush

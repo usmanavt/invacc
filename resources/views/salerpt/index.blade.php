@@ -27,6 +27,14 @@
                                         <input type="text" title="t1"  id="p1" name="p1" value="0" hidden   >
 
                                 </div>
+
+                                <div>
+                                    <input type="radio" name="report_type" value="pendquotation" required onchange="checkReportType('pendquotation')">
+                                    <label for="">Pending Price Quotation </label>
+                                </div>
+
+
+
                                 <div>
                                     <input type="radio" name="report_type" value="custorder" required onchange="checkReportType('custorder')">
                                     <label for="">Purchase Order </label>
@@ -162,6 +170,9 @@
     const subheadspend = @json($subheadspend);
     const vchrheads = @json($vchrheads);
     const funcquotation = @json(route('salerpt.funcquotation'));
+
+    const funcpendquotation = @json(route('salerpt.funcpendquotation'));
+
     const funccustorder = @json(route('salerpt.funccustorder'));
     const funcpendcustorder = @json(route('salerpt.funcpendcustorder'));
 
@@ -229,6 +240,70 @@ const getSubheadVoucherData = async (value) =>{
         const quotation = await getSubheadVoucherData(value)
         return quotation
     }
+
+
+
+
+
+
+
+    case 'pendquotation':
+            // console.log(value)
+            fetch(funcpendquotation + `?&head=${value}`,{
+                    method:"GET",
+                    headers: { 'Accept':'application/json','Content-type':'application/json'},
+                    })
+                    .then(response => response.json())
+                    .then( data => {
+                        if(data.length > 0)
+                        {
+                            data.forEach(e => {
+                                addSelectElement(subhead,e.Subhead,e.title)
+                            });
+                            subhead.setAttribute('required','')
+                            subhead.removeAttribute('disabled','')
+                        }else{
+                            subhead.removeAttribute('required','')
+                            subhead.setAttribute('disabled','')
+                        }
+                    })
+                    .catch(error => console.error(error))
+                break;
+
+// FOR CONTRACT FILL
+const getSubheadVoucherDatapnd = async (value) =>{
+        let data = await fetch(funcpendquotation + `?head=${value}`,{
+            method:"GET",
+            headers: { 'Accept':'application/json','Content-type':'application/json'},
+            })
+            .then(response => response.json())
+            .then( data => { return data })
+            .catch(error => console.error(error))
+    }
+    const getQuotationpend =async  (value) => {
+        const quotationpend = await getSubheadVoucherDatapnd(value)
+        return quotationpend
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
     case 'custorder':
@@ -740,6 +815,26 @@ const getSubheadVoucherData14 = async (value) =>{
                 });
                 headSelected()
                 break;
+
+                case 'pendquotation':
+                // Show Head
+                rptType = 'pendquotation'
+                head.setAttribute('required','')
+                head.disabled = false
+                head.length = 0
+                subhead.removeAttribute('required')
+                subhead.disabled = true
+                subhead.length = 0
+                heads.forEach(e => {
+                    addSelectElement(head,e.id,e.title)
+                });
+                headSelected()
+                break;
+
+
+
+
+
 
                 case 'custorder':
                 // Show Head

@@ -24,10 +24,10 @@
                                     <input type="radio" name="report_type" value="gl" required onchange="checkReportType('gl')">
                                     <label for="">General Ledger</label>
 
-                                    <input class="checked:bg-blue-500 checked:border-blue-500 focus:outline-none"  type="checkbox" name="imppurf2" id="imppurf2"   onclick="imppur(this)" >
-                                    <label for="">
+                                    {{-- <input class="checked:bg-blue-500 checked:border-blue-500 focus:outline-none"  type="checkbox" name="imppurf2" id="imppurf2"   onclick="imppur(this)" > --}}
+                                    {{-- <label for="">
                                        <span style="color: brown;font-weight: bold"> Import Purchase Detail </span> <span class="text-red-500 font-semibold  "></span>
-                                        </label>
+                                        </label> --}}
 
 
 
@@ -97,7 +97,12 @@
                                         </label>
 
                                 </div>
+
                             </fieldset>
+
+
+
+
 
                             {{-- <fieldset class="border px-4 py-2 rounded">
                                 <legend>Additional Requests</legend>
@@ -137,6 +142,28 @@
                                 </div>
                             </fieldset>
                         </div>
+                        <div class="flex flex-col ">
+                            <label for="">
+                                Customer Name<span class="text-red-500 font-semibold w-10">(*)</span>
+                            </label>
+                            <textarea name="cname" id="cname" cols="40" rows="1"  maxlength="150" required class="rounded">
+                                MUHAMMAD NAZIR & Co
+                            </textarea>
+
+                            <label for="">
+                                Customer Address <span class="text-red-500 font-semibold w-10 ">(*)</span>
+                            </label>
+                            <textarea name="csdrs" id="csdrs" cols="40" rows="5" maxlength="255"   class="rounded">
+                                Steam Pipes, Pipe Fitting, Flanges Valves, S.S Pipes
+                                Plot # 8 Near Allah Malik Godown Shershah Kabari Bazar,
+                                Phone : 021-32588781, 021-32574285 , Fax : 021-32588782
+                            </textarea>
+                        </div>
+
+
+
+
+
 
                         <div class="flex flex-col md:flex-row w-full gap-2 px-6 pt-4">
 
@@ -158,6 +185,7 @@
                                     </select>
                                 </div>
                             </fieldset>
+
 
                             <x-button type="submit">
                                 Submit

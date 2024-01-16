@@ -300,6 +300,8 @@ class PurchaseRptController extends Controller
         // }
 
         if($report_type === 'pndcontr'){
+            $hdng1 = $request->cname;
+            $hdng2 = $request->csdrs;
 
             $head_id = $request->head_id;
             $head = Supplier::findOrFail($head_id);
@@ -325,7 +327,7 @@ class PurchaseRptController extends Controller
             $grouped->values()->all();                       //  values() removes indices of array
 
             foreach($grouped as $g){
-                 $html =  view('purrpt.pendcontractsrpt')
+                 $html =  view('purrpt.pendcontractsrpt')->with('hdng1',$hdng1)->with('hdng2',$hdng2)
                     ->with('data',$g)
                     ->with('fromdate',$fromdate)
                     ->with('todate',$todate)
@@ -342,6 +344,8 @@ class PurchaseRptController extends Controller
         }
 
         if($report_type === 'cc'){
+            $hdng1 = $request->cname;
+            $hdng2 = $request->csdrs;
             $head_id = $request->head_id;
             $head = Supplier::findOrFail($head_id);
             if($request->has('subhead_id')){
@@ -366,7 +370,7 @@ class PurchaseRptController extends Controller
             $grouped->values()->all();                       //  values() removes indices of array
 
             foreach($grouped as $g){
-                 $html =  view('purrpt.compcontractsrpt')
+                 $html =  view('purrpt.compcontractsrpt')->with('hdng1',$hdng1)->with('hdng2',$hdng2)
                     ->with('data',$g)
                     ->with('fromdate',$fromdate)
                     ->with('todate',$todate)
@@ -386,6 +390,8 @@ class PurchaseRptController extends Controller
         if($report_type === 'glhw'){
             //  dd($request->all());
             $head_id = $request->head_id;
+            $hdng1 = $request->cname;
+            $hdng2 = $request->csdrs;
             //  dd($request->all());
             $head = Supplier::findOrFail($head_id);
             if($request->has('subhead_id')){
@@ -410,7 +416,7 @@ class PurchaseRptController extends Controller
             $grouped->values()->all();                       //  values() removes indices of array
 
             foreach($grouped as $g){
-                 $html =  view('purrpt.contactsrpt')->with('data',$g)->with('fromdate',$fromdate)->with('todate',$todate)
+                 $html =  view('purrpt.contactsrpt')->with('data',$g)->with('fromdate',$fromdate)->with('todate',$todate)->with('hdng1',$hdng1)->with('hdng2',$hdng2)
                     ->with('headtype',$head->title)->render();
                 $filename = $g[0]->purid  .'-'.$fromdate.'-'.$todate.'.pdf';
                 $chunks = explode("chunk", $html);
@@ -425,6 +431,8 @@ class PurchaseRptController extends Controller
         if($report_type === 'tpl'){
             //  dd($request->all());
             $head_id = $request->head_id;
+            $hdng1 = $request->cname;
+            $hdng2 = $request->csdrs;
             $head = Supplier::findOrFail($head_id);
             if($request->has('subhead_id')){
                 $subhead_id = $request->subhead_id;
@@ -448,7 +456,7 @@ class PurchaseRptController extends Controller
             $grouped->values()->all();                       //  values() removes indices of array
 
             foreach($grouped as $g){
-                 $html =  view('purrpt.conthistory')->with('data',$g)->with('fromdate',$fromdate)->with('todate',$todate)
+                 $html =  view('purrpt.conthistory')->with('data',$g)->with('fromdate',$fromdate)->with('todate',$todate)->with('hdng1',$hdng1)->with('hdng2',$hdng2)
                     ->with('headtype',$head->title)->render();
                 $filename = $g[0]->grp  .'-'.$fromdate.'-'.$todate.'.pdf';
                 $chunks = explode("chunk", $html);
@@ -463,6 +471,8 @@ class PurchaseRptController extends Controller
 
         if($report_type === 'impcominvspc'){
             //  dd($request->all());
+            $hdng1 = $request->cname;
+            $hdng2 = $request->csdrs;
             $head_id = $request->head_id;
             $head = Supplier::findOrFail($head_id);
             if($request->has('subhead_id')){
@@ -487,7 +497,7 @@ class PurchaseRptController extends Controller
             $grouped->values()->all();                       //  values() removes indices of array
 
             foreach($grouped as $g){
-                 $html =  view('purrpt.imppaycriteriasum')
+                 $html =  view('purrpt.imppaycriteriasum')->with('hdng1',$hdng1)->with('hdng2',$hdng2)
                     ->with('data',$g)
                     ->with('fromdate',$fromdate)
                     ->with('todate',$todate)
@@ -505,6 +515,9 @@ class PurchaseRptController extends Controller
 
         if($report_type === 'dtysmry'){
             //  dd($request->all());
+            $hdng1 = $request->cname;
+            $hdng2 = $request->csdrs;
+
             $head_id = $request->head_id;
             $head = Supplier::findOrFail($head_id);
             if($request->has('subhead_id')){
@@ -529,7 +542,7 @@ class PurchaseRptController extends Controller
             $grouped->values()->all();                       //  values() removes indices of array
 
             foreach($grouped as $g){
-                 $html =  view('purrpt.dutysmry')
+                 $html =  view('purrpt.dutysmry')->with('hdng1',$hdng1)->with('hdng2',$hdng2)
                     ->with('data',$g)
                     ->with('fromdate',$fromdate)
                     ->with('todate',$todate)
@@ -555,6 +568,9 @@ class PurchaseRptController extends Controller
 
         if($report_type === 'gdnrcvd'){
             //  dd($request->all());
+            $hdng1 = $request->cname;
+            $hdng2 = $request->csdrs;
+
             $head_id = $request->head_id;
             $head = Supplier::findOrFail($head_id);
             if($request->has('subhead_id')){
@@ -579,7 +595,7 @@ class PurchaseRptController extends Controller
             $grouped->values()->all();                       //  values() removes indices of array
 
             foreach($grouped as $g){
-                 $html =  view('purrpt.gdnreceived')
+                 $html =  view('purrpt.gdnreceived')->with('hdng1',$hdng1)->with('hdng2',$hdng2)
                     ->with('data',$g)
                     ->with('fromdate',$fromdate)
                     ->with('todate',$todate)
@@ -599,6 +615,8 @@ class PurchaseRptController extends Controller
 
         if($report_type === 'dtyclrnc' || $report_type === 'dtypnding' ){
             //  dd($request->all());
+            $hdng1 = $request->cname;
+            $hdng2 = $request->csdrs;
             $head_id = $request->head_id;
             $head = Supplier::findOrFail($head_id);
             if($request->has('subhead_id')){
@@ -625,7 +643,7 @@ class PurchaseRptController extends Controller
             foreach($grouped as $g){
 
 
-                $html =  view('purrpt.dtyclearance')
+                $html =  view('purrpt.dtyclearance')->with('hdng1',$hdng1)->with('hdng2',$hdng2)
                     ->with('data',$g)
                     ->with('fromdate',$fromdate)
                     ->with('todate',$todate)
@@ -643,6 +661,10 @@ class PurchaseRptController extends Controller
 
 
         if($report_type === 'loccominvs'){
+
+            $hdng1 = $request->cname;
+            $hdng2 = $request->csdrs;
+
             $head_id = $request->head_id;
             $head = Supplier::findOrFail($head_id);
             if($request->has('subhead_id')){
@@ -669,7 +691,7 @@ class PurchaseRptController extends Controller
             $grouped = $collection->groupBy('purid');       //  Sort collection by SupName
             $grouped->values()->all();                       //  values() removes indices of array
             foreach($grouped as $g){
-                $html =  view('purrpt.loccominvsrpt')
+                $html =  view('purrpt.loccominvsrpt')->with('hdng1',$hdng1)->with('hdng2',$hdng2)
                    ->with('data',$g)
                    ->with('fromdate',$fromdate)
                    ->with('todate',$todate)
@@ -686,6 +708,8 @@ class PurchaseRptController extends Controller
         }
 
         if($report_type === 'locpurhist'){
+            $hdng1 = $request->cname;
+            $hdng2 = $request->csdrs;
             $head_id = $request->head_id;
             $head = Supplier::findOrFail($head_id);
             if($request->has('subhead_id')){
@@ -711,7 +735,7 @@ class PurchaseRptController extends Controller
             $grouped = $collection->groupBy('grp');       //  Sort collection by SupName
             $grouped->values()->all();                       //  values() removes indices of array
             foreach($grouped as $g){
-                $html =  view('purrpt.locpurhistory')
+                $html =  view('purrpt.locpurhistory')->with('hdng1',$hdng1)->with('hdng2',$hdng2)
                    ->with('data',$g)
                    ->with('fromdate',$fromdate)
                    ->with('todate',$todate)
@@ -731,6 +755,8 @@ class PurchaseRptController extends Controller
 
 
         if($report_type === 'purret'){
+            $hdng1 = $request->cname;
+            $hdng2 = $request->csdrs;
             $head_id = $request->head_id;
             $head = Supplier::findOrFail($head_id);
             if($request->has('subhead_id')){
@@ -756,7 +782,7 @@ class PurchaseRptController extends Controller
             $grouped = $collection->groupBy('id');       //  Sort collection by SupName
             $grouped->values()->all();                       //  values() removes indices of array
             foreach($grouped as $g){
-                $html =  view('purrpt.purchaseret')
+                $html =  view('purrpt.purchaseret')->with('hdng1',$hdng1)->with('hdng2',$hdng2)
                    ->with('data',$g)
                    ->with('fromdate',$fromdate)
                    ->with('todate',$todate)
@@ -773,6 +799,8 @@ class PurchaseRptController extends Controller
         }
 
         if($report_type === 'locpurhist'){
+            $hdng1 = $request->cname;
+            $hdng2 = $request->csdrs;
             $head_id = $request->head_id;
             $head = Supplier::findOrFail($head_id);
             if($request->has('subhead_id')){
@@ -798,7 +826,7 @@ class PurchaseRptController extends Controller
             $grouped = $collection->groupBy('grp');       //  Sort collection by SupName
             $grouped->values()->all();                       //  values() removes indices of array
             foreach($grouped as $g){
-                $html =  view('purrpt.locpurhistory')
+                $html =  view('purrpt.locpurhistory')->with('hdng1',$hdng1)->with('hdng2',$hdng2)
                    ->with('data',$g)
                    ->with('fromdate',$fromdate)
                    ->with('todate',$todate)
@@ -824,6 +852,8 @@ class PurchaseRptController extends Controller
 
         if($report_type === 'impcominvs' || $report_type === 'impcominvs1' ){
             //  dd($request->all());
+            $hdng1 = $request->cname;
+            $hdng2 = $request->csdrs;
             $head_id = $request->head_id;
             $head = Supplier::findOrFail($head_id);
             if($request->has('subhead_id')){
@@ -836,7 +866,11 @@ class PurchaseRptController extends Controller
                 }
             }
             //  Call Procedure
-            $data = DB::select('call procimpcominvs()');
+            // imppurdtl.blade
+            if($request->p5==0)
+            { $data = DB::select('call procimpcominvs()'); }
+            else
+            { $data = DB::select('call procipdetail()'); }
             if(!$data)
             {
                 Session::flash('info','No data available');
@@ -850,11 +884,15 @@ class PurchaseRptController extends Controller
 
                 if($report_type === 'impcominvs')
                 {
-                $html =  view('purrpt.impcominvs')->with('data',$g)->with('fromdate',$fromdate)->with('todate',$todate)->with('headtype',$head->title)->render();
+                    if($request->p5==0)
+                        { $html =  view('purrpt.impcominvs')->with('hdng1',$hdng1)->with('hdng2',$hdng2)->with('data',$g)->with('fromdate',$fromdate)->with('todate',$todate)->with('headtype',$head->title)->render(); }
+                    else
+                    { $html =  view('purrpt.imppurdtl')->with('hdng1',$hdng1)->with('hdng2',$hdng2)->with('data',$g)->with('fromdate',$fromdate)->with('todate',$todate)->with('headtype',$head->title)->render(); }
+
                 }
                 if($report_type === 'impcominvs1')
                 {
-                $html =  view('purrpt.impcominvs1')->with('data',$g)->with('fromdate',$fromdate)->with('todate',$todate)->with('headtype',$head->title)->render();
+                $html =  view('purrpt.impcominvs1')->with('hdng1',$hdng1)->with('hdng2',$hdng2)->with('data',$g)->with('fromdate',$fromdate)->with('todate',$todate)->with('headtype',$head->title)->render();
                 }
 
                 // $html =  view('purrpt.glhw')->with('data',$g)->with('fromdate',$fromdate)->with('todate',$todate)->render();
@@ -871,6 +909,8 @@ class PurchaseRptController extends Controller
 
         if($report_type === 'imppurhist'){
             //  dd($request->all());
+            $hdng1 = $request->cname;
+            $hdng2 = $request->csdrs;
             $head_id = $request->head_id;
             $head = Supplier::findOrFail($head_id);
             if($request->has('subhead_id')){
@@ -894,7 +934,7 @@ class PurchaseRptController extends Controller
             $grouped = $collection->groupBy('grp');       //  Sort collection by SupName
             $grouped->values()->all();                       //  values() removes indices of array
             foreach($grouped as $g){
-                 $html =  view('purrpt.imppurhistory')->with('data',$g)->with('fromdate',$fromdate)->with('todate',$todate)->with('headtype',$head->title)->render();
+                 $html =  view('purrpt.imppurhistory')->with('hdng1',$hdng1)->with('hdng2',$hdng2)->with('data',$g)->with('fromdate',$fromdate)->with('todate',$todate)->with('headtype',$head->title)->render();
                 // $html =  view('purrpt.glhw')->with('data',$g)->with('fromdate',$fromdate)->with('todate',$todate)->render();
                 $filename = $g[0]->grp  .'-'.$fromdate.'-'.$todate.'.pdf';
                 $chunks = explode("chunk", $html);

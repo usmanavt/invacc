@@ -68,7 +68,7 @@ table{
                     {{-- <img src="{{ asset('/images/pipesfittings.jpg') }}" width="90"> --}}
                 </td>
                 <td align="center" style="width:60%;">
-                    <h1>MUHAMMAD NAZIR & Co</h1>
+                    <h1>{{ $hdng1 }}</h1>
                 </td>
                 <td align="right" style="width:20%;">
                     &nbsp;&nbsp;&nbsp;&nbsp;
@@ -82,9 +82,10 @@ table{
         <tbody>
             <tr>
                 <td  style="text-align: center;">
-                    <h3 style="font-size:0.7rem">Steam Pipes, Pipe Fitting, Flanges Valves, S.S Pipes</h3>
-                    <h3 style="font-size:0.7rem">Plot # 8 Near Allah Malik Godown Shershah Kabari Bazar,</h3>
-                    <h3 style="font-size:0.7rem">Phone : 021-32588781, 021-32574285 , Fax : 021-32588782</h3>
+                    {{-- <h3 style="font-size:0.7rem">Steam Pipes, Pipe Fitting, Flanges Valves, S.S Pipes</h3> --}}
+                    {{-- <h3 style="font-size:0.7rem">Plot # 8 Near Allah Malik Godown Shershah Kabari Bazar,</h3> --}}
+                    {{-- <h3 style="font-size:0.7rem">Phone : 021-32588781, 021-32574285 , Fax : 021-32588782</h3> --}}
+                    {{ $hdng2 }}
                 </td>            </tr>
             <tr>
                 <td  style="text-align: center;">

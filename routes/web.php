@@ -112,6 +112,9 @@ Route::get('funcquotation',[SaleRptController::class, 'funcquotation'])->name('s
 Route::get('funccustorder',[SaleRptController::class, 'funccustorder'])->name('salerpt.funccustorder');
 Route::get('funcpendcustorder',[SaleRptController::class, 'funcpendcustorder'])->name('salerpt.funcpendcustorder');
 Route::get('funcsalretcat',[SaleRptController::class, 'funcsalretcat'])->name('salerpt.funcsalretcat');
+Route::get('funcpendquotation',[SaleRptController::class, 'funcpendquotation'])->name('salerpt.funcpendquotation');
+
+
 
 
 Route::get('funcdlvrychln',[SaleRptController::class, 'funcdlvrychln'])->name('salerpt.funcdlvrychln');
@@ -284,7 +287,7 @@ Route::resource('salereturn', SalesRetunrsController::class);
 Route::get('/quotations/getQuotationsMaster', [QuotationController::class, 'getMaster'])->name('quotations.master');
 Route::get('/quotations/getQuotationsDetails', [QuotationController::class, 'getDetail'])->name('quotations.details');
 Route::get('/quotations/getMmfrqut', [QuotationController::class, 'getmmfrqut'])->name('quotations.mmfrqut');
-
+Route::get('/quotations/getqutindex', [QuotationController::class, 'qutIndex'])->name('quotations.qIndex');
 
 
 Route::resource('quotations', QuotationController::class);

@@ -29,6 +29,12 @@
                                 <div>
                                     <input type="radio" name="report_type" value="impcominvs" required onchange="checkReportType('impcominvs')">
                                     <label for="">PURCHASE INVOICE IMPORT </label>
+                                    <input class="checked:bg-blue-500 checked:border-blue-500 focus:outline-none"  type="checkbox" name="imppurf2" id="imppurf2"   onclick="imppur(this)" >
+                                    <label for="">
+                                       <span style="color: brown;font-weight: bold"> Import Purchase Detail </span> <span class="text-red-500 font-semibold  "></span>
+                                        </label>
+                                        <input type="text" title="t5"  id="p5" name="p5" value="0" hidden   >
+
                                 </div>
 
                                 <div>
@@ -99,6 +105,23 @@
                                     <label for="">LOCAL PURCHASE HISTORY</label>
                                 </div>
 
+                                <div class="flex flex-col ">
+                                    <label for="">
+                                        Customer Name<span class="text-red-500 font-semibold w-10">(*)</span>
+                                    </label>
+                                    <textarea name="cname" id="cname" cols="40" rows="1"  maxlength="150" required class="rounded">
+                                        MUHAMMAD NAZIR & Co
+                                    </textarea>
+
+                                    <label for="">
+                                        Customer Address <span class="text-red-500 font-semibold w-10 ">(*)</span>
+                                    </label>
+                                    <textarea name="csdrs" id="csdrs" cols="40" rows="5" maxlength="255"   class="rounded">
+                                        Steam Pipes, Pipe Fitting, Flanges Valves, S.S Pipes
+                                        Plot # 8 Near Allah Malik Godown Shershah Kabari Bazar,
+                                        Phone : 021-32588781, 021-32574285 , Fax : 021-32588782
+                                    </textarea>
+                                </div>
 
                                 {{-- <div>
                                     <input type="radio" name="report_type" value="vchr" required onchange="checkReportType('vchr')">
@@ -177,11 +200,6 @@
                                         </select>
                                     </div>
                                 </fieldset>
-
-
-
-
-
                             </div>
 
                             <div class="flex flex-col md:flex-row w-full gap-2 px-6 pt-4">
@@ -1461,6 +1479,25 @@ head_id.addEventListener("change", () => {
 
 
 });
+
+function imppur(imppurf2) {
+        var p5 = document.getElementById("p5");
+        // amount_fc.disabled = advtxt.checked ? true : false;
+
+        // amount_fc.disabled = per.checked ? true : false;
+
+        if(imppurf2.checked==true)
+        {
+            p5.value=1;
+        }
+        else
+        {
+            p5.value=0;
+        }
+
+    }
+
+
 
 
 </script>

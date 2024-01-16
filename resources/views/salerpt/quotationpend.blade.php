@@ -91,7 +91,7 @@ padding-left: 8px;
     {{-- Report Header --}}
 
     <table class="mhd">
-        <tbody><tr><td> PRICE QUITATION </td></tr></tbody>
+        <tbody><tr><td> PENDING PRICE QUITATION </td></tr></tbody>
     </table>
 
 
@@ -183,18 +183,19 @@ padding-left: 8px;
                 {{-- <td  style="text-align: center font-size:0.5rem;font-weight: bold"> --}}
                     <th class="" width="3%">S#</th>
                     {{-- <th class="" width="16%">Group Name</th> --}}
-                    <th class="" width="19%">Material Name</th>
+                    <th class="" width="15%">Material Name</th>
                     <th class="" width="6%">Unit</th>
-                    <th class="" width="9%">Supplier1</th>
+                    <th class="" width="8%">Supplier1</th>
                     <th class="" width="6%">Price1</th>
-                    <th class="" width="9%">Supplier2</th>
+                    <th class="" width="8%">Supplier2</th>
                     <th class="" width="6%">Price2</th>
-                    <th class="" width="9%">Supplier3</th>
+                    <th class="" width="8%">Supplier3</th>
                     <th class="" width="6%">Price3</th>
                     <th class="" width="6%">L-Price</th>
                     <th class="" width="7%">Quantity</th>
                     <th class="" width="7%">Price</th>
                     <th class="" width="7%">Amount</th>
+                    <th class="" width="7%">Pend.Qty</th>
 
             </tr>
         </thead>
@@ -222,23 +223,24 @@ padding-left: 8px;
                             {{ $vvlues += $data[$i]->saleamnt }}
                             <td class="" width="3%">{{ $i+1 }}</td>
                             {{-- <td class="" width="16%">{{ $data[$i]->grpname }} </td> --}}
-                            <td style="font-size:12px" width="19%">{{ $data[$i]->matname }} </td>
+                            <td style="font-size:12px" width="15%">{{ $data[$i]->matname }} </td>
                             <td style="text-align:center;font-size:12px" width="6%">{{ $data[$i]->UOM }} </td>
-                            <td style="text-align:left;font-size:12px" width="9%">{{ $data[$i]->supp1 }} </td>
+                            <td style="text-align:left;font-size:12px" width="8%">{{ $data[$i]->supp1 }} </td>
                             <td style="text-align:right;font-size:12px" width="6%">{{ number_format($data[$i]->mrktprice1,1) }} </td>
-                            <td style="text-align:left;font-size:12px" width="9%">{{ $data[$i]->supp2 }} </td>
+                            <td style="text-align:left;font-size:12px" width="8%">{{ $data[$i]->supp2 }} </td>
                             <td style="text-align:right;font-size:12px" width="6%">{{ number_format($data[$i]->mrktprice1,1) }} </td>
-                            <td style="text-align:left;font-size:12px" width="9%">{{ $data[$i]->supp3 }} </td>
+                            <td style="text-align:left;font-size:12px" width="8%">{{ $data[$i]->supp3 }} </td>
                             <td style="text-align:right;font-size:12px" width="6%">{{ number_format($data[$i]->mrktprice1,3) }} </td>
                             <td style="text-align:right;font-size:12px" width="6%">{{ number_format($data[$i]->lstslprice,1) }} </td>
                             <td style="text-align:right;font-size:12px" width="7%">{{ number_format($data[$i]->qty,1) }} </td>
                             <td style="text-align:right;font-size:12px" width="7%">{{ number_format($data[$i]->price,1) }} </td>
                             <td style="text-align:right;font-size:12px" width="7%">{{ number_format($data[$i]->saleamnt,0) }} </td>
+                            <td style="text-align:right;font-size:12px" width="7%">{{ number_format($data[$i]->tqtpendqty,0) }} </td>
                         </tr>
                     @endif
                 @endfor
                 <tr>
-                    <td colspan="13"  style="text-align: right;border-bottom: 1px solid lightgray;"></td>
+                    <td colspan="14"  style="text-align: right;border-bottom: 1px solid lightgray;"></td>
                     {{-- <td colspan="4" width="8%" style="text-align: right;border-bottom: 1px solid lightgray;">{{ number_format($vtotpcs,0) }} </td> --}}
                     {{-- <td class="1" width="8%" style="text-align: right;border-bottom: 1px solid lightgray;">{{ number_format($vwt,0) }} </td> --}}
                     {{-- <td class="2" width="8%" style="text-align: right;border-bottom: 1px solid lightgray;">{{ number_format($vvlues,0) }} </td> --}}
@@ -275,18 +277,19 @@ padding-left: 8px;
                                 {{ $vvlues += $data[$i]->saleamnt }}
                                 <td style="font-size:12px" width="3%">{{ $i+1 }}</td>
                                 {{-- <td class="" width="16%">{{ $data[$i]->grpname }} </td> --}}
-                                <td style="font-size:12px;border-right: 1.5px solid burlywood;font-weight: bold;" width="19%">{{ $data[$i]->matname }} </td>
+                                <td style="font-size:12px;border-right: 1.5px solid burlywood;font-weight: bold;" width="15%">{{ $data[$i]->matname }} </td>
                                 <td style="text-align:center;font-size:12px ;font-weight: bold;" width="6%">{{ $data[$i]->UOM }} </td>
-                                <td style="text-align:center;font-size:12px ;font-weight: bold;" width="9%">{{ $data[$i]->supp1 }} </td>
+                                <td style="text-align:center;font-size:12px ;font-weight: bold;" width="8%">{{ $data[$i]->supp1 }} </td>
                                 <td style="text-align:right;font-size:12px" width="6%">{{ number_format($data[$i]->mrktprice1,1) }} </td>
-                                <td style="text-align:center;font-size:12px ;font-weight: bold;" width="9%">{{ $data[$i]->supp2 }} </td>
+                                <td style="text-align:center;font-size:12px ;font-weight: bold;" width="8%">{{ $data[$i]->supp2 }} </td>
                                 <td style="text-align:right;font-size:12px" width="6%">{{ number_format($data[$i]->mrktprice2,1) }} </td>
-                                <td style="text-align:center;font-size:12px ;font-weight: bold;" width="9%">{{ $data[$i]->supp3 }} </td>
+                                <td style="text-align:center;font-size:12px ;font-weight: bold;" width="8%">{{ $data[$i]->supp3 }} </td>
                                 <td style="text-align:right;font-size:12px" width="6%">{{ number_format($data[$i]->mrktprice3,1) }} </td>
                                 <td style="text-align:right;font-size:12px" width="6%">{{ number_format($data[$i]->lstslprice,1) }} </td>
                                 <td style="text-align:right;font-size:12px;border-right: 1.5px solid burlywood;font-weight: bold;" width="7%">{{ number_format($data[$i]->qty,1) }} </td>
                                 <td style="text-align:right;font-size:12px;border-right: 1.5px solid burlywood;font-weight: bold;" width="7%">{{ number_format($data[$i]->price,1) }} </td>
                                 <td style="text-align:right;font-size:12px;font-weight: bold" width="7%">{{ number_format($data[$i]->saleamnt,0) }} </td>
+                                <td style="text-align:right;font-size:12px;font-weight: bold" width="7%">{{ number_format($data[$i]->tqtpendqty,0) }} </td>
 
                             </tr>
                         @endif

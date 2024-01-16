@@ -123,7 +123,7 @@ table{
                  </td> --}}
 
                 <td style= "text-align:center; width:60%;">
-                    <h1>MUHAMMAD NAZIR & Co </h1>
+                    <h1>{{ $hdng1 }} </h1>
                 </td>
             </tr>
         </tbody>
@@ -133,9 +133,10 @@ table{
         <tbody>
             <tr>
                 <td  style="text-align: center;">
-                    <h3 style="font-size:0.8rem">Steam Pipes, Pipe Fitting, Flanges Valves, S.S Pipes</h3>
-                    <h3 style="font-size:0.8rem">Plot # 8 Near Allah Malik Godown Shershah Kabari Bazar,</h3>
-                    <h3 style="font-size:0.8rem">Phone : 021-32588781, 021-32574285 , Fax : 021-32588782</h3>
+                    {{-- <h3 style="font-size:0.8rem">Steam Pipes, Pipe Fitting, Flanges Valves, S.S Pipes</h3> --}}
+                    {{-- <h3 style="font-size:0.8rem">Plot # 8 Near Allah Malik Godown Shershah Kabari Bazar,</h3> --}}
+                    {{-- <h3 style="font-size:0.8rem">Phone : 021-32588781, 021-32574285 , Fax : 021-32588782</h3> --}}
+                    <h3> {{ $hdng2 }} </h3>
                 </td>            </tr>
                 <tr>
                     <td style="color:white"> a </td>

@@ -20,12 +20,12 @@
                         {{ $vvlues += $nogrp[$i]->saleamnt }}
                         <td style="font-size:12px" width="4%">{{ $i+1 }}</td>
                         {{-- <td class="" width="16%">{{ $data[$i]->grpname }} </td> --}}
-                        <td style="font-size:12px;border-right: 1.5px solid burlywood;font-weight: bold;" width="40%">{{ $nogrp[$i]->matname }} </td>
+                        <td style="font-size:12px;border-right: 1.5px solid burlywood;font-weight: bold;" width="57%">{{ $nogrp[$i]->matname }} </td>
                         <td style="text-align:center;font-size:12px ;font-weight: bold;" width="7%">{{ $nogrp[$i]->UOM }} </td>
-                        <td style="text-align:left;font-size:12px;border-right: 1.5px solid burlywood;font-weight: bold;" width="20%">{{ $nogrp[$i]->mybrand }} </td>
-                        <td style="text-align:right;font-size:12px;border-right: 1.5px solid burlywood;font-weight: bold;" width="9%">{{ number_format($nogrp[$i]->qty,1) }} </td>
-                        <td style="text-align:right;font-size:12px;border-right: 1.5px solid burlywood;font-weight: bold;" width="9%">{{ number_format($nogrp[$i]->price,1) }} </td>
-                        <td style="text-align:right;font-size:12px;font-weight: bold" width="11%">{{ number_format($nogrp[$i]->saleamnt,0) }} </td>
+                        {{-- <td style="text-align:left;font-size:12px;border-right: 1.5px solid burlywood;font-weight: bold;" width="20%">{{ $nogrp[$i]->mybrand }} </td> --}}
+                        <td style="text-align:right;font-size:12px;border-right: 1.5px solid burlywood;font-weight: bold;" width="10%">{{ number_format($nogrp[$i]->qty,1) }} </td>
+                        <td style="text-align:right;font-size:12px;border-right: 1.5px solid burlywood;font-weight: bold;" width="10%">{{ number_format($nogrp[$i]->price,1) }} </td>
+                        <td style="text-align:right;font-size:12px;font-weight: bold" width="12%">{{ number_format($nogrp[$i]->saleamnt,0) }} </td>
 
                     </tr>
             @endfor

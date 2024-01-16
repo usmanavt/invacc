@@ -187,10 +187,10 @@ class CustomerOrderController  extends Controller
             $ci->save();
 
             // Quotation Close
-            $qutclose = Quotation::findOrFail($request->quotation_id);
-            $qutclose->closed = 0;
-            $qutclose->fstatus = 1;
-            $qutclose->save();
+            // $qutclose = Quotation::findOrFail($request->quotation_id);
+            // $qutclose->closed = 0;
+            // $qutclose->fstatus = 1;
+            // $qutclose->save();
 
 
             foreach ($request->contracts as $cont) {
@@ -207,7 +207,46 @@ class CustomerOrderController  extends Controller
                 $lpd->saleamnt = $cont['saleamnt'];
                 $lpd->save();
             }
+
+            DB::update(DB::raw("
+            UPDATE quotations c
+            INNER JOIN (
+            SELECT quotation_id,SUM(b.qtykg) AS qty,SUM(b.saleamnt) AS amount from customer_orders as a inner join customer_order_details as b on a.id=b.sale_invoice_id
+            WHERE quotation_id=$ci->quotation_id GROUP BY quotation_id
+            ) x ON c.id = x.quotation_id
+            SET c.tqpendqty = c.tqqty - coalesce(x.qty,0), c.tqpendval = c.rcvblamount - coalesce(x.amount,0) WHERE  c.id = $ci->quotation_id"));
+
+            DB::update(DB::raw("
+            UPDATE quotation_details c
+            INNER JOIN (
+            SELECT quotation_id,material_id,SUM(b.qtykg) AS qty,SUM(b.saleamnt) AS amount from customer_orders as a inner join customer_order_details as b on a.id=b.sale_invoice_id
+            WHERE quotation_id=$ci->quotation_id GROUP BY quotation_id,material_id
+            ) x ON c.id = x.quotation_id and c.material_id=x.material_id
+            SET c.tqtpendqty = c.tqtqty - coalesce(x.qty,0) WHERE  c.id = $ci->quotation_id"));
+
             // }
+
+
+            // DB::update(DB::raw("
+            // UPDATE customer_order_details c
+            // INNER JOIN (
+            // SELECT b.custplan_id,a.material_id,SUM(feedqty) AS feedqty  FROM sale_invoices_details a
+			// 	INNER JOIN sale_invoices AS b ON b.id=a.sale_invoice_id WHERE b.custplan_id=$ci->custplan_id GROUP BY b.custplan_id,a.material_id
+            // ) x ON c.sale_invoice_id = x.custplan_id AND c.material_id=x.material_id
+            // SET c.balqty = c.qtykg - x.feedqty WHERE  c.sale_invoice_id = $ci->custplan_id"));
+
+
+            ///**** Master Update
+
+
+
+
+
+
+
+
+
+
             DB::commit();
             Session::flash('success','Contract Information Saved');
             return response()->json(['success'],200);

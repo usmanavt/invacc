@@ -230,6 +230,13 @@ const skus = @json($skus);
                 dimension_id:data.dimension_id,
                 dimension:data.dimension,
 
+                supp1:'',
+                supp2:'',
+                supp3:'',
+
+                mrktprice1:0,
+                mrktprice2:0,
+                mrktprice3:0,
 
                 bundle1:0,
                 bundle2:0,
@@ -369,7 +376,7 @@ const skus = @json($skus);
             {title:"Dimension",         field:"dimension",      cssClass:"bg-gray-200 font-semibold"},
             {title:"Replace Description",field:"repname",       cssClass:"bg-gray-200 font-semibold",editor:true},
             {title:"Sku",               field:"sku_id",         cssClass:"bg-gray-200 font-semibold",visible:false},
-            {title:"Brand",             field:"mybrand",          cssClass:"bg-gray-200 font-semibold",editor:true},
+            {title:"Brand",             field:"mybrand",          cssClass:"bg-gray-200 font-semibold",editor:true,visible:false},
             {title: "id",field: "skuid",visible:false},
             {title:"UOM", field:"sku" ,editor:"list" , editorParams:   {
                         values:newList1,
@@ -377,6 +384,7 @@ const skus = @json($skus);
                         validator:["required"]
                     }
             },
+
 
             {title:"LastSalePrice",
                 field:"pcspbundle1",
@@ -389,6 +397,31 @@ const skus = @json($skus);
                 cellEdited: updateValues,
                },
 
+            {
+            title:'Market Suppliers', headerHozAlign:"center",
+            columns:[
+
+            {title:"1st",field:"supp1",width:200,editor:true,responsive:0,headerHozAlign:"center"},
+            {title:"2nd",field:"supp2",width:200,editor:true,responsive:0,headerHozAlign:"center"},
+            {title:"3rd",field:"supp3",width:200,editor:true,responsive:0,headerHozAlign:"center"},
+
+
+        ]},
+
+
+        {
+            title:'Market Price', headerHozAlign:"center",
+            columns:[
+
+            {title:"1st",field:"mrktprice1",width:100,responsive:0,formatter:"money",headerHozAlign:"center",editor:"number"},
+            {title:"2nd",field:"mrktprice2",width:100,responsive:0,formatter:"money",headerHozAlign:"center",editor:"number"},
+            {title:"3rd",field:"mrktprice3",width:100,responsive:0,formatter:"money",headerHozAlign:"center",editor:"number"},
+        ]},
+
+
+        {
+            title:'Sale', headerHozAlign:"center",
+            columns:[
 
             {   title:"Quantity",
                 field:"bundle1",
@@ -396,82 +429,90 @@ const skus = @json($skus);
                 responsive:0,
                 validator:"required",
                 formatter:"money",
+                bottomCalc:"sum",
                 formatterParams:{thousand:",",precision:2},
                 // validator:["required","integer"],
                 cellEdited: updateValues,
                },
 
-               {title:"Supplier1",
-                field:"supp1",
-                width:300,
-                editor:true,
-                responsive:0,
-                validator:"required",
-                formatter:"money",
-                // formatterParams:{thousand:",",precision:2},
-                // validator:["required","integer"],
-                // cellEdited: updateValues,
-               },
+            {   title:"Price", field:"price",editor:"number",responsive:0, validator:"required" ,formatter:"money",
+             formatterParams:{thousand:",",precision:2},validator:["required","decimal(10,3)"] ,cellEdited: updateValues, },
 
-               {title:"MarketPrice1",
-                field:"mrktprice1",
-                editor:"number",
-                responsive:0,
-                validator:"required",
-                formatter:"money",
-                formatterParams:{thousand:",",precision:2},
-                // validator:["required","integer"],
-                cellEdited: updateValues,
-               },
-
-               {title:"Supplier2",
-                field:"supp2",
-                width:300,
-                editor:true,
-                validator:"required",
-                formatter:"money",
-                responsive:0,
-                // validator:["required","integer"],
-                // cellEdited: updateValues,
-               },
-
-
-
-
-
-
-               {title:"MarketPrice2",
-                field:"mrktprice2",
-                editor:"number",
-                responsive:0,
-                validator:"required",
-                formatter:"money",
-                formatterParams:{thousand:",",precision:2},
-                // validator:["required","integer"],
-                cellEdited: updateValues,
-               },
-
-
-             {   title:"SalePrice",
-                field:"price",
-                editor:"number",
-                responsive:0,
-                validator:"required" ,
-                formatter:"money",
-                formatterParams:{thousand:",",precision:2},
-                validator:["required","decimal(10,3)"] ,
-                cellEdited: updateValues   ,
-            },
-            {   title:"Amount",
-                field:"ttpcs",
-                cssClass:"bg-gray-200 font-semibold",
-                formatter:"money",
-                formatterParams:{thousand:",",precision:2},
+             {   title:"Amount",field:"ttpcs",cssClass:"bg-gray-200 font-semibold",formatter:"money",formatterParams:{thousand:",",precision:2},
                 formatter:function(cell,row)
                 {
                     return (cell.getData().bundle1 * cell.getData().price) + (cell.getData().bundle2 * cell.getData().price)
                 },
                 bottomCalc:totalVal  },
+
+
+        ]},
+
+
+
+
+
+
+
+            //    {title:"MrktPrice1",
+            //     field:"mrktprice1",
+            //     editor:"number",
+            //     responsive:0,
+            //     formatter:"money",
+            //     formatterParams:{thousand:",",precision:2},
+            //     // validator:["required","integer"],
+            //     cellEdited: updateValues,
+            //    },
+
+            //    {title:"Supplier2",
+            //     field:"supp2",
+            //     width:200,
+            //     editor:true,
+            //     // validator:"required",
+            //     formatter:"money",
+            //     responsive:0,
+            //     // validator:["required","integer"],
+            //     // cellEdited: updateValues,
+            //    },
+
+            //    {title:"MrktPrice2",
+            //     field:"mrktprice2",
+            //     editor:"number",
+            //     responsive:0,
+            //     // validator:"required",
+            //     formatter:"money",
+            //     formatterParams:{thousand:",",precision:2},
+            //     // validator:["required","integer"],
+            //     cellEdited: updateValues,
+            //    },
+
+            //    {title:"Supplier3",
+            //     field:"supp3",
+            //     width:200,
+            //     editor:true,
+            //     // validator:"required",
+            //     formatter:"money",
+            //     responsive:0,
+            //     // validator:["required","integer"],
+            //     // cellEdited: updateValues,
+            //    },
+
+            //    {title:"MrktPrice3",
+            //     field:"mrktprice3",
+            //     editor:"number",
+            //     responsive:0,
+            //     // validator:"required",
+            //     formatter:"money",
+            //     formatterParams:{thousand:",",precision:2},
+            //     // validator:["required","integer"],
+            //     cellEdited: updateValues,
+            //    },
+
+
+
+
+
+
         ],
     })
 

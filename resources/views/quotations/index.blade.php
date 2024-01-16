@@ -45,8 +45,10 @@
     var deleteIcon = function(cell, formatterParams, onRendered){ return "<i class='fa fa-trash text-red-600'></i>";};
     var printIcon = function(cell, formatterParams, onRendered){ return "<i class='fa fa-print text-pink-500'></i>";};
 
-    const getMaster = @json(route('quotations.master'));
-    const getDetails = @json(route('quotations.details'));
+    // const getMaster = @json(route('quotations.master'));
+    // const getDetails = @json(route('quotations.details'));
+    const getMaster = @json(route('quotations.qIndex'));
+
     let table;
     let searchValue = "";
     let statusValue="1";  // 1 = Pending, 2 - Completed
@@ -147,31 +149,28 @@
       //      Master Data
             {title: "id",field: "id"},
             // {title: "Dated",field: "created_at"},
-            {title: "Quotation Date",field: "saldate"},
-            {title: "Valid Date",field: "valdate"},
-            {title: "Qut.No",field: "qutno"},
-            {title: "P.R No",field: "prno"},
-            // {title: "GP#",field: "gpno"},
-            // {title: "Contract#",field: "contract_id"},
-            {title: "Customer",field: "customer.title"},
-            // {title: "Challan#",field: "challanno"},
-            // {title: "Mach Date",field: "machine_date"},
-            // {title: "Description",field: "machineno"},
-            // {title: "conversionrate",field: "conversionrate"},
-            // {title: "insurance",field: "insurance"},
-            // {title: "bankcharges",field: "bankcharges"},
-            // {title: "collofcustom",field: "collofcustom"},
-            // {title: "exataxoffie",field: "exataxoffie"},
-            // {title: "lngnshipdochrgs",field: "lngnshipdochrgs"},
-            // {title: "localcartage",field: "localcartage"},
-            // {title: "miscexplunchetc",field: "miscexplunchetc"},
-            // {title: "customsepoy",field: "customsepoy"},
-            // {title: "weighbridge",field: "weighbridge"},
-            // {title: "miscexpenses",field: "miscexpenses"},
-            // {title: "agencychrgs",field: "agencychrgs"},
-            // {title: "otherchrgs",field: "otherchrgs"},
+            {title: "Quotation Date",field: "saldate", hozAlign:"center"},
+            {title: "Valid Date",field: "valdate", hozAlign:"center"},
+            {title: "Qut.No",field: "qutno", hozAlign:"center"},
+            {title: "P.R No",field: "prno", hozAlign:"center"},
+            {title: "Customer",field: "custname"},
 
-            {title: "Rcvbl Amount",field: "rcvblamount"},
+            {title:'Quotaton Status', headerHozAlign:"center",
+            columns:[
+
+            {title: "Quanitity",field: "tqqty",hozAlign:"right"},
+            {title: "Amount",field: "rcvblamount",formatterParams:{thousand:",",precision:0},hozAlign:"right"},
+        ]},
+
+        {title:'Pending Status', headerHozAlign:"center",
+            columns:[
+
+            {title: "Quantity",field: "tqpendqty",hozAlign:"right"},
+            {title: "Amount",field: "tqpendval",hozAlign:"right"},
+            {title:"Status", field:"pstatus", hozAlign:"center", formatter:"tickCross", headerSort:false},
+            // {title: "Status",field: "pstatus",hozAlign:"center"},
+            ]},
+
             {title:"View" , formatter:viewIcon, hozAlign:"center",headerSort:false, responsive:0,
                 cellClick:function(e, cell){
                     window.open(window.location + "/" + cell.getRow().getData().id  ,"_self");

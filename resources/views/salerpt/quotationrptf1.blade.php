@@ -79,7 +79,7 @@ body{
 
     {{-- calculate the lenght of data here,if more than 30 lines, we need different strategy to print multiple pages --}}
     @php
-        $showlines = 23
+        $showlines = 24
     @endphp
     @if ( count($data) <= $showlines )
         {{-- Report Header --}}
@@ -145,11 +145,11 @@ body{
                         @endfor
                     @endif
                     <tr>
-                        <td colspan="2" width="100%" style="text-align: right;border-bottom: 1px solid lightgray;font-size:12px;font-weight:bold;">Totals</td>
+                        <td colspan="2"  style="text-align: right;border-bottom: 1px solid lightgray;font-size:12px;font-weight:bold;">Totals</td>
                         {{-- <td colspan="4" width="8%" style="text-align: right;border-bottom: 1px solid lightgray;">{{ number_format($vtotpcs,0) }} </td> --}}
-                        <td class="2" width="9%" style="text-align: right;border-bottom: 1px solid lightgray;font-size:12px;font-weight:bold;">{{ number_format($vqty,1) }} </td>
-                        <td class="2" width="9%" style="text-align: right;border-bottom: 1px solid lightgray;">&nbsp; </td>
-                        <td class="2" width="11%" style="text-align: right;border-bottom: 1px solid lightgray;font-size:12px;font-weight:bold;">{{ number_format($vvlues,1) }} </td>
+                        <td colspan="2"  style="text-align: right;border-bottom: 1px solid lightgray;font-size:12px;font-weight:bold;">{{ number_format($vqty,1) }} </td>
+                        {{-- <td class="2"  style="text-align: right;border-bottom: 1px solid lightgray;">&nbsp; </td> --}}
+                        <td colspan="2"  style="text-align: right;border-bottom: 1px solid lightgray;font-size:12px;font-weight:bold;">{{ number_format($vvlues,1) }} </td>
                     </tr>
 
                 </tbody>

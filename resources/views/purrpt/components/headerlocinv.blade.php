@@ -92,18 +92,28 @@
             <td >PURCHASE INVOICE  </td>
         </tr>
         <tr  >
-            <td style="font-size: 1rem" > MUHAMMAD NAZIR & Co </td>
+            <td style="font-size: 1rem" > {{ $hdng1 }} </td>
         </tr>
     </tbody>
 </table>
 
 
-<table class="column-headers2">
+{{-- <table class="column-headers2">
     <tbody>
         <tr  > <td >Steam Pipes, Pipe Fitting, Flanges Valves, S.S Pipes  </td>  </tr>
         <tr  > <td >Plot # 8 Near Allah Malik Godown Shershah Kabari Bazar,  </td>  </tr>
         <tr  > <td >Phone : 021-32588781, 021-32574285 , Fax : 021-32588782  </td>  </tr>
 
+    </tbody>
+</table> --}}
+
+<table class="hd1" >
+    <tbody>
+          <tr >
+            <td style="Padding:5px 130px 30px 130px " >
+                <span style= " text-align: center; font-size:1rem;font-weight: bold">{{ $hdng2 }}</span>
+            </td>
+        </tr>
     </tbody>
 </table>
 
