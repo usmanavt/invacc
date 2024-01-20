@@ -53,7 +53,7 @@
 
                         <div class="grid grid-cols-12 gap-2 py-2 ">
 
-                            <label for="bank_id">Payment From<x-req /></label>
+                            {{-- <label for="bank_id">Payment From<x-req /></label>
                             <select autocomplete="on"  name="bank_id" id="bank_id" class="col-span-2" >
                                 <option value="" selected>--Payment From</option>
                                 @foreach($banks as $bank)
@@ -61,7 +61,16 @@
                                     <option value="{{$bank->id}}" selected> {{$bank->title}} </option>
                                 @endif
                                 @endforeach
+                            </select> --}}
+
+                            <label for="bank_id">Payment From<x-req /></label>
+                            <select autocomplete="on"  name="bank_id" id="bank_id" class="col-span-2" >
+                                {{-- <option value="" selected>--Payment From</option> --}}
+                                @foreach($banks as $bank)
+                                    <option value="{{ $bank->id }}" @if ($bank->id == $banktransaction->bank_id) selected @endif>{{$bank->title}}</option>
+                                @endforeach
                             </select>
+
 
                             <x-input-text title="Cheque No/Payment to" name="cheque_no" id="cheque_no" req required class="col-span-2" value="{{ $banktransaction->cheque_no }}"  />
                             <x-input-date title="Cheque Date" id="cheque_date" name="cheque_date" req required class="col-span-2" value="{{ $banktransaction->cheque_date->format('Y-m-d') }}" />
@@ -596,6 +605,22 @@ function EnableDisableTextBox(per) {
     amount_pkr.value=(amount_fc.value * conversion_rate.value).toFixed(0);
     // bankntotal.value= ( Number(100)-Number(discntamt.value))+Number(exataxoffie.value) +Number(otherchrgs.value)  ;
    }
+
+
+   bank_id.addEventListener("change", () => {
+    var sid = document.getElementById("bank_id");
+        var bank_id = sid.options[sid.selectedIndex];
+        if(bank_id.value==1)
+        { cheque_no.disabled=true;
+          cheque_date.disabled=true;
+        }
+        else
+        { cheque_no.disabled=false;
+          cheque_date.disabled=false;
+        }
+
+});
+
 
 
 

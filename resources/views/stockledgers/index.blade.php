@@ -827,7 +827,7 @@ const getSubheadVoucherData4 = async (value) =>{
                             data.forEach(e => {
 
                                 a += 1;
-                                addSelectElement(subhead,e.Subhead,a + ' - '+ e.Subhead + ' - ' + e.title)
+                                addSelectElement(subhead,e.Subhead,e.title + ' - '+ e.Subhead + ' - ' + a)
                             });
                             subhead.setAttribute('required','')
                             subhead.removeAttribute('disabled','')
@@ -878,7 +878,7 @@ fetch(funcstkos + `?head_id=${value} &source_id=${value1} &brand_id=${value3} `,
                     data.forEach(e => {
 
                         a += 1;
-                        addSelectElement(subhead,e.Subhead,a + ' - '+ e.Subhead + ' - ' + e.title)
+                         addSelectElement(subhead,e.Subhead,e.title + ' - '+ e.Subhead + ' - ' + a)
                     });
                     subhead.setAttribute('required','')
                     subhead.removeAttribute('disabled','')
@@ -929,7 +929,8 @@ fetch(funcstkos + `?head_id=${value} &source_id=${value1} &brand_id=${value3} `,
                     data.forEach(e => {
 
                         a += 1;
-                        addSelectElement(subhead,e.Subhead,a + ' - '+ e.Subhead + ' - ' + e.title)
+                        // addSelectElement(subhead,e.Subhead,a + ' - '+ e.Subhead + ' - ' + e.title)
+                        addSelectElement(subhead,e.Subhead,e.title + ' - '+ e.Subhead + ' - ' + a)
                     });
                     subhead.setAttribute('required','')
                     subhead.removeAttribute('disabled','')

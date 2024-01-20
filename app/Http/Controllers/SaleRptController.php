@@ -56,7 +56,15 @@ class SaleRptController extends Controller
 
     }
 
+    public function funccompquotation(Request $request)
+    {
+        //  dd($request->all());
+        $fromdate = $request->fromdate;
+        $todate = $request->todate;
+        $head = $request->head;
+        return  DB::select('call procqutcompcategory(?,?,?)',array($fromdate,$todate,$head));
 
+    }
 
 
 
@@ -157,6 +165,36 @@ public function funcsalretcat(Request $request)
         $mpdf->debug = true;
         return $mpdf;
     }
+
+
+
+    public function getMPDFSettingsLegal($orientation = 'Legal-L')
+    {
+
+        $format;
+        $orientation == 'L' ? $format = 'Legal': 'Legal';
+
+        $mpdf = new PDF( [
+            'mode' => 'utf-8',
+            'format' => $orientation,
+            'margin_header' => '2',
+            'margin_top' => '5',
+            'margin_bottom' => '5',
+            'margin_footer' => '2',
+            'default_font_size' => 9,
+            'margin_left' => '10',
+            'margin_right' => '10',
+        ]);
+        $mpdf->showImageErrors = true;
+        $mpdf->curlAllowUnsafeSslRequests = true;
+        $mpdf->debug = true;
+        return $mpdf;
+    }
+
+
+
+
+
 
 
     public function getMPDFSettingslndscap($orientation = 'A4-L')
@@ -441,28 +479,6 @@ public function funcsalretcat(Request $request)
             return response($mpdf->Output($filename,'I'),200)->header('Content-Type','application/pdf');
 
         }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
@@ -768,7 +784,6 @@ public function funcsalretcat(Request $request)
             $t4 = $request->t4;
             $t5 = $request->t5;
 
-
             // $head = Head::findOrFail($head_id);
             $head = Customer::findOrFail($head_id);
             if($request->has('subhead_id')){
@@ -781,8 +796,8 @@ public function funcsalretcat(Request $request)
                 }
             }
             //  Call Procedure
-            $mpdf = $this->getMPDFSettings();
-            $data = DB::select('call procquotation()');
+            $mpdf = $this->getMPDFSettingsLegal();
+            $data = DB::select('call procquotationpend()');
             if(!$data)
             {
                 Session::flash('info','No data available');
@@ -797,6 +812,72 @@ public function funcsalretcat(Request $request)
 
             foreach($grouped as $g){
                  $html =  view('salerpt.quotationpend')->with('data',$g)->with('fromdate',$fromdate)
+                 ->with('todate',$todate)
+                 ->with('headtype',$head->title)
+                 ->with('hdng1',$hdng1)->with('hdng2',$hdng2)->with('hdng3',$hdng3)
+                 ->render();
+                // $html =  view('salerpt.glhw')->with('data',$g)->with('fromdate',$fromdate)->with('todate',$todate)->render();
+                $filename = $g[0]->id  .'-'.$fromdate.'-'.$todate.'.pdf';
+                // $mpdf = $this->getMPDFSettingslndscap();
+                // $mpdf = $this->getMPDFSettingsLegal();
+                // $mpdf->SetHTMLFooter('
+                // <table width="100%" style="border-top:1px solid gray">
+                //     <tr>
+                //         <td width="33%">{DATE d-m-Y}</td>
+                //         <td width="33%" align="center">{PAGENO}/{nbpg}</td>
+                //     </tr>
+                // </table>');
+                $chunks = explode("chunk", $html);
+                foreach($chunks as $key => $val) {
+                    $mpdf->WriteHTML($val);
+                }
+                $mpdf->AddPage();
+            }
+            return response($mpdf->Output($filename,'I'),200)->header('Content-Type','application/pdf');
+        }
+
+
+        if($report_type === 'compquotation' ){
+            //  dd($request->all());
+
+            $head_id = $request->head_id;
+            $hdng1 = $request->cname;
+            $hdng2 = $request->csdrs;
+            $hdng3 = $request->toc;
+            $t1 = $request->t1;
+            $t2 = $request->t2;
+            $t3 = $request->t3;
+            $t4 = $request->t4;
+            $t5 = $request->t5;
+
+            // $head = Head::findOrFail($head_id);
+            $head = Customer::findOrFail($head_id);
+            if($request->has('subhead_id')){
+                $subhead_id = $request->subhead_id;
+                //  Clear Data from Table
+                DB::table('tmpqutparrpt')->truncate();
+                foreach($request->subhead_id as $id)
+                {
+                    DB::table('tmpqutparrpt')->insert([ 'qutid' => $id ]);
+                }
+            }
+            //  Call Procedure
+            $mpdf = $this->getMPDFSettings();
+            $data = DB::select('call procquotationpend()');
+            if(!$data)
+            {
+                Session::flash('info','No data available');
+                return redirect()->back();
+            }
+            $collection = collect($data);                   //  Make array a collection
+            // $grouped = $collection->groupBy('SupName');       //  Sort collection by SupName
+            $grouped = $collection->groupBy('id');       //  Sort collection by SupName
+            $grouped->values()->all();                       //  values() removes indices of array
+
+            // dd($grouped);
+
+            foreach($grouped as $g){
+                 $html =  view('salerpt.quotationcomp')->with('data',$g)->with('fromdate',$fromdate)
                  ->with('todate',$todate)
                  ->with('headtype',$head->title)
                  ->with('hdng1',$hdng1)->with('hdng2',$hdng2)->with('hdng3',$hdng3)
@@ -819,6 +900,12 @@ public function funcsalretcat(Request $request)
             }
             return response($mpdf->Output($filename,'I'),200)->header('Content-Type','application/pdf');
         }
+
+
+
+
+
+
 
 
 

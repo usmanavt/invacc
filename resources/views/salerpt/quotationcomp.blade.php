@@ -91,7 +91,7 @@ padding-left: 8px;
     {{-- Report Header --}}
 
     <table class="mhd">
-        <tbody><tr><td> PENDING PRICE QUITATION </td></tr></tbody>
+        <tbody><tr><td> COMPLETED PRICE QUITATION </td></tr></tbody>
     </table>
 
 

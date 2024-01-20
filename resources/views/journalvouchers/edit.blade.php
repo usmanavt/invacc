@@ -29,14 +29,17 @@
                                     <legend>Transaction Date</legend>
                                     <x-input-date title="Dcoument Date" name="jvdate" value="{{ $document_date }}" />
                                     <x-input-text title="Dcoument No" name="document_no" value="{{ $jvno }}"  />
+                                </fieldset>
+
+                                <fieldset class="border px-4 py-2 rounded">
+                                    <legend>Transaction Date</legend>
+                                    <x-input-text title="Description" name="description" id="description" value="{{ $description }}" req required class="col-span-2"   />
                                     <x-input-text title="Cheque No" name="cheque_no" id="cheque_no" value="{{ $cheque_no }}" req required class="col-span-2" disabled  />
                                     <input class="checked:bg-blue-500 checked:border-blue-500 focus:outline-none" type="checkbox" name="per" id="per" onclick="EnableDisableTextBox(this)" >
                                     <label for="">
                                         <span style="color: brown;font-weight: bold"> J.V Against Cheque Collection </span> <span class="text-red-500 font-semibold  ">(*)</span>
                                          </label>
-
                                 </fieldset>
-
 
 
                                 @method('PUT')
@@ -129,7 +132,7 @@
             }},
             // {title:"JV #", width:100,validator:['required'],  field:"jvno",headerSort: false, editor:"input",cssClass:"bg-green-200 font-semibold"},
             {title:"Amount (PKR)", field:"amount",headerSort: false, editor:"number",cssClass:"bg-green-200 font-semibold",validator:['required','numeric']},
-            {title:"Description", width:300, field:"description",headerSort: false,validator:['required'],  editor:"input",cssClass:"bg-green-200 font-semibold"},
+            // {title:"Description", width:300, field:"description",headerSort: false,validator:['required'],  editor:"input",cssClass:"bg-green-200 font-semibold"},
         ],
     })
 
@@ -161,7 +164,7 @@
             e.document_date = document_date
         })
         //  Now Post Data
-        var mydata = {'document_no':document_no.value,'jvdate':jvdate.value,'cheque_no':cheque_no.value,
+        var mydata = {'document_no':document_no.value,'jvdate':jvdate.value,'cheque_no':cheque_no.value,'description':description.value,
             'vouchers': data
         }
         fetch(@json(route('jv.update',$transaction)),{

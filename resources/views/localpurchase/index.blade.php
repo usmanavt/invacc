@@ -172,6 +172,7 @@
                     columns:[
 
                     {title: "id",field: "id"},
+                    {title: "Status",field: "tstatus"},
                     {title: "Inv Dt",field: "invoice_date"},
                     {title: "Invoice#",field: "invoiceno"},
                     {title: "Bill #",field: "challanno"},

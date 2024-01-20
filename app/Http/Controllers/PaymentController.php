@@ -318,6 +318,7 @@ class PaymentController  extends Controller
             DB::commit();
             Session::flash('success','Payment Information Saved');
             return response()->json(['success'],200);
+            // return redirect()->back();
         } catch (\Throwable $th) {
             DB::rollback();
             throw $th;

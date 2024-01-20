@@ -227,9 +227,9 @@ padding-left: 8px;
                             <td style="text-align:left;font-size:12px" width="9%">{{ $data[$i]->supp1 }} </td>
                             <td style="text-align:right;font-size:12px" width="6%">{{ number_format($data[$i]->mrktprice1,1) }} </td>
                             <td style="text-align:left;font-size:12px" width="9%">{{ $data[$i]->supp2 }} </td>
-                            <td style="text-align:right;font-size:12px" width="6%">{{ number_format($data[$i]->mrktprice1,1) }} </td>
+                            <td style="text-align:right;font-size:12px" width="6%">{{ number_format($data[$i]->mrktprice2,1) }} </td>
                             <td style="text-align:left;font-size:12px" width="9%">{{ $data[$i]->supp3 }} </td>
-                            <td style="text-align:right;font-size:12px" width="6%">{{ number_format($data[$i]->mrktprice1,3) }} </td>
+                            <td style="text-align:right;font-size:12px" width="6%">{{ number_format($data[$i]->mrktprice3,1) }} </td>
                             <td style="text-align:right;font-size:12px" width="6%">{{ number_format($data[$i]->lstslprice,1) }} </td>
                             <td style="text-align:right;font-size:12px" width="7%">{{ number_format($data[$i]->qty,1) }} </td>
                             <td style="text-align:right;font-size:12px" width="7%">{{ number_format($data[$i]->price,1) }} </td>

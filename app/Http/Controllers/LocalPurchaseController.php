@@ -131,7 +131,7 @@ class LocalPurchaseController  extends Controller
         // ->with('customer:id,title')
         ->where('invoiceno', 'like', "%$search%")
         ->orWhere('supname', 'like', "%$search%")
-        //  ->orWhere('ref', 'like', "%$search%")
+        // ->orWhere('tstatus', 'like', "%$search%")
         ->orderBy($field,$dir)
         ->paginate((int) $size);
         return $cis;
@@ -194,7 +194,7 @@ class LocalPurchaseController  extends Controller
             $ci->machine_date = $request->invoice_date;
             $ci->conversionrate = 0;
             $ci->comdescription = $request->comdescription;
-
+            $ci->ttype = $request->p9;
 
 
             if (!empty($request->insurance)) {
@@ -346,7 +346,7 @@ class LocalPurchaseController  extends Controller
             $commercialinvoice->machine_date = $request->invoice_date;
             $commercialinvoice->machineno = $request->invoiceno;
             $commercialinvoice->comdescription = $request->comdescription;
-
+            $commercialinvoice->ttype = $request->p9;
 
 
             if (!empty($commercialinvoice->insurance)) {

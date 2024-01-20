@@ -16,7 +16,7 @@
 
     <div class="py-6">
         <div class="max-w-full mx-auto sm:px-2 lg:px-4">
-            <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
+            <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">.
                 {{-- Create Form --}}
                 <div class="px-6 py-2">
 
@@ -73,9 +73,15 @@
                                     Descripiton <span class="text-red-500 font-semibold"></span>
                                 </label>
                                 <textarea name="comdescription" id="comdescription" cols="30" rows="2" maxlength="150" required class="rounded"> </textarea>
+                            </div>
 
+                            <div>
+                                <input class="checked:bg-blue-500 checked:border-blue-500 focus:outline-none"  type="checkbox" name="comp" id="comp"   onclick="chqcol(this)" >
 
-
+                                <label for="">
+                                    <span style="color: brown;font-weight: bold"> Temporary </span> <span class="text-red-500 font-semibold  "></span>
+                                     </label>
+                                     <input type="text" title="t1"  id="p9" name="p9" value="0" hidden    >
                             </div>
 
 
@@ -631,7 +637,7 @@ var calculate = function(){
         disableSubmitButton(true);
         var data = { 'contracts' : dynamicTableData,'bankntotal':bankntotal.value,'otherchrgs':otherchrgs.value,'exataxoffie':exataxoffie.value,
         'collofcustom':collofcustom.value,'insurance':insurance.value ,'supplier_id': supplier_id.value,'invoice_date':invoice_date.value,
-        'number':number.value,'gpassno':gpassno.value,'challanno':challanno.value,'comdescription':comdescription.value};
+        'number':number.value,'gpassno':gpassno.value,'challanno':challanno.value,'comdescription':comdescription.value,'p9':p9.value};
         // All Ok - Proceed
         fetch(@json(route('localpurchase.store')),{
             credentials: 'same-origin', // 'include', default: 'omit'
@@ -686,6 +692,28 @@ collofcustom.onblur=function(){
     // bankntotal.value= ( Number(tamount)-Number(collofcustom.value))+Number(exataxoffie.value) +Number(otherchrgs.value)  ;
 }
 
+
+function chqcol(comp) {
+        var p9 = document.getElementById("p9");
+        // amount_fc.disabled = advtxt.checked ? true : false;
+
+        // amount_fc.disabled = per.checked ? true : false;
+
+        if(comp.checked==true)
+        {
+            p9.value=1;
+        }
+        else
+        {
+            p9.value=0;
+        }
+
+    }
+
+
+
+
+
 </script>
 
 
@@ -694,11 +722,6 @@ collofcustom.onblur=function(){
 
 {{-- required  onblur="Discper()" --}}
 {{-- required  onblur="DiscAmount()" --}}
-
-
-
-
-
 
 </x-app-layout>
 

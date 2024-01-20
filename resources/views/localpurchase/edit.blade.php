@@ -48,11 +48,6 @@
                                 {{-- <label for="gpassno">GatePass #<x-req /></label> --}}
                                 <input type="text" class="col-span-2" id="gpassno" name="gpassno" value="{{ $commercialInvoice->gpassno }}" hidden   placeholder="gpassno"
                                     minlength="1" title="minimum 1 characters required" required>
-
-
-
-
-
                         </div>
 
                         <fieldset class="border px-4 py-2 rounded">
@@ -76,6 +71,14 @@
                                 Descripiton <span class="text-red-500 font-semibold"></span>
                             </label>
                             <textarea name="comdescription" id="comdescription" cols="30" rows="2" maxlength="150" required class="rounded"> {{ $commercialInvoice->comdescription }} </textarea>
+                        </div>
+                        <div>
+                            <input class="checked:bg-blue-500 checked:border-blue-500 focus:outline-none" {{ $commercialInvoice->ttype === 1 ? 'checked' : '' }} type="checkbox" name="comp" id="comp"   onclick="chqcol(this)" >
+
+                            <label for="">
+                                <span style="color: brown;font-weight: bold"> Temporary </span> <span class="text-red-500 font-semibold  "></span>
+                                 </label>
+                                 <input type="text" title="t1"  id="p9" name="p9" value="0"  hidden    >
                         </div>
 
 
@@ -515,19 +518,7 @@ dynamicTable = new Tabulator("#dynamicTable", {
                 cellEdited: updateValues   ,
                 bottomCalc:"sum",
             },
-
-
-
-
-
     ],
-
-
-
-
-
-
-
 })
 
 // Add event handler to read keyboard key up event
@@ -603,7 +594,7 @@ function validateForm()
      var data = { 'localpurchase' : dynamicTableData,'contract_id':parseFloat(contract_id.value).toFixed(0),'bankntotal':parseFloat(bankntotal.value).toFixed(0),
      'collofcustom':parseFloat(collofcustom.value).toFixed(0),'exataxoffie':parseFloat(exataxoffie.value).toFixed(0) ,
      'insurance':parseFloat(insurance.value).toFixed(2) ,'supplier_id': supplier_id.value,'invoice_date':invoice_date.value,'invoiceno':invoiceno.value,
-     'otherchrgs':otherchrgs.value,'gpassno':gpassno.value,'challanno':challanno.value,'comdescription':comdescription.value};
+     'otherchrgs':otherchrgs.value,'gpassno':gpassno.value,'challanno':challanno.value,'comdescription':comdescription.value,'p9':p9.value};
     // var data = { 'contracts' : dynamicTableData,'banktotal':parseFloat(total.value).toFixed(2),'exataxoffie':parseFloat(exataxoffie.value).toFixed(2),'collofcustom':parseFloat(collofcustom.value).toFixed(2),'insurance':parseFloat(insurance.value).toFixed(2) ,'supplier_id': supplier_id.value,'invoice_date':invoice_date.value,'invoiceno':number.value};
     // All Ok - Proceed
     fetch(@json(route('localpurchase.update',$commercialInvoice)),{
@@ -650,6 +641,30 @@ collofcustom.onblur=function(){
     // bankntotal.value= ( Number(tamount)-Number(collofcustom.value))+Number(exataxoffie.value) +Number(otherchrgs.value)  ;
     tnetamount();
 }
+
+
+
+function chqcol(comp) {
+        var p9 = document.getElementById("p9");
+        // amount_fc.disabled = advtxt.checked ? true : false;
+
+        // amount_fc.disabled = per.checked ? true : false;
+
+        if(comp.checked==true)
+        {
+            p9.value=1;
+        }
+        else
+        {
+            p9.value=0;
+        }
+
+    }
+
+
+
+
+
 
 </script>
 

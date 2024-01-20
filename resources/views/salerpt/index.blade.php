@@ -33,6 +33,11 @@
                                     <label for="">Pending Price Quotation </label>
                                 </div>
 
+                                <div>
+                                    <input type="radio" name="report_type" value="compquotation" required onchange="checkReportType('compquotation')">
+                                    <label for="">Completed Price Quotation </label>
+                                </div>
+
 
 
                                 <div>
@@ -172,6 +177,7 @@
     const funcquotation = @json(route('salerpt.funcquotation'));
 
     const funcpendquotation = @json(route('salerpt.funcpendquotation'));
+    const funccompquotation = @json(route('salerpt.funccompquotation'));
 
     const funccustorder = @json(route('salerpt.funccustorder'));
     const funcpendcustorder = @json(route('salerpt.funcpendcustorder'));
@@ -286,23 +292,43 @@ const getSubheadVoucherDatapnd = async (value) =>{
     }
 
 
+    case 'compquotation':
+            // console.log(value)
+            fetch(funccompquotation + `?todate=${todate.value}&fromdate=${fromdate.value}&head=${value}`,{
+                    method:"GET",
+                    headers: { 'Accept':'application/json','Content-type':'application/json'},
+                    })
+                    .then(response => response.json())
+                    .then( data => {
+                        if(data.length > 0)
+                        {
+                            data.forEach(e => {
+                                addSelectElement(subhead,e.Subhead,e.title)
+                            });
+                            subhead.setAttribute('required','')
+                            subhead.removeAttribute('disabled','')
+                        }else{
+                            subhead.removeAttribute('required','')
+                            subhead.setAttribute('disabled','')
+                        }
+                    })
+                    .catch(error => console.error(error))
+                break;
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+// FOR CONTRACT FILL
+const getSubheadVoucherDatacmp = async (value) =>{
+    let data = await fetch(funccompquotation + `?todate=${todate.value}&fromdate=${fromdate.value}&head=${value}`,{
+            method:"GET",
+            headers: { 'Accept':'application/json','Content-type':'application/json'},
+            })
+            .then(response => response.json())
+            .then( data => { return data })
+            .catch(error => console.error(error))
+    }
+    const getQuotationcomp =async  (value) => {
+        const quotationcomp = await getSubheadVoucherDatacmp(value)
+        return quotationcomp
+    }
 
 
 
@@ -831,6 +857,20 @@ const getSubheadVoucherData14 = async (value) =>{
                 headSelected()
                 break;
 
+                case 'compquotation':
+                // Show Head
+                rptType = 'compquotation'
+                head.setAttribute('required','')
+                head.disabled = false
+                head.length = 0
+                subhead.removeAttribute('required')
+                subhead.disabled = true
+                subhead.length = 0
+                heads.forEach(e => {
+                    addSelectElement(head,e.id,e.title)
+                });
+                headSelected()
+                break;
 
 
 

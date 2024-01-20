@@ -209,6 +209,16 @@ class CustomerOrderController  extends Controller
             }
 
             DB::update(DB::raw("
+            UPDATE customer_orders c
+            INNER JOIN (
+            SELECT sale_invoice_id,SUM(b.qtykg) AS qty from customer_orders as a inner join customer_order_details as b on a.id=b.sale_invoice_id
+            WHERE sale_invoice_id=$ci->id GROUP BY sale_invoice_id
+            ) x ON c.id = x.sale_invoice_id
+            SET c.tplnqty = x.qty  WHERE  c.id = $customerorder->id"));
+
+
+
+            DB::update(DB::raw("
             UPDATE quotations c
             INNER JOIN (
             SELECT quotation_id,SUM(b.qtykg) AS qty,SUM(b.saleamnt) AS amount from customer_orders as a inner join customer_order_details as b on a.id=b.sale_invoice_id
@@ -221,8 +231,21 @@ class CustomerOrderController  extends Controller
             INNER JOIN (
             SELECT quotation_id,material_id,SUM(b.qtykg) AS qty,SUM(b.saleamnt) AS amount from customer_orders as a inner join customer_order_details as b on a.id=b.sale_invoice_id
             WHERE quotation_id=$ci->quotation_id GROUP BY quotation_id,material_id
-            ) x ON c.id = x.quotation_id and c.material_id=x.material_id
-            SET c.tqtpendqty = c.tqtqty - coalesce(x.qty,0) WHERE  c.id = $ci->quotation_id"));
+            ) x ON c.sale_invoice_id = x.quotation_id and c.material_id=x.material_id
+            SET c.tqtpendqty = c.qtykg - coalesce(x.qty,0) WHERE  c.sale_invoice_id = $ci->quotation_id"));
+
+            DB::update(DB::raw("
+            UPDATE customer_orders c
+            INNER JOIN (
+            SELECT sale_invoice_id,SUM(b.qtykg) AS qty from customer_orders as a inner join customer_order_details as b on a.id=b.sale_invoice_id
+            WHERE sale_invoice_id=$$ci->id GROUP BY sale_invoice_id
+            ) x ON c.id = x.sale_invoice_id
+            SET c.tplnqty = x.qty  WHERE  c.id = $ci->id"));
+
+
+
+
+
 
             // }
 
@@ -400,6 +423,16 @@ class CustomerOrderController  extends Controller
                 }
             }
 
+            DB::update(DB::raw("
+            UPDATE customer_orders c
+            INNER JOIN (
+            SELECT sale_invoice_id,SUM(b.qtykg) AS qty from customer_orders as a inner join customer_order_details as b on a.id=b.sale_invoice_id
+            WHERE sale_invoice_id=$customerorder->id GROUP BY sale_invoice_id
+            ) x ON c.id = x.sale_invoice_id
+            SET c.tplnqty = x.qty  WHERE  c.id = $customerorder->id"));
+
+
+
             //// Details update
             DB::update(DB::raw("
             UPDATE customer_order_details c
@@ -420,6 +453,21 @@ class CustomerOrderController  extends Controller
             SET c.delivered = x.Dlvred,c.salordbal=( coalesce(totrcvbamount,0)-coalesce(cartage,0) )-x.Dlvred WHERE  c.id = $customerorder->id"));
 
 
+            DB::update(DB::raw("
+            UPDATE quotations c
+            INNER JOIN (
+            SELECT quotation_id,SUM(b.qtykg) AS qty,SUM(b.saleamnt) AS amount from customer_orders as a inner join customer_order_details as b on a.id=b.sale_invoice_id
+            WHERE quotation_id=$customerorder->quotation_id GROUP BY quotation_id
+            ) x ON c.id = x.quotation_id
+            SET c.tqpendqty = c.tqqty - coalesce(x.qty,0), c.tqpendval = c.rcvblamount - coalesce(x.amount,0) WHERE  c.id = $customerorder->quotation_id"));
+
+            DB::update(DB::raw("
+            UPDATE quotation_details c
+            INNER JOIN (
+            SELECT quotation_id,material_id,SUM(b.qtykg) AS qty,SUM(b.saleamnt) AS amount from customer_orders as a inner join customer_order_details as b on a.id=b.sale_invoice_id
+            WHERE quotation_id=$customerorder->quotation_id GROUP BY quotation_id,material_id
+            ) x ON c.sale_invoice_id = x.quotation_id and c.material_id=x.material_id
+            SET c.tqtpendqty = c.qtykg - coalesce(x.qty,0) WHERE  c.sale_invoice_id = $customerorder->quotation_id"));
 
 
 

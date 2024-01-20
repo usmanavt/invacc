@@ -35,6 +35,7 @@
                                         <option value="{{$head->id}}"> {{$head->title}} </option>
                                         @endforeach
                                     </select> --}}
+                                    {{-- <input type="text" title="t1"  id="p1" name="p1" value="0"    > --}}
                                     <x-input-text title="Payment Seq.#" name="transno" id="transno" value="{{$maxposeqno}}"  class="col-span-2"    />
 
                             </div>
@@ -43,14 +44,14 @@
 
                             <label for="bank_id">Payment From<x-req /></label>
                             <select autocomplete="on"  name="bank_id" id="bank_id" class="col-span-2" >
-                                <option value="" selected>--Payment From</option>
+                                {{-- <option value="" >--Payment From</option> --}}
                                 @foreach($banks as $bank)
                                 <option value="{{$bank->id}}"> {{$bank->title}} </option>
                                 @endforeach
                             </select>
 
-                            <x-input-text title="Cheque No/Payment to" name="cheque_no" id="cheque_no" req required class="col-span-2"  />
-                            <x-input-date title="Cheque Date" id="cheque_date" name="cheque_date" req required class="col-span-2" />
+                            <x-input-text title="Cheque No/Payment to" name="cheque_no" id="cheque_no"  class="col-span-2" disabled  />
+                            <x-input-date title="Cheque Date" id="cheque_date" name="cheque_date"  class="col-span-2"  />
 
                         </div>
 
@@ -139,6 +140,12 @@
 
 @push('scripts')
     <script>
+
+
+window.onload = function() {
+            var input = document.getElementById("bank_id").focus();
+        }
+
         let table;
         let searchValue = "";
         const deleteIcon = function(cell,formatterParams){return "<i class='fa fa-trash text-red-500'></i>";};
@@ -655,6 +662,10 @@ var updateValues = (cell) => {
                 if (response == 'success')
                 {
                     window.open(window.location.origin + "/banktransaction","_self" );
+                    // amount_fc.value=0;
+                    // amount_pkr.value=0;
+                    // bank_id.focus();
+
                 }
             })
             .catch(error => {
@@ -716,7 +727,40 @@ var updateValues = (cell) => {
     // bankntotal.value= ( Number(100)-Number(discntamt.value))+Number(exataxoffie.value) +Number(otherchrgs.value)  ;
    }
 
-    </script>
+
+
+
+   bank_id.addEventListener("change", () => {
+    var sid = document.getElementById("bank_id");
+        var bank_id = sid.options[sid.selectedIndex];
+        if(bank_id.value==1)
+        { cheque_no.disabled=true;
+          cheque_date.disabled=true;
+        }
+        else
+        { cheque_no.disabled=false;
+          cheque_date.disabled=false;
+        }
+
+});
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</script>
 @endpush
 
 </x-app-layout>

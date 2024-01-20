@@ -113,7 +113,7 @@ Route::get('funccustorder',[SaleRptController::class, 'funccustorder'])->name('s
 Route::get('funcpendcustorder',[SaleRptController::class, 'funcpendcustorder'])->name('salerpt.funcpendcustorder');
 Route::get('funcsalretcat',[SaleRptController::class, 'funcsalretcat'])->name('salerpt.funcsalretcat');
 Route::get('funcpendquotation',[SaleRptController::class, 'funcpendquotation'])->name('salerpt.funcpendquotation');
-
+Route::get('funccompquotation',[SaleRptController::class, 'funccompquotation'])->name('salerpt.funccompquotation');
 
 
 

@@ -214,7 +214,7 @@
                 {title:"D.C #", field:"invoiceno" , visible:true ,headerSort:false, responsive:0},
                 {title:"D.C Date", field:"invoice_date" , visible:true ,headerSort:false, responsive:0},
                 {title:"Customer", field:"supname", visible:true ,headerSort:false, responsive:0},
-                // {title:"Pur.Ret.Inv.No", field:"prno", visible:true ,headerSort:false, responsive:0},
+                {title:"Sale.Ret.Date", field:"prdate", visible:true ,headerSort:false, responsive:0},
                 // {title:"Pur.Ret.Inv Date", field:"prdate", visible:true ,headerSort:false, responsive:0},
 
 
@@ -276,6 +276,7 @@
             supname.value=data.supname
             cominvid.value=data.cominvid
             retstatus.value=data.prdescr
+            purdate.value=data.prdate
 
 
             // quotation_id = data.id

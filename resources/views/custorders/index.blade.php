@@ -149,18 +149,44 @@
             // {title: "Dated",field: "created_at"},
 
 
+            {
+                title:'Quotation Status', headerHozAlign:"center",
+                    columns:[
             {title: "Quotation No",field: "pqutno"},
             {title: "Quotation Date",field: "qutdate"},
+            {title: "Quotation Qty",field: "tqqty",bottomCalc:"max"}
+                    ]}
+
+            ,
+
+            {
+                title:'Purchase Plan', headerHozAlign:"center",
+                    columns:[
+
+
             {title: "Sale Order id",field: "id"},
             {title: "P.O Date",field: "podate"},
             {title: "P.O No",field: "pono"},
             {title: "P.O Seq.No",field: "poseqno"},
             {title: "Delivery Date",field: "deliverydt"},
             {title: "Customer",field: "custname"},
-            {title: "W/O GST",field: "rcvblamount"},
-            {title: "W/GST",field: "totrcvbamount"},
-            {title: "Delivered",field: "delivered"},
-            {title: "Pending",field: "salordbal"},
+            {title: "Plan Qty",field: "tplnqty",bottomCalc:"sum"},
+            {title: "W/O GST",field: "rcvblamount",bottomCalc:"sum"},
+            {title: "W/GST",field: "totrcvbamount",bottomCalc:"sum"}
+                    ]} ,
+
+
+            {
+                title:'Sales', headerHozAlign:"center",
+                    columns:[
+
+            {title: "Delivered(Qty)",field: "tslwt",bottomCalc:"sum"},
+            {title: "Delivered(Amount)",field: "delivered",bottomCalc:"sum"},
+            {title: "Pending(Amount)",field: "salordbal",bottomCalc:"sum"},
+            {title:"Status", field:"compstatus", hozAlign:"center", formatter:"tickCross", headerSort:false},
+
+
+        ]},
 
             {title:"View" , formatter:viewIcon, hozAlign:"center",headerSort:false, responsive:0,
                 cellClick:function(e, cell){
