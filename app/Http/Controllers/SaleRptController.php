@@ -167,6 +167,33 @@ public function funcsalretcat(Request $request)
     }
 
 
+    public function getMPDFSettingsA4L($orientation = 'A4-L')
+    {
+
+        $format;
+        $orientation == 'L' ? $format = 'A4': 'A4';
+
+        $mpdf = new PDF( [
+            'mode' => 'utf-8',
+            'format' => $orientation,
+            'margin_header' => '2',
+            'margin_top' => '5',
+            'margin_bottom' => '5',
+            'margin_footer' => '2',
+            'default_font_size' => 9,
+            'margin_left' => '10',
+            'margin_right' => '10',
+        ]);
+        $mpdf->showImageErrors = true;
+        $mpdf->curlAllowUnsafeSslRequests = true;
+        $mpdf->debug = true;
+        return $mpdf;
+    }
+
+
+
+
+
 
     public function getMPDFSettingsLegal($orientation = 'Legal-L')
     {
@@ -193,32 +220,6 @@ public function funcsalretcat(Request $request)
 
 
 
-
-
-
-
-    public function getMPDFSettingslndscap($orientation = 'A4-L')
-    {
-
-        $format;
-        $orientation == 'L' ? $format = 'A4': 'A4';
-
-        $mpdf = new PDF( [
-            'mode' => 'utf-8',
-            'format' => $orientation,
-            'margin_header' => '2',
-            'margin_top' => '5',
-            'margin_bottom' => '5',
-            'margin_footer' => '2',
-            'default_font_size' => 9,
-            'margin_left' => '10',
-            'margin_right' => '10',
-        ]);
-        $mpdf->showImageErrors = true;
-        $mpdf->curlAllowUnsafeSslRequests = true;
-        $mpdf->debug = true;
-        return $mpdf;
-    }
 
 
 
@@ -754,14 +755,14 @@ public function funcsalretcat(Request $request)
                  ->render();
                 // $html =  view('salerpt.glhw')->with('data',$g)->with('fromdate',$fromdate)->with('todate',$todate)->render();
                 $filename = $g[0]->id  .'-'.$fromdate.'-'.$todate.'.pdf';
-                $mpdf = $this->getMPDFSettingslndscap();
-                // $mpdf->SetHTMLFooter('
-                // <table width="100%" style="border-top:1px solid gray">
-                //     <tr>
-                //         <td width="33%">{DATE d-m-Y}</td>
-                //         <td width="33%" align="center">{PAGENO}/{nbpg}</td>
-                //     </tr>
-                // </table>');
+                // $mpdf = $this->getMPDFSettingslndscap();
+                $mpdf->SetHTMLFooter('
+                <table width="100%" style="border-top:1px solid gray">
+                    <tr>
+                        <td width="33%">{DATE d-m-Y}</td>
+                        <td width="33%" align="center">{PAGENO}/{nbpg}</td>
+                    </tr>
+                </table>');
                 $chunks = explode("chunk", $html);
                 foreach($chunks as $key => $val) {
                     $mpdf->WriteHTML($val);
@@ -796,7 +797,8 @@ public function funcsalretcat(Request $request)
                 }
             }
             //  Call Procedure
-            $mpdf = $this->getMPDFSettingsLegal();
+            // $mpdf = $this->getMPDFSettingsLegal();
+            $mpdf = $this->getMPDFSettingsA4L();
             $data = DB::select('call procquotationpend()');
             if(!$data)
             {
@@ -862,7 +864,8 @@ public function funcsalretcat(Request $request)
                 }
             }
             //  Call Procedure
-            $mpdf = $this->getMPDFSettings();
+            // $mpdf = $this->getMPDFSettings();
+            $mpdf = $this->getMPDFSettingsA4L();
             $data = DB::select('call procquotationpend()');
             if(!$data)
             {
@@ -884,7 +887,8 @@ public function funcsalretcat(Request $request)
                  ->render();
                 // $html =  view('salerpt.glhw')->with('data',$g)->with('fromdate',$fromdate)->with('todate',$todate)->render();
                 $filename = $g[0]->id  .'-'.$fromdate.'-'.$todate.'.pdf';
-                $mpdf = $this->getMPDFSettingslndscap();
+                //  $mpdf = $this->getMPDFSettingsA4L();
+
                 // $mpdf->SetHTMLFooter('
                 // <table width="100%" style="border-top:1px solid gray">
                 //     <tr>

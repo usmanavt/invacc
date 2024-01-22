@@ -214,7 +214,7 @@ function pushDynamicData(data)
 
         sku_id:data.sku_id,
         sku:data.sku,
-        prunitid :data.sku_id ,
+       // prunitid :data.sku_id ,
 
         dimension_id:data.dimension_id,
         dimension:data.dimension,
@@ -234,16 +234,17 @@ function pushDynamicData(data)
 var updateValues = (cell) => {
         var data = cell.getData();
 
-        if(cell.getData().prunitid===1)
+        // if(cell.getData().prunitid==1)
+        if(data.prunitid===1 )
          {
              var sum =  Number(data.prwt) * Number(data.prprice)
          }
-         if(cell.getData().prunitid===2)
+         if(data.prunitid===2 )
          {
             var sum =  Number(data.prpcs) * Number(data.prprice)
          }
 
-         if(cell.getData().prunitid===3)
+         if(data.prunitid===3 )
          {
             var sum =  Number(data.prfeet) * Number(data.prprice)
          }

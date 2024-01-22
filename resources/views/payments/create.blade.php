@@ -662,9 +662,6 @@ var updateValues = (cell) => {
                 if (response == 'success')
                 {
                     window.open(window.location.origin + "/banktransaction","_self" );
-                    // amount_fc.value=0;
-                    // amount_pkr.value=0;
-                    // bank_id.focus();
 
                 }
             })

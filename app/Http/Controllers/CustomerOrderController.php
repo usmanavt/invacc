@@ -214,7 +214,7 @@ class CustomerOrderController  extends Controller
             SELECT sale_invoice_id,SUM(b.qtykg) AS qty from customer_orders as a inner join customer_order_details as b on a.id=b.sale_invoice_id
             WHERE sale_invoice_id=$ci->id GROUP BY sale_invoice_id
             ) x ON c.id = x.sale_invoice_id
-            SET c.tplnqty = x.qty  WHERE  c.id = $customerorder->id"));
+            SET c.tplnqty = x.qty  WHERE  c.id = $ci->id"));
 
 
 
@@ -238,7 +238,7 @@ class CustomerOrderController  extends Controller
             UPDATE customer_orders c
             INNER JOIN (
             SELECT sale_invoice_id,SUM(b.qtykg) AS qty from customer_orders as a inner join customer_order_details as b on a.id=b.sale_invoice_id
-            WHERE sale_invoice_id=$$ci->id GROUP BY sale_invoice_id
+            WHERE sale_invoice_id=$ci->id GROUP BY sale_invoice_id
             ) x ON c.id = x.sale_invoice_id
             SET c.tplnqty = x.qty  WHERE  c.id = $ci->id"));
 

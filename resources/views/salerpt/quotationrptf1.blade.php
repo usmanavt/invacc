@@ -137,7 +137,6 @@ body{
                             <td class="" width="4%">&nbsp;</td>
                             <td style="font-size:12px" width="57%">&nbsp;</td>
                             <td style="text-align:center;font-size:12px" width="7%"> </td>
-                            {{-- <td style="text-align:left;font-size:12px" width="20%"></td> --}}
                             <td style="font-size:12px" width="10%"></td>
                             <td style="font-size:12px" width="10%"></td>
                             <td style="text-align:right;font-size:12px" width="12%"></td>

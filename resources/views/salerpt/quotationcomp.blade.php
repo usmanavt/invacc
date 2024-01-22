@@ -222,7 +222,7 @@ padding-left: 8px;
         </thead>
     </table>
 
-    <div style="height:500px;border:1px solid;">
+    <div style="height:400px;border:1px solid;">
 
         {{-- <table>
             <tbody>

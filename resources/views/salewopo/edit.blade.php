@@ -305,8 +305,8 @@ function pushDynamicData(data)
             var pr1=(Number(data.feedqty) / Number(data.totqty))*100
 
             var pr2=( pr1 / Number(data.wtper))*100
-            qtypcs=((pr2*Number(data.sqtypcs))/100).toFixed(2)
-            qtyfeet=((pr2*Number(data.sqtyfeet))/100).toFixed(2)
+            qtypcs=((pr2*Number(data.sqtypcs))/100).toFixed(0)
+            qtyfeet=((pr2*Number(data.sqtyfeet))/100).toFixed(0)
             qtykg=Number(data.feedqty)
          }
         else if(data.sku==='PCS'   )
@@ -315,8 +315,8 @@ function pushDynamicData(data)
             var sum = (Number(data.feedqty) * Number(data.price))
             var pr1=(Number(data.feedqty) / Number(data.totqty))*100
             var pr2=( pr1 / Number(data.pcper))*100
-            qtykg=((pr2*Number(data.sqtykg))/100).toFixed(2)
-            qtyfeet=((pr2*Number(data.sqtyfeet))/100).toFixed(2)
+            qtykg=((pr2*Number(data.sqtykg))/100).toFixed(0)
+            qtyfeet=((pr2*Number(data.sqtyfeet))/100).toFixed(0)
             qtypcs=Number(data.feedqty)
          }
 
@@ -324,10 +324,10 @@ function pushDynamicData(data)
          {
             var sum = (Number(data.feedqty) * Number(data.price))
             // var pr1=(Number(data.qtyfeet) / Number(data.totqty))*100
-            var pr1=(Number(data.feedqty) / Number(data.totqty))*100
-            var pr2=( pr1 / Number(data.feetper))*100
-            qtykg=((pr2*Number(data.sqtykg))/100).toFixed(2)
-            qtypcs=((pr2*Number(data.sqtypcs))/100).toFixed(2)
+            var pr1=((Number(data.feedqty) / Number(data.totqty))*100).toFixed(6)
+            var pr2=(( pr1 / Number(data.feetper))*100).toFixed(6)
+            qtykg=((pr2*Number(data.sqtykg))/100).toFixed(0)
+            qtypcs=((pr2*Number(data.sqtypcs))/100).toFixed(0)
             // qtyfeet=((pr2*Number(data.sqtyfeet))/100).toFixed(2)
             qtyfeet=Number(data.feedqty)
          }
@@ -336,8 +336,8 @@ function pushDynamicData(data)
             var sum = (Number(data.feedqty) * Number(data.price))
             var pr1=(Number(data.feedqty) / Number(data.totqty))*100
             var pr2=( pr1 / Number(data.pcper))*100
-            qtykg=(((pr2*Number(data.sqtykg))/100) / Number(data.unitconver)).toFixed(2)
-            qtyfeet=(((pr2*Number(data.sqtyfeet))/100) / Number(data.unitconver)).toFixed(2)
+            qtykg=(((pr2*Number(data.sqtykg))/100) / Number(data.unitconver)).toFixed(0)
+            qtyfeet=(((pr2*Number(data.sqtyfeet))/100) / Number(data.unitconver)).toFixed(0)
             qtypcs=(Number(data.feedqty) / Number(data.unitconver))
          }
 

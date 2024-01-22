@@ -319,6 +319,10 @@ class PaymentController  extends Controller
             Session::flash('success','Payment Information Saved');
             return response()->json(['success'],200);
             // return redirect()->back();
+            // Session::flash('success','Bank Transaction created');
+            // return redirect()->route('banktransaction.create')->with('message','Operation Successful !');;
+            // return Redirect::back()->with('message','Operation Successful !');
+
         } catch (\Throwable $th) {
             DB::rollback();
             throw $th;

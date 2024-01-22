@@ -16,7 +16,8 @@
         <tbody>
             {{ $vvlues = 0 }}
             @for ($i = 0 ; $i < count($nogrp) ; $i++)
-                    <tr>
+            @if ($nogrp[$i]->grpid  > 1)
+                <tr>
                         {{ $vvlues += $nogrp[$i]->saleamnt }}
                         <td style="font-size:12px" width="4%">{{ $i+1 }}</td>
                         {{-- <td class="" width="16%">{{ $data[$i]->grpname }} </td> --}}
@@ -28,6 +29,7 @@
                         <td style="text-align:right;font-size:12px;font-weight: bold" width="12%">{{ number_format($nogrp[$i]->saleamnt,0) }} </td>
 
                     </tr>
+            @endif
             @endfor
 
             {{-- border:1px solid burlywood; --}}
