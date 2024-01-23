@@ -409,6 +409,20 @@ class SalesInvoicesController  extends Controller
                     $cds->salefeet = $cd['qtyfeet'];
 
 
+
+                    $cds->qtykgcrt = $cd['qtykgcrt'];
+                    $cds->qtypcscrt = $cd['qtypcscrt'];
+                    $cds->qtyfeetcrt = $cd['qtyfeetcrt'];
+
+
+                    $cds->wtper = $cd['wtper'];
+                    $cds->pcper = $cd['pcper'];
+                    $cds->feetper = $cd['feetper'];
+
+
+
+
+
                     // $lstrt = CreateSaleRate::where('customer_id',$request->customer_id)->where('material_id',$cd['material_id'])->first();
                     $lstrt = CreateSaleRate::where('tranid',$sale_invoices->id)->where('material_id',$cd['material_id'])->first();
                     if(!$lstrt) {

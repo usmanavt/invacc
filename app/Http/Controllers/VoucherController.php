@@ -34,7 +34,7 @@ class VoucherController extends Controller
         $vouchers = Voucher::where(function ($query) use ($search){
             $query->where('transaction_type','LIKE','%' . $search . '%')
             ->orWhere('jvno','LIKE','%' . $search . '%')
-            ->orWhereDate('document_date','LIKE','%' . $search . '%')
+            ->orWhere('subhead_title','LIKE','%' . $search . '%')
             ->orWhereHas('head',function($query) use($search){
                 $query->where('title','LIKE',"%$search%");
             });

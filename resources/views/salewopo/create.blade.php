@@ -587,9 +587,9 @@ var totalVal = function(values, data, calcParams){
                 {title:"sku_id",       field:"sku_id",visible:false},
                 {title:"dimension_id", field:"dimension_id",visible:false},
 
-                {title:"costkg", field:"salcostkg",visible:true},
-                {title:"costpcs", field:"salcostpcs",visible:true},
-                {title:"costfeet", field:"salcostfeet",visible:true},
+                {title:"costkg", field:"salcostkg",visible:false},
+                {title:"costpcs", field:"salcostpcs",visible:false},
+                {title:"costfeet", field:"salcostfeet",visible:false},
 
 
                 {

@@ -454,6 +454,14 @@ class SalesInvoiceWopoController  extends Controller
                     $cds->salepcs = $cd['qtypcs'];
                     $cds->salefeet = $cd['qtyfeet'];
 
+                    $cds->qtykgcrt = $cd['qtykgcrt'];
+                    $cds->qtypcscrt = $cd['qtypcscrt'];
+                    $cds->qtyfeetcrt = $cd['qtyfeetcrt'];
+
+
+
+
+
                     // $lstrt = CreateSaleRate::where('customer_id',$request->customer_id)->where('material_id',$cd['material_id'])->first();
                     $lstrt = CreateSaleRate::where('tranid',$sale_invoices->id)->where('material_id',$cd['material_id'])->first();
                     if(!$lstrt) {

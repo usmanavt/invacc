@@ -733,10 +733,15 @@ var updateValues = (cell) => {
         if(bank_id.value==1)
         { cheque_no.disabled=true;
           cheque_date.disabled=true;
+          cheque_no.style.color ="black";
+          cheque_date.style.color ="black";
         }
         else
         { cheque_no.disabled=false;
           cheque_date.disabled=false;
+          cheque_no.value='';
+          cheque_no.style.color ="black";
+          cheque_date.style.color ="black";
         }
 
 });

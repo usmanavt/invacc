@@ -214,7 +214,7 @@ function pushDynamicData(data)
 
         sku_id:data.sku_id,
         sku:data.sku,
-       // prunitid :data.sku_id ,
+        prunitid :data.sku_id ,
 
         dimension_id:data.dimension_id,
         dimension:data.dimension,

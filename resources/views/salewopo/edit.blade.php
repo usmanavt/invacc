@@ -413,9 +413,9 @@ dynamicTable = new Tabulator("#dynamicTable", {
         {title:"Dimension",         field:"dimension",      cssClass:"bg-gray-200 font-semibold"},
         {title:"UOM",               field:"sku",cssClass:"bg-gray-200 font-semibold"},
 
-        {title:"qtykgcrt", field:"qtykgcrt",visible:false},
-        {title:"qtypcscrt", field:"qtypcscrt",visible:false},
-        {title:"qtyfeetcrt", field:"qtyfeetcrt",visible:false},
+        {title:"qtykgcrt", field:"qtykgcrt",visible:true},
+        {title:"qtypcscrt", field:"qtypcscrt",visible:true},
+        {title:"qtyfeetcrt", field:"qtyfeetcrt",visible:true},
 
         {
                 title:'STOCK QUANTITY', headerHozAlign:"center",
