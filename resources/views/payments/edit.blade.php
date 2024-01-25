@@ -557,14 +557,14 @@ function EnableDisableTextBox(per) {
         var amount_fc = document.getElementById("amount_fc");
         amount_fc.disabled = per.checked ? true : false;
         amount_fc.style.color ="black";
-        amount_fc.value =0;
+        // amount_fc.value =0;
 
 
         var conversion_rate = document.getElementById("conversion_rate");
         conversion_rate.disabled = per.checked ? true : false;
         conversion_rate.style.color ="black";
-        amount_pkr.value =0;
-        conversion_rate.value =0;
+        // amount_pkr.value =0;
+        // conversion_rate.value =0;
 
 
     }

@@ -46,7 +46,7 @@
                                     Descripiton <span class="text-red-500 font-semibold"></span>
                                 </label>
                                 <textarea name="saldescription" id="saldescription" cols="30" rows="2" maxlength="150" required class="rounded"></textarea>
-
+                                <x-input-text title="abc" name="abc" id="abc"     required   />
                             </div>
                         </fieldset>
 
@@ -567,6 +567,7 @@ var totalVal = function(values, data, calcParams){
             reactiveData:true,
             // movableRows:true,
             // groupBy:"material_title",
+            // index:"qtykg",
             columns:[
                 {title:"Del" , formatter:deleteIcon, headerSort:false, responsive:0,
                     cellClick:function(e, cell){
@@ -587,9 +588,9 @@ var totalVal = function(values, data, calcParams){
                 {title:"sku_id",       field:"sku_id",visible:false},
                 {title:"dimension_id", field:"dimension_id",visible:false},
 
-                {title:"costkg", field:"salcostkg",visible:false},
-                {title:"costpcs", field:"salcostpcs",visible:false},
-                {title:"costfeet", field:"salcostfeet",visible:false},
+                {title:"costkg", field:"salcostkg",visible:true,editor:"number"},
+                {title:"costpcs", field:"salcostpcs",visible:true,editor:"number"},
+                {title:"costfeet", field:"salcostfeet",visible:true,editor:"number" },
 
 
                 {
@@ -612,11 +613,11 @@ var totalVal = function(values, data, calcParams){
                             headerHozAlign :'right',
                             hozAlign:"right",
                             field:"qtykg",
-                            // editor:"number",
+                            editor:"number",
                             // headerVertical:true,
                             bottomCalc:"sum",
                             formatter:"money",
-                            cellEdited: updateValues,
+                            // cellEdited: updateValues,
                             validator:["required","numeric"],
                             cssClass:"bg-gray-200 font-semibold",
                             formatterParams:{thousand:",",precision:4},
@@ -628,11 +629,11 @@ var totalVal = function(values, data, calcParams){
                             hozAlign:"right",
                             responsive:0,
                             field:"qtypcs",
-                            // editor:"number",
+                            editor:"number",
                             // headerVertical:true,
                             bottomCalc:"sum",
                             formatter:"money",
-                            cellEdited: updateValues,
+                            // cellEdited: updateValues,
                             validator:["required","numeric"],
                             cssClass:"bg-gray-200 font-semibold",
                             formatterParams:{thousand:",",precision:2},
@@ -643,11 +644,11 @@ var totalVal = function(values, data, calcParams){
                             hozAlign:"right",
                             responsive:0,
                             field:"qtyfeet",
-                            // editor:"number",
+                            editor:"number",
                             // headerVertical:true,
                             bottomCalc:"sum",
                             formatter:"money",
-                            cellEdited: updateValues,
+                            // cellEdited: updateValues,
                             validator:["required","numeric"],
                             cssClass:"bg-gray-200 font-semibold",
                             formatterParams:{thousand:",",precision:4},
@@ -781,8 +782,8 @@ var totalVal = function(values, data, calcParams){
                 return;
             }
 
-            for (let index = 0; index < dynamicTableData.length; index++) {
-                const element = dynamicTableData[index];
+            // for (let index = 0; index < dynamicTableData.length; index++) {
+                // const element = dynamicTableData[index];
 
                         // if(element.feedqty > element.balqty )
                         //     {
@@ -790,14 +791,14 @@ var totalVal = function(values, data, calcParams){
                         //         return;
 
                         //     }
-                            if(Number(element.qtypcs) > Number(element.sqtypcs) || Number(element.qtykg) > Number(element.sqtykg) || Number(element.qtyfeet) > Number(element.sqtyfeet) )
-                                {
+                        //     if(Number(element.qtypcs) > Number(element.sqtypcs) || Number(element.qtykg) > Number(element.sqtykg) || Number(element.qtyfeet) > Number(element.sqtyfeet) )
+                        //         {
 
-                                    showSnackbar("sale qty must be less than stock qty","info");
-                                    return;
-                                }
+                        //             showSnackbar("sale qty must be less than stock qty","info");
+                        //             return;
+                        //         }
 
-                        }
+                        // }
              //     if( element.sku==='KG')
             //     {
             //     if(element.feedqty > element.sqtypcs )

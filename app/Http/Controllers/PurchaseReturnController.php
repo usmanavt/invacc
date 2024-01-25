@@ -216,7 +216,7 @@ class PurchaseReturnController  extends Controller
         }
 
     }
-
+// jkjk kjkjkjksfda
     // public function edit(Contract $contract)
     public function edit($id)
     {

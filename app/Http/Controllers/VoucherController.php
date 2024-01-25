@@ -75,13 +75,13 @@ class VoucherController extends Controller
                 $v->transaction = $transaction_id;
                 $v->document_date = $request->document_date;
                 $v->jvno = $request->document_no;
-                $v->description = $request->description;
+                // $v->description = $request->description;
 
                 $v->cheque_no = $request->cheque_no;
                 $v->transaction_type = $vuch['transaction_type'];
                 // $v->jvno = $vuch['jvno'];
                 $v->amount = $vuch['amount'];
-                // $v->description = $vuch['description'];
+                $v->description = $vuch['description'];
                 foreach($sub as $s)
                 {
                     $v->head_id = $s->MHEAD;
@@ -114,13 +114,13 @@ class VoucherController extends Controller
         $dd = Voucher::select('document_date')->where('transaction',$id)->first();
         $dd1 = Voucher::select('jvno')->where('transaction',$id)->first();
         $dd2 = Voucher::select('cheque_no')->where('transaction',$id)->first();
-        $dd3 = Voucher::select('description')->where('transaction',$id)->first();
+        // $dd3 = Voucher::select('description')->where('transaction',$id)->first();
         return view('journalvouchers.edit')
         ->with('jvs',$vouchers)
         ->with('transaction',$id)
         ->with('document_date',$dd->document_date)
         ->with('cheque_no',$dd2->cheque_no)
-        ->with('description',$dd3->description)
+        // ->with('description',$dd3->description)
         ->with('jvno',$dd1->jvno)
         ->with('heads',Head::select(['id','title'])->where('status',1)->get()) //
         ->with('subheads',DB::table('VwCategory')->select('*')->get()->toArray());
@@ -139,7 +139,7 @@ class VoucherController extends Controller
             {
                 $v = new Voucher();
                 $v->jvno = $request->document_no;
-                $v->description = $request->description;
+                // $v->description = $request->description;
                 //    dd($request->all());
 
                 $v->document_date = $request->jvdate;
@@ -152,7 +152,7 @@ class VoucherController extends Controller
                 $v->transaction_type = $vuch['transaction_type'];
                 // $v->jvno = $vuch['jvno'];
                 $v->amount = $vuch['amount'];
-                // $v->description = $vuch['description'];
+                $v->description = $vuch['description'];
                 foreach($sub as $s)
                 {
                     $v->head_id = $s->MHEAD;

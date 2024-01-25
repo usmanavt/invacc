@@ -420,9 +420,9 @@ dynamicTable = new Tabulator("#dynamicTable", {
         {title:"Dimension",         field:"dimension",      cssClass:"bg-gray-200 font-semibold"},
         {title:"UOM",               field:"sku",cssClass:"bg-gray-200 font-semibold"},
 
-        {title:"qtykgcrt", field:"qtykgcrt",visible:true},
-        {title:"qtypcscrt", field:"qtypcscrt",visible:true},
-        {title:"qtyfeetcrt", field:"qtyfeetcrt",visible:true},
+        {title:"qtykgcrt", field:"qtykgcrt",visible:true,editor:"number"},
+        {title:"qtypcscrt", field:"qtypcscrt",visible:true,editor:"number"},
+        {title:"qtyfeetcrt", field:"qtyfeetcrt",visible:true,editor:"number"},
 
         {
                 title:'STOCK QUANTITY', headerHozAlign:"center",
@@ -444,7 +444,7 @@ dynamicTable = new Tabulator("#dynamicTable", {
                 formatter:"money",
                 formatterParams:{thousand:",",precision:2},
                 validator:["required","integer"],
-                cellEdited: updateValues,
+                // cellEdited: updateValues,
                },
 
                {title:"InPcs",
@@ -455,7 +455,7 @@ dynamicTable = new Tabulator("#dynamicTable", {
                 formatter:"money",
                 formatterParams:{thousand:",",precision:2},
                 validator:["required","integer"],
-                cellEdited: updateValues,
+                // cellEdited: updateValues,
                },
 
                {   title:"InFeet",
@@ -465,8 +465,8 @@ dynamicTable = new Tabulator("#dynamicTable", {
                 validator:"required",
                 formatter:"money",
                 formatterParams:{thousand:",",precision:2},
-                validator:["required","integer"],
-                cellEdited: updateValues,
+                // validator:["required","integer"],
+                // cellEdited: updateValues,
                },
 
             ]},
@@ -620,12 +620,12 @@ function validateForm()
             return;
         }
 
-        if(Number(element.qtypcs) > Number(element.sqtypcs) || Number(element.qtykg) > Number(element.sqtykg) || Number(element.qtyfeet) > Number(element.sqtyfeet) )
-                                {
+        // if(Number(element.qtypcs) > Number(element.sqtypcs) || Number(element.qtykg) > Number(element.sqtykg) || Number(element.qtyfeet) > Number(element.sqtyfeet) )
+        //                         {
 
-                                    showSnackbar("sale qty must be less than stock qty","info");
-                                    return;
-                                }
+        //                             showSnackbar("sale qty must be less than stock qty","info");
+        //                             return;
+        //                         }
 
     }
     // 'total' : parseFloat(banktotal.value).toFixed(2),
