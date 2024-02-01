@@ -541,7 +541,7 @@ class StockLedgerController extends Controller
                     DB::table('tmpstockrptpar')->insert([ 'GLCODE' => $id ]);
                 }
             }
-            $data = DB::select('call procstockledgerosval(?,?)',array($fromdate,$todate));
+            $data = DB::select('call procstockledgerosval(?,?,?)',array($fromdate,$todate,1));
             if(!$data)
             {
                 Session::flash('info','No data available');

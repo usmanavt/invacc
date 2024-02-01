@@ -49,6 +49,9 @@ use App\Http\Controllers\PaymentController;
 use App\Http\Controllers\ReceiveController;
 use App\Http\Controllers\GodownMovementController;
 use App\Http\Controllers\GodownMovementControllerR;
+use App\Http\Controllers\StockanalysisController;
+
+
 
 
 
@@ -75,6 +78,15 @@ Route::get('/gtransactons', function () {
 Route::get('reports',[ReportController::class, 'index'])->name('reports.index');
  Route::get('vouchers',[ReportController::class, 'vouchers'])->name('reports.vouchers');
 Route::post('report/fetch',[ReportController::class, 'fetch'])->name('reports.fetch');
+
+// Analysis Report
+Route::get('analysis',[StockanalysisController::class, 'index'])->name('analysis.index');
+//  Route::get('vouchers',[StockanalysisController::class, 'vouchers'])->name('analysis.vouchers');
+Route::post('analysis/fetch',[StockanalysisController::class, 'fetch'])->name('analysis.fetch');
+
+
+
+
 
 // Purchase Reports
 Route::get('purrpt',[PurchaseRptController::class, 'index'])->name('purrpt.index');

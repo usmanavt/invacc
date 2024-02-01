@@ -1,9 +1,9 @@
 <x-app-layout>
 
     @push('styles')
-    {{-- <link rel="stylesheet" href="{{ asset('css/tabulator_simple.min.css') }}"> --}}
-    <link href="https://unpkg.com/tabulator-tables/dist/css/tabulator.min.css" rel="stylesheet">
-    <script type="text/javascript" src="https://unpkg.com/tabulator-tables/dist/js/tabulator.min.js"></script>
+    <link rel="stylesheet" href="{{ asset('css/tabulator_simple.min.css') }}">
+    {{-- <link href="https://unpkg.com/tabulator-tables/dist/css/tabulator.min.css" rel="stylesheet"> --}}
+    {{-- <script type="text/javascript" src="https://unpkg.com/tabulator-tables/dist/js/tabulator.min.js"></script> --}}
 
     @endpush
 
@@ -461,8 +461,8 @@ var updateValues = (cell) => {
             var pr1=(Number(data.feedqty) / Number(data.totqty))*100
 
             var pr2=( pr1 / Number(data.wtper))*100
-            qtypcs=((pr2*Number(data.sqtypcs))/100).toFixed(4)
-            qtyfeet=((pr2*Number(data.sqtyfeet))/100).toFixed(4)
+            qtypcs=((pr2*Number(data.sqtypcs))/100).toFixed(0)
+            qtyfeet=((pr2*Number(data.sqtyfeet))/100).toFixed(0)
             qtykg=Number(data.feedqty)
          }
         else if(data.sku==='PCS'   )
@@ -471,8 +471,8 @@ var updateValues = (cell) => {
             var sum = (Number(data.feedqty) * Number(data.price))
             var pr1=(Number(data.feedqty) / Number(data.totqty))*100
             var pr2=( pr1 / Number(data.pcper))*100
-            qtykg=((pr2*Number(data.sqtykg))/100).toFixed(4)
-            qtyfeet=((pr2*Number(data.sqtyfeet))/100).toFixed(4)
+            qtykg=((pr2*Number(data.sqtykg))/100).toFixed(0)
+            qtyfeet=((pr2*Number(data.sqtyfeet))/100).toFixed(0)
             qtypcs=Number(data.feedqty)
          }
 
@@ -482,8 +482,8 @@ var updateValues = (cell) => {
             // var pr1=(Number(data.qtyfeet) / Number(data.totqty))*100
             var pr1=(Number(data.feedqty) / Number(data.totqty))*100
             var pr2=( pr1 / Number(data.feetper))*100
-            qtykg=((pr2*Number(data.sqtykg))/100).toFixed(4)
-            qtypcs=((pr2*Number(data.sqtypcs))/100).toFixed(4)
+            qtykg=((pr2*Number(data.sqtykg))/100).toFixed(0)
+            qtypcs=((pr2*Number(data.sqtypcs))/100).toFixed(0)
             // qtyfeet=((pr2*Number(data.sqtyfeet))/100).toFixed(2)
             qtyfeet=Number(data.feedqty)
          }
@@ -492,9 +492,9 @@ var updateValues = (cell) => {
             var sum = (Number(data.feedqty) * Number(data.price))
             var pr1=(Number(data.feedqty) / Number(data.totqty))*100
             var pr2=( pr1 / Number(data.pcper))*100
-            qtykg=(((pr2*Number(data.sqtykg))/100) / Number(data.unitconver)).toFixed(4)
-            qtyfeet=(((pr2*Number(data.sqtyfeet))/100) / Number(data.unitconver)).toFixed(4)
-            qtypcs=((Number(data.feedqty) / Number(data.unitconver))).toFixed(4)
+            qtykg=(((pr2*Number(data.sqtykg))/100) / Number(data.unitconver)).toFixed(0)
+            qtyfeet=(((pr2*Number(data.sqtyfeet))/100) / Number(data.unitconver)).toFixed(0)
+            qtypcs=((Number(data.feedqty) / Number(data.unitconver))).toFixed(0)
          }
 
 

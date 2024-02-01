@@ -184,6 +184,7 @@
                             <x-dropdown-link href="{{ route('salerpt.index') }}">Sale</x-dropdown-link>
                             <x-dropdown-link href="{{ route('reports.index') }}">Financial</x-dropdown-link>
                             <x-dropdown-link href="{{ route('stockledgers.index') }}">Material Stock Ledgers</x-dropdown-link>
+                            <x-dropdown-link href="{{ route('analysis.index') }}">Analysis</x-dropdown-link>
 
 
                             {{-- <x-dropdown-link href="{{ route('cisl.index') }}">Comm Invoices Local</x-dropdown-link> --}}
