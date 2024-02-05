@@ -75,7 +75,7 @@ class ReceiveController  extends Controller
         // ->with('customer:id,title')
         ->where('subhead', 'like', "%$search%")
         ->orWhere('trantype', 'like', "%$search%")
-        //  ->orWhere('ref', 'like', "%$search%")
+        ->orWhere('ref', 'like', "%$search%")
         ->orderBy($field,$dir)
         ->paginate((int) $size);
         return $cis;
@@ -162,7 +162,7 @@ class ReceiveController  extends Controller
                 $ci->transaction_type = 'BRV';
             }
             $ci->documentdate = $request->documentdate;
-            $ci->conversion_rate = 0;
+            $ci->conversion_rate = $request->conversion_rate;
             if($request->amount_fc<=0)
             {
 
@@ -173,7 +173,7 @@ class ReceiveController  extends Controller
             else
             {
                 $ci->amount_fc = $request->amount_fc;
-                $ci->amount_pkr = $request->amount_fc;
+                $ci->amount_pkr = $request->amount_pkr;
 
             }
             $ci->cheque_date = $request->cheque_date;
@@ -311,7 +311,7 @@ class ReceiveController  extends Controller
                 $ci->transaction_type = 'BRV';
             }
             $ci->documentdate = $request->documentdate;
-            $ci->conversion_rate = 0;
+            $ci->conversion_rate = $request->conversion_rate;
 
             if($request->amount_fc<=0)
             {
@@ -323,7 +323,7 @@ class ReceiveController  extends Controller
             else
             {
                 $ci->amount_fc = $request->amount_fc;
-                $ci->amount_pkr = $request->amount_fc;
+                $ci->amount_pkr = $request->amount_pkr;
 
             }
 

@@ -56,20 +56,14 @@
 
                         <div class="grid grid-cols-12 gap-2 py-2 items-center">
 
-                            <x-input-numeric title="Prvs. Credit Amount" name="prvscrdtamt" id="prvscrdtamt" class="col-span-2" disabled     />
-                            <x-input-numeric title="Prvs. Invs.Clrd Amount" name="prvsinvsamt" id="prvsinvsamt" class="col-span-2" disabled     />
-                            <x-input-numeric title="Credit Amount" name="amount_fc" id="amount_fc" class="col-span-2" disabled     />
-                            <input class="checked:bg-blue-500 checked:border-blue-500 focus:outline-none" type="checkbox" name="per" id="per" onclick="EnableDisableTextBox(this)" >
-
+                            <x-input-numeric title="Amount(USD)" name="amount_fc" id="amount_fc" class="col-span-2" disabled     />
+                            <x-input-numeric title="conversion_rate" name="conversion_rate" id="conversion_rate"  class="col-span-2" value=1 disabled     />
+                            <x-input-numeric title="Amount(PKR)" name="amount_pkr" id="amount_pkr" class="col-span-2" disabled  />
+                            <input class="checked:bg-blue-500 checked:border-blue-500 focus:outline-none" class="col-span-2" type="checkbox" name="per" id="per" onclick="EnableDisableTextBox(this)" >
 
                         </div>
 
                         <div>
-                            <label for="">
-                                Description <span class="text-red-500 font-semibold  ">(*)</span>
-                                </label>
-                            <textarea name="description" id="description" cols="150" rows="2" maxlength="150" class="col-span-2" required class="rounded"></textarea>
-                            <label for="">
 
                                 {{-- Invoice Level Receive <span class="text-red-500 font-semibold  ">(*)</span>
                             </label>
@@ -81,14 +75,27 @@
                             </label>
                         <input class="checked:bg-blue-500 checked:border-blue-500 focus:outline-none"  type="checkbox" name="adv" id="adv"  onclick="advpayment(this)" > --}}
 
+                        <x-input-numeric title="Prvs. Credit Amount" name="prvscrdtamt" id="prvscrdtamt" class="col-span-2" disabled     />
+                        <x-input-numeric title="Prvs. Invs.Clrd Amount" name="prvsinvsamt" id="prvsinvsamt" class="col-span-2" disabled     />
 
-                            <x-input-numeric title="" name="conversion_rate" id="conversion_rate"  class="col-span-2" hidden   />
-                            <x-input-numeric title="" name="amount_pkr" id="amount_pkr" class="col-span-2" hidden />
-                            <x-input-numeric title="" name="advtxt" id="advtxt" value="0"  hidden     />
+                        <x-input-numeric title="" name="advtxt" id="advtxt" value="0" hidden       />
+
+                        <label for="">
+                            Description <span class="text-red-500 font-semibold  ">(*)</span>
+                            </label>
+                        <textarea name="description" id="description" cols="100" rows="2" maxlength="100"  required class="rounded"></textarea>
+                        <label for="">
+
+
+
                         </div>
 
 
-                        </fieldset>
+
+
+
+
+                    </fieldset>
 
                         {{-- <fieldset class="border px-4 py-2 rounded">
                             <div class="grid grid-cols-12 gap-2 py-2 items-center">
@@ -141,6 +148,13 @@
 
 @push('scripts')
     <script>
+
+window.onload = function() {
+            var input = document.getElementById("bank_id").focus();
+        }
+
+
+
         let table;
         let searchValue = "";
         const deleteIcon = function(cell,formatterParams){return "<i class='fa fa-trash text-red-500'></i>";};
@@ -268,14 +282,14 @@
              head_id = data.head_id
              custname.value=data.custname
              cheque_no.value=data.cheque_no
-             cheque_date.value=data.cheque_date
+
+             cheque_date.value= data.cheque_date
 
              prvscrdtamt.value=data.crdtcust
              prvsinvsamt.value=data.invsclrd
              amount_fc.value=data.AdvanceAmount
-
-
-            detailsUrl = `${getDetails}/?id=${data.id}`
+            if (data.head_id==33)
+            { detailsUrl = `${getDetails}/?id=${data.id}` }
             fetchDataFromServer(detailsUrl)
             adopted = true
          //   calculateButton.disabled = false
@@ -704,35 +718,35 @@ var updateValues = (cell) => {
         var amount_fc = document.getElementById("amount_fc");
         amount_fc.disabled = per.checked ? false : true;
         amount_fc.style.color ="black";
-        // amount_fc.value =0;
+        amount_fc.value =0;
 
 
-        // var conversion_rate = document.getElementById("conversion_rate");
-        // conversion_rate.disabled = per.checked ? true : false;
-        // conversion_rate.style.color ="black";
-        // amount_pkr.value =0;
-        // conversion_rate.value =1;
-
-
-    }
-
-    function advpayment(adv) {
-        var advtxt = document.getElementById("advtxt");
-        // amount_fc.disabled = advtxt.checked ? true : false;
-
-        // amount_fc.disabled = per.checked ? true : false;
-
-        if(adv.checked==true)
-        {
-            advtxt.value=1;
-        }
-        else
-        {
-            advtxt.value=0;
-        }
+        var conversion_rate = document.getElementById("conversion_rate");
+        conversion_rate.disabled = per.checked ? false : true;
+        conversion_rate.style.color ="black";
+        amount_pkr.value =0;
+        conversion_rate.value =1;
 
 
     }
+
+    // function advpayment(adv) {
+    //     var advtxt = document.getElementById("advtxt");
+    //     amount_fc.disabled = advtxt.checked ? true : false;
+
+    //     amount_fc.disabled = per.checked ? true : false;
+
+    //     if(adv.checked==true)
+    //     {
+    //         advtxt.value=1;
+    //     }
+    //     else
+    //     {
+    //         advtxt.value=0;
+    //     }
+
+
+    // }
 
     amount_fc.onblur=function(){
     amount_pkr.value=(amount_fc.value * conversion_rate.value).toFixed(0);

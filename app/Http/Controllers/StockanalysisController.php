@@ -140,7 +140,7 @@ class StockanalysisController extends Controller
         if($report_type === 'tb'){
             $hdng1 = $request->cname;
             $hdng2 = $request->csdrs;
-            $data = DB::select('call proctrialbalance(?)',array($todate));
+            $data = DB::select('call proctrialbalance(?,?,?)',array($fromdate,$todate,1));
             if(!$data)
             {
                 Session::flash('info','No data available');
@@ -169,7 +169,8 @@ class StockanalysisController extends Controller
     if($report_type === 'bs'){
         $hdng1 = $request->cname;
         $hdng2 = $request->csdrs;
-        $data = DB::select('call procbalancesheet(?)',array($todate));
+        // $data = DB::select('call procbalancesheet(?)',array($todate));
+        $data = DB::select('call proctrialbalance(?,?,?)',array($fromdate,$todate,2));
         if(!$data)
         {
             Session::flash('info','No data available');

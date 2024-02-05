@@ -146,8 +146,8 @@ table{
                 </tr>
             @else
         {{ $srno = $i - 1 }}
-        {{ $stdebitusd += $data[$srno]->DebitAmtDlr }}
-        {{ $stcreditusd += $data[$srno]->CreditAmtDlr }}
+        {{ $stdebitusd += $data[$srno]->DebitAmtRup }}
+        {{ $stcreditusd += $data[$srno]->CreditAmtRup }}
 
 
         @if ($data[$i]->Ref  <> $data[$srno]->Ref)
@@ -171,8 +171,8 @@ table{
 
             <tr>
 
-                {{ $debitusd += $data[$i]->DebitAmtDlr }}
-                {{ $creditusd += $data[$i]->CreditAmtDlr }}
+                {{ $debitusd += $data[$i]->DebitAmtRup }}
+                {{ $creditusd += $data[$i]->CreditAmtRup }}
 
 
 
@@ -183,8 +183,8 @@ table{
                     <br> {{ $data[$i]->Description }} </td>
                 <td style="text-align:center" width="10%">{{ $data[$i]->doc_date }} </td>
                 {{-- <td style="text-align:center" width="10%">{{ $data[$i]->Ref }} </td> --}}
-                <td style="text-align:right ;margin-right:10px " width="12%">{{ number_format($data[$i]->DebitAmtDlr,2) }}  : {{($data[$i]->cur) }}</td>
-                <td style="text-align:right ;border-right:1px solid lightgray; margin-right:10px ; " width="12%">{{ number_format($data[$i]->CreditAmtDlr,2) }} : {{($data[$i]->cur) }}<br></td>
+                <td style="text-align:right ;margin-right:10px " width="12%">{{ number_format($data[$i]->DebitAmtRup,2) }}  : {{($data[$i]->cur) }}</td>
+                <td style="text-align:right ;border-right:1px solid lightgray; margin-right:10px ; " width="12%">{{ number_format($data[$i]->CreditAmtRup,2) }} : {{($data[$i]->cur) }}<br></td>
                 <td style="text-align:right ;border-right:1px solid lightgray; margin-right:10px ; " width="10%">0<br></td>
 
             </tr>

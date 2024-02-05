@@ -45,9 +45,9 @@
 
                         <div class="grid grid-cols-12 gap-2 py-2 ">
 
-                            <label for="bank_id">Payment From<x-req /></label>
+                            <label for="bank_id">Received From<x-req /></label>
                             <select autocomplete="on"  name="bank_id" id="bank_id" class="col-span-2" >
-                                <option value="" selected>--Payment From</option>
+                                <option value="" selected>--Received From</option>
                                 @foreach($banks as $bank)
                                 {{-- @if ($bank->id == $banktransaction->bank_id) --}}
                                     {{-- <option value="{{$bank->id}}" selected> {{$bank->title}} </option> --}}
@@ -63,17 +63,13 @@
                         </div>
 
                         <div class="grid grid-cols-12 gap-2 py-2 items-center">
-                            <x-input-numeric title="Received Amount" name="amount_fc" id="amount_fc" class="col-span-2" value="{{ $banktransaction->amount_fc }}"      />
+                            <x-input-numeric title="Amount(USD)" name="amount_fc" id="amount_fc" class="col-span-2" value="{{ $banktransaction->amount_fc }}"      />
 
-                                <label for="">
-                                    Description <span class="text-red-500 font-semibold  ">(*)</span>
-                                    </label>
-                                <textarea name="description" id="description" cols="150" rows="2" maxlength="150" class="col-span-2" required class="rounded"> {{ $banktransaction->description }} </textarea>
 
                                 {{-- <label for="">
                                     Invoice Level Receive <span class="text-red-500 font-semibold  ">(*)</span>
                                     </label>
-                                <input class="checked:bg-blue-500 checked:border-blue-500 focus:outline-none "  type="checkbox" name="per" id="per" @if( $banktransaction->invslvl==1  )  checked else unchecked @endif   onclick="EnableDisableTextBox(this)" >
+
 
 
                                 <label for="">
@@ -81,15 +77,21 @@
                                     </label>
                                 <input class="checked:bg-blue-500 checked:border-blue-500 focus:outline-none"  type="checkbox" name="adv" id="adv" @if( $banktransaction->advance==1  )  checked else unchecked @endif    onclick="advpayment(this)" > --}}
 
-                                <x-input-numeric title="" name="conversion_rate" id="conversion_rate" class="col-span-2" hidden value="{{ $banktransaction->conversion_rate }}" disabled   />
-                                <x-input-numeric title="" name="amount_pkr" id="amount_pkr" class="col-span-2" hidden value="{{ $banktransaction->amount_pkr }}" disabled />
-                                <x-input-numeric title="" name="advtxt" id="advtxt"    value="{{ $banktransaction->advance }}" hidden    />
+                                <x-input-numeric title="conversion_rate" name="conversion_rate" id="conversion_rate" class="col-span-2"  value="{{ $banktransaction->conversion_rate }}" disabled   />
+                                <x-input-numeric title="Amount(pkr)" name="amount_pkr" id="amount_pkr" class="col-span-2"  value="{{ $banktransaction->amount_pkr }}" disabled />
+                                 <input class="checked:bg-blue-500 checked:border-blue-500 focus:outline-none " class="col-span-2"  type="checkbox" name="per" id="per"   onclick="EnableDisableTextBox(this)" >
+                                 {{-- @if( $banktransaction->invslvl==1  )  checked else unchecked @endif  --}}
+                                 <x-input-numeric title="" name="advtxt" id="advtxt"    value="{{ $banktransaction->advance }}" hidden    />
                                 <x-input-numeric title="" name="head_id" class="col-span-2" value="{{ $banktransaction->head_id}}" hidden  />
 
+                                </div>
+                            <div>
+                                <label for="">
+                                    Description <span class="text-red-500 font-semibold  ">(*)</span>
+                                    </label>
+                                <textarea name="description" id="description" cols="150" rows="2" maxlength="150" class="col-span-2" required class="rounded"> {{ $banktransaction->description }} </textarea>
+                            </div>
 
-
-
-                        </div>
                         </fieldset>
 
                         {{-- Contract Details --}}
@@ -539,39 +541,39 @@ function EnableDisableTextBox(per) {
         var amount_fc = document.getElementById("amount_fc");
         amount_fc.disabled = per.checked ? true : false;
         amount_fc.style.color ="black";
-        amount_fc.value =0;
+        // amount_fc.value =0;
 
 
         var conversion_rate = document.getElementById("conversion_rate");
         conversion_rate.disabled = per.checked ? true : false;
         conversion_rate.style.color ="black";
-        amount_pkr.value =0;
-        conversion_rate.value =0;
+        // amount_pkr.value =0;
+        // conversion_rate.value =0;
 
 
     }
 
-    function advpayment(adv) {
-        var advtxt = document.getElementById("advtxt");
-        // amount_fc.disabled = advtxt.checked ? true : false;
+    // function advpayment(adv) {
+    //     var advtxt = document.getElementById("advtxt");
+    //     // amount_fc.disabled = advtxt.checked ? true : false;
 
-        // amount_fc.disabled = per.checked ? true : false;
+    //     // amount_fc.disabled = per.checked ? true : false;
 
-        if(adv.checked==true)
-        {
-            advtxt.value=1;
-        }
-        else
-        {
-            advtxt.value=0;
-        }
-
-
+    //     if(adv.checked==true)
+    //     {
+    //         advtxt.value=1;
+    //     }
+    //     else
+    //     {
+    //         advtxt.value=0;
+    //     }
 
 
 
 
-    }
+
+
+    // }
 
     amount_fc.onblur=function(){
     amount_pkr.value=(amount_fc.value * conversion_rate.value).toFixed(0);

@@ -28,10 +28,6 @@ table{
 }
 .column-headers th{
     text-align: center;
-    font-size: 1.5rem;
-    color: brown;
-    font-weight: bold;
-
 }
 .data {
     border-collapse: collapse;
@@ -40,7 +36,7 @@ table{
     border-left: 1px solid lightgray;
     border-top: 1px solid lightgray;
     text-align: left;
-    font-size: 1.5rem;
+    font-size: 0.8rem;
     font-style: normal;
 }
 .data tr td:nth-child(7){
@@ -67,12 +63,11 @@ table{
                 {{-- <td align="left" style="width:20%;"> --}}
                     {{-- <img src="{{ asset('/images/pipesfittings.jpg') }}" width="90"> --}}
                 {{-- </td> --}}
-                <td style= "text-align:center; width:60%;">
-                    {{-- <h1>{{ $hdng1 }} </h1> --}}
+                <td align="center" style="width:60%;">
                     <h1>MUHAMMAD NAZIR & Co </h1>
                 </td>
                 {{-- <td align="right" style="width:20%;"> --}}
-                    {{-- &nbsp;&nbsp;&nbsp;&nbsp; --}}
+                    &nbsp;&nbsp;&nbsp;&nbsp;
                 {{-- </td> --}}
             </tr>
         </tbody>
@@ -83,14 +78,14 @@ table{
         <tbody>
             <tr>
                 <td  style="text-align: center;">
-                    <h3 style="font-size:0.8rem">Steam Pipes, Pipe Fitting, Flanges Valves, S.S Pipes</h3>
-                    <h3 style="font-size:0.8rem">Plot # 8 Near Allah Malik Godown Shershah Kabari Bazar,</h3>
-                    <h3 style="font-size:0.8rem">Phone : 021-32588781, 021-32574285 , Fax : 021-32588782</h3>
+                    <h3 style="font-size:0.7rem">Steam Pipes, Pipe Fitting, Flanges Valves, S.S Pipes</h3>
+                    <h3 style="font-size:0.7rem">Plot # 8 Near Allah Malik Godown Shershah Kabari Bazar,</h3>
+                    <h3 style="font-size:0.7rem">Phone : 021-32588781, 021-32574285 , Fax : 021-32588782</h3>
                     {{-- <h3> {{ $hdng2 }} </h3> --}}
                 </td>            </tr>
             <tr>
                 <td  style="text-align: center;">
-                    <span style="font-size:2rem;font-weight: bold">BALANCE SHEET </span>
+                    <span style="font-size:2rem">BALANCE SHEET </span>
                 </td>
             </tr>
 
@@ -103,31 +98,20 @@ table{
         <tbody>
             {{-- <tr>
                 <td>
-                    Head Name
+                    Ledger Type
                 </td>
                 <td>
-                    {{ $data[0]->SupName }}
-                </td>
-                <td>
-                    Head Type
-                </td>
-                <td>
-                    {{ $headtype }}
+                    {{ $data[0]->Descr }}
+                    Transaction Prove List (TPL)
                 </td>
             </tr> --}}
             <tr>
                 <td>
-                    Period
+                    Date Period
                 </td>
                 <td>
-                    Up to date:  {{ $todate }}
+                    From {{ $fromdate }} to {{ $todate }}
                 </td>
-                {{-- <td>
-                    Up To Date:
-                </td>
-                <td>
-                    {{ $data[0]->mheadname }}
-                </td> --}}
             </tr>
         </tbody>
     </table>
@@ -137,52 +121,89 @@ table{
         <thead>
             <tr>
                 <th class="column-headers" width="5%">S#</th>
-                <th class="column-headers" width="55%">HEAD OF ACCOUNTS</th>
-                <th class="column-headers" width="40%">AMOUNT</th>
-                {{-- <th class="column-headers" width="25%">CREDIT</th> --}}
-                {{-- <th class="column-headers" width="15%">Credit</th>
-                <th class="column-headers" width="15%">Closing<br>Balance</th> --}}
-                {{-- <th class="column-headers" width="15%">Balance</th> --}}
+                <th class="column-headers" width="28%">HEAD OF ACCOUNTS</th>
+                <th class="column-headers" width="13%">AMOUNT</th>
+                <th class="column-headers" width="13%"></th>
+                <th class="column-headers" width="28%">HEAD OF ACCOUNTS</th>
+                <th class="column-headers" width="13%">AMOUNT</th>
+
+
             </tr>
         </thead>
     </table>
 
     <table class="data" cellspacing="0">
         <tbody>
-            {{ $vob = 0 }}
-            {{ $vdb = 0 }}
-            {{ $vcd = 0 }}
-            {{ $vcb = 0 }}
+            {{-- {{ $debitpkr = 0}} --}}
+            {{ $vamount = 0 }};
+            {{ $vamount1 = 0 }}
+            {{-- {{ $creditusd = 0 }}           {{ $stdebitusd = 0 }};  {{ $stcreditusd = 0 }};  {{ $varval = 0 }} --}}
 
-            @for ($i = 0 ; $i < count($data) ; $i++)
+@for ($i = 0 ; $i < count($data) ; $i++)
+{{-- {{ $vamount1 += $data[$i]->amount }} --}}
+@if( $i==0 )
+                <tr>
+                    <td colspan="3"  style="text-align: left;font-size:1.2rem;border-bottom: 2px solid rgb(211, 211, 211);"> {{ $data[$i]->grp1}}  </td>
+                    <td colspan="9"  style="text-align: left;font-size:1.2rem;border-bottom: 2px solid rgb(211, 211, 211);"> {{ $data[$i]->grp2}}  </td>
+                </tr>
+            @else
+        {{ $srno = $i - 1 }}
+        {{ $vamount += $data[$srno]->amount1 }}
+        {{-- {{ $stcreditusd += $data[$srno]->CreditAmtDlr }} --}}
+
+
+        @if ($data[$i]->grpid1  <> $data[$srno]->grpid1)
+        {{-- {{ $varval = $stdebitusd - $stcreditusd  }} --}}
+
             <tr>
-                {{-- {{ $vob += $data[$i]->OB }} --}}
-                {{ $vdb += $data[$i]->amount }}
-                {{-- {{ $vcd += $data[$i]->credit }} --}}
-                {{-- {{ $vcb += $data[$i]->CB }} --}}
+                <td colspan="2"  style=" border:1px solid lightgray; text-align: right;font-weight: bold;background: #e3e3e3;border-top: 2px double  lightgray ;">Sub Total(s)</td>
+                <td colspan="1"  style=" border:1px solid lightgray; text-align: right;font-weight: bold;background: #e3e3e3;border-top: 2px double  lightgray ;">{{ number_format($vamount,0) }} </td>
+                {{-- <td colspan="1"  style=" border:1px solid lightgray; text-align: right;font-weight: bold;background: #e3e3e3;border-top: 2px double  lightgray ;">{{ number_format($stcreditusd,2) }} </td>
+                <td colspan="1"  style=" border:1px solid lightgray; text-align: right;font-weight: bold;background: #e3e3e3;border-top: 2px double  lightgray ;">{{ number_format($varval,2) }} </td> --}}
+
+            </tr>
+            {{ $vamount = 0 }};
+            <tr>
+                    <td colspan="5"  style="text-align:left;font-size:1.2rem;border-bottom: 2px solid rgb(211, 211, 211);"> {{ $data[$i]->grp1}} </td>
+             </tr>
+
+
+        @endif
+        @endif
+
+
+            <tr>
+
+                {{-- {{ $vamount1 += $data[$i]->amount }} --}}
+                {{-- {{ $creditusd += $data[$i]->CreditAmtDlr }} --}}
+
+
+
 
                 <td style="text-align: centre"; width="5%">{{ $i+1 }}</td>
-                <td style="text-align: left"; width="55%">{{ $data[$i]->title }} </td>
-                <td style="text-align: right"; width="40%">{{ number_format($data[$i]->amount,0) }}</td>
-                {{-- <td style="text-align: right"; width="25%">{{ number_format($data[$i]->credit,0) }}</td> --}}
+                <td style="text-align: left"; width="28%">{{ $data[$i]->title1 }} </td>
+                <td style="text-align: right"; width="13%">{{ number_format($data[$i]->amount1,0) }}</td>
+                <td style="text-align: left"; width="13%">{{ $data[$i]->gape1 }} </td>
+                <td style="text-align: left"; width="28%">{{ $data[$i]->title2 }} </td>
+                <td style="text-align: right"; width="13%">{{ number_format($data[$i]->amount2,0) }}</td>
+
+
             </tr>
-            @endfor
+@endfor
+<tr>
+    <td colspan="2"  style=" border:1px solid lightgray; text-align: right;font-weight: bold;background: #e3e3e3;border-top: 2px double  lightgray ;">Grand Total(s)</td>
+    <td colspan="1"  style=" border:1px solid lightgray; text-align: right;font-weight: bold;background: #e3e3e3;border-top: 2px double  lightgray ;">{{ number_format($vamount1,0) }} </td>
+    {{-- <td colspan="1"  style=" border:1px solid lightgray; text-align: right;font-weight: bold;background: #e3e3e3;border-top: 2px double  lightgray ;">{{ number_format($creditusd,2) }} </td> --}}
 
-            <tr>
-                <td colspan="2"  style="text-align: right;border-bottom: 1px solid lightgray;font-weight: bold;font-size:1.5rem;color:brown;background: #e3e3e3; "> Total </td>
-                <td colspan="1" style="text-align: right;border-bottom: 1px solid lightgray;font-weight: bold;font-weight: bold;font-size:1.5rem;color:brown;background: #e3e3e3;">{{ number_format($vdb,0) }} </td>
-                {{-- <td colspan="1" style="text-align: right;border-bottom: 1px solid lightgray;font-weight: bold;font-weight: bold;font-size:1.5rem;color:brown;background: #e3e3e3;">{{ number_format($vcd,0) }} </td> --}}
-            </tr>
-
-
+</tr>
 
 
 
-        </tbody>
+</tbody>
     </table>
 
     {{-- Footer  --}}
-    <div style="margin-top:64px;">
+    {{-- <div style="margin-top:64px;">
         <table >
 
             <tr style="margin-top:16px;margin-bottom:16px;">
@@ -206,5 +227,5 @@ table{
         </table>
     </div>
 
-    </body>
+    </body> --}}
 </html>

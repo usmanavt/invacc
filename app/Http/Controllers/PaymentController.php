@@ -76,6 +76,7 @@ class PaymentController  extends Controller
         ->where('subhead', 'like', "%$search%")
         ->orWhere('trantype', 'like', "%$search%")
         ->orWhere('impgdno', 'like', "%$search%")
+        ->orWhere('ref', 'like', "%$search%")
         ->orderBy($field,$dir)
         ->paginate((int) $size);
         return $cis;

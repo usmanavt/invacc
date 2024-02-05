@@ -28,7 +28,7 @@ table{
 }
 .column-headers th{
     text-align: center;
-    font-size: 1.5rem;
+    font-size: 0.8rem;
     color: brown;
     font-weight: bold;
 
@@ -120,7 +120,7 @@ table{
                     Period
                 </td>
                 <td>
-                    Up to date:  {{ $todate }}
+                    From {{ $fromdate }} to {{ $todate }}
                 </td>
                 {{-- <td>
                     Up To Date:
@@ -135,43 +135,110 @@ table{
     {{-- column headers --}}
     <table class="column-headers">
         <thead>
+
             <tr>
-                <th class="column-headers" width="5%">S#</th>
-                <th class="column-headers" width="45%">HEAD OF ACCOUNTS</th>
-                <th class="column-headers" width="25%">DEBIT</th>
-                <th class="column-headers" width="25%">CREDIT</th>
-                {{-- <th class="column-headers" width="15%">Credit</th>
-                <th class="column-headers" width="15%">Closing<br>Balance</th> --}}
-                {{-- <th class="column-headers" width="15%">Balance</th> --}}
+                <td colspan="2" width="28%" style="font-size: 0.8rem;;text-align:center;font-weight: bold;border-right: 1px solid lightgray;">HEAD OF ACCOUNTS</td>
+                <td colspan="2" width="24%" style="font-size: 0.8rem;;text-align:center;font-weight: bold;border-right: 1px solid lightgray;"> OPENING</td>
+                <td colspan="2" width="24%" style="font-size: 0.8rem;;text-align: center;font-weight: bold;border-right: 1px solid lightgray;"> ACTIVITY</td>
+                <td colspan="2" width="24%" style="font-size: 0.8rem;;text-align: center;font-weight: bold;border-right: 1px solid lightgray;"> CLOSING</td>
+
+            </tr>
+
+
+
+
+
+
+
+
+            <tr>
+                <th class="column-headers" width="3%">S#</th>
+                <th class="column-headers" width="25%">PARTICULARS</th>
+                <th class="column-headers" width="12%">DEBIT</th>
+                <th class="column-headers" width="12%">CREDIT</th>
+                <th class="column-headers" width="12%">DEBIT</th>
+                <th class="column-headers" width="12%">CREDIT</th>
+                <th class="column-headers" width="12%">DEBIT</th>
+                <th class="column-headers" width="12%">CREDIT</th>
             </tr>
         </thead>
     </table>
 
     <table class="data" cellspacing="0">
         <tbody>
-            {{ $vob = 0 }}
-            {{ $vdb = 0 }}
-            {{ $vcd = 0 }}
-            {{ $vcb = 0 }}
+            {{ $vodebit = 0 }};{{ $vocredit = 0 }}
+            {{ $vadebit = 0 }};{{ $vacredit = 0 }}
+            {{ $vcdebit = 0 }};{{ $vccredit = 0 }}
 
             @for ($i = 0 ; $i < count($data) ; $i++)
-            <tr>
-                {{-- {{ $vob += $data[$i]->OB }} --}}
-                {{ $vdb += $data[$i]->debit }}
-                {{ $vcd += $data[$i]->credit }}
-                {{-- {{ $vcb += $data[$i]->CB }} --}}
 
-                <td style="text-align: centre"; width="5%">{{ $i+1 }}</td>
-                <td style="text-align: left"; width="45%">{{ $data[$i]->title }} </td>
-                <td style="text-align: right"; width="25%">{{ number_format($data[$i]->debit,0) }}</td>
-                <td style="text-align: right"; width="25%">{{ number_format($data[$i]->credit,0) }}</td>
+
+            @if( $i==0 )
+            <tr>
+                <td colspan="8"  style=" color:darkorange;font-weight: bold ;text-align: left;font-size:0.9rem;border-bottom: 2px solid rgb(211, 211, 211);"> {{ $data[$i]->grp}}  </td>
+            </tr>
+        @else
+        {{ $srno = $i - 1 }}
+
+    @if ($data[$i]->grpid  <> $data[$srno]->grpid)
+        <tr>
+                <td colspan="8"  style="color:darkorange;font-weight: bold ;text-align:left;font-size:0.9rem;border-bottom: 2px solid rgb(211, 211, 211);"> {{ $data[$i]->grp}} </td>
+         </tr>
+
+
+    @endif
+    @endif
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+            <tr>
+                {{ $vodebit += $data[$i]->odebit }}; {{ $vocredit += $data[$i]->ocredit }}
+                {{ $vadebit += $data[$i]->adebit }}; {{ $vacredit += $data[$i]->acredit }}
+                {{ $vcdebit += $data[$i]->cdebit }}; {{ $vccredit += $data[$i]->ccredit }}
+
+
+                <td style="font-size: 0.8rem;text-align: centre"; width="3%">{{ $i+1 }}</td>
+                <td style="font-size: 0.8rem;text-align: left"; width="25%">{{ $data[$i]->title }} </td>
+                <td style="font-size: 0.8rem;text-align: right"; width="12%">{{ number_format($data[$i]->odebit,0) }}</td>
+                <td style="font-size: 0.8rem;text-align: right"; width="12%">{{ number_format($data[$i]->ocredit,0) }}</td>
+                <td style="font-size: 0.8rem;text-align: right"; width="12%">{{ number_format($data[$i]->adebit,0) }}</td>
+                <td style="font-size: 0.8rem;text-align: right"; width="12%">{{ number_format($data[$i]->acredit,0) }}</td>
+                <td style="font-size: 0.8rem;text-align: right"; width="12%">{{ number_format($data[$i]->cdebit,0) }}</td>
+                <td style="font-size: 0.8rem;text-align: right"; width="12%">{{ number_format($data[$i]->ccredit,0) }}</td>
+
             </tr>
             @endfor
 
             <tr>
-                <td colspan="2"  style="text-align: right;border-bottom: 1px solid lightgray;font-weight: bold;font-size:1.5rem;color:brown;background: #e3e3e3; "> Total </td>
-                <td colspan="1" style="text-align: right;border-bottom: 1px solid lightgray;font-weight: bold;font-weight: bold;font-size:1.5rem;color:brown;background: #e3e3e3;">{{ number_format($vdb,0) }} </td>
-                <td colspan="1" style="text-align: right;border-bottom: 1px solid lightgray;font-weight: bold;font-weight: bold;font-size:1.5rem;color:brown;background: #e3e3e3;">{{ number_format($vcd,0) }} </td>
+                <td colspan="2"  style="font-size: 0.8rem;text-align: right;border-bottom: 1px solid lightgray;font-weight: bold;color:brown;background: #e3e3e3; "> Total </td>
+                <td colspan="1" style="font-size: 0.8rem;text-align: right;border-bottom: 1px solid lightgray;font-weight: bold;font-weight: bold;color:brown;background: #e3e3e3;">{{ number_format($vodebit,0) }} </td>
+                <td colspan="1" style="font-size: 0.8rem;text-align: right;border-bottom: 1px solid lightgray;font-weight: bold;font-weight: bold;color:brown;background: #e3e3e3;">{{ number_format($vocredit,0) }} </td>
+                <td colspan="1" style="font-size: 0.8rem;text-align: right;border-bottom: 1px solid lightgray;font-weight: bold;font-weight: bold;color:brown;background: #e3e3e3;">{{ number_format($vadebit,0) }} </td>
+                <td colspan="1" style="font-size: 0.8rem;text-align: right;border-bottom: 1px solid lightgray;font-weight: bold;font-weight: bold;color:brown;background: #e3e3e3;">{{ number_format($vacredit,0) }} </td>
+                <td colspan="1" style="font-size: 0.8rem;text-align: right;border-bottom: 1px solid lightgray;font-weight: bold;font-weight: bold;color:brown;background: #e3e3e3;">{{ number_format($vcdebit,0) }} </td>
+                <td colspan="1" style="font-size: 0.8rem;text-align: right;border-bottom: 1px solid lightgray;font-weight: bold;font-weight: bold;color:brown;background: #e3e3e3;">{{ number_format($vccredit,0) }} </td>
             </tr>
 
 
