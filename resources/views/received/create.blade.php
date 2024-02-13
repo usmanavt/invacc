@@ -63,7 +63,7 @@
 
                         </div>
 
-                        <div>
+                        <div class="grid grid-cols-12 gap-2 py-2 items-center">
 
                                 {{-- Invoice Level Receive <span class="text-red-500 font-semibold  ">(*)</span>
                             </label>
@@ -78,21 +78,18 @@
                         <x-input-numeric title="Prvs. Credit Amount" name="prvscrdtamt" id="prvscrdtamt" class="col-span-2" disabled     />
                         <x-input-numeric title="Prvs. Invs.Clrd Amount" name="prvsinvsamt" id="prvsinvsamt" class="col-span-2" disabled     />
 
+
+
+                        <label for="">
+                            Description <span class="text-red-500 font-semibold  "></span>
+                            </label>
+                        <textarea name="description" id="description" cols="100" rows="2" maxlength="100"  required class="col-span-2" ></textarea>
+                        <label for="">
+                        <x-input-numeric title="Supp.InvoiceID" name="supinvid" id="supinvid" class="col-span-2"  disabled     />
+                        <input class="checked:bg-blue-500 checked:border-blue-500 focus:outline-none"  type="checkbox" name="invid" id="invid" onclick="enbldspl(this)" >
                         <x-input-numeric title="" name="advtxt" id="advtxt" value="0" hidden       />
 
-                        <label for="">
-                            Description <span class="text-red-500 font-semibold  ">(*)</span>
-                            </label>
-                        <textarea name="description" id="description" cols="100" rows="2" maxlength="100"  required class="rounded"></textarea>
-                        <label for="">
-
-
-
                         </div>
-
-
-
-
 
 
                     </fieldset>
@@ -685,7 +682,8 @@ var updateValues = (cell) => {
 
             var data = { 'banktransactionr' : dynamicTableData,'supplier_id':supplier_id,'transno':transno.value,'bank_id':bank_id.value,'documentdate':documentdate.value,
             'cheque_no':cheque_no.value,'cheque_date':cheque_date.value,'head_id':head_id ,'description': description.value,'transno':transno.value
-        ,'amount_fc':amount_fc.value,'amount_pkr':amount_pkr.value,'conversion_rate':conversion_rate.value,'advtxt':advtxt.value,'custname':custname.value};
+        ,'amount_fc':amount_fc.value,'amount_pkr':amount_pkr.value,'conversion_rate':conversion_rate.value,'advtxt':advtxt.value,
+        'custname':custname.value,'supinvid':supinvid.value};
 
 
             // All Ok - Proceed
@@ -729,6 +727,22 @@ var updateValues = (cell) => {
 
 
     }
+
+
+    function enbldspl(invid) {
+        var supinvid = document.getElementById("supinvid");
+        supinvid.disabled = invid.checked ? false : true;
+        supinvid.style.color ="black";
+        supinvid.value =0;
+
+    }
+
+
+
+
+
+
+
 
     // function advpayment(adv) {
     //     var advtxt = document.getElementById("advtxt");

@@ -81,6 +81,10 @@
                             <x-input-numeric title="Amount(USD)" name="amount_fc" id="amount_fc" class="col-span-2" value="{{ $banktransaction->amount_fc }}"   disabled     />
                             <x-input-numeric title="Conversion Rate" name="conversion_rate" id="conversion_rate" class="col-span-2" value="{{ $banktransaction->conversion_rate }}" disabled   />
                             <x-input-numeric title="Amount(PKR)" name="amount_pkr" id="amount_pkr" class="col-span-2" value="{{ $banktransaction->amount_pkr }}" disabled />
+                            <label for="">
+                                Invoice Level Payment <span class="text-red-500 font-semibold  ">(*)</span>
+                                </label>
+                            <input class="checked:bg-blue-500 checked:border-blue-500 focus:outline-none "  type="checkbox" name="per" id="per" @if( $banktransaction->invslvl==1  )  checked else unchecked @endif   onclick="EnableDisableTextBox(this)" >
                             <x-input-numeric title="" name="advtxt" id="advtxt"    value="{{ $banktransaction->advance }}" hidden    />
                              <x-input-numeric title="" name="head_id" class="col-span-2" value="{{ $banktransaction->head_id}}" hidden  />
                         </div>
@@ -92,19 +96,18 @@
                             <textarea name="description" id="description" cols="150" rows="2" maxlength="150" class="col-span-2" required class="rounded"> {{ $banktransaction->description }} </textarea>
                             <x-input-text title="G.D No For Import Expenses" name="impgdno" id="impgdno"   class="col-span-2"  value="{{ $banktransaction->impgdno }}" disabled  />
 
-                            <label for="">
-                                Invoice Level Payment <span class="text-red-500 font-semibold  ">(*)</span>
-                                </label>
-                            <input class="checked:bg-blue-500 checked:border-blue-500 focus:outline-none "  type="checkbox" name="per" id="per" @if( $banktransaction->invslvl==1  )  checked else unchecked @endif   onclick="EnableDisableTextBox(this)" >
 
 
-                            <label for="">
+                            {{-- <label for="">
                                 Advance Payment For Clearance Future Invoices <span class="text-red-500 font-semibold  ">(*)</span>
                                 </label>
-                            <input class="checked:bg-blue-500 checked:border-blue-500 focus:outline-none"  type="checkbox" name="adv" id="adv" @if( $banktransaction->advance==1  )  checked else unchecked @endif    onclick="advpayment(this)" >
+                            <input class="checked:bg-blue-500 checked:border-blue-500 focus:outline-none"  type="checkbox" name="adv" id="adv" @if( $banktransaction->advance==1  )  checked else unchecked @endif    onclick="advpayment(this)" > --}}
+                            <x-input-numeric title="Cust.InvoiceID" name="cusinvid" id="cusinvid" class="col-span-2;w-20" value="{{ $banktransaction->cusinvid }}"  disabled     />
+                            <input class="checked:bg-blue-500 checked:border-blue-500 focus:outline-none"  type="checkbox" name="invid" id="invid" onclick="enbldspl(this)" >
                         </div>
 
-                        </fieldset>
+
+                    </fieldset>
 
                         {{-- Contract Details --}}
                         <x-tabulator-dynamic />
@@ -522,7 +525,8 @@ function validateForm()
 
     var data = { 'banktransaction' : dynamicTableData,'supplier_id':supplier_id.value,'transno':transno.value,'bank_id':bank_id.value,'documentdate':documentdate.value,
             'cheque_no':cheque_no.value,'cheque_date':cheque_date.value,'head_id':head_id.value ,'description': description.value,'transno':transno.value
-        ,'amount_fc':amount_fc.value,'amount_pkr':amount_pkr.value,'conversion_rate':conversion_rate.value,'advtxt':advtxt.value,'paymentid':paymentid.value,'supname':supname.value,'impgdno':impgdno.value};
+        ,'amount_fc':amount_fc.value,'amount_pkr':amount_pkr.value,'conversion_rate':conversion_rate.value,'advtxt':advtxt.value,
+        'paymentid':paymentid.value,'supname':supname.value,'impgdno':impgdno.value,'cusinvid':cusinvid.value};
 
 
 
@@ -589,11 +593,6 @@ function EnableDisableTextBox(per) {
             advtxt.value=0;
         }
 
-
-
-
-
-
     }
 
     amount_fc.onblur=function(){
@@ -620,6 +619,14 @@ function EnableDisableTextBox(per) {
         }
 
 });
+
+function enbldspl(invid) {
+        var supinvid = document.getElementById("cusinvid");
+        supinvid.disabled = invid.checked ? false : true;
+        supinvid.style.color ="black";
+        supinvid.value =0;
+
+    }
 
 
 

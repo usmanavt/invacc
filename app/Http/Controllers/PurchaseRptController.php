@@ -635,7 +635,7 @@ class PurchaseRptController extends Controller
                 Session::flash('info','No data available');
                 return redirect()->back();
             }
-            $mpdf = $this->getMPDFSettingsLgl();
+            $mpdf = $this->getMPDFSettingsA4L();
             $collection = collect($data);                   //  Make array a collection
             $grouped = $collection->groupBy('cominvid');       //  Sort collection by SupName
             $grouped->values()->all();                       //  values() removes indices of array

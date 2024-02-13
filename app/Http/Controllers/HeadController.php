@@ -42,6 +42,10 @@ class HeadController extends Controller
             $head = new Head();
             $head->title = $request->title;
             $head->nature = $request->nature;
+            $head->obdlr = $request->obdlr;
+            $head->obrup = $request->obrup;
+
+
             $head->save();
             DB::commit();
             Session::flash('success','Head opened');
@@ -68,6 +72,11 @@ class HeadController extends Controller
         try {
             $head->title = $request->title;
             $head->nature = $request->nature;
+
+            $head->obdlr = $request->obdlr;
+            $head->obrup = $request->obrup;
+
+
             if($request->has('status'))
             {
                 $head->status = 1;

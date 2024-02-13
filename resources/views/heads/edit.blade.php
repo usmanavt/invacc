@@ -23,6 +23,17 @@
                             <x-input id="title" class="bg-indigo-100" type="text" name="title" value="{{ $head->title }}"  required minlength="3"/>
                             @if($errors->has('title'))<div class="text-red-500 text-xs">{{ $errors->first('title') }}</div>@endif
 
+
+                            <x-label for="title" value="Cash In Hand(USD)"/>
+                            <x-input id="title" class="bg-indigo-100" type="text" name="obdlr" value="{{ $head->obdlr }}"  required minlength="3"/>
+                            @if($errors->has('obdlr'))<div class="text-red-500 text-xs">{{ $errors->first('obdlr') }}</div>@endif
+
+                            <x-label for="title" value="Cash In Hand(PKR)"/>
+                            <x-input id="title" class="bg-indigo-100" type="text" name="obrup" value="{{ $head->obrup }}"  required minlength="3"/>
+                            @if($errors->has('obrup'))<div class="text-red-500 text-xs">{{ $errors->first('obrup') }}</div>@endif
+
+
+
                             <x-label for="nature" value="Nature"/>
                             <select required name="nature" id="nature" class="bg-indigo-100">
                                 @if ($head->nature == 0)

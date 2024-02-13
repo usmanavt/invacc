@@ -83,6 +83,7 @@ class SupplierController extends Controller
                 // $supplier->status = 0;
             // }
             $supplier->obalance = $request->obalance;
+            $supplier->obusd = $request->obusd;
             $supplier->ntn = $request->ntn;
             $supplier->stax = $request->stax;
             $supplier->source_id = $request->source_id;
@@ -129,6 +130,8 @@ class SupplierController extends Controller
                 $supplier->status = 0;
             }
             $supplier->obalance = $request->obalance;
+            $supplier->obusd = $request->obusd;
+
             $supplier->ntn = $request->ntn;
             $supplier->stax = $request->stax;
             $supplier->source_id = $request->source_id;

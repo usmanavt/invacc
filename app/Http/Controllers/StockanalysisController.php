@@ -251,59 +251,34 @@ class StockanalysisController extends Controller
 
 
         if($report_type === 'glhw'){
-            //  dd($request->all());
             $hdng1 = $request->cname;
             $hdng2 = $request->csdrs;
-            $head_id = $request->head_id;
-            $vrtype = $request->p2;
-            //  dd($vrtype);
-            $head = Head::findOrFail($head_id);
-            if($request->has('subhead_id')){
-                $subhead_id = $request->subhead_id;
-                //  Clear Data from Table
-                DB::table('glparameterrpt')->truncate();
-                foreach($request->subhead_id as $id)
-                {
-                    DB::table('glparameterrpt')->insert([ 'GLCODE' => $id ]);
-                }
-            }
-            //  Call Procedure
-            $data = DB::select('call ProcGLHW(?,?,?,?)',array($fromdate,$todate,$head_id,$vrtype));
+            // $data = DB::select('call procbalancesheet(?)',array($todate));
+            $data = DB::select('call proctrialbalance(?,?,?)',array($fromdate,$todate,3));
             if(!$data)
             {
                 Session::flash('info','No data available');
                 return redirect()->back();
             }
             $mpdf = $this->getMPDFSettings();
-            $collection = collect($data);                   //  Make array a collection
-            $grouped = $collection->groupBy('SubHead');       //  Sort collection by SupName
-            $grouped->values()->all();                       //  values() removes indices of array
-            foreach($grouped as $g){
+            $html =  view('analysis.pnl')->with('data',$data)->with('fromdate',$fromdate)->with('todate',$todate)->render();
+            $filename = 'pnl-'.$fromdate.'-'.$todate.'.pdf';
 
-             if($vrtype == 0)
-              {
-                $html =  view('reports.glhw')->with('hdng1',$hdng1)->with('hdng2',$hdng2)->with('data',$g)->with('fromdate',$fromdate)->with('todate',$todate)->with('headtype',$head->title)->render();
-               }
-              else
-              {
-                $html =  view('reports.glhwsummary')->with('hdng1',$hdng1)->with('hdng2',$hdng2)->with('data',$g)->with('fromdate',$fromdate)->with('todate',$todate)->with('headtype',$head->title)->render();
-               }
-
-
-
-               $filename = $g[0]->SubHead  .'-'.$fromdate.'-'.$todate.'.pdf';
-
-               $chunks = explode("chunk", $html);
-                foreach($chunks as $key => $val) {
-                    $mpdf->WriteHTML($val);
-                }
-                $mpdf->AddPage();
+            // $mpdf->SetHTMLFooter('
+            // <table width="100%" style="border-top:1px solid gray">
+            //     <tr>
+            //         <td width="33%">{DATE d-m-Y}</td>
+            //         <td width="33%" align="center">{PAGENO}/{nbpg}</td>
+            //         <td width="33%" style="text-align: right;">' . $filename . '</td>
+            //     </tr>
+            // </table>');
+            $chunks = explode("chunk", $html);
+            foreach($chunks as $key => $val) {
+                $mpdf->WriteHTML($val);
             }
-            //  $mpdf->Output($filename,'I');
+            // $mpdf->AddPage();
             return response($mpdf->Output($filename,'I'),200)->header('Content-Type','application/pdf');
-
-            // return;
-        }
+    }
 
 
 

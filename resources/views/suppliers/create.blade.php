@@ -68,6 +68,16 @@
                                 </div>
 
                                 <div class="basis-0 md:basis-1/6">
+                                    <x-label for="obalance" :value="__('O/Balance(USD)')" />
+                                    <x-input id="obusd" class="bg-indigo-100" type="text" name="obusd" :value="old('obusd')"  />
+                                    @if($errors->has('obusd'))<div class="text-red-500 text-xs">{{ $errors->first('obusd') }}</div>@endif
+                                </div>
+
+
+
+
+
+                                <div class="basis-0 md:basis-1/6">
                                     <x-label for="source_id" :value="__('Source')" />
                                     <select autocomplete="on" required name="source_id" id="source_id" class="bg-indigo-100">
                                         <option value="" selected>--Source</option>

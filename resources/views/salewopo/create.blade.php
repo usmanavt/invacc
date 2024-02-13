@@ -1,9 +1,9 @@
 <x-app-layout>
 
     @push('styles')
-    <link rel="stylesheet" href="{{ asset('css/tabulator_simple.min.css') }}">
-    {{-- <link href="https://unpkg.com/tabulator-tables/dist/css/tabulator.min.css" rel="stylesheet"> --}}
-    {{-- <script type="text/javascript" src="https://unpkg.com/tabulator-tables/dist/js/tabulator.min.js"></script> --}}
+    {{-- <link rel="stylesheet" href="{{ asset('css/tabulator_simple.min.css') }}"> --}}
+    <link href="https://unpkg.com/tabulator-tables/dist/css/tabulator.min.css" rel="stylesheet">
+    <script type="text/javascript" src="https://unpkg.com/tabulator-tables/dist/js/tabulator.min.js"></script>
 
     @endpush
 
@@ -40,29 +40,32 @@
                                 <x-input-date title="Deilivery Date" id="deliverydt" name="deliverydt" req required class="col-span-2" />
                             </div>
                             <div class="grid grid-cols-12 gap-1 py-2 items-center">
-                                <x-input-text title="DC No" name="dcno" id="dcno" value="{{$maxdcno}}"     required   />
-                                <x-input-text title="Bill No" name="billno" id="billno" value="{{$maxbillno}}"     required   />
+                                <x-input-text title="DC No" name="dcno" id="dcno" class="col-span-2" value="{{$maxdcno}}"     required   />
+                                <x-input-text title="Bill No" name="billno" id="billno" class="col-span-2;w-20"  value="{{$maxbillno}}"     required   />
                                 <label for="">
                                     Descripiton <span class="text-red-500 font-semibold"></span>
                                 </label>
-                                <textarea name="saldescription" id="saldescription" cols="30" rows="2" maxlength="150" required class="rounded"></textarea>
-                                <x-input-text title="abc" name="abc" id="abc"     required   />
+                                <textarea name="saldescription" id="saldescription" class="col-span-2" cols="30" rows="2" maxlength="150" required class="rounded"></textarea>
+                                <x-input-text title="abc" name="abc" id="abc"     required hidden   />
                             </div>
                         </fieldset>
 
                         <fieldset class="border px-4 py-2 rounded">
                             {{-- <legend>Invoice Level Expenses</legend> --}}
                             <div class="grid grid-cols-12 gap-2 py-2 items-center">
-                                <x-input-numeric title="Discou(%)" name="discntper" id="discntper" disabled    />
+                                <x-input-numeric title="Discou(%)" name="discntper" id="discntper" class="col-span-2" disabled    />
                                 <input class="checked:bg-blue-500 checked:border-blue-500 focus:outline-none" type="checkbox" name="per" id="per" onclick="EnableDisableTextBox(this)" >
-                                <x-input-numeric title="Discount(Amount)" name="discntamt" id="discntamt"   />
-                                <x-input-numeric title="Receivable Amount" name="rcvblamount" disabled />
+                                <x-input-numeric title="Discount(Amount)" name="discntamt" id="discntamt" class="col-span-2;w-20"  />
+                                <x-input-numeric title="Receivable Amount" name="rcvblamount" class="col-span-2" disabled />
                             </div>
                             <div class="grid grid-cols-12 gap-2 py-2 items-center">
-                                <x-input-numeric title="Sale Tax(%)" name="saletaxper" required  onblur="tnetamount()"  />
-                                <x-input-numeric title="Sale Tax(Rs)" name="saletaxamt" disabled    />
-                                <x-input-numeric title="Cartage" name=cartage  required  onblur="tnetamount()"  />
-                                <x-input-numeric title="Total Amount" name="totrcvbamount" disabled />
+                                <x-input-numeric title="Sale Tax(%)" name="saletaxper" class="col-span-2" required  onblur="tnetamount()"  />
+                                <x-input-numeric title="Sale Tax(Rs)" name="saletaxamt" class="col-span-2" disabled    />
+                                <x-input-numeric title="Cartage" name=cartage class="col-span-2"  required  onblur="tnetamount()"  />
+
+                            </div>
+                            <div class="grid grid-cols-12 gap-2 py-2 items-center">
+                            <x-input-numeric title="Total Amount" name="totrcvbamount" class="col-span-2" disabled />
                             </div>
                         </fieldset>
 

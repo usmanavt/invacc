@@ -155,6 +155,7 @@ class PaymentController  extends Controller
             $ci->head_id = $request->head_id;
             $ci->subhead_id = $request->supplier_id;
             $ci->impgdno = $request->impgdno;
+            $ci->cusinvid = $request->cusinvid;
 
             // $ci->transaction_type = 'BPV';
             if($request->bank_id == 1)
@@ -301,13 +302,34 @@ class PaymentController  extends Controller
             SET c.amount_fc = x.payedusd,c.amount_pkr=x.payedrup,c.conversion_rate=x.convrate
             where  c.id = $ci->id "));
 
-            DB::update(DB::raw("
-            UPDATE commercial_invoices c
-            INNER JOIN (
-            SELECT invoice_id,SUM(payedusd) as payment  FROM payment_details WHERE invoice_id in(select invoice_id from payment_details where paymentid =$ci->id  )  GROUP BY invoice_id
-            ) x ON c.id = x.invoice_id
-            SET c.invoicebal = ( case when contract_id=0 then c.total else tval end ) -  x.payment
-            where  c.id in(select invoice_id from payment_details where paymentid =$ci->id  ) "));
+            if($ci->head_id==32)
+            {
+                DB::update(DB::raw("
+                UPDATE commercial_invoices c
+                INNER JOIN (
+                SELECT invoice_id,SUM(payedusd) as payment  FROM payment_details WHERE invoice_id in(select invoice_id from payment_details where paymentid =$ci->id  )  GROUP BY invoice_id
+                ) x ON c.id = x.invoice_id
+                SET c.invoicebal = ( case when contract_id=0 then c.total else tval end ) -  x.payment
+                where  c.id in(select invoice_id from payment_details where paymentid =$ci->id  ) "));
+            }
+
+            if($ci->head_id==33)
+            {
+                DB::update(DB::raw("
+                UPDATE sale_invoices c
+                INNER JOIN (
+                    SELECT invoice_id,SUM(received) AS received FROM
+                    (
+                    SELECT invoice_id,SUM(totrcvd) as received  FROM receive_details WHERE invoice_id=$ci->cusinvid   GROUP BY invoice_id
+                    UNION all
+                    SELECT cusinvid,amount_fc FROM bank_transactions WHERE cusinvid=$ci->cusinvid AND  head_id=33
+                ) y GROUP BY invoice_id
+                ) x ON c.id = x.invoice_id
+                SET c.paymentbal = totrcvbamount -  x.received
+                where  c.id =$ci->cusinvid "));
+            }
+
+
 
             DB::update(DB::raw("
             UPDATE cheque_transactions c
@@ -370,6 +392,7 @@ class PaymentController  extends Controller
             $ci->head_id = $request->head_id;
             $ci->subhead_id = $request->supplier_id;
             $ci->impgdno = $request->impgdno;
+            $ci->cusinvid = $request->cusinvid;
             if($request->bank_id == 1)
             {
                 $ci->transaction_type = 'CPV';
@@ -546,19 +569,49 @@ class PaymentController  extends Controller
             SET c.amount_fc = x.payedusd,c.amount_pkr=x.payedrup,c.conversion_rate=x.convrate
             where  c.id = $ci->id "));
 
-            DB::update(DB::raw("
-            UPDATE commercial_invoices c
-            INNER JOIN (
-            SELECT invoice_id,SUM(payedusd) as payment  FROM payment_details WHERE invoice_id in(select invoice_id from payment_details where paymentid =$ci->id  )  GROUP BY invoice_id
-            ) x ON c.id = x.invoice_id
-            SET c.invoicebal = ( case when contract_id=0 then c.total else tval end ) -  x.payment
-            where  c.id in(select invoice_id from payment_details where paymentid =$ci->id  ) "));
+            if($ci->head_id==32)
+            {
+                DB::update(DB::raw("
+                UPDATE commercial_invoices c
+                INNER JOIN (
+                SELECT invoice_id,SUM(payedusd) as payment  FROM payment_details WHERE invoice_id in(select invoice_id from payment_details where paymentid =$ci->id  )  GROUP BY invoice_id
+                ) x ON c.id = x.invoice_id
+                SET c.invoicebal = ( case when contract_id=0 then c.total else tval end ) -  x.payment
+                where  c.id in(select invoice_id from payment_details where paymentid =$ci->id  ) "));
+            }
+
+            if($ci->head_id==33)
+            {
+                DB::update(DB::raw("
+                UPDATE sale_invoices c
+                INNER JOIN (
+                    SELECT invoice_id,SUM(received) AS received FROM
+                    (
+                    SELECT invoice_id,SUM(totrcvd) as received  FROM receive_details WHERE invoice_id=$ci->cusinvid   GROUP BY invoice_id
+                    UNION all
+                    SELECT cusinvid,amount_fc FROM bank_transactions WHERE cusinvid=$ci->cusinvid AND  head_id=33
+                ) y GROUP BY invoice_id
+                ) x ON c.id = x.invoice_id
+                SET c.paymentbal = totrcvbamount -  x.received
+                where  c.id =$ci->cusinvid "));
+            }
+
+
+
+
+
+
+
+
+
+
 
             DB::update(DB::raw("
             UPDATE cheque_transactions c
             INNER JOIN (SELECT id,documentdate,cheque_no,transaction_type,bank_id FROM bank_transactions WHERE bank_id>3 AND id=$ci->id) x
             ON c.cheque_no=x.cheque_no and c.bank_id=x.bank_id
             SET c.clrstatus=1,c.clrdate=x.documentdate,clrid=x.id,c.ref=CONCAT(x.transaction_type,'-',LPAD(x.id,4,'0')) "));
+
 
             DB::commit();
             Session::flash('success','Contract Information Saved');

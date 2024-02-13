@@ -138,7 +138,6 @@ table{
 
 @for ($i = 0 ; $i < count($data) ; $i++)
 
-
 @if( $i==0 )
 
                 <tr>
@@ -167,17 +166,10 @@ table{
              {{ $stdebitusd = 0 }};  {{ $stcreditusd = 0 }}
         @endif
         @endif
-
-
             <tr>
 
                 {{ $debitusd += $data[$i]->DebitAmtRup }}
                 {{ $creditusd += $data[$i]->CreditAmtRup }}
-
-
-
-
-
                 <td style="text-align:center" width="5%">{{ $i+1 }}</td>
                 <td  width="51%"> <span style="font-size:0.8rem;font-weight: bold;color:brown">{{ $data[$i]->Descr }}</span>
                     <br> {{ $data[$i]->Description }} </td>

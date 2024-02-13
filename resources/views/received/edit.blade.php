@@ -85,11 +85,14 @@
                                 <x-input-numeric title="" name="head_id" class="col-span-2" value="{{ $banktransaction->head_id}}" hidden  />
 
                                 </div>
-                            <div>
+                            <div class="grid grid-cols-12 gap-2 py-2 items-center">
                                 <label for="">
                                     Description <span class="text-red-500 font-semibold  ">(*)</span>
                                     </label>
                                 <textarea name="description" id="description" cols="150" rows="2" maxlength="150" class="col-span-2" required class="rounded"> {{ $banktransaction->description }} </textarea>
+                                <x-input-numeric title="Supp.InvoiceID" name="supinvid" id="supinvid" class="col-span-2" value="{{ $banktransaction->supinvid }}"    disabled     />
+                                <input class="checked:bg-blue-500 checked:border-blue-500 focus:outline-none"  type="checkbox" name="invid" id="invid" onclick="enbldspl(this)" >
+
                             </div>
 
                         </fieldset>
@@ -506,7 +509,8 @@ function validateForm()
 
     var data = { 'banktransactionr' : dynamicTableData,'subhead_id':subhead_id.value,'transno':transno.value,'bank_id':bank_id.value,'documentdate':documentdate.value,
             'cheque_no':cheque_no.value,'cheque_date':cheque_date.value,'head_id':head_id.value ,'description': description.value,'transno':transno.value
-        ,'amount_fc':amount_fc.value,'amount_pkr':amount_pkr.value,'conversion_rate':conversion_rate.value,'advtxt':advtxt.value,'supname':supname.value,'receivedid':receivedid.value};
+        ,'amount_fc':amount_fc.value,'amount_pkr':amount_pkr.value,'conversion_rate':conversion_rate.value,'advtxt':advtxt.value,
+        'supname':supname.value,'receivedid':receivedid.value,'supinvid':supinvid.value};
 
 
 
@@ -553,20 +557,13 @@ function EnableDisableTextBox(per) {
 
     }
 
-    // function advpayment(adv) {
-    //     var advtxt = document.getElementById("advtxt");
-    //     // amount_fc.disabled = advtxt.checked ? true : false;
+    function enbldspl(invid) {
+        var supinvid = document.getElementById("supinvid");
+        supinvid.disabled = invid.checked ? false : true;
+        supinvid.style.color ="black";
+        supinvid.value =0;
 
-    //     // amount_fc.disabled = per.checked ? true : false;
-
-    //     if(adv.checked==true)
-    //     {
-    //         advtxt.value=1;
-    //     }
-    //     else
-    //     {
-    //         advtxt.value=0;
-    //     }
+    }
 
 
 
