@@ -42,6 +42,10 @@
                                        <span style="color: brown;font-weight: bold"> Summary </span> <span class="text-red-500 font-semibold  ">(*)</span>
                                         </label>
 
+                                        <input class="checked:bg-blue-500 checked:border-blue-500 focus:outline-none"  type="checkbox" name="glhsumrup" id="glhsumrup"   onclick="GLHWSUMRYRUP(this)" >
+                                        <label for="">
+                                           <span style="color: brown;font-weight: bold"> In PKR </span> <span class="text-red-500 font-semibold  ">(*)</span>
+                                            </label>
 
 
                                 </div>
@@ -129,6 +133,7 @@
                         <input type="text" title="t3"  id="p3" name="p3" value="0" hidden  >
                         <input type="text" title="t4"  id="p4" name="p4" value="0" hidden   >
                         <input type="text" title="t5"  id="p5" name="p5" value="0" hidden   >
+                        <input type="text" title="t6"  id="p6" name="p6" value="0" hidden    >
                         <div class="flex flex-col md:flex-row w-full gap-2 px-6 pt-4">
 
                             <fieldset class="border px-4 py-2 rounded w-full">
@@ -485,6 +490,28 @@
         }
 
     }
+
+    function GLHWSUMRYRUP(glhsumrup) {
+        var p6 = document.getElementById("p6");
+        // amount_fc.disabled = advtxt.checked ? true : false;
+
+        // amount_fc.disabled = per.checked ? true : false;
+
+        if(glhsumrup.checked==true)
+        {
+            p6.value=1;
+        }
+        else
+        {
+            p6.value=0;
+        }
+
+    }
+
+
+
+
+
 
 
     function vagng(agdtl) {

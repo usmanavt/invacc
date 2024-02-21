@@ -170,6 +170,7 @@ class PaymentController  extends Controller
             $ci->conversion_rate = $request->conversion_rate;
             $ci->amount_fc = $request->amount_fc;
             $ci->amount_pkr = $request->amount_pkr;
+
             $ci->cheque_date = $request->cheque_date;
             $ci->cheque_no = $request->cheque_no;
             $ci->description = $request->description;
@@ -200,6 +201,9 @@ class PaymentController  extends Controller
                 $lpd->payedusd = $cont['payedusd'];
                 $lpd->convrate = $cont['convrate'];
                 $lpd->payedrup = $cont['payedrup'];
+                $lpd->purret = $cont['purretamount'];
+
+
                 $lpd->invoice_bal = $cont['invoice_bal'];
                 $lpd->save();
                 }
@@ -357,8 +361,11 @@ class PaymentController  extends Controller
     public function edit($id)
     {
 
+
+        $stockdtl = DB::select('call procpurretbal()');
+
         // $stockdtl = DB::select('call procdetailquotations(?,?)',array( $id,2 ));
-        $cd = DB::table('payment_details')
+        $cd = DB::table('vwvoucherpaymentedit')
         // ->join('materials', 'materials.id', '=', 'customer_order_details.material_id')
         // ->join('skus', 'skus.id', '=', 'customer_order_details.sku_id')
         // ->leftJoin('tmptblinvswsstock','tmptblinvswsstock.material_id', '=', 'customer_order_details.material_id')

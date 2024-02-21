@@ -320,6 +320,7 @@ window.onload = function() {
                         payedusd:           obj.payedusd,
                         payedrup:           obj.payedrup,
                         invoice_bal:        obj.invoice_bal,
+                        purretamount:       obj.purretamount,
 
                     }
                 ])
@@ -409,34 +410,29 @@ var headerMenu = function(){
    return menu;
 };
 
-var tamount=0;
+var tamountpkr=0;
+var tamountusd=0;
     function tnetamount()
         {
-            //  discntamt.value=0;
-            //   rcvblamount.value=0;
-            // discntamt.value=(tamount*discntper.value/100).toFixed(0);
-            // discntper.value=(discntamt.value/tamount*100).toFixed(2);
-            // if (discntper.disabled)
-            // {discntper.value=(discntamt.value/tamount*100).toFixed(2)};
 
-            // if (!discntper.disabled)
-            // {discntamt.value=(tamount*discntper.value/100).toFixed(0);};
-
-            //  rcvblamount.value=  Number(tamount)  ;
-            // saletaxamt.value=(Number(rcvblamount.value) * Number(saletaxper.value) )/100 ;
-            // totrcvbamount.value=(Number(rcvblamount.value)+Number(saletaxamt.value)+Number(cartage.value)).toFixed(0);
+            // console.log(tamount)
+            amount_fc.value=  tamountusd
+            amount_pkr.value=  tamountpkr
         }
 
 var updateValues = (cell) => {
         var data = cell.getData();
         var sum = (Number(data.payedusd) * Number(data.convrate))
-        var invbal = (Number(data.invoice_amount) - Number(data.payedusd))
+        var invbal = (Number(data.invoice_amount) - Number(data.payedusd) - Number(data.purretamount) )
+        var amtinusd = Number(data.payedusd)
         // var varqty = ( Number(data.balqty) - Number(data.saleqty) )
         var row = cell.getRow();
         row.update({
              "payedrup": sum,
              "invoice_bal":invbal,
-             totalVal: sum
+             totalVal: sum,
+             totalVal1:sum,
+             totalVal2:amtinusd,
 
         });
     }
@@ -446,7 +442,29 @@ var updateValues = (cell) => {
         values.forEach(function(value){
             calc += Number(value) ;
         });
-        tamount = calc;
+        // tamountusd = calc;
+        // tnetamount();
+        return calc;
+
+    }
+
+    var totalVal1 = function(values, data, calcParams){
+        var calc1 = 0;
+        values.forEach(function(value){
+            calc1 += Number(value) ;
+        });
+        tamountpkr = calc1;
+        tnetamount();
+        return calc1;
+
+    }
+
+    var totalVal2 = function(values, data, calcParams){
+        var calc = 0;
+        values.forEach(function(value){
+            calc += Number(value) ;
+        });
+        tamountusd = calc;
         tnetamount();
         return calc;
 
@@ -510,6 +528,23 @@ var updateValues = (cell) => {
                             formatterParams:{thousand:",",precision:3},
                         },
 
+
+                        {   title:"Purchase Return",
+                            headerHozAlign :'right',
+                            hozAlign:"right",
+                            responsive:0,
+                            field:"purretamount",
+                            bottomCalc:"sum",
+                            formatter:"money",
+                            cellEdited: updateValues,
+                            validator:["required","numeric"],
+                            cssClass:"bg-gray-200 font-semibold",
+                            formatterParams:{thousand:",",precision:3},
+                        },
+
+
+
+
                         {   title:"Currency",
                             headerHozAlign :'right',
                             hozAlign:"right",
@@ -542,7 +577,7 @@ var updateValues = (cell) => {
                         // {
                         //     return (cell.getData().invoice_amount * cell.getData().convrate).toFixed(0)
                         // },
-                        bottomCalc:totalVal  },
+                        bottomCalc:totalVal2  },
 
                         {   title:"Conversion Rate",
                             headerHozAlign :'right',
@@ -571,7 +606,7 @@ var updateValues = (cell) => {
                         {
                             return (cell.getData().payedusd * cell.getData().convrate).toFixed(0)
                         },
-                        bottomCalc:totalVal  },
+                        bottomCalc:totalVal1  },
                     ]},
 
                     {title:"Invoice Balance.",
@@ -583,7 +618,7 @@ var updateValues = (cell) => {
                         formatterParams:{thousand:",",precision:3},
                         formatter:function(cell,row)
                         {
-                            return (cell.getData().invoice_amount - cell.getData().payedusd).toFixed(0)
+                            return (cell.getData().invoice_amount - cell.getData().payedusd - cell.getData().purretamount).toFixed(0)
                         },
                         bottomCalc:totalVal
 

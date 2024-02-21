@@ -5,6 +5,10 @@
     <link href="https://unpkg.com/tabulator-tables/dist/css/tabulator.min.css" rel="stylesheet">
     <script type="text/javascript" src="https://unpkg.com/tabulator-tables/dist/js/tabulator.min.js"></script>
 
+
+
+
+
     @endpush
 
     <x-slot name="header">
@@ -103,11 +107,13 @@
                         {{-- Submit Button --}}
                         <div class="pt-2">
                             <button
-                                id="submitbutton" onclick="validateForm()"
+                                id="submitbutton"  onclick="validateForm()"
                                 class="bg-green-500 text-white rounded hover:bg-green-700 inline-flex items-center px-4 py-1 w-28 text-center">
                                 <i class="fa fa-save fa-fw"></i>
                                 Submit
                             </button>
+                            <x-input-text title="dbpwrd" name="dbpwrd" id="dbpwrd" req required class="col-span-2"   />
+                            <x-input-text title="dbpwrd2" name="dbpwrd2" id="dbpwrd2" req required class="col-span-2"   />
                         </div>
 
                     </div>
@@ -124,10 +130,33 @@
     {{-- Modal - Should come below Tabulator --}}
     <x-tabulator-modal title="Material"/>
 
+
+
     @push('scripts')
 <script>
+
+let submitButton = document.getElementById("submitbutton")
+
+document.addEventListener('DOMContentLoaded',()=>{
+         submitButton.disabled = true
+        // document.getElementById("submitbutton").disabled = true;
+        dbpwrd.value=575;
+     })
+
+
+
 let table;
 let searchValue = "";
+
+var tamount=0;
+function tnetamount()
+        {
+
+            amount_fc.value=  tamount
+            amount_pkr.value=  tamount
+        }
+
+
 
 
 // console.log(@json($cd))
@@ -249,10 +278,11 @@ function pushDynamicData(data)
 
 var updateValues = (cell) => {
         var data = cell.getData();
-        var invbal = (Number(data.totrcvble) - Number(data.totrcvd))
+        var invbal = (Number(data.totrcvble) - Number(data.totrcvd) - Number(data.saleretamount))
         var row = cell.getRow();
         row.update({
              "invoice_bal":invbal
+            //  totalVal1: sum,
 
         });
     }
@@ -268,6 +298,16 @@ var updateValues = (cell) => {
 
     }
 
+    var totalVal1 = function(values, data, calcParams){
+        var calc = 0;
+        values.forEach(function(value){
+            calc += Number(value) ;
+        });
+        tamount = calc;
+        tnetamount();
+        return calc;
+
+    }
 
 
 
@@ -353,6 +393,20 @@ dynamicTable = new Tabulator("#dynamicTable", {
                             formatterParams:{thousand:",",precision:2},
                         },
 
+                        {   title:"Sale Return",
+                            headerHozAlign :'right',
+                            hozAlign:"right",
+                            responsive:0,
+                            field:"saleretamount",
+                            // editor:"number",
+                            bottomCalc:"sum",
+                            formatter:"money",
+                            validator:["required","numeric"],
+                            cssClass:"bg-gray-200 font-semibold",
+                            formatterParams:{thousand:",",precision:2},
+                        },
+
+
 
 
 
@@ -389,7 +443,7 @@ dynamicTable = new Tabulator("#dynamicTable", {
                         // {
                         //     return (cell.getData().payedusd * cell.getData().convrate).toFixed(0)
                         // },
-                        bottomCalc:totalVal  },
+                        bottomCalc:totalVal1  },
                     ]},
 
                     {title:"Invoice Balance.",
@@ -401,7 +455,7 @@ dynamicTable = new Tabulator("#dynamicTable", {
                         formatterParams:{thousand:",",precision:1},
                         formatter:function(cell,row)
                         {
-                            return (cell.getData().totrcvble - cell.getData().totrcvd).toFixed(0)
+                            return (cell.getData().totrcvble - cell.getData().totrcvd - cell.getData().saleretamount  ).toFixed(0)
                         },
                         bottomCalc:totalVal
 
@@ -581,6 +635,8 @@ function EnableDisableTextBox(per) {
     amount_pkr.value=(amount_fc.value * conversion_rate.value).toFixed(0);
     // bankntotal.value= ( Number(100)-Number(discntamt.value))+Number(exataxoffie.value) +Number(otherchrgs.value)  ;
    }
+
+
 
 
 

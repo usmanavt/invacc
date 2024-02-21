@@ -85,7 +85,7 @@ table{
                 </td>            </tr>
             <tr>
                 <td  style="text-align: center;">
-                    <span style="font-size:1.5rem">GENERAL LEDGER HEADER WISE (GLH - USD) </span>
+                    <span style="font-size:1.5rem">GENERAL LEDGER HEADER WISE (GLH - PKR) </span>
                 </td>
             </tr>
 
@@ -147,18 +147,18 @@ table{
 
             @for ($i = 0 ; $i < count($data) ; $i++)
             <tr>
-                {{ $debitusd += $data[$i]->DebitAmtDlr }}
-                {{ $creditusd += $data[$i]->CreditAmtDlr }}
-                {{-- {{ $balusd += $data[$i]->BalanceAmtDlr }} --}}
+                {{ $debitusd += $data[$i]->DebitAmtRup }}
+                {{ $creditusd += $data[$i]->CreditAmtRup }}
+                {{-- {{ $balusd += $data[$i]->BalanceAmtRup }} --}}
 
                 <td class="" width="5%">{{ $i+1 }}</td>
                 <td class="" width="10%">{{ $data[$i]->invoice_date }} </td>
                 <td  width="33%"> <span style="font-size:0.8rem;font-weight: bold;color:brown">{{ $data[$i]->Descr }}</span>
                     <br> {{ $data[$i]->DESCRIPTION }} </td>
                 <td class="" width="7%">{{ $data[$i]->Ref }} </td>
-                <td class="" width="15%">{{ number_format($data[$i]->DebitAmtDlr,2) }} </td>
-.                <td class="" width="15%">{{ number_format($data[$i]->CreditAmtDlr,2) }}</td>
-                <td class="" width="15%">{{ number_format($data[$i]->BalanceAmtDlr,2) }}</td>
+                <td class="" width="15%">{{ number_format($data[$i]->DebitAmtRup,2) }} </td>
+.                <td class="" width="15%">{{ number_format($data[$i]->CreditAmtRup,2) }}</td>
+                <td class="" width="15%">{{ number_format($data[$i]->BalanceAmtRup,2) }}</td>
             </tr>
             @endfor
 

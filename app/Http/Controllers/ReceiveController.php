@@ -208,6 +208,7 @@ class ReceiveController  extends Controller
                 $lpd->staxamount = $cont['staxamount'];
                 $lpd->totrcvble = $cont['totrcvble'];
                 $lpd->totrcvd = $cont['totrcvd'];
+                $lpd->salret = $cont['saleretamount'];
                 $lpd->invoice_bal = $cont['invoice_bal'];
                 $lpd->pono = $cont['pono'];
                 $lpd->save();
@@ -269,12 +270,6 @@ class ReceiveController  extends Controller
                 "));
             }
 
-
-
-
-
-
-
             DB::commit();
             Session::flash('success','Payment Information Saved');
             return response()->json(['success'],200);
@@ -284,18 +279,18 @@ class ReceiveController  extends Controller
         }
 
     }
-
+    // SELECT a.*,COALESCE(b.totrcvbamount,0) AS saleretamount FROM receive_details AS a LEFT OUTER JOIN sale_returns AS b ON a.invoice_id=b.invoice_id
     // public function edit(Contract $contract)
     public function edit($id)
     {
 
-        // $stockdtl = DB::select('call procdetailquotations(?,?)',array( $id,2 ));
-        $cd = DB::table('receive_details')
+         $stockdtl = DB::select('call prcsaleretbal()');
+        $cd = DB::table('vsvoucherrcvedit')
         // receive_details
         // ->join('materials', 'materials.id', '=', 'customer_order_details.material_id')
         // ->join('skus', 'skus.id', '=', 'customer_order_details.sku_id')
-        // ->leftJoin('tmptblinvswsstock','tmptblinvswsstock.material_id', '=', 'customer_order_details.material_id')
-        // ->select('customer_order_details.*','materials.title as material_title','materials.dimension','skus.title as sku',
+        // ->leftJoin('sale_returns','sale_returns.invoice_id', '=', 'receive_details.invoice_id')
+        ->select('vsvoucherrcvedit.*')
         // DB::raw('( CASE customer_order_details.sku_id  WHEN  1 THEN tmptblinvswsstock.qtykg WHEN 2 THEN tmptblinvswsstock.qtypcs WHEN 3 THEN tmptblinvswsstock.qtyfeet  END) AS balqty')
         // ,DB::raw('( CASE customer_order_details.sku_id  WHEN  1 THEN tmptblinvswsstock.qtykg - customer_order_details.qtykg  WHEN 2 THEN tmptblinvswsstock.qtypcs - customer_order_details.qtykg WHEN 3 THEN tmptblinvswsstock.qtyfeet - customer_order_details.qtykg  END) AS varqty') )
         ->where('receivedid',$id)->get();
@@ -378,8 +373,8 @@ class ReceiveController  extends Controller
                 {
 
             $cds = ReceiveDetails::where('id',$cd->id)->first();
-            if($cd['totrcvd'] <> 0)
-            {
+            // if($cd['totrcvd'] <> 0)
+            // {
 
 
 
@@ -392,16 +387,17 @@ class ReceiveController  extends Controller
                     $cds->staxamount = $cd['staxamount'];
                     $cds->totrcvble = $cd['totrcvble'];
                     $cds->totrcvd = $cd['totrcvd'];
+                    $cds->salret = $cd['saleretamount'];
                     $cds->invoice_bal = $cd['invoice_bal'];
                     $cds->pono = $cd['pono'];
                     $cds->save();
-            }
+            // }
                 }else
                 {
                     //  The item is new, Add it
                      $cds = new ReceiveDetails();
-                if($cd['totrcvd'] <> 0)
-                {
+                // if($cd['totrcvd'] <> 0)
+                // {
 
                      $cds->receivedid = $ci->id;
                      $cds->invoice_id = $cd['invoice_id'];
@@ -413,10 +409,11 @@ class ReceiveController  extends Controller
                      $cds->totrcvble = $cd['totrcvble'];
                      $cds->totrcvd = $cd['totrcvd'];
                      $cds->invoice_bal = $cd['invoice_bal'];
+                     $cds->salret = $cd['saleretamount'];
                      $cds->pono = $cd['pono'];
 
                      $cds->save();
-                }
+                // }
                     }
             }
 

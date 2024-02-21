@@ -252,12 +252,26 @@ class ReportController extends Controller
 
              if($vrtype == 0)
               {
-                $html =  view('reports.glhw')->with('hdng1',$hdng1)->with('hdng2',$hdng2)->with('data',$g)->with('fromdate',$fromdate)->with('todate',$todate)->with('headtype',$head->title)->render();
-               }
+                 if($request->p6 == 0)
+                 {
+                    $html =  view('reports.glhw')->with('hdng1',$hdng1)->with('hdng2',$hdng2)->with('data',$g)->with('fromdate',$fromdate)->with('todate',$todate)->with('headtype',$head->title)->render();
+                 }
+                 else
+                 {
+                    $html =  view('reports.glhwrup')->with('hdng1',$hdng1)->with('hdng2',$hdng2)->with('data',$g)->with('fromdate',$fromdate)->with('todate',$todate)->with('headtype',$head->title)->render();
+                 }
+                }
               else
               {
-                $html =  view('reports.glhwsummary')->with('hdng1',$hdng1)->with('hdng2',$hdng2)->with('data',$g)->with('fromdate',$fromdate)->with('todate',$todate)->with('headtype',$head->title)->render();
-               }
+                if($request->p6 == 0)
+                    {
+                    $html =  view('reports.glhwsummary')->with('hdng1',$hdng1)->with('hdng2',$hdng2)->with('data',$g)->with('fromdate',$fromdate)->with('todate',$todate)->with('headtype',$head->title)->render();
+                    }
+                else
+                    {
+                    $html =  view('reports.glhwsummaryrup')->with('hdng1',$hdng1)->with('hdng2',$hdng2)->with('data',$g)->with('fromdate',$fromdate)->with('todate',$todate)->with('headtype',$head->title)->render();
+                    }
+              }
 
 
 

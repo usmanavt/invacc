@@ -25,6 +25,7 @@ table{
     border-bottom: 2px double  lightgray;
     border-collapse: collapse;
     text-align: center;
+    font-size: 0.9rem;
 }
 .column-headers th{
     text-align: center;
@@ -129,14 +130,15 @@ table{
         <thead>
             <tr>
                 <th class="column-headers" width="4%">S#</th>
-                <th class="column-headers" width="10%">Invoice<br>date</th>
-                <th class="column-headers" width="10%">Invoice<br>No</th>
-                <th class="column-headers" width="26%">Payment<br>Status</th>
-                <th class="column-headers" width="10%">Payment<br>Date</th>
-                <th class="column-headers" width="10%">Payment<br>Ref.</th>
-                <th class="column-headers" width="10%">Payable<br>Amount</th>
-                <th class="column-headers" width="10%">Payment<br>Amount</th>
-                <th class="column-headers" width="10%">Invoice<br>Balance</th>
+                <th class="column-headers" width="9%">Invoice<br>date</th>
+                <th class="column-headers" width="9%">Invoice<br>No</th>
+                <th class="column-headers" width="24%">Payment<br>Status</th>
+                <th class="column-headers" width="9%">Payment<br>Date</th>
+                <th class="column-headers" width="9%">Payment<br>Ref.</th>
+                <th class="column-headers" width="9%">Payable<br>Amount</th>
+                <th class="column-headers" width="9%">Purchase<br>Return</th>
+                <th class="column-headers" width="9%">Payment<br>Amount</th>
+                <th class="column-headers" width="9%">Invoice<br>Balance</th>
             </tr>
         </thead>
     </table>
@@ -153,20 +155,21 @@ table{
                 {{ $invbal += $data[$i]->invoice_bal }}
 
                 <td style="text-align:center" width="4%">{{ $i+1 }}</td>
-                <td style="text-align:center" width="10%">{{ $data[$i]->invoice_date }} </td>
-                <td style="text-align:center" width="10%">{{ $data[$i]->invoiceno }} </td>
-                <td style="text-align:left" width="26%">{{ $data[$i]->paystatus }} </td>
-                <td style="text-align:center" width="10%">{{ $data[$i]->pdate }} </td>
-                <td style="text-align:center" width="10%">{{ $data[$i]->ref }} </td>
-                <td style="text-align:right" width="10%">{{ number_format($data[$i]->payable,0) }} </td>
-                <td style="text-align:right" width="10%">{{ number_format($data[$i]->payment,0) }} </td>
-                <td style="text-align:right" width="10%">{{ number_format($data[$i]->invoice_bal,0) }} </td>
+                <td style="text-align:center" width="9%">{{ $data[$i]->invoice_date }} </td>
+                <td style="text-align:center" width="9%">{{ $data[$i]->invoiceno }} </td>
+                <td style="text-align:center" width="24%">{{ $data[$i]->paystatus }} </td>
+                <td style="text-align:center" width="9%">{{ $data[$i]->pdate }} </td>
+                <td style="text-align:center" width="9%">{{ $data[$i]->ref }} </td>
+                <td style="text-align:right" width="9%">{{ number_format($data[$i]->payable,0) }} </td>
+                <td style="text-align:right" width="9%">{{ number_format($data[$i]->purretamount,0) }} </td>
+                <td style="text-align:right" width="9%">{{ number_format($data[$i]->payment,0) }} </td>
+                <td style="text-align:right" width="9%">{{ number_format($data[$i]->invoice_bal,0) }} </td>
 
             </tr>
             @endfor
             <tr>
                 <td colspan="7"  style=" border:1px solid lightgray; text-align: right;font-weight: bold;background: #e3e3e3;border-top: 2px double   lightgray; ">{{ number_format($pble,0) }}</td>
-                <td colspan="1"  style=" border:1px solid lightgray; text-align: right;font-weight: bold;background: #e3e3e3;border-top: 2px double   lightgray; ">{{ number_format($pmnt,0) }}</td>
+                <td colspan="2"  style=" border:1px solid lightgray; text-align: right;font-weight: bold;background: #e3e3e3;border-top: 2px double   lightgray; ">{{ number_format($pmnt,0) }}</td>
                 <td colspan="1"  style=" border:1px solid lightgray; text-align: right;font-weight: bold;background: #e3e3e3;border-top: 2px double   lightgray; ">{{ number_format($invbal,0) }}</td>
             </tr>
         </tbody>

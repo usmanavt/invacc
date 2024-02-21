@@ -17,6 +17,7 @@
                             <fieldset class="border px-4 py-2 rounded">
                                 <legend>Report Type</legend>
                                 <input type="text" title="t1"  id="p1" name="p1" value="0" hidden  >
+                                <input type="text" title="t4"  id="p4" name="p4" value="0" hidden   >
                                 <tr>
                                     <td  style="text-align: center;">
                                         <span style="font-size:1.5rem">--- FOR OFFICE ---</span>
@@ -27,12 +28,20 @@
                                     <input type="radio" name="report_type" value="dlvrychln" required >
                                     {{-- onchange="checkReportType('dlvrychln')" --}}
                                     <label for="">SMLS Master Unit </label>
+                                    <input class="checked:bg-blue-500 checked:border-blue-500 focus:outline-none"  type="checkbox" name="lt0" id="lt0"   onclick="psto2(this)" >
+                                    <label for="">
+                                       <span style="color: brown;font-weightn: bold"> Show Only Less than 0 Stock </span> <span class="text-red-500 font-bold  "></span>
+                                        </label>
+
+
+
                                 </div>
 
                                 <div>
                                     <input type="radio" name="report_type" value="sraluntos" >
                                     {{-- required onchange="checkReportType('sraluntos')" --}}
                                     <label for="">SMLS All Unit </label>
+
                                 </div>
 
                                 <div>
@@ -50,7 +59,7 @@
                                     <label for="">Stock Transfer Order </label>
                                     <input class="checked:bg-blue-500 checked:border-blue-500 focus:outline-none"  type="checkbox" name="adv" id="adv"   onclick="psto(this)" >
                                     <label for="">
-                                       <span style="color: brown;font-weight: bold"> Show Only Pending STO </span> <span class="text-red-500 font-semibold  ">(*)</span>
+                                       <span style="color: brown;font-weight: bold"> Show Only Pending STO </span> <span class="text-red-500 font-semibold  "></span>
                                         </label>
 
                                 </div>
@@ -975,6 +984,33 @@ function psto(adv) {
         }
 
     }
+
+    function psto2(lt0) {
+        var p4 = document.getElementById("p4");
+        // amount_fc.disabled = advtxt.checked ? true : false;
+
+        // amount_fc.disabled = per.checked ? true : false;
+
+        if(lt0.checked==true)
+        {
+            p4.value=1;
+        }
+        else
+        {
+            p4.value=0;
+        }
+
+    }
+
+
+
+
+
+
+
+
+
+
 
 
 </script>

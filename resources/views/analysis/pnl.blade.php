@@ -117,62 +117,59 @@ table{
     </table>
 
     {{-- column headers --}}
-    <table class="column-headers">
+    {{-- <table >
         <thead>
             <tr>
-                <th class="column-headers" width="5%">S#</th>
-                <th class="column-headers" width="65%">HEAD OF ACCOUNTS</th>
-                <th class="column-headers" width="30%">AMOUNT</th>
-                {{-- <th class="column-headers" width="13%"></th> --}}
-                {{-- <th class="column-headers" width="28%">HEAD OF ACCOUNTS</th> --}}
-                {{-- <th class="column-headers" width="13%">AMOUNT</th> --}}
+                <th  width="4%">S#</th>
+                <th  width="33%">TITLE1</th>
+                <th  width="33%">TITLE2</th>
+                <th  width="15%">AMOUNT1</th>
+                <th  width="15%">AMOUNT2</th>
 
 
             </tr>
         </thead>
-    </table>
+    </table> --}}
 
-    <table class="data" cellspacing="0">
+    <table  cellspacing="0">
         <tbody>
             {{-- {{ $debitpkr = 0}} --}}
-            {{ $vamount1 = 0 }}; {{ $vamount2 = 0 }}
-            {{ $gvamount1 = 0 }}; {{ $gvamount2 = 0 }}
+            {{-- {{ $vamount1 = 0 }}; {{ $vamount2 = 0 }} --}}
+            {{-- {{ $gvamount1 = 0 }}; {{ $gvamount2 = 0 }} --}}
 
 
 @for ($i = 0 ; $i < count($data) ; $i++)
-@if( $i==0 )
-                <tr>
-                        <td colspan="3"  style="text-align: left;font-size:1.2rem;border-bottom: 2px solid rgb(211, 211, 211);">
-                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; {{ $data[$i]->grp1}}  </td>
+{{-- @if( $i==0 ) --}}
+                {{-- <tr> --}}
+                        {{-- <td colspan="3"  style="text-align: left;font-size:1.2rem;border-bottom: 2px solid rgb(211, 211, 211);"> --}}
+                        {{-- &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; {{ $data[$i]->grp1}}  </td> --}}
                         {{-- <td colspan="7"  style="text-align: left;font-size:1.2rem;border-bottom: 2px solid rgb(211, 211, 211);">
                         &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                         &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                         &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{ $data[$i]->grp2}}  </td> --}}
-                </tr>
-            @else
-        {{ $srno = $i - 1 }}
-        {{ $vamount1 += $data[$srno]->amount1 }}
+                {{-- </tr> --}}
+            {{-- @else --}}
+        {{-- {{ $srno = $i - 1 }} --}}
+        {{-- {{ $vamount1 += $data[$srno]->amount1 }} --}}
         {{-- {{ $vamount2 += $data[$srno]->amount2 }} --}}
 
 
 
-        @if ($data[$i]->grpid1  <> $data[$srno]->grpid1)
-             <tr>
+        {{-- @if ($data[$i]->grpid1  <> $data[$srno]->grpid1) --}}
+             {{-- <tr>
                 <td colspan="2"  style=" border:1px solid lightgray; text-align: right;font-weight: bold;background: #e3e3e3;border-top: 2px double  lightgray ;">Sub Total(s)</td>
                 <td colspan="1"  style=" border:1px solid lightgray; text-align: right;font-weight: bold;background: #e3e3e3;border-top: 2px double  lightgray ;">{{ number_format($vamount1,0) }} </td>
-                {{-- <td colspan="3"  style=" border:1px solid lightgray; text-align: right;font-weight: bold;background: #e3e3e3;border-top: 2px double  lightgray ;">{{ number_format($vamount2,0) }} </td> --}}
-
-            </tr>
-            {{ $vamount1 = 0 }};
+             </tr> --}}
+            {{-- {{ $vamount1 = 0 }}; --}}
             {{-- {{ $vamount2 = 0 }} --}}
-            <tr>
+            {{-- <tr>
                     <td colspan="3"  style="text-align:left;font-size:1.2rem;border-bottom: 2px solid rgb(211, 211, 211);"> {{ $data[$i]->grp1}} </td>
-             </tr>
+            </tr> --}}
 
 
-        @endif
+        {{-- @endif --}}
 
-        @endif
+        {{-- @endif --}}
 
 
 
@@ -183,17 +180,23 @@ table{
 
 
 
-
-                <td style="text-align: centre"; width="5%">{{ $i+1 }}</td>
-                <td style="text-align: left"; width="65%">{{ $data[$i]->title1 }} </td>
-                <td style="text-align: right"; width="30%">{{ number_format($data[$i]->amount1,0) }}</td>
-                {{-- <td style="text-align: left"; width="13%">{{ $data[$i]->gape1 }} </td> --}}
-                {{-- <td style="text-align: left"; width="28%">{{ $data[$i]->title2 }} </td> --}}
-                {{-- <td style="text-align: right"; width="13%">{{ number_format($data[$i]->amount2,0) }}</td> --}}
+            @if ($data[$i]->grpid1 == 3 or $data[$i]->grpid1 == 6 or $data[$i]->grpid1 == 10 )
+                <td style="text-align: centre;border-bottom: 2px double  lightgray;background:#e3e3e3;font-weight: bold"; width="4%">{{ $i+1 }}</td>
+                <td style="text-align: left;border-bottom: 2px double  lightgray;background: #e3e3e3;font-weight: bold"; width="33%">{{ $data[$i]->grp1 }} </td>
+                <td style="text-align: left;border-bottom: 2px double  lightgray;background: #e3e3e3;font-weight: bold"; width="33%">{{ $data[$i]->title1 }} </td>
+                <td style="text-align: right;border-bottom: 2px double  lightgray;background: #e3e3e3;font-weight: bold"; width="15%">{{ number_format($data[$i]->amount1,0) }}</td>
+                <td style="text-align: right;border-bottom: 2px double  lightgray;background: #e3e3e3;font-weight: bold;"; width="15%">{{ number_format($data[$i]->amount2,0) }}</td>
+            @else
+            <td style="text-align: centre"; width="4%">{{ $i+1 }}</td>
+            <td style="text-align: left"; width="33%">{{ $data[$i]->grp1 }} </td>
+            <td style="text-align: left"; width="33%">{{ $data[$i]->title1 }} </td>
+            <td style="text-align: right"; width="15%">{{ number_format($data[$i]->amount1,0) }}</td>
+            <td style="text-align: right"; width="15%">{{ number_format($data[$i]->amount2,0) }}</td>
+            @endif
 
 
             </tr>
-            {{ $gvamount1 += $data[$i]->amount1 }}
+            {{-- {{ $gvamount1 += $data[$i]->amount1 }} --}}
             {{-- {{ $gvamount2 += $data[$i]->amount2 }} --}}
 
 
@@ -202,21 +205,19 @@ table{
 
  @endfor
 
- <tr>
+ {{-- <tr>
     <td colspan="2"  style=" border:1px solid lightgray; text-align: right;font-weight: bold;background: #e3e3e3;border-top: 2px double  lightgray ;">Sub Total(s)</td>
     <td colspan="1"  style=" border:1px solid lightgray; text-align: right;font-weight: bold;background: #e3e3e3;border-top: 2px double  lightgray ;">{{ number_format($vamount1,0) }} </td>
-    {{-- <td colspan="3"  style=" border:1px solid lightgray; text-align: right;font-weight: bold;background: #e3e3e3;border-top: 2px double  lightgray ;">{{ number_format($vamount2,0) }} </td> --}}
 
-</tr>
-
+</tr> --}}
 
 
 
- <tr>
+
+ {{-- <tr>
     <td colspan="2"  style=" border:1px solid lightgray; text-align: right;font-weight: bold;background: #e3e3e3;border-top: 2px double  lightgray ;">Grand Total(s)</td>
     <td colspan="1"  style=" border:1px solid lightgray; text-align: right;font-weight: bold;background: #e3e3e3;border-top: 2px double  lightgray ;">{{ number_format($gvamount1,0) }} </td>
-    {{-- <td colspan="3"  style=" border:1px solid lightgray; text-align: right;font-weight: bold;background: #e3e3e3;border-top: 2px double  lightgray ;">{{ number_format($gvamount2,0) }} </td> --}}
-</tr>
+</tr> --}}
 
 
 

@@ -25,6 +25,7 @@ table{
     border-bottom: 2px double  lightgray;
     border-collapse: collapse;
     text-align: center;
+    font-size: 0.9rem;
 }
 .column-headers th{
     text-align: center;
@@ -128,16 +129,18 @@ table{
     <table class="column-headers">
         <thead>
             <tr>
-                <th class="column-headers" width="4%">S#</th>
-                <th class="column-headers" width="9%">Delivery<br>date</th>
+                <th class="column-headers" width="3%">S#</th>
+                <th class="column-headers" width="8%">Dlvry<br>date</th>
                 <th class="column-headers" width="8%">Bill<br>No</th>
-                <th class="column-headers" width="8%">P.O No<br>No</th>
-                <th class="column-headers" width="29%">Received<br>Status</th>
-                <th class="column-headers" width="8%">Collection<br>Date</th>
-                <th class="column-headers" width="7%">Collection<br>Ref.</th>
-                <th class="column-headers" width="9%">Receivable<br>Amount</th>
-                <th class="column-headers" width="9%">Collection<br>Amount</th>
-                <th class="column-headers" width="9%">Invoice<br>Balance</th>
+                <th class="column-headers" width="8%">PO#<br>No</th>
+                <th class="column-headers" width="8%">Invoice<br>Amount</th>
+                <th class="column-headers" width="8%">Sale<br>Return</th>
+                <th class="column-headers" width="18%">Received<br>Status</th>
+                <th class="column-headers" width="8%">Collec.<br>Date</th>
+                <th class="column-headers" width="7%">Collec.<br>Ref.</th>
+                <th class="column-headers" width="8%">Rcvble.<br>Amount</th>
+                <th class="column-headers" width="8%">Collec.<br>Amount</th>
+                <th class="column-headers" width="8%">Invoice<br>Balance</th>
             </tr>
         </thead>
     </table>
@@ -147,29 +150,34 @@ table{
             {{ $pble = 0 }}
             {{ $pmnt = 0 }}
             {{ $invbal = 0 }}
+            {{ $sr = 0 }}
             @for ($i = 0 ; $i < count($data) ; $i++)
             <tr>
                 {{ $pble += $data[$i]->payable }}
                 {{ $pmnt += $data[$i]->payment }}
                 {{ $invbal += $data[$i]->invoice_bal }}
+                {{ $sr += $data[$i]->saleretamount }}
 
-                <td style="text-align:center" width="4%">{{ $i+1 }}</td>
-                <td style="text-align:center" width="9%">{{ $data[$i]->saldate }} </td>
+                <td style="text-align:center" width="3%">{{ $i+1 }}</td>
+                <td style="text-align:center" width="8%">{{ $data[$i]->saldate }} </td>
                 <td style="text-align:center" width="8%">{{ $data[$i]->billno }} </td>
                 <td style="text-align:center" width="8%">{{ $data[$i]->pono }} </td>
-                <td style="text-align:left" width="29%">{{ $data[$i]->paystatus }} </td>
+                <td style="text-align:center" width="8%">{{ $data[$i]->invoiceval }} </td>
+                <td style="text-align:right" width="8%">{{ number_format($data[$i]->saleretamount,0) }} </td>
+                <td style="text-align:center" width="18%">{{ $data[$i]->paystatus }} </td>
                 <td style="text-align:center" width="8%">{{ $data[$i]->pdate }} </td>
                 <td style="text-align:center" width="7%">{{ $data[$i]->ref }} </td>
-                <td style="text-align:right" width="9%">{{ number_format($data[$i]->payable,0) }} </td>
-                <td style="text-align:right" width="9%">{{ number_format($data[$i]->payment,0) }} </td>
-                <td style="text-align:right" width="9%">{{ number_format($data[$i]->invoice_bal,0) }} </td>
+                <td style="text-align:right" width="8%">{{ number_format($data[$i]->payable,0) }} </td>
+                <td style="text-align:right" width="8%">{{ number_format($data[$i]->payment,0) }} </td>
+                <td style="text-align:right" width="8%">{{ number_format($data[$i]->invoice_bal,0) }} </td>
 
             </tr>
             @endfor
             <tr>
                 {{-- <td colspan="4"  style=" border:1px solid lightgray; text-align: right;font-weight: bold;background: #e3e3e3;border-top: 2px double  lightgray ;"> Total(s)</td> --}}
                 {{-- <td colspan="7"  style=" border:1px solid lightgray;. text-align: right;font-weight: bold;background: #e3e3e3;border-top: 2px double   lightgray; ">{{ number_format($pble,0) }}  </td> --}}
-                <td colspan="7"  style=" border:1px solid lightgray; text-align: right;font-weight: bold;background: #e3e3e3;border-top: 2px double   lightgray; ">{{ number_format($pble,0) }}</td>
+                <td colspan="10"  style=" border:1px solid lightgray; text-align: right;font-weight: bold;background: #e3e3e3;border-top: 2px double   lightgray; ">{{ number_format($pble,0) }}</td>
+                {{-- <td colspan="1"  style=" border:1px solid lightgray; text-align: right;font-weight: bold;background: #e3e3e3;border-top: 2px double   lightgray; ">{{ number_format($sr,0) }}</td> --}}
                 <td colspan="1"  style=" border:1px solid lightgray; text-align: right;font-weight: bold;background: #e3e3e3;border-top: 2px double   lightgray; ">{{ number_format($pmnt,0) }}</td>
                 <td colspan="1"  style=" border:1px solid lightgray; text-align: right;font-weight: bold;background: #e3e3e3;border-top: 2px double   lightgray; ">{{ number_format($invbal,0) }}</td>
                 <td colspan="1"  style=" border:1px solid lightgray; text-align: right;font-weight: bold;background: #e3e3e3;border-top: 2px double   lightgray; "></td>

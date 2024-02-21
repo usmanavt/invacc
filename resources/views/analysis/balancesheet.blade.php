@@ -201,12 +201,12 @@ table{
 
  @endfor
 
- <tr>
+ {{-- <tr>
     <td colspan="2"  style=" border:1px solid lightgray; text-align: right;font-weight: bold;background: #e3e3e3;border-top: 2px double  lightgray ;">Sub Total(s)</td>
     <td colspan="1"  style=" border:1px solid lightgray; text-align: right;font-weight: bold;background: #e3e3e3;border-top: 2px double  lightgray ;">{{ number_format($vamount1,0) }} </td>
     <td colspan="3"  style=" border:1px solid lightgray; text-align: right;font-weight: bold;background: #e3e3e3;border-top: 2px double  lightgray ;">{{ number_format($vamount2,0) }} </td>
 
-</tr>
+</tr> --}}
 
 
 

@@ -45,7 +45,7 @@
                                 {{-- <x-input-date title="P.O Date" name="podate" id="podate" req required class="col-span-2" value="{{ $saleinvoices->podate->format('Y-m-d') }}" disabled  /> --}}
                                 <x-input-text title="G.Pass No" name="gpno" id="gpno" value="{{ $saleinvoices->gpno }}"     required   />
                                 <x-input-date title="Deilivery Date" id="deliverydt" name="deliverydt" req required class="col-span-2" value="{{ $saleinvoices->saldate->format('Y-m-d') }}" />
-
+                                <x-input-text title="prvscustno" name="pcustno" id="pcustno" value="{{ $saleinvoices->customer_id }}"   />
 
 
                         </div>

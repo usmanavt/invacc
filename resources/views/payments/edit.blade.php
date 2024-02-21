@@ -262,8 +262,8 @@ function pushDynamicData(data)
 var updateValues = (cell) => {
         var data = cell.getData();
         var sum = (Number(data.payedusd) * Number(data.convrate))
-        var invbal = (Number(data.invoice_amount) - Number(data.payedusd))
-        // var varqty = ( Number(data.balqty) - Number(data.saleqty) )
+        var invbal = (Number(data.invoice_amount) - Number(data.payedusd) - Number(data.purretamount))
+        // var invbal = (Number(data.invoice_amount) )
         var row = cell.getRow();
         row.update({
              "payedrup": sum,
@@ -342,6 +342,27 @@ dynamicTable = new Tabulator("#dynamicTable", {
                             formatterParams:{thousand:",",precision:3},
                         },
 
+
+                        {   title:"Purchase Return",
+                            headerHozAlign :'right',
+                            hozAlign:"right",
+                            responsive:0,
+                            field:"purretamount",
+                            bottomCalc:"sum",
+                            formatter:"money",
+                            cellEdited: updateValues,
+                            validator:["required","numeric"],
+                            cssClass:"bg-gray-200 font-semibold",
+                            formatterParams:{thousand:",",precision:3},
+                        },
+
+
+
+
+
+
+
+
                         {   title:"Currency",
                             headerHozAlign :'right',
                             hozAlign:"right",
@@ -415,9 +436,11 @@ dynamicTable = new Tabulator("#dynamicTable", {
                         formatterParams:{thousand:",",precision:3},
                         formatter:function(cell,row)
                         {
-                            return (cell.getData().invoice_amount - cell.getData().payedusd).toFixed(0)
+                            return (cell.getData().invoice_amount - cell.getData().payedusd - cell.getData().purretamount ).toFixed(0)
+
                         },
-                        bottomCalc:totalVal
+                         bottomCalc:totalVal,
+
 
                     },
 

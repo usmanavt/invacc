@@ -285,6 +285,7 @@ window.onload = function() {
              prvscrdtamt.value=data.crdtcust
              prvsinvsamt.value=data.invsclrd
              amount_fc.value=data.AdvanceAmount
+            //  amount_pkr.value=data.AdvanceAmount
             if (data.head_id==33)
             { detailsUrl = `${getDetails}/?id=${data.id}` }
             fetchDataFromServer(detailsUrl)
@@ -339,6 +340,7 @@ window.onload = function() {
                         totrcvd :     obj.totrcvd,
                         cartage :     obj.cartage,
                         invoice_bal:  obj.invoice_bal,
+                        saleretamount:obj.saleretamount,
 
                     }
                 ])
@@ -432,24 +434,8 @@ var tamount=0;
     function tnetamount()
         {
 
-
-            // console.log(tamount)
             amount_fc.value= (prvsinvsamt.value - prvscrdtamt.value) + tamount
-            // console.log(amount_fc.value)
-
-            //  discntamt.value=0;
-            //   rcvblamount.value=0;
-            // discntamt.value=(tamount*discntper.value/100).toFixed(0);
-            // discntper.value=(discntamt.value/tamount*100).toFixed(2);
-            // if (discntper.disabled)
-            // {discntper.value=(discntamt.value/tamount*100).toFixed(2)};
-
-            // if (!discntper.disabled)
-            // {discntamt.value=(tamount*discntper.value/100).toFixed(0);};
-
-            //  rcvblamount.value=  Number(tamount)  ;
-            // saletaxamt.value=(Number(rcvblamount.value) * Number(saletaxper.value) )/100 ;
-            // totrcvbamount.value=(Number(rcvblamount.value)+Number(saletaxamt.value)+Number(cartage.value)).toFixed(0);
+            amount_pkr.value= (prvsinvsamt.value - prvscrdtamt.value) + tamount
         }
 
 var updateValues = (cell) => {
@@ -574,6 +560,21 @@ var updateValues = (cell) => {
                             cssClass:"bg-gray-200 font-semibold",
                             formatterParams:{thousand:",",precision:2},
                         },
+
+                        {   title:"Sale Return",
+                            headerHozAlign :'right',
+                            hozAlign:"right",
+                            responsive:0,
+                            field:"saleretamount",
+                            // editor:"number",
+                            bottomCalc:"sum",
+                            formatter:"money",
+                            validator:["required","numeric"],
+                            cssClass:"bg-gray-200 font-semibold",
+                            formatterParams:{thousand:",",precision:2},
+                        },
+
+
 
 
 
@@ -716,13 +717,13 @@ var updateValues = (cell) => {
         var amount_fc = document.getElementById("amount_fc");
         amount_fc.disabled = per.checked ? false : true;
         amount_fc.style.color ="black";
-        amount_fc.value =0;
+        // amount_fc.value =0;
 
 
         var conversion_rate = document.getElementById("conversion_rate");
         conversion_rate.disabled = per.checked ? false : true;
         conversion_rate.style.color ="black";
-        amount_pkr.value =0;
+        // amount_pkr.value =0;
         conversion_rate.value =1;
 
 

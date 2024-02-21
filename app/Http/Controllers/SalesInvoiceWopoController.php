@@ -14,6 +14,8 @@ use App\Models\SaleInvoices;
 use App\Models\SaleInvoicesDetails;
 use App\Models\CreateSaleRate;
 use App\Models\ItemBal;
+use App\Models\BankTransaction;
+
 
 
 use App\Models\Material;
@@ -147,8 +149,8 @@ class SalesInvoiceWopoController  extends Controller
             //    dd($request->all());
         $this->validate($request,[
 
-            'dcno' => 'required|unique:sale_invoices',
-            'gpno' => 'required|unique:sale_invoices',
+            // 'dcno' => 'required|unique:sale_invoices',
+            // 'gpno' => 'required|unique:sale_invoices',
             // 'poseqno' => 'required|min:1|unique:customer_orders',
             // 'pono' => 'required|min:1|unique:customer_orders'
             // 'gpno' => 'required|min:1|unique:sale_invoices',
@@ -156,8 +158,9 @@ class SalesInvoiceWopoController  extends Controller
         ]);
         DB::beginTransaction();
         try {
-            $ci = new SaleInvoices();
 
+
+            $ci = new SaleInvoices();
             $ci->custplan_id = 0;
             $ci->pono = 'Without P.O';
             $ci->podate = $request->deliverydt;
@@ -178,6 +181,32 @@ class SalesInvoiceWopoController  extends Controller
 
 
             $ci->save();
+
+            if($request->customer_id==0)
+            {
+                $pv = new BankTransaction();
+                $pv->cashinvid = $ci->id;
+                $pv->bank_id = 1;
+                $pv->head_id = 33;
+                $pv->subhead_id = 0;
+                $pv->transaction_type = 'CRV';
+                $pv->documentdate = $request->deliverydt;
+                $pv->conversion_rate = 1;
+                $pv->amount_fc = $request->totrcvbamount;
+                $pv->amount_pkr = $request->totrcvbamount;
+                $pv->cheque_date = $request->deliverydt;;
+                $pv->cheque_no = '';
+                $pv->description = 'Received Against Sale';
+                $pv->transno = 0;
+                $pv->advance = 0;
+                $pv->supname = 'CUST CASH CUSTOMER';
+                $pv->save();
+            }
+
+
+
+
+
 
             foreach ($request->sales as $cont) {
                 // $material = Material::findOrFail($cont['id']);
@@ -242,6 +271,11 @@ class SalesInvoiceWopoController  extends Controller
 
 
                 $lpd->save();
+
+
+
+
+
 
                 // $location = Location::where("title", $cont['location'])->first();
                 // $lpd->locid = $location->id;
@@ -400,6 +434,46 @@ class SalesInvoiceWopoController  extends Controller
         try {
 
             //  dd($request->sale_invoice_id);
+
+
+            if($request->pcustno==0)
+            {
+                // $pv = new BankTransaction();
+                // $pv = BankTransaction::findOrFail($request->sale_invoice_id);
+                // dd($request->per());
+
+                if($request->pcustno==0 and $request->customer_id==0 )
+
+                {
+                    $pv = BankTransaction::where('cashinvid',$request->sale_invoice_id)->first();
+                    $pv->bank_id = 1;
+                    $pv->head_id = 33;
+                    $pv->subhead_id = 0;
+                    $pv->transaction_type = 'CRV';
+                    $pv->documentdate = $request->deliverydt;
+                    $pv->conversion_rate = 1;
+                    $pv->amount_fc = $request->totrcvbamount;
+                    $pv->amount_pkr = $request->totrcvbamount;
+                    $pv->cheque_date = $request->deliverydt;;
+                    $pv->cheque_no = '';
+                    $pv->description = 'Received Against Sale';
+                    $pv->transno = 0;
+                    $pv->advance = 0;
+                    $pv->supname = 'CUST CASH CUSTOMER';
+                    $pv->save();
+
+                }
+            else
+            {
+                DB::delete(DB::raw(" delete from bank_transactions where  cashinvid=$request->sale_invoice_id   "));
+
+            }
+
+            }
+
+
+
+
             $sale_invoices = SaleInvoices::findOrFail($request->sale_invoice_id);
             $sale_invoices->custplan_id = 0;
             $sale_invoices->pono = 'Without P.O';

@@ -147,8 +147,8 @@ class SalesInvoicesController  extends Controller
             //    dd($request->all());
         $this->validate($request,[
 
-            'dcno' => 'required|unique:sale_invoices',
-            'gpno' => 'required|unique:sale_invoices',
+            // 'dcno' => 'required|unique:sale_invoices',
+            // 'gpno' => 'required|unique:sale_invoices',
             // 'poseqno' => 'required|min:1|unique:customer_orders',
             // 'pono' => 'required|min:1|unique:customer_orders'
             // 'gpno' => 'required|min:1|unique:sale_invoices',
