@@ -194,9 +194,9 @@ class SalesInvoicesController  extends Controller
                 $lpd->saleamnt = $cont['saleamnt'];
                 $lpd->feedqty = $cont['feedqty'];
 
-                $lpd->qtykgcrt = $cont['salcostkg'];
-                $lpd->qtypcscrt = $cont['salcostpcs'];
-                $lpd->qtyfeetcrt = $cont['salcostfeet'];
+                $lpd->qtykgcrt = 0;
+                $lpd->qtypcscrt = 0;
+                $lpd->qtyfeetcrt = 0;
 
                 $lpd->sqtykg = $cont['sqtykg'];
                 $lpd->sqtypcs = $cont['sqtypcs'];
@@ -410,9 +410,9 @@ class SalesInvoicesController  extends Controller
 
 
 
-                    $cds->qtykgcrt = $cd['qtykgcrt'];
-                    $cds->qtypcscrt = $cd['qtypcscrt'];
-                    $cds->qtyfeetcrt = $cd['qtyfeetcrt'];
+                    $cds->qtykgcrt = 0;
+                    $cds->qtypcscrt = 0;
+                    $cds->qtyfeetcrt = 0;
 
 
                     $cds->wtper = $cd['wtper'];

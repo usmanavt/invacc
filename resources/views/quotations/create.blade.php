@@ -370,10 +370,10 @@ const skus = @json($skus);
                     // disableSubmitButton();
                 }
             },
-            {title:"Material",          field:"title", cssClass:"bg-gray-200 font-semibold"},
+            {title:"Material",          field:"title", cssClass:"bg-gray-200 font-semibold",width:300,responsive:0},
             {title:"Category_id",       field:"category_id",    cssClass:"bg-gray-200 font-semibold",visible:false},
             {title:"Dimension",         field:"dimension_id",   cssClass:"bg-gray-200 font-semibold",visible:false},
-            {title:"Dimension",         field:"dimension",      cssClass:"bg-gray-200 font-semibold"},
+            {title:"Dimension",         field:"dimension",      cssClass:"bg-gray-200 font-semibold",width:120,responsive:0},
             {title:"Replace Description",field:"repname",       cssClass:"bg-gray-200 font-semibold",editor:true},
             {title:"Sku",               field:"sku_id",         cssClass:"bg-gray-200 font-semibold",visible:false},
             {title:"Brand",             field:"mybrand",          cssClass:"bg-gray-200 font-semibold",editor:true,visible:false},
@@ -555,12 +555,12 @@ const skus = @json($skus);
             return;
         }
 
-        if(prno.value == "")
-        {
-            showSnackbar("Please add prno");
-            prno.focus();
-            return;
-        }
+        // if(prno.value == "")
+        // {
+        //     showSnackbar("Please add prno");
+        //     prno.focus();
+        //     return;
+        // }
 
         // if(gpno.value == "")
         // {

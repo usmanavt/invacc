@@ -453,8 +453,8 @@ var updateValues = (cell) => {
                     }
                 },
                 {title:"Id",           field:"id", visible:false},
-                {title:"Material Name",     field:"material_title",responsive:0},
-                {title:"Material Size",    field:"dimension",responsive:0,frozen:true, headerMenu:headerMenu},
+                {title:"Material Name",     field:"material_title",responsive:0,width:300,responsive:0},
+                {title:"Material Size",    field:"dimension",responsive:0,frozen:true, headerMenu:headerMenu,width:150,responsive:0},
                 {title:"UOM",         field:"sku",responsive:0, hozAlign:"center"},
                 {title:"Unitid",       field:"sku_id",visible:false},
                 // {title:"contract_id",  field:"contract_id",visible:false},
@@ -466,11 +466,11 @@ var updateValues = (cell) => {
                 {title:"dimension_id", field:"dimension_id",visible:false},
 
 
-                {title:"StockQty", field:"balqty"},
+                {title:"StockQty", field:"balqty",width:120,responsive:0},
 
 
 
-                {title:"Variance", field:"varqty",cellEdited: updateValues,},
+                {title:"Variance", field:"varqty",width:120,responsive:0,cellEdited: updateValues},
 
                 {
                     title:'Quantity', headerHozAlign:"center",
@@ -479,13 +479,14 @@ var updateValues = (cell) => {
                             field:"repname",
                             // editor:"list",
                             responsive:0,
+                            width:150,
                             // headerVertical:true,
                             editor:true,
                         },
 
                         {   title:"Brand",headerHozAlign :'center',
                             field:"mybrand",
-                            // editor:"list",
+                            width:150,
                             responsive:0,
                             // headerVertical:true,
                             editor:true,
@@ -499,6 +500,7 @@ var updateValues = (cell) => {
                             headerHozAlign :'right',
                             hozAlign:"right",
                             responsive:0,
+                            width:150,
                             field:"saleqty",
                             editor:"number",
                             // headerVertical:true,
@@ -514,6 +516,7 @@ var updateValues = (cell) => {
                             headerHozAlign :'right',
                             hozAlign:"right",
                             responsive:0,
+                            width:120,
                             field:"price",
                             editor:"number",
                             // headerVertical:true,
@@ -529,6 +532,7 @@ var updateValues = (cell) => {
                         {title:"Sale Amount",
                         headerHozAlign :'right',
                         hozAlign:"right",
+                        width:120,
                         field:"saleamnt",
                         cssClass:"bg-gray-200 font-semibold",
                         formatter:"money",

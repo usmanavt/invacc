@@ -231,9 +231,12 @@ class SalesInvoiceWopoController  extends Controller
                 $lpd->saleamnt = $cont['saleamnt'];
                 $lpd->feedqty = $cont['feedqty'];
 
-                $lpd->qtykgcrt = $cont['salcostkg'];
-                $lpd->qtypcscrt = $cont['salcostpcs'];
-                $lpd->qtyfeetcrt = $cont['salcostfeet'];
+                $lpd->qtykgcrt =0;
+                // $cont['salcostkg'];
+                $lpd->qtypcscrt =0;
+                // $cont['salcostpcs'];
+                $lpd->qtyfeetcrt =0;
+                // $cont['salcostfeet'];
 
                 $lpd->sqtykg = $cont['sqtykg'];
                 $lpd->sqtypcs = $cont['sqtypcs'];
@@ -528,9 +531,12 @@ class SalesInvoiceWopoController  extends Controller
                     $cds->salepcs = $cd['qtypcs'];
                     $cds->salefeet = $cd['qtyfeet'];
 
-                    $cds->qtykgcrt = $cd['qtykgcrt'];
-                    $cds->qtypcscrt = $cd['qtypcscrt'];
-                    $cds->qtyfeetcrt = $cd['qtyfeetcrt'];
+                    $cds->qtykgcrt = 0;
+                    // $cd['qtykgcrt'];
+                    $cds->qtypcscrt = 0;
+                    // $cd['qtypcscrt'];
+                    $cds->qtyfeetcrt = 0;
+                    // $cd['qtyfeetcrt'];
 
 
 
@@ -559,87 +565,38 @@ class SalesInvoiceWopoController  extends Controller
                             $lstrt->save();
                         }
 
-
-
-
-
-
-
-
-
-
-
                     $cds->save();
 
-                    // $location = Location::where("title", $cd['location'])->first();
-                    // $cds->locid = $location->id;
-                    // dd($cds->locid);
-                    // Last Sale Rate Update in Material Table
-                    // $matsrate = Material::findOrFail($cds->material_id);
-                    // if($cds->sku_id == 1)
-                    // { $matsrate->salertkg = $cds->price+;}
-                    // elseif($cds->sku_id == 2)
-                    // { $matsrate->salertpcs = $cds->price;}
-                    // elseif($cds->sku_id == 3)
-                    // { $matsrate->salertfeet = $cds->price;}
-                    // $matsrate->save();
-
-                    // $custplnbal = customer_order_details::findOrFail($cds->material_id);
-
-
-
-
-
-                    // $dlvrd = DB::table('sale_invoices_details')
-                    // ->join('sale_invoices', 'sale_invoices_details.sale_invoice_id', '=', 'sale_invoices.id')
-                    // ->where('sale_invoices.custplan_id', '=', $sale_invoices->custplan_id)->where('sale_invoices_details.material_id', '=', $cd->material_id)
-                    // ->sum(DB::raw('( CASE sale_invoices_details.sku_id  WHEN  1 THEN sale_invoices_details.qtykg WHEN 2 THEN sale_invoices_details.qtypcs WHEN 3 THEN sale_invoices_details.qtyfeet  END)'));
-                    // // dd($dlvrd);
-                    // $custplnbal = CustomerOrderDetails::where('sale_invoice_id',$sale_invoices->custplan_id)->where('material_id',$cd->material_id)
-                    // ->first();
-                    // $custplnbal->balqty = $custplnbal->qtykg - $dlvrd;
-                    // $custplnbal->save();
-
-
-
-
-
-
-
-
-                    //  $cds->save();
-                // }
-                //     //  The item is new, Add it
-                //      $cds = new SaleInvoicesDetails();
-                //      $cds->sale_invoice_id = $sale_invoices->id;
-                //      $cds->material_id = $cd->material_id;
-                //      $cds->sku_id = $cd->sku_id;
-                //      $cds->repname = $cd['repname'];
-                //      $cds->brand = $cd['brand'];
-                //      $cds->qtykg = $cd['qtykg'];
-                //      $cds->qtypcs = $cd['qtypcs'];
-                //      $cds->qtyfeet = $cd['qtyfeet'];
-                //      $cds->price = $cd['price'];
-                //      $cds->saleamnt = $cd['saleamnt'];
-                //      $unit = Sku::where("title", $cd['sku'])->first();
-                //       $cds->sku_id = $unit->id;
-
-
-                //     $cds->save();
-                // }
             }
-            // $dlvrd = SaleInvoices::where('custplan_id',$sale_invoices->custplan_id)->sum('totrcvbamount');
-            // $custordr = CustomerOrder::where('id',$sale_invoices->custplan_id)->first();
 
-            // $custordr->delivered = $dlvrd;
-            // $custordr->save();
+            else
+            {
 
-            // $sordrbal = SaleInvoices::where('id',$sale_invoices->id)->first();
-            // $sordrbal->ordrbal= $custordr->totrcvbamount - $dlvrd;
-            // $sordrbal->save();
+               $cds = new SaleInvoicesDetails();
+               $cds->sale_invoice_id = $sale_invoices->id;
+               $cds->material_id = $cd->material_id;
+               $cds->sku_id = $cd->sku_id;
+               $cds->repname = $cd['repname'];
+               $cds->brand = $cd['brand'];
+               $cds->qtykg = $cd['qtykg'];
+               $cds->qtypcs = $cd['qtypcs'];
+               $cds->qtyfeet = $cd['qtyfeet'];
+               $cds->unitconver = $cd['unitconver'];
+               $cds->price = $cd['price'];
+               $cds->saleamnt = $cd['saleamnt'];
+               $cds->feedqty = $cd['feedqty'];
+               $unit = Sku::where("title", $cd['sku'])->first();
+               $cds->sku_id = $unit->id;
+               $cds->salewt = $cd['qtykg'];
+               $cds->salepcs = $cd['qtypcs'];
+               $cds->salefeet = $cd['qtyfeet'];
 
+               $cds->qtykgcrt = 0;
+               $cds->qtypcscrt = 0;
+               $cds->qtyfeetcrt = 0;
+               $cds->save();
 
-        }
+            }}
 
             /// **** update summary data to master table
             DB::update(DB::raw("

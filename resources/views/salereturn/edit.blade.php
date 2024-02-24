@@ -46,26 +46,13 @@
                                     <x-input-text title="Bill No" name="billno" id="billno" value="{{ $salereturn->billno }}"   disabled   />
                                     <x-input-text title="G.Pass No" name="gpno" id="gpno" value="{{ $salereturn->gpno }}"   disabled   />
                                     <x-input-date title="Return Date" name="rdate" id="rdate" value="{{ $salereturn->rdate }}"  class="col-span-2" />
+                                    <x-input-text title="" name="pcustno" id="pcustno" hidden value="{{ $salereturn->customer_id }}"  class="col-span-2" />
                         </div>
-                        {{-- <div class="grid grid-cols-12 gap-1 py-2 items-center"> --}}
-                            {{-- <x-input-date title="Deilivery Date" id="deliverydt" name="deliverydt" req required class="col-span-2" value="{{ $saleinvoices->saldate->format('Y-m-d') }}" />
-                            <x-input-text title="DC No" name="dcno" id="dcno" value="{{ $saleinvoices->dcno }}"     required   />
-                            <x-input-text title="Bill No" name="billno" id="billno" value="{{ $saleinvoices->billno }}"     required   /> --}}
 
 
-                            {{-- <x-input-date title="P.O Date" id="podate" name="podate" value="{{ $customerorder->podate->format('Y-m-d') }}" req required class="col-span-2" />
-                            <x-input-text title="P.O #" name="pono" id="pono" value="{{ $customerorder->pono }}"  />
-                            <x-input-date title="Delivery Date" name="deliverydt" value="{{ $customerorder->deliverydt->format('Y-m-d') }}" />
 
 
-                            <label for="">
-                                Remakrs <span class="text-red-500 font-semibold  ">(*)</span>
-                            </label>
-                            <textarea name="remarks" id="remarks" cols="100" rows="2" maxlength="150" required class="rounded">
-                                {{ $customerorder->remarks }}
 
-                            </textarea> --}}
-                        {{-- </div> --}}
                     </fieldset>
 
 
@@ -94,7 +81,7 @@
                                 <x-input-numeric title="Sale Tax(%)" name="saletaxper" value="{{ $salereturn->saletaxper }}" required  onblur="tnetamount()"  />
                                 <x-input-numeric title="Sale Tax(Rs)" name="saletaxamt" value="{{ $salereturn->saletaxamt }}" disabled    />
                                 <x-input-numeric title="Total Amount" name="totrcvbamount" value="{{ $salereturn->totrcvbamount }}" disabled />
-                                <x-input-numeric title="" name="sale_return_id" id="sale_return_id" value="{{ $salereturn->id }}"   />
+                                <x-input-numeric title="" name="sale_return_id" id="sale_return_id" value="{{ $salereturn->id }}" hidden   />
                                     <label for="">
                                         Descripiton <span class="text-red-500 font-semibold"></span>
                                     </label>
@@ -340,6 +327,16 @@ function pushDynamicData(data)
             qtyfeet=((pr2*Number(data.sqtyfeet))/100).toFixed(2)
 
          }
+         else
+        {
+            var sum = (Number(data.feedqty) * Number(data.price))
+            var pr1=(Number(data.feedqty) / Number(data.totqty))*100
+            var pr2=( pr1 / Number(data.pcper))*100
+            qtykg=(((pr2*Number(data.sqtykg))/100) / Number(data.unitconversr)).toFixed(2)
+            qtyfeet=(((pr2*Number(data.sqtyfeet))/100) / Number(data.unitconversr)).toFixed(2)
+            qtypcs=((Number(data.feedqty) / Number(data.unitconversr))).toFixed(0)
+         }
+
 
 
         var row = cell.getRow();
@@ -433,7 +430,7 @@ dynamicTable = new Tabulator("#dynamicTable", {
                 formatter:"money",
                 formatterParams:{thousand:",",precision:2},
                 validator:["required","integer"],
-                cellEdited: updateValues,
+                // cellEdited: updateValues,
                },
 
                {title:"InPcs",
@@ -444,7 +441,7 @@ dynamicTable = new Tabulator("#dynamicTable", {
                 formatter:"money",
                 formatterParams:{thousand:",",precision:2},
                 validator:["required","integer"],
-                cellEdited: updateValues,
+                // cellEdited: updateValues,
                },
 
                {   title:"InFeet",
@@ -455,7 +452,7 @@ dynamicTable = new Tabulator("#dynamicTable", {
                 formatter:"money",
                 formatterParams:{thousand:",",precision:2},
                 validator:["required","integer"],
-                cellEdited: updateValues,
+                // cellEdited: updateValues,
                },
 
             ]},
@@ -484,6 +481,16 @@ dynamicTable = new Tabulator("#dynamicTable", {
                 {
                 title:'Pricing', headerHozAlign:"center",
                     columns:[
+
+                { title:"Convertion",
+                field:"unitconversr",
+                editor:"number",
+                validator:"required" ,
+                formatter:"money",
+                formatterParams:{thousand:",",precision:2},
+                validator:["required","decimal(10,3)"] ,
+                cellEdited: updateValues   ,
+            },
 
                 { title:"Revise Qty",
                 field:"feedqty",

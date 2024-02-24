@@ -87,18 +87,22 @@
                                     {{-- </div> --}}
 
 
-                                <x-input-numeric title="Discount(Amount)" name="discntamt" id="discntamt" value="{{ $saleinvoices->discntamt }}"    />
-                                <x-input-numeric title="Payble Amount" name="rcvblamount" value="{{ $saleinvoices->rcvblamount }}" disabled />
-                                <x-input-numeric title="" name="sale_invoice_id" id="sale_invoice_id" value="{{ $saleinvoices->id }}" hidden  />
+                                <x-input-numeric title="Discount(Amount)" name="discntamt" id="discntamt" class="col-span-2" value="{{ $saleinvoices->discntamt }}"    />
+                                <x-input-numeric title="Payble Amount" name="rcvblamount" class="col-span-2" value="{{ $saleinvoices->rcvblamount }}" disabled />
+                                <x-input-numeric title="" name="sale_invoice_id" id="sale_invoice_id" class="col-span-2" value="{{ $saleinvoices->id }}" hidden  />
                             </div>
 
                             <div class="grid grid-cols-12 gap-2 py-2 items-center">
-                                <x-input-numeric title="Sale Tax(%)" name="saletaxper" value="{{ $saleinvoices->saletaxper }}" required  onblur="tnetamount()"  />
-                                <x-input-numeric title="Sale Tax(Rs)" name="saletaxamt" value="{{ $saleinvoices->saletaxamt }}" disabled    />
-                                <x-input-numeric title="Cartage" name="cartage" value="{{ $saleinvoices->cartage }}"  required  onblur="tnetamount()"  />
-                                <x-input-numeric title="Total Amount" name="totrcvbamount" value="{{ $saleinvoices->totrcvbamount }}" disabled />
+                                <x-input-numeric title="Sale Tax(%)" name="saletaxper" class="col-span-2" value="{{ $saleinvoices->saletaxper }}" required  onblur="tnetamount()"  />
+                                <x-input-numeric title="Sale Tax(Rs)" name="saletaxamt" class="col-span-2" value="{{ $saleinvoices->saletaxamt }}" disabled    />
+                                <x-input-numeric title="Cartage" name="cartage" class="col-span-2" value="{{ $saleinvoices->cartage }}"  required  onblur="tnetamount()"  />
 
                             </div>
+                            <div class="grid grid-cols-12 gap-2 py-2 items-center">
+                            <x-input-numeric title="Total Amount" name="totrcvbamount" class="col-span-2" value="{{ $saleinvoices->totrcvbamount }}" disabled />
+                            </div>
+
+
 
 
 
@@ -302,6 +306,10 @@ function pushDynamicData(data)
     var updateValues = (cell) => {
         var data = cell.getData();
 
+if(Number(data.totqty) > 0  )
+
+{
+
         if(cell.getData().sku_id==1)
          {
 
@@ -348,7 +356,36 @@ function pushDynamicData(data)
             qtypcs=(Number(data.feedqty) / Number(data.unitconver)).toFixed(2)
 
          }
+        }
 
+//  if(Number(data.totqty) <= 0  )
+else
+ {
+
+
+    if(data.sku==='KG'  )
+        {
+        qtypcs=0
+        qtyfeet=0
+         qtykg=Number(data.feedqty) }
+    else if(data.sku==='PCS'   )
+    {
+    qtykg=0
+    qtyfeet=0
+        qtypcs=Number(data.feedqty)}
+    else if(data.sku==='FEET')
+    {
+    qtykg=0
+    qtypcs=0
+        qtyfeet=Number(data.feedqty)}
+    else
+    {
+    qtykg=0
+    qtyfeet=0
+    qtypcs=((Number(data.feedqty) / Number(data.unitconver))).toFixed(0)}
+
+ }
+ var sum = (Number(data.feedqty) * Number(data.price))
 
         var row = cell.getRow();
 
@@ -418,11 +455,13 @@ dynamicTable = new Tabulator("#dynamicTable", {
         {title:"Id",                field:"material_id",    cssClass:"bg-gray-200 font-semibold"},
         {title:"Material",          field:"material_title", cssClass:"bg-gray-200 font-semibold"},
         {title:"Dimension",         field:"dimension",      cssClass:"bg-gray-200 font-semibold"},
-        {title:"UOM",               field:"sku",cssClass:"bg-gray-200 font-semibold"},
 
-        {title:"qtykgcrt", field:"qtykgcrt",visible:true,editor:"number"},
-        {title:"qtypcscrt", field:"qtypcscrt",visible:true,editor:"number"},
-        {title:"qtyfeetcrt", field:"qtyfeetcrt",visible:true,editor:"number"},
+        {title:"Master Unit",   field:"munitname",cssClass:"bg-gray-200 font-semibold"},
+        {title:"Sale Unit",  field:"sku",cssClass:"bg-gray-200 font-semibold"},
+
+        // {title:"qtykgcrt", field:"qtykgcrt",visible:true,editor:"number"},
+        // {title:"qtypcscrt", field:"qtypcscrt",visible:true,editor:"number"},
+        // {title:"qtyfeetcrt", field:"qtyfeetcrt",visible:true,editor:"number"},
 
         {
                 title:'STOCK QUANTITY', headerHozAlign:"center",
@@ -619,6 +658,36 @@ function validateForm()
             showSnackbar("Sale Qty must be less than Plan qty","info");
             return;
         }
+
+                            if( element.munitname=='KG' &&  element.qtykg <=0 )
+                            {
+                                showSnackbar("Stock Unit Data must be Enter","info");
+                                return;
+
+                            }
+
+                            if( element.munitname=='PCS' &&  element.qtypcs <=0 )
+                            {
+                                showSnackbar("Stock Unit Data must be Enter","info");
+                                return;
+
+                            }
+
+                            if( element.munitname=='FEET' &&  element.qtyfeet <=0 )
+                            {
+                                showSnackbar("Stock Unit Data must be Enter","info");
+                                return;
+
+                            }
+
+
+
+
+
+
+
+
+
 
         // if(Number(element.qtypcs) > Number(element.sqtypcs) || Number(element.qtykg) > Number(element.sqtykg) || Number(element.qtyfeet) > Number(element.sqtyfeet) )
         //                         {

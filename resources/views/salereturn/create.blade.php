@@ -348,13 +348,12 @@
 
                         price   :           obj.price,
                         saleamnt:           obj.saleamnt,
+                        unitconversr:         obj.unitconver,
 
                     }
                 ])
             }
         }
-
-
 
         //  Dynamic Table [User data]
 
@@ -455,6 +454,7 @@ var tamount=0;
             totrcvbamount.value=(Number(rcvblamount.value)+Number(saletaxamt.value)).toFixed(0);
         }
 
+
 var updateValues = (cell) => {
         var data = cell.getData();
         // var sum = (Number(data.bundle1) * Number(data.pcspbundle1)) + (Number(data.bundle2) * Number(data.pcspbundle2))
@@ -502,6 +502,17 @@ var updateValues = (cell) => {
 
          }
 
+         else
+        {
+            var sum = (Number(data.feedqty) * Number(data.price))
+            var pr1=(Number(data.feedqty) / Number(data.totqty))*100
+            var pr2=( pr1 / Number(data.pcper))*100
+            qtykg=(((pr2*Number(data.sqtykg))/100) / Number(data.unitconversr)).toFixed(2)
+            qtyfeet=(((pr2*Number(data.sqtyfeet))/100) / Number(data.unitconversr)).toFixed(2)
+            qtypcs=((Number(data.feedqty) / Number(data.unitconversr))).toFixed(0)
+         }
+
+
 
         var row = cell.getRow();
 
@@ -542,7 +553,7 @@ var updateValues = (cell) => {
 
         // });}
 
-
+// console.log(feedqty)
 
 }
 
@@ -685,10 +696,12 @@ var updateValues = (cell) => {
                     // {title:"feedqty", field:"feedqty",cellEdited: updateValues,editor:"number"},
 
                     {
-                    title:'Princing', headerHozAlign:"center",
+                    title:'Pricing', headerHozAlign:"center",
                     columns:[
 
 
+
+                    {title:"Conversion", field:"unitconversr",cellEdited: updateValues,editor:"number"},
                     {title:"Return Qty", field:"feedqty",cellEdited: updateValues,editor:"number"},
 
                     {   title:"Sale Price",
@@ -701,7 +714,7 @@ var updateValues = (cell) => {
                             formatter:"money",
                             cellEdited: updateValues,
                             validator:["required","numeric"],
-                            formatterParams:{thousand:",",precision:0},
+                            formatterParams:{thousand:",",precision:3},
                         },
 
 

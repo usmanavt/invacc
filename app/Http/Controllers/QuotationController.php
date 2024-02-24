@@ -163,7 +163,7 @@ class QuotationController  extends Controller
             'saldate' => 'required|min:3|date',
         //    'title'=>'required|min:3|unique:materials'
             'qutno' => 'required|min:1|unique:quotations',
-            'prno' => 'required|min:1|unique:quotations',
+            // 'prno' => 'required|min:1|unique:quotations',
             // 'gpno' => 'required|min:1|unique:sale_invoices',
             'customer_id' => 'required'
         ]);

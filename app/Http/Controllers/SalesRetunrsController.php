@@ -16,6 +16,9 @@ use App\Models\SaleReturnDetails;
 use App\Models\SaleReturn;
 use App\Models\SaleInvoicesDetails;
 
+use App\Models\BankTransaction;
+
+
 
 
 use App\Models\Material;
@@ -176,6 +179,29 @@ class SalesRetunrsController  extends Controller
 
             $ci->save();
 
+
+            if($request->customer_id==0)
+            {
+                $pv = new BankTransaction();
+                $pv->cashretinvid = $ci->id;
+                $pv->bank_id = 1;
+                $pv->head_id = 33;
+                $pv->subhead_id = 0;
+                $pv->transaction_type = 'CPV';
+                $pv->documentdate = $request->rdate;
+                $pv->conversion_rate = 1;
+                $pv->amount_fc = $request->totrcvbamount;
+                $pv->amount_pkr = $request->totrcvbamount;
+                $pv->cheque_date = $request->rdate;;
+                $pv->cheque_no = '';
+                $pv->description = 'Cash Sale Return';
+                $pv->transno = 0;
+                $pv->advance = 0;
+                $pv->supname = 'CUST CASH CUSTOMER';
+                $pv->save();
+            }
+
+
             foreach ($request->sales as $cont) {
                 // $material = Material::findOrFail($cont['id']);
                 $lpd = new SaleReturnDetails();
@@ -193,13 +219,11 @@ class SalesRetunrsController  extends Controller
                 $lpd->prtbalwt = $cont['qtykg'];
                 $lpd->prtbalpcs = $cont['qtypcs'];
                 $lpd->prtbalfeet = $cont['qtyfeet'];
-
-
-
-
-                $lpd->qtykgcrt = $cont['salcostkg'];
-                $lpd->qtypcscrt = $cont['salcostpcs'];
-                $lpd->qtyfeetcrt = $cont['salcostfeet'];
+                $lpd->qtykgcrt = 0;
+                $lpd->qtypcscrt = 0;
+                $lpd->qtyfeetcrt = 0;
+                $lpd->unitconversr = $cont['unitconversr'];
+                $lpd->srfeedqty = $cont['feedqty'];
 
 
 
@@ -308,24 +332,47 @@ class SalesRetunrsController  extends Controller
         DB::beginTransaction();
         try {
 
+
+            if($request->customer_id==0)
+            {
+                // $pv = new BankTransaction();
+                // $pv = BankTransaction::findOrFail($request->sale_invoice_id);
+                // dd($request->per());
+                // and $request->customer_id==0
+                // if($request->pcustno==0  )
+
+                // {
+                    $pv = BankTransaction::where('cashretinvid',$request->sale_return_id)->first();
+                    $pv->bank_id = 1;
+                    $pv->head_id = 33;
+                    $pv->subhead_id = 0;
+                    $pv->transaction_type = 'CPV';
+                    $pv->documentdate = $request->rdate;
+                    $pv->conversion_rate = 1;
+                    $pv->amount_fc = $request->totrcvbamount;
+                    $pv->amount_pkr = $request->totrcvbamount;
+                    $pv->cheque_date = $request->rdate;
+                    $pv->cheque_no = '';
+                    $pv->description = 'Cash Sale Return';
+                    $pv->transno = 0;
+                    $pv->advance = 0;
+                    $pv->supname = 'CUST CASH CUSTOMER';
+                    $pv->save();
+
+                // }
+            // else
+            // {
+            //     DB::delete(DB::raw(" delete from bank_transactions where  cashinvid=$request->sale_return_id   "));
+
+            // }
+
+            }
+
+
+
+
             //  dd($request->sale_invoice_id);
             $salereturn = SaleReturn::findOrFail($request->sale_return_id);
-            // $sale_invoices->custplan_id = $request->custplan_id;
-            // $sale_invoices->pono = $request->pono;
-            // $sale_invoices->podate = $request->podate;
-            // $sale_invoices->saldate = $request->deliverydt;
-            // $sale_invoices->dcno = $request->dcno;
-            // $sale_invoices->gpno = $request->gpno;
-            // $sale_invoices->billno = $request->billno;
-            // $sale_invoices->customer_id = $request->customer_id;
-            // $sale_invoices->discntper = $request->discntper;
-            // $sale_invoices->discntamt = $request->discntamt;
-            // $sale_invoices->cartage = $request->cartage;
-            // $sale_invoices->rcvblamount = $request->rcvblamount;
-            // $sale_invoices->saletaxper = $request->saletaxper;
-            // $sale_invoices->saletaxamt = $request->saletaxamt;
-            // $sale_invoices->totrcvbamount = $request->totrcvbamount;
-
             // $salereturn->invoice_id = $request->invoice_id;
             $salereturn->dcdate = $request->dcdate;
             $salereturn->rdate = $request->rdate;
@@ -376,9 +423,8 @@ class SalesRetunrsController  extends Controller
                     $cds->prtbalpcs = $cd['qtypcs'];
                     $cds->prtbalfeet = $cd['qtyfeet'];
 
-
-
-
+                    $cds->unitconversr = $cd['unitconversr'];
+                    $cds->srfeedqty = $cd['feedqty'];
                     $cds->save();
 
 

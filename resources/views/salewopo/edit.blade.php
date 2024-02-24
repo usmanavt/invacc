@@ -44,18 +44,18 @@
                                 {{-- <x-input-text title="P.O No" name="pono" id="pono" req required class="col-span-2" value="{{ $saleinvoices->pono }}" disabled  /> --}}
                                 {{-- <x-input-date title="P.O Date" name="podate" id="podate" req required class="col-span-2" value="{{ $saleinvoices->podate->format('Y-m-d') }}" disabled  /> --}}
                                 <x-input-text title="G.Pass No" name="gpno" id="gpno" value="{{ $saleinvoices->gpno }}"     required   />
-                                <x-input-date title="Deilivery Date" id="deliverydt" name="deliverydt" req required class="col-span-2" value="{{ $saleinvoices->saldate->format('Y-m-d') }}" />
-                                <x-input-text title="prvscustno" name="pcustno" id="pcustno" value="{{ $saleinvoices->customer_id }}"   />
+                                <x-input-date title="Deilivery Date" id="deliverydt" name="deliverydt"  class="col-span-2" value="{{ $saleinvoices->saldate->format('Y-m-d') }}" />
+                                {{-- <x-input-text title="prvscustno" name="pcustno" id="pcustno" value="{{ $saleinvoices->customer_id }}"   /> --}}
 
 
                         </div>
                         <div class="grid grid-cols-12 gap-1 py-2 items-center">
-                            <x-input-text title="DC No" name="dcno" id="dcno" value="{{ $saleinvoices->dcno }}"     required   />
-                            <x-input-text title="Bill No" name="billno" id="billno" value="{{ $saleinvoices->billno }}"     required   />
+                            <x-input-text title="DC No" name="dcno" id="dcno" value="{{ $saleinvoices->dcno }}"    class="col-span-2"   />
+                            <x-input-text title="Bill No" name="billno" id="billno"   value="{{ $saleinvoices->billno }}"  class="col-span-2"   />
                                 <label for="">
                                     Descripiton <span class="text-red-500 font-semibold"></span>
                                 </label>
-                                <textarea name="saldescription" id="saldescription" cols="30" rows="2" maxlength="150" required class="rounded"> {{ $saleinvoices->saldescription }} </textarea>
+                                <textarea name="saldescription" id="saldescription" cols="100" rows="2" maxlength="150" class="rounded"> {{ $saleinvoices->saldescription }} </textarea>
 
 
                             {{-- <x-input-date title="P.O Date" id="podate" name="podate" value="{{ $customerorder->podate->format('Y-m-d') }}" req required class="col-span-2" />
@@ -77,7 +77,7 @@
                         </div>
 
                         <fieldset class="border px-4 py-2 rounded">
-                            <legend>Invoice Level Expenses</legend>
+                            <legend>Other Invoice Level Charges</legend>
                             <div class="grid grid-cols-12 gap-2 py-2 items-center">
                                 <x-input-numeric title="Discou(%)" name="discntper" id="discntper" value="{{ $saleinvoices->discntper }}" disabled    />
                                     {{-- <div class="basis-0 md:basis-1/5 self-center pt-4"> --}}
@@ -88,18 +88,19 @@
                                     {{-- </div> --}}
 
 
-                                <x-input-numeric title="Discount(Amount)" name="discntamt" id="discntamt" value="{{ $saleinvoices->discntamt }}"    />
-                                <x-input-numeric title="Payble Amount" name="rcvblamount" value="{{ $saleinvoices->rcvblamount }}" disabled />
-                                <x-input-numeric title="" name="sale_invoice_id" id="sale_invoice_id" value="{{ $saleinvoices->id }}" hidden  />
+                                <x-input-numeric title="Discount(Amount)" name="discntamt" id="discntamt" class="col-span-2" value="{{ $saleinvoices->discntamt }}"    />
+                                <x-input-numeric title="Payble Amount" name="rcvblamount" class="col-span-2" value="{{ $saleinvoices->rcvblamount }}" disabled />
+                                <x-input-numeric title="" name="sale_invoice_id" id="sale_invoice_id" class="col-span-2" value="{{ $saleinvoices->id }}" hidden  />
                             </div>
 
                             <div class="grid grid-cols-12 gap-2 py-2 items-center">
-                                <x-input-numeric title="Sale Tax(%)" name="saletaxper" value="{{ $saleinvoices->saletaxper }}" required  onblur="tnetamount()"  />
-                                <x-input-numeric title="Sale Tax(Rs)" name="saletaxamt" value="{{ $saleinvoices->saletaxamt }}" disabled    />
-                                <x-input-numeric title="Cartage" name="cartage" value="{{ $saleinvoices->cartage }}"  required  onblur="tnetamount()"  />
-                                <x-input-numeric title="Total Amount" name="totrcvbamount" value="{{ $saleinvoices->totrcvbamount }}" disabled />
+                                <x-input-numeric title="Sale Tax(%)" name="saletaxper" class="col-span-2" value="{{ $saleinvoices->saletaxper }}"   onblur="tnetamount()"  />
+                                <x-input-numeric title="Sale Tax(Rs)" name="saletaxamt" class="col-span-2" value="{{ $saleinvoices->saletaxamt }}" disabled    />
+                                <x-input-numeric title="Cartage" name="cartage" class="col-span-2" value="{{ $saleinvoices->cartage }}"  required  onblur="tnetamount()"  />
                             </div>
-
+                            <div class="grid grid-cols-12 gap-2 py-2 items-center">
+                                <x-input-numeric title="Total Amount" name="totrcvbamount" class="col-span-2" value="{{ $saleinvoices->totrcvbamount }}" disabled />
+                            </div>
 
 
 
@@ -214,15 +215,21 @@ let dynamicTableData = @json($cd);
     table.on('rowClick',function(e,row){
         var simple = {...row}
         var data = simple._row.data
+
         //  Filter Data here .
         // console.log(data.id)
         // var result = dynamicTableData.filter( dt => dt.material_id == data.id)
-        var result = dynamicTableData.filter( dt => dt.material_id == data.id)
-        if(result.length <= 0)
-        {
-            pushDynamicData(data)
+        // if(result.length <= 0)
+        // {
+        //     pushDynamicData(data)
 
-        }
+        // }
+
+        // console.log(material_id)
+        if(!dynamicTableData.filter( dt => dt.material_id === data.id).length){
+        pushDynamicData(data)
+    }
+
     })
     function showModal(){ modal.style.display = "block"}
     function closeModal(){  modal.style.display = "none"}
@@ -235,6 +242,7 @@ let dynamicTableData = @json($cd);
     // -----------------FOR MODAL -------------------------------//
 
 //  Adds actual data to row - EDIT Special
+
 function pushDynamicData(data)
 {
 
@@ -247,7 +255,7 @@ function pushDynamicData(data)
 
         sku_id:data.sku_id,
         sku:data.sku,
-
+        munit:data.sku,
         dimension_id:data.dimension_id,
         dimension:data.dimension,
         // location:datea.location;
@@ -297,7 +305,9 @@ function pushDynamicData(data)
     var updateValues = (cell) => {
         var data = cell.getData();
 
-        // if(cell.getData().sku_id==1)
+        if(Number(data.totqty) > 0  )
+
+{
         if(data.sku==='KG' )
         {
 
@@ -305,8 +315,9 @@ function pushDynamicData(data)
             var pr1=(Number(data.feedqty) / Number(data.totqty))*100
 
             var pr2=( pr1 / Number(data.wtper))*100
-            qtypcs=((pr2*Number(data.sqtypcs))/100).toFixed(0)
-            qtyfeet=((pr2*Number(data.sqtyfeet))/100).toFixed(0)
+            qtypcs=((pr2*Number(data.sqtypcs))/100)
+            // .toFixed(0)
+            qtyfeet=((pr2*Number(data.sqtyfeet))/100).toFixed(2)
             qtykg=Number(data.feedqty)
          }
         else if(data.sku==='PCS'   )
@@ -315,8 +326,9 @@ function pushDynamicData(data)
             var sum = (Number(data.feedqty) * Number(data.price))
             var pr1=(Number(data.feedqty) / Number(data.totqty))*100
             var pr2=( pr1 / Number(data.pcper))*100
-            qtykg=((pr2*Number(data.sqtykg))/100).toFixed(0)
-            qtyfeet=((pr2*Number(data.sqtyfeet))/100).toFixed(0)
+            qtykg=((pr2*Number(data.sqtykg))/100)
+            // .toFixed(0)
+            qtyfeet=((pr2*Number(data.sqtyfeet))/100).toFixed(2)
             qtypcs=Number(data.feedqty)
          }
 
@@ -324,9 +336,11 @@ function pushDynamicData(data)
          {
             var sum = (Number(data.feedqty) * Number(data.price))
             // var pr1=(Number(data.qtyfeet) / Number(data.totqty))*100
-            var pr1=((Number(data.feedqty) / Number(data.totqty))*100).toFixed(6)
-            var pr2=(( pr1 / Number(data.feetper))*100).toFixed(6)
-            qtykg=((pr2*Number(data.sqtykg))/100).toFixed(0)
+            var pr1=((Number(data.feedqty) / Number(data.totqty))*100)
+            // .toFixed(6)
+            var pr2=(( pr1 / Number(data.feetper))*100)
+            // .toFixed(6)
+            qtykg=((pr2*Number(data.sqtykg))/100).toFixed(2)
             qtypcs=((pr2*Number(data.sqtypcs))/100).toFixed(0)
             // qtyfeet=((pr2*Number(data.sqtyfeet))/100).toFixed(2)
             qtyfeet=Number(data.feedqty)
@@ -336,13 +350,39 @@ function pushDynamicData(data)
             var sum = (Number(data.feedqty) * Number(data.price))
             var pr1=(Number(data.feedqty) / Number(data.totqty))*100
             var pr2=( pr1 / Number(data.pcper))*100
-            qtykg=(((pr2*Number(data.sqtykg))/100) / Number(data.unitconver)).toFixed(0)
-            qtyfeet=(((pr2*Number(data.sqtyfeet))/100) / Number(data.unitconver)).toFixed(0)
+            qtykg=(((pr2*Number(data.sqtykg))/100) / Number(data.unitconver)).toFixed(2)
+            qtyfeet=(((pr2*Number(data.sqtyfeet))/100) / Number(data.unitconver)).toFixed(2)
             qtypcs=(Number(data.feedqty) / Number(data.unitconver))
          }
+ }
+
+ else
+ {
 
 
+    if(data.sku==='KG'  )
+        {
+        qtypcs=0
+        qtyfeet=0
+         qtykg=Number(data.feedqty) }
+    else if(data.sku==='PCS'   )
+    {
+    qtykg=0
+    qtyfeet=0
+        qtypcs=Number(data.feedqty)}
+    else if(data.sku==='FEET')
+    {
+    qtykg=0
+    qtypcs=0
+        qtyfeet=Number(data.feedqty)}
+    else
+    {
+    qtykg=0
+    qtyfeet=0
+    qtypcs=((Number(data.feedqty) / Number(data.unitconver))).toFixed(0)}
 
+ }
+ var sum = (Number(data.feedqty) * Number(data.price))
         var row = cell.getRow();
 
         // if(cell.getData().sku_id==1)
@@ -409,20 +449,20 @@ dynamicTable = new Tabulator("#dynamicTable", {
         },
 
         {title:"Id",                field:"material_id",    cssClass:"bg-gray-200 font-semibold"},
-        {title:"Material",          field:"material_title", cssClass:"bg-gray-200 font-semibold"},
+        {title:"Material",          field:"material_title", cssClass:"bg-gray-200 font-semibold",width:300,responsive:0},
         {title:"Dimension",         field:"dimension",      cssClass:"bg-gray-200 font-semibold"},
         {title:"UOM",               field:"sku",cssClass:"bg-gray-200 font-semibold"},
 
-        {title:"qtykgcrt", field:"qtykgcrt",visible:false,editor:"number"},
-        {title:"qtypcscrt", field:"qtypcscrt",visible:false,editor:"number"},
-        {title:"qtyfeetcrt", field:"qtyfeetcrt",visible:false,editor:"number"},
+        {title:"qtykgcrt", field:"munit",visible:false},
+        // {title:"qtypcscrt", field:"qtypcscrt",visible:false,editor:"number"},
+        // {title:"qtyfeetcrt", field:"qtyfeetcrt",visible:false,editor:"number"},
 
         {
                 title:'STOCK QUANTITY', headerHozAlign:"center",
                     columns:[
-                {title:"InKg", field:"sqtykg",cssClass:"bg-gray-200 font-semibold"},
-                {title:"InPcs", field:"sqtypcs",cssClass:"bg-gray-200 font-semibold"},
-                {title:"InFeet", field:"sqtyfeet",cssClass:"bg-gray-200 font-semibold"},
+                {title:"InKg", field:"sqtykg",cssClass:"bg-gray-200 font-semibold",width:90,responsive:0},
+                {title:"InPcs", field:"sqtypcs",cssClass:"bg-gray-200 font-semibold",width:90,responsive:0},
+                {title:"InFeet", field:"sqtyfeet",cssClass:"bg-gray-200 font-semibold",width:90,responsive:0},
             ]},
 
             {title:"ORDER BALANCE", field:"balqty",visible:false},
@@ -435,7 +475,7 @@ dynamicTable = new Tabulator("#dynamicTable", {
                 cssClass:"bg-gray-200 font-semibold",
                 validator:"required",
                 formatter:"money",
-                formatterParams:{thousand:",",precision:2},
+                formatterParams:{thousand:",",precision:2},width:90,responsive:0,
                 validator:["required","integer"],
                 // cellEdited: updateValues,
                },
@@ -446,7 +486,7 @@ dynamicTable = new Tabulator("#dynamicTable", {
                 cssClass:"bg-gray-200 font-semibold",
                 validator:"required",
                 formatter:"money",
-                formatterParams:{thousand:",",precision:2},
+                formatterParams:{thousand:",",precision:0},width:90,responsive:0,
                 validator:["required","integer"],
                 // cellEdited: updateValues,
                },
@@ -457,7 +497,7 @@ dynamicTable = new Tabulator("#dynamicTable", {
                 cssClass:"bg-gray-200 font-semibold",
                 validator:"required",
                 formatter:"money",
-                formatterParams:{thousand:",",precision:2},
+                formatterParams:{thousand:",",precision:2},width:90,responsive:0,
                 validator:["required","integer"],
                 // cellEdited: updateValues,
                },
@@ -479,7 +519,7 @@ dynamicTable = new Tabulator("#dynamicTable", {
           //      },
 
                 {title:"Replace Description",field:"repname", editor:true},
-                {title:"Brand",             field:"brand",editor:true},
+                {title:"Brand",             field:"brand",editor:true,visible:false},
 
 
                 ]},
@@ -488,7 +528,7 @@ dynamicTable = new Tabulator("#dynamicTable", {
                 {title:"UOM", field:"sku" ,editor:"list" , editorParams:   {
                         values:newList1,
                         cssClass:"bg-green-200 font-semibold",
-                        cellEdited: updateValues,
+                        cellEdited: updateValues,responsive:0,
                         validator:["required"]
                     }
                 },
@@ -499,14 +539,14 @@ dynamicTable = new Tabulator("#dynamicTable", {
                 title:'SALE', headerHozAlign:"center",
                     columns:[
 
-                    {title:"Conversion", field:"unitconver",cellEdited: updateValues,editor:"number"},
+                    {title:"Conversion", field:"unitconver",cellEdited: updateValues,editor:"number",responsive:0},
 
                 { title:"Quantity",
                 field:"feedqty",
                 editor:"number",
                 validator:"required" ,
                 formatter:"money",
-                formatterParams:{thousand:",",precision:2},
+                formatterParams:{thousand:",",precision:2},width:90,responsive:0,
                 validator:["required","decimal(10,3)"] ,
                 cellEdited: updateValues   ,
             },
@@ -516,7 +556,7 @@ dynamicTable = new Tabulator("#dynamicTable", {
                 editor:"number",
                 validator:"required" ,
                 formatter:"money",
-                formatterParams:{thousand:",",precision:2},
+                formatterParams:{thousand:",",precision:2},width:90,responsive:0,
                 validator:["required","decimal(10,3)"] ,
                 cellEdited: updateValues   ,
             },
@@ -528,7 +568,7 @@ dynamicTable = new Tabulator("#dynamicTable", {
                 cssClass:"bg-green-200 font-semibold",
                 formatter:"money",
                 bottomCalc:"sum",
-                formatterParams:{thousand:",",precision:0},
+                formatterParams:{thousand:",",precision:0},width:100,responsive:0,
                 formatter:function(cell,row)
                 {
                       return  ( cell.getData().feedqty * cell.getData().price).toFixed(0)
@@ -619,11 +659,27 @@ function validateForm()
     // Qty Required
     for (let index = 0; index < dynamicTableData.length; index++) {
         const element = dynamicTableData[index];
-        // if(Number(element.feedqty ) > Number(element.balqty)+Number(element.balqty) )
-        // {
-        //     showSnackbar("Sale Qty must be less than Plan qty","info");
-        //     return;
-        // }
+                           if( element.munit=='KG' &&  element.qtykg <=0 )
+                            {
+                                showSnackbar("Stock Unit Data must be Enter","info");
+                                return;
+
+                            }
+
+                            if( element.munit=='PCS' &&  element.qtypcs <=0 )
+                            {
+                                showSnackbar("Stock Unit Data must be Enter","info");
+                                return;
+
+                            }
+
+                            if( element.munit=='FEET' &&  element.qtyfeet <=0 )
+                            {
+                                showSnackbar("Stock Unit Data must be Enter","info");
+                                return;
+
+                            }
+
     }
     // 'total' : parseFloat(banktotal.value).toFixed(2),
     disableSubmitButton(true);
