@@ -345,6 +345,7 @@
 
                         price   :           '',
                         saleamnt:           obj.feedqty * obj.price,
+                        itemsource:         obj.itemsource,
                         unitconver:           1,
 
                     }
@@ -442,7 +443,7 @@ var tamount=0;
             //  rcvblamount.value=0;
 
             if (discntper.disabled)
-            {discntper.value=(discntamt.value/tamount*100).toFixed(2)};
+            {discntper.value=(discntamt.value/tamount*100).toFixed(6)};
             if (!discntper.disabled)
             {discntamt.value=(tamount*discntper.value/100).toFixed(0);};
             // discntamt.value=(tamount*discntper.value/100).toFixed(0);
@@ -622,8 +623,8 @@ var totalVal = function(values, data, calcParams){
                 {title:"Id",           field:"id", visible:false},
                 {title:"Material Name",width:400,     field:"material_title",responsive:0, cssClass:"bg-gray-200 font-semibold"},
                 {title:"Material Size",hozAlign:"center",width:150,    field:"dimension",cssClass:"bg-gray-200 font-semibold",responsive:0},
-                // ,frozen:true, headerMenu:headerMenu,},
-                {title:"UOM",         field:"sku",responsive:0,width:100,responsive:0, hozAlign:"center", cssClass:"bg-gray-200 font-semibold"},
+                {title:"Source",         field:"itemsource",width:100,responsive:0, hozAlign:"center", cssClass:"bg-gray-200 font-semibold"},
+                {title:"UOM",         field:"sku",width:100,responsive:0, hozAlign:"center", cssClass:"bg-gray-200 font-semibold"},
                 // {title:"Unitid",       field:"sku_id",visible:false},
                 // {title:"contract_id",  field:"contract_id",visible:false},
                 {title:"material_id",  field:"material_id",visible:false},
@@ -730,10 +731,10 @@ var totalVal = function(values, data, calcParams){
                     ]},
 
                     {title: "id",field: "skuid",visible:false},
-                {title:"UOM", field:"sku" ,editor:"list" , editorParams:   {
+                {title:"UOM", field:"sku" ,editor:"list",responsive:0, editorParams:   {
                         values:newList1,
                         cssClass:"bg-green-200 font-semibold",
-                        cellEdited: updateValues,width:100,responsive:0,
+                        cellEdited: updateValues,width:100,
                         validator:["required"]
                     }
                 },

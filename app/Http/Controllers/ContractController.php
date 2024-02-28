@@ -316,7 +316,8 @@ class ContractController extends Controller
 
 // for update change
 
-        return view('contracts.edit')->with('suppliers',Supplier::select('id','title')->where('source_id',2)->get())
+        $passwrd = DB::table('tblpwrd')->select('pwrdtxt')->max('pwrdtxt');
+        return view('contracts.edit',compact('passwrd'))->with('suppliers',Supplier::select('id','title')->where('source_id',2)->get())
         ->with('contract',$contract)
         // ->with('pcontract',$pcontract)
         ->with($data);

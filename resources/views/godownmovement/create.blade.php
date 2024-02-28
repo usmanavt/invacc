@@ -587,8 +587,8 @@ var totalVal = function(values, data, calcParams){
                     }
                 },
                 {title:"Id",           field:"id", visible:false},
-                {title:"Material Name",     field:"material_title",responsive:0, cssClass:"bg-gray-200 font-semibold"},
-                {title:"Material Size",    field:"dimension",cssClass:"bg-gray-200 font-semibold",responsive:0},
+                {title:"Material Name",     field:"material_title",width:300,responsive:0, cssClass:"bg-gray-200 font-semibold"},
+                {title:"Material Size",    field:"dimension",width:150,cssClass:"bg-gray-200 font-semibold",responsive:0},
                 // ,frozen:true, headerMenu:headerMenu,},
                 {title:"UOM",         field:"sku",responsive:0, hozAlign:"center", cssClass:"bg-gray-200 font-semibold"},
                 // {title:"Unitid",       field:"sku_id",visible:false},
@@ -600,23 +600,24 @@ var totalVal = function(values, data, calcParams){
                 {title:"sku_id",       field:"sku_id",visible:false},
                 {title:"dimension_id", field:"dimension_id",visible:false},
 
-                {title:"costkg", field:"salcostkg",visible:true},
-                {title:"costpcs", field:"salcostpcs",visible:true},
-                {title:"costfeet", field:"salcostfeet",visible:true},
+                {title:"costkg", field:"salcostkg",visible:false},
+                {title:"costpcs", field:"salcostpcs",visible:false},
+                {title:"costfeet", field:"salcostfeet",visible:false},
 
 
                 {
                 title:'STOCK QUANTITY', headerHozAlign:"center",
                     columns:[
-                {title:"InKg", field:"sqtykg", cssClass:"bg-gray-200 font-semibold"},
-                {title:"InPcs", field:"sqtypcs", cssClass:"bg-gray-200 font-semibold"},
-                {title:"InFeet", field:"sqtyfeet", cssClass:"bg-gray-200 font-semibold"},
+                {title:"InKg", field:"sqtykg",width:150, cssClass:"bg-gray-200 font-semibold"},
+                {title:"InPcs", field:"sqtypcs",width:150, cssClass:"bg-gray-200 font-semibold"},
+                {title:"InFeet", field:"sqtyfeet",width:150, cssClass:"bg-gray-200 font-semibold"},
 
                 {   title:"Cost",
                             headerHozAlign :'right',
                             hozAlign:"right",
                             responsive:0,
                             field:"price",
+                            width:150,
                             // bottomCalc:"sum",
                             formatter:"money",
                             cellEdited: updateValues,
@@ -638,6 +639,7 @@ var totalVal = function(values, data, calcParams){
                         hozAlign:"right",
                         field:"saleamnt",
                         bottomCalc:"sum",
+                        width:150,
                         cssClass:"bg-green-200 font-semibold",
                         formatter:"money",
                         formatterParams:{thousand:",",precision:3}
@@ -672,6 +674,7 @@ var totalVal = function(values, data, calcParams){
                             field:"qtykg",
                             // editor:"number",
                             // headerVertical:true,
+                            width:150,
                             bottomCalc:"sum",
                             formatter:"money",
                             cellEdited: updateValues,
@@ -684,11 +687,13 @@ var totalVal = function(values, data, calcParams){
                         {   title:"InPcs",
                             headerHozAlign :'right',
                             hozAlign:"right",
+                            width:150,
                             responsive:0,
                             field:"qtypcs",
                             // editor:"number",
                             // headerVertical:true,
                             bottomCalc:"sum",
+                            width:150,
                             formatter:"money",
                             cellEdited: updateValues,
                             validator:["required","numeric"],
@@ -704,6 +709,7 @@ var totalVal = function(values, data, calcParams){
                             // editor:"number",
                             // headerVertical:true,
                             bottomCalc:"sum",
+                            width:150,
                             formatter:"money",
                             cellEdited: updateValues,
                             validator:["required","numeric"],
@@ -824,7 +830,7 @@ var totalVal = function(values, data, calcParams){
                         //         return;
 
                         //     }
-                            if(Number(element.qtypcs) > Number(element.sqtypcs) || Number(element.qtykg) > Number(element.sqtykg) || Number(element.qtyfeet) > Number(element.sqtyfeet) )
+                            if(Number(element.qtypcs).toFixed(0) > Number(element.sqtypcs).toFixed(0) || Number(element.qtykg).toFixed(0) > Number(element.sqtykg).toFixed(0) || Number(element.qtyfeet).toFixed(0) > Number(element.sqtyfeet).toFixed(0) )
                                 {
 
                                     showSnackbar("sale qty must be less than stock qty","info");

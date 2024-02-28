@@ -83,8 +83,9 @@ table{
             <tr>
                 <td  style="text-align: center;">
                     <h3 style="font-size:0.7rem">Steam Pipes, Pipe Fitting, Flanges Valves, S.S Pipes</h3>
-                    <h3 style="font-size:0.7rem">Plot # 8 Near Allah Malik Godown Shershah Kabari Bazar,</h3>
+                    <h3 style="font-size:0.7rem">PLOT NO. E-13, S.I.T.E AREA KARACHI MOBILE NO. 0333-3804744</h3>
                     <h3 style="font-size:0.7rem">Phone : 021-32588781, 021-32574285 , Fax : 021-32588782</h3>
+
                 </td>            </tr>
             <tr>
                 <td  style="text-align: center;">
@@ -169,10 +170,16 @@ table{
     <table class="data" cellspacing="0">
         <tbody>
 
-            {{ $owt = 0 }};{{ $opcs = 0 }}; {{ $ofeet = 0 }}
-            {{ $pwt = 0 }};{{ $ppcs = 0 }}; {{ $pfeet = 0 }}
-            {{ $swt = 0 }};{{ $spcs = 0 }}; {{ $sfeet = 0 }}
-            {{ $cwt = 0 }};{{ $cpcs = 0 }}; {{ $cfeet = 0 }}
+
+            {{-- for grand total --}}
+            {{ $owt = 0 }};{{ $opcs = 0 }}; {{ $ofeet = 0 }}; {{ $pwt = 0 }};{{ $ppcs = 0 }}; {{ $pfeet = 0 }};
+            {{ $swt = 0 }};{{ $spcs = 0 }}; {{ $sfeet = 0 }}; {{ $cwt = 0 }};{{ $cpcs = 0 }}; {{ $cfeet = 0 }};
+
+            {{-- for Sub total --}}
+            {{ $owts = 0 }};{{ $opcss = 0 }}; {{ $ofeets = 0 }}; {{ $pwts = 0 }};{{ $ppcss = 0 }}; {{ $pfeets = 0 }};
+            {{ $swts = 0 }};{{ $spcss = 0 }}; {{ $sfeets = 0 }}; {{ $cwts = 0 }};{{ $cpcss = 0 }}; {{ $cfeets = 0 }};
+
+
 
             @for ($i = 0 ; $i < count($data) ; $i++)
             @if( $i==0 )
@@ -182,10 +189,48 @@ table{
         @else
 
         {{ $srno = $i - 1 }}
+
+            {{-- fro sub total --}}
+            {{ $owts += $data[$srno]->oqtykg }};{{ $opcss += $data[$srno]->oqtypcs }};{{ $ofeets += $data[$srno]->oqtyfeet }}
+            {{ $pwts += $data[$srno]->pqtykg }};{{ $ppcss += $data[$srno]->pqtypcs }};{{ $pfeets += $data[$srno]->pqtyfeet }}
+            {{ $swts += $data[$srno]->sqtykg }};{{ $spcss += $data[$srno]->sqtypcs }};{{ $sfeets += $data[$srno]->sqtyfeet }}
+            {{ $cwts += $data[$srno]->cbkg }};{{ $cpcss += $data[$srno]->cbpcs }};{{ $cfeets += $data[$srno]->cbfeet }}
+
+
+
         @if ($data[$i]->Itemgroupe  <> $data[$srno]->Itemgroupe)
+
+        {{-- for subtotal --}}
+        <tr>
+            <td colspan="2" style="background: #e3e3e3;font-weight: bold;text-align: right;border-bottom: 1px solid lightgray;"> Sub Total</td>
+            <td colspan="1"  style="background: #e3e3e3;font-weight: bold;text-align: right;border-bottom: 1px solid lightgray;">{{ number_format($owts) }} </td>
+            <td colspan="1"  style="background: #e3e3e3;font-weight: bold;text-align: right;border-bottom: 1px solid lightgray;">{{ number_format($opcss,0) }} </td>
+            <td colspan="1"  style="background: #e3e3e3;font-weight: bold;text-align: right;border-bottom: 1px solid lightgray;">{{ number_format($ofeets,0) }} </td>
+
+            <td colspan="1"  style="background: #e3e3e3;font-weight: bold;text-align: right;border-bottom: 1px solid lightgray;">{{ number_format($pwts,0) }} </td>
+            <td colspan="1"  style="background: #e3e3e3;font-weight: bold;text-align: right;border-bottom: 1px solid lightgray;">{{ number_format($ppcss,0) }} </td>
+            <td colspan="1"  style="background: #e3e3e3;font-weight: bold;text-align: right;border-bottom: 1px solid lightgray;">{{ number_format($pfeets,0) }} </td>
+
+            <td colspan="1"  style="background: #e3e3e3;font-weight: bold;text-align: right;border-bottom: 1px solid lightgray;">{{ number_format($swts,0) }} </td>
+            <td colspan="1"  style="background: #e3e3e3;font-weight: bold;text-align: right;border-bottom: 1px solid lightgray;">{{ number_format($spcss,0) }} </td>
+            <td colspan="1"  style="background: #e3e3e3;font-weight: bold;text-align: right;border-bottom: 1px solid lightgray;">{{ number_format($sfeets,0) }} </td>
+
+            <td colspan="7"  style="background: #e3e3e3;font-weight: bold;text-align: right;border-bottom: 1px solid lightgray;">{{ number_format($cwts,0) }} </td>
+            <td colspan="1"  style="background: #e3e3e3;font-weight: bold;text-align: right;border-bottom: 1px solid lightgray;">{{ number_format($cpcss,0) }} </td>
+            <td colspan="1"  style="background: #e3e3e3;font-weight: bold;text-align: right;border-bottom: 1px solid lightgray;">{{ number_format($cfeets,0) }} </td>
+
+        </tr>
+
             <tr>
                     <td colspan="20" width="100%" style="text-align:left;font-size:1.2rem;border-bottom: 2px solid rgb(211, 211, 211);"> {{ $data[$i]->Itemgroupe}} </td>
              </tr>
+
+        {{-- for Sub total --}}
+        {{ $owts = 0 }};{{ $opcss = 0 }}; {{ $ofeets = 0 }}; {{ $pwts = 0 }};{{ $ppcss = 0 }}; {{ $pfeets = 0 }};
+        {{ $swts = 0 }};{{ $spcss = 0 }}; {{ $sfeets = 0 }}; {{ $cwts = 0 }};{{ $cpcss = 0 }}; {{ $cfeets = 0 }};
+
+
+
         @endif
         @endif
 
@@ -229,23 +274,22 @@ table{
             </tr>
             @endfor
             <tr>
-                {{-- <td colspan="20" width="100%" style="text-align: right;border-bottom: 1px solid lightgray;"></td> --}}
-                <td colspan="3" width="4%" style="text-align: right;border-bottom: 1px solid lightgray;">{{ number_format($owt,0) }} </td>
-                <td colspan="1" width="4%" style="text-align: right;border-bottom: 1px solid lightgray;">{{ number_format($opcs,0) }} </td>
-                <td colspan="1" width="4%" style="text-align: right;border-bottom: 1px solid lightgray;">{{ number_format($ofeet,0) }} </td>
+                <td colspan="2"  style="background: #e3e3e3;font-weight: bold;text-align: right;border-bottom: 1px solid lightgray;"> Grand Total</td>
+                <td colspan="1"  style="background: #e3e3e3;font-weight: bold;text-align: right;border-bottom: 1px solid lightgray;">{{ number_format($owt,0) }} </td>
+                <td colspan="1"  style="background: #e3e3e3;font-weight: bold;text-align: right;border-bottom: 1px solid lightgray;">{{ number_format($opcs,0) }} </td>
+                <td colspan="1"  style="background: #e3e3e3;font-weight: bold;text-align: right;border-bottom: 1px solid lightgray;">{{ number_format($ofeet,0) }} </td>
 
-                <td colspan="1" width="4%" style="text-align: right;border-bottom: 1px solid lightgray;">{{ number_format($pwt,0) }} </td>
-                <td colspan="1" width="4%" style="text-align: right;border-bottom: 1px solid lightgray;">{{ number_format($ppcs,0) }} </td>
-                <td colspan="1" width="4%" style="text-align: right;border-bottom: 1px solid lightgray;">{{ number_format($pfeet,0) }} </td>
+                <td colspan="1"  style="background: #e3e3e3;font-weight: bold;text-align: right;border-bottom: 1px solid lightgray;">{{ number_format($pwt,0) }} </td>
+                <td colspan="1"  style="background: #e3e3e3;font-weight: bold;text-align: right;border-bottom: 1px solid lightgray;">{{ number_format($ppcs,0) }} </td>
+                <td colspan="1"  style="background: #e3e3e3;font-weight: bold;text-align: right;border-bottom: 1px solid lightgray;">{{ number_format($pfeet,0) }} </td>
 
-                <td colspan="1" width="4%" style="text-align: right;border-bottom: 1px solid lightgray;">{{ number_format($swt,0) }} </td>
-                <td colspan="1" width="4%" style="text-align: right;border-bottom: 1px solid lightgray;">{{ number_format($spcs,0) }} </td>
-                <td colspan="1" width="4%" style="text-align: right;border-bottom: 1px solid lightgray;">{{ number_format($sfeet,0) }} </td>
+                <td colspan="1"  style="background: #e3e3e3;font-weight: bold;text-align: right;border-bottom: 1px solid lightgray;">{{ number_format($swt,0) }} </td>
+                <td colspan="1"  style="background: #e3e3e3;font-weight: bold;text-align: right;border-bottom: 1px solid lightgray;">{{ number_format($spcs,0) }} </td>
+                <td colspan="1"  style="background: #e3e3e3;font-weight: bold;text-align: right;border-bottom: 1px solid lightgray;">{{ number_format($sfeet,0) }} </td>
 
-                <td colspan="7" width="4%" style="text-align: right;border-bottom: 1px solid lightgray;">{{ number_format($cwt,0) }} </td>
-                <td colspan="1" width="4%" style="text-align: right;border-bottom: 1px solid lightgray;">{{ number_format($cpcs,0) }} </td>
-                <td colspan="1" width="4%" style="text-align: right;border-bottom: 1px solid lightgray;">{{ number_format($cfeet,0) }} </td>
-
+                <td colspan="7"  style="background: #e3e3e3;font-weight: bold;text-align: right;border-bottom: 1px solid lightgray;">{{ number_format($cwt,0) }} </td>
+                <td colspan="1"  style="background: #e3e3e3;font-weight: bold;text-align: right;border-bottom: 1px solid lightgray;">{{ number_format($cpcs,0) }} </td>
+                <td colspan="1"  style="background: #e3e3e3;font-weight: bold;text-align: right;border-bottom: 1px solid lightgray;">{{ number_format($cfeet,0) }} </td>
 
             </tr>
 

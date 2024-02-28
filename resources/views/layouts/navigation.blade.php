@@ -139,23 +139,6 @@
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
                 {{-- Reports --}}
                 <div class="hidden sm:flex sm:items-center sm:ml-6">
                     <x-dropdown align="left" width="48">
@@ -180,7 +163,7 @@
                             {{-- <x-dropdown-link href="{{ route('transaction') }}">Transaction</x-dropdown-link> --}}
 
                             <x-dropdown-link href="{{ route('purrpt.index') }}">Purchase</x-dropdown-link>
-                            <x-dropdown-link href="{{ route('dutyclearance.index') }}">Duty Clearance</x-dropdown-link>
+                            {{-- <x-dropdown-link href="{{ route('dutyclearance.index') }}">Duty Clearance</x-dropdown-link> --}}
                             <x-dropdown-link href="{{ route('salerpt.index') }}">Sale</x-dropdown-link>
                             <x-dropdown-link href="{{ route('reports.index') }}">Financial</x-dropdown-link>
                             <x-dropdown-link href="{{ route('stockledgers.index') }}">Material Stock Ledgers</x-dropdown-link>

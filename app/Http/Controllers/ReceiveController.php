@@ -284,7 +284,8 @@ class ReceiveController  extends Controller
     public function edit($id)
     {
 
-         $stockdtl = DB::select('call prcsaleretbal()');
+        $passwrd = DB::table('tblpwrd')->select('pwrdtxt')->max('pwrdtxt');
+        $stockdtl = DB::select('call prcsaleretbal()');
         $cd = DB::table('vsvoucherrcvedit')
         // receive_details
         // ->join('materials', 'materials.id', '=', 'customer_order_details.material_id')
@@ -297,7 +298,7 @@ class ReceiveController  extends Controller
          $data=compact('cd');
 
 
-        return view('received.edit')
+        return view('received.edit',compact('passwrd'))
         ->with('customers',Customer::select('id','title')->get())
         ->with('banktransaction',BankTransaction::findOrFail($id))
         ->with($data)

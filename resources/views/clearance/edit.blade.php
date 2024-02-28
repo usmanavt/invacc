@@ -126,7 +126,10 @@ z                                           @if ($sku->id == $clearance->dunitid
                         <div class="flex flex-row px-4 py-2 items-center">
                             <x-label value="Add Pcs & Feet Size & Press"></x-label>
                             <x-button id="calculate" class="mx-2" onclick="calculate();calculate();calculate();">Calculate</x-button>
-                            <x-label value="This will prepare your commercial invoice for Submission"></x-label>
+                            <x-input-text title="Password For Edition" name="edtpw" id="edtpw" type="password"     />
+                            <x-input-text title="" name="dbpwrd2" id="dbpwrd2"  class="col-span-2" hidden value="{{$passwrd}}" />
+
+                            {{-- <x-label value="This will prepare your commercial invoice for Submission"></x-label> --}}
                         </div>
                         <x-tabulator-dynamic />
 
@@ -153,6 +156,10 @@ z                                           @if ($sku->id == $clearance->dunitid
 
 @push('scripts')
     <script>
+        document.addEventListener('DOMContentLoaded',()=>{
+        document.getElementById("calculate").disabled = true;
+     })
+
         const deleteIcon = function(cell,formatterParams){return "<i class='fa fa-trash text-red-500'></i>";};
         let rcvIsMoreThenPending = [] // if reciving is more then pending pcs
         const getDetails = @json(route('clearances.details'));
@@ -1012,7 +1019,26 @@ dynamicTable = new Tabulator("#dynamicTable", {
                 // disableSubmitButton(false);
             })
         }
-    </script>
+
+     edtpw.onblur=function(){
+    if(edtpw.value == dbpwrd2.value )
+     {document.getElementById("calculate").disabled = false;
+
+    }
+    else
+    {document.getElementById("calculate").disabled = true;}
+
+    }
+
+
+
+
+
+
+
+
+
+</script>
 @endpush
 
 </x-app-layout>

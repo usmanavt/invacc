@@ -23,7 +23,7 @@
 
                         {{-- Form Data --}}
                         <div class="flex flex-col justify-start items-center">
-                            <form action="{{ route('jv.edit',$transaction) }}" method="post" class="flex flex-col">
+                            <form action="{{ route('jv.ddelete',$transaction) }}" method="post" class="flex flex-col">
                                 @csrf
                                 <fieldset class="border px-4 py-2 rounded">
                                     <legend>Transaction Date</legend>

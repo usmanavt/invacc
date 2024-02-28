@@ -92,6 +92,8 @@
                                 <i class="fa fa-save fa-fw"></i>
                                 Submit
                             </button>
+                            <x-input-text title="Password For Edition" name="edtpw" id="edtpw" type="password"     />
+                            <x-input-text title="" name="dbpwrd2" id="dbpwrd2"  class="col-span-2" hidden value="{{$passwrd}}" />
                         </div>
 
                     </div>
@@ -110,6 +112,13 @@
 
     @push('scripts')
 <script>
+
+document.addEventListener('DOMContentLoaded',()=>{
+        document.getElementById("submitbutton").disabled = true;
+     })
+
+
+
 let table;
 let searchValue = "";
 
@@ -618,6 +627,20 @@ function validateForm()
 //     // discntper.value=(discntamt.value/tamount*100).toFixed(2);
 //     tnetamount();
 //     }
+
+
+edtpw.onblur=function(){
+    if(edtpw.value == dbpwrd2.value )
+     {document.getElementById("submitbutton").disabled = false;
+
+    }
+    else
+    {document.getElementById("submitbutton").disabled = true;}
+
+    }
+
+
+
 
 
 </script>

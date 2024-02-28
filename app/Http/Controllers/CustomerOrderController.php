@@ -284,6 +284,8 @@ class CustomerOrderController  extends Controller
     public function edit($id)
     {
 
+        $passwrd = DB::table('tblpwrd')->select('pwrdtxt')->max('pwrdtxt');
+
         $stockdtl = DB::select('call procdetailquotations(?,?)',array( $id,2 ));
         $cd = DB::table('customer_order_details')
         ->join('materials', 'materials.id', '=', 'customer_order_details.material_id')
@@ -296,7 +298,7 @@ class CustomerOrderController  extends Controller
          $data=compact('cd');
 
 
-        return view('custorders.edit')
+        return view('custorders.edit',compact('passwrd'))
         ->with('customer',Customer::select('id','title')->get())
         ->with('customerorder',CustomerOrder::findOrFail($id))
         ->with($data)

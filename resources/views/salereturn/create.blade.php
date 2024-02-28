@@ -53,16 +53,12 @@
                         <fieldset class="border px-4 py-2 rounded">
                             {{-- <legend>Invoice Level Expenses</legend> --}}
                             <div class="grid grid-cols-12 gap-2 py-2 items-center">
-                                {{-- <x-input-numeric title="Discou(%)" name="discntper" id="discntper" disabled    /> --}}
-                                {{-- <input class="checked:bg-blue-500 checked:border-blue-500 focus:outline-none" type="checkbox" name="per" id="per" onclick="EnableDisableTextBox(this)" > --}}
-                                {{-- <x-input-numeric title="Discount(Amount)" name="discntamt" id="discntamt"   /> --}}
-                                {{-- <x-input-numeric title="Cartage" name=cartage  required  onblur="tnetamount()"  /> --}}
                                 <x-input-date title="Return Date" name="rdate" id="rdate"  class="col-span-2" />
-                                <x-input-numeric title="Receivable Amount" name="rcvblamount" disabled />
-                                <x-input-numeric title="Sale Tax(%)" name="saletaxper" disabled onblur="tnetamount()"  />
-                                <x-input-numeric title="Sale Tax(Rs)" name="saletaxamt" disabled    />
-                                <x-input-numeric title="Total Amount" name="totrcvbamount" disabled />
-
+                                <x-input-numeric title="Discou(%)" name="discntper" id="discntper" disabled    />
+                                <input class="checked:bg-blue-500 checked:border-blue-500 focus:outline-none" type="checkbox" name="per" id="per" onclick="EnableDisableTextBox(this)" >
+                                <x-input-numeric title="Discount(Amount)" name="discntamt" id="discntamt"   />
+                                {{-- <x-input-numeric title="Cartage" name=cartage  required  onblur="tnetamount()"  /> --}}
+                                <x-input-numeric title="Receivable Amount" name="rcvblamount" class="col-span-2" disabled />
                             </div>
                             {{-- <div class="grid grid-cols-12 gap-2 py-2 items-center">
                                 <x-input-numeric title="Sale Tax(%)" name="saletaxper" required  onblur="tnetamount()"  />
@@ -70,20 +66,23 @@
                                 <x-input-numeric title="Total Amount" name="totrcvbamount" disabled />
                             </div> --}}
                         </fieldset>
+                        <fieldset class="border px-4 py-2 rounded">
+                            <div class="grid grid-cols-12 gap-2 py-2 items-center">
+                                <x-input-numeric title="Sale Tax(%)" name="saletaxper"  disabled onblur="tnetamount()"  />
+                                <x-input-numeric title="Sale Tax(Rs)" name="saletaxamt"  disabled    />
+                                <x-input-numeric title="Total Amount" name="totrcvbamount"  disabled />
+                                <label for="">
+                                    Descripiton <span class="text-red-500 font-semibold"></span>
+                                </label>
+                                <textarea name="sretdescription" id="sretdescription" cols="30" rows="2" maxlength="150" required class="rounded">  </textarea>
 
-                        <div class="flex flex-row px-4 py-2 items-center">
+                            </div>
+                        </fieldset>
+
+                        {{-- <div class="flex flex-row px-4 py-2 items-center">
                             <x-label value="Add Pcs & Feet Size & Press"></x-label>
                             <x-button id="calculate" class="mx-2" type="button" onclick="calculate()">Calculate</x-button>
-                            {{-- <x-label value="This will prepare your commercial invoice for Submission"></x-label> --}}
-                            <label for="">
-                                Descripiton <span class="text-red-500 font-semibold"></span>
-                            </label>
-                            <textarea name="sretdescription" id="sretdescription" cols="30" rows="2" maxlength="150" required class="rounded">  </textarea>
-
-
-                        </div>
-
-
+                        </div> --}}
 
                         <x-tabulator-dynamic />
 
@@ -150,7 +149,7 @@
         let csrfToken = document.head.querySelector("[name~=csrf-token][content]").content;
         //
         let modal = document.getElementById("myModal")
-        let calculateButton = document.getElementById("calculate")
+        // let calculateButton = document.getElementById("calculate")
         let submitButton = document.getElementById("submitbutton")
 
         let dynamicTable = ""
@@ -270,15 +269,18 @@
             dcno.value=data.dcno
             gpno.value=data.gpno
             billno.value=data.billno
+            rcvblamount.value=data.rcvblamount
+            discntamt.value=data.discntamt
+            discntper.value=data.discntper
 
             saletaxper.value=data.saletaxper
             saletaxamt.value=data.saletaxamt
-            rcvblamount.value=data.rcvblamount
+
             totrcvbamount.value=data.totrcvbamount
             detailsUrl = `${getDetails}/?id=${data.id}`
             fetchDataFromServer(detailsUrl)
             adopted = true
-            calculateButton.disabled = false
+            // calculateButton.disabled = false
             closeModal()
         })
     </script>
@@ -448,10 +450,19 @@ var tamount=0;
             // {discntamt.value=(tamount*discntper.value/100).toFixed(0);};
             // discntamt.value=(tamount*discntper.value/100).toFixed(0);
             // discntper.value=(discntamt.value/tamount*100).toFixed(2);
-            rcvblamount.value= ( Number(tamount) )
-            // +Number(cartage.value)  ;
-            saletaxamt.value=(Number(rcvblamount.value) * Number(saletaxper.value) )/100 ;
+            // rcvblamount.value= ( Number(tamount) )
+            // saletaxamt.value=(Number(rcvblamount.value) * Number(saletaxper.value) )/100 ;
+            // totrcvbamount.value=(Number(rcvblamount.value)+Number(saletaxamt.value)).toFixed(0);
+
+            // if (discntper.disabled)
+            // {discntper.value=(discntamt.value/tamount*100).toFixed(2)};
+            // if (!discntper.disabled)
+
+            discntamt.value=(tamount*discntper.value/100).toFixed(0);
+            rcvblamount.value= ( Number(tamount)-Number(discntamt.value) ).toFixed(0)  ;
+            saletaxamt.value=((Number(rcvblamount.value) * Number(saletaxper.value) )/100).toFixed(0) ;
             totrcvbamount.value=(Number(rcvblamount.value)+Number(saletaxamt.value)).toFixed(0);
+
         }
 
 
@@ -460,10 +471,14 @@ var updateValues = (cell) => {
         // var sum = (Number(data.bundle1) * Number(data.pcspbundle1)) + (Number(data.bundle2) * Number(data.pcspbundle2))
        // var sum = (Number(data.saleqty) * Number(data.price))
 
-        if(cell.getData().sku_id==1)
+
+// console.log(cell.getData().sku_id)
+       if(cell.getData().sku_id === 1)
          {
 
             // var pr1=(Number(data.qtykg) / Number(data.totqty))*100
+
+            console.log(Number(data.qtykg))
 
             var sum = (Number(data.feedqty) * Number(data.price))
             var pr1=(Number(data.feedqty) / Number(data.totqty))*100
@@ -471,39 +486,43 @@ var updateValues = (cell) => {
             var pr2=( pr1 / Number(data.wtper))*100
             qtypcs=((pr2*Number(data.sqtypcs))/100).toFixed(2)
             qtyfeet=((pr2*Number(data.sqtyfeet))/100).toFixed(2)
-            qtykg=((pr2*Number(data.sqtykg))/100).toFixed(2)
+            // qtykg=((pr2*Number(data.sqtykg))/100).toFixed(2)
+            qtykg=Number(data.feedqty)
 
 
 
          }
-         if(cell.getData().sku_id==2)
+         if(cell.getData().sku_id === 2)
          {
+            console.log('PCS')
             var sum = (Number(data.feedqty) * Number(data.price))
             // var pr1=(Number(data.qtypcs) / Number(data.totqty))*100
             var pr1=(Number(data.feedqty) / Number(data.totqty))*100
             var pr2=( pr1 / Number(data.pcper))*100
             qtykg=((pr2*Number(data.sqtykg))/100).toFixed(2)
             qtyfeet=((pr2*Number(data.sqtyfeet))/100).toFixed(2)
-            qtypcs=((pr2*Number(data.sqtypcs))/100).toFixed(2)
+            qtypcs=Number(data.feedqty)
 
 
 
          }
 
-         if(cell.getData().sku_id==3)
+         if(cell.getData().sku_id === 3)
          {
+            console.log('FEET')
             var sum = (Number(data.feedqty) * Number(data.price))
             // var pr1=(Number(data.qtyfeet) / Number(data.totqty))*100
             var pr1=(Number(data.feedqty) / Number(data.totqty))*100
             var pr2=( pr1 / Number(data.feetper))*100
             qtykg=((pr2*Number(data.sqtykg))/100).toFixed(2)
             qtypcs=((pr2*Number(data.sqtypcs))/100).toFixed(2)
-            qtyfeet=((pr2*Number(data.sqtyfeet))/100).toFixed(2)
+            qtyfeet=Number(data.feedqty)
 
          }
 
-         else
+         if(cell.getData().sku_id > 3 )
         {
+            console.log('METER')
             var sum = (Number(data.feedqty) * Number(data.price))
             var pr1=(Number(data.feedqty) / Number(data.totqty))*100
             var pr2=( pr1 / Number(data.pcper))*100
@@ -587,8 +606,8 @@ var updateValues = (cell) => {
                     }
                 },
                 {title:"Id",           field:"id", visible:false},
-                {title:"Material Name",     field:"material_title",responsive:0, cssClass:"bg-gray-200 font-semibold"},
-                {title:"Material Size",    field:"dimension",cssClass:"bg-gray-200 font-semibold",responsive:0},
+                {title:"Material Name",     field:"material_title",width:300,responsive:0, cssClass:"bg-gray-200 font-semibold"},
+                {title:"Material Size",    field:"dimension",width:150,cssClass:"bg-gray-200 font-semibold",responsive:0},
                 {title:"UOM",         field:"sku",responsive:0, hozAlign:"center", cssClass:"bg-gray-200 font-semibold"},
                 {title:"Unitid",       field:"sku_id",visible:false},
                 // {title:"contract_id",  field:"contract_id",visible:false},
@@ -603,9 +622,9 @@ var updateValues = (cell) => {
                 {
                 title:'Sale Quantity', headerHozAlign:"center",
                     columns:[
-                {title:"InKg", field:"sqtykg", cssClass:"bg-gray-200 font-semibold"},
-                {title:"InPcs", field:"sqtypcs", cssClass:"bg-gray-200 font-semibold"},
-                {title:"InFeet", field:"sqtyfeet", cssClass:"bg-gray-200 font-semibold"}]},
+                {title:"InKg", field:"sqtykg", cssClass:"bg-gray-200 font-semibold",width:120},
+                {title:"InPcs", field:"sqtypcs", cssClass:"bg-gray-200 font-semibold",width:120},
+                {title:"InFeet", field:"sqtyfeet", cssClass:"bg-gray-200 font-semibold",width:120}]},
 
                 // {title:"Order BalQty",headerHozAlign :'center',
                 //             field:"balqty", cssClass:"bg-gray-200 font-semibold",
@@ -622,9 +641,10 @@ var updateValues = (cell) => {
                             field:"qtykg",
                             // editor:"number",
                             // headerVertical:true,
+                            width:120,
                             bottomCalc:"sum",
                             formatter:"money",
-                            cellEdited: updateValues,
+                            // cellEdited: updateValues,
                             validator:["required","numeric"],
                             cssClass:"bg-gray-200 font-semibold",
                             formatterParams:{thousand:",",precision:2},
@@ -638,6 +658,7 @@ var updateValues = (cell) => {
                             field:"qtypcs",
                             // editor:"number",
                             // headerVertical:true,
+                            width:120,
                             bottomCalc:"sum",
                             formatter:"money",
                             cellEdited: updateValues,
@@ -653,6 +674,7 @@ var updateValues = (cell) => {
                             field:"qtyfeet",
                             // editor:"number",
                             // headerVertical:true,
+                            width:120,
                             bottomCalc:"sum",
                             formatter:"money",
                             cellEdited: updateValues,
@@ -686,7 +708,7 @@ var updateValues = (cell) => {
 
                         {   title:"Brand",headerHozAlign :'center',
                             field:"mybrand",
-                            editor:true,
+                            editor:true,visible:false,
                         },
 
                     ]},
@@ -701,13 +723,14 @@ var updateValues = (cell) => {
 
 
 
-                    {title:"Conversion", field:"unitconversr",cellEdited: updateValues,editor:"number"},
-                    {title:"Return Qty", field:"feedqty",cellEdited: updateValues,editor:"number"},
+                    {title:"Conversion", field:"unitconversr",cellEdited: updateValues,editor:"number",width:120},
+                    {title:"Return Qty", field:"feedqty",cellEdited: updateValues,editor:"number",width:120},
 
                     {   title:"Sale Price",
                             headerHozAlign :'right',
                             hozAlign:"right",
                             responsive:0,
+                            width:120,
                             field:"price",
                             editor:"number",
                             bottomCalc:"sum",
@@ -722,6 +745,7 @@ var updateValues = (cell) => {
                         headerHozAlign :'right',
                         hozAlign:"right",
                         field:"saleamnt",
+                        width:120,
                         bottomCalc:"sum",
                         cssClass:"bg-green-200 font-semibold",
                         formatter:"money",
@@ -840,7 +864,8 @@ var updateValues = (cell) => {
             var data = { 'sales' : dynamicTableData,'rcvblamount':rcvblamount.value,
         'customer_id': customer_id,'dcdate':dcdate.value,'invoice_id':invoice_id,
         'saletaxper':saletaxper.value,'saletaxamt':saletaxamt.value,'totrcvbamount':totrcvbamount.value,
-        'dcno':dcno.value,'gpno':gpno.value,'billno':billno.value,'rdate':rdate.value,'sretdescription':sretdescription.value};
+        'dcno':dcno.value,'gpno':gpno.value,'billno':billno.value,'rdate':rdate.value,'sretdescription':sretdescription.value
+        ,'discntamt':discntamt.value,'discntper':discntper.value};
 
 
 

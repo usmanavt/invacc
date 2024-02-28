@@ -42,13 +42,16 @@
                                 <x-input-text title="G.Pass No" name="gpno" id="gpno" value="{{ $saleinvoices->gpno }}"     required   /> --}}
                                     {{-- <x-input-text title="Customer Name" name="custname" id="custname" value="{{ $customer->custname }}" req required class="col-span-2" disabled  /> --}}
                                     <x-input-date title="Deilivery Date" id="dcdate" name="dcdate" value="{{ $salereturn->dcdate }}"   class="col-span-2" disabled />
-                                    <x-input-text title="DC No" name="dcno" id="dcno" value="{{ $salereturn->dcno }}"    disabled   />
-                                    <x-input-text title="Bill No" name="billno" id="billno" value="{{ $salereturn->billno }}"   disabled   />
-                                    <x-input-text title="G.Pass No" name="gpno" id="gpno" value="{{ $salereturn->gpno }}"   disabled   />
+                                    <x-input-text title="DC No" name="dcno" id="dcno" value="{{ $salereturn->dcno }}"    disabled class="col-span-2"   />
+                                    <x-input-text title="Bill No" name="billno" id="billno" value="{{ $salereturn->billno }}" class="col-span-2"   disabled   />
+                                    <x-input-text title="G.Pass No" name="gpno" id="gpno" value="{{ $salereturn->gpno }}" class="col-span-2"   disabled   />
                                     <x-input-date title="Return Date" name="rdate" id="rdate" value="{{ $salereturn->rdate }}"  class="col-span-2" />
                                     <x-input-text title="" name="pcustno" id="pcustno" hidden value="{{ $salereturn->customer_id }}"  class="col-span-2" />
                         </div>
+                        <div>
 
+
+                        </div>
 
 
 
@@ -77,17 +80,22 @@
 
                             <div class="grid grid-cols-12 gap-2 py-2 items-center">
 
+                                <x-input-numeric title="Discou(%)" name="discntper" id="discntper" value="{{ $salereturn->discntper }}" disabled     />
+                                {{-- <input class="checked:bg-blue-500 checked:border-blue-500 focus:outline-none" type="checkbox" name="per" id="per" onclick="EnableDisableTextBox(this)" > --}}
+                                <x-input-numeric title="Discount(Amount)" name="discntamt" id="discntamt" value="{{ $salereturn->discntamt }}"   />
                                 <x-input-numeric title="Receivable Amount" name="rcvblamount" value="{{ $salereturn->rcvblamount }}" disabled />
-                                <x-input-numeric title="Sale Tax(%)" name="saletaxper" value="{{ $salereturn->saletaxper }}" required  onblur="tnetamount()"  />
-                                <x-input-numeric title="Sale Tax(Rs)" name="saletaxamt" value="{{ $salereturn->saletaxamt }}" disabled    />
-                                <x-input-numeric title="Total Amount" name="totrcvbamount" value="{{ $salereturn->totrcvbamount }}" disabled />
                                 <x-input-numeric title="" name="sale_return_id" id="sale_return_id" value="{{ $salereturn->id }}" hidden   />
                                     <label for="">
                                         Descripiton <span class="text-red-500 font-semibold"></span>
                                     </label>
                                     <textarea name="sretdescription" id="sretdescription" cols="30" rows="2" maxlength="150" required class="rounded"> {{ $salereturn->sretdescription }} </textarea>
                                 </div>
+                                <div class="grid grid-cols-12 gap-2 py-2 items-center">
+                                    <x-input-numeric title="Sale Tax(%)" name="saletaxper" value="{{ $salereturn->saletaxper }}" required  onblur="tnetamount()"  />
+                                    <x-input-numeric title="Sale Tax(Rs)" name="saletaxamt" value="{{ $salereturn->saletaxamt }}" disabled    />
+                                    <x-input-numeric title="Total Amount" name="totrcvbamount" value="{{ $salereturn->totrcvbamount }}" disabled />
 
+                                </div>
 
 
 
@@ -98,12 +106,15 @@
 
                         {{-- Submit Button --}}
                         <div class="pt-2">
-                            <button
+                            <x-button
                                 id="submitbutton" onclick="validateForm()"
                                 class="bg-green-500 text-white rounded hover:bg-green-700 inline-flex items-center px-4 py-1 w-28 text-center">
                                 <i class="fa fa-save fa-fw"></i>
                                 Submit
-                            </button>
+                            </x-button>
+                            <x-input-text title="Password For Edition" name="edtpw" id="edtpw" type="password"     />
+                            <x-input-text title="" name="dbpwrd2" id="dbpwrd2"  class="col-span-2" hidden value="{{$passwrd}}" />
+
                         </div>
 
                     </div>
@@ -122,6 +133,9 @@
 
     @push('scripts')
 <script>
+document.addEventListener('DOMContentLoaded',()=>{
+        document.getElementById("submitbutton").disabled = true;
+     })
 
 
 let table;
@@ -365,9 +379,15 @@ function pushDynamicData(data)
             // {discntamt.value=(tamount*discntper.value/100).toFixed(0);};
 
 
-            rcvblamount.value=  Number(tamount)  ;
-            saletaxamt.value=(Number(rcvblamount.value) * Number(saletaxper.value) )/100 ;
+            // rcvblamount.value=  Number(tamount)  ;
+            // saletaxamt.value=(Number(rcvblamount.value) * Number(saletaxper.value) )/100 ;
+            // totrcvbamount.value=(Number(rcvblamount.value)+Number(saletaxamt.value)).toFixed(0);
+
+            discntamt.value=(tamount*discntper.value/100).toFixed(0);
+            rcvblamount.value= ( Number(tamount)-Number(discntamt.value) ).toFixed(0)  ;
+            saletaxamt.value=((Number(rcvblamount.value) * Number(saletaxper.value) )/100).toFixed(0) ;
             totrcvbamount.value=(Number(rcvblamount.value)+Number(saletaxamt.value)).toFixed(0);
+
 
 
 
@@ -405,17 +425,17 @@ dynamicTable = new Tabulator("#dynamicTable", {
         },
 
         {title:"Id",                field:"material_id",    cssClass:"bg-gray-200 font-semibold"},
-        {title:"Material Name",          field:"material_title", cssClass:"bg-gray-200 font-semibold"},
-        {title:"Material Size",         field:"dimension",      cssClass:"bg-gray-200 font-semibold"},
+        {title:"Material Name",          field:"material_title",width:300, cssClass:"bg-gray-200 font-semibold"},
+        {title:"Material Size",         field:"dimension",width:200,      cssClass:"bg-gray-200 font-semibold"},
 
         {title:"UOM",               field:"sku",cssClass:"bg-gray-200 font-semibold"},
 
         {
                 title:'Sale Quantity', headerHozAlign:"center",
                     columns:[
-                {title:"InKg", field:"sqtykg",cssClass:"bg-gray-200 font-semibold"},
-                {title:"InPcs", field:"sqtypcs",cssClass:"bg-gray-200 font-semibold"},
-                {title:"InFeet", field:"sqtyfeet",cssClass:"bg-gray-200 font-semibold"},
+                {title:"InKg", field:"sqtykg",width:120,cssClass:"bg-gray-200 font-semibold"},
+                {title:"InPcs", field:"sqtypcs",width:120,cssClass:"bg-gray-200 font-semibold"},
+                {title:"InFeet", field:"sqtyfeet",width:120,cssClass:"bg-gray-200 font-semibold"},
             ]},
 
             // {title:"ORDER BALANCE", field:"balqty",cssClass:"bg-gray-200 font-semibold"},
@@ -428,6 +448,7 @@ dynamicTable = new Tabulator("#dynamicTable", {
                 cssClass:"bg-gray-200 font-semibold",
                 validator:"required",
                 formatter:"money",
+                width:120,
                 formatterParams:{thousand:",",precision:2},
                 validator:["required","integer"],
                 // cellEdited: updateValues,
@@ -439,6 +460,7 @@ dynamicTable = new Tabulator("#dynamicTable", {
                 cssClass:"bg-gray-200 font-semibold",
                 validator:"required",
                 formatter:"money",
+                width:120,
                 formatterParams:{thousand:",",precision:2},
                 validator:["required","integer"],
                 // cellEdited: updateValues,
@@ -450,6 +472,7 @@ dynamicTable = new Tabulator("#dynamicTable", {
                 cssClass:"bg-gray-200 font-semibold",
                 validator:"required",
                 formatter:"money",
+                width:120,
                 formatterParams:{thousand:",",precision:2},
                 validator:["required","integer"],
                 // cellEdited: updateValues,
@@ -487,6 +510,7 @@ dynamicTable = new Tabulator("#dynamicTable", {
                 editor:"number",
                 validator:"required" ,
                 formatter:"money",
+                width:120,
                 formatterParams:{thousand:",",precision:2},
                 validator:["required","decimal(10,3)"] ,
                 cellEdited: updateValues   ,
@@ -497,6 +521,7 @@ dynamicTable = new Tabulator("#dynamicTable", {
                 editor:"number",
                 validator:"required" ,
                 formatter:"money",
+                width:120,
                 formatterParams:{thousand:",",precision:2},
                 validator:["required","decimal(10,3)"] ,
                 cellEdited: updateValues   ,
@@ -507,6 +532,7 @@ dynamicTable = new Tabulator("#dynamicTable", {
                 editor:"number",
                 validator:"required" ,
                 formatter:"money",
+                width:120,
                 formatterParams:{thousand:",",precision:2},
                 validator:["required","decimal(10,3)"] ,
                 cellEdited: updateValues   ,
@@ -519,6 +545,7 @@ dynamicTable = new Tabulator("#dynamicTable", {
                 cssClass:"bg-green-200 font-semibold",
                 formatter:"money",
                 bottomCalc:"sum",
+                width:120,
                 formatterParams:{thousand:",",precision:0},
                 formatter:function(cell,row)
                 {
@@ -621,7 +648,8 @@ function validateForm()
     var data = { 'salereturn' : dynamicTableData,'rcvblamount':rcvblamount.value,
         'customer_id': customer_id.value,'dcdate':dcdate.value,'sale_return_id':sale_return_id.value,
         'saletaxper':saletaxper.value,'saletaxamt':saletaxamt.value,'totrcvbamount':totrcvbamount.value,
-        'dcno':dcno.value,'gpno':gpno.value,'billno':billno.value,'rdate':rdate.value,'sretdescription':sretdescription.value};
+        'dcno':dcno.value,'gpno':gpno.value,'billno':billno.value,'rdate':rdate.value,'sretdescription':sretdescription.value
+    ,'discntamt':discntamt.value,'discntper':discntper.value};
 
 
 
@@ -665,6 +693,22 @@ function validateForm()
 //     // discntper.value=(discntamt.value/tamount*100).toFixed(2);
 //     tnetamount();
 //     }
+
+
+edtpw.onblur=function(){
+    if(edtpw.value == dbpwrd2.value )
+     {document.getElementById("submitbutton").disabled = false;
+
+    }
+    else
+    {document.getElementById("submitbutton").disabled = true;}
+
+    }
+
+
+
+
+
 
 
 </script>

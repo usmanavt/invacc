@@ -300,7 +300,7 @@ class LocalPurchaseController  extends Controller
     public function edit($id)
     {
 
-
+        $passwrd = DB::table('tblpwrd')->select('pwrdtxt')->max('pwrdtxt');
         $cd = DB::table('commercial_invoices as a')
         ->join('commercial_invoice_details as b', 'a.id', '=', 'b.commercial_invoice_id')
         ->join('materials as c', 'c.id', '=', 'b.material_id')
@@ -315,7 +315,7 @@ class LocalPurchaseController  extends Controller
 
         $data=compact('cd');
 
-         return view('localpurchase.edit')
+         return view('localpurchase.edit',compact('passwrd'))
         ->with('suppliers',Supplier::select('id','title')->get())
         ->with('commercialInvoice',CommercialInvoice::findOrFail($id))
         // ->with('cd',CommercialInvoiceDetails::where('commercial_invoice_id',$id)->get())
@@ -324,6 +324,61 @@ class LocalPurchaseController  extends Controller
         ->with($data);
 
     }
+
+
+
+
+
+    public function ddelete($id)
+    {
+
+        $passwrd = DB::table('tblpwrd')->select('pwrdtxt')->max('pwrdtxt');
+        $cd = DB::table('commercial_invoices as a')
+        ->join('commercial_invoice_details as b', 'a.id', '=', 'b.commercial_invoice_id')
+        ->join('materials as c', 'c.id', '=', 'b.material_id')
+        ->join('skus as d', 'd.id', '=', 'b.sku_id')
+        ->select('c.id as material_id','c.title','c.category_id','c.category','c.dimension_id','c.dimension','c.sku_id','c.sku','c.brand_id','c.brand'
+        ,'b.user_id','b.supplier_id','b.id','b.pcs','b.length','b.qtyinfeet','b.gdsprice','b.amtinpkr','b.perkg','b.purval','b.repname',
+        'b.machineno','b.forcust','b.purunit','b.locid','b.location','b.contract_id','d.title as sku',
+        'b.gdswt','pcs','qtyinfeet','b.perft','pricevaluecostsheet'
+        // DB::raw('( CASE b.sku_id  WHEN  1 THEN b.gdswt WHEN 2 THEN b.pcs WHEN 3 THEN b.qtyinfeet  END) AS gdswt')
+        )
+        ->where('a.id',$id)->get();
+
+        $data=compact('cd');
+
+         return view('localpurchase.ddelete',compact('passwrd'))
+        ->with('suppliers',Supplier::select('id','title')->get())
+        ->with('commercialInvoice',CommercialInvoice::findOrFail($id))
+        // ->with('cd',CommercialInvoiceDetails::where('commercial_invoice_id',$id)->get())
+        ->with('locations',Location::select('id','title')->get())
+        ->with('skus',Sku::select('id','title')->get())
+        ->with($data);
+
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
     public function update(Request $request, CommercialInvoice $commercialinvoice)
@@ -514,11 +569,15 @@ class LocalPurchaseController  extends Controller
 
     public function printContract($id)
     {
-        // dd($id);
-        $contract = Contract::findOrFail($id);
-        $cd = ContractDetails::where('contract_id',$contract->id)->get();
-        $html = view('contracts.print')->with('cd',$cd)->with('contract',$contract)->render();
-        $filename = $contract->id . '.pdf';
+
+        console.log('abc');
+        Session::flash('info','No data available');
+        // $gp = Gatepass::findOrFail($id);
+        // $gpd = GatepassDetail::whereGatepassId($gp->id)->whereDeleted(0)->get();
+        $data = DB::select('call procpurinvcloc()');
+        $html = view('purrpt.loccominvsrpt')->render();
+        // Report::getPDFByMpdf($html, $gp->id.'.pdf');
+        $filename = $gp->id . '.pdf';
         ini_set('max_execution_time', '2000');
         ini_set("pcre.backtrack_limit", "100000000");
         ini_set("memory_limit","8000M");
@@ -533,7 +592,6 @@ class LocalPurchaseController  extends Controller
             'margin_bottom' => '20',
             'margin_footer' => '2',
             'default_font_size' => 9,
-            'orientation' => 'L'
         ]);
         $mpdf->SetHTMLFooter('
             <table width="100%" style="border-top:1px solid gray">
@@ -552,5 +610,12 @@ class LocalPurchaseController  extends Controller
         // 'I': serves in-line to the browser
         // 'S': returns the PDF document as a string
         // 'F': save as file $file_out
+
+
+
+
+
+
     }
+
 }

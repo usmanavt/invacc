@@ -83,8 +83,9 @@ table{
             <tr>
                 <td  style="text-align: center;">
                     <h3 style="font-size:0.7rem">Steam Pipes, Pipe Fitting, Flanges Valves, S.S Pipes</h3>
-                    <h3 style="font-size:0.7rem">Plot # 8 Near Allah Malik Godown Shershah Kabari Bazar,</h3>
+                    <h3 style="font-size:0.7rem">PLOT NO. E-13, S.I.T.E AREA KARACHI MOBILE NO. 0333-3804744</h3>
                     <h3 style="font-size:0.7rem">Phone : 021-32588781, 021-32574285 , Fax : 021-32588782</h3>
+
                 </td>            </tr>
             <tr>
                 <td  style="text-align: center;">
@@ -129,7 +130,7 @@ table{
                     <th class="column-headers" width="9%">Sale</th>
                     <th class="column-headers" width="9%">Purchase<br>Return</th>
                     <th class="column-headers" width="9%">Sale<br>Return</th>
-                    <th class="column-headers" width="9%">Closing<br>Balance</th>
+.                    <th class="column-headers" width="9%">Closing<br>Balance</th>
 
             </tr>
         </thead>
@@ -137,13 +138,18 @@ table{
 
     <table class="data" cellspacing="0">
         <tbody>
-            {{ $vob = 0 }}
-            {{ $vrcvd = 0 }}
-            {{ $vsl = 0 }}
-            {{ $vcb = 0 }}
+
+            {{-- FOR SUBTOTAL --}}
+            {{ $sob = 0 }};{{ $srcvd = 0 }};{{ $ssl = 0 }};{{ $scb = 0 }};{{ $spr = 0 }};{{ $ssr = 0 }}
+            {{-- FOR GRANDTOTAL --}}
+            {{ $vob = 0 }};{{ $vrcvd = 0 }};{{ $vsl = 0 }};{{ $vcb = 0 }};{{ $vpr = 0 }};{{ $vsr = 0 }}
+            {{-- FOR LAST GROUP SUBTOTAL --}}
+            {{-- {{ $sob1 = 0 }};{{ $srcvd1 = 0 }};{{ $ssl1 = 0 }};{{ $scb1 = 0 }};{{ $spr1 = 0 }};{{ $ssr1 = 0 }} --}}
+
 
             @for ($i = 0 ; $i < count($data) ; $i++)
 
+            {{-- {{ $spr1 += $data[$i]->PURRET }};{{ $ssr1 += $data[$i]->SALRET }};{{ $scb1 += $data[$i]->CB }} --}}
             @if( $i==0 )
                 <tr>
                     <td colspan="9" width="100%" style="text-align: left;font-size:1.2rem;border-bottom: 2px solid rgb(211, 211, 211);"> {{ $data[$i]->Itemgroupe}} </td>
@@ -151,8 +157,31 @@ table{
             @else
 
             {{ $srno = $i - 1 }}
+            {{ $sob += $data[$srno]->OBALANCE }};{{ $srcvd += $data[$srno]->PURQTY }};{{ $ssl += $data[$srno]->SALQTY }};
+            {{ $spr += $data[$srno]->PURRET }};{{ $ssr += $data[$srno]->SALRET }};{{ $scb += $data[$srno]->CB }}
+
+                {{-- FOR LAST SUBTOTAL  --}}
+            {{-- {{ $sob1 += $data[$i]->OBALANCE }};{{ $srcvd1 += $data[$i]->PURQTY }};{{ $ssl1 += $data[$i]->SALQTY }}; --}}
+
+
+
+
+
             @if ($data[$i]->Itemgroupe  <> $data[$srno]->Itemgroupe )
-                <tr>
+
+            <tr>
+                <td colspan="2"  style="font-weight: bold;background: #e3e3e3;text-align: right;border-bottom: 1px solid lightgray;">Sub Total </td>
+                <td colspan="2"  style="font-weight: bold;background: #e3e3e3;text-align: right;border-bottom: 1px solid lightgray;">{{ number_format($sob,0) }} </td>
+                <td colspan="1"  style="font-weight: bold;background: #e3e3e3;text-align: right;border-bottom: 1px solid lightgray;">{{ number_format($srcvd,0) }} </td>
+                <td colspan="1"  style="font-weight: bold;background: #e3e3e3;text-align: right;border-bottom: 1px solid lightgray;">{{ number_format($ssl,0) }} </td>
+                <td colspan="1"  style="font-weight: bold;background: #e3e3e3;text-align: right;border-bottom: 1px solid lightgray;">{{ number_format($spr,0) }} </td>
+                <td colspan="1"  style="font-weight: bold;background: #e3e3e3;text-align: right;border-bottom: 1px solid lightgray;">{{ number_format($ssr,0) }} </td>
+                <td colspan="1"  style="font-weight: bold;background: #e3e3e3;text-align: right;border-bottom: 1px solid lightgray;">{{ number_format($scb,0) }} </td>
+            </tr>
+           {{ $sob = 0 }};{{ $srcvd = 0 }};{{ $ssl = 0 }};{{ $scb = 0 }};{{ $spr = 0 }};{{ $ssr = 0 }}
+           {{-- {{ $sob1 = 0 }};{{ $srcvd1 = 0 }};{{ $ssl1 = 0 }};{{ $scb1 = 0 }};{{ $spr1 = 0 }};{{ $ssr1 = 0 }} --}}
+
+                 <tr>
                         <td colspan="9" width="100%" style="text-align:left;font-size:1.2rem;border-bottom: 2px solid rgb(211, 211, 211);"> {{ $data[$i]->Itemgroupe}} </td>
                 </tr>
             @endif
@@ -160,10 +189,9 @@ table{
 
             <tr>
 
-                {{ $vob += $data[$i]->OBALANCE }}
-                {{ $vrcvd += $data[$i]->PURQTY }}
-                {{ $vsl += $data[$i]->SALQTY }}
-                {{ $vcb += $data[$i]->CB }}
+                {{ $vob += $data[$i]->OBALANCE }};{{ $vrcvd += $data[$i]->PURQTY }};{{ $vsl += $data[$i]->SALQTY }}
+                {{ $vpr += $data[$i]->PURRET }};{{ $vsr += $data[$i]->SALRET }};{{ $vcb += $data[$i]->CB }}
+
 
 
 
@@ -178,13 +206,27 @@ table{
                 <td style="text-align:right" width="9%">{{ number_format($data[$i]->CB,0) }} </td>
             </tr>
             @endfor
-            <tr>
-                {{-- <td colspan="9" width="100%" style="text-align: right;border-bottom: 1px solid lightgray;"></td> --}}
 
-                <td colspan="4" width="9%" style="text-align: right;border-bottom: 1px solid lightgray;">{{ number_format($vob,0) }} </td>
-                <td colspan="1" width="9%" style="text-align: right;border-bottom: 1px solid lightgray;">{{ number_format($vrcvd,0) }} </td>
-                <td colspan="1" width="9%" style="text-align: right;border-bottom: 1px solid lightgray;">{{ number_format($vsl,0) }} </td>
-                <td colspan="4" width="9%" style="text-align: right;border-bottom: 1px solid lightgray;">{{ number_format($vcb,0) }} </td>
+            {{-- <tr>
+                <td colspan="2"  style="font-weight: bold;background: #e3e3e3;text-align: right;border-bottom: 1px solid lightgray;">Sub Total </td>
+                <td colspan="2"  style="font-weight: bold;background: #e3e3e3;text-align: right;border-bottom: 1px solid lightgray;">{{ number_format($sob1,0) }} </td>
+                <td colspan="1"  style="font-weight: bold;background: #e3e3e3;text-align: right;border-bottom: 1px solid lightgray;">{{ number_format($srcvd1,0) }} </td>
+                <td colspan="1"  style="font-weight: bold;background: #e3e3e3;text-align: right;border-bottom: 1px solid lightgray;">{{ number_format($ssl1,0) }} </td>
+                <td colspan="1"  style="font-weight: bold;background: #e3e3e3;text-align: right;border-bottom: 1px solid lightgray;">{{ number_format($spr1,0) }} </td>
+                <td colspan="1"  style="font-weight: bold;background: #e3e3e3;text-align: right;border-bottom: 1px solid lightgray;">{{ number_format($ssr1,0) }} </td>
+                <td colspan="1"  style="font-weight: bold;background: #e3e3e3;text-align: right;border-bottom: 1px solid lightgray;">{{ number_format($scb1,0) }} </td>
+            </tr> --}}
+
+
+            <tr>
+
+                <td colspan="2"  style="font-weight: bold;background: #e3e3e3;text-align: right;border-bottom: 1px solid lightgray;">Grand Total </td>
+                <td colspan="2"  style="font-weight: bold;background: #e3e3e3;text-align: right;border-bottom: 1px solid lightgray;">{{ number_format($vob,0) }} </td>
+                <td colspan="1"  style="font-weight: bold;background: #e3e3e3;text-align: right;border-bottom: 1px solid lightgray;">{{ number_format($vrcvd,0) }} </td>
+                <td colspan="1"  style="font-weight: bold;background: #e3e3e3;text-align: right;border-bottom: 1px solid lightgray;">{{ number_format($vsl,0) }} </td>
+                <td colspan="1"  style="font-weight: bold;background: #e3e3e3;text-align: right;border-bottom: 1px solid lightgray;">{{ number_format($vpr,0) }} </td>
+                <td colspan="1"  style= "font-weight: bold;background: #e3e3e3;text-align: right;border-bottom: 1px solid lightgray;">{{ number_format($vsr,0) }} </td>
+                <td colspan="1"  style="font-weight: bold;background: #e3e3e3;text-align: right;border-bottom: 1px solid lightgray;">{{ number_format($vcb,0) }} </td>
            </tr>
 
 

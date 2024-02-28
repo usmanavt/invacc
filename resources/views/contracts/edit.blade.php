@@ -54,6 +54,9 @@
                                 <i class="fa fa-save fa-fw"></i>
                                 Submit
                             </button>
+                            <x-input-text title="Password For Edition Permission" name="edtpw" id="edtpw" type="password"     />
+                            <x-input-text title="" name="dbpwrd2" id="dbpwrd2"  class="col-span-2" hidden  value="{{$passwrd}}" />
+
                         </div>
 
                     </div>
@@ -82,6 +85,14 @@ let modal = document.getElementById("myModal")
 
 let dyanmicTable = ""; // Tabulator
 let dynamicTableData = @json($cd);
+
+
+document.addEventListener('DOMContentLoaded',()=>{
+        document.getElementById("submitbutton").disabled = true;
+     })
+
+
+
 
 
 //  ---------------- For MODAL -----------------------//
@@ -596,6 +607,18 @@ function validateForm()
         disableSubmitButton(false);
     })
 }
+
+edtpw.onblur=function(){
+    if(edtpw.value == dbpwrd2.value )
+     {document.getElementById("submitbutton").disabled = false;
+
+    }
+    else
+    {document.getElementById("submitbutton").disabled = true;}
+
+    }
+
+
 </script>
 @endpush
 

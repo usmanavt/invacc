@@ -62,7 +62,7 @@
                                 Remarks <span class="text-red-500 font-semibold">(*)</span>
                             </label>
                             <textarea name="mremarks" id="mremarks" cols="50" rows="2" maxlength="200" required class="rounded"></textarea>
-                            <x-input-numeric title="" name="godown_movement_id" id="godown_movement_id" value="{{ $godownmovement->id }}"   />
+                            <x-input-numeric title="" name="godown_movement_id" id="godown_movement_id" hidden value="{{ $godownmovement->id }}"   />
 
                         </div>
                     </fieldset>
@@ -95,12 +95,16 @@
 
                         {{-- Submit Button --}}
                         <div class="pt-2">
-                            <button
+                            <x-button
                                 id="submitbutton" onclick="validateForm()"
                                 class="bg-green-500 text-white rounded hover:bg-green-700 inline-flex items-center px-4 py-1 w-28 text-center">
                                 <i class="fa fa-save fa-fw"></i>
                                 Submit
-                            </button>
+                            </x-button>
+                            <x-input-text title="Password For Edition" name="edtpw" id="edtpw" type="password"     />
+                            <x-input-text title="" name="dbpwrd2" id="dbpwrd2"  class="col-span-2" hidden value="{{$passwrd}}" />
+
+
                         </div>
 
                     </div>
@@ -119,6 +123,11 @@
 
     @push('scripts')
 <script>
+
+document.addEventListener('DOMContentLoaded',()=>{
+        document.getElementById("submitbutton").disabled = true;
+     })
+
 
 
 const skus = @json($skus);
@@ -394,8 +403,8 @@ dynamicTable = new Tabulator("#dynamicTable", {
         },
 
         {title:"Id",                field:"material_id",    cssClass:"bg-gray-200 font-semibold"},
-        {title:"Material",          field:"material_title", cssClass:"bg-gray-200 font-semibold"},
-        {title:"Dimension",         field:"dimension",      cssClass:"bg-gray-200 font-semibold"},
+        {title:"Material",          field:"material_title",width:400, cssClass:"bg-gray-200 font-semibold"},
+        {title:"Dimension",         field:"dimension",width:150, cssClass:"bg-gray-200 font-semibold"},
         {title:"UOM",               field:"sku",cssClass:"bg-gray-200 font-semibold"},
 
         {title:"qtykgcrt", field:"qtykgcrt",visible:false},
@@ -405,9 +414,9 @@ dynamicTable = new Tabulator("#dynamicTable", {
         {
                 title:'STOCK QUANTITY', headerHozAlign:"center",
                     columns:[
-                {title:"InKg", field:"sqtykg",cssClass:"bg-gray-200 font-semibold"},
-                {title:"InPcs", field:"sqtypcs",cssClass:"bg-gray-200 font-semibold"},
-                {title:"InFeet", field:"sqtyfeet",cssClass:"bg-gray-200 font-semibold"},
+                {title:"InKg", field:"sqtykg",width:120,cssClass:"bg-gray-200 font-semibold"},
+                {title:"InPcs", field:"sqtypcs",width:120,cssClass:"bg-gray-200 font-semibold"},
+                {title:"InFeet", field:"sqtyfeet",width:120,cssClass:"bg-gray-200 font-semibold"},
             ]},
 
             {title:"ORDER BALANCE", field:"balqty",visible:false},
@@ -420,6 +429,7 @@ dynamicTable = new Tabulator("#dynamicTable", {
                 cssClass:"bg-gray-200 font-semibold",
                 validator:"required",
                 formatter:"money",
+                width:120,
                 formatterParams:{thousand:",",precision:2},
                 validator:["required","integer"],
                 cellEdited: updateValues,
@@ -427,6 +437,7 @@ dynamicTable = new Tabulator("#dynamicTable", {
 
                {title:"InPcs",
                 field:"qtypcs",
+                width:120,
                 // editor:"number",
                 cssClass:"bg-gray-200 font-semibold",
                 validator:"required",
@@ -441,6 +452,7 @@ dynamicTable = new Tabulator("#dynamicTable", {
                 // editor:"number",
                 cssClass:"bg-gray-200 font-semibold",
                 validator:"required",
+                width:120,
                 formatter:"money",
                 formatterParams:{thousand:",",precision:2},
                 validator:["required","integer"],
@@ -489,6 +501,7 @@ dynamicTable = new Tabulator("#dynamicTable", {
                 { title:"Quantity",
                 field:"feedqty",
                 editor:"number",
+                width:120,
                 validator:"required" ,
                 formatter:"money",
                 formatterParams:{thousand:",",precision:2},
@@ -498,6 +511,7 @@ dynamicTable = new Tabulator("#dynamicTable", {
 
             { title:"Cost",
                 field:"price",
+                width:120,
                 // editor:"number",
                 validator:"required" ,
                 cssClass:"bg-gray-200 font-semibold",
@@ -514,6 +528,7 @@ dynamicTable = new Tabulator("#dynamicTable", {
                 cssClass:"bg-green-200 font-semibold",
                 formatter:"money",
                 bottomCalc:"sum",
+                width:120,
                 formatterParams:{thousand:",",precision:2},
                 formatter:function(cell,row)
                 {
@@ -665,6 +680,17 @@ function validateForm()
 //     tnetamount();
 //     }
 
+
+
+edtpw.onblur=function(){
+    if(edtpw.value == dbpwrd2.value )
+     {document.getElementById("submitbutton").disabled = false;
+
+    }
+    else
+    {document.getElementById("submitbutton").disabled = true;}
+
+    }
 
 </script>
 

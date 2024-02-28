@@ -415,10 +415,11 @@ class SalesInvoiceWopoController  extends Controller
     public function edit($id)
     {
 
+        $passwrd = DB::table('tblpwrd')->select('pwrdtxt')->max('pwrdtxt');
          $cd = DB::select('call procsalewosoedit (?)',array( $id ));
          $data=compact('cd');
          $locations = Location::select('id','title')->where('status',1)->get();
-        return view('salewopo.edit')
+        return view('salewopo.edit',compact('passwrd'))
         ->with('customer',Customer::select('id','title')->get())
         ->with('saleinvoices',SaleInvoices::findOrFail($id))
         ->with($data)

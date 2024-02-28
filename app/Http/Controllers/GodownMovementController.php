@@ -262,10 +262,13 @@ class GodownMovementController  extends Controller
     public function edit($id)
     {
 
+        $passwrd = DB::table('tblpwrd')->select('pwrdtxt')->max('pwrdtxt');
+
+
          $cd = DB::select('call procgmedit (?)',array( $id ));
          $data=compact('cd');
         //  $locations = Location::select('id','title')->where('status',1)->get();
-        return view('godownmovement.edit')
+        return view('godownmovement.edit',compact('passwrd'))
         // ->with('customer',Customer::select('id','title')->get())
         ->with('godownmovement',GodownMovement::findOrFail($id))
         ->with($data)

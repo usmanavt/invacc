@@ -111,12 +111,15 @@
 
                         {{-- Submit Button --}}
                         <div class="pt-2">
-                            <button
+                            <x-button
                                 id="submitbutton" onclick="validateForm()"
                                 class="bg-green-500 text-white rounded hover:bg-green-700 inline-flex items-center px-4 py-1 w-28 text-center">
                                 <i class="fa fa-save fa-fw"></i>
                                 Submit
-                            </button>
+                            </x-button>
+                            <x-input-text title="Password For Edition" name="edtpw" id="edtpw" type="password"     />
+                            <x-input-text title="" name="dbpwrd2" id="dbpwrd2"  class="col-span-2" hidden value="{{$passwrd}}" />
+
                         </div>
 
                     </div>
@@ -135,6 +138,11 @@
 
     @push('scripts')
 <script>
+
+document.addEventListener('DOMContentLoaded',()=>{
+        document.getElementById("submitbutton").disabled = true;
+     })
+
 let customerid = document.getElementById('customer_id');
 let table;
 let searchValue = "";
@@ -398,9 +406,9 @@ dynamicTable = new Tabulator("#dynamicTable", {
             title:'Market Suppliers', headerHozAlign:"center",
             columns:[
 
-            {title:"1st",field:"supp1",width:200,editor:true,responsive:0,headerHozAlign:"center"},
-            {title:"2nd",field:"supp2",width:200,editor:true,responsive:0,headerHozAlign:"center"},
-            {title:"3rd",field:"supp3",width:200,editor:true,responsive:0,headerHozAlign:"center"},
+            {title:"1st",field:"supp1",width:150,editor:true,responsive:0,headerHozAlign:"center"},
+            {title:"2nd",field:"supp2",width:150,editor:true,responsive:0,headerHozAlign:"center"},
+            {title:"3rd",field:"supp3",width:150,editor:true,responsive:0,headerHozAlign:"center"},
 
 
         ]},
@@ -583,12 +591,12 @@ function validateForm()
             return;
         }
 
-        if(prno.value == "")
-        {
-            showSnackbar("Please add prno");
-            prno.focus();
-            return;
-        }
+        // if(prno.value == "")
+        // {
+        //     showSnackbar("Please add prno");
+        //     prno.focus();
+        //     return;
+        // }
 
         if(customer_id.value == 0)
         {
@@ -688,6 +696,21 @@ function imppur(qutclose) {
     }
 
 }
+
+edtpw.onblur=function(){
+    if(edtpw.value == dbpwrd2.value )
+     {document.getElementById("submitbutton").disabled = false;
+
+    }
+    else
+    {document.getElementById("submitbutton").disabled = true;}
+
+    }
+
+
+
+
+
 
 
 </script>

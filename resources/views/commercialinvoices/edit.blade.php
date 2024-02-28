@@ -96,7 +96,10 @@
                         <div class="flex flex-row px-4 py-2 items-center">
                             <x-label value="Add Pcs & Feet Size & Press"></x-label>
                             <x-button id="calculate" class="mx-2" onclick="calculate();calculate();calculate();">Calculate</x-button>
-                            {{-- <x-label value="This will prepare your commercial invoice for Submission"></x-label> --}}
+
+                            <x-input-text title="Password For Edition" name="edtpw" id="edtpw" type="password"     />
+                            <x-input-text title="" name="dbpwrd2" id="dbpwrd2"  class="col-span-2" hidden value="{{$passwrd}}" />
+
 
                             <label for="">
                                 Descripiton <span class="text-red-500 font-semibold"></span>
@@ -137,6 +140,14 @@
 
 @push('scripts')
     <script>
+
+
+        document.addEventListener('DOMContentLoaded',()=>{
+        document.getElementById("calculate").disabled = true;
+     })
+
+
+
         const getDetails = @json("$i->commericalInvoiceDetails");
         const cid = @json("$i->id");
 
@@ -1067,6 +1078,15 @@ var headerMenu = function(){
 
     }
 
+    edtpw.onblur=function(){
+    if(edtpw.value == dbpwrd2.value )
+     {document.getElementById("calculate").disabled = false;
+
+    }
+    else
+    {document.getElementById("calculate").disabled = true;}
+
+    }
 
 
 

@@ -266,7 +266,9 @@ class ClearanceController extends Controller
 
         public function edit($id)
         {
-            return view('clearance.edit')->with('clearance',Clearance::where('id',$id)->first())
+
+            $passwrd = DB::table('tblpwrd')->select('pwrdtxt')->max('pwrdtxt');
+            return view('clearance.edit',compact('passwrd'))->with('clearance',Clearance::where('id',$id)->first())
             ->with('banks',Bank::where('status',1)->get())
             ->with('cd',Sku::whereIn('id',[1,2])->get());
         }

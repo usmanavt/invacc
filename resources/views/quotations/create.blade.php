@@ -401,9 +401,9 @@ const skus = @json($skus);
             title:'Market Suppliers', headerHozAlign:"center",
             columns:[
 
-            {title:"1st",field:"supp1",width:200,editor:true,responsive:0,headerHozAlign:"center"},
-            {title:"2nd",field:"supp2",width:200,editor:true,responsive:0,headerHozAlign:"center"},
-            {title:"3rd",field:"supp3",width:200,editor:true,responsive:0,headerHozAlign:"center"},
+            {title:"1st",field:"supp1",width:100,editor:true,responsive:0,headerHozAlign:"center"},
+            {title:"2nd",field:"supp2",width:100,editor:true,responsive:0,headerHozAlign:"center"},
+            {title:"3rd",field:"supp3",width:100,editor:true,responsive:0,headerHozAlign:"center"},
 
 
         ]},

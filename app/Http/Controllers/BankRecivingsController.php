@@ -140,7 +140,10 @@ class BankRecivingsController extends Controller
 
     public function edit($id)
     {
-        return view('bankrecivings.edit')
+        $passwrd = DB::table('tblpwrd')->select('pwrdtxt')->max('pwrdtxt');
+
+
+        return view('bankrecivings.edit',compact('passwrd'))
         ->with('bt',ChequeTransaction::whereId($id)->first())
         ->with('banks',Bank::where('status',1)->get())
         ->with('suppliers',Supplier::where('status',1)->get())

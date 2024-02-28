@@ -356,6 +356,7 @@
                         saleamnt:           obj.feedqty * obj.price,
                         unitconver:           1,
                         munitname:          obj.munitname,
+                        itemsource:         obj.itemsource,
 
                     }
                 ])
@@ -452,7 +453,7 @@ var tamount=0;
             //  rcvblamount.value=0;
 
             if (discntper.disabled)
-            {discntper.value=(discntamt.value/tamount*100).toFixed(2)};
+            {discntper.value=(discntamt.value/tamount*100).toFixed(6)};
             if (!discntper.disabled)
             {discntamt.value=(tamount*discntper.value/100).toFixed(0);};
             // discntamt.value=(tamount*discntper.value/100).toFixed(0);
@@ -627,8 +628,7 @@ var totalVal = function(values, data, calcParams){
                 {title:"Id",           field:"id", visible:false},
                 {title:"Material Name",     field:"material_title",responsive:0, cssClass:"bg-gray-200 font-semibold",width:300,responsive:0},
                 {title:"Material Size",    field:"dimension",cssClass:"bg-gray-200 font-semibold",width:150,responsive:0},
-                // ,frozen:true, headerMenu:headerMenu,},
-
+                {title:"Item Source",    field:"itemsource",cssClass:"bg-gray-200 font-semibold",width:100,responsive:0},
                 {title:"Master Unit",         field:"munitname",responsive:0, hozAlign:"center", cssClass:"bg-gray-200 font-semibold",width:120,responsive:0},
                 {title:"Sale Unit",         field:"sku",responsive:0, hozAlign:"center", cssClass:"bg-gray-200 font-semibold",width:120,responsive:0},
                 {title:"Unitid",       field:"sku_id",visible:false},

@@ -257,6 +257,8 @@ class QuotationController  extends Controller
     public function edit($id)
     {
 
+        $passwrd = DB::table('tblpwrd')->select('pwrdtxt')->max('pwrdtxt');
+
         $cd = DB::table('quotation_details')
         ->join('materials', 'materials.id', '=', 'quotation_details.material_id')
         ->join('skus', 'skus.id', '=', 'quotation_details.sku_id')
@@ -269,7 +271,7 @@ class QuotationController  extends Controller
 
 
 
-        return view('quotations.edit')
+        return view('quotations.edit',compact('passwrd'))
         ->with('customer',Customer::select('id','title')->get())
         // ->with('materials',Material::select('id','category')->get())
         ->with('quotation',Quotation::findOrFail($id))

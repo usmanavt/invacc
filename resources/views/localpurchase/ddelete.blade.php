@@ -60,7 +60,6 @@
                                 <x-input-numeric title="Cutting/Repairing Charges" name="otherchrgs" value="{{ $commercialInvoice->otherchrgs }}" required  onblur="tnetamount()"  />
                                 <x-input-numeric title="Payble Amount" name="bankntotal" value="{{ $commercialInvoice->total }}"  />
                                 <x-input-numeric title="" name="contract_id" value="{{ $commercialInvoice->id }}" hidden />
-                                    <x-input-numeric title="Delete Mode" name="dltid" id='"dltid"' />
                             </div>
                         </fieldset>
 

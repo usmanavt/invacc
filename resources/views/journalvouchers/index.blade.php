@@ -38,8 +38,11 @@
 @push('scripts')
 <script>
     var editIcon = function(cell, formatterParams, onRendered){ return "<i class='fa fa-edit text-blue-600'></i>";};
-    var lockIcon = function(cell, formatterParams, onRendered){ return "<i class='fa fa-lock text-red-600'></i>";};
-    var unlockIcon = function(cell, formatterParams, onRendered){ return "<i class='fa fa-lock text-green-600'></i>";};
+    // var lockIcon = function(cell, formatterParams, onRendered){ return "<i class='fa fa-lock text-red-600'></i>";};
+    // var unlockIcon = function(cell, formatterParams, onRendered){ return "<i class='fa fa-lock text-green-600'></i>";};
+    var deleteIcon = function(cell, formatterParams, onRendered){ return "<i class='fa fa-trash text-red-600'></i>";};
+    var printIcon = function(cell, formatterParams, onRendered){ return "<i class='fa fa-print text-pink-500'></i>";};
+
 
     const getMaster = @json(route('jv.master'));
     let table;
@@ -93,6 +96,17 @@
                 cellClick:function(e, cell){
                     window.open(window.location + "/" + cell.getData().transaction + "/edit" ,"_self");
             }},
+            {title:"Delete" , formatter:deleteIcon, hozAlign:"center",headerSort:false, responsive:0,
+                cellClick:function(e, cell){
+                    window.open(window.location + "/" + cell.getData().id + "/ddelete" ,"_self");
+                }},
+                {title:"Print" , formatter:printIcon, hozAlign:"center",headerSort:false, responsive:0,
+                cellClick:function(e, cell){
+                    window.open(window.location + "/" + cell.getRow().getData().id + "/printcontract"  ,"_self");
+                }
+            },
+
+
         ],
         // Extra Pagination Data for End Users
         ajaxResponse:function(getDataUrl, params, response){

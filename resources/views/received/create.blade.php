@@ -43,7 +43,7 @@
 
                             <label for="bank_id">Received From<x-req /></label>
                             <select autocomplete="on"  name="bank_id" id="bank_id" class="col-span-2" >
-                                <option value="" selected>--Received From</option>
+                                {{-- <option value="" selected>--Received From</option> --}}
                                 @foreach($banks as $bank)
                                 <option value="{{$bank->id}}"> {{$bank->title}} </option>
                                 @endforeach
@@ -56,10 +56,14 @@
 
                         <div class="grid grid-cols-12 gap-2 py-2 items-center">
 
-                            <x-input-numeric title="Amount(USD)" name="amount_fc" id="amount_fc" class="col-span-2" disabled     />
-                            <x-input-numeric title="conversion_rate" name="conversion_rate" id="conversion_rate"  class="col-span-2" value=1 disabled     />
-                            <x-input-numeric title="Amount(PKR)" name="amount_pkr" id="amount_pkr" class="col-span-2" disabled  />
-                            <input class="checked:bg-blue-500 checked:border-blue-500 focus:outline-none" class="col-span-2" type="checkbox" name="per" id="per" onclick="EnableDisableTextBox(this)" >
+                            <x-input-numeric title="Amount(USD)" name="amount_fc" id="amount_fc" class="col-span-2"     />
+                            <x-input-numeric title="conversion_rate" name="conversion_rate" id="conversion_rate"  class="col-span-2" value=1      />
+                            <x-input-numeric title="Amount(PKR)" name="amount_pkr" id="amount_pkr" class="col-span-2" disabled    />
+                            {{-- <input class="checked:bg-blue-500 checked:border-blue-500 focus:outline-none" class="col-span-2" type="checkbox" name="per" id="per" onclick="EnableDisableTextBox(this)" > --}}
+
+                            <x-input-numeric title="" name="chqamount" id="chqamount" class="col-span-2" hidden     />
+                            <x-input-text title="" name="chqno" id="chqno" class="col-span-2" hidden     />
+
 
                         </div>
 
@@ -284,10 +288,17 @@ window.onload = function() {
 
              prvscrdtamt.value=data.crdtcust
              prvsinvsamt.value=data.invsclrd
-             amount_fc.value=data.AdvanceAmount
+             amount_fc.value=data.received
+             conversion_rate.value=1
+             amount_pkr.value=data.received
+             chqamount.value=data.received
+             chqno.value=data.cheque_no
+
+
+
             //  amount_pkr.value=data.AdvanceAmount
-            if (data.head_id==33)
-            { detailsUrl = `${getDetails}/?id=${data.id}` }
+            // if (data.head_id==33)
+             detailsUrl = `${getDetails}/?id=${data.id}`
             fetchDataFromServer(detailsUrl)
             adopted = true
          //   calculateButton.disabled = false
@@ -649,6 +660,8 @@ var updateValues = (cell) => {
             var transno = document.getElementById("transno")
             // var per= document.getElementById("per");
 
+            console.log(bank_id.index);
+
             if(bank_id.value <0)
             {
                 showSnackbar("Payment Head Required","error");
@@ -657,7 +670,22 @@ var updateValues = (cell) => {
             }
 
 
+            if ( chqno.value !== '' &&  chqno.value == cheque_no.value && chqamount.value !== amount_pkr.value )
 
+            {
+
+            // if( chqamount.value <> amount_pkr.value)
+
+                    // {
+                            showSnackbar("Cheque Amont can not change","error");
+                            amount_fc.value=chqamount.value;
+                            amount_fc.focus();
+                            return;
+
+
+                        // }
+
+            }
 
 
 

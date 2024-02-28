@@ -221,11 +221,12 @@ class PurchaseReturnController  extends Controller
     public function edit($id)
     {
 
+        $passwrd = DB::table('tblpwrd')->select('pwrdtxt')->max('pwrdtxt');
 
         // $cd = DB::table('vwpreditdtl')->select('vwpreditdtl.*')->where('id',$id)->get();
         $cd = DB::select('call procpurretedit(?)',array( $id ));
          $data=compact('cd');
-         return view('purchasereturn.edit')
+         return view('purchasereturn.edit',compact('passwrd'))
         ->with('supplier',Supplier::select('id','title')->get())
         ->with('purchasereturn',PurchaseReturn::findOrFail($id))
         ->with($data)

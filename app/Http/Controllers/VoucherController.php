@@ -110,12 +110,14 @@ class VoucherController extends Controller
 
     public function edit($id)
     {
+
+        $passwrd = DB::table('tblpwrd')->select('pwrdtxt')->max('pwrdtxt');
         $vouchers = Voucher::where('transaction',$id)->get();
         $dd = Voucher::select('document_date')->where('transaction',$id)->first();
         $dd1 = Voucher::select('jvno')->where('transaction',$id)->first();
         $dd2 = Voucher::select('cheque_no')->where('transaction',$id)->first();
         // $dd3 = Voucher::select('description')->where('transaction',$id)->first();
-        return view('journalvouchers.edit')
+        return view('journalvouchers.edit',compact('passwrd'))
         ->with('jvs',$vouchers)
         ->with('transaction',$id)
         ->with('document_date',$dd->document_date)
@@ -125,6 +127,28 @@ class VoucherController extends Controller
         ->with('heads',Head::select(['id','title'])->where('status',1)->get()) //
         ->with('subheads',DB::table('VwCategory')->select('*')->get()->toArray());
     }
+
+
+    public function ddelete($id)
+    {
+
+        $passwrd = DB::table('tblpwrd')->select('pwrdtxt')->max('pwrdtxt');
+        $vouchers = Voucher::where('transaction',$id)->get();
+        $dd = Voucher::select('document_date')->where('transaction',$id)->first();
+        $dd1 = Voucher::select('jvno')->where('transaction',$id)->first();
+        $dd2 = Voucher::select('cheque_no')->where('transaction',$id)->first();
+        // $dd3 = Voucher::select('description')->where('transaction',$id)->first();
+        return view('journalvouchers.ddelete',compact('passwrd'))
+        ->with('jvs',$vouchers)
+        ->with('transaction',$id)
+        ->with('document_date',$dd->document_date)
+        ->with('cheque_no',$dd2->cheque_no)
+        // ->with('description',$dd3->description)
+        ->with('jvno',$dd1->jvno)
+        ->with('heads',Head::select(['id','title'])->where('status',1)->get()) //
+        ->with('subheads',DB::table('VwCategory')->select('*')->get()->toArray());
+    }
+
 
     public function update(Request $request)
     {

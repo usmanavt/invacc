@@ -171,6 +171,10 @@ class SalesRetunrsController  extends Controller
             $ci->gpno = $request->gpno;
             $ci->billno = $request->billno;
             $ci->customer_id = $request->customer_id;
+
+            $ci->discntper = $request->discntper;
+            $ci->discntamt = $request->discntamt;
+
             $ci->rcvblamount = $request->rcvblamount;
             $ci->saletaxper = $request->saletaxper;
             $ci->saletaxamt = $request->saletaxamt;
@@ -295,6 +299,8 @@ class SalesRetunrsController  extends Controller
     public function edit($id)
     {
 
+        $passwrd = DB::table('tblpwrd')->select('pwrdtxt')->max('pwrdtxt');
+
         // $planid = SaleInvoices::select('custplan_id')->where('id',$id)->first();
         // $planid = DB::table('sale_returns')->where('id',$id)->select('invoice_id')->max('invoice_id');
         $cd = DB::select('call procsalereturnedit(?)',array( $id ));
@@ -314,7 +320,7 @@ class SalesRetunrsController  extends Controller
          $data=compact('cd');
         //  $locations = Location::select('id','title')->where('status',1)->get();
 
-        return view('salereturn.edit')
+        return view('salereturn.edit',compact('passwrd'))
         ->with('customer',Customer::select('id','title')->get())
         ->with('salereturn',SaleReturn::findOrFail($id))
         ->with($data)
@@ -379,6 +385,8 @@ class SalesRetunrsController  extends Controller
             $salereturn->dcno = $request->dcno;
             $salereturn->gpno = $request->gpno;
             $salereturn->billno = $request->billno;
+            $salereturn->discntper = $request->discntper;
+            $salereturn->discntamt = $request->discntamt;
             $salereturn->customer_id = $request->customer_id;
             $salereturn->rcvblamount = $request->rcvblamount;
             $salereturn->saletaxper = $request->saletaxper;

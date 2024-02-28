@@ -458,14 +458,14 @@ class CommercialInvoiceController extends Controller
 
         // $pack = DB::table('packagings')->select('id AS packid ','title AS packing')->get();
         // $data1=compact('pack');
-
+        $passwrd = DB::table('tblpwrd')->select('pwrdtxt')->max('pwrdtxt');
         $cd = DB::table('skus')->select('id AS dunitid','title AS dunit')
         ->whereIn('id',[1,2])->get();
        $data=compact('cd');
 
 
 
-        return view('commercialinvoices.edit')
+        return view('commercialinvoices.edit',compact('passwrd'))
         ->with('i',CommercialInvoice::whereId($id)->with('commericalInvoiceDetails.material.hscodes')->first())
         ->with('locations',Location::select('id','title')->get())
         // ->with('pack',Packaging::select('id','title')->get())

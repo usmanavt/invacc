@@ -361,6 +361,7 @@ class PaymentController  extends Controller
     public function edit($id)
     {
 
+        $passwrd = DB::table('tblpwrd')->select('pwrdtxt')->max('pwrdtxt');
 
         $stockdtl = DB::select('call procpurretbal()');
 
@@ -376,7 +377,7 @@ class PaymentController  extends Controller
          $data=compact('cd');
 
 
-        return view('payments.edit')
+        return view('payments.edit',compact('passwrd'))
         ->with('suppliers',Supplier::select('id','title')->get())
         ->with('banktransaction',BankTransaction::findOrFail($id))
         ->with($data)

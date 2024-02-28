@@ -48,7 +48,7 @@
 
 
     var hideIcon = function(cell, formatterParams, onRendered){ return "<i class='fa fa-eye text-green-600'></i>";};
-    var viewIcon = function(cell, formatterParams, onRendered){ return "<i class='fa fa-binoculars text-purple-600'></i>";};
+    // var viewIcon = function(cell, formatterParams, onRendered){ return "<i class='fa fa-binoculars text-purple-600'></i>";};
     var editIcon = function(cell, formatterParams, onRendered){ return "<i class='fa fa-edit text-blue-600'></i>";};
     var deleteIcon = function(cell, formatterParams, onRendered){ return "<i class='fa fa-trash text-red-600'></i>";};
     var printIcon = function(cell, formatterParams, onRendered){ return "<i class='fa fa-print text-pink-500'></i>";};
@@ -199,22 +199,22 @@
                 ]},
                 {title: "SuppPaymentBalance",field: "invoicebal"},
 
-            {title:"View" , formatter:viewIcon, hozAlign:"center",headerSort:false, responsive:0,
-                cellClick:function(e, cell){
-                    window.open(window.location + "/" + cell.getRow().getData().id  ,"_self");
-                }
-            },
+            // {title:"View" , formatter:viewIcon, hozAlign:"center",headerSort:false, responsive:0,
+            //     cellClick:function(e, cell){
+            //         window.open(window.location + "/" + cell.getRow().getData().id  ,"_self");
+            //     }
+            // },
             {title:"Edit" , formatter:editIcon, hozAlign:"center",headerSort:false, responsive:0,
                 cellClick:function(e, cell){
                     console.log(cell.getRow().getData())
                     window.open(window.location + "/" + cell.getRow().getData().id + "/edit" ,"_self");
                 }
             },
-            // {title:"Delete" , formatter:deleteIcon, hozAlign:"center",headerSort:false, responsive:0,
-            //     cellClick:function(e, cell){
-            //         window.open(window.location + "/" + cell.getRow().getData().id  ,"_self");
-            //     }
-            // },
+            {title:"Delete" , formatter:deleteIcon, hozAlign:"center",headerSort:false, responsive:0,
+                cellClick:function(e, cell){
+                    window.open(window.location + "/" + cell.getRow().getData().id + "/ddelete"   ,"_self");
+                }
+            },
             {title:"Print" , formatter:printIcon, hozAlign:"center",headerSort:false, responsive:0,
                 cellClick:function(e, cell){
                     window.open(window.location + "/" + cell.getRow().getData().id + "/printcontract"  ,"_self");

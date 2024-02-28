@@ -111,12 +111,15 @@
 
                         {{-- Submit Button --}}
                         <div class="pt-2">
-                            <button
+                            <x-button
                                 id="submitbutton" onclick="validateForm()"
                                 class="bg-green-500 text-white rounded hover:bg-green-700 inline-flex items-center px-4 py-1 w-28 text-center">
                                 <i class="fa fa-save fa-fw"></i>
                                 Submit
-                            </button>
+                            </x-button>
+                            <x-input-text title="Password For Edition" name="edtpw" id="edtpw" type="password"     />
+                            <x-input-text title="" name="dbpwrd2" id="dbpwrd2"  class="col-span-2" hidden value="{{$passwrd}}" />
+
                         </div>
 
                     </div>
@@ -135,6 +138,10 @@
 
     @push('scripts')
 <script>
+
+document.addEventListener('DOMContentLoaded',()=>{
+        document.getElementById("submitbutton").disabled = true;
+     })
 
 
 const skus = @json($skus);
@@ -403,7 +410,7 @@ function pushDynamicData(data)
 
             // tamount=rcvblamount
             if (discntper.disabled)
-            {discntper.value=(discntamt.value/tamount*100).toFixed(2)};
+            {discntper.value=(discntamt.value/tamount*100).toFixed(6)};
 
             if (!discntper.disabled)
             {discntamt.value=(tamount*discntper.value/100).toFixed(0);};
@@ -451,6 +458,7 @@ dynamicTable = new Tabulator("#dynamicTable", {
         {title:"Id",                field:"material_id",    cssClass:"bg-gray-200 font-semibold"},
         {title:"Material",          field:"material_title", cssClass:"bg-gray-200 font-semibold",width:300,responsive:0},
         {title:"Dimension",         field:"dimension",      cssClass:"bg-gray-200 font-semibold"},
+        {title:"Source",         field:"itemsource",width:100,responsive:0, hozAlign:"center", cssClass:"bg-gray-200 font-semibold"},
         {title:"UOM",               field:"sku",cssClass:"bg-gray-200 font-semibold"},
 
         {title:"qtykgcrt", field:"munit",visible:false},
@@ -525,10 +533,10 @@ dynamicTable = new Tabulator("#dynamicTable", {
                 ]},
 
                 {title: "id",field: "skuid",visible:false},
-                {title:"UOM", field:"sku" ,editor:"list" , editorParams:   {
+                {title:"UOM", field:"sku",responsive:0 ,editor:"list" , editorParams:   {
                         values:newList1,
                         cssClass:"bg-green-200 font-semibold",
-                        cellEdited: updateValues,responsive:0,
+                        cellEdited: updateValues,
                         validator:["required"]
                     }
                 },
@@ -749,6 +757,16 @@ discntamt.onblur=function(){
     // tnetamount1();
     // discntper.value=(discntamt.value/tamount*100).toFixed(2);
     tnetamount();
+    }
+
+    edtpw.onblur=function(){
+    if(edtpw.value == dbpwrd2.value )
+     {document.getElementById("submitbutton").disabled = false;
+
+    }
+    else
+    {document.getElementById("submitbutton").disabled = true;}
+
     }
 
 

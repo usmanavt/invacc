@@ -120,6 +120,9 @@
                                 <i class="fa fa-save fa-fw"></i>
                                 Submit
                             </button>
+                            <x-input-text title="Password For Edition" name="edtpw" id="edtpw" type="password"     />
+                            <x-input-text title="" name="dbpwrd2" id="dbpwrd2"  class="col-span-2" hidden value="{{$passwrd}}" />
+
                         </div>
 
                     </div>
@@ -138,6 +141,11 @@
 
     @push('scripts')
 <script>
+
+document.addEventListener('DOMContentLoaded',()=>{
+        document.getElementById("submitbutton").disabled = true;
+     })
+
 
 const locations = @json($locations);
         var newList=[]
@@ -407,7 +415,7 @@ else
 
             // tamount=rcvblamount
             if (discntper.disabled)
-            {discntper.value=(discntamt.value/tamount*100).toFixed(2)};
+            {discntper.value=(discntamt.value/tamount*100).toFixed(6)};
 
             if (!discntper.disabled)
             {discntamt.value=(tamount*discntper.value/100).toFixed(0);};
@@ -455,7 +463,7 @@ dynamicTable = new Tabulator("#dynamicTable", {
         {title:"Id",                field:"material_id",    cssClass:"bg-gray-200 font-semibold"},
         {title:"Material",          field:"material_title", cssClass:"bg-gray-200 font-semibold"},
         {title:"Dimension",         field:"dimension",      cssClass:"bg-gray-200 font-semibold"},
-
+        {title:"Item Source",         field:"itemsource",      cssClass:"bg-gray-200 font-semibold"},
         {title:"Master Unit",   field:"munitname",cssClass:"bg-gray-200 font-semibold"},
         {title:"Sale Unit",  field:"sku",cssClass:"bg-gray-200 font-semibold"},
 
@@ -765,6 +773,15 @@ discntamt.onblur=function(){
     // tnetamount1();
     // discntper.value=(discntamt.value/tamount*100).toFixed(2);
     tnetamount();
+    }
+    edtpw.onblur=function(){
+    if(edtpw.value == dbpwrd2.value )
+     {document.getElementById("submitbutton").disabled = false;
+
+    }
+    else
+    {document.getElementById("submitbutton").disabled = true;}
+
     }
 
 

@@ -83,9 +83,10 @@ table{
             <tr>
                 <td  style="text-align: center;">
                     <h3 style="font-size:0.7rem">Steam Pipes, Pipe Fitting, Flanges Valves, S.S Pipes</h3>
-                    <h3 style="font-size:0.7rem">Plot # 8 Near Allah Malik Godown Shershah Kabari Bazar,</h3>
+                    <h3 style="font-size:0.7rem">PLOT NO. E-13, S.I.T.E AREA KARACHI MOBILE NO. 0333-3804744</h3>
                     <h3 style="font-size:0.7rem">Phone : 021-32588781, 021-32574285 , Fax : 021-32588782</h3>
-                </td>            </tr>
+                </td>
+            </tr>
             <tr>
                 <td  style="text-align: center;">
                     <span style="font-size:2rem">Stock Movement Ledger "VALUATION" </span>
@@ -169,38 +170,79 @@ table{
     <table class="data" cellspacing="0">
         <tbody>
 
-            {{ $oqty = 0 }};{{ $oval = 0 }}
-            {{ $purqty = 0 }};{{ $pval = 0 }}
-            {{ $salqty = 0 }};{{ $sval = 0 }}
-            {{ $purret = 0 }};{{ $prval = 0 }}
-            {{ $salret = 0 }};{{ $srval = 0 }}
-            {{ $cb = 0 }};{{ $cb = 0 }}
-            {{ $cbval = 0 }};{{ $cbval = 0 }}
+
+            {{-- FOR GRAND TOTAL --}}
+            {{ $oqty = 0 }};{{ $oval = 0 }};{{ $purqty = 0 }};{{ $pval = 0 }};{{ $salqty = 0 }};{{ $sval = 0 }};{{ $purret = 0 }};
+            {{ $prval = 0 }};{{ $salret = 0 }};{{ $srval = 0 }};{{ $cb = 0 }};{{ $cb = 0 }};{{ $cbval = 0 }};{{ $cbval = 0 }};
+
+            {{-- FOR SUB TOTAL --}}
+            {{ $oqtys = 0 }};{{ $ovals = 0 }};{{ $purqtys = 0 }};{{ $pvals = 0 }};{{ $salqtys = 0 }};{{ $svals = 0 }};{{ $purrets = 0 }};
+            {{ $prvals = 0 }};{{ $salrets = 0 }};{{ $srvals = 0 }};{{ $cbs = 0 }};{{ $cbs = 0 }};{{ $cbvals = 0 }};{{ $cbvals = 0 }};
+
 
             @for ($i = 0 ; $i < count($data) ; $i++)
             @if( $i==0 )
+
             <tr>
                 <td colspan="21" width="100%" style="text-align: left;font-size:1.2rem;border-bottom: 2px solid rgb(211, 211, 211);"> {{ $data[$i]->Itemgroupe}} </td>
             </tr>
         @else
 
-        {{ $srno = $i - 1 }}
+                {{ $srno = $i - 1 }}
+
+                {{-- FOR GRAND TOTAL  --}}
+                {{ $oqtys += $data[$srno]->oqty }};{{ $ovals += $data[$srno]->oval }};{{ $purqtys += $data[$srno]->purqty }};{{ $pvals += $data[$srno]->pval }};
+                {{ $salqtys += $data[$srno]->salqty }};{{ $svals += $data[$srno]->sval }};{{ $purrets += $data[$srno]->purret }};{{ $prvals += $data[$srno]->prval }};
+                {{ $salrets += $data[$srno]->salret }};{{ $srvals += $data[$srno]->srval }};{{ $cbs += $data[$i]->cb }};{{ $cbvals += $data[$srno]->cbval }};
+
+
+
         @if ($data[$i]->Itemgroupe  <> $data[$srno]->Itemgroupe)
-            <tr>
+
+        <tr>
+
+            <td colspan="3"  style="text-align: right;border-bottom: 1px solid lightgray;background: #e3e3e3;font-weight: bold">Total(s)</td>
+            <td colspan="1"  style="text-align: right;border-bottom: 1px solid lightgray;background: #e3e3e3;font-weight: bold">{{ number_format($oqtys,0) }} </td>
+            <td colspan="2"  style="text-align: right;border-bottom: 1px solid lightgray;background: #e3e3e3;font-weight: bold">{{ number_format($ovals,0) }} </td>
+
+            <td colspan="1"  style="text-align: right;border-bottom: 1px solid lightgray;background: #e3e3e3;font-weight: bold">{{ number_format($purqtys,0) }} </td>
+            <td colspan="2"  style="text-align: right;border-bottom: 1px solid lightgray;background: #e3e3e3;font-weight: bold">{{ number_format($pvals,0) }} </td>
+
+            <td colspan="1"  style="text-align: right;border-bottom: 1px solid lightgray;background: #e3e3e3;font-weight: bold">{{ number_format($salqtys,0) }} </td>
+            <td colspan="2"  style="text-align: right;border-bottom: 1px solid lightgray;background: #e3e3e3;font-weight: bold">{{ number_format($svals,0) }} </td>
+
+            <td colspan="1"  style="text-align: right;border-bottom: 1px solid lightgray;background: #e3e3e3;font-weight: bold">{{ number_format($purrets,0) }} </td>
+            <td colspan="2"  style="text-align: right;border-bottom: 1px solid lightgray;background: #e3e3e3;font-weight: bold">{{ number_format($prvals,0) }} </td>
+
+            <td colspan="1"  style="text-align: right;border-bottom: 1px solid lightgray;background: #e3e3e3;font-weight: bold">{{ number_format($salrets,0) }} </td>
+            <td colspan="2"  style="text-align: right;border-bottom: 1px solid lightgray;background: #e3e3e3;font-weight: bold">{{ number_format($srvals,0) }} </td>
+
+            <td colspan="1"  style="text-align: right;border-bottom: 1px solid lightgray;background: #e3e3e3;font-weight: bold">{{ number_format($cbs,0) }} </td>
+            <td colspan="2"  style="text-align: right;border-bottom: 1px solid lightgray;background: #e3e3e3;font-weight: bold">{{ number_format($cbvals,0) }} </td>
+
+        </tr>
+
+             <tr>
                     <td colspan="21" width="100%" style="text-align:left;font-size:1.2rem;border-bottom: 2px solid rgb(211, 211, 211);"> {{ $data[$i]->Itemgroupe}} </td>
              </tr>
+            {{-- FOR SUB TOTAL --}}
+            {{ $oqtys = 0 }};{{ $ovals = 0 }};{{ $purqtys = 0 }};{{ $pvals = 0 }};{{ $salqtys = 0 }};{{ $svals = 0 }};{{ $purrets = 0 }};
+            {{ $prvals = 0 }};{{ $salrets = 0 }};{{ $srvals = 0 }};{{ $cbs = 0 }};{{ $cbs = 0 }};{{ $cbvals = 0 }};{{ $cbvals = 0 }};
+
+
+
+
+
         @endif
         @endif
 
 
             <tr>
 
-                {{ $oqty += $data[$i]->oqty }};{{ $oval += $data[$i]->oval }}
-                {{ $purqty += $data[$i]->purqty }};{{ $pval += $data[$i]->pval }}
-                {{ $salqty += $data[$i]->salqty }};{{ $sval += $data[$i]->sval }}
-                {{ $purret += $data[$i]->purret }};{{ $prval += $data[$i]->prval }}
-                {{ $salret += $data[$i]->salret }};{{ $srval += $data[$i]->srval }}
-                {{ $cb += $data[$i]->cb }};{{ $cbval += $data[$i]->cbval }}
+                {{-- FOR GRAND TOTAL  --}}
+                {{ $oqty += $data[$i]->oqty }};{{ $oval += $data[$i]->oval }};{{ $purqty += $data[$i]->purqty }};{{ $pval += $data[$i]->pval }};
+                {{ $salqty += $data[$i]->salqty }};{{ $sval += $data[$i]->sval }};{{ $purret += $data[$i]->purret }};{{ $prval += $data[$i]->prval }};
+                {{ $salret += $data[$i]->salret }};{{ $srval += $data[$i]->srval }};{{ $cb += $data[$i]->cb }};{{ $cbval += $data[$i]->cbval }};
 
 
 

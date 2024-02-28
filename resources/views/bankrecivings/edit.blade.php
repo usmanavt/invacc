@@ -85,6 +85,9 @@
                                         <i class="fa fa-save fa-fw"></i>
                                             Submit
                                     </x-button>
+                                    <x-input-text title="Password For Edition" name="edtpw" id="edtpw" type="password"     />
+                                    <x-input-text title="" name="dbpwrd2" id="dbpwrd2"  class="col-span-2" hidden  value="{{$passwrd}}" />
+
                                 </div>
                             </form>
 
@@ -98,6 +101,10 @@
 
 @push('scripts')
 <script>
+
+    document.addEventListener('DOMContentLoaded',()=>{
+        document.getElementById("submitButton").disabled = true;
+     })
     let subheads = @json($subheads);
     let supplier_id = @json($bt->supplier_id);
     let customer_id = @json($bt->customer_id);
@@ -176,6 +183,20 @@
     //     {
     //         amount_pkr.value = (parseFloat(conversion_rate.value) * parseFloat(received.value)).toFixed(2)
     //     }
+
+    edtpw.onblur=function(){
+    if(edtpw.value == dbpwrd2.value )
+     {document.getElementById("submitButton").disabled = false;
+
+    }
+    else
+    {document.getElementById("submitButton").disabled = true;}
+
+    }
+
+
+
+
 
 </script>
 @endpush

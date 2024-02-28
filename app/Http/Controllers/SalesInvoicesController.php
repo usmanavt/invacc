@@ -332,10 +332,14 @@ class SalesInvoicesController  extends Controller
 
         // )
         // ->where('sale_invoices_details.sale_invoice_id',$id)->get();
-         $data=compact('cd');
+
+        $passwrd = DB::table('tblpwrd')->select('pwrdtxt')->max('pwrdtxt');
+
+
+        $data=compact('cd');
          $locations = Location::select('id','title')->where('status',1)->get();
 
-        return view('sales.edit')
+        return view('sales.edit',compact('passwrd'))
         ->with('customer',Customer::select('id','title')->get())
         ->with('saleinvoices',SaleInvoices::findOrFail($id))
         ->with($data)

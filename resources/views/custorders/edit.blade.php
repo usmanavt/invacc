@@ -98,12 +98,15 @@
 
                         {{-- Submit Button --}}
                         <div class="pt-2">
-                            <button
+                            <x-button
                                 id="submitbutton" onclick="validateForm()"
                                 class="bg-green-500 text-white rounded hover:bg-green-700 inline-flex items-center px-4 py-1 w-28 text-center">
                                 <i class="fa fa-save fa-fw"></i>
                                 Submit
-                            </button>
+                            </x-button>
+                            <x-input-text title="Password For Edition" name="edtpw" id="edtpw" type="password"     />
+                            <x-input-text title="" name="dbpwrd2" id="dbpwrd2"  class="col-span-2" hidden value="{{$passwrd}}" />
+
                         </div>
 
                     </div>
@@ -120,10 +123,16 @@
     {{-- Modal - Should come below Tabulator --}}
     <x-tabulator-modal title="Material"/>
 
-    @push('scripts')
+ @push('scripts')
 <script>
 let table;
 let searchValue = "";
+
+
+document.addEventListener('DOMContentLoaded',()=>{
+        document.getElementById("submitbutton").disabled = true;
+     })
+
 
 
 // console.log(@json($cd))
@@ -542,6 +551,20 @@ discntamt.onblur=function(){
     // discntper.value=(discntamt.value/tamount*100).toFixed(2);
     tnetamount();
     }
+
+
+    edtpw.onblur=function(){
+    if(edtpw.value == dbpwrd2.value )
+     {document.getElementById("submitbutton").disabled = false;
+
+    }
+    else
+    {document.getElementById("submitbutton").disabled = true;}
+
+    }
+
+
+
 
 
 </script>

@@ -51,7 +51,7 @@
 
                             <label for="bank_id">Received From<x-req /></label>
                             <select autocomplete="on"  name="bank_id" id="bank_id" class="col-span-2" >
-                                <option value="" selected>--Received From</option>
+                                {{-- <option value="" selected>--Received From</option> --}}
                                 @foreach($banks as $bank)
                                 {{-- @if ($bank->id == $banktransaction->bank_id) --}}
                                     {{-- <option value="{{$bank->id}}" selected> {{$bank->title}} </option> --}}
@@ -106,14 +106,16 @@
 
                         {{-- Submit Button --}}
                         <div class="pt-2">
-                            <button
+                            <x-button
                                 id="submitbutton"  onclick="validateForm()"
                                 class="bg-green-500 text-white rounded hover:bg-green-700 inline-flex items-center px-4 py-1 w-28 text-center">
                                 <i class="fa fa-save fa-fw"></i>
+
+
                                 Submit
-                            </button>
-                            <x-input-text title="dbpwrd" name="dbpwrd" id="dbpwrd" req required class="col-span-2"   />
-                            <x-input-text title="dbpwrd2" name="dbpwrd2" id="dbpwrd2" req required class="col-span-2"   />
+                            </x-button>
+                            <x-input-text title="Password For Edition Permission" name="edtpw" id="edtpw" type="password"     />
+                            <x-input-text title="" name="dbpwrd2" id="dbpwrd2"  class="col-span-2" hidden value="{{$passwrd}}" />
                         </div>
 
                     </div>
@@ -138,8 +140,9 @@
 let submitButton = document.getElementById("submitbutton")
 
 document.addEventListener('DOMContentLoaded',()=>{
-         submitButton.disabled = true
-        // document.getElementById("submitbutton").disabled = true;
+        //  submitButton.disabled = true
+        document.getElementById("submitbutton").disabled = true;
+
         dbpwrd.value=575;
      })
 
@@ -152,8 +155,12 @@ var tamount=0;
 function tnetamount()
         {
 
+        if(tamount!==0)
+          {
             amount_fc.value=  tamount
             amount_pkr.value=  tamount
+          }
+
         }
 
 
@@ -635,6 +642,18 @@ function EnableDisableTextBox(per) {
     amount_pkr.value=(amount_fc.value * conversion_rate.value).toFixed(0);
     // bankntotal.value= ( Number(100)-Number(discntamt.value))+Number(exataxoffie.value) +Number(otherchrgs.value)  ;
    }
+
+
+   edtpw.onblur=function(){
+    if(edtpw.value == dbpwrd2.value )
+     {document.getElementById("submitbutton").disabled = false;
+
+    }
+    else
+    {document.getElementById("submitbutton").disabled = true;}
+
+    }
+
 
 
 
