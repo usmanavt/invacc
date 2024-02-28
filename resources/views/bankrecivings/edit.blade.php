@@ -110,7 +110,7 @@
     let customer_id = @json($bt->customer_id);
     let subhead_id = @json($bt->subhead_id);
 
-    console.info(supplier_id,customer_id,subhead_id)
+    // console.info(supplier_id,customer_id,subhead_id)
 
 
     const submitButton = document.getElementById('submitButton')
@@ -125,11 +125,11 @@
     document.addEventListener('DOMContentLoaded',()=>{
        populateSelect()
     })
-
+// xyz
     const populateSelect = ()=>{
         const val = head.value
         subhead.options.length = 0 // Reset List
-        let list = subheads.filter( l => l.head_id === parseInt(val))
+        let list = subheads.filter( l => l.head_id === Number(val))
         //  Setup subhead dropdown
         addSelectElement(subhead,'','--Select')
         list.forEach(e => {
@@ -137,7 +137,7 @@
         });
         subhead.setAttribute('required','')
         subhead.removeAttribute('disabled','')
-        console.info(list)
+        // console.info(list)
 
         if(val === "32"){
             supplier.setAttribute('required','')

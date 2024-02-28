@@ -69,10 +69,10 @@
                                     <input type="radio" name="report_type" value="chktran" required onchange="checkReportType('chktran')">
                                     <label for="">Cheque Transaction</label>
 
-                                    <input class="checked:bg-blue-500 checked:border-blue-500 focus:outline-none"  type="checkbox" name="chq" id="chq"   onclick="chqcol(this)" >
+                                    {{-- <input class="checked:bg-blue-500 checked:border-blue-500 focus:outline-none" hidden  type="checkbox" name="chq" id="chq"   onclick="chqcol(this)" >
                                     <label for="">
-                                       <span style="color: brown;font-weight: bold"> Show Only Pending Cheques </span> <span class="text-red-500 font-semibold  ">(*)</span>
-                                        </label>
+                                       <span style="color: brown;font-weight: bold"> Show Only Pending Cheques</span> <span class="text-red-500 font-semibold  ">(*)</span>
+                                        </label> --}}
 
                                 </div>
 

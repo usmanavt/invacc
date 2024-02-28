@@ -311,7 +311,7 @@ class ReportController extends Controller
             //     }
             // }
             //  Call Procedure
-            $data = DB::select('call procchequetrans(?,?,?)',array($fromdate,$todate,$vrtype4));
+            $data = DB::select('call procchequetrans(?,?)',array($fromdate,$todate));
             if(!$data)
             {
                 Session::flash('info','No data available');
@@ -340,22 +340,13 @@ class ReportController extends Controller
                 foreach($chunks as $key => $val) {
                     $mpdf->WriteHTML($val);
                 }
-                $mpdf->AddPage();
+                // $mpdf->AddPage();
             }
             //  $mpdf->Output($filename,'I');
             return response($mpdf->Output($filename,'I'),200)->header('Content-Type','application/pdf');
 
             // return;
         }
-
-
-
-
-
-
-
-
-
 
 
 

@@ -478,7 +478,7 @@ var updateValues = (cell) => {
 
             // var pr1=(Number(data.qtykg) / Number(data.totqty))*100
 
-            console.log(Number(data.qtykg))
+            // console.log(Number(data.qtykg))
 
             var sum = (Number(data.feedqty) * Number(data.price))
             var pr1=(Number(data.feedqty) / Number(data.totqty))*100
@@ -494,7 +494,7 @@ var updateValues = (cell) => {
          }
          if(cell.getData().sku_id === 2)
          {
-            console.log('PCS')
+            // console.log('PCS')
             var sum = (Number(data.feedqty) * Number(data.price))
             // var pr1=(Number(data.qtypcs) / Number(data.totqty))*100
             var pr1=(Number(data.feedqty) / Number(data.totqty))*100
@@ -509,7 +509,7 @@ var updateValues = (cell) => {
 
          if(cell.getData().sku_id === 3)
          {
-            console.log('FEET')
+            // console.log('FEET')
             var sum = (Number(data.feedqty) * Number(data.price))
             // var pr1=(Number(data.qtyfeet) / Number(data.totqty))*100
             var pr1=(Number(data.feedqty) / Number(data.totqty))*100
@@ -522,7 +522,7 @@ var updateValues = (cell) => {
 
          if(cell.getData().sku_id > 3 )
         {
-            console.log('METER')
+            // console.log('METER')
             var sum = (Number(data.feedqty) * Number(data.price))
             var pr1=(Number(data.feedqty) / Number(data.totqty))*100
             var pr2=( pr1 / Number(data.pcper))*100
@@ -622,9 +622,9 @@ var updateValues = (cell) => {
                 {
                 title:'Sale Quantity', headerHozAlign:"center",
                     columns:[
-                {title:"InKg", field:"sqtykg", cssClass:"bg-gray-200 font-semibold",width:120},
-                {title:"InPcs", field:"sqtypcs", cssClass:"bg-gray-200 font-semibold",width:120},
-                {title:"InFeet", field:"sqtyfeet", cssClass:"bg-gray-200 font-semibold",width:120}]},
+                {title:"InKg", field:"sqtykg", cssClass:"bg-gray-200 font-semibold", responsive:0,width:120},
+                {title:"InPcs", field:"sqtypcs", cssClass:"bg-gray-200 font-semibold", responsive:0,width:120},
+                {title:"InFeet", field:"sqtyfeet", cssClass:"bg-gray-200 font-semibold", responsive:0,width:120}]},
 
                 // {title:"Order BalQty",headerHozAlign :'center',
                 //             field:"balqty", cssClass:"bg-gray-200 font-semibold",
@@ -641,6 +641,7 @@ var updateValues = (cell) => {
                             field:"qtykg",
                             // editor:"number",
                             // headerVertical:true,
+                            responsive:0,
                             width:120,
                             bottomCalc:"sum",
                             formatter:"money",
@@ -658,6 +659,7 @@ var updateValues = (cell) => {
                             field:"qtypcs",
                             // editor:"number",
                             // headerVertical:true,
+                            responsive:0,
                             width:120,
                             bottomCalc:"sum",
                             formatter:"money",
@@ -674,6 +676,7 @@ var updateValues = (cell) => {
                             field:"qtyfeet",
                             // editor:"number",
                             // headerVertical:true,
+                            responsive:0,
                             width:120,
                             bottomCalc:"sum",
                             formatter:"money",
@@ -723,8 +726,8 @@ var updateValues = (cell) => {
 
 
 
-                    {title:"Conversion", field:"unitconversr",cellEdited: updateValues,editor:"number",width:120},
-                    {title:"Return Qty", field:"feedqty",cellEdited: updateValues,editor:"number",width:120},
+                    {title:"Conversion", field:"unitconversr",cellEdited: updateValues,editor:"number",width:120,responsive:0},
+                    {title:"Return Qty", field:"feedqty",cellEdited: updateValues,editor:"number",width:120,responsive:0},
 
                     {   title:"Sale Price",
                             headerHozAlign :'right',
@@ -734,6 +737,7 @@ var updateValues = (cell) => {
                             field:"price",
                             editor:"number",
                             bottomCalc:"sum",
+                            responsive:0,
                             formatter:"money",
                             cellEdited: updateValues,
                             validator:["required","numeric"],
@@ -747,6 +751,7 @@ var updateValues = (cell) => {
                         field:"saleamnt",
                         width:120,
                         bottomCalc:"sum",
+                        responsive:0,
                         cssClass:"bg-green-200 font-semibold",
                         formatter:"money",
                         formatterParams:{thousand:",",precision:3},

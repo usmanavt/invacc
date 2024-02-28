@@ -392,6 +392,9 @@ class LocalPurchaseController  extends Controller
             //  $commercialinvoice = 43;
             // $commercialinvoice = CommercialInvoice::findOrFail($request->commercial_invoice_id);
 
+
+if($request->dltid==0)
+{
             $commercialinvoice = CommercialInvoice::findOrFail($request->contract_id);
             $commercialinvoice->invoiceno = $request->invoiceno;
             $commercialinvoice->invoice_date = $request->invoice_date;
@@ -544,7 +547,14 @@ class LocalPurchaseController  extends Controller
             SELECT a.id AS transid,a.invoice_date,'Lpurchasing',3,b.material_id,sku_id,gdswt,pcs,qtyinfeet,perft,perft,perft,pricevaluecostsheet FROM commercial_invoices a INNER JOIN  commercial_invoice_details b
             ON a.id=b.commercial_invoice_id WHERE a.id=$commercialinvoice->id"));
 
+//   dd($request->dltid);
+ }
+if($request->dltid==1)
+{
+    // DB::delete(DB::raw(" delete FROM commercial_invoices WHERE id=$commercialinvoice->id   "));
+    // DB::delete(DB::raw(" delete FROM commercial_invoice_details WHERE commercial_invoice_id =$commercialinvoice->id   "));
 
+}
 
 
 

@@ -78,11 +78,6 @@ class BankRecivingsController extends Controller
         return $transactions;
 
 
-
-
-
-
-
     }
 
     public function create()

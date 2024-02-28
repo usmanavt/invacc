@@ -60,7 +60,7 @@
                                 <x-input-numeric title="Cutting/Repairing Charges" name="otherchrgs" value="{{ $commercialInvoice->otherchrgs }}" required  onblur="tnetamount()"  />
                                 <x-input-numeric title="Payble Amount" name="bankntotal" value="{{ $commercialInvoice->total }}"  />
                                 <x-input-numeric title="" name="contract_id" value="{{ $commercialInvoice->id }}" hidden />
-                                    <x-input-numeric title="Delete Mode" name="dltid" id='"dltid"' />
+                                    <x-input-numeric title="Delete Mode" name="dltid" id="dltid" hidden />
                             </div>
                         </fieldset>
 
@@ -88,12 +88,12 @@
 
                         {{-- Submit Button --}}
                         <div class="pt-2">
-                            <button
+                            <x-button
                                 id="submitbutton" onclick="validateForm()"
                                 class="bg-green-500 text-white rounded hover:bg-green-700 inline-flex items-center px-4 py-1 w-28 text-center">
                                 <i class="fa fa-save fa-fw"></i>
                                 Submit
-                            </button>
+                            </x-button>
                             <x-input-text title="Password For Edition" name="edtpw" id="edtpw" type="password"     />
                             <x-input-text title="" name="dbpwrd2" id="dbpwrd2"  class="col-span-2" hidden value="{{$passwrd}}" />
 
@@ -603,7 +603,7 @@ function validateForm()
      var data = { 'localpurchase' : dynamicTableData,'contract_id':parseFloat(contract_id.value).toFixed(0),'bankntotal':parseFloat(bankntotal.value).toFixed(0),
      'collofcustom':parseFloat(collofcustom.value).toFixed(0),'exataxoffie':parseFloat(exataxoffie.value).toFixed(0) ,
      'insurance':parseFloat(insurance.value).toFixed(2) ,'supplier_id': supplier_id.value,'invoice_date':invoice_date.value,'invoiceno':invoiceno.value,
-     'otherchrgs':otherchrgs.value,'gpassno':gpassno.value,'challanno':challanno.value,'comdescription':comdescription.value,'p9':p9.value};
+     'otherchrgs':otherchrgs.value,'gpassno':gpassno.value,'challanno':challanno.value,'comdescription':comdescription.value,'p9':p9.value,'dltid':dltid.value};
     // var data = { 'contracts' : dynamicTableData,'banktotal':parseFloat(total.value).toFixed(2),'exataxoffie':parseFloat(exataxoffie.value).toFixed(2),'collofcustom':parseFloat(collofcustom.value).toFixed(2),'insurance':parseFloat(insurance.value).toFixed(2) ,'supplier_id': supplier_id.value,'invoice_date':invoice_date.value,'invoiceno':number.value};
     // All Ok - Proceed
     fetch(@json(route('localpurchase.update',$commercialInvoice)),{
