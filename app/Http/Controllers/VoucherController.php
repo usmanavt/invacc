@@ -112,54 +112,63 @@ class VoucherController extends Controller
     {
 
         $passwrd = DB::table('tblpwrd')->select('pwrdtxt')->max('pwrdtxt');
+        $passwrddel = DB::table('tblpwrd')->select('pwrdtxtdel')->max('pwrdtxtdel');
         $vouchers = Voucher::where('transaction',$id)->get();
         $dd = Voucher::select('document_date')->where('transaction',$id)->first();
         $dd1 = Voucher::select('jvno')->where('transaction',$id)->first();
         $dd2 = Voucher::select('cheque_no')->where('transaction',$id)->first();
-        // $dd3 = Voucher::select('description')->where('transaction',$id)->first();
-        return view('journalvouchers.edit',compact('passwrd'))
+        $delgdno = Voucher::select('vgdno')->where('transaction',$id)->first();
+        return view('journalvouchers.edit',compact('passwrd','passwrddel'))
         ->with('jvs',$vouchers)
         ->with('transaction',$id)
         ->with('document_date',$dd->document_date)
         ->with('cheque_no',$dd2->cheque_no)
-        // ->with('description',$dd3->description)
+        ->with('vgdno',$delgdno->vgdno)
         ->with('jvno',$dd1->jvno)
         ->with('heads',Head::select(['id','title'])->where('status',1)->get()) //
         ->with('subheads',DB::table('VwCategory')->select('*')->get()->toArray());
     }
 
 
-    public function ddelete($id)
-    {
+    // public function ddelete($id)
+    // {
 
-        $passwrd = DB::table('tblpwrd')->select('pwrdtxt')->max('pwrdtxt');
-        $vouchers = Voucher::where('transaction',$id)->get();
-        $dd = Voucher::select('document_date')->where('transaction',$id)->first();
-        $dd1 = Voucher::select('jvno')->where('transaction',$id)->first();
-        $dd2 = Voucher::select('cheque_no')->where('transaction',$id)->first();
-        // $dd3 = Voucher::select('description')->where('transaction',$id)->first();
-        return view('journalvouchers.ddelete',compact('passwrd'))
-        ->with('jvs',$vouchers)
-        ->with('transaction',$id)
-        ->with('document_date',$dd->document_date)
-        ->with('cheque_no',$dd2->cheque_no)
-        // ->with('description',$dd3->description)
-        ->with('jvno',$dd1->jvno)
-        ->with('heads',Head::select(['id','title'])->where('status',1)->get()) //
-        ->with('subheads',DB::table('VwCategory')->select('*')->get()->toArray());
-    }
+    //     $passwrd = DB::table('tblpwrd')->select('pwrdtxt')->max('pwrdtxt');
+    //     $vouchers = Voucher::where('transaction',$id)->get();
+    //     $dd = Voucher::select('document_date')->where('transaction',$id)->first();
+    //     $dd1 = Voucher::select('jvno')->where('transaction',$id)->first();
+    //     $dd2 = Voucher::select('cheque_no')->where('transaction',$id)->first();
+    //     // $dd3 = Voucher::select('description')->where('transaction',$id)->first();
+    //     return view('journalvouchers.ddelete',compact('passwrd'))
+    //     ->with('jvs',$vouchers)
+    //     ->with('transaction',$id)
+    //     ->with('document_date',$dd->document_date)
+    //     ->with('cheque_no',$dd2->cheque_no)
+    //     // ->with('description',$dd3->description)
+    //     ->with('jvno',$dd1->jvno)
+    //     ->with('heads',Head::select(['id','title'])->where('status',1)->get()) //
+    //     ->with('subheads',DB::table('VwCategory')->select('*')->get()->toArray());
+    // }
 
 
     public function update(Request $request)
     {
-        // dd($request->all());
-        $vouchers = $request->vouchers;
+        //  dd($request->cheque_nofd);
+
         // $mydate = $request->document_date;
         // $myjvno = $request->jvno;
-        $transactions = Voucher::where('transaction',$vouchers[0]['transaction'])->delete();
+
+
         DB::beginTransaction();
         try {
-            foreach($vouchers as $vuch)
+
+    if($request->p2==0 )
+    {
+
+
+        $vouchers = $request->vouchers;
+        $transactions = Voucher::where('transaction',$vouchers[0]['transaction'])->delete();
+        foreach($vouchers as $vuch)
             {
                 $v = new Voucher();
                 $v->jvno = $request->document_no;
@@ -190,12 +199,26 @@ class VoucherController extends Controller
             INNER JOIN (SELECT distinct jvno,document_date,cheque_no,'JV' as transaction_type,subhead_id as bank_id FROM vouchers WHERE  jvno=$v->jvno) x
             ON c.cheque_no=x.cheque_no
             SET c.bank_id=x.bank_id, c.clrstatus=1,c.clrdate=x.document_date,clrid=x.jvno,c.ref=CONCAT(x.transaction_type,'-',LPAD(x.jvno,4,'0')) "));
+        }
+
+
+        if(  $request->p2==1  )
+        {
+
+            // dd($request->document_no);
+            // $vouchers = $request->vouchers;
+            // $transactions = Voucher::where('transaction',$vouchers[0]['transaction'])->delete();
+
+            DB::delete(DB::raw(" delete FROM vouchers WHERE cheque_no IS NULL AND vgdno IS NULL AND vcominvno=0 and  jvno=$request->document_no"));
+                // $transactions = Voucher::where('transaction',$vouchers[0]['transaction'])->delete();
+                // && $request->cheque_nofd==' '  && $request->gdno==' '
+        }
 
 
 
+        DB::commit();
 
 
-            DB::commit();
             Session::flash('success','Journal Voucer Updated');
             return response()->json(['success'],200);
         } catch (\Throwable $th) {

@@ -243,8 +243,8 @@
 
             // {title:"Status", field:"clrstatus" ,  responsive:0},
             {title:"AmountCredit", field:"AmountCredit", hozAlign:"center",  headerSort:false},
-            {title:"AmountInvoiceCleared", field:"AmountInvsCleared", hozAlign:"center",  headerSort:false},
-            {title:"AmountInvsBal", field:"invsbal", hozAlign:"center",  headerSort:false},
+            {title:"ClrdAmount", field:"AmountInvsCleared", hozAlign:"center",  headerSort:false},
+            {title:"InvsBal", field:"invsbal", hozAlign:"center",  headerSort:false},
 
             {title:"Status", field:"clrstatus", hozAlign:"center", formatter:"tickCross", headerSort:false},
             {title:"Date", field:"clrdate" ,  responsive:0},

@@ -534,9 +534,6 @@ var updateValues = (cell) => {
 
 
         var row = cell.getRow();
-
-        // if(cell.getData().sku_id==1)
-        // {
         row.update({
             "saleamnt": sum,
             // "mybrand": pr2,
@@ -639,7 +636,7 @@ var updateValues = (cell) => {
                             headerHozAlign :'right',
                             hozAlign:"right",
                             field:"qtykg",
-                            // editor:"number",
+                            editor:"number",
                             // headerVertical:true,
                             responsive:0,
                             width:120,
@@ -657,13 +654,13 @@ var updateValues = (cell) => {
                             hozAlign:"right",
                             responsive:0,
                             field:"qtypcs",
-                            // editor:"number",
+                            editor:"number",
                             // headerVertical:true,
                             responsive:0,
                             width:120,
                             bottomCalc:"sum",
                             formatter:"money",
-                            cellEdited: updateValues,
+                            // cellEdited: updateValues,
                             validator:["required","numeric"],
                             cssClass:"bg-gray-200 font-semibold",
                             formatterParams:{thousand:",",precision:2},
@@ -674,13 +671,13 @@ var updateValues = (cell) => {
                             hozAlign:"right",
                             responsive:0,
                             field:"qtyfeet",
-                            // editor:"number",
+                            editor:"number",
                             // headerVertical:true,
                             responsive:0,
                             width:120,
                             bottomCalc:"sum",
                             formatter:"money",
-                            cellEdited: updateValues,
+                            // cellEdited: updateValues,
                             validator:["required","numeric"],
                             cssClass:"bg-gray-200 font-semibold",
                             formatterParams:{thousand:",",precision:2},

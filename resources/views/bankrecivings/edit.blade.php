@@ -6,8 +6,9 @@
         </h2>
     </x-slot>
 
+
     <div class="py-6">
-        <div class="max-w-xl mx-auto sm:px-2 lg:px-4">
+        <div class="max-w-2xl mx-auto sm:px-2 lg:px-4">
             <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg p-4">
 
                  {{-- Create Form --}}
@@ -15,6 +16,10 @@
                     <div class="flex gap-8">
 
                         {{-- Form Data --}}
+
+
+
+
                         <div class="flex flex-col justify-start items-center">
                             <form action="{{ route('bankrecivings.update',$bt) }}" method="post" class="flex flex-col">
                                 @csrf
@@ -69,6 +74,18 @@
                                 <x-input-date title="Cheque Date" name="cheque_date" value="{{ $bt->cheque_date }}" req required/>
 
 
+                            <div>
+                            <input class="checked:bg-blue-500 checked:border-blue-500 focus:outline-none" {{ $bt->ref === 'CHEQUE_RETURN' ? 'checked' : '' }}  type="checkbox" name="imppurf2" id="imppurf2"   onclick="imppur(this)" >
+                            <label for="">
+                                <span style="color: brown;font-weight: bold"> Cheque Return/Cancel </span> <span class="text-red-500 font-semibold font-size:1rem "></span>
+                                </label>
+
+                            </div>
+
+                            <x-input-text title="" name="p1" id="p1" value="0" hidden />
+                            <x-input-text title="" name="sts" id="sts" value="{{ $bt->clrstatus }}" hidden />
+                            <x-input-text title="" name="chqref" id="chqref" value="{{ $bt->ref }}" hidden />
+
                                 <div class="flex flex-col">
                                     <label for="">
                                         Description <span class="text-red-500 font-semibold">(*)</span>
@@ -81,6 +98,8 @@
                                         <i class="fa fa-save fa-fw"></i>
                                             Calculate
                                     </x-button> --}}
+
+
                                     <x-button  id="submitButton">
                                         <i class="fa fa-save fa-fw"></i>
                                             Submit
@@ -89,6 +108,19 @@
                                     <x-input-text title="" name="dbpwrd2" id="dbpwrd2"  class="col-span-2" hidden  value="{{$passwrd}}" />
 
                                 </div>
+                                <div class="mt-2">
+                                    <input class="checked:bg-blue-500 checked:border-blue-500 focus:outline-none"  type="checkbox"  name="del" id="del" disabled   onclick="delmode(this)" >
+                                    <label for="">
+                                        <span style="color: brown;font-weight: bold"> Delete Mode </span> <span class="text-red-500 font-semibold font-size:1rem "></span>
+                                        </label>
+
+                                <x-input-text title="Password For Deletion" name="delpwrd" id="delpwrd" type="password" class="col-span-2"    />
+                                <x-input-text title="" name="delpwrd2" id="delpwrd2"  class="col-span-2" hidden   value="{{$passwrddel}}" />
+                                <x-input-text title="p2" name="p2" id="p2" value="0"  />
+
+
+                                </div>
+
                             </form>
 
                         </div>
@@ -194,6 +226,56 @@
 
     }
 
+
+    delpwrd.onblur=function(){
+    if(delpwrd.value == delpwrd2.value )
+     {
+        // document.getElementById("submitButton").disabled = false;
+        document.getElementById('del').disabled=false;
+
+    }
+    else
+    {
+        // document.getElementById("submitButton").disabled = true;
+        document.getElementById('del').disabled=true;
+
+    }
+
+
+    }
+
+
+
+
+
+
+    function imppur(imppurf2) {
+        var p1 = document.getElementById("p1");
+        if(imppurf2.checked==true)
+        {
+            p1.value=1;
+        }
+        else
+        {
+            p1.value=0;
+        }
+
+    }
+
+    function delmode(del) {
+        var p2 = document.getElementById("p2");
+        if(del.checked==true)
+        {
+            document.getElementById("submitButton").disabled = false;
+            p2.value=1;
+        }
+        else
+        {
+            document.getElementById("submitButton").disabled = true;
+            p2.value=0;
+        }
+
+    }
 
 
 

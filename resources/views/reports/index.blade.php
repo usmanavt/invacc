@@ -6,7 +6,7 @@
     </x-slot>
 
     <div class="py-4">
-        <div class="max-w-2xl mx-auto">
+        <div class="max-w-3xl mx-auto">
             <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
                 <div class="p-4 bg-white border-b border-gray-200">
 
@@ -187,7 +187,7 @@
                             <fieldset class="border px-4 py-2 rounded w-full">
                                 <legend>Sub Head <span class="text-xs text-mute">shift & click to select multiple items</span></legend>
                                 <div class="flex justify-between py-1">
-                                    <select size="12" multiple class="h-full w-full" name="subhead_id[]" id="subhead_id" required class="w-full disabled:opacity-50" disabled>
+                                    <select size="18" multiple class="h-full w-full" name="subhead_id[]" id="subhead_id" required class="w-full disabled:opacity-50" disabled>
                                     </select>
                                 </div>
                             </fieldset>

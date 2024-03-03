@@ -136,9 +136,10 @@ class BankRecivingsController extends Controller
     public function edit($id)
     {
         $passwrd = DB::table('tblpwrd')->select('pwrdtxt')->max('pwrdtxt');
+        $passwrddel = DB::table('tblpwrd')->select('pwrdtxtdel')->max('pwrdtxtdel');
 
 
-        return view('bankrecivings.edit',compact('passwrd'))
+        return view('bankrecivings.edit',compact('passwrd','passwrddel'))
         ->with('bt',ChequeTransaction::whereId($id)->first())
         ->with('banks',Bank::where('status',1)->get())
         ->with('suppliers',Supplier::where('status',1)->get())
@@ -149,6 +150,7 @@ class BankRecivingsController extends Controller
     }
 
     public function update(Request $request, ChequeTransaction $bt)
+
     {
         // dd($request->all(),$bt);
         $this->validate($request,[
@@ -163,6 +165,9 @@ class BankRecivingsController extends Controller
         ]);
         DB::beginTransaction();
         try {
+
+        if($request->p2==0 )
+        {
             $bt = ChequeTransaction::findOrFail($request->id);
             // $bt->bank_id = $request->bank_id;
             $bt->head_id = $request->head_id;
@@ -177,7 +182,33 @@ class BankRecivingsController extends Controller
             if($request->has('subhead_id')){$bt->subhead_id = $request->subhead_id;}else { $bt->subhead_id= 0;}
             if($request->has('supplier_id')){ $bt->supplier_id = $request->supplier_id;} else { $bt->supplier_id = 0;}
             if($request->has('customer_id')) { $bt->customer_id = $request->customer_id;} else { $bt->customer_id = 0;}
+
+            if($request->p1==1 && $request->sts==0 )
+            {
+                $bt->clrstatus = 1;
+                $bt->ref = 'CHEQUE_RETURN';
+
+            }
+
+            if($request->p1==0 && $request->sts==1 && $request->chqref=='CHEQUE_RETURN'  )
+            {
+                $bt->clrstatus = 0;
+                $bt->ref = '';
+
+            }
+
+
+
+
             $bt->save();
+        }
+
+        if( ( $request->p2==1  && $request->sts==0 ) || $request->chqref=='CHEQUE_RETURN' )
+        {
+
+                DB::delete(DB::raw(" delete FROM cheque_transactions WHERE id=$request->id"));
+
+        }
             DB::commit();
             Session::flash('info','Bank Payment/Transaction updated');
             return redirect()->route('bankrecivings.index');
