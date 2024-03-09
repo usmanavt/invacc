@@ -468,35 +468,24 @@ var tamount=0;
 
 var updateValues = (cell) => {
         var data = cell.getData();
-        // var sum = (Number(data.bundle1) * Number(data.pcspbundle1)) + (Number(data.bundle2) * Number(data.pcspbundle2))
-       // var sum = (Number(data.saleqty) * Number(data.price))
-
 
 // console.log(cell.getData().sku_id)
-       if(cell.getData().sku_id === 1)
+        if(data.sku==='KG'  )
          {
-
-            // var pr1=(Number(data.qtykg) / Number(data.totqty))*100
-
-            // console.log(Number(data.qtykg))
-
             var sum = (Number(data.feedqty) * Number(data.price))
             var pr1=(Number(data.feedqty) / Number(data.totqty))*100
 
             var pr2=( pr1 / Number(data.wtper))*100
             qtypcs=((pr2*Number(data.sqtypcs))/100).toFixed(2)
             qtyfeet=((pr2*Number(data.sqtyfeet))/100).toFixed(2)
-            // qtykg=((pr2*Number(data.sqtykg))/100).toFixed(2)
             qtykg=Number(data.feedqty)
 
 
 
          }
-         if(cell.getData().sku_id === 2)
+         else if(data.sku==='PCS'  )
          {
-            // console.log('PCS')
             var sum = (Number(data.feedqty) * Number(data.price))
-            // var pr1=(Number(data.qtypcs) / Number(data.totqty))*100
             var pr1=(Number(data.feedqty) / Number(data.totqty))*100
             var pr2=( pr1 / Number(data.pcper))*100
             qtykg=((pr2*Number(data.sqtykg))/100).toFixed(2)
@@ -507,11 +496,9 @@ var updateValues = (cell) => {
 
          }
 
-         if(cell.getData().sku_id === 3)
+         else if(data.sku==='FEET'  )
          {
-            // console.log('FEET')
             var sum = (Number(data.feedqty) * Number(data.price))
-            // var pr1=(Number(data.qtyfeet) / Number(data.totqty))*100
             var pr1=(Number(data.feedqty) / Number(data.totqty))*100
             var pr2=( pr1 / Number(data.feetper))*100
             qtykg=((pr2*Number(data.sqtykg))/100).toFixed(2)
@@ -520,9 +507,8 @@ var updateValues = (cell) => {
 
          }
 
-         if(cell.getData().sku_id > 3 )
+         else
         {
-            // console.log('METER')
             var sum = (Number(data.feedqty) * Number(data.price))
             var pr1=(Number(data.feedqty) / Number(data.totqty))*100
             var pr2=( pr1 / Number(data.pcper))*100
