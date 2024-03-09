@@ -170,7 +170,7 @@
 
 
                                     <div class="flex justify-between py-1">
-                                        <select autocomplete="on" name="source_id" id="source_id" required>
+                                        <select autocomplete="on" name="source_id" id="source_id"  required>
                                             {{-- <option disabled selected value="">--Select</option> --}}
                                             @foreach ($sources as $source)
                                                 <option value="{{ $source->id }}">{{ $source->title }}</option>
@@ -178,6 +178,8 @@
                                         </select>
 
                                     </div>
+
+
 
 
 

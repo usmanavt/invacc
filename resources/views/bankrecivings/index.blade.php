@@ -128,7 +128,7 @@
     head.addEventListener('change',()=>{
         const val = head.value
         subhead.options.length = 0 // Reset List
-        let list = subheads.filter( l => l.head_id === parseInt(val))
+        let list = subheads.filter( l => l.head_id === val)
         // if(list.length <=0) { alert('Cannot continue,No Sub Head Defined!') ; return}
         //  Setup subhead dropdown
         addSelectElement(subhead,'','--Select')
