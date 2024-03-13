@@ -613,7 +613,7 @@ class PurchaseRptController extends Controller
 
 
 
-        if($report_type === 'dtyclrnc' || $report_type === 'dtypnding' ){
+        if($report_type === 'dtyclrnc'   ){
             //  dd($request->all());
             $hdng1 = $request->cname;
             $hdng2 = $request->csdrs;
@@ -659,6 +659,102 @@ class PurchaseRptController extends Controller
         }
 
 
+        if($report_type === 'dtypnding' && $request->p7==0  ){
+            //  dd($request->all());
+            $hdng1 = $request->cname;
+            $hdng2 = $request->csdrs;
+            $head_id = $request->head_id;
+            $head = Supplier::findOrFail($head_id);
+            if($request->has('subhead_id')){
+                $subhead_id = $request->subhead_id;
+                //  Clear Data from Table
+                DB::table('contparameterrpt')->truncate();
+                foreach($request->subhead_id as $id)
+                {
+                    DB::table('contparameterrpt')->insert([ 'GLCODE' => $id ]);
+                }
+            }
+            //  Call Procedure
+            $data = DB::select('call procdutytrans()');
+            if(!$data)
+            {
+                Session::flash('info','No data available');
+                return redirect()->back();
+            }
+            $mpdf = $this->getMPDFSettingsA4L();
+            $collection = collect($data);                   //  Make array a collection
+            $grouped = $collection->groupBy('cominvid');       //  Sort collection by SupName
+            $grouped->values()->all();                       //  values() removes indices of array
+
+            foreach($grouped as $g){
+
+
+                $html =  view('purrpt.dtyclearance')->with('hdng1',$hdng1)->with('hdng2',$hdng2)
+                    ->with('data',$g)
+                    ->with('fromdate',$fromdate)
+                    ->with('todate',$todate)
+                    ->with('headtype',$head->title)->render();
+                $filename = $g[0]->cominvid  .'-'.$fromdate.'-'.$todate.'.pdf';
+                $chunks = explode("chunk", $html);
+                foreach($chunks as $key => $val) {
+                    $mpdf->WriteHTML($val);
+                }
+                $mpdf->AddPage();
+            }
+            return response($mpdf->Output($filename,'I'),200)->header('Content-Type','application/pdf');
+        }
+
+        if($report_type === 'dtypnding' && $request->p7==1  ){
+            //  dd($request->all());
+            $hdng1 = $request->cname;
+            $hdng2 = $request->csdrs;
+            $head_id = $request->head_id;
+            $head = Supplier::findOrFail($head_id);
+            if($request->has('subhead_id')){
+                $subhead_id = $request->subhead_id;
+                //  Clear Data from Table
+                DB::table('contparameterrpt')->truncate();
+                foreach($request->subhead_id as $id)
+                {
+                    DB::table('contparameterrpt')->insert([ 'GLCODE' => $id ]);
+                }
+            }
+            //  Call Procedure
+            $data = DB::select('call procdutytrans()');
+            if(!$data)
+            {
+                Session::flash('info','No data available');
+                return redirect()->back();
+            }
+            $mpdf = $this->getMPDFSettingsA4L();
+            $collection = collect($data);                   //  Make array a collection
+            $grouped = $collection->groupBy('grpid');       //  Sort collection by SupName
+            $grouped->values()->all();                       //  values() removes indices of array
+
+            foreach($grouped as $g){
+
+
+                $html =  view('purrpt.dtyclearancesmry')->with('hdng1',$hdng1)->with('hdng2',$hdng2)
+                    ->with('data',$g)
+                    ->with('fromdate',$fromdate)
+                    ->with('todate',$todate)
+                    ->with('headtype',$head->title)->render();
+                $filename = $g[0]->grpid  .'-'.$fromdate.'-'.$todate.'.pdf';
+                $chunks = explode("chunk", $html);
+                foreach($chunks as $key => $val) {
+                    $mpdf->WriteHTML($val);
+                }
+                // $mpdf->AddPage();
+            }
+            return response($mpdf->Output($filename,'I'),200)->header('Content-Type','application/pdf');
+        }
+
+
+
+
+
+
+
 
         if($report_type === 'loccominvs'){
 
@@ -676,7 +772,6 @@ class PurchaseRptController extends Controller
                     DB::table('contparameterrpt')->insert([ 'GLCODE' => $id ]);
                 }
             }
-
 
             //  Call Procedure
             $data = DB::select('call procpurinvcloc()');

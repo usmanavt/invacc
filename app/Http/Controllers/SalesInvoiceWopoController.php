@@ -60,27 +60,49 @@ class SalesInvoiceWopoController  extends Controller
     //     return $localpurchase;
     // }
 
+
+
     public function getMaster(Request $request)
     {
-        // dd($request->all());
-        $status =$request->status ;
+        // // dd($request->all());
+        // $status =$request->status ;
+        // $search = $request->search;
+        // $size = $request->size;
+        // $field = $request->sort[0]["field"];     //  Nested Array
+        // $dir = $request->sort[0]["dir"];         //  Nested Array
+        // $cis = SaleInvoices::where('custplan_id','=','0')
+        // ->where(function ($query) use ($search){
+        //         $query->where('dcno','LIKE','%' . $search . '%')
+        //         // ->orWhere('gpno','LIKE','%' . $search . '%')
+        //         ->orWhere('billno','LIKE','%' . $search . '%');
+        //     })
+        //     // ->whereHas('customer', function ($query) {
+        //     //      $query->where('source_id','=','1');
+        //     // })
+        // ->with('customer:id,title')
+        //  ->orderBy($field,$dir)
+        // ->paginate((int) $size);
+        // return $cis;
+
         $search = $request->search;
         $size = $request->size;
         $field = $request->sort[0]["field"];     //  Nested Array
         $dir = $request->sort[0]["dir"];         //  Nested Array
-        $cis = SaleInvoices::where('custplan_id','=','0')
-        ->where(function ($query) use ($search){
-                $query->where('dcno','LIKE','%' . $search . '%')
-                // ->orWhere('gpno','LIKE','%' . $search . '%')
-                ->orWhere('billno','LIKE','%' . $search . '%');
-            })
-            // ->whereHas('customer', function ($query) {
-            //      $query->where('source_id','=','1');
-            // })
-        ->with('customer:id,title')
-         ->orderBy($field,$dir)
+        $cis = DB::table('vwswopoindex')
+        // ->join('suppliers', 'contracts.supplier_id', '=', 'suppliers.id')
+        // ->select('contracts.*', 'suppliers.title')
+        ->where('custname', 'like', "%$search%")
+        ->orWhere('dcno', 'like', "%$search%")
+        ->orderBy($field,$dir)
         ->paginate((int) $size);
         return $cis;
+
+
+
+
+
+
+
     }
 
 

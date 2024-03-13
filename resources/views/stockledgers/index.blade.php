@@ -183,16 +183,20 @@
                                     </div>
                                 </fieldset>
 
+
+
+
+
+
                                 {{-- <input type="text" title="Search List Text" class="col-span-2" id="srch" name="srch"  onchange="headSelected()" > --}}
 
 
                                 <fieldset class="border px-4 py-2 rounded w-full">
-                                    <legend>Inoices Selection <span class="text-xs text-mute">shift & click to select multiple items</span></legend>
-                                        <select search="true" size="10" multiple="multiple" name="subhead_id[]" id="subhead_id" required class="w-full disabled:opacity-50" disabled>
+                                    <legend>Invoices Selection <span class="text-xs text-mute">shift & click to select multiple items</span></legend>
+                                        <select search="true" size="20" multiple class="h-full w-full" name="subhead_id[]" id="subhead_id" required class="w-full disabled:opacity-50" disabled>
                                         </select>
                                     </div>
                                 </fieldset>
-
                             </div>
 
                             <div class="flex flex-col md:flex-row w-full gap-1 px-6 pt-4">
@@ -251,7 +255,7 @@
     </div>
 
 @push('scripts')
-<script src="{{ asset('js/multiselect-dropdown.js') }}"></script>
+{{-- <script src="{{ asset('js/multiselect-dropdown.js') }}"></script> --}}
 <script>
     const heads = @json($heads);
     const sources = @json($source);

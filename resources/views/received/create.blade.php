@@ -49,11 +49,11 @@
                                 @endforeach
                             </select>
 
-                            <x-input-text title="Cheque No/Received From" name="cheque_no" id="cheque_no" req required class="col-span-2"  />
+                            <x-input-text title="Cheque No" name="cheque_no" id="cheque_no" req required class="col-span-2"  />
                             <x-input-date title="Cheque Date" id="cheque_date" name="cheque_date" req required class="col-span-2" />
+                            <x-input-text title="Received From" name="pmntto" id="pmntto"  class="col-span-2"   />
 
                         </div>
-
                         <div class="grid grid-cols-12 gap-2 py-2 items-center">
 
                             <x-input-numeric title="Amount(USD)" name="amount_fc" id="amount_fc" class="col-span-2"     />
@@ -64,15 +64,12 @@
                             <x-input-numeric title="" name="chqamount" id="chqamount" class="col-span-2" hidden     />
                             <x-input-text title="" name="chqno" id="chqno" class="col-span-2" hidden     />
 
-
                         </div>
-
                         <div class="grid grid-cols-12 gap-2 py-2 items-center">
 
                                 {{-- Invoice Level Receive <span class="text-red-500 font-semibold  ">(*)</span>
                             </label>
                             <input class="checked:bg-blue-500 checked:border-blue-500 focus:outline-none"  type="checkbox" name="per" id="per" checked=true onclick="EnableDisableTextBox(this)" >
-
 
                         <label for="">
                             Advance Received For Clearance Future Invoices <span class="text-red-500 font-semibold  ">(*)</span>
@@ -89,7 +86,7 @@
                             </label>
                         <textarea name="description" id="description" cols="100" rows="2" maxlength="100"  required class="col-span-2" ></textarea>
                         <label for="">
-                        <x-input-numeric title="Supp.InvoiceID" name="supinvid" id="supinvid" class="col-span-2"  disabled     />
+                        <x-input-text title="Supp.Invoice No" name="supinvid" id="supinvid" class="col-span-2"  disabled     />
                         <input class="checked:bg-blue-500 checked:border-blue-500 focus:outline-none"  type="checkbox" name="invid" id="invid" onclick="enbldspl(this)" >
                         <x-input-numeric title="" name="advtxt" id="advtxt" value="0" hidden       />
 
@@ -712,7 +709,7 @@ var updateValues = (cell) => {
             var data = { 'banktransactionr' : dynamicTableData,'supplier_id':supplier_id,'transno':transno.value,'bank_id':bank_id.value,'documentdate':documentdate.value,
             'cheque_no':cheque_no.value,'cheque_date':cheque_date.value,'head_id':head_id ,'description': description.value,'transno':transno.value
         ,'amount_fc':amount_fc.value,'amount_pkr':amount_pkr.value,'conversion_rate':conversion_rate.value,'advtxt':advtxt.value,
-        'custname':custname.value,'supinvid':supinvid.value};
+        'custname':custname.value,'supinvid':supinvid.value,'pmntto':pmntto.value};
 
 
             // All Ok - Proceed
@@ -762,7 +759,7 @@ var updateValues = (cell) => {
         var supinvid = document.getElementById("supinvid");
         supinvid.disabled = invid.checked ? false : true;
         supinvid.style.color ="black";
-        supinvid.value =0;
+        supinvid.value ='';
 
     }
 

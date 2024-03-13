@@ -467,7 +467,6 @@ var calculate = function(){
 
 
 
-
             {   title:"Weight",
                 field:"gdswt",
                 editor:"number",

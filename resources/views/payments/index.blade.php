@@ -24,10 +24,7 @@
 
         <x-input-date title="From" name="fromdt" class="col-span-2" />
         <x-input-date title="To" name="todt" class="col-span-2" />
-
     </div> --}}
-
-
 
     {{-- Tabulator --}}
     <div class="py-6">

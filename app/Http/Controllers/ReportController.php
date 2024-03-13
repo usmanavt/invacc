@@ -366,6 +366,8 @@ class ReportController extends Controller
                     DB::table('tmpvoucherrpt')->insert([ 'supid' => $id ]);
                 }
             }
+
+
             //  Call Procedure ,$head_id
             if($head_id == 32)
             {

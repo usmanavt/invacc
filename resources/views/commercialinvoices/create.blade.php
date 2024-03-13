@@ -175,18 +175,19 @@
 
             //  We are using ctrl key + 'ArrowUp' to show Modal
             if(e.ctrlKey && e.keyCode == 32){
-                if(conversionrate.value <= 0 || sconversionrate.value <= 0 )
-                {
-                    showSnackbar("Please add conversion rate before proceeding","error");
-                    conversionrate.focus();
-                    return;
-                }
-                if(insurance.value <= 0)
-                {
-                    showSnackbar("Please add insurance rate before proceeding","error");
-                    insurance.focus();
-                    return;
-                }
+                // if(conversionrate.value <= 0 || sconversionrate.value <= 0 )
+                // {
+                //     showSnackbar("Please add conversion rate before proceeding","error");
+                //     conversionrate.focus();
+                //     return;
+                // }
+                // if(insurance.value <= 0)
+                // {
+                //     showSnackbar("Please add insurance rate before proceeding","error");
+                //     insurance.focus();
+                //     return;
+                // }
+
 
                 if(!adopted)
                 {

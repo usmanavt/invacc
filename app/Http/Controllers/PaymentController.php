@@ -156,6 +156,8 @@ class PaymentController  extends Controller
             $ci->subhead_id = $request->supplier_id;
             $ci->impgdno = $request->impgdno;
             $ci->cusinvid = $request->cusinvid;
+            $ci->pmntto = $request->pmntto;
+
 
             // $ci->transaction_type = 'BPV';
             if($request->bank_id == 1)
@@ -322,15 +324,15 @@ class PaymentController  extends Controller
                 DB::update(DB::raw("
                 UPDATE sale_invoices c
                 INNER JOIN (
-                    SELECT invoice_id,SUM(received) AS received FROM
+                    SELECT dcno,SUM(received) AS received FROM
                     (
-                    SELECT invoice_id,SUM(totrcvd) as received  FROM receive_details WHERE invoice_id=$ci->cusinvid   GROUP BY invoice_id
+                    SELECT dcno,SUM(totrcvd) as received  FROM receive_details WHERE dcno='$ci->cusinvid'   GROUP BY dcno
                     UNION all
-                    SELECT cusinvid,amount_fc FROM bank_transactions WHERE cusinvid=$ci->cusinvid AND  head_id=33
-                ) y GROUP BY invoice_id
-                ) x ON c.id = x.invoice_id
+                    SELECT cusinvid,amount_fc FROM bank_transactions WHERE cusinvid='$ci->cusinvid' AND  head_id=33
+                ) y GROUP BY dcno
+                ) x ON c.dcno = x.dcno
                 SET c.paymentbal = totrcvbamount -  x.received
-                where  c.id =$ci->cusinvid "));
+                where  c.dcno =$ci->cusinvid "));
             }
 
 
@@ -401,6 +403,9 @@ class PaymentController  extends Controller
             $ci->subhead_id = $request->supplier_id;
             $ci->impgdno = $request->impgdno;
             $ci->cusinvid = $request->cusinvid;
+            $ci->pmntto = $request->pmntto;
+
+
             if($request->bank_id == 1)
             {
                 $ci->transaction_type = 'CPV';
@@ -409,8 +414,6 @@ class PaymentController  extends Controller
             {
                 $ci->transaction_type = 'BPV';
             }
-
-
 
             $ci->documentdate = $request->documentdate;
             $ci->conversion_rate = $request->conversion_rate;
@@ -423,6 +426,7 @@ class PaymentController  extends Controller
             $ci->advance = $request->advtxt;
             $ci->supname = $request->supname;
             $ci->save();
+
 
             $lstrt = CommercialInvoice::where('machineno',$ci->impgdno)->first();
             if($lstrt) {
@@ -511,13 +515,6 @@ class PaymentController  extends Controller
             }
 
 
-
-
-
-
-
-
-
             // Get Data
             $cds = $request->banktransaction; // This is array
             $cds = PaymentDetail::hydrate($cds); // Convert it into Model Collection
@@ -588,20 +585,20 @@ class PaymentController  extends Controller
                 where  c.id in(select invoice_id from payment_details where paymentid =$ci->id  ) "));
             }
 
-            if($ci->head_id==33)
+            if($ci->head_id==33 &&  $request->cusinvid <> ' ' )
             {
                 DB::update(DB::raw("
                 UPDATE sale_invoices c
                 INNER JOIN (
-                    SELECT invoice_id,SUM(received) AS received FROM
+                    SELECT dcno,SUM(received) AS received FROM
                     (
-                    SELECT invoice_id,SUM(totrcvd) as received  FROM receive_details WHERE invoice_id=$ci->cusinvid   GROUP BY invoice_id
+                    SELECT dcno,SUM(totrcvd) as received  FROM receive_details WHERE dcno='$ci->cusinvid'   GROUP BY dcno
                     UNION all
-                    SELECT cusinvid,amount_fc FROM bank_transactions WHERE cusinvid=$ci->cusinvid AND  head_id=33
-                ) y GROUP BY invoice_id
-                ) x ON c.id = x.invoice_id
+                    SELECT cusinvid,amount_fc FROM bank_transactions WHERE cusinvid='$ci->cusinvid' AND  head_id=33
+                ) y GROUP BY dcno
+                ) x ON c.dcno = x.dcno
                 SET c.paymentbal = totrcvbamount -  x.received
-                where  c.id =$ci->cusinvid "));
+                where  c.dcno =$ci->cusinvid "));
             }
 
 

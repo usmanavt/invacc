@@ -59,6 +59,13 @@
                                 <div>
                                     <input type="radio" name="report_type" value="dtypnding" required onchange="checkReportType('dtypnding')">
                                     <label for="">CUSTOM DUTY PENDING </label>
+                                    <input class="checked:bg-blue-500 checked:border-blue-500 focus:outline-none"  type="checkbox" name="dtypndsmry" id="dtypndsmry"   onclick="dtypndsmryfun(this)" >
+                                    <label for="">
+                                       <span style="color: brown;font-weight: bold">  Summary </span> <span class="text-red-500 font-semibold  "></span>
+                                        </label>
+                                        <input type="text" title="t7"  id="p7" name="p7" value="0" hidden   >
+
+
                                 </div>
 
                                 <div>
@@ -1499,6 +1506,25 @@ function imppur(imppurf2) {
         }
 
     }
+
+    function dtypndsmryfun(dtypndsmry) {
+        var p7 = document.getElementById("p7");
+        // amount_fc.disabled = advtxt.checked ? true : false;
+
+        // amount_fc.disabled = per.checked ? true : false;
+
+        if(dtypndsmry.checked==true)
+        {
+            p7.value=1;
+        }
+        else
+        {
+            p7.value=0;
+        }
+
+    }
+
+
 
 
 

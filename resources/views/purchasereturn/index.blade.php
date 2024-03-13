@@ -168,7 +168,7 @@
             {title: "Total Wt",field: "prtwt"},
             {title: "Total Pcs",field: "prtpcs"},
             {title: "Total Feet",field: "prtfeet"},
-            {title: "Total Amount",field: "prtamount"},
+            {title: "Total Amount",field: "prtamount",bottomCalc:"sum"},
                     ]},
 
           {title:'Pending Data Against Godown GatePass', headerHozAlign:"center",

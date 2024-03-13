@@ -72,10 +72,10 @@
                             </select>
 
 
-                            <x-input-text title="Cheque No/Payment to" name="cheque_no" id="cheque_no" req required class="col-span-2" value="{{ $banktransaction->cheque_no }}"  />
+                            <x-input-text title="Cheque No" name="cheque_no" id="cheque_no" req required class="col-span-2" value="{{ $banktransaction->cheque_no }}"  />
                             <x-input-date title="Cheque Date" id="cheque_date" name="cheque_date" req required class="col-span-2" value="{{ $banktransaction->cheque_date->format('Y-m-d') }}" />
-
-                        </div>
+                            <x-input-text title="Payment to" name="pmntto" id="pmntto" req required class="col-span-2" value="{{ $banktransaction->pmntto }}"  />
+                           </div>
 
                         <div class="grid grid-cols-12 gap-2 py-2 items-center">
                             <x-input-numeric title="Amount(USD)" name="amount_fc" id="amount_fc" class="col-span-2" value="{{ $banktransaction->amount_fc }}"   disabled     />
@@ -88,7 +88,6 @@
                             <x-input-numeric title="" name="advtxt" id="advtxt"    value="{{ $banktransaction->advance }}" hidden    />
                              <x-input-numeric title="" name="head_id" class="col-span-2" value="{{ $banktransaction->head_id}}" hidden  />
                         </div>
-
                         <div class="grid grid-cols-12 gap-2 py-2 items-center">
                             <label for="">
                                 Description <span class="text-red-500 font-semibold  ">(*)</span>
@@ -97,15 +96,13 @@
                             <x-input-text title="G.D No For Import Expenses" name="impgdno" id="impgdno"   class="col-span-2"  value="{{ $banktransaction->impgdno }}" disabled  />
 
 
-
                             {{-- <label for="">
                                 Advance Payment For Clearance Future Invoices <span class="text-red-500 font-semibold  ">(*)</span>
                                 </label>
                             <input class="checked:bg-blue-500 checked:border-blue-500 focus:outline-none"  type="checkbox" name="adv" id="adv" @if( $banktransaction->advance==1  )  checked else unchecked @endif    onclick="advpayment(this)" > --}}
-                            <x-input-numeric title="Cust.InvoiceID" name="cusinvid" id="cusinvid" class="col-span-2;w-20" value="{{ $banktransaction->cusinvid }}"  disabled     />
+                            <x-input-text title="Cust.DC No" name="cusinvid" id="cusinvid" class="col-span-2;w-20" value="{{ $banktransaction->cusinvid }}"  disabled     />
                             <input class="checked:bg-blue-500 checked:border-blue-500 focus:outline-none"  type="checkbox" name="invid" id="invid" onclick="enbldspl(this)" >
                         </div>
-
 
                     </fieldset>
 
@@ -557,7 +554,7 @@ function validateForm()
     var data = { 'banktransaction' : dynamicTableData,'supplier_id':supplier_id.value,'transno':transno.value,'bank_id':bank_id.value,'documentdate':documentdate.value,
             'cheque_no':cheque_no.value,'cheque_date':cheque_date.value,'head_id':head_id.value ,'description': description.value,'transno':transno.value
         ,'amount_fc':amount_fc.value,'amount_pkr':amount_pkr.value,'conversion_rate':conversion_rate.value,'advtxt':advtxt.value,
-        'paymentid':paymentid.value,'supname':supname.value,'impgdno':impgdno.value,'cusinvid':cusinvid.value};
+        'paymentid':paymentid.value,'supname':supname.value,'impgdno':impgdno.value,'cusinvid':cusinvid.value,'pmntto':pmntto.value};
 
 
 

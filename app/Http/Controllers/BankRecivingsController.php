@@ -15,6 +15,7 @@ use Illuminate\Support\Facades\Session;
 
 class BankRecivingsController extends Controller
 {
+
     public function index()
     {
         return view('bankrecivings.index')
@@ -26,7 +27,6 @@ class BankRecivingsController extends Controller
         ->with('customers',Customer::where('status',1)->get())
         ;
     }
-
     public function getMaster(Request $request)
     {
         // dd($request->all());

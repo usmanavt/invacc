@@ -513,11 +513,13 @@ public function funcsalretcat(Request $request)
             foreach($grouped as $g){
 
 
+
                 // if($report_type === 'dlvrychln')
                 // {
                 $html =  view('salerpt.salhistory')->with('data',$g)->with('fromdate',$fromdate)->with('todate',$todate)
                 ->with('headtype',$head->title)
                 ->with('hdng1',$hdng1)->with('hdng2',$hdng2)->render();
+
                 // }
                 // if($report_type === 'salinvs')
                 // {

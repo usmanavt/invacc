@@ -151,7 +151,7 @@
             {title: "Inv Dt",field: "invoice_date"},
             {title: "Invoice#",field: "invoiceno"},
             {title: "Contract#",field: "contract_id"},
-            {title: "Supplier",field: "supplier.title"},
+            {title: "Supplier",field: "supname"},
             {title: "Mach Date",field: "machine_date"},
             {title: "Machine #",field: "machineno"},
 

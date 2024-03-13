@@ -44,7 +44,7 @@ table{
     border-left: 1px solid lightgray;
     border-top: 1px solid lightgray;
     text-align: left;
-    font-size: 0.9rem;
+    font-size: 0.8rem;
     font-style: normal;
 }
 .data tr td:nth-child(7){
@@ -130,11 +130,14 @@ table{
             <tr>
 
                 <th class="column-headers" width="3%">S#</th>
-                <th class="column-headers" width="39%">Description Of Items</th>
-                <th class="column-headers" width="10%">Quantity</th>
-                <th class="column-headers" width="5%">Unit</th>
-                <th class="column-headers" width="25%">ForCustomer</th>
-                <th class="column-headers" width="9%">Rate</th>
+                <th class="column-headers" width="30%">Description Of Items</th>
+                <th class="column-headers" width="9%">Invoice<br>Date</th>
+                <th class="column-headers" width="9%">Invoice<br>No</th>
+                <th class="column-headers" width="4%">Master<br>Unit</th>
+                <th class="column-headers" width="9%">Qty<br>Kg</th>
+                <th class="column-headers" width="9%">Qty<br>Pcs</th>
+                <th class="column-headers" width="9%">Qty<br>Feet</th>
+                <th class="column-headers" width="9%">Item<br>Rate</th>
                 <th class="column-headers" width="9%">Amount</th>
 
 
@@ -146,52 +149,50 @@ table{
     <table class="data" cellspacing="0">
         <tbody>
             {{-- {{ $debitpkr = 0}} --}}
-            {{ $gtqty = 0 }};  {{ $gtval = 0 }}
-            {{ $stqty = 0 }};  {{ $stval = 0 }}
+            {{ $gtqtykg = 0 }};{{ $gtqtypcs = 0 }};{{ $gtqtyfeet = 0 }};  {{ $gtval = 0 }}
+            {{ $stqtykg = 0 }};{{ $stqtypcs = 0 }};{{ $stqtyfeet = 0 }};  {{ $stval = 0 }}
 
 @for ($i = 0 ; $i < count($data) ; $i++)
 
-{{ $gtqty += $data[$i]->purqty }}
-{{ $gtval += $data[$i]->vlues }}
+            {{ $gtqtykg += $data[$i]->gdswt }};{{ $gtqtypcs += $data[$i]->pcs }}{{ $gtqtyfeet += $data[$i]->qtyinfeet }}
+            {{ $gtval += $data[$i]->vlues }}
 
 
 
 
                 @if( $i==0 )
                 <tr>
-                    <td class="subhead" colspan="2" width="100%"   > Supplier Name: <span style="font-weight: bold;color:brown" > {{ $data[$i]->supname}} </span> </td>
-                </tr>
-                <tr>
-                <td class="subhead" colspan="2" > Invoice Date: <span style="font-weight: bold;color:brown">  {{ $data[$i]->invoice_date}} </span>
-                    Invoice No: <span style="font-weight: bold;color:brown"  > {{ $data[$i]->invoiceno}} </span></td>
+                    <td class="subhead" colspan="2" width="100%"   > <span style="font-weight: bold;color:brown" > {{ $data[$i]->supname}} </span> </td>
                 </tr>
             @else
 
             {{ $srno = $i - 1 }}
-            {{ $stqty += $data[$srno]->purqty }}
+            {{ $stqtykg += $data[$srno]->gdswt }};{{ $stqtypcs += $data[$srno]->pcs }}{{ $stqtyfeet += $data[$srno]->qtyinfeet }}
             {{ $stval += $data[$srno]->vlues }}
 
 
-        @if ($data[$i]->purid  <> $data[$srno]->purid)
+        @if ($data[$i]->supid  <> $data[$srno]->supid)
 
             <tr>
-                <td class="column-headers" colspan="2" width="100%" style="font-size:0.9rem; border:1px solid lightgray; text-align: right;font-weight: bold;background: #e3e3e3;border-top: 2px double  lightgray ;">Sub Total</td>
-                <td class="column-headers" colspan="1" width="8%" style="font-size:0.9rem; border:1px solid lightgray; text-align: right;font-weight: bold;background: #e3e3e3;border-top: 2px double  lightgray ;">{{ number_format($stqty,0) }} </td>
-                <td class="column-headers" colspan="4" width="10%" style="font-size:0.9rem; border:1px solid lightgray; text-align: right;font-weight: bold;background: #e3e3e3;border-top: 2px double  lightgray ;">{{ number_format($stval,0) }} </td>
+                <td class="column-headers" colspan="2"  style="font-size:0.8rem; border:1px solid lightgray; text-align: right;font-weight: bold;background: #e3e3e3;border-top: 2px double  lightgray ;">Sub Total</td>
+                <td class="column-headers" colspan="4"  style="font-size:0.8rem; border:1px solid lightgray; text-align: right;font-weight: bold;background: #e3e3e3;border-top: 2px double  lightgray ;">{{ number_format($stqtykg,0) }} </td>
+                <td class="column-headers" colspan="1"  style="font-size:0.8rem; border:1px solid lightgray; text-align: right;font-weight: bold;background: #e3e3e3;border-top: 2px double  lightgray ;">{{ number_format($stqtypcs,0) }} </td>
+                <td class="column-headers" colspan="1"  style="font-size:0.8rem; border:1px solid lightgray; text-align: right;font-weight: bold;background: #e3e3e3;border-top: 2px double  lightgray ;">{{ number_format($stqtyfeet,0) }} </td>
+                <td class="column-headers" colspan="2"  style="font-size:0.8rem; border:1px solid lightgray; text-align: right;font-weight: bold;background: #e3e3e3;border-top: 2px double  lightgray ;">{{ number_format($stval,0) }} </td>
             </tr>
 
             <tr>
 
-                <td class="subhead" colspan="2"   > Supplier Name: <span style="font-weight: bold;color:brown" > {{ $data[$i]->supname}} </span> </td>
+                <td class="subhead" colspan="2"   > <span style="font-weight: bold;color:brown" > {{ $data[$i]->supname}} </span> </td>
             </tr>
 
 
-            <tr>
+            {{-- <tr>
                 <td class="subhead" colspan="2"> Invoice Date: <span style="font-weight: bold;color:brown">  {{ $data[$i]->invoice_date}} </span>
                     Invoice No: <span style="font-weight: bold;color:brown"  > {{ $data[$i]->invoiceno}} </span></td>
-                </tr>
+                </tr> --}}
 
-             {{ $stqty = 0 }};  {{ $stval = 0 }}
+                {{ $stqtykg = 0 }};{{ $stqtypcs = 0 }};{{ $stqtyfeet = 0 }}; {{ $stval = 0 }}
         @endif
         @endif
 
@@ -202,33 +203,42 @@ table{
                 {{-- {{ $debitusd += $data[$i]->DebitAmtDlr }}
                 {{ $creditusd += $data[$i]->CreditAmtDlr }} --}}
 
-                    <td style="text-align: center"  width="3%">{{ $i+1 }}</td>
-                    <td  width="39%">{{ $data[$i]->material_title }} </td>
-                    <td style="text-align: right"  width="10%">{{ number_format($data[$i]->purqty,1) }} </td>
-                    <td style="text-align: center"  width="5%">{{ $data[$i]->unit }} </td>
-                    <td  width="25%">{{ $data[$i]->forcust }} </td>
-                    <td  width="9%">{{ number_format($data[$i]->price,1) }} </td>
-                    <td  width="9%">{{ number_format($data[$i]->vlues,0) }} </td>
+                    <td style="text-align: center;text-align: center"  width="3%">{{ $i+1 }}</td>
+                    <td style="font-size:0.8rem;"  width="30%">{{ $data[$i]->material_title }} </td>
+                    <td style="text-align: center;font-size:0.8rem;" width="9%">{{ $data[$i]->invoice_date }} </td>
+                    <td style="text-align: center;font-size:0.8rem;"  width="9%">{{ $data[$i]->invoiceno }} </td>
+                    <td  style="text-align: center;font-size:0.8rem"  width="4%">{{ $data[$i]->unit }} </td>
+                    <td style="text-align: right;font-size:0.8rem;" width="9%">{{ number_format($data[$i]->gdswt,1) }} </td>
+                    <td style="text-align: right;font-size:0.8rem;" width="9%">{{ number_format($data[$i]->pcs,1) }} </td>
+                    <td style="text-align: right;font-size:0.8rem;" width="9%">{{ number_format($data[$i]->qtyinfeet,1) }} </td>
+                    <td style="text-align: right;font-size:0.8rem;" width="9%">{{ number_format($data[$i]->price,1) }} </td>
+                    <td style="text-align: right;font-size:0.8rem;" width="9%">{{ number_format($data[$i]->vlues,0) }} </td>
 
             </tr>
 @endfor
 
-{{ $stqty += $data[$srno+1]->purqty }}
+{{ $stqtykg += $data[$srno]->gdswt }};{{ $stqtypcs += $data[$srno]->pcs }}{{ $stqtyfeet += $data[$srno]->qtyinfeet }}
 {{ $stval += $data[$srno+1]->vlues }}
 
 <tr>
-    <td colspan="2"  style="font-size:0.9rem; border:1px solid lightgray; text-align: right;font-weight: bold;background: #e3e3e3;border-top: 2px double  lightgray ;">Sub Total</td>
-    <td colspan="1"  style="font-size:0.9rem; border:1px solid lightgray; text-align: right;font-weight: bold;background: #e3e3e3;border-top: 2px double  lightgray ;">{{ number_format($stqty,0) }} </td>
-    <td colspan="4"  style="font-size:0.9rem; border:1px solid lightgray; text-align: right;font-weight: bold;background: #e3e3e3;border-top: 2px double  lightgray ;">{{ number_format($stval,0) }} </td>
+    <td class="column-headers" colspan="2"  style="font-size:0.8rem; border:1px solid lightgray; text-align: right;font-weight: bold;background: #e3e3e3;border-top: 2px double  lightgray ;">Sub Total</td>
+    <td class="column-headers" colspan="4"  style="font-size:0.8rem; border:1px solid lightgray; text-align: right;font-weight: bold;background: #e3e3e3;border-top: 2px double  lightgray ;">{{ number_format($stqtykg,0) }} </td>
+    <td class="column-headers" colspan="1"  style="font-size:0.8rem; border:1px solid lightgray; text-align: right;font-weight: bold;background: #e3e3e3;border-top: 2px double  lightgray ;">{{ number_format($stqtypcs,0) }} </td>
+    <td class="column-headers" colspan="1"  style="font-size:0.8rem; border:1px solid lightgray; text-align: right;font-weight: bold;background: #e3e3e3;border-top: 2px double  lightgray ;">{{ number_format($stqtyfeet,0) }} </td>
+    <td class="column-headers" colspan="2"  style="font-size:0.8rem; border:1px solid lightgray; text-align: right;font-weight: bold;background: #e3e3e3;border-top: 2px double  lightgray ;">{{ number_format($stval,0) }} </td>
 </tr>
 
 
 
-
 <tr>
-    <td colspan="2"  style="font-size:0.9rem; border:1px solid lightgray; text-align: right;font-weight: bold;background: #e3e3e3;border-top: 2px double  lightgray ;">Grand Total(s)</td>
-    <td colspan="1"  style="font-size:0.9rem; border:1px solid lightgray; text-align: right;font-weight: bold;background: #e3e3e3;border-top: 2px double  lightgray ;">{{ number_format($gtqty,0) }} </td>
-    <td colspan="4"  style="font-size:0.9rem; border:1px solid lightgray; text-align: right;font-weight: bold;background: #e3e3e3;border-top: 2px double  lightgray ;">{{ number_format($gtval,0) }} </td>
+    <tr>
+        <td class="column-headers" colspan="2"  style="font-size:0.9rem; border:1px solid lightgray; text-align: right;font-weight: bold;background: #e3e3e3;border-top: 2px double  lightgray ;">Grand Total</td>
+        <td class="column-headers" colspan="4"  style="font-size:0.9rem; border:1px solid lightgray; text-align: right;font-weight: bold;background: #e3e3e3;border-top: 2px double  lightgray ;">{{ number_format($gtqtykg,0) }} </td>
+        <td class="column-headers" colspan="1"  style="font-size:0.9rem; border:1px solid lightgray; text-align: right;font-weight: bold;background: #e3e3e3;border-top: 2px double  lightgray ;">{{ number_format($gtqtypcs,0) }} </td>
+        <td class="column-headers" colspan="1"  style="font-size:0.9rem; border:1px solid lightgray; text-align: right;font-weight: bold;background: #e3e3e3;border-top: 2px double  lightgray ;">{{ number_format($gtqtyfeet,0) }} </td>
+        <td class="column-headers" colspan="2"  style="font-size:0.9rem; border:1px solid lightgray; text-align: right;font-weight: bold;background: #e3e3e3;border-top: 2px double  lightgray ;">{{ number_format($gtval,0) }} </td>
+    </tr>
+
 </tr>
 
 

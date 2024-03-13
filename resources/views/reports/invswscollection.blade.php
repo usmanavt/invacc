@@ -102,7 +102,7 @@ table{
                     Customer Name
                 </td>
                 <td>
-                    {{ $data[0]->custname }}
+                    {{ $data[0]->supname }}
                 </td>
 
                 <td>
@@ -129,17 +129,17 @@ table{
     <table class="column-headers">
         <thead>
             <tr>
-                <th class="column-headers" width="3%">S#</th>
-                <th class="column-headers" width="8%">Dlvry<br>date</th>
+                <th  class="column-headers" width="3%">S#</th>
+                <th class="column-headers" width="8%">Transaction<br>Type</th>
+                <th class="column-headers" width="8%">P.O No</th>
+                <th class="column-headers" width="8%">D.C<br>Date</th>
+                <th class="column-headers" width="8%">D.C<br>No</th>
                 <th class="column-headers" width="8%">Bill<br>No</th>
-                <th class="column-headers" width="8%">PO#<br>No</th>
-                <th class="column-headers" width="8%">Invoice<br>Amount</th>
+                <th class="column-headers" width="8%">Sale<br>Amount</th>
                 <th class="column-headers" width="8%">Sale<br>Return</th>
-                <th class="column-headers" width="18%">Received<br>Status</th>
-                <th class="column-headers" width="8%">Collec.<br>Date</th>
-                <th class="column-headers" width="7%">Collec.<br>Ref.</th>
-                <th class="column-headers" width="8%">Rcvble.<br>Amount</th>
-                <th class="column-headers" width="8%">Collec.<br>Amount</th>
+                <th class="column-headers" width="17%">Description</th>
+                <th class="column-headers" width="8%">Collection<br>Amount</th>
+                <th class="column-headers" width="8%">Payment<br>Amount</th>
                 <th class="column-headers" width="8%">Invoice<br>Balance</th>
             </tr>
         </thead>
@@ -147,40 +147,99 @@ table{
 
     <table class="data" cellspacing="0">
         <tbody>
-            {{ $pble = 0 }}
+            {{ $rcvd = 0 }}
             {{ $pmnt = 0 }}
             {{ $invbal = 0 }}
-            {{ $sr = 0 }}
+            {{ $invamt = 0 }}
+            {{ $retamt = 0 }}
+
             @for ($i = 0 ; $i < count($data) ; $i++)
             <tr>
-                {{ $pble += $data[$i]->payable }}
+                {{ $rcvd += $data[$i]->received }}
                 {{ $pmnt += $data[$i]->payment }}
-                {{ $invbal += $data[$i]->invoice_bal }}
-                {{ $sr += $data[$i]->saleretamount }}
+                {{ $invamt += $data[$i]->invoiceamount }}
+                {{ $retamt += $data[$i]->purretamount }}
 
-                <td style="text-align:center" width="3%">{{ $i+1 }}</td>
-                <td style="text-align:center" width="8%">{{ $data[$i]->saldate }} </td>
-                <td style="text-align:center" width="8%">{{ $data[$i]->billno }} </td>
-                <td style="text-align:center" width="8%">{{ $data[$i]->pono }} </td>
-                <td style="text-align:center" width="8%">{{ $data[$i]->invoiceval }} </td>
-                <td style="text-align:right" width="8%">{{ number_format($data[$i]->saleretamount,0) }} </td>
-                <td style="text-align:center" width="18%">{{ $data[$i]->paystatus }} </td>
-                <td style="text-align:center" width="8%">{{ $data[$i]->pdate }} </td>
-                <td style="text-align:center" width="7%">{{ $data[$i]->ref }} </td>
-                <td style="text-align:right" width="8%">{{ number_format($data[$i]->payable,0) }} </td>
-                <td style="text-align:right" width="8%">{{ number_format($data[$i]->payment,0) }} </td>
-                <td style="text-align:right" width="8%">{{ number_format($data[$i]->invoice_bal,0) }} </td>
+
+
+                {{-- @if( $i==0 )
+                <tr>
+                    <td colspan="11" width="100%" style="text-align: left;font-size:1.2rem;border-bottom: 2px solid rgb(211, 211, 211);"> {{ $data[$i]->Itemgroupe}} </td>
+                </tr>
+            @else
+
+            {{ $srno = $i - 1 }}
+            @if ($data[$i]->Itemgroupe  <> $data[$srno]->Itemgroupe)
+                <tr>
+                        <td colspan="11" width="100%" style="text-align:left;font-size:1.2rem;border-bottom: 2px solid rgb(211, 211, 211);"> {{ $data[$i]->Itemgroupe}} </td>
+                </tr>
+            @endif
+            @endif --}}
+
+
+            @if( $i==0 )
+
+                <td style="text-align:center;font-weight: bold;background:rgb(237, 194, 163)" width="3%">{{ $i+1 }}</td>
+                <td style="text-align:center;font-weight: bold;background: rgb(237, 194, 163);" width="8%">{{ $data[$i]->transtatus }} </td>
+                <td style="text-align:center;font-weight: bold;background: rgb(237, 194, 163);" width="8%">{{ $data[$i]->pono }} </td>
+                <td style="text-align:center;font-weight: bold;background: rgb(237, 194, 163);" width="8%">{{ $data[$i]->invoice_date }} </td>
+                <td style="text-align:center;font-weight: bold;background: rgb(237, 194, 163);" width="8%">{{ $data[$i]->dcno }} </td>
+                <td style="text-align:center;font-weight: bold;background: rgb(237, 194, 163);" width="8%">{{ $data[$i]->invoiceno }} </td>
+                <td style="text-align:right;font-weight: bold;background: rgb(237, 194, 163);" width="8%">{{ number_format($data[$i]->invoiceamount,0) }} </td>
+                <td style="text-align:right;font-weight: bold;background: rgb(237, 194, 163);" width="8%">{{ number_format($data[$i]->purretamount,0) }} </td>
+                <td style="text-align:center;font-weight: bold;background: rgb(237, 194, 163);" width="17%">{{ $data[$i]->paystatus }} </td>
+                <td style="text-align:right;font-weight: bold;background: rgb(237, 194, 163);" width="8%">{{ number_format($data[$i]->received,0) }} </td>
+                <td style="text-align:right;font-weight: bold;background: rgb(237, 194, 163);" width="8%">{{ number_format($data[$i]->payment,0) }} </td>
+                <td style="text-align:right;font-weight: bold;background: rgb(237, 194, 163);" width="8%">{{ number_format($data[$i]->invoice_bal,0) }} </td>
+            @else
+
+            {{ $srno = $i - 1 }}
+                @if ($data[$i]->invoiceno  <> $data[$srno]->invoiceno)
+                {{-- {!! nl2br(e($text)) !!} --}}
+
+                <td style="text-align:center;font-weight: bold;background:rgb(237, 194, 163)" width="3%">{{ $i+1 }}</td>
+                <td style="text-align:center;font-weight: bold;background: rgb(237, 194, 163);" width="8%">{{ $data[$i]->transtatus }} </td>
+                <td style="text-align:center;font-weight: bold;background: rgb(237, 194, 163);" width="8%">{{ $data[$i]->pono }} </td>
+                <td style="text-align:center;font-weight: bold;background: rgb(237, 194, 163);" width="8%">{{ $data[$i]->invoice_date }} </td>
+                <td style="text-align:center;font-weight: bold;background: rgb(237, 194, 163);" width="8%">{{ $data[$i]->dcno }} </td>
+                <td style="text-align:center;font-weight: bold;background: rgb(237, 194, 163);" width="8%">{{ $data[$i]->invoiceno }} </td>
+                <td style="text-align:right;font-weight: bold;background: rgb(237, 194, 163);" width="8%">{{ number_format($data[$i]->invoiceamount,0) }} </td>
+                <td style="text-align:right;font-weight: bold;background: rgb(237, 194, 163);" width="8%">{{ number_format($data[$i]->purretamount,0) }} </td>
+                <td style="text-align:center;font-weight: bold;background: rgb(237, 194, 163);" width="17%">{{ $data[$i]->paystatus }} </td>
+                <td style="text-align:right;font-weight: bold;background: rgb(237, 194, 163);" width="8%">{{ number_format($data[$i]->received,0) }} </td>
+                <td style="text-align:right;font-weight: bold;background: rgb(237, 194, 163);" width="8%">{{ number_format($data[$i]->payment,0) }} </td>
+                <td style="text-align:right;font-weight: bold;background: rgb(237, 194, 163);" width="8%">{{ number_format($data[$i]->invoice_bal,0) }} </td>
+
+
+                @else
+                <td style="text-align:center;" width="3%">{{ $i+1 }}</td>
+                <td style="text-align:center;" width="8%">{{ $data[$i]->transtatus }} </td>
+                <td style="text-align:center;" width="8%">{{ $data[$i]->pono }} </td>
+                <td style="text-align:center;" width="8%">{{ $data[$i]->invoice_date }} </td>
+                <td style="text-align:center;" width="8%">{{ $data[$i]->dcno }} </td>
+                <td style="text-align:center;" width="8%">{{ $data[$i]->invoiceno }} </td>
+                <td style="text-align:right;" width="8%">{{ number_format($data[$i]->invoiceamount,0) }} </td>
+                <td style="text-align:right;" width="8%">{{ number_format($data[$i]->purretamount,0) }} </td>
+                <td style="text-align:center;" width="17%">{{ $data[$i]->paystatus }} </td>
+                <td style="text-align:right;" width="8%">{{ number_format($data[$i]->received,0) }} </td>
+                <td style="text-align:right;" width="8%">{{ number_format($data[$i]->payment,0) }} </td>
+                <td style="text-align:right;" width="8%">{{ number_format($data[$i]->invoice_bal,0) }} </td>
+                @endif
+            @endif
+
+
 
             </tr>
             @endfor
+            {{ $invbal = ( $invamt - $retamt + $pmnt - $rcvd )   }}
+
             <tr>
-                {{-- <td colspan="4"  style=" border:1px solid lightgray; text-align: right;font-weight: bold;background: #e3e3e3;border-top: 2px double  lightgray ;"> Total(s)</td> --}}
-                {{-- <td colspan="7"  style=" border:1px solid lightgray;. text-align: right;font-weight: bold;background: #e3e3e3;border-top: 2px double   lightgray; ">{{ number_format($pble,0) }}  </td> --}}
-                <td colspan="10"  style=" border:1px solid lightgray; text-align: right;font-weight: bold;background: #e3e3e3;border-top: 2px double   lightgray; ">{{ number_format($pble,0) }}</td>
-                {{-- <td colspan="1"  style=" border:1px solid lightgray; text-align: right;font-weight: bold;background: #e3e3e3;border-top: 2px double   lightgray; ">{{ number_format($sr,0) }}</td> --}}
+                <td colspan="4"  style=" border:1px solid lightgray; text-align: right;font-weight: bold;background: #e3e3e3;border-top: 2px double   lightgray; ">Total</td>
+                <td colspan="3"  style=" border:1px solid lightgray; text-align: right;font-weight: bold;background: #e3e3e3;border-top: 2px double   lightgray; ">{{ number_format($invamt,0) }}</td>
+                <td colspan="1"  style=" border:1px solid lightgray; text-align: right;font-weight: bold;background: #e3e3e3;border-top: 2px double   lightgray; ">{{ number_format($retamt,0) }}</td>
+                <td colspan="2"  style=" border:1px solid lightgray; text-align: right;font-weight: bold;background: #e3e3e3;border-top: 2px double   lightgray; ">{{ number_format($rcvd,0) }}</td>
                 <td colspan="1"  style=" border:1px solid lightgray; text-align: right;font-weight: bold;background: #e3e3e3;border-top: 2px double   lightgray; ">{{ number_format($pmnt,0) }}</td>
                 <td colspan="1"  style=" border:1px solid lightgray; text-align: right;font-weight: bold;background: #e3e3e3;border-top: 2px double   lightgray; ">{{ number_format($invbal,0) }}</td>
-                <td colspan="1"  style=" border:1px solid lightgray; text-align: right;font-weight: bold;background: #e3e3e3;border-top: 2px double   lightgray; "></td>
             </tr>
         </tbody>
     </table>

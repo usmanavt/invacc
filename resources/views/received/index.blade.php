@@ -19,15 +19,12 @@
             <button class="text-sm text-blue-300" onclick="setStatus(2)">Received History</button>
         </h2>
     </x-slot>
-
     {{-- <div class="grid grid-cols-12 gap-2 py-2 items-center">
 
         <x-input-date title="From" name="fromdt" class="col-span-2" />
         <x-input-date title="To" name="todt" class="col-span-2" />
 
     </div> --}}
-
-
 
     {{-- Tabulator --}}
     <div class="py-6">

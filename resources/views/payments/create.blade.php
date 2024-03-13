@@ -13,7 +13,6 @@
             Create Payment Voucher
         </h2>
     </x-slot>
-
     <div class="py-2">
         <div class="max-w-full mx-auto sm:px-2 lg:px-4">
             <div class="bg-white overflow-hidden shadow-sm  sm:rounded-lg">
@@ -50,8 +49,9 @@
                                 @endforeach
                             </select>
 
-                            <x-input-text title="Cheque No/Payment to" name="cheque_no" id="cheque_no"  class="col-span-2" disabled  />
+                            <x-input-text title="Cheque No" name="cheque_no" id="cheque_no"  class="col-span-2" disabled  />
                             <x-input-date title="Cheque Date" id="cheque_date" name="cheque_date"  class="col-span-2"  />
+                            <x-input-text title="Payment to" name="pmntto" id="pmntto"  class="col-span-2"   />
 
                         </div>
 
@@ -81,7 +81,7 @@
                                 </label>
                             <input class="checked:bg-blue-500 checked:border-blue-500 focus:outline-none"  type="checkbox" name="adv" id="adv"  onclick="advpayment(this)" > --}}
 
-                            <x-input-numeric title="Cust.InvoiceID" name="cusinvid" id="cusinvid" class="col-span-2;w-20"  disabled     />
+                            <x-input-text title="Cust.DC No" name="cusinvid" id="cusinvid" class="col-span-2;w-20" value=0  disabled     />
                             <input class="checked:bg-blue-500 checked:border-blue-500 focus:outline-none"  type="checkbox" name="invid" id="invid" onclick="enbldspl(this)" >
 
 
@@ -313,6 +313,7 @@ window.onload = function() {
                     {
                         invoice_id :        obj.invoice_id,
                         invoice_date :      obj.invoice_date,
+                        invoice_dated :      obj.invoice_dated,
                         invoice_no :        obj.invoice_no,
                         invoice_amount :     obj.invoice_amount,
                         curncy:             obj.curncy,
@@ -475,7 +476,7 @@ var updateValues = (cell) => {
 
         dynamicTable = new Tabulator("#dynamicTable", {
             height:"350px",
-            width:"1000px",
+            width:"1500px",
             rowContextMenu: rowMenu,
             layout:'fitDataTable',
             responsiveLayout:"collapse",
@@ -488,9 +489,10 @@ var updateValues = (cell) => {
                         cell.getRow().delete();
                     }
                 },
-                {title:"invoice Id",           field:"invoice_id",cssClass:"bg-gray-200 font-semibold"},
-                {title:"Invoice No",     field:"invoice_no",responsive:0,cssClass:"bg-gray-200 font-semibold"},
-                {title:"Invoice_Date",    field:"invoice_date",responsive:0,cssClass:"bg-gray-200 font-semibold"},
+                {title:"invoice Id",           field:"invoice_id",cssClass:"bg-gray-200 font-semibold",width:80,responsive:0},
+                {title:"Invoice No",     field:"invoice_no",responsive:0,cssClass:"bg-gray-200 font-semibold",width:120,responsive:0},
+                {title:"Invoice_Date",    field:"invoice_date",responsive:0,cssClass:"bg-gray-200 font-semibold",width:120,responsive:0,visible:false},
+                {title:"Invoice_Date",    field:"invoice_dated",responsive:0,cssClass:"bg-gray-200 font-semibold",width:120,responsive:0},
 
 
 
@@ -522,6 +524,7 @@ var updateValues = (cell) => {
                             field:"invoice_amount",
                             bottomCalc:"sum",
                             formatter:"money",
+                            width:150,
                             cellEdited: updateValues,
                             validator:["required","numeric"],
                             cssClass:"bg-gray-200 font-semibold",
@@ -533,6 +536,7 @@ var updateValues = (cell) => {
                             headerHozAlign :'right',
                             hozAlign:"right",
                             responsive:0,
+                            width:150,
                             field:"purretamount",
                             bottomCalc:"sum",
                             formatter:"money",
@@ -540,6 +544,7 @@ var updateValues = (cell) => {
                             validator:["required","numeric"],
                             cssClass:"bg-gray-200 font-semibold",
                             formatterParams:{thousand:",",precision:3},
+                            bottomCalcParams:{precision:0},
                         },
 
 
@@ -550,6 +555,7 @@ var updateValues = (cell) => {
                             hozAlign:"right",
                             responsive:0,
                             field:"curncy",
+                            width:80,
                             // editor:"number",
                             bottomCalc:"sum",
                             formatter:"money",
@@ -570,9 +576,12 @@ var updateValues = (cell) => {
                         hozAlign:"right",
                         field:"payedusd",
                         editor:"number",
+                        responsive:0,
+                        width:150,
                         cellEdited: updateValues,
                         formatter:"money",
                         formatterParams:{thousand:",",precision:3},
+                        bottomCalcParams:{precision:0},
                         // formatter:function(cell,row)
                         // {
                         //     return (cell.getData().invoice_amount * cell.getData().convrate).toFixed(0)
@@ -585,6 +594,7 @@ var updateValues = (cell) => {
                             responsive:0,
                             editor:"number",
                             field:"convrate",
+                            width:150,
                             // bottomCalc:"sum",
                             formatter:"money",
                             cellEdited: updateValues,
@@ -598,10 +608,14 @@ var updateValues = (cell) => {
                         headerHozAlign :'right',
                         hozAlign:"right",
                         field:"payedrup",
+                        responsive:0,
                         cssClass:"bg-gray-200 font-semibold",
                         formatter:"money",
+                        width:150,
+                        validator:["required","numeric"],
                         cssClass:"bg-gray-200 font-semibold",
                         formatterParams:{thousand:",",precision:3},
+                        bottomCalcParams:{precision:0},
                         formatter:function(cell,row)
                         {
                             return (cell.getData().payedusd * cell.getData().convrate).toFixed(0)
@@ -614,19 +628,19 @@ var updateValues = (cell) => {
                         hozAlign:"right",
                         field:"invoice_bal",
                         formatter:"money",
+                        validator:["required","numeric"],
+                        responsive:0,
+                        width:150,
                         cssClass:"bg-gray-200 font-semibold",
                         formatterParams:{thousand:",",precision:3},
-                        formatter:function(cell,row)
-                        {
-                            return (cell.getData().invoice_amount - cell.getData().payedusd - cell.getData().purretamount).toFixed(0)
-                        },
+                        bottomCalcParams:{precision:2},
+                        // formatter:function(cell,row)
+                        // {
+                        //     return (cell.getData().invoice_amount - cell.getData().payedusd - cell.getData().purretamount).toFixed(0)
+                        // },
                         bottomCalc:totalVal
 
                     },
-
-
-
-
 
             ],
         })
@@ -677,7 +691,8 @@ var updateValues = (cell) => {
 
             var data = { 'banktransaction' : dynamicTableData,'supplier_id':supplier_id,'transno':transno.value,'bank_id':bank_id.value,'documentdate':documentdate.value,
             'cheque_no':cheque_no.value,'cheque_date':cheque_date.value,'head_id':head_id ,'description': description.value,'transno':transno.value,'cusinvid':cusinvid.value
-        ,'amount_fc':amount_fc.value,'amount_pkr':amount_pkr.value,'conversion_rate':conversion_rate.value,'advtxt':advtxt.value,'supname':supname.value,'impgdno':impgdno.value};
+        ,'amount_fc':amount_fc.value,'amount_pkr':amount_pkr.value,'conversion_rate':conversion_rate.value,'advtxt':advtxt.value,
+        'supname':supname.value,'impgdno':impgdno.value,'pmntto':pmntto.value};
 
 
             // All Ok - Proceed

@@ -86,12 +86,12 @@
 
                         {{-- Submit Button --}}
                         <div class="pt-2">
-                            <button
+                            <x-button
                                 id="submitbutton" onclick="validateForm()"
                                 class="bg-green-500 text-white rounded hover:bg-green-700 inline-flex items-center px-4 py-1 w-28 text-center">
                                 <i class="fa fa-save fa-fw"></i>
                                 Submit
-                            </button>
+                            </x-button>
                             <x-input-text title="Password For Edition" name="edtpw" id="edtpw" type="password"     />
                             <x-input-text title="" name="dbpwrd2" id="dbpwrd2"  class="col-span-2" hidden value="{{$passwrd}}" />
                         </div>
@@ -101,8 +101,6 @@
             </div>
         </div>
     </div>
-
-
     @push('scripts')
     <script src="{{ asset('js/tabulator.min.js') }}"></script>
     @endpush
@@ -244,16 +242,16 @@ var updateValues = (cell) => {
         var data = cell.getData();
 
         // if(cell.getData().prunitid==1)
-        if(data.prunitid===1 )
+        if(data.unitname=='KG' )
          {
              var sum =  Number(data.prwt) * Number(data.prprice)
          }
-         if(data.prunitid===2 )
+         if(data.unitname=='PCS' )
          {
             var sum =  Number(data.prpcs) * Number(data.prprice)
          }
 
-         if(data.prunitid===3 )
+         if(data.unitname=='FEET' )
          {
             var sum =  Number(data.prfeet) * Number(data.prprice)
          }

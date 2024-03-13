@@ -27,6 +27,7 @@ use App\Models\Voucher;
 
 
 
+
 class CommercialInvoiceController extends Controller
 {
 
@@ -39,23 +40,41 @@ class CommercialInvoiceController extends Controller
 
     public function getMaster(Request $request)
     {
-        $status =$request->status ;
+        // $status =$request->status ;
+        // $search = $request->search;
+        // $size = $request->size;
+        // $field = $request->sort[0]["field"];     //  Nested Array
+        // $dir = $request->sort[0]["dir"];         //  Nested Array
+        // $cis = CommercialInvoice::where('status',$status)
+        // ->where(function ($query) use ($search){
+        //         $query->where('invoiceno','LIKE','%' . $search . '%')
+        //         ->orWhere('invoiceno','LIKE','%' . $search . '%');
+        //     })
+        //     ->whereHas('supplier', function ($query) {
+        //         $query->where('source_id','=','2');
+        //     })
+        // ->with('supplier:id,title')
+        // ->orderBy($field,$dir)
+        // ->paginate((int) $size);
+        // return $cis;
+
         $search = $request->search;
         $size = $request->size;
         $field = $request->sort[0]["field"];     //  Nested Array
         $dir = $request->sort[0]["dir"];         //  Nested Array
-        $cis = CommercialInvoice::where('status',$status)
-        ->where(function ($query) use ($search){
-                $query->where('invoiceno','LIKE','%' . $search . '%')
-                ->orWhere('invoiceno','LIKE','%' . $search . '%');
-            })
-            ->whereHas('supplier', function ($query) {
-                $query->where('source_id','=','2');
-            })
-        ->with('supplier:id,title')
+        $cis = DB::table('vwimppurindex')
+        // ->join('suppliers', 'contracts.supplier_id', '=', 'suppliers.id')
+        // ->select('contracts.*', 'suppliers.title')
+        ->where('supname', 'like', "%$search%")
+        ->orWhere('machineno', 'like', "%$search%")
         ->orderBy($field,$dir)
         ->paginate((int) $size);
         return $cis;
+
+
+
+
+
     }
 
 

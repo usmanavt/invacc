@@ -153,7 +153,7 @@
             columns:[
 
             {title: "id",field: "id"},
-            {title: "Customer",field: "customer.title"},
+            {title: "Customer",field: "custname"},
             {title: "P.O No",field: "pono"},
             // {title: "P.O Date",field: "podate"},
             {title: "D.C No",field: "dcno"},

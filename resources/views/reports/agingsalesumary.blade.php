@@ -143,23 +143,55 @@ table{
 
     <table class="data" cellspacing="0">
         <tbody>
-            {{ $vA = 0 }}
-            {{ $vB = 0 }}
-            {{ $vC = 0 }}
-            {{ $vD = 0 }}
-            {{ $vE = 0 }}
-            {{ $vF = 0 }}
-            {{ $vG = 0 }}
+
+            {{-- For Grand Total --}}
+            {{ $vA = 0 }};{{ $vB = 0 }};{{ $vC = 0 }};{{ $vD = 0 }};{{ $vE = 0 }};{{ $vF = 0 }};{{ $vG = 0 }}
+
+            {{-- For Sub Total --}}
+            {{ $svA = 0 }};{{ $svB = 0 }};{{ $svC = 0 }};{{ $svD = 0 }};{{ $svE = 0 }};{{ $svF = 0 }};{{ $svG = 0 }}
 
             @for ($i = 0 ; $i < count($data) ; $i++)
+            @if( $i==0 )
             <tr>
-                {{ $vA += $data[$i]->A }}
-                {{ $vB += $data[$i]->B }}
-                {{ $vC += $data[$i]->C }}
-                {{ $vD += $data[$i]->D }}
-                {{ $vE += $data[$i]->E }}
-                {{ $vF += $data[$i]->F }}
-                {{ $vG += $data[$i]->TOTAMOUNT }}
+                <td colspan="10"  style="text-align: left;border-bottom: 1px solid lightgray;font-weight: bold;font-size: 1.5rem;color:brown">{{ $data[$i]->rtitle }} </td>
+            </tr>
+            @else
+
+            {{ $srno = $i - 1 }}
+
+            {{ $svA += $data[$srno]->A }};{{ $svB += $data[$srno]->B }};{{ $svC += $data[$srno]->C }};{{ $svD += $data[$srno]->D }}
+            {{ $svE += $data[$srno]->E }};{{ $svF += $data[$srno]->F }};{{ $svG += $data[$srno]->TOTAMOUNT }}
+
+            @if ($data[$i]->srtid  <> $data[$srno]->srtid)
+
+                <tr>
+                    <td colspan="4" style="text-align: right;border-bottom: 1px solid lightgray;font-weight: bold">{{ number_format($svA,0) }} </td>
+                    <td colspan="1" style="text-align: right;border-bottom: 1px solid lightgray;font-weight: bold">{{ number_format($svB,0) }} </td>
+                    <td colspan="1" style="text-align: right;border-bottom: 1px solid lightgray;font-weight: bold">{{ number_format($svC,0) }} </td>
+                    <td colspan="1" style="text-align: right;border-bottom: 1px solid lightgray;font-weight: bold">{{ number_format($svD,0) }} </td>
+                    <td colspan="1" style="text-align: right;border-bottom: 1px solid lightgray;font-weight: bold">{{ number_format($svE,0) }} </td>
+                    <td colspan="1" style="text-align: right;border-bottom: 1px solid lightgray;font-weight: bold">{{ number_format($svF,0) }} </td>
+                    <td colspan="1" style="text-align: right;border-bottom: 1px solid lightgray;font-weight: bold">{{ number_format($svG,0) }} </td>
+                </tr>
+                {{ $svA = 0 }};{{ $svB = 0 }};{{ $svC = 0 }};{{ $svD = 0 }};{{ $svE = 0 }};{{ $svF = 0 }};{{ $svG = 0 }}
+
+                <tr>
+                    <td colspan="10"  style="text-align: left;border-bottom: 1px solid lightgray;font-weight: bold;font-size: 1.5rem;color:brown">{{ $data[$i]->rtitle }} </td>
+                </tr>
+            @endif
+            @endif
+
+
+
+
+
+
+
+
+            <tr>
+                {{ $vA += $data[$i]->A }};{{ $vB += $data[$i]->B }};{{ $vC += $data[$i]->C }};{{ $vD += $data[$i]->D }}
+                {{ $vE += $data[$i]->E }};{{ $vF += $data[$i]->F }};{{ $vG += $data[$i]->TOTAMOUNT }}
+
 
                 <td style="text-align:center"; width="5%">{{ $i+1 }}</td>
                 <td style="text-align: left"; width="20%">{{ $data[$i]->supname }} </td>
@@ -190,7 +222,7 @@ table{
     </table>
 
     {{-- Footer  --}}
-    <div style="margin-top:64px;">
+    {{-- <div style="margin-top:64px;">
         <table >
 
             <tr style="margin-top:16px;margin-bottom:16px;">
@@ -212,7 +244,7 @@ table{
                 </td>
             </tr>
         </table>
-    </div>
+    </div> --}}
 
     </body>
 </html>

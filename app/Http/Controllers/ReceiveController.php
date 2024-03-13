@@ -82,7 +82,6 @@ class ReceiveController  extends Controller
 
     }
 
-
     public function getDetails(Request $request)
     {
         $search = $request->search;
@@ -108,8 +107,8 @@ class ReceiveController  extends Controller
         ->paginate((int) $size);
         return $contracts;
 
-
     }
+
 
     public function getDetailsqut(Request $request)
     {
@@ -136,11 +135,12 @@ class ReceiveController  extends Controller
     /** Function Complete*/
     public function store(Request $request)
     {
-            //    dd($request->all());
+            //    dd($request->supinvid);
         $this->validate($request,[
             // 'saldate' => 'required|min:3|date',
         //    'title'=>'required|min:3|unique:materials'
              'transno' => 'required|min:1|unique:bank_transactions',
+            //  'cheque_no' => 'required|unique:bank_transactions',
             // 'pono' => 'required|min:1|unique:customer_orders'
             // 'gpno' => 'required|min:1|unique:sale_invoices',
             // 'customer_id' => 'required'
@@ -153,6 +153,9 @@ class ReceiveController  extends Controller
             $ci->bank_id = $request->bank_id;
             $ci->head_id = $request->head_id;
             $ci->subhead_id = $request->supplier_id;
+            $ci->pmntto = $request->pmntto;
+
+
             if($request->bank_id == 1)
             {
                 $ci->transaction_type = 'CRV';
@@ -183,8 +186,6 @@ class ReceiveController  extends Controller
             $ci->advance = $request->advtxt;
             $ci->supname = $request->custname;
             $ci->supinvid = $request->supinvid;
-
-
             $ci->save();
 
             // Quotation Close
@@ -255,19 +256,19 @@ class ReceiveController  extends Controller
             if($ci->head_id==32)
             {
                 DB::update(DB::raw("
-
                 UPDATE commercial_invoices c
                 INNER JOIN (
-				SELECT invoice_id,SUM(payment) AS payment FROM
+				SELECT invoice_no,SUM(payment) AS payment FROM
 				(
-				SELECT invoice_id,SUM(payedusd) as payment  FROM payment_details WHERE invoice_id =$ci->supinvid   GROUP BY invoice_id
+				SELECT invoice_no,SUM(payedusd) as payment  FROM payment_details WHERE invoice_no ='$ci->supinvid'   GROUP BY invoice_no
                 UNION all
-                SELECT supinvid,amount_fc*-1 FROM bank_transactions WHERE supinvid=$ci->supinvid AND  head_id=32
-                ) y GROUP BY invoice_id
-                ) x ON c.id = x.invoice_id
+                SELECT supinvid,amount_fc*-1 FROM bank_transactions WHERE supinvid='$ci->supinvid' AND  head_id=32
+                ) y GROUP BY invoice_no
+                ) x ON c.invoiceno = x.invoice_no
                 SET c.invoicebal = ( case when contract_id=0 then c.total else tval end ) -  x.payment
-                where  c.id =$ci->supinvid
+                where  c.invoiceno ='$ci->supinvid'
                 "));
+
             }
 
             DB::commit();
@@ -315,11 +316,14 @@ class ReceiveController  extends Controller
         DB::beginTransaction();
         try {
 
+            // dd($request->supinvid);
             $ci = BankTransaction::findOrFail($request->receivedid);
+
 
             $ci->bank_id = $request->bank_id;
             $ci->head_id = $request->head_id;
             $ci->subhead_id = $request->subhead_id;
+            $ci->pmntto = $request->pmntto;
             if($request->bank_id == 1)
             {
                 $ci->transaction_type = 'CRV';
@@ -450,19 +454,20 @@ class ReceiveController  extends Controller
 
             if($ci->head_id==32)
             {
+                // dd($request->supinvid);
                 DB::update(DB::raw("
 
                 UPDATE commercial_invoices c
                 INNER JOIN (
-				SELECT invoice_id,SUM(payment) AS payment FROM
+				SELECT invoice_no,SUM(payment) AS payment FROM
 				(
-				SELECT invoice_id,SUM(payedusd) as payment  FROM payment_details WHERE invoice_id =$ci->supinvid   GROUP BY invoice_id
+				SELECT invoice_no,SUM(payedusd) as payment  FROM payment_details WHERE invoice_no ='$ci->supinvid'   GROUP BY invoice_no
                 UNION all
-                SELECT supinvid,amount_fc*-1 FROM bank_transactions WHERE supinvid=$ci->supinvid AND  head_id=32
-                ) y GROUP BY invoice_id
-                ) x ON c.id = x.invoice_id
+                SELECT supinvid,amount_fc*-1 FROM bank_transactions WHERE supinvid='$ci->supinvid' AND  head_id=32
+                ) y GROUP BY invoice_no
+                ) x ON c.invoiceno = x.invoice_no
                 SET c.invoicebal = ( case when contract_id=0 then c.total else tval end ) -  x.payment
-                where  c.id =$ci->supinvid
+                where  c.invoiceno ='$ci->supinvid'
                 "));
             }
 

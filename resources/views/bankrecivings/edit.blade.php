@@ -99,7 +99,6 @@
                                             Calculate
                                     </x-button> --}}
 
-
                                     <x-button  id="submitButton">
                                         <i class="fa fa-save fa-fw"></i>
                                             Submit
@@ -116,8 +115,7 @@
 
                                 <x-input-text title="Password For Deletion" name="delpwrd" id="delpwrd" type="password" class="col-span-2"    />
                                 <x-input-text title="" name="delpwrd2" id="delpwrd2"  class="col-span-2" hidden   value="{{$passwrddel}}" />
-                                <x-input-text title="p2" name="p2" id="p2" value="0"  />
-
+                                <x-input-text title="" name="p2" id="p2" value="0" hidden  />
 
                                 </div>
 
