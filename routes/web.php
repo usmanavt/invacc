@@ -35,7 +35,7 @@ use App\Http\Controllers\StockLedgerController;
 use App\Http\Controllers\CareController;
 use App\Http\Controllers\QuotationController;
 use App\Http\Controllers\CustomerOrderController;
-use App\Http\Controllers\CustomerOrderwoqController;
+// use App\Http\Controllers\CustomerOrderwoqController;
 use App\Http\Controllers\SalesRetunrsController;
 use App\Http\Controllers\PurchasingController;
 use App\Http\Controllers\GatepasseController;
@@ -113,7 +113,7 @@ Route::post('purrpt/fetch',[PurchaseRptController::class, 'fetch'])->name('purrp
 
 
 // dutyclearance Reports
-Route::get('dutyclearance',[DutyRptController::class, 'index'])->name('dutyclearance.index');
+// Route::get('dutyclearance',[DutyRptController::class, 'index'])->name('dutyclearance.index');
 // Route::get('xyz',[PurchaseRptController::class, 'xyz'])->name('purrpt.xyz');
 // Route::post('purrpt/fetch',[PurchaseRptController::class, 'fetch'])->name('purrpt.fetch');
 
@@ -314,6 +314,13 @@ Route::resource('customerorder', CustomerOrderController::class);
 
 
 //  Payment Voucher
+// Route::get('/materials/{id}/copyMaterial', [MaterialController::class, 'copyMaterial'])->name('materials.copy');
+Route::post('/banktransaction/delete', [PaymentController::class, 'delete'])->name('banktransaction.del');
+Route::get('/banktransaction/{id}/deleterec', [PaymentController::class, 'deleterec']);
+
+
+
+
 Route::get('/banktransaction/getQuotationsMaster', [PaymentController::class, 'getMaster'])->name('banktransaction.master');
 Route::get('/banktransaction/getQuotationsDetails', [PaymentController::class, 'getDetail'])->name('banktransaction.details');
 Route::get('/banktransaction/getcidMaster', [PaymentController::class, 'getMasterqut'])->name('banktransaction.quotations');
@@ -381,11 +388,11 @@ Route::resource('godownsr', GodownsrController::class);
 
 
 
-Route::get('/custorderswoq/getQuotationsMaster', [CustomerOrderwoqController::class, 'getMaster'])->name('custorderswoq.master');
-Route::get('/custorderswoq/getQuotationsDetails', [CustomerOrderwoqController::class, 'getDetail'])->name('custorderswoq.details');
-Route::get('/custorderswoq/getcidMaster', [CustomerOrderwoqController::class, 'getMasterqut'])->name('custorderswoq.quotations');
-Route::get('/custorderswoq/getCustordersQuotationsdtl', [CustomerOrderwoqController::class, 'getDetailsqut'])->name('custorderswoq.quotationsdtl');
-Route::resource('customerorderwoq', CustomerOrderwoqController::class);
+// Route::get('/custorderswoq/getQuotationsMaster', [CustomerOrderwoqController::class, 'getMaster'])->name('custorderswoq.master');
+// Route::get('/custorderswoq/getQuotationsDetails', [CustomerOrderwoqController::class, 'getDetail'])->name('custorderswoq.details');
+// Route::get('/custorderswoq/getcidMaster', [CustomerOrderwoqController::class, 'getMasterqut'])->name('custorderswoq.quotations');
+// Route::get('/custorderswoq/getCustordersQuotationsdtl', [CustomerOrderwoqController::class, 'getDetailsqut'])->name('custorderswoq.quotationsdtl');
+// Route::resource('customerorderwoq', CustomerOrderwoqController::class);
 
 
 //  CommercialInvoice - LOCAL
