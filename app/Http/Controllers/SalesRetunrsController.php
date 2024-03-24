@@ -274,6 +274,50 @@ class SalesRetunrsController  extends Controller
             c.psrwt = x.wt,c.psrpcs=x.pcs,c.psrfeet=x.feet  WHERE  c.id =$ci->id "));
 
 
+            DB::update(DB::raw("
+            UPDATE sale_invoices c
+            INNER JOIN (
+
+                SELECT customer_id,invoiceid,SUM(invsbal) AS invoicebal FROM
+                (
+
+                    SELECT customer_id ,id AS invoiceid,totrcvbamount AS invsbal FROM sale_invoices
+                    WHERE customer_id=$ci->customer_id  AND id in(  SELECT invoice_id FROM sale_returns WHERE id=$ci->id )
+                    UNION ALL
+                     SELECT subhead_id, invoice_id,b.totrcvd*-1 AS invsbal
+                     FROM bank_transactions AS a INNER join receive_details AS b ON a.id=b.receivedid and a.subhead_id =$ci->customer_id
+                     AND invoice_id in(  SELECT invoice_id FROM sale_returns WHERE id=$ci->id )
+                     UNION all
+                     SELECT a.customer_id,invoice_id,a.totrcvbamount*-1 AS invsbal
+                     FROM sale_returns AS a INNER JOIN sale_invoices AS b  ON a.invoice_id=b.id  WHERE a.customer_id =$ci->customer_id
+                     AND invoice_id in(SELECT invoice_id FROM sale_returns WHERE id=$ci->id)
+                     UNION all
+                     SELECT a.subhead_id, b.id AS  invoice_id,a.amount_fc AS invsbal
+                     FROM bank_transactions AS a INNER join sale_invoices AS b ON a.cusinvid=b.dcno AND a.subhead_id =$ci->customer_id
+                     AND b.id  in(SELECT invoice_id FROM sale_returns WHERE id=$ci->id)
+
+               ) AS w GROUP BY customer_id,invoiceid
+            ) x ON c.id = x.invoiceid
+            SET c.paymentbal = x.invoicebal
+            where  c.id in(select invoice_id from sale_returns where id=$ci->id  ) "));
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
             DB::insert(DB::raw("
             INSERT INTO office_item_bal(transaction_id,tdate,ttypedesc,ttypeid,material_id,uom,tqtykg,tqtypcs,tqtyfeet,tcostkg,tcostpcs,tcostfeet,transvalue)
             SELECT a.id AS transid,a.rdate,'SaleRet',6,b.material_id,b.sku_id,qtykg,qtypcs,qtyfeet,qtykgcrt,qtypcscrt,qtyfeetcrt
@@ -329,6 +373,29 @@ class SalesRetunrsController  extends Controller
 
         // return view('contracts.edit')->with('suppliers',Supplier::select('id','title')->get())->with('contract',$contract)->with('cd',ContractDetails::where('contract_id',$contract->id)->get());
     }
+
+
+
+    public function deleterec($id)
+    {
+
+        $passwrd = DB::table('tblpwrd')->select('pwrdtxtdel')->max('pwrdtxtdel');
+
+        $cd = DB::select('call procsalereturnedit(?)',array( $id ));
+
+         $data=compact('cd');
+
+        return view('salereturn.deleterec',compact('passwrd'))
+        ->with('customer',Customer::select('id','title')->get())
+        ->with('salereturn',SaleReturn::findOrFail($id))
+        ->with($data)
+        ->with('skus',Sku::select('id','title')->get());
+    }
+
+
+
+
+
 
 
     public function update(Request $request, SaleReturn $salereturn)
@@ -529,6 +596,44 @@ class SalesRetunrsController  extends Controller
             c.psrwt = x.wt,c.psrpcs=x.pcs,c.psrfeet=x.feet  WHERE  c.id =$salereturn->id "));
 
 
+            DB::update(DB::raw("
+            UPDATE sale_invoices c
+            INNER JOIN (
+
+                SELECT customer_id,invoiceid,SUM(invsbal) AS invoicebal FROM
+                (
+
+                    SELECT customer_id ,id AS invoiceid,totrcvbamount AS invsbal FROM sale_invoices
+                    WHERE customer_id=$salereturn->customer_id  AND id in(  SELECT invoice_id FROM sale_returns WHERE id=$salereturn->id )
+                    UNION ALL
+                     SELECT subhead_id, invoice_id,b.totrcvd*-1 AS invsbal
+                     FROM bank_transactions AS a INNER join receive_details AS b ON a.id=b.receivedid and a.subhead_id =$salereturn->customer_id
+                     AND invoice_id in(  SELECT invoice_id FROM sale_returns WHERE id=$salereturn->id )
+                     UNION all
+                     SELECT a.customer_id,invoice_id,a.totrcvbamount*-1 AS invsbal
+                     FROM sale_returns AS a INNER JOIN sale_invoices AS b  ON a.invoice_id=b.id  WHERE a.customer_id =$salereturn->customer_id
+                     AND invoice_id in(SELECT invoice_id FROM sale_returns WHERE id=$salereturn->id)
+                     UNION all
+                     SELECT a.subhead_id, b.id AS  invoice_id,a.amount_fc AS invsbal
+                     FROM bank_transactions AS a INNER join sale_invoices AS b ON a.cusinvid=b.dcno AND a.subhead_id =$salereturn->customer_id
+                     AND b.id  in(SELECT invoice_id FROM sale_returns WHERE id=$salereturn->id)
+
+               ) AS w GROUP BY customer_id,invoiceid
+            ) x ON c.id = x.invoiceid
+            SET c.paymentbal = x.invoicebal
+            where  c.id in(select invoice_id from sale_returns where id=$salereturn->id  ) "));
+
+
+
+
+
+
+
+
+
+
+
+
             DB::delete(DB::raw(" delete from office_item_bal where ttypeid=6 and  transaction_id=$salereturn->id   "));
 
             // DB::insert(DB::raw("
@@ -600,4 +705,67 @@ class SalesRetunrsController  extends Controller
         // 'S': returns the PDF document as a string
         // 'F': save as file $file_out
     }
+
+
+
+    public function deleteBankRequest(Request $request)
+    {
+
+
+//  dd($request->invsid);
+        DB::beginTransaction();
+            try {
+
+                DB::delete(DB::raw(" delete from sale_returns where id=$request->sale_return_id   "));
+                DB::delete(DB::raw(" delete from sale_return_details where sale_return_id=$request->sale_return_id   "));
+
+
+                DB::update(DB::raw("
+                UPDATE sale_invoices c
+                INNER JOIN (
+
+                    SELECT customer_id,invoiceid,SUM(invsbal) AS invoicebal FROM
+                    (
+
+                        SELECT customer_id ,id AS invoiceid,totrcvbamount AS invsbal FROM sale_invoices
+                        WHERE customer_id=$request->customer_id  AND id=$request->invsid
+                        UNION ALL
+                         SELECT subhead_id, invoice_id,b.totrcvd*-1 AS invsbal
+                         FROM bank_transactions AS a INNER join receive_details AS b ON a.id=b.receivedid and a.subhead_id =$request->customer_id
+                         AND invoice_id =$request->invsid
+                         UNION all
+                         SELECT a.customer_id,invoice_id,a.totrcvbamount*-1 AS invsbal
+                         FROM sale_returns AS a INNER JOIN sale_invoices AS b  ON a.invoice_id=b.id  WHERE a.customer_id =$request->customer_id
+                         AND invoice_id =$request->invsid
+                         UNION all
+                         SELECT a.subhead_id, b.id AS  invoice_id,a.amount_fc AS invsbal
+                         FROM bank_transactions AS a INNER join sale_invoices AS b ON a.cusinvid=b.dcno AND a.subhead_id =$request->customer_id
+                         AND b.id  =$request->invsid
+
+                   ) AS w GROUP BY customer_id,invoiceid
+                ) x ON c.id = x.invoiceid
+                SET c.paymentbal = x.invoicebal
+                where  c.id = $request->invsid "));
+
+
+
+                DB::delete(DB::raw(" delete from office_item_bal where ttypeid=6 and  transaction_id=$request->sale_return_id   "));
+
+                DB::commit();
+
+
+                Session::flash('success','Record Deleted Successfully');
+                return response()->json(['success'],200);
+
+            } catch (\Throwable $th) {
+                DB::rollback();
+                throw $th;
+            }
+
+
+
+    }
+
+
+
 }

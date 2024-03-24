@@ -58,13 +58,13 @@
                                 </div>
                                 <div>
 
-                                    <input class="checked:bg-blue-500 checked:border-blue-500 focus:outline-none"  type="checkbox"  name="del" id="del" disabled   onclick="delmode(this)" >
+                                    {{-- <input class="checked:bg-blue-500 checked:border-blue-500 focus:outline-none"  type="checkbox"  name="del" id="del" disabled   onclick="delmode(this)" >
                                     <label for="">
                                         <span style="color: brown;font-weight: bold"> Delete Mode </span> <span class="text-red-500 font-semibold font-size:1rem "></span>
-                                        </label>
+                                        </label> --}}
 
-                                    <x-input-text title="Password For Deletion" name="delpwrd" id="delpwrd" type="password" class="col-span-2"    />
-                                    <x-input-text title="" name="delpwrd2" id="delpwrd2" hidden  class="col-span-2"    value="{{$passwrddel}}" />
+                                    {{-- <x-input-text title="Password For Deletion" name="delpwrd" id="delpwrd" type="password" class="col-span-2"    />
+                                    <x-input-text title="" name="delpwrd2" id="delpwrd2" hidden  class="col-span-2"    value="{{$passwrddel}}" /> --}}
                                     <x-input-text title="" name="p2" id="p2" value="0" hidden  />
                                     <x-input-text title="" name="cheque_nofd" id="cheque_nofd" hidden value="{{ $cheque_no }}" req required class="col-span-2" disabled  />
                                     <x-input-text title="" name="gdno" id="gdno" value="{{ $vgdno }}" hidden disabled  />
@@ -254,22 +254,22 @@ document.addEventListener('DOMContentLoaded',()=>{
 
     }
 
-    delpwrd.onblur=function(){
-    if(delpwrd.value == delpwrd2.value )
-     {
-        // document.getElementById("submitButton").disabled = false;
-        document.getElementById('del').disabled=false;
+    // delpwrd.onblur=function(){
+    // if(delpwrd.value == delpwrd2.value )
+    //  {
+    //     // document.getElementById("submitButton").disabled = false;
+    //     document.getElementById('del').disabled=false;
 
-    }
-    else
-    {
-        // document.getElementById("submitButton").disabled = true;
-        document.getElementById('del').disabled=true;
+    // }
+    // else
+    // {
+    //     // document.getElementById("submitButton").disabled = true;
+    //     document.getElementById('del').disabled=true;
 
-    }
+    // }
 
 
-    }
+    // }
 
 
 

@@ -191,7 +191,14 @@ Route::resource('materials', MaterialController::class);
 //  Users Controller
 Route::resource('users',UserController::class);
 // Contract Controller
+
+
+
 Route::get('/contracts/{contract}/printcontract', [ContractController::class, 'printContract'])->name('contracts.print');
+Route::post('/contracts/deleteBankRequest', [ContractController::class, 'deleteBankRequest'])->name('contracts.del');
+Route::get('/contracts/{id}/deleterec', [ContractController::class, 'deleterec']);
+
+
 Route::get('/contracts/getContractMaster', [ContractController::class, 'getMaster'])->name('contracts.master');
 Route::get('/contracts/getContractMasterI', [ContractController::class, 'getMasterImp'])->name('contracts.masterI');
 Route::get('/contracts/getContractMasterL', [ContractController::class, 'getMasterLoc'])->name('contracts.masterL');
@@ -202,6 +209,11 @@ Route::resource('contracts', ContractController::class);
 
 
 //  CommercialInvoice
+
+Route::post('/cis/deleteBankRequest', [CommercialInvoiceController::class, 'deleteBankRequest'])->name('cis.del');
+Route::get('/cis/{id}/deleterec', [CommercialInvoiceController::class, 'deleterec']);
+
+
 Route::get('/cis/getCisMaster', [CommercialInvoiceController::class, 'getMaster'])->name('cis.master');
 Route::get('/cis/getCisDetails', [CommercialInvoiceController::class, 'getDetails'])->name('cis.details');
 Route::get('/cid/getContractMasterI', [CommercialInvoiceController::class, 'getMasterImp'])->name('contracts.masterII');
@@ -214,6 +226,13 @@ Route::get('/cis/getcidMaster', [CommercialInvoiceController::class, 'getMasterd
 Route::resource('cis', CommercialInvoiceController::class);
 
 //  CommercialInvoice - LOCAL NEW
+
+
+Route::post('/localpurchase/deleteBankRequest', [LocalPurchaseController::class, 'deleteBankRequest'])->name('localpurchase.del');
+Route::get('/localpurchase/{id}/deleterec', [LocalPurchaseController::class, 'deleterec']);
+
+
+
 Route::get('/localpurchase/getPurchaseMaster', [LocalPurchaseController::class, 'getMaster'])->name('localpurchase.master');
 Route::get('/localpurchase/getPurchaseDetails', [LocalPurchaseController::class, 'getDetail'])->name('localpurchase.details');
 Route::get('/localpurchase/getLocmatMaster', [LocalPurchaseController::class, 'matMaster'])->name('locmat.master');
@@ -231,6 +250,10 @@ Route::resource('openinggodownstock', OpeningGodownStockController::class);
 
 //  Sales Invoices with purchase orders
 
+Route::post('/sales/deleteBankRequest', [SalesInvoicesController::class, 'deleteBankRequest'])->name('sales.del');
+Route::get('/saleinvoices/{id}/deleterec', [SalesInvoicesController::class, 'deleterec']);
+
+
 Route::get('/sales/getSalesMaster', [SalesInvoicesController::class, 'getMaster'])->name('sales.master');
 Route::get('/sales/getSalesDetails', [SalesInvoicesController::class, 'getDetail'])->name('sales.details');
 Route::get('/sales/getSalesCustplan', [SalesInvoicesController::class, 'getMastercustplan'])->name('sales.custplan');
@@ -239,6 +262,10 @@ Route::resource('saleinvoices', SalesInvoicesController::class);
 
 
 //  Sales Invoices with out purchase orders
+
+Route::post('/salewopo/deleteBankRequest', [SalesInvoiceWopoController::class, 'deleteBankRequest'])->name('salewopo.del');
+Route::get('/salewopo/{id}/deleterec', [SalesInvoiceWopoController::class, 'deleterec']);
+
 
 Route::get('/salewopo/getSalesMaster', [SalesInvoiceWopoController::class, 'getMaster'])->name('saleswopo.master');
 Route::get('/salewopo/getSalesDetails', [SalesInvoiceWopoController::class, 'getDetail'])->name('saleswopo.details');
@@ -272,6 +299,12 @@ Route::resource('godownmovementr', GodownMovementControllerR::class);
 
 
 //  Gate Pass
+
+Route::post('/gatepasse/deleteBankRequest', [GatepasseController::class, 'deleteBankRequest'])->name('gatepasse.del');
+Route::get('/gatepasse/{id}/deleterec', [GatepasseController::class, 'deleterec']);
+
+
+
 Route::get('/gatepasse/getSalesMaster', [GatepasseController::class, 'getMaster'])->name('gatepasse.master');
 Route::get('/gatepasse/getSalesDetails', [GatepasseController::class, 'getDetail'])->name('gatepasse.details');
 Route::get('/gatepasse/getInvsMaster', [GatepasseController::class, 'getMasterinvs'])->name('gatepasse.dcmaster');
@@ -286,6 +319,11 @@ Route::resource('gatepasse', GatepasseController::class);
 
 
 //  Sales Return Invoices
+
+Route::post('/salereturn/deleteBankRequest', [SalesRetunrsController::class, 'deleteBankRequest'])->name('salereturn.del');
+Route::get('/salereturn/{id}/deleterec', [SalesRetunrsController::class, 'deleterec']);
+
+
 Route::get('/sales/getSalesrMaster', [SalesRetunrsController::class, 'getMaster'])->name('saler.master');
 Route::get('/sales/getSalesrDetails', [SalesRetunrsController::class, 'getDetail'])->name('saler.details');
 Route::get('/sales/getSalesrCustplan', [SalesRetunrsController::class, 'getMastersaler'])->name('salei.master');
@@ -296,6 +334,10 @@ Route::resource('salereturn', SalesRetunrsController::class);
 
 //  Quotation
 
+
+Route::post('/quotations/deleteBankRequest', [QuotationController::class, 'deleteBankRequest'])->name('quotations.del');
+Route::get('/quotations/{id}/deleterec', [QuotationController::class, 'deleterec']);
+
 Route::get('/quotations/getQuotationsMaster', [QuotationController::class, 'getMaster'])->name('quotations.master');
 Route::get('/quotations/getQuotationsDetails', [QuotationController::class, 'getDetail'])->name('quotations.details');
 Route::get('/quotations/getMmfrqut', [QuotationController::class, 'getmmfrqut'])->name('quotations.mmfrqut');
@@ -305,6 +347,11 @@ Route::get('/quotations/getqutindex', [QuotationController::class, 'qutIndex'])-
 Route::resource('quotations', QuotationController::class);
 
 //  Customer Orders
+
+Route::post('/customerorder/deleteBankRequest', [CustomerOrderController::class, 'deleteBankRequest'])->name('customerorder.del');
+Route::get('/customerorder/{id}/deleterec', [CustomerOrderController::class, 'deleterec']);
+
+
 Route::get('/custorders/getQuotationsMaster', [CustomerOrderController::class, 'getMaster'])->name('custorders.master');
 Route::get('/custorders/getQuotationsDetails', [CustomerOrderController::class, 'getDetail'])->name('custorders.details');
 Route::get('/custorders/getcidMaster', [CustomerOrderController::class, 'getMasterqut'])->name('custorders.quotations');
@@ -315,7 +362,7 @@ Route::resource('customerorder', CustomerOrderController::class);
 
 //  Payment Voucher
 // Route::get('/materials/{id}/copyMaterial', [MaterialController::class, 'copyMaterial'])->name('materials.copy');
-Route::post('/banktransaction/delete', [PaymentController::class, 'delete'])->name('banktransaction.del');
+Route::post('/banktransaction/deleteBankRequest', [PaymentController::class, 'deleteBankRequest'])->name('banktransaction.del');
 Route::get('/banktransaction/{id}/deleterec', [PaymentController::class, 'deleterec']);
 
 
@@ -329,6 +376,10 @@ Route::resource('banktransaction', PaymentController::class);
 
 
 //  Received Voucher
+
+Route::post('/banktransactionr/deleteBankRequest', [ReceiveController::class, 'deleteBankRequest'])->name('banktransactionr.del');
+Route::get('/banktransactionr/{id}/deleterec', [ReceiveController::class, 'deleterec']);
+
 Route::get('/banktransactionr/getQuotationsMaster', [ReceiveController::class, 'getMaster'])->name('banktransactionr.master');
 Route::get('/banktransactionr/getQuotationsDetails', [ReceiveController::class, 'getDetail'])->name('banktransactionr.details');
 Route::get('/banktransactionr/getcidMaster', [ReceiveController::class, 'getMasterqut'])->name('banktransactionr.quotations');
@@ -346,6 +397,10 @@ Route::resource('banktransactionr', ReceiveController::class);
 
 
 //  Purchase Return
+Route::post('/purchasereturn/deleteBankRequest', [PurchaseReturnController::class, 'deleteBankRequest'])->name('purchasereturn.del');
+Route::get('/purchasereturn/{id}/deleterec', [PurchaseReturnController::class, 'deleterec']);
+
+
 Route::get('/purchasereturn/getQuotationsMaster', [PurchaseReturnController::class, 'getMaster'])->name('purchasereturn.master');
 Route::get('/purchasereturn/getQuotationsDetails', [PurchaseReturnController::class, 'getDetail'])->name('purchasereturn.details');
 Route::get('/purchasereturn/getcidMaster', [PurchaseReturnController::class, 'getMasterqut'])->name('purchasereturn.quotations');
@@ -355,6 +410,12 @@ Route::resource('purchasereturn', PurchaseReturnController::class);
 
 
 //  Purchasing Imported
+
+Route::post('/purchasing/deleteBankRequest', [PurchasingController::class, 'deleteBankRequest'])->name('purchasing.del');
+Route::get('/purchasing/{id}/deleterec', [PurchasingController::class, 'deleterec']);
+
+
+
 Route::get('/Purchasing/getPurchasingMaster', [PurchasingController::class, 'getMaster'])->name('purchasing.master');
 Route::get('/Purchasing/getPurchasingDetails', [PurchasingController::class, 'getDetail'])->name('purchasing.details');
 Route::get('/Purchasing/getContractDetails', [PurchasingController::class, 'getContractDetails'])->name('contfrpur.dtl');
@@ -362,6 +423,11 @@ Route::resource('purchasing', PurchasingController::class);
 
 
 //  Purchasing Local
+Route::post('/purchasingloc/deleteBankRequest', [PurchasinglocController::class, 'deleteBankRequest'])->name('purchasingloc.del');
+Route::get('/purchasingloc/{id}/deleterec', [PurchasinglocController::class, 'deleterec']);
+
+
+
 Route::get('/Purchasingloc/getPurchasingMaster', [PurchasinglocController::class, 'getMaster'])->name('purchasingloc.master');
 Route::get('/Purchasingloc/getPurchasingDetails', [PurchasinglocController::class, 'getDetail'])->name('purchasingloc.details');
 Route::get('/Purchasingloc/PurinvsMaster', [PurchasinglocController::class, 'getMasterpendipurnvs'])->name('purinvs.master');
@@ -370,6 +436,11 @@ Route::resource('purchasingloc', PurchasinglocController::class);
 
 
 //  Godown purhcase return
+
+Route::post('/godownpr/deleteBankRequest', [GodownprController::class, 'deleteBankRequest'])->name('godownpr.del');
+Route::get('/godownpr/{id}/deleterec', [GodownprController::class, 'deleterec']);
+
+
 Route::get('/godownpr/getPurchasingMaster', [GodownprController::class, 'getMaster'])->name('godownpr.master');
 Route::get('/godownpr/getPurchasingDetails', [GodownprController::class, 'getDetail'])->name('godownpr.details');
 Route::get('/godownpr/PurinvsMaster', [GodownprController::class, 'getMasterpendipurnvs'])->name('purinvspr.master');
@@ -378,6 +449,10 @@ Route::resource('godownpr', GodownprController::class);
 
 
 //  Godown sale return
+Route::post('/godownsr/deleteBankRequest', [GodownsrController::class, 'deleteBankRequest'])->name('godownsr.del');
+Route::get('/godownsr/{id}/deleterec', [GodownsrController::class, 'deleterec']);
+
+
 Route::get('/godownsr/getPurchasingMaster', [GodownsrController::class, 'getMaster'])->name('godownsr.master');
 Route::get('/godownsr/getPurchasingDetails', [GodownsrController::class, 'getDetail'])->name('godownsr.details');
 Route::get('/godownsr/PurinvsMaster', [GodownsrController::class, 'getMasterpendipurnvs'])->name('purinvssr.master');
@@ -416,6 +491,10 @@ Route::resource('recivings', RecivingController::class)->except(['create','store
 // Route::get('/clearances/details', [ClearanceController::class, 'getDetails'])->name('clearances.details');
 //  Route::get('/clearances/ccd', [ClearanceController::class, 'updateCompletedClearance'])->name('clearances.updatercd');
 
+Route::post('/clearance/deleteBankRequest', [ClearanceController::class, 'deleteBankRequest'])->name('clearance.del');
+Route::get('/clearance/{id}/deleterec', [ClearanceController::class, 'deleterec']);
+
+
 Route::get('/clearance/getCisclrMaster', [ClearanceController::class, 'getMaster'])->name('cisclr.master');
 Route::get('/clearance/getCisclrDetails', [ClearanceController::class, 'getDetails'])->name('clearances.details');
 
@@ -434,6 +513,13 @@ Route::resource('banks',BankController::class);
 Route::get('/bankpayments/master', [BankPaymentsController::class, 'getMaster'])->name('bankpayments.master');
 Route::resource('bankpayments',BankPaymentsController::class)->except(['create','show','destroy']);
 //  Bank Recivings
+
+
+
+Route::post('/bankrecivings/deleteBankRequest', [BankRecivingsController::class, 'deleteBankRequest'])->name('bankrecivings.del');
+Route::get('/bankrecivings/{id}/deleterec', [BankRecivingsController::class, 'deleterec'])->name('bankrecivings.deleterec');
+
+
 Route::get('/bankrecivings/master', [BankRecivingsController::class, 'getMaster'])->name('bankrecivings.master');
 Route::resource('bankrecivings',BankRecivingsController::class)->except(['create','show','destroy']);
 //  Cash Payment
@@ -447,6 +533,12 @@ Route::resource('cashrecivings',CashRecivingsController::class)->except(['create
 
 
 //  Journal Vouchers
+
+
+Route::post('/jv/deleteBankRequest', [VoucherController::class, 'deleteBankRequest'])->name('jv.del');
+Route::get('/jv/{id}/deleterec', [VoucherController::class, 'deleterec'])->name('jv.deleterec');
+
+
 Route::get('/jv/master', [VoucherController::class, 'getMaster'])->name('jv.master');
 Route::resource('jv',VoucherController::class);
 

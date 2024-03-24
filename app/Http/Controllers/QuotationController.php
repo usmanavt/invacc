@@ -284,6 +284,49 @@ class QuotationController  extends Controller
     }
 
 
+
+
+    public function deleterec($id)
+    {
+
+        $rsrvpo = CustomerOrder::where('quotation_id',$id)->max('quotation_id');
+        $passwrd = DB::table('tblpwrd')->select('pwrdtxtdel')->max('pwrdtxtdel');
+
+        $cd = DB::table('quotation_details')
+        ->join('materials', 'materials.id', '=', 'quotation_details.material_id')
+        ->join('skus', 'skus.id', '=', 'quotation_details.sku_id')
+        ->select('quotation_details.*','materials.title as material_title','materials.dimension','skus.title as sku')
+        ->where('sale_invoice_id',$id)->get();
+         $data=compact('cd');
+
+        // DB::table('skus')->select('id AS dunitid','title AS dunit')
+        // ->whereIn('id',[1,2])->get();
+
+
+
+        return view('quotations.deleterec',compact('passwrd','rsrvpo'))
+        ->with('customer',Customer::select('id','title')->get())
+        // ->with('materials',Material::select('id','category')->get())
+        ->with('quotation',Quotation::findOrFail($id))
+        // ->with('cd',QuotationDetails::where('sale_invoice_id',$id)->get())
+        ->with($data)
+        ->with('locations',Location::select('id','title')->get())
+        ->with('skus',Sku::select('id','title')->get());
+
+        // return view('contracts.edit')->with('suppliers',Supplier::select('id','title')->get())->with('contract',$contract)->with('cd',ContractDetails::where('contract_id',$contract->id)->get());
+    }
+
+
+
+
+
+
+
+
+
+
+
+
     public function update(Request $request, Quotation $quotation)
     {
         //  dd($commercialinvoice->commercial_invoice_id());
@@ -491,4 +534,56 @@ class QuotationController  extends Controller
         // 'S': returns the PDF document as a string
         // 'F': save as file $file_out
     }
+
+
+
+    public function deleteBankRequest(Request $request)
+    {
+
+
+//  dd($request->invsid);
+        DB::beginTransaction();
+            try {
+
+
+
+
+
+                // DB::update(DB::raw("
+                // UPDATE quotations c
+                // INNER JOIN (
+                // SELECT quotation_id,SUM(b.qtykg) AS qty,SUM(b.saleamnt) AS amount from customer_orders as a inner join customer_order_details as b on a.id=b.sale_invoice_id
+                // WHERE quotation_id=$request->quotation_id GROUP BY quotation_id
+                // ) x ON c.id = x.quotation_id
+                // SET c.tqpendqty = c.tqpendqty + coalesce(x.qty,0), c.tqpendval = c.tqpendval + coalesce(x.amount,0) WHERE  c.id = $request->quotation_id"));
+
+                // DB::update(DB::raw("
+                // UPDATE quotation_details c
+                // INNER JOIN (
+                // SELECT quotation_id,material_id,SUM(b.qtykg) AS qty,SUM(b.saleamnt) AS amount from customer_orders as a inner join customer_order_details as b on a.id=b.sale_invoice_id
+                // WHERE quotation_id=$request->quotation_id GROUP BY quotation_id,material_id
+                // ) x ON c.sale_invoice_id = x.quotation_id and c.material_id=x.material_id
+                // SET c.tqtpendqty = c.tqtpendqty + coalesce(x.qty,0) WHERE  c.sale_invoice_id = $request->quotation_id"));
+
+
+
+                DB::delete(DB::raw(" delete from quotations where id=$request->sale_invoice_id   "));
+                DB::delete(DB::raw(" delete from quotation_details where sale_invoice_id=$request->sale_invoice_id   "));
+                DB::commit();
+
+
+                Session::flash('success','Record Deleted Successfully');
+                return response()->json(['success'],200);
+
+            } catch (\Throwable $th) {
+                DB::rollback();
+                throw $th;
+            }
+
+
+
+    }
+
+
+
 }

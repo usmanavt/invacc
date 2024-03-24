@@ -885,22 +885,7 @@ var updateValues = (cell) => {
                 },
                 {title:"Id",           field:"id", visible:false},
                 {title:"Packaging Type",     field:"packing",responsive:0},
-                // {title:"dimension",    field:"dimension",responsive:0,frozen:true, headerMenu:headerMenu},
-                // {title:"Unit",         field:"sku",responsive:0},
-                // {title:"Unitid",       field:"sku_id",visible:false},
-                // {title:"contract_id",  field:"contract_id",visible:false},
-                // {title:"material_id",  field:"material_id",visible:false},
                 {title:"supplier_id",  field:"supplier_id",visible:false},
-                // {title:"user_id",      field:"user_id",visible:false},
-                // {title:"category_id",  field:"category_id",visible:false},
-                // {title:"sku_id",       field:"sku_id",visible:false},
-                // {title:"dimension_id", field:"dimension_id",visible:false},
-                // {title:"source_id",    field:"source_id",visible:false},
-                // {title:"brand_id",     field:"brand_id",visible:false},
-
-                // {title:"totpcs",     field:"pcs",visible:true},
-                // {title:"totwt",     field:"gdswt",visible:true},
-
 
                 {
                     title:'Quantity', headerHozAlign:"center",
@@ -920,6 +905,7 @@ var updateValues = (cell) => {
                         {   title:"HS code",headerHozAlign :'center',
                             field:"hscode",
                             // editor:"list",
+                            width:120,
                             responsive:0,
                             headerVertical:true,
                             // cssClass:"bg-green-200 font-semibold",
@@ -930,6 +916,7 @@ var updateValues = (cell) => {
                         },
 
                         {   title:"Nos Of Bundles",headerHozAlign :'center',
+                            width:80,
                             responsive:0,
                             field:"packingwtbal",
                             editor:"number",
@@ -981,6 +968,7 @@ var updateValues = (cell) => {
                         // },
 
                         {   title:"Pcs",headerHozAlign :'center',
+                            width:120,
                             responsive:0,
                             field:"pcsbal",
                             // editor:"number",
@@ -1000,6 +988,7 @@ var updateValues = (cell) => {
 
                         {   title:"Duty.Wt(Kg)",
                             field:"dutygdswt",
+                            width:120,
                             responsive:0,
                             bottomCalc:"sum",
                             editor:"number",
@@ -1015,6 +1004,7 @@ var updateValues = (cell) => {
                             headerVertical:true,
                             formatter:"money",
                             editor:"number",
+                            width:120,
                             responsive:0,
                             formatterParams:{thousand:",",precision:2},
                             validator:["required","numeric"],
@@ -1023,6 +1013,7 @@ var updateValues = (cell) => {
 
                         {   title:"Duty.Val($)",
                             field:"dtyamtindollar",
+                            width:150,
                             responsive:0,
                             headerVertical:true,
                             formatter:"money",
@@ -1032,6 +1023,7 @@ var updateValues = (cell) => {
                         },
                         {   title:"Duty.Val(Rs)",
                             field:"dtyamtinpkr",
+                            width:150,
                             responsive:0,
                             headerVertical:true,
                             formatter:"money",
@@ -1078,7 +1070,9 @@ var updateValues = (cell) => {
 
                 {   title:"Item Ratio(%)",
                             field:"dtyitmratio",
+                            width:100,
                             responsive:0,
+
                             bottomCalc:"sum",bottomCalcParams:{precision:0},
                             headerVertical:true,
                             formatter:"money",
@@ -1088,6 +1082,7 @@ var updateValues = (cell) => {
                 {
                     title:"Insurance/Item($)",
                     field:"dtyinsuranceperitem",
+                    width:100,
                     responsive:0,
                     bottomCalc:"sum",bottomCalcParams:{precision:0},
                     headerVertical:true,
@@ -1096,6 +1091,7 @@ var updateValues = (cell) => {
                 {
                     title:"Insurance/Item(Rs)",
                     field:"dtyinsuranceperitemrs",
+                    width:100,
                     responsive:0,
                     bottomCalc:"sum",bottomCalcParams:{precision:0},
                     headerVertical:true,
@@ -1105,6 +1101,7 @@ var updateValues = (cell) => {
                 {
                     title:"Amt W/Insurance (Rs)",
                     field:"dtyamountwithoutinsurance",
+                    width:100,
                     responsive:0,
                     bottomCalc:"sum",bottomCalcParams:{precision:0},
                     headerVertical:true,
@@ -1113,14 +1110,12 @@ var updateValues = (cell) => {
                  {
                     title:"1% Duty (PKR)",
                     field:"dtyonepercentdutypkr",
+                    width:100,
                     responsive:0,
                     bottomCalc:"sum",bottomCalcParams:{precision:0},
                     headerVertical:true,
                     formatter:"money",
                 },
-
-
-
 
 
                 {title:"WSE",  field:"wse",   formatter:"money",editor:"number",
@@ -1206,21 +1201,21 @@ var updateValues = (cell) => {
 
 
                         {title:"CD",                field:"cda", formatter:"money",
-                        formatterParams:{thousand:",",precision:0},             responsive:0,bottomCalc:"sum",bottomCalcParams:{precision:0}},
+                        formatterParams:{thousand:",",precision:0},             responsive:0,width:120,bottomCalc:"sum",bottomCalcParams:{precision:0}},
                             {title:"ST",                field:"sta", formatter:"money",
-                        formatterParams:{thousand:",",precision:0},             responsive:0,bottomCalc:"sum",bottomCalcParams:{precision:0}},
+                        formatterParams:{thousand:",",precision:0},             responsive:0,width:120,bottomCalc:"sum",bottomCalcParams:{precision:0}},
                             {title:"RD",                field:"rda", formatter:"money",
-                        formatterParams:{thousand:",",precision:0},             responsive:0,bottomCalc:"sum",bottomCalcParams:{precision:0}},
+                        formatterParams:{thousand:",",precision:0},             responsive:0,width:120,bottomCalc:"sum",bottomCalcParams:{precision:0}},
                             {title:"ACD",               field:"acda", formatter:"money",
-                        formatterParams:{thousand:",",precision:0},            responsive:0,bottomCalc:"sum",bottomCalcParams:{precision:0}},
+                        formatterParams:{thousand:",",precision:0},            responsive:0,width:120,bottomCalc:"sum",bottomCalcParams:{precision:0}},
                             {title:"AST",               field:"asta",  formatter:"money",
-                        formatterParams:{thousand:",",precision:0},           responsive:0,bottomCalc:"sum",bottomCalcParams:{precision:0}},
+                        formatterParams:{thousand:",",precision:0},           responsive:0,width:120,bottomCalc:"sum",bottomCalcParams:{precision:0}},
                             {title:"IT",                field:"ita",  formatter:"money",
-                        formatterParams:{thousand:",",precision:0},            responsive:0,bottomCalc:"sum",bottomCalcParams:{precision:0}},
+                        formatterParams:{thousand:",",precision:0},            responsive:0,width:120,bottomCalc:"sum",bottomCalcParams:{precision:0}},
                             {title:"WSE",visible:false,               field:"wsca",  formatter:"money",
-                        formatterParams:{thousand:",",precision:0},           responsive:0,bottomCalc:"sum",bottomCalcParams:{precision:0}},
+                        formatterParams:{thousand:",",precision:0},           responsive:0,width:120,bottomCalc:"sum",bottomCalcParams:{precision:0}},
                             {title:"Total Duty", cssClass:"bg-green-200 font-semibold",  field:"total", headerVertical:true,  formatter:"money",formatterParams:{thousand:",",precision:0},
-                         responsive:0,bottomCalc:"sum",bottomCalcParams:{precision:0}},
+                         responsive:0,width:120,bottomCalc:"sum",bottomCalcParams:{precision:0}},
 
 
 

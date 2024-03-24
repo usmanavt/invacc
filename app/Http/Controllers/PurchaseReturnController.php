@@ -12,6 +12,8 @@ use App\Models\CustomerOrderDetails;
 
 use App\Models\PurchaseReturn;
 use App\Models\PurchaseReturnDetail;
+use App\Models\Godownpr;
+
 
 use App\Models\Supplier;
 
@@ -200,6 +202,44 @@ class PurchaseReturnController  extends Controller
             where  id = $ci->id
             "));
 
+
+
+            DB::update(DB::raw("
+            UPDATE commercial_invoices c
+            INNER JOIN (
+
+                SELECT suppid,invsid,SUM(invoiceamount) AS invoicebal FROM
+                (
+                SELECT b.id AS suppid,a.id AS invsid,case WHEN b.source_id=2 then a.tval else  total end AS invoiceamount FROM commercial_invoices AS a
+                INNER JOIN suppliers AS b ON a.supplier_id=b.id  AND b.id=$ci->supplier_id AND a.id =$ci->commercial_invoice_id
+                UNION all
+                 SELECT a.subhead_id,b.invoice_id,b.payedusd*-1 AS payment
+                FROM bank_transactions AS a INNER join payment_details AS b ON a.id=b.paymentid and a.subhead_id =$ci->supplier_id
+                AND b.invoice_id =$ci->commercial_invoice_id
+               UNION ALL
+                SELECT supplier_id,commercial_invoice_id,prtamount*-1 AS retqty FROM purchase_returns WHERE supplier_id =$ci->supplier_id
+                AND commercial_invoice_id =$ci->commercial_invoice_id
+               UNION ALL
+                SELECT a.subhead_id, b.id AS  invoice_id,a.amount_fc AS Receivedqty
+                FROM bank_transactions AS a INNER join commercial_invoices AS b ON a.supinvid=b.invoiceno AND a.subhead_id =$ci->supplier_id
+                AND b.id  =$ci->commercial_invoice_id
+               ) AS w GROUP BY suppid,invsid
+            ) x ON c.id = x.invsid
+            SET c.invoicebal = x.invoicebal
+            where  c.id =$ci->commercial_invoice_id "));
+
+
+
+
+
+
+
+
+
+
+
+
+
             DB::insert(DB::raw("
             INSERT INTO office_item_bal(transaction_id,tdate,ttypedesc,ttypeid,material_id,uom,tqtykg,tqtypcs,tqtyfeet,tcostkg,tcostpcs,tcostfeet,transvalue)
             SELECT a.id AS transid,a.prdate,'Purchase Return',5,b.material_id,b.prunitid,prwt*-1,prpcs*-1,prfeet*-1,prprice,prprice,prprice,pramount*-1
@@ -231,9 +271,31 @@ class PurchaseReturnController  extends Controller
         ->with('purchasereturn',PurchaseReturn::findOrFail($id))
         ->with($data)
         ->with('skus',Sku::select('id','title')->get());
-
-        // return view('contracts.edit')->with('suppliers',Supplier::select('id','title')->get())->with('contract',$contract)->with('cd',ContractDetails::where('contract_id',$contract->id)->get());
     }
+
+
+    public function deleterec($id)
+    {
+
+        $passwrd = DB::table('tblpwrd')->select('pwrdtxtdel')->max('pwrdtxtdel');
+        $prgp = Godownpr::where('contract_id',$id)->max('contract_id');;
+
+        // $cd = DB::table('vwpreditdtl')->select('vwpreditdtl.*')->where('id',$id)->get();
+        $cd = DB::select('call procpurretedit(?)',array( $id ));
+         $data=compact('cd');
+         return view('purchasereturn.deleterec',compact('passwrd','prgp'))
+        ->with('supplier',Supplier::select('id','title')->get())
+        ->with('purchasereturn',PurchaseReturn::findOrFail($id))
+        ->with($data)
+        ->with('skus',Sku::select('id','title')->get());
+    }
+
+
+
+
+
+
+
 
 
     public function update(Request $request, PurchaseReturn $purchasereturn)
@@ -282,6 +344,33 @@ class PurchaseReturnController  extends Controller
                 c.prbalpcs = x.pcs,c.prbalwt=x.wt,c.prbalfeet=x.ft
                 where  id = $ci->id
                 "));
+
+
+                DB::update(DB::raw("
+                UPDATE commercial_invoices c
+                INNER JOIN (
+
+                    SELECT suppid,invsid,SUM(invoiceamount) AS invoicebal FROM
+                    (
+                    SELECT b.id AS suppid,a.id AS invsid,case WHEN b.source_id=2 then a.tval else  total end AS invoiceamount FROM commercial_invoices AS a
+                    INNER JOIN suppliers AS b ON a.supplier_id=b.id  AND b.id=$ci->supplier_id
+                    AND a.id in( select distinct commercial_invoice_id from purchase_returns where id=$ci->id  )
+                    UNION all
+                     SELECT a.subhead_id,b.invoice_id,b.payedusd*-1 AS payment
+                    FROM bank_transactions AS a INNER join payment_details AS b ON a.id=b.paymentid and a.subhead_id =$ci->supplier_id
+                    AND b.invoice_id in( select distinct commercial_invoice_id from purchase_returns where id=$ci->id  )
+                   UNION ALL
+                    SELECT supplier_id,commercial_invoice_id,prtamount*-1 AS retqty FROM purchase_returns WHERE supplier_id =$ci->supplier_id
+                    AND commercial_invoice_id in( select distinct commercial_invoice_id from purchase_returns where id=$ci->id  )
+                   UNION ALL
+                    SELECT a.subhead_id, b.id AS  invoice_id,a.amount_fc AS Receivedqty
+                    FROM bank_transactions AS a INNER join commercial_invoices AS b ON a.supinvid=b.invoiceno AND a.subhead_id =$ci->supplier_id
+                    AND b.id  in( select distinct commercial_invoice_id from purchase_returns where id=$ci->id  )
+                   ) AS w GROUP BY suppid,invsid
+                ) x ON c.id = x.invsid
+                SET c.invoicebal = x.invoicebal
+                where  c.id in( select distinct commercial_invoice_id from purchase_returns where id=$ci->id  )  "));
+
 
                 DB::delete(DB::raw(" delete from office_item_bal where ttypeid=5 and  transaction_id=$ci->id   "));
 
@@ -354,4 +443,66 @@ class PurchaseReturnController  extends Controller
         // 'S': returns the PDF document as a string
         // 'F': save as file $file_out
     }
+
+    public function deleteBankRequest(Request $request)
+    {
+
+
+//  dd($request->invsid);
+        DB::beginTransaction();
+            try {
+
+
+
+                DB::update(DB::raw("  update purchase_returns SET prtamount=0 WHERE id=$request->prid "));
+
+                DB::update(DB::raw("
+                UPDATE commercial_invoices c
+                INNER JOIN (
+
+                    SELECT suppid,invsid,SUM(invoiceamount) AS invoicebal FROM
+                    (
+                    SELECT b.id AS suppid,a.id AS invsid,case WHEN b.source_id=2 then a.tval else  total end AS invoiceamount FROM commercial_invoices AS a
+                    INNER JOIN suppliers AS b ON a.supplier_id=b.id  AND b.id=$request->supplier_id AND a.id in(  SELECT commercial_invoice_id FROM purchase_returns WHERE id=$request->prid )
+                    UNION all
+                     SELECT a.subhead_id,b.invoice_id,b.payedusd*-1 AS payment
+                    FROM bank_transactions AS a INNER join payment_details AS b ON a.id=b.paymentid and a.subhead_id =$request->supplier_id
+                    AND b.invoice_id in(  SELECT commercial_invoice_id FROM purchase_returns WHERE id=$request->prid )
+                   UNION ALL
+                    SELECT supplier_id,commercial_invoice_id,prtamount*-1 AS retqty FROM purchase_returns WHERE supplier_id =$request->supplier_id
+                    AND commercial_invoice_id in(  SELECT commercial_invoice_id FROM purchase_returns WHERE id=$request->prid )
+                   UNION ALL
+                    SELECT a.subhead_id, b.id AS  invoice_id,a.amount_fc AS Receivedqty
+                    FROM bank_transactions AS a INNER join commercial_invoices AS b ON a.supinvid=b.invoiceno AND a.subhead_id =$request->supplier_id
+                    AND b.id  in(  SELECT commercial_invoice_id FROM purchase_returns WHERE id=$request->prid )
+                   ) AS w GROUP BY suppid,invsid
+                ) x ON c.id = x.invsid
+                SET c.invoicebal = x.invoicebal
+                where  c.id in(SELECT commercial_invoice_id FROM purchase_returns WHERE id=$request->prid  ) "));
+
+
+                DB::delete(DB::raw(" delete from purchase_returns where id=$request->prid   "));
+                DB::delete(DB::raw(" delete from purchase_return_details where prid=$request->prid   "));
+
+                DB::delete(DB::raw(" delete from office_item_bal where ttypeid=5 and  transaction_id=$request->prid   "));
+
+                DB::commit();
+
+
+                Session::flash('success','Record Deleted Successfully');
+                return response()->json(['success'],200);
+
+            } catch (\Throwable $th) {
+                DB::rollback();
+                throw $th;
+            }
+    }
+
+
+
+
+
+
+
+
 }

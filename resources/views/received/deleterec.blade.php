@@ -5,12 +5,13 @@
     <link href="https://unpkg.com/tabulator-tables/dist/css/tabulator.min.css" rel="stylesheet">
     <script type="text/javascript" src="https://unpkg.com/tabulator-tables/dist/js/tabulator.min.js"></script>
 
+
+
+
+
     @endpush
 
     <x-slot name="header">
-        {{-- <h2 class="font-semibold text-5xl text-red-700 leading-tight font-size: 1.2em; ">
-            Delete Record Information
-        </h2> --}}
         <div style="font-size: 3rem;font-weight: bold;color:brown;border:blue">
             Delete Record Information
         </div>
@@ -25,7 +26,7 @@
                     <div class="grid">
 
                         <fieldset class="border px-4 py-2 rounded">
-                            <legend></legend>
+                            <legend>Invoice Level Entries</legend>
                             <div class="grid grid-cols-12 gap-2 py-2 items-center">
 
                                 {{-- <x-input-text title="Supplier Name" name="supname" id="supname" class="col-span-2" value="{{ $supplier->title }}" disabled  /> --}}
@@ -39,75 +40,69 @@
                                             <option value="{{$supplier->id}}"> {{$supplier->title}} </option>
                                         @endforeach
                                     </select> --}}
-                                <x-input-text title="Supplier Name" name="supname" id="supname" class="col-span-2" value="{{ $banktransaction->supname }}" disabled  />
-                                <x-input-date title="Payment Date" name="documentdate" class="col-span-2" disabled value="{{ $banktransaction->documentdate->format('Y-m-d') }}"  />
-
-                                    {{-- <label for="head_id">Payment To<x-req /></label>
-                                    <select autocomplete="on" class="col-span-2" name="customer_id" id="customer_id" >
-                                        <option value="" selected>--Payment Head</option>
-                                        @foreach($heads as $head)
-                                        <option value="{{$head->id}}"> {{$head->title}} </option>
-                                        @endforeach
-                                    </select> --}}
-                                    <x-input-text title="Payment Seq.#" name="transno" id="transno" disabled value="{{ $banktransaction->transno }}"  class="col-span-2"    />
-                                    <x-input-numeric title="" name="paymentid" id="paymentid" value="{{ $banktransaction->id }}" hidden    />
-                                    <x-input-numeric title="" name="supplier_id" id="supplier_id" value="{{ $banktransaction->subhead_id }}" hidden  />
+                                <x-input-text title="Customer Name" name="supname" id="supname" class="col-span-2" value="{{ $banktransaction->supname }}" disabled  />
+                                <x-input-date title="Received Date" name="documentdate" class="col-span-2" value="{{ $banktransaction->documentdate->format('Y-m-d') }}" disabled  />
+                                    <x-input-text title="Received Seq.#" name="transno" id="transno" value="{{ $banktransaction->transno }}"  class="col-span-2" disabled    />
+                                    <x-input-numeric title="" name="receivedid" id="receivedid" value="{{ $banktransaction->id }}" hidden   />
+                                    <x-input-numeric title="" name="subhead_id" id="subhead_id" hidden value="{{ $banktransaction->subhead_id }}"   />
                                     </div>
 
                         <div class="grid grid-cols-12 gap-2 py-2 ">
 
-                            {{-- <label for="bank_id">Payment From<x-req /></label>
-                            <select autocomplete="on"  name="bank_id" id="bank_id" class="col-span-2" >
-                                <option value="" selected>--Payment From</option>
-                                @foreach($banks as $bank)
-                                @if ($bank->id == $banktransaction->bank_id)
-                                    <option value="{{$bank->id}}" selected> {{$bank->title}} </option>
-                                @endif
-                                @endforeach
-                            </select> --}}
-
-                            <label for="bank_id">Payment From<x-req /></label>
+                            <label for="bank_id">Received From<x-req /></label>
                             <select autocomplete="on"  name="bank_id" id="bank_id" class="col-span-2" disabled >
-                                {{-- <option value="" selected>--Payment From</option> --}}
+                                {{-- <option value="" selected>--Received From</option> --}}
                                 @foreach($banks as $bank)
-                                    <option value="{{ $bank->id }}" @if ($bank->id == $banktransaction->bank_id) selected @endif>{{$bank->title}} </option>
+                                {{-- @if ($bank->id == $banktransaction->bank_id) --}}
+                                    {{-- <option value="{{$bank->id}}" selected> {{$bank->title}} </option> --}}
+                                    <option value="{{ $bank->id }}" @if ($bank->id == $banktransaction->bank_id) selected @endif>{{$bank->title}}</option>
+
+                                {{-- @endif --}}
                                 @endforeach
                             </select>
 
-
-                            <x-input-text title="Cheque No" name="cheque_no" id="cheque_no" req required class="col-span-2" value="{{ $banktransaction->cheque_no }}" disabled  />
-                            <x-input-date title="Cheque Date" id="cheque_date" name="cheque_date" req required class="col-span-2" value="{{ $banktransaction->cheque_date->format('Y-m-d') }}" disabled />
-                            <x-input-text title="" name="pmntto" id="pmntto"  class="col-span-2" value="{{ $banktransaction->pmntto }}" hidden  />
-                           </div>
-
-                        <div class="grid grid-cols-12 gap-2 py-2 items-center">
-                            <x-input-numeric title="Amount(USD)" name="amount_fc" id="amount_fc" class="col-span-2" value="{{ $banktransaction->amount_fc }}"   disabled     />
-                            <x-input-numeric title="Conversion Rate" name="conversion_rate" id="conversion_rate" class="col-span-2" value="{{ $banktransaction->conversion_rate }}" disabled   />
-                            <x-input-numeric title="Amount(PKR)" name="amount_pkr" id="amount_pkr" class="col-span-2" value="{{ $banktransaction->amount_pkr }}" disabled />
-                            {{-- <label for="">
-                                Invoice Level Payment <span class="text-red-500 font-semibold  ">(*)</span>
-                                </label> --}}
-                            {{-- <input class="checked:bg-blue-500 checked:border-blue-500 focus:outline-none "  type="checkbox" name="per" id="per" @if( $banktransaction->invslvl==1  )  checked else unchecked @endif   onclick="EnableDisableTextBox(this)" > --}}
-                            <x-input-numeric title="" name="advtxt" id="advtxt"    value="{{ $banktransaction->advance }}" hidden    />
-                             <x-input-numeric title="" name="head_id" class="col-span-2" value="{{ $banktransaction->head_id}}" hidden  />
-                        </div>
-                        <div class="grid grid-cols-12 gap-2 py-2 items-center">
-                            <label for="">
-                                Description <span class="text-red-500 font-semibold  ">(*)</span>
-                                </label>
-                            <textarea name="description" id="description" cols="150" rows="2" maxlength="150" class="col-span-2" disabled  class="rounded"> {{ $banktransaction->description }}  </textarea>
-                            <x-input-text title="G.D No For Import Expenses" name="impgdno" id="impgdno"   class="col-span-2"  value="{{ $banktransaction->impgdno }}" disabled  />
+                            <x-input-text title="Cheque No" name="cheque_no" id="cheque_no" req required class="col-span-2" disabled value="{{ $banktransaction->cheque_no }}"  />
+                            <x-input-date title="Cheque Date" id="cheque_date" name="cheque_date" req required class="col-span-2" disabled value="{{ $banktransaction->cheque_date->format('Y-m-d') }}" />
+                            <x-input-text title="Payment to" name="pmntto" id="pmntto"  class="col-span-2" disabled value="{{ $banktransaction->pmntto }}"  />
 
 
-                            {{-- <label for="">
-                                Advance Payment For Clearance Future Invoices <span class="text-red-500 font-semibold  ">(*)</span>
-                                </label>
-                            <input class="checked:bg-blue-500 checked:border-blue-500 focus:outline-none"  type="checkbox" name="adv" id="adv" @if( $banktransaction->advance==1  )  checked else unchecked @endif    onclick="advpayment(this)" > --}}
-                            <x-input-text title="Cust.DC No" name="cusinvid" id="cusinvid" class="col-span-2;w-20" value="{{ $banktransaction->cusinvid }}"  disabled     />
-                            {{-- <input class="checked:bg-blue-500 checked:border-blue-500 focus:outline-none"  type="checkbox" name="invid" id="invid" onclick="enbldspl(this)" > --}}
+
                         </div>
 
-                    </fieldset>
+                        <div class="grid grid-cols-12 gap-2 py-2 items-center">
+                            <x-input-numeric title="Amount(USD)" name="amount_fc" id="amount_fc" class="col-span-2" disabled value="{{ $banktransaction->amount_fc }}"      />
+
+
+                                {{-- <label for="">
+                                    Invoice Level Receive <span class="text-red-500 font-semibold  ">(*)</span>
+                                    </label>
+
+
+
+                                <label for="">
+                                    Advance Receive For Clearance Future Invoices <span class="text-red-500 font-semibold  ">(*)</span>
+                                    </label>
+                                <input class="checked:bg-blue-500 checked:border-blue-500 focus:outline-none"  type="checkbox" name="adv" id="adv" @if( $banktransaction->advance==1  )  checked else unchecked @endif    onclick="advpayment(this)" > --}}
+
+                                <x-input-numeric title="conversion_rate" name="conversion_rate" id="conversion_rate" class="col-span-2"  value="{{ $banktransaction->conversion_rate }}" disabled   />
+                                <x-input-numeric title="Amount(pkr)" name="amount_pkr" id="amount_pkr" class="col-span-2"  value="{{ $banktransaction->amount_pkr }}" disabled />
+                                 {{-- <input class="checked:bg-blue-500 checked:border-blue-500 focus:outline-none " class="col-span-2"  type="checkbox" name="per" id="per"   onclick="EnableDisableTextBox(this)" > --}}
+                                 {{-- @if( $banktransaction->invslvl==1  )  checked else unchecked @endif  --}}
+                                 <x-input-numeric title="" name="advtxt" id="advtxt"    value="{{ $banktransaction->advance }}" hidden    />
+                                <x-input-numeric title="" name="head_id" class="col-span-2" value="{{ $banktransaction->head_id}}" hidden  />
+
+                                </div>
+                            <div class="grid grid-cols-12 gap-2 py-2 items-center">
+                                <label for="">
+                                    Description <span class="text-red-500 font-semibold  ">(*)</span>
+                                    </label>
+                                <textarea name="description" id="description" cols="150" rows="2" disabled maxlength="150" class="col-span-2" required class="rounded"> {{ $banktransaction->description }} </textarea>
+                                <x-input-text title="Supp.Invoice No" name="supinvid" id="supinvid" class="col-span-2" value="{{ $banktransaction->supinvid }}"    disabled     />
+                                {{-- <input class="checked:bg-blue-500 checked:border-blue-500 focus:outline-none"  type="checkbox" name="invid" id="invid" onclick="enbldspl(this)" > --}}
+
+                            </div>
+
+                        </fieldset>
 
                         {{-- Contract Details --}}
                         <x-tabulator-dynamic />
@@ -115,15 +110,15 @@
                         {{-- Submit Button --}}
                         <div class="pt-2">
                             <x-button
-                                id="submitbutton" onclick="validateForm()"
+                                id="submitbutton"  onclick="validateForm()"
                                 class="bg-green-500 text-white rounded hover:bg-green-700 inline-flex items-center px-4 py-1 w-28 text-center">
                                 <i class="fa fa-save fa-fw"></i>
+
+
                                 Submit
-                                {{-- Confirm Delete Above Record --}}
                             </x-button>
                             <x-input-text title="Password For Deletion" name="edtpw" id="edtpw" type="password"     />
                             <x-input-text title="" name="dbpwrd2" id="dbpwrd2"  class="col-span-2"  value="{{$passwrd}}" hidden />
-
                         </div>
 
                     </div>
@@ -140,14 +135,37 @@
     {{-- Modal - Should come below Tabulator --}}
     <x-tabulator-modal title="Material"/>
 
+
+
     @push('scripts')
 <script>
+
+let submitButton = document.getElementById("submitbutton")
+
+document.addEventListener('DOMContentLoaded',()=>{
+        //  submitButton.disabled = true
+        document.getElementById("submitbutton").disabled = true;
+
+        // dbpwrd.value=575;
+     })
+
+
+
 let table;
 let searchValue = "";
 
-document.addEventListener('DOMContentLoaded',()=>{
-        document.getElementById("submitbutton").disabled = true;
-     })
+var tamount=0;
+function tnetamount()
+        {
+
+        if(tamount!==0)
+          {
+            amount_fc.value=  tamount
+            amount_pkr.value=  tamount
+          }
+
+        }
+
 
 
 
@@ -268,30 +286,38 @@ function pushDynamicData(data)
      dynamicTable.setData(dynamicTableData);
 }
 
- //   var updateValues = (cell) => {
- //           var data = cell.getData();
- //           var sum = (Number(data.payedusd) * Number(data.convrate))
- //           var invbal = (Number(data.invoice_amount) - Number(data.payedusd) - Number(data.purretamount))
- //           // var invbal = (Number(data.invoice_amount) )
- //           var row = cell.getRow();
- //           row.update({
- //               "payedrup": sum,
- //               "invoice_bal":invbal,
- //               totalVal: sum
-//
-//            });
-//        }
+var updateValues = (cell) => {
+        var data = cell.getData();
+        var invbal = (Number(data.totrcvble) - Number(data.totrcvd) - Number(data.saleretamount))
+        var row = cell.getRow();
+        row.update({
+             "invoice_bal":invbal
+            //  totalVal1: sum,
 
-    // var totalVal = function(values, data, calcParams){
-    //     var calc = 0;
-    //     values.forEach(function(value){
-    //         calc += Number(value) ;
-    //     });
-    //     // tamount = calc;
-    //     // tnetamount();
-    //     return calc;
+        });
+    }
 
-    // }
+    var totalVal = function(values, data, calcParams){
+        var calc = 0;
+        values.forEach(function(value){
+            calc += Number(value) ;
+        });
+        // tamount = calc;
+        // tnetamount();
+        return calc;
+
+    }
+
+    var totalVal1 = function(values, data, calcParams){
+        var calc = 0;
+        values.forEach(function(value){
+            calc += Number(value) ;
+        });
+        tamount = calc;
+        tnetamount();
+        return calc;
+
+    }
 
 
 
@@ -312,128 +338,122 @@ function pushDynamicData(data)
 //         },
 
 //         {title:"invoice Id",           field:"invoice_id",cssClass:"bg-gray-200 font-semibold"},
-//                 {title:"Invoice No",     field:"invoice_no",responsive:0,cssClass:"bg-gray-200 font-semibold"},
-//                 {title:"Invoice_Date",    field:"invoice_date",responsive:0,cssClass:"bg-gray-200 font-semibold"},
+//                 {title:"P.O No",           field:"pono",cssClass:"bg-gray-200 font-semibold"},
+//                 {title:"Delivery Date",     field:"saldate",responsive:0,cssClass:"bg-gray-200 font-semibold"},
+//                 {title:"",     field:"saldate",responsive:0,visible:false},
+//                 {title:"DC No",     field:"dcno",responsive:0,cssClass:"bg-gray-200 font-semibold"},
+//                 {title:"Bill No",    field:"billno",responsive:0,cssClass:"bg-gray-200 font-semibold"},
 
 
 
 //                 // {title:"Variance", field:"varqty",cellEdited: updateValues,},
 
 //                 {
-//                     title:'Payable Amount', headerHozAlign:"center",
+//                     title:'Receivable Amount', headerHozAlign:"center",
 //                     columns:[
-//                         // {   title:"Replace Name",headerHozAlign :'center',
-//                         //     field:"repname",
-//                         //     responsive:0,
-//                         //     editor:true,
-//                         // },
 
-//                         // {   title:"Brand",headerHozAlign :'center',
-//                         //     field:"mybrand",
-//                         //     responsive:0,
-//                         //     editor:true,
-//                         // },
-
-
-
-
-
-//                         {   title:"Payable",
+//                         {   title:"Sale Amount",
 //                             headerHozAlign :'right',
 //                             hozAlign:"right",
 //                             responsive:0,
-//                             field:"invoice_amount",
+//                             field:"dcamount",
 //                             bottomCalc:"sum",
 //                             formatter:"money",
-//                             cellEdited: updateValues,
 //                             validator:["required","numeric"],
 //                             cssClass:"bg-gray-200 font-semibold",
-//                             formatterParams:{thousand:",",precision:3},
+//                             formatterParams:{thousand:",",precision:2},
 //                         },
 
-
-//                         {   title:"Purchase Return",
+//                         {   title:"Sale Tax(%)",
 //                             headerHozAlign :'right',
 //                             hozAlign:"right",
 //                             responsive:0,
-//                             field:"purretamount",
-//                             bottomCalc:"sum",
-//                             formatter:"money",
-//                             cellEdited: updateValues,
-//                             validator:["required","numeric"],
-//                             cssClass:"bg-gray-200 font-semibold",
-//                             formatterParams:{thousand:",",precision:3},
-//                         },
-
-
-
-
-
-
-
-
-//                         {   title:"Currency",
-//                             headerHozAlign :'right',
-//                             hozAlign:"right",
-//                             responsive:0,
-//                             field:"curncy",
+//                             field:"staxper",
 //                             // editor:"number",
 //                             bottomCalc:"sum",
 //                             formatter:"money",
-//                             cellEdited: updateValues,
 //                             validator:["required","numeric"],
 //                             cssClass:"bg-gray-200 font-semibold",
-//                             formatterParams:{thousand:",",precision:0},
+//                             formatterParams:{thousand:",",precision:2},
 //                         },
-//                     ]},
 
-//                 {
-//                         title:'Amount Payed', headerHozAlign:"center",
-//                     columns:[
-
-
-//                         {title:"Payed In USD.",
-//                         headerHozAlign :'right',
-//                         hozAlign:"right",
-//                         field:"payedusd",
-//                         editor:"number",
-//                         cellEdited: updateValues,
-//                         formatter:"money",
-//                         formatterParams:{thousand:",",precision:3},
-//                         // formatter:function(cell,row)
-//                         // {
-//                         //     return (cell.getData().invoice_amount * cell.getData().convrate).toFixed(0)
-//                         // },
-//                         bottomCalc:totalVal  },
-
-//                         {   title:"Conversion Rate",
+//                         {   title:"Sale Tax Amount",
 //                             headerHozAlign :'right',
 //                             hozAlign:"right",
 //                             responsive:0,
-//                             editor:"number",
-//                             field:"convrate",
-//                             // bottomCalc:"sum",
+//                             field:"staxamount",
+//                             // editor:"number",
+//                             bottomCalc:"sum",
 //                             formatter:"money",
-//                             cellEdited: updateValues,
 //                             validator:["required","numeric"],
-//                             // cssClass:"bg-green-200 font-semibold",
-//                             formatterParams:{thousand:",",precision:3},
+//                             cssClass:"bg-gray-200 font-semibold",
+//                             formatterParams:{thousand:",",precision:2},
+//                         },
+
+//                         {   title:"Cartage",
+//                             headerHozAlign :'right',
+//                             hozAlign:"right",
+//                             responsive:0,
+//                             field:"cartage",
+//                             // editor:"number",
+//                             bottomCalc:"sum",
+//                             formatter:"money",
+//                             validator:["required","numeric"],
+//                             cssClass:"bg-gray-200 font-semibold",
+//                             formatterParams:{thousand:",",precision:2},
+//                         },
+
+//                         {   title:"Sale Return",
+//                             headerHozAlign :'right',
+//                             hozAlign:"right",
+//                             responsive:0,
+//                             field:"saleretamount",
+//                             // editor:"number",
+//                             bottomCalc:"sum",
+//                             formatter:"money",
+//                             validator:["required","numeric"],
+//                             cssClass:"bg-gray-200 font-semibold",
+//                             formatterParams:{thousand:",",precision:2},
 //                         },
 
 
-//                         {title:"Payed In Rup.",
+
+
+
+
+//                         {   title:"Total Receivable Amount",
+//                             headerHozAlign :'right',
+//                             hozAlign:"right",
+//                             responsive:0,
+//                             field:"totrcvble",
+//                             // editor:"number",
+//                             bottomCalc:"sum",
+//                             formatter:"money",
+//                             validator:["required","numeric"],
+//                             cssClass:"bg-gray-200 font-semibold",
+//                             formatterParams:{thousand:",",precision:2},
+//                         },
+
+//                     ]},
+
+//                 {
+//                         title:'Amount Received', headerHozAlign:"center",
+//                     columns:[
+
+
+//                         {title:"Received Amount.",
 //                         headerHozAlign :'right',
 //                         hozAlign:"right",
-//                         field:"payedrup",
-//                         cssClass:"bg-gray-200 font-semibold",
+//                         editor:"number",
+//                         field:"totrcvd",
 //                         formatter:"money",
-//                         cssClass:"bg-gray-200 font-semibold",
-//                         formatterParams:{thousand:",",precision:3},
-//                         formatter:function(cell,row)
-//                         {
-//                             return (cell.getData().payedusd * cell.getData().convrate).toFixed(0)
-//                         },
-//                         bottomCalc:totalVal  },
+//                         cellEdited: updateValues,
+//                         formatterParams:{thousand:",",precision:1},
+//                         // formatter:function(cell,row)
+//                         // {
+//                         //     return (cell.getData().payedusd * cell.getData().convrate).toFixed(0)
+//                         // },
+//                         bottomCalc:totalVal1  },
 //                     ]},
 
 //                     {title:"Invoice Balance.",
@@ -442,44 +462,40 @@ function pushDynamicData(data)
 //                         field:"invoice_bal",
 //                         formatter:"money",
 //                         cssClass:"bg-gray-200 font-semibold",
-//                         formatterParams:{thousand:",",precision:3},
+//                         formatterParams:{thousand:",",precision:1},
 //                         formatter:function(cell,row)
 //                         {
-//                             return (cell.getData().invoice_amount - cell.getData().payedusd - cell.getData().purretamount ).toFixed(0)
-
+//                             return (cell.getData().totrcvble - cell.getData().totrcvd - cell.getData().saleretamount  ).toFixed(0)
 //                         },
-//                          bottomCalc:totalVal,
-
+//                         bottomCalc:totalVal
 
 //                     },
 
 
-
-
-
 //             ],
 //         })
+
 //         dynamicTable.on("dataLoaded", function(data){
 //             //data - all data loaded into the table
 //         });
 
 // Add event handler to read keyboard key up event
-// document.addEventListener('keyup', (e)=>{
-//     //  We are using ctrl key + 'ArrowUp' to show Modal
-//     if(e.ctrlKey && e.keyCode == 532){
-//         showModal()
-//     }
-// })
+document.addEventListener('keyup', (e)=>{
+    //  We are using ctrl key + 'ArrowUp' to show Modal
+    if(e.ctrlKey && e.keyCode == 532){
+        showModal()
+    }
+})
 // Ensure Buttons Are Closed
-// function disableSubmitButton()
-// {
-//     if(dynamicTableData.length <= 0 )
-//     {
-//         document.getElementById("submitbutton").disabled = true;
-//     }else {
-//         document.getElementById("submitbutton").disabled = false;
-//     }
-// }
+function disableSubmitButton()
+{
+    if(dynamicTableData.length <= 0 )
+    {
+        document.getElementById("submitbutton").disabled = true;
+    }else {
+        document.getElementById("submitbutton").disabled = false;
+    }
+}
   // Validation & Post
 function validateForm()
 {
@@ -535,7 +551,7 @@ function validateForm()
     //     return;
     // }
     // dynamicTableData = dynamicTable.getData();
-    // // Qty Required
+    // Qty Required
     // for (let index = 0; index < dynamicTableData.length; index++) {
     //     const element = dynamicTableData[index];
     //     if(element.qtykg == 0 || element.price == 0  || element.saleamnt == 0)
@@ -555,16 +571,12 @@ function validateForm()
      // var data = { 'contracts' : dynamicTableData,'banktotal':parseFloat(total.value).toFixed(2),'exataxoffie':parseFloat(exataxoffie.value).toFixed(2),'collofcustom':parseFloat(collofcustom.value).toFixed(2),'bankcharges':parseFloat(bankcharges.value).toFixed(2) ,'supplier_id': supplier_id.value,'invoice_date':invoice_date.value,'invoiceno':number.value};
     // All Ok - Proceed
 
-     var data = { 'banktransaction' : dynamicTableData,'supplier_id':supplier_id.value,'transno':transno.value,'bank_id':bank_id.value,'documentdate':documentdate.value,
-             'cheque_no':cheque_no.value,'cheque_date':cheque_date.value,'head_id':head_id.value ,'description': description.value,'transno':transno.value
-         ,'amount_fc':amount_fc.value,'amount_pkr':amount_pkr.value,'conversion_rate':conversion_rate.value,'advtxt':advtxt.value,
-         'paymentid':paymentid.value,'supname':supname.value,'impgdno':impgdno.value,'cusinvid':cusinvid.value,'pmntto':pmntto.value};
+    var data = { 'banktransactionr' : dynamicTableData,'subhead_id':subhead_id.value,'transno':transno.value,'bank_id':bank_id.value,'documentdate':documentdate.value,
+            'cheque_no':cheque_no.value,'cheque_date':cheque_date.value,'head_id':head_id.value ,'description': description.value,'transno':transno.value
+        ,'amount_fc':amount_fc.value,'amount_pkr':amount_pkr.value,'conversion_rate':conversion_rate.value,'advtxt':advtxt.value,
+        'supname':supname.value,'receivedid':receivedid.value,'supinvid':supinvid.value,'pmntto':pmntto.value};
 
-
-
-    // var delId = @json($id);
-    //    var data = { delid : delId}
-    fetch(@json(route('banktransaction.del')),{
+    fetch(@json(route('banktransactionr.del')),{
         credentials: 'same-origin', // 'include', default: 'omit'
         method: 'POST', // 'GET', 'PUT', 'DELETE', etc.
         // body: formData, // Coordinate the body type with 'Content-Type'
@@ -580,50 +592,41 @@ function validateForm()
     .then( response => {
         if (response == 'success')
         {
-            window.open(window.location.origin + "/banktransaction","_self" );
+            window.open(window.location.origin + "/banktransactionr","_self" );
         }
     })
     .catch(error => {
         showSnackbar("Errors occured","red");
-        // disableSubmitButton(false);
+        disableSubmitButton(false);
     })
 }
 
-// function EnableDisableTextBox(per) {
-//         var amount_fc = document.getElementById("amount_fc");
-//         amount_fc.disabled = per.checked ? true : false;
-//         amount_fc.style.color ="black";
-//         // amount_fc.value =0;
+function EnableDisableTextBox(per) {
+        var amount_fc = document.getElementById("amount_fc");
+        amount_fc.disabled = per.checked ? true : false;
+        amount_fc.style.color ="black";
+        // amount_fc.value =0;
 
 
-//         var conversion_rate = document.getElementById("conversion_rate");
-//         conversion_rate.disabled = per.checked ? true : false;
-//         conversion_rate.style.color ="black";
-//         // amount_pkr.value =0;
-//         // conversion_rate.value =0;
+        var conversion_rate = document.getElementById("conversion_rate");
+        conversion_rate.disabled = per.checked ? true : false;
+        conversion_rate.style.color ="black";
+        // amount_pkr.value =0;
+        // conversion_rate.value =0;
+
+    }
+    function enbldspl(invid) {
+        var supinvid = document.getElementById("supinvid");
+        supinvid.disabled = invid.checked ? false : true;
+        supinvid.style.color ="black";
+        supinvid.value ='';
+
+    }
 
 
-//     }
 
-    // var impgdno = document.getEle6mentById("impgdno");
-    //     impgdno.disabled = per.checked ? true : false;
-    //     impgdno.style.color ="black";
-    //     // impgdno.value ='';
 
-    // function advpayment(adv) {
-    //     var advtxt = document.getElementById("advtxt");
-    //     // amount_fc.disabled = advtxt.checked ? true : false;
 
-    //     // amount_fc.disabled = per.checked ? true : false;
-
-    //     if(adv.checked==true)
-    //     {
-    //         advtxt.value=1;
-    //     }
-    //     else
-    //     {
-    //         advtxt.value=0;
-    //     }
 
     // }
 
@@ -638,41 +641,18 @@ function validateForm()
    }
 
 
-   bank_id.addEventListener("change", () => {
-    var sid = document.getElementById("bank_id");
-        var bank_id = sid.options[sid.selectedIndex];
-        if(bank_id.value==1)
-        { cheque_no.disabled=true;
-          cheque_date.disabled=true;
-        }
-        else
-        { cheque_no.disabled=false;
-          cheque_date.disabled=false;
-        }
-
-});
-
-function enbldspl(invid) {
-        var supinvid = document.getElementById("cusinvid");
-        supinvid.disabled = invid.checked ? false : true;
-        supinvid.style.color ="black";
-        supinvid.value =0;
-
-    }
-
-    edtpw.onblur=function(){
-
-        // console.log('disbaled');
-     if(edtpw.value == dbpwrd2.value )
+   edtpw.onblur=function(){
+    if(edtpw.value == dbpwrd2.value )
      {document.getElementById("submitbutton").disabled = false;
-    //  console.log('enabled');
 
     }
     else
     {document.getElementById("submitbutton").disabled = true;}
 
-
     }
+
+
+
 
 
 

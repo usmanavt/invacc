@@ -7,9 +7,9 @@
     @endpush
 
     <x-slot name="header">
-        <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-            Edit Local Purchasing
-        </h2>
+        <div style="font-size: 3rem;font-weight: bold;color:brown;border:blue">
+            Delete Record Information for Local Purchasing
+        </div>
     </x-slot>
 
     <div class="py-6">
@@ -23,7 +23,7 @@
                         <div class="grid grid-cols-12 gap-2 py-2 items-center">
                             {{-- Contract Master --}}
                             <label for="supplier_id">Supplier</label>
-                            <select  autocomplete="on" class="col-span-2" name="supplier_id" id="supplier_id" required>
+                            <select  autocomplete="on" class="col-span-2" name="supplier_id" id="supplier_id" disabled>
                                 @foreach($suppliers as $supplier)
                                     @if ($supplier->id == $commercialInvoice->supplier_id)
                                     <option value="{{$supplier->id}}" selected> {{$supplier->title}} </option>
@@ -34,15 +34,15 @@
 
 
                             <label for="invoice_date">Invoice Date</label>
-                            <input type="date" class="col-span-2" id="invoice_date" name="invoice_date" value="{{ $commercialInvoice->invoice_date->format('Y-m-d') }}"  required>
+                            <input type="date" class="col-span-2" id="invoice_date" name="invoice_date" value="{{ $commercialInvoice->invoice_date->format('Y-m-d') }}"  disabled>
                             {{-- ->format('Y-m-d') --}}
                             {{-- Contract Master - Invoice Number --}}
                             <label for="invoiceno">Invoice #</label>
                             <input type="text" class="col-span-2" id="invoiceno" name="invoiceno" placeholder="Invoice No"
-                                minlength="3" title="minimum 3 characters required" value="{{ $commercialInvoice->invoiceno }}" required>
+                                minlength="3" title="minimum 3 characters required" value="{{ $commercialInvoice->invoiceno }}" disabled>
 
                             <label for="challanno">Bill #<x-req /></label>
-                            <input type="text" class="col-span-2" id="challanno" name="challanno" value="{{ $commercialInvoice->challanno }}" >
+                            <input type="text" class="col-span-2" id="challanno" name="challanno" value="{{ $commercialInvoice->challanno }}" disabled >
 
 
                                 {{-- <label for="gpassno">GatePass #<x-req /></label> --}}
@@ -55,30 +55,35 @@
                             <div class="grid grid-cols-12 gap-2 py-2 items-center">
                                 <x-input-numeric title="Discou(%)" name="insurance" value="{{ $commercialInvoice->insurance }}" disabled  />
                                  <input class="checked:bg-blue-500 checked:border-blue-500 focus:outline-none" type="checkbox" name="per" id="per" onclick="EnableDisableTextBox(this)" >
-                                 <x-input-numeric title="Discount(Amount)" name="collofcustom" value="{{ $commercialInvoice->collofcustom }}"    />
-                                <x-input-numeric title="Cartage/Loading Charges" name="exataxoffie" value="{{ $commercialInvoice->exataxoffie }}"  required  onblur="tnetamount()"  />
-                                <x-input-numeric title="Cutting/Repairing Charges" name="otherchrgs" value="{{ $commercialInvoice->otherchrgs }}" required  onblur="tnetamount()"  />
-                                <x-input-numeric title="Payble Amount" name="bankntotal" value="{{ $commercialInvoice->total }}"  />
+                                 <x-input-numeric title="Discount(Amount)" name="collofcustom" value="{{ $commercialInvoice->collofcustom }}" disabled   />
+                                <x-input-numeric title="Cartage/Loading Charges" name="exataxoffie" value="{{ $commercialInvoice->exataxoffie }}"  disabled  onblur="tnetamount()"  />
+                                <x-input-numeric title="Cutting/Repairing Charges" name="otherchrgs" value="{{ $commercialInvoice->otherchrgs }}" disabled  onblur="tnetamount()"  />
+                                <x-input-numeric title="Payble Amount" name="bankntotal" value="{{ $commercialInvoice->total }}" disabled  />
                                 <x-input-numeric title="" name="contract_id" value="{{ $commercialInvoice->id }}" hidden />
+                                    <x-input-numeric title="Delete Mode" name="dltid" id="dltid" hidden />
                             </div>
                         </fieldset>
 
                         <div class="flex flex-row px-4 py-2 items-center">
-                            <x-label value="Add Pcs & Feet Size & Press"></x-label>
-                            <x-button id="calculate" class="mx-2" type="button" onclick="calculate()">Generate Item Cost With Other Charges</x-button>
+                            {{-- <x-label value="Add Pcs & Feet Size & Press"></x-label> --}}
+                            {{-- <x-button id="calculate" class="mx-2" type="button" onclick="calculate()">Generate Item Cost With Other Charges</x-button> --}}
                             {{-- <x-label value="This will prepare your commercial invoice for Submission"></x-label> --}}
                             <label for="">
                                 Descripiton <span class="text-red-500 font-semibold"></span>
                             </label>
-                            <textarea name="comdescription" id="comdescription" cols="30" rows="2" maxlength="150" required class="rounded"> {{ $commercialInvoice->comdescription }} </textarea>
+                            <textarea name="comdescription" id="comdescription" cols="30" rows="2" maxlength="150" disabled class="rounded"> {{ $commercialInvoice->comdescription }} </textarea>
                         </div>
                         <div>
-                            <input class="checked:bg-blue-500 checked:border-blue-500 focus:outline-none" {{ $commercialInvoice->ttype === 1 ? 'checked' : '' }} type="checkbox" name="comp" id="comp"   onclick="chqcol(this)" >
+                            {{-- <input class="checked:bg-blue-500 checked:border-blue-500 focus:outline-none" {{ $commercialInvoice->ttype === 1 ? 'checked' : '' }} type="checkbox" name="comp" id="comp"   onclick="chqcol(this)" > --}}
 
-                            <label for="">
+                            {{-- <label for="">
                                 <span style="color: brown;font-weight: bold"> Temporary </span> <span class="text-red-500 font-semibold  "></span>
-                                 </label>
+                                 </label> --}}
                                  <input type="text" title="t1"  id="p9" name="p9" value="0"  hidden    >
+                                 <x-input-text title="" name="futgp1" id="futgp1" hidden  value="{{$fugp}}"       />
+                                 <x-input-text title="" name="rcvvchr" id="rcvvchr" hidden  value="{{$rcvvchr}}"       />
+                                 <x-input-text title="" name="pmtvchr" id="pmtvchr" hidden  value="{{$pmtvchr}}"       />
+
                         </div>
 
 
@@ -87,13 +92,13 @@
 
                         {{-- Submit Button --}}
                         <div class="pt-2">
-                            <button
+                            <x-button
                                 id="submitbutton" onclick="validateForm()"
                                 class="bg-green-500 text-white rounded hover:bg-green-700 inline-flex items-center px-4 py-1 w-28 text-center">
                                 <i class="fa fa-save fa-fw"></i>
                                 Submit
-                            </button>
-                            <x-input-text title="Password For Edition" name="edtpw" id="edtpw" type="password"     />
+                            </x-button>
+                            <x-input-text title="Password For Deletion" name="edtpw" id="edtpw" type="password"     />
                             <x-input-text title="" name="dbpwrd2" id="dbpwrd2"  class="col-span-2" hidden value="{{$passwrd}}" />
 
                         </div>
@@ -387,165 +392,165 @@ var totval = function(values, data, calcParams){
 
 
 //  Dynamic Table [User data]
-dynamicTable = new Tabulator("#dynamicTable", {
-    data:dynamicTableData,
-    layout:'fitData',
-    reactiveData:true,
-    columns:[
-        {title:"Delete" , formatter:deleteIcon, headerSort:false, responsive:0,
-            cellClick:function(e, cell){
-                cell.getRow().delete();
-                dynamicTableData = dynamicTable.getData(); // Ensure that our data is clean
-                dynamicTable.redraw();
-                // disableSubmitButton();
-            }
-        },
-        //  {title: "Location",field: "locid"},
-        {title:"Id",                field:"id",            cssClass:"bg-gray-200 font-semibold"},
-        {title:"Material",          field:"title",         cssClass:"bg-gray-200 font-semibold"},
-        {title:"Category_id",       field:"category_id",    cssClass:"bg-gray-200 font-semibold",visible:false},
-        {title:"Category",          field:"category",       cssClass:"bg-gray-200 font-semibold"},
-        {title:"Dimension",         field:"dimension_id",   cssClass:"bg-gray-200 font-semibold",visible:false},
-        {title:"Dimension",         field:"dimension",      cssClass:"bg-gray-200 font-semibold"},
-        // {title:"Sku",               field:"sku_id",         cssClass:"bg-gray-200 font-semibold",visible:false},
-        // {title:"M/Unit",            field:"sku",            cssClass:"bg-gray-200 font-semibold"},
+// dynamicTable = new Tabulator("#dynamicTable", {
+//     data:dynamicTableData,
+//     layout:'fitData',
+//     reactiveData:true,
+//     columns:[
+//         {title:"Delete" , formatter:deleteIcon, headerSort:false, responsive:0,
+//             cellClick:function(e, cell){
+//                 cell.getRow().delete();
+//                 dynamicTableData = dynamicTable.getData(); // Ensure that our data is clean
+//                 dynamicTable.redraw();
+//                 // disableSubmitButton();
+//             }
+//         },
+//         //  {title: "Location",field: "locid"},
+//         {title:"Id",                field:"id",            cssClass:"bg-gray-200 font-semibold"},
+//         {title:"Material",          field:"title",         cssClass:"bg-gray-200 font-semibold"},
+//         {title:"Category_id",       field:"category_id",    cssClass:"bg-gray-200 font-semibold",visible:false},
+//         {title:"Category",          field:"category",       cssClass:"bg-gray-200 font-semibold"},
+//         {title:"Dimension",         field:"dimension_id",   cssClass:"bg-gray-200 font-semibold",visible:false},
+//         {title:"Dimension",         field:"dimension",      cssClass:"bg-gray-200 font-semibold"},
+//         // {title:"Sku",               field:"sku_id",         cssClass:"bg-gray-200 font-semibold",visible:false},
+//         // {title:"M/Unit",            field:"sku",            cssClass:"bg-gray-200 font-semibold"},
 
-        // {title: "id",field: "myid",visible:false},
-        //         {title:"Location", field:"location" ,editor:"list" , editorParams:   {
-        //                 values:newList,
-        //                 cssClass:"bg-green-200 font-semibold",
-        //                 validator:["required"]
-        //             }
-        //         },
+//         // {title: "id",field: "myid",visible:false},
+//         //         {title:"Location", field:"location" ,editor:"list" , editorParams:   {
+//         //                 values:newList,
+//         //                 cssClass:"bg-green-200 font-semibold",
+//         //                 validator:["required"]
+//         //             }
+//         //         },
 
-                {title: "id",field: "skuid",visible:false},
-                {title:"UOM", field:"sku" ,editor:"list" , editorParams:   {
-                        values:newList1,
-                        cssClass:"bg-green-200 font-semibold",
-                        validator:["required"]
-                    }
-                },
-
-
-        // {title:"PurUnit",           field:"purunit",        cssClass:"bg-gray-200 font-semibold",validator:"in:p|k|f",editor:true},
-        {title:"Replace Description",field:"repname",       editor:true},
-        {title:"Brand",              field:"machineno",     editor:true},
-        {title:"ForCustomer",        field:"forcust",       editor:true},
+//                 {title: "id",field: "skuid",visible:false},
+//                 {title:"UOM", field:"sku" ,editor:"list" , editorParams:   {
+//                         values:newList1,
+//                         cssClass:"bg-green-200 font-semibold",
+//                         validator:["required"]
+//                     }
+//                 },
 
 
-        {   title:"Weight",
-            field: "gdswt",
-            editor:"number",
-            validator:"required",
-            formatter:"money",
-            formatterParams:{thousand:",",precision:2},
-            // validator:["required","integer"],
-            cellEdited: updateValues,
-            bottomCalc:"sum"
+//         // {title:"PurUnit",           field:"purunit",        cssClass:"bg-gray-200 font-semibold",validator:"in:p|k|f",editor:true},
+//         {title:"Replace Description",field:"repname",       editor:true},
+//         {title:"Brand",              field:"machineno",     editor:true},
+//         {title:"ForCustomer",        field:"forcust",       editor:true},
 
 
-            },
-
-        {   title:"Qty(Pcs)",
-            field:"pcs",
-            editor:"number",
-            validator:"required" ,
-            formatter:"money",
-            formatterParams:{thousand:",",precision:2},
-            validator:["required","decimal(10,2)"] ,
-            cellEdited: updateValues  ,
-            bottomCalc:"sum"
-            },
-
-            // {title:"Length",
-            //     field:"length",
-            //     editor:"number",
-            //     cssClass:"bg-green-200 font-semibold",
-            //     validator:"required",
-            //     formatter:"money",
-            //     formatterParams:{thousand:",",precision:2},
-            //     validator:["required","integer"],
-            //     cellEdited: updateValues,
-            //    },
-
-               {title:"Qty(Feet)",
-                field:"qtyinfeet",
-                editor:"number",
-                validator:"required",
-                formatter:"money",
-                formatterParams:{thousand:",",precision:2},
-                //  validator:["required","integer"],
-                 cellEdited: updateValues,
-                 bottomCalc:"sum"
-               },
-
-               {title:"Price",
-                field:"gdsprice",
-                editor:"number",
-                validator:"required" ,
-                formatter:"money",
-                formatterParams:{thousand:",",precision:2},
-                validator:["required","decimal(10,2)"] ,
-                cellEdited: updateValues   ,
-            },
-
-            {   title:"Amount",
-                field:"amtinpkr",
-                cssClass:"bg-gray-200 font-semibold",
-                formatter:"money",
-                formatterParams:{thousand:",",precision:0},
-                // formatter:function(cell,row)
-                // {
-                //     // return (cell.getData().bundle1 * cell.getData().pcspbundle1) + (cell.getData().bundle2 * cell.getData().pcspbundle2)
-
-                //     return console.log(cell.getData().skuid.sku_id)
+//         {   title:"Weight",
+//             field: "gdswt",
+//             editor:"number",
+//             validator:"required",
+//             formatter:"money",
+//             formatterParams:{thousand:",",precision:2},
+//             // validator:["required","integer"],
+//             cellEdited: updateValues,
+//             bottomCalc:"sum"
 
 
-                // },
-                bottomCalc:totval  },
+//             },
 
-                {title:"CostPrice",
-                field:"perft",
-                // editor:"number",
-                cssClass:"bg-gray-200 font-semibold",
-                validator:"required" ,
-                formatter:"money",
-                formatterParams:{thousand:",",precision:3},
-                validator:["required","decimal(10,0)"] ,
-                cellEdited: updateValues   ,
-            },
+//         {   title:"Qty(Pcs)",
+//             field:"pcs",
+//             editor:"number",
+//             validator:"required" ,
+//             formatter:"money",
+//             formatterParams:{thousand:",",precision:2},
+//             validator:["required","decimal(10,2)"] ,
+//             cellEdited: updateValues  ,
+//             bottomCalc:"sum"
+//             },
 
-            {title:"CostAmount",
-                field:"pricevaluecostsheet",
-                // editor:"number",
-                cssClass:"bg-gray-200 font-semibold",
-                validator:"required" ,
-                formatter:"money",
-                formatterParams:{thousand:",",precision:2},
-                validator:["required","decimal(10,0)"] ,
-                cellEdited: updateValues   ,
-                bottomCalc:"sum",
-            },
-    ],
-})
+//             // {title:"Length",
+//             //     field:"length",
+//             //     editor:"number",
+//             //     cssClass:"bg-green-200 font-semibold",
+//             //     validator:"required",
+//             //     formatter:"money",
+//             //     formatterParams:{thousand:",",precision:2},
+//             //     validator:["required","integer"],
+//             //     cellEdited: updateValues,
+//             //    },
+
+//                {title:"Qty(Feet)",
+//                 field:"qtyinfeet",
+//                 editor:"number",
+//                 validator:"required",
+//                 formatter:"money",
+//                 formatterParams:{thousand:",",precision:2},
+//                 //  validator:["required","integer"],
+//                  cellEdited: updateValues,
+//                  bottomCalc:"sum"
+//                },
+
+//                {title:"Price",
+//                 field:"gdsprice",
+//                 editor:"number",
+//                 validator:"required" ,
+//                 formatter:"money",
+//                 formatterParams:{thousand:",",precision:2},
+//                 validator:["required","decimal(10,2)"] ,
+//                 cellEdited: updateValues   ,
+//             },
+
+//             {   title:"Amount",
+//                 field:"amtinpkr",
+//                 cssClass:"bg-gray-200 font-semibold",
+//                 formatter:"money",
+//                 formatterParams:{thousand:",",precision:0},
+//                 // formatter:function(cell,row)
+//                 // {
+//                 //     // return (cell.getData().bundle1 * cell.getData().pcspbundle1) + (cell.getData().bundle2 * cell.getData().pcspbundle2)
+
+//                 //     return console.log(cell.getData().skuid.sku_id)
+
+
+//                 // },
+//                 bottomCalc:totval  },
+
+//                 {title:"CostPrice",
+//                 field:"perft",
+//                 // editor:"number",
+//                 cssClass:"bg-gray-200 font-semibold",
+//                 validator:"required" ,
+//                 formatter:"money",
+//                 formatterParams:{thousand:",",precision:3},
+//                 validator:["required","decimal(10,0)"] ,
+//                 cellEdited: updateValues   ,
+//             },
+
+//             {title:"CostAmount",
+//                 field:"pricevaluecostsheet",
+//                 // editor:"number",
+//                 cssClass:"bg-gray-200 font-semibold",
+//                 validator:"required" ,
+//                 formatter:"money",
+//                 formatterParams:{thousand:",",precision:2},
+//                 validator:["required","decimal(10,0)"] ,
+//                 cellEdited: updateValues   ,
+//                 bottomCalc:"sum",
+//             },
+//     ],
+// })
 
 // Add event handler to read keyboard key up event
 document.addEventListener('keyup', (e)=>{
     //  We are using ctrl key + 'ArrowUp' to show Modal
-    if(e.ctrlKey && e.keyCode == 32){
+    if(e.ctrlKey && e.keyCode == 500){
         showModal()
     }
 })
 // Ensure Buttons Are Closed
-function disableSubmitButton()
-{
-    if(dynamicTableData.length <= 0 )
-    {
-        document.getElementById("submitbutton").disabled = true;
-    }else {
-        document.getElementById("submitbutton").disabled = false;
-    }
-}
+// function disableSubmitButton()
+// {
+//     if(dynamicTableData.length <= 0 )
+//     {
+//         document.getElementById("submitbutton").disabled = true;
+//     }else {
+//         document.getElementById("submitbutton").disabled = false;
+//     }
+// }
   // Validation & Post
 function validateForm()
 {
@@ -553,6 +558,37 @@ function validateForm()
     var supplier_id = sid.options[sid.selectedIndex];
     var invoice_date = document.getElementById("invoice_date");
     var invoiceno = document.getElementById("invoiceno");
+
+    var futgp1= document.getElementById("futgp1");
+    var rcvvchr= document.getElementById("rcvvchr");
+    var pmtvchr= document.getElementById("pmtvchr");
+
+
+    if(futgp1.value == contract_id.value   )
+        {
+            showSnackbar("First of all Delete Data From Received Goods of this Invoice");
+            dcno.focus();
+            return;
+        }
+
+
+        if(rcvvchr.value == contract_id.value   )
+        {
+            showSnackbar("First of all Delete Data From Received Voucher of this Invoice ");
+            dcno.focus();
+            return;
+        }
+
+        if(pmtvchr.value == contract_id.value   )
+        {
+            showSnackbar("First of all Delete Data From Payment Voucher of this Invoice ");
+            dcno.focus();
+            return;
+        }
+
+
+
+
 
     // Required
     if(supplier_id.value <= 0)
@@ -578,7 +614,7 @@ function validateForm()
         showSnackbar("You must have atleast 1 row of item to Proceed","info");
         return;
     }
-    dynamicTableData = dynamicTable.getData();
+    // dynamicTableData = dynamicTable.getData();
     // Qty Required
     // for (let index = 0; index < dynamicTableData.length; index++) {
     //     const element = dynamicTableData[index];
@@ -598,16 +634,16 @@ function validateForm()
 
     // }
     // 'total' : parseFloat(banktotal.value).toFixed(2),
-    disableSubmitButton(true);
+    // disableSubmitButton(true);
      var data = { 'localpurchase' : dynamicTableData,'contract_id':parseFloat(contract_id.value).toFixed(0),'bankntotal':parseFloat(bankntotal.value).toFixed(0),
      'collofcustom':parseFloat(collofcustom.value).toFixed(0),'exataxoffie':parseFloat(exataxoffie.value).toFixed(0) ,
      'insurance':parseFloat(insurance.value).toFixed(2) ,'supplier_id': supplier_id.value,'invoice_date':invoice_date.value,'invoiceno':invoiceno.value,
-     'otherchrgs':otherchrgs.value,'gpassno':gpassno.value,'challanno':challanno.value,'comdescription':comdescription.value,'p9':p9.value};
+     'otherchrgs':otherchrgs.value,'gpassno':gpassno.value,'challanno':challanno.value,'comdescription':comdescription.value,'p9':p9.value,'dltid':dltid.value};
     // var data = { 'contracts' : dynamicTableData,'banktotal':parseFloat(total.value).toFixed(2),'exataxoffie':parseFloat(exataxoffie.value).toFixed(2),'collofcustom':parseFloat(collofcustom.value).toFixed(2),'insurance':parseFloat(insurance.value).toFixed(2) ,'supplier_id': supplier_id.value,'invoice_date':invoice_date.value,'invoiceno':number.value};
     // All Ok - Proceed
-    fetch(@json(route('localpurchase.update',$commercialInvoice)),{
+    fetch(@json(route('localpurchase.del')),{
         credentials: 'same-origin', // 'include', default: 'omit'
-        method: 'PUT', // 'GET', 'PUT', 'DELETE', etc.
+        method: 'POST', // 'GET', 'PUT', 'DELETE', etc.
         // body: formData, // Coordinate the body type with 'Content-Type'
         body:JSON.stringify(data),
         headers: new Headers({

@@ -46,23 +46,40 @@ class GatepasseController extends Controller
 
     public function getMaster(Request $request)
     {
-        $status =$request->status ;
+        // $status =$request->status ;
+        // $search = $request->search;
+        // $size = $request->size;
+        // $field = $request->sort[0]["field"];     //  Nested Array
+        // $dir = $request->sort[0]["dir"];         //  Nested Array
+        // $cis = Gatepasse::where('status',$status)
+        // ->where(function ($query) use ($search){
+        //         $query->where('dcno','LIKE','%' . $search . '%');
+        //         // ->orWhere('invoiceno','LIKE','%' . $search . '%');
+        //     })
+        //     ->whereHas('customer', function ($query) {
+        //         $query->where('id','<>','1');
+        //     })
+        // ->with('customer:id,title')
+        // ->orderBy($field,$dir)
+        // ->paginate((int) $size);
+        // return $cis;
+
         $search = $request->search;
         $size = $request->size;
         $field = $request->sort[0]["field"];     //  Nested Array
         $dir = $request->sort[0]["dir"];         //  Nested Array
-        $cis = Gatepasse::where('status',$status)
-        ->where(function ($query) use ($search){
-                $query->where('dcno','LIKE','%' . $search . '%');
-                // ->orWhere('invoiceno','LIKE','%' . $search . '%');
-            })
-            ->whereHas('customer', function ($query) {
-                $query->where('id','<>','1');
-            })
-        ->with('customer:id,title')
+        $cis = DB::table('vwgpassindex')
+        // ->join('suppliers', 'contracts.supplier_id', '=', 'suppliers.id')
+        // ->select('contracts.*', 'suppliers.title')
+        ->where('custname', 'like', "%$search%")
+        ->orWhere('dcno', 'like', "%$search%")
         ->orderBy($field,$dir)
         ->paginate((int) $size);
         return $cis;
+
+
+
+
     }
 
 
@@ -255,26 +272,36 @@ class GatepasseController extends Controller
 
     public function edit($id)
     {
-    //     $cd = DB::table('skus')->select('id AS dunitid','title AS dunit')
-    //     ->whereIn('id',[1,2])->get();
-    //    $data=compact('cd');
 
-    // $supplier = DB::table('suppliers')
-    // ->join('purchasings', 'purchasings.supplier_id', '=', 'suppliers.id')
-    // ->select('suppliers.id','suppliers.title as supname')
-    // ->where('purchasings.id',$id)->get();
-    // $data1=compact('supplier');
-
-
-
+    $passwrd = DB::table('tblpwrd')->select('pwrdtxt')->max('pwrdtxt');
     $cd = DB::select('call procgpedit(?)',array( $id ));
      $data=compact('cd');
-        return view('gatepasse.edit')
+        return view('gatepasse.edit',compact('passwrd'))
         ->with('gatepasse',Gatepasse::findOrFail($id))
         ->with('customer',Customer::select('id','title')->get())
          ->with($data);
 
     }
+
+
+    public function deleterec($id)
+    {
+
+    $passwrd = DB::table('tblpwrd')->select('pwrdtxtdel')->max('pwrdtxtdel');
+    $cd = DB::select('call procgpedit(?)',array( $id ));
+     $data=compact('cd');
+        return view('gatepasse.deleterec',compact('passwrd'))
+        ->with('gatepasse',Gatepasse::findOrFail($id))
+        ->with('customer',Customer::select('id','title')->get())
+         ->with($data);
+
+    }
+
+
+
+
+
+
 
     public function update(Request $request, Gatepasse $gatepasse)
     {
@@ -420,8 +447,58 @@ class GatepasseController extends Controller
         }
     }
 
-    public function destroy(CommercialInvoice $commercialInvoice)
+    public function deleteBankRequest(Request $request)
     {
-        //
+
+        DB::beginTransaction();
+            try {
+
+
+
+                DB::update(DB::raw(" update gatepasses SET gptotpcs=0,gptotwt=0,gptotfeet=0 where id=$request->gpid "));
+                DB::update(DB::raw(" update gatepasse_details SET gppcstot=0,gpfeettot=0 where gpid=$request->gpid "));
+
+
+
+            // //****################# Transfert Contract Balance to Contracts
+            DB::update(DB::raw("
+            UPDATE sale_invoices c
+            INNER JOIN (
+                  SELECT sale_invoice_id, SUM(gptotpcs) as pcs,SUM(gptotwt) AS wt,SUM(gptotfeet) AS ft
+            FROM gatepasses where  sale_invoice_id=$request->sale_invoice_id  GROUP BY sale_invoice_id) x ON c.id = x.sale_invoice_id
+            SET c.balsltpcs = c.sltpcs - x.pcs,c.balsltwt= c.sltwt-x.wt,c.balslfeet=slfeet-x.ft
+            where  id = $request->sale_invoice_id  "));
+
+            // //****################# Transfert item wise Contract Balance from detail to detail
+            DB::update(DB::raw("
+            UPDATE sale_invoices_details c
+            INNER JOIN (
+            SELECT sale_invoice_id,material_id,SUM(gppcstot) as pcs,SUM(gpwttot) AS wt,SUM(gpfeettot) AS ft
+            FROM gatepasse_details where  sale_invoice_id = $request->sale_invoice_id   GROUP BY sale_invoice_id,material_id
+            ) x ON c.sale_invoice_id = x.sale_invoice_id and c.material_id=x.material_id
+            SET c.salepcs = c.qtypcs - x.pcs,c.salewt= c.qtykg-x.wt,c.salefeet=c.qtyfeet-ft WHERE  c.sale_invoice_id = $request->sale_invoice_id
+            "));
+
+
+
+                DB::delete(DB::raw(" delete from gatepasses where id=$request->gpid"  ));
+                DB::delete(DB::raw(" delete from gatepasse_details where gpid=$request->gpid   "));
+
+                DB::delete(DB::raw(" delete from godown_stock where ttypeid=4 and  transaction_id=$request->gpid   "));
+
+                // DB::update(DB::raw(" update contracts set closed=0 where id=$request->contract_id "));
+
+                DB::commit();
+                Session::flash('success','Record Deleted Successfully');
+                return response()->json(['success'],200);
+
+            } catch (\Throwable $th) {
+                DB::rollback();
+                throw $th;
+            }
     }
+
+
+
+
 }

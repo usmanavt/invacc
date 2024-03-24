@@ -257,15 +257,34 @@ class GodownsrController extends Controller
     // $data1=compact('supplier');
 
 
-
+    $passwrd = DB::table('tblpwrd')->select('pwrdtxt')->max('pwrdtxt');
     $cd = DB::select('call procsredit(?)',array( $id ));
     $data=compact('cd');
-        return view('godownsr.edit')
+        return view('godownsr.edit',compact('passwrd'))
         ->with('godownsr',Godownsr::findOrFail($id))
         ->with('customer',Customer::select('id','title')->get())
         ->with($data);
 
     }
+
+    public function deleterec($id)
+    {
+
+    $passwrd = DB::table('tblpwrd')->select('pwrdtxtdel')->max('pwrdtxtdel');
+    $cd = DB::select('call procsredit(?)',array( $id ));
+    $data=compact('cd');
+        return view('godownsr.deleterec',compact('passwrd'))
+        ->with('godownsr',Godownsr::findOrFail($id))
+        ->with('customer',Customer::select('id','title')->get())
+        ->with($data);
+
+    }
+
+
+
+
+
+
 
     public function update(Request $request, Godownsr $godownsr)
     {
@@ -397,8 +416,61 @@ class GodownsrController extends Controller
         }
     }
 
-    public function destroy(CommercialInvoice $commercialInvoice)
+
+    public function deleteBankRequest(Request $request)
     {
-        //
+
+        DB::beginTransaction();
+            try {
+
+                DB::update(DB::raw(" update godownsrs SET purtotpcs=0,purtotwt=0,purtotfeet=0 where id=$request->tranid "));
+                DB::update(DB::raw(" update godownsr_details SET prgpwttot=0,prgppcstot=0,prgpfeettot=0 where gprid=$request->tranid "));
+            // //****################# Transfert Contract Balance to Contracts
+
+            DB::update(DB::raw("
+                    UPDATE sale_returns c
+                    INNER JOIN (
+                    SELECT tcontract_id, SUM(prgppcstot) as pcs,SUM(prgpwttot) AS wt,sum(prgpfeettot) as ft
+                    FROM godownsr_details where  tcontract_id = $request->contract_id
+                    GROUP BY tcontract_id
+                    ) x ON c.id = x.tcontract_id
+                    SET c.psrpcs = c.tsrpcs - x.pcs,c.psrwt= c.tsrwt-x.wt,c.psrfeet=c.tsrfeet-x.ft
+                    where  id = $request->contract_id  "));
+
+                    DB::update(DB::raw("
+                    UPDATE sale_return_details c
+                    INNER JOIN (
+                    SELECT tcontract_id,material_id, SUM(prgppcstot) as pcs,SUM(prgpwttot) AS wt,sum(prgpfeettot) as ft
+                    FROM godownsr_details where  tcontract_id = $request->contract_id
+                    GROUP BY tcontract_id,material_id
+                    ) x ON c.sale_return_id = x.tcontract_id and c.material_id=x.material_id
+                    SET c.prtbalpcs = c.qtypcs - x.pcs,c.prtbalwt= c.qtykg-x.wt,c.prtbalfeet=c.qtyfeet-x.ft
+                    where  sale_return_id = $request->contract_id  "));
+
+
+
+                DB::delete(DB::raw(" delete from godownsrs where id=$request->tranid"  ));
+                DB::delete(DB::raw(" delete from godownsr_details where gprid=$request->tranid   "));
+
+                DB::delete(DB::raw(" delete from godown_stock where ttypeid=6 and  transaction_id=$request->tranid   "));
+
+                // DB::update(DB::raw(" update contracts set closed=0 where id=$request->contract_id "));
+
+                DB::commit();
+                Session::flash('success','Record Deleted Successfully');
+                return response()->json(['success'],200);
+
+            } catch (\Throwable $th) {
+                DB::rollback();
+                throw $th;
+            }
     }
+
+
+
+
+
+
+
+
 }

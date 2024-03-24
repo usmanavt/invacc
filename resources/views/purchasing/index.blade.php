@@ -153,7 +153,7 @@
                     title:'Data Description', headerHozAlign:"center",
                     columns:[
 
-            {title: "Supplier",field: "supplier.title"},
+            {title: "Supplier",field: "supname"},
             {title: "Contract No",field: "contract_id"},
             {title: "Contract Date",field: "contract_date"},
             {title: "Purchase Id",field: "id"},
@@ -181,22 +181,22 @@
 
 
 
-            {title:"View" , formatter:viewIcon, hozAlign:"center",headerSort:false, responsive:0,
-                cellClick:function(e, cell){
-                    window.open(window.location + "/" + cell.getRow().getData().id  ,"_self");
-                }
-            },
+            // {title:"View" , formatter:viewIcon, hozAlign:"center",headerSort:false, responsive:0,
+            //     cellClick:function(e, cell){
+            //         window.open(window.location + "/" + cell.getRow().getData().id  ,"_self");
+            //     }
+            // },
             {title:"Edit" , formatter:editIcon, hozAlign:"center",headerSort:false, responsive:0,
                 cellClick:function(e, cell){
                     console.log(cell.getRow().getData())
                     window.open(window.location + "/" + cell.getRow().getData().id + "/edit" ,"_self");
                 }
             },
-            // {title:"Delete" , formatter:deleteIcon, hozAlign:"center",headerSort:false, responsive:0,
-            //     cellClick:function(e, cell){
-            //         window.open(window.location + "/" + cell.getRow().getData().id  ,"_self");
-            //     }
-            // },
+            {title:"Delete" , formatter:deleteIcon, hozAlign:"center",headerSort:false, responsive:0,
+                cellClick:function(e, cell){
+                    window.open(window.location + "/" + cell.getRow().getData().id + "/deleterec"   ,"_self");
+                }
+            },
             {title:"Print" , formatter:printIcon, hozAlign:"center",headerSort:false, responsive:0,
                 cellClick:function(e, cell){
                     window.open(window.location + "/" + cell.getRow().getData().id + "/printcontract"  ,"_self");

@@ -152,6 +152,26 @@ class PaymentController  extends Controller
             // 'gpno' => 'required|min:1|unique:sale_invoices',
             // 'customer_id' => 'required'
         ]);
+
+
+// FOR DUPLICATE CHEQUE NO
+
+    if($request->bank_id > 1 && $request->cheque_no != ' ' )
+       {
+        // $dupchqno = BankTransaction::where('cheque_no',$request->cheque_no)->first();
+        $dupchqno = DB::table('vwdupchqno')->where('cheque_no',$request->cheque_no)->first();
+        if($dupchqno) {
+            Session::flash('info','Record not Save Successfully Due to "Duplicate Cheque_no" ');
+            return response()->json(['success'],200);
+                      }
+        }
+
+
+
+
+
+
+
         DB::beginTransaction();
         try {
             $ci = new BankTransaction();
@@ -316,29 +336,71 @@ class PaymentController  extends Controller
 
             if($ci->head_id==32)
             {
+                // DB::update(DB::raw("
+                // UPDATE commercial_invoices c
+                // INNER JOIN (
+                // SELECT invoice_id,SUM(payedusd) as payment  FROM payment_details WHERE invoice_id in(select invoice_id from payment_details where paymentid =$ci->id  )  GROUP BY invoice_id
+                // ) x ON c.id = x.invoice_id
+                // SET c.invoicebal = ( case when contract_id=0 then c.total else tval end ) -  x.payment
+                // where  c.id in(select invoice_id from payment_details where paymentid =$ci->id  ) "));
+
                 DB::update(DB::raw("
                 UPDATE commercial_invoices c
                 INNER JOIN (
-                SELECT invoice_id,SUM(payedusd) as payment  FROM payment_details WHERE invoice_id in(select invoice_id from payment_details where paymentid =$ci->id  )  GROUP BY invoice_id
-                ) x ON c.id = x.invoice_id
-                SET c.invoicebal = ( case when contract_id=0 then c.total else tval end ) -  x.payment
+
+                    SELECT suppid,invsid,SUM(invoiceamount) AS invoicebal FROM
+                    (
+                    SELECT b.id AS suppid,a.id AS invsid,case WHEN b.source_id=2 then a.tval else  total end AS invoiceamount FROM commercial_invoices AS a
+                    INNER JOIN suppliers AS b ON a.supplier_id=b.id  AND b.id=$request->supplier_id AND a.id in(  SELECT invoice_id FROM payment_details WHERE paymentid=$ci->id )
+                    UNION all
+                     SELECT a.subhead_id,b.invoice_id,b.payedusd*-1 AS payment
+                    FROM bank_transactions AS a INNER join payment_details AS b ON a.id=b.paymentid and a.subhead_id =$request->supplier_id
+                    AND b.invoice_id in(  SELECT invoice_id FROM payment_details WHERE paymentid=$ci->id )
+                   UNION ALL
+                    SELECT supplier_id,commercial_invoice_id,prtamount*-1 AS retqty FROM purchase_returns WHERE supplier_id =$request->supplier_id
+                    AND commercial_invoice_id in(  SELECT commercial_invoice_id FROM purchase_returns WHERE id=$ci->id )
+                   UNION ALL
+                    SELECT a.subhead_id, b.id AS  invoice_id,a.amount_fc AS Receivedqty
+                    FROM bank_transactions AS a INNER join commercial_invoices AS b ON a.supinvid=b.invoiceno AND a.subhead_id =$request->supplier_id
+                    AND b.id  in(  SELECT invoice_id FROM payment_details WHERE paymentid=$ci->id )
+                   ) AS w GROUP BY suppid,invsid
+                ) x ON c.id = x.invsid
+                SET c.invoicebal = x.invoicebal
                 where  c.id in(select invoice_id from payment_details where paymentid =$ci->id  ) "));
+
             }
 
-            if($ci->head_id==33)
+            if($ci->head_id==33 &&  $request->cusinvid <> ' ' )
             {
                 DB::update(DB::raw("
+
+
                 UPDATE sale_invoices c
                 INNER JOIN (
-                    SELECT dcno,SUM(received) AS received FROM
+
+                    SELECT customer_id,invoiceid,SUM(invsbal) AS invoicebal FROM
                     (
-                    SELECT dcno,SUM(totrcvd) as received  FROM receive_details WHERE dcno='$ci->cusinvid'   GROUP BY dcno
-                    UNION all
-                    SELECT cusinvid,amount_fc FROM bank_transactions WHERE cusinvid='$ci->cusinvid' AND  head_id=33
-                ) y GROUP BY dcno
-                ) x ON c.dcno = x.dcno
-                SET c.paymentbal = totrcvbamount -  x.received
-                where  c.dcno =$ci->cusinvid "));
+
+                        SELECT customer_id ,id AS invoiceid,totrcvbamount AS invsbal FROM sale_invoices
+                        WHERE customer_id=$ci->subhead_id  AND dcno='$ci->cusinvid'
+                        UNION ALL
+                         SELECT subhead_id, invoice_id,b.totrcvd*-1 AS invsbal
+                         FROM bank_transactions AS a INNER join receive_details AS b ON a.id=b.receivedid and a.subhead_id =$ci->subhead_id
+                         AND invoice_id in(  SELECT invoice_id FROM receive_details WHERE dcno='$ci->cusinvid' )
+                         UNION all
+                         SELECT a.customer_id,invoice_id,a.totrcvbamount*-1 AS invsbal
+                         FROM sale_returns AS a INNER JOIN sale_invoices AS b  ON a.invoice_id=b.id  WHERE a.customer_id =$ci->subhead_id
+                         AND invoice_id in(SELECT invoice_id FROM sale_returns WHERE dcno='$ci->cusinvid')
+                         UNION all
+                         SELECT a.subhead_id, b.id AS  invoice_id,a.amount_fc AS invsbal
+                         FROM bank_transactions AS a INNER join sale_invoices AS b ON a.cusinvid=b.dcno AND a.subhead_id =$ci->subhead_id
+                         AND b.id  in(SELECT invoice_id FROM receive_details WHERE dcno='$ci->cusinvid')
+
+                   ) AS w GROUP BY customer_id,invoiceid
+                ) x ON c.id = x.invoiceid
+                SET c.paymentbal = x.invoicebal
+                where  c.id in(select invoice_id from receive_details where dcno='$ci->cusinvid') "));
+
             }
 
 
@@ -395,7 +457,7 @@ class PaymentController  extends Controller
     }
 
 
-
+    // showing view for purchase delete
     public function deleterec($id)
     {
 
@@ -410,6 +472,7 @@ class PaymentController  extends Controller
 
 
         return view('payments.deleterec',compact('passwrd'))
+        ->with('id',$id)
         ->with('suppliers',Supplier::select('id','title')->get())
         ->with('banktransaction',BankTransaction::findOrFail($id))
         ->with($data)
@@ -622,22 +685,22 @@ class PaymentController  extends Controller
                     SELECT suppid,invsid,SUM(invoiceamount) AS invoicebal FROM
                     (
                     SELECT b.id AS suppid,a.id AS invsid,case WHEN b.source_id=2 then a.tval else  total end AS invoiceamount FROM commercial_invoices AS a
-                    INNER JOIN suppliers AS b ON a.supplier_id=b.id  AND b.id=$request->supplier_id AND a.id in(  SELECT invoice_id FROM payment_details WHERE paymentid=$request->paymentid )
+                    INNER JOIN suppliers AS b ON a.supplier_id=b.id  AND b.id=$request->supplier_id AND a.id in(  SELECT invoice_id FROM payment_details WHERE paymentid=$ci->id )
                     UNION all
                      SELECT a.subhead_id,b.invoice_id,b.payedusd*-1 AS payment
                     FROM bank_transactions AS a INNER join payment_details AS b ON a.id=b.paymentid and a.subhead_id =$request->supplier_id
-                    AND b.invoice_id in(  SELECT invoice_id FROM payment_details WHERE paymentid=$request->paymentid )
+                    AND b.invoice_id in(  SELECT invoice_id FROM payment_details WHERE paymentid=$ci->id )
                    UNION ALL
                     SELECT supplier_id,commercial_invoice_id,prtamount*-1 AS retqty FROM purchase_returns WHERE supplier_id =$request->supplier_id
-                    AND commercial_invoice_id in(  SELECT invoice_id FROM payment_details WHERE paymentid=$request->paymentid )
+                    AND commercial_invoice_id in(  SELECT invoice_id FROM payment_details WHERE paymentid=$ci->id )
                    UNION ALL
                     SELECT a.subhead_id, b.id AS  invoice_id,a.amount_fc AS Receivedqty
                     FROM bank_transactions AS a INNER join commercial_invoices AS b ON a.supinvid=b.invoiceno AND a.subhead_id =$request->supplier_id
-                    AND b.id  in(  SELECT invoice_id FROM payment_details WHERE paymentid=$request->paymentid )
+                    AND b.id  in(  SELECT invoice_id FROM payment_details WHERE paymentid=$ci->id )
                    ) AS w GROUP BY suppid,invsid
                 ) x ON c.id = x.invsid
                 SET c.invoicebal = x.invoicebal
-                where  c.id in(select invoice_id from payment_details where paymentid =$request->paymentid  ) "));
+                where  c.id in(select invoice_id from payment_details where paymentid =$ci->id  ) "));
 
 
             }
@@ -645,17 +708,34 @@ class PaymentController  extends Controller
             if($ci->head_id==33 &&  $request->cusinvid <> ' ' )
             {
                 DB::update(DB::raw("
+
+
                 UPDATE sale_invoices c
                 INNER JOIN (
-                    SELECT dcno,SUM(received) AS received FROM
+
+                    SELECT customer_id,invoiceid,SUM(invsbal) AS invoicebal FROM
                     (
-                    SELECT dcno,SUM(totrcvd) as received  FROM receive_details WHERE dcno='$ci->cusinvid'   GROUP BY dcno
-                    UNION all
-                    SELECT cusinvid,amount_fc FROM bank_transactions WHERE cusinvid='$ci->cusinvid' AND  head_id=33
-                ) y GROUP BY dcno
-                ) x ON c.dcno = x.dcno
-                SET c.paymentbal = totrcvbamount -  x.received
-                where  c.dcno =$ci->cusinvid "));
+
+                        SELECT customer_id ,id AS invoiceid,totrcvbamount AS invsbal FROM sale_invoices
+                        WHERE customer_id=$ci->subhead_id  AND dcno='$ci->cusinvid'
+                        UNION ALL
+                         SELECT subhead_id, invoice_id,b.totrcvd*-1 AS invsbal
+                         FROM bank_transactions AS a INNER join receive_details AS b ON a.id=b.receivedid and a.subhead_id =$ci->subhead_id
+                         AND invoice_id in(  SELECT invoice_id FROM receive_details WHERE dcno='$ci->cusinvid' )
+                         UNION all
+                         SELECT a.customer_id,invoice_id,a.totrcvbamount*-1 AS invsbal
+                         FROM sale_returns AS a INNER JOIN sale_invoices AS b  ON a.invoice_id=b.id  WHERE a.customer_id =$ci->subhead_id
+                         AND invoice_id in(SELECT invoice_id FROM sale_returns WHERE dcno='$ci->cusinvid')
+                         UNION all
+                         SELECT a.subhead_id, b.id AS  invoice_id,a.amount_fc AS invsbal
+                         FROM bank_transactions AS a INNER join sale_invoices AS b ON a.cusinvid=b.dcno AND a.subhead_id =$ci->subhead_id
+                         AND b.id  in(SELECT invoice_id FROM receive_details WHERE dcno='$ci->cusinvid')
+
+                   ) AS w GROUP BY customer_id,invoiceid
+                ) x ON c.id = x.invoiceid
+                SET c.paymentbal = x.invoicebal
+                where  c.id in(select invoice_id from receive_details where dcno='$ci->cusinvid') "));
+
             }
 
 
@@ -726,77 +806,123 @@ class PaymentController  extends Controller
 
 
 
-    public function delete(Request $request)
+    public function deleteBankRequest(Request $request)
     {
-        dd($request->all());
+        // dd($request->all());
+        // $delid = $request->delid;
+        // dd($delid);
         //  dd($commercialinvoice->commercial_invoice_id());
            //   dd('0jd fakdsjf kdjf');
-        DB::beginTransaction();
-        try {
-
-        //    dd($request->paymentid);
-
-
-        if($request->head_id==32)
+        if($request->paymentid == 0)
         {
-
-            DB::update(DB::raw("  update payment_details SET payedusd=0,payedrup=0 WHERE paymentid=$request->paymentid "));
-
-
-
-            DB::update(DB::raw("
-            UPDATE commercial_invoices c
-            INNER JOIN (
-
-                SELECT suppid,invsid,SUM(invoiceamount) AS invoicebal FROM
-                (
-                SELECT b.id AS suppid,a.id AS invsid,case WHEN b.source_id=2 then a.tval else  total end AS invoiceamount FROM commercial_invoices AS a
-                INNER JOIN suppliers AS b ON a.supplier_id=b.id  AND b.id=$request->supplier_id AND a.id in(  SELECT invoice_id FROM payment_details WHERE paymentid=$request->paymentid )
-                UNION all
-                 SELECT a.subhead_id,b.invoice_id,b.payedusd*-1 AS payment
-                FROM bank_transactions AS a INNER join payment_details AS b ON a.id=b.paymentid and a.subhead_id =$request->supplier_id
-                AND b.invoice_id in(  SELECT invoice_id FROM payment_details WHERE paymentid=$request->paymentid )
-               UNION ALL
-                SELECT supplier_id,commercial_invoice_id,prtamount*-1 AS retqty FROM purchase_returns WHERE supplier_id =$request->supplier_id
-                AND commercial_invoice_id in(  SELECT invoice_id FROM payment_details WHERE paymentid=$request->paymentid )
-               UNION ALL
-                SELECT a.subhead_id, b.id AS  invoice_id,a.amount_fc AS Receivedqty
-                FROM bank_transactions AS a INNER join commercial_invoices AS b ON a.supinvid=b.invoiceno AND a.subhead_id =$request->supplier_id
-                AND b.id  in(  SELECT invoice_id FROM payment_details WHERE paymentid=$request->paymentid )
-               ) AS w GROUP BY suppid,invsid
-            ) x ON c.id = x.invsid
-            SET c.invoicebal = x.invoicebal
-            where  c.id in(select invoice_id from payment_details where paymentid =$request->paymentid  ) "));
-        }
-
-        if($request->head_id==33 &&  $request->cusinvid <> ' ' )
-        {
-            DB::update(DB::raw("
-            UPDATE sale_invoices c
-            INNER JOIN (
-                SELECT dcno,SUM(received) AS received FROM
-                (
-                SELECT dcno,SUM(totrcvd) as received  FROM receive_details WHERE dcno='$request->cusinvid'   GROUP BY dcno
-                UNION all
-                SELECT cusinvid,amount_fc FROM bank_transactions WHERE cusinvid='$request->cusinvid' AND  head_id=33
-            ) y GROUP BY dcno
-            ) x ON c.dcno = x.dcno
-            SET c.paymentbal = totrcvbamount +  x.received
-            where  c.dcno ='$request->cusinvid' "));
-        }
-
-
-            DB::delete(DB::raw(" delete from bank_transactions where id=$request->paymentid   "));
-            DB::delete(DB::raw(" delete FROM payment_details WHERE paymentid =$request->paymentid   "));
-
-
-            DB::commit();
-            Session::flash('success','Record Deleted Successfully');
+            Session::flash('info','Record not Deleted');
             return response()->json(['success'],200);
-        } catch (\Throwable $th) {
-            DB::rollback();
-            throw $th;
         }
+
+
+            DB::beginTransaction();
+            try {
+
+
+
+                // dd($request->paymentid);
+
+
+
+
+
+            if($request->head_id==32)
+            {
+
+                DB::update(DB::raw("  update payment_details SET payedusd=0,payedrup=0 WHERE paymentid=$request->paymentid "));
+
+
+
+                DB::update(DB::raw("
+                UPDATE commercial_invoices c
+                INNER JOIN (
+
+                    SELECT suppid,invsid,SUM(invoiceamount) AS invoicebal FROM
+                    (
+                    SELECT b.id AS suppid,a.id AS invsid,case WHEN b.source_id=2 then a.tval else  total end AS invoiceamount FROM commercial_invoices AS a
+                    INNER JOIN suppliers AS b ON a.supplier_id=b.id  AND b.id=$request->supplier_id AND a.id in(  SELECT invoice_id FROM payment_details WHERE paymentid=$request->paymentid )
+                    UNION all
+                     SELECT a.subhead_id,b.invoice_id,b.payedusd*-1 AS payment
+                    FROM bank_transactions AS a INNER join payment_details AS b ON a.id=b.paymentid and a.subhead_id =$request->supplier_id
+                    AND b.invoice_id in(  SELECT invoice_id FROM payment_details WHERE paymentid=$request->paymentid )
+                   UNION ALL
+                    SELECT supplier_id,commercial_invoice_id,prtamount*-1 AS retqty FROM purchase_returns WHERE supplier_id =$request->supplier_id
+                    AND commercial_invoice_id in(  SELECT invoice_id FROM payment_details WHERE paymentid=$request->paymentid )
+                   UNION ALL
+                    SELECT a.subhead_id, b.id AS  invoice_id,a.amount_fc AS Receivedqty
+                    FROM bank_transactions AS a INNER join commercial_invoices AS b ON a.supinvid=b.invoiceno AND a.subhead_id =$request->supplier_id
+                    AND b.id  in(  SELECT invoice_id FROM payment_details WHERE paymentid=$request->paymentid )
+                   ) AS w GROUP BY suppid,invsid
+                ) x ON c.id = x.invsid
+                SET c.invoicebal = x.invoicebal
+                where  c.id in(select invoice_id from payment_details where paymentid =$request->paymentid  ) "));
+            }
+
+            // if($request->head_id==33 &&  $request->cusinvid <> ' ' )
+            if($request->head_id==33 &&  $request->cusinvid <> ' ' )
+            {
+
+
+                DB::update(DB::raw("  update bank_transactions SET amount_fc=0 WHERE id=$request->paymentid "));
+
+
+
+                DB::update(DB::raw("
+
+                UPDATE sale_invoices c
+                INNER JOIN (
+
+                    SELECT customer_id,invoiceid,SUM(invsbal) AS invoicebal FROM
+                    (
+
+                        SELECT customer_id ,id AS invoiceid,totrcvbamount AS invsbal FROM sale_invoices
+                        WHERE customer_id=$request->supplier_id  AND dcno='$request->cusinvid'
+                        UNION ALL
+                         SELECT subhead_id, invoice_id,b.totrcvd*-1 AS invsbal
+                         FROM bank_transactions AS a INNER join receive_details AS b ON a.id=b.receivedid and a.subhead_id =$request->supplier_id
+                         AND invoice_id in(  SELECT invoice_id FROM receive_details WHERE dcno='$request->cusinvid' )
+                         UNION all
+                         SELECT a.customer_id,invoice_id,a.totrcvbamount*-1 AS invsbal
+                         FROM sale_returns AS a INNER JOIN sale_invoices AS b  ON a.invoice_id=b.id  WHERE a.customer_id =$request->supplier_id
+                         AND invoice_id in(SELECT invoice_id FROM sale_returns WHERE dcno='$request->cusinvid')
+                         UNION all
+                         SELECT a.subhead_id, b.id AS  invoice_id,a.amount_fc AS invsbal
+                         FROM bank_transactions AS a INNER join sale_invoices AS b ON a.cusinvid=b.dcno AND a.subhead_id =$request->supplier_id
+                         AND b.id  in(SELECT invoice_id FROM receive_details WHERE dcno='$request->cusinvid')
+
+                   ) AS w GROUP BY customer_id,invoiceid
+                ) x ON c.id = x.invoiceid
+                SET c.paymentbal = x.invoicebal
+                where  c.id in(select invoice_id from receive_details where dcno='$request->cusinvid') "));
+
+            }
+
+
+                DB::delete(DB::raw(" delete from bank_transactions where id=$request->paymentid   "));
+                DB::delete(DB::raw(" delete FROM payment_details WHERE paymentid =$request->paymentid   "));
+
+
+                DB::commit();
+
+
+                Session::flash('success','Record Deleted Successfully');
+                return response()->json(['success'],200);
+
+            } catch (\Throwable $th) {
+                DB::rollback();
+                throw $th;
+            }
+
+
+
     }
+
+
+
 
 }

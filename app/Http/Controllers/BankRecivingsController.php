@@ -136,10 +136,10 @@ class BankRecivingsController extends Controller
     public function edit($id)
     {
         $passwrd = DB::table('tblpwrd')->select('pwrdtxt')->max('pwrdtxt');
-        $passwrddel = DB::table('tblpwrd')->select('pwrdtxtdel')->max('pwrdtxtdel');
+        // $passwrddel = DB::table('tblpwrd')->select('pwrdtxtdel')->max('pwrdtxtdel');
 
 
-        return view('bankrecivings.edit',compact('passwrd','passwrddel'))
+        return view('bankrecivings.edit',compact('passwrd'))
         ->with('bt',ChequeTransaction::whereId($id)->first())
         ->with('banks',Bank::where('status',1)->get())
         ->with('suppliers',Supplier::where('status',1)->get())
@@ -148,6 +148,24 @@ class BankRecivingsController extends Controller
         ->with('customers',Customer::where('status',1)->get())
         ;
     }
+
+
+    public function deleterec($id)
+    {
+        $passwrd = DB::table('tblpwrd')->select('pwrdtxtdel')->max('pwrdtxtdel');
+        // $passwrddel = DB::table('tblpwrd')->select('pwrdtxtdel')->max('pwrdtxtdel');
+
+
+        return view('bankrecivings.deleterec',compact('passwrd'))
+        ->with('bt',ChequeTransaction::whereId($id)->first())
+        ->with('banks',Bank::where('status',1)->get())
+        ->with('suppliers',Supplier::where('status',1)->get())
+        ->with('heads',Head::where('status',1)->get())
+        ->with('subheads',Subhead::where('status',1)->get())
+        ->with('customers',Customer::where('status',1)->get())
+        ;
+    }
+
 
     public function update(Request $request, ChequeTransaction $bt)
 
@@ -230,4 +248,49 @@ class BankRecivingsController extends Controller
     //     Session::flash('info',"Bank status set");
     //     return redirect()->route('banks.index');
     // }
+
+
+    public function deleteBankRequest(Request $request)
+    {
+
+
+//   dd($request->sts);
+
+
+if($request->sts == 1)
+{
+    Session::flash('info','Record Already Used In Other Transaction');
+    // return response()->json(['success'],200);
+    // return redirect()->route('bankrecivings.index');
+    return redirect()->route('bankrecivings.index');
+}
+
+
+DB::beginTransaction();
+            try {
+
+                 DB::delete(DB::raw(" delete FROM cheque_transactions WHERE id=$request->id; "));
+
+
+                // DB::update(DB::raw("
+                // deletefrom cheque_transactions SET clrstatus=0,clrid=0,ref='' WHERE cheque_no=$request->id;
+
+                // "));
+
+
+                DB::commit();
+                Session::flash('success','Record Deleted Successfully');
+                // return response()->json(['success'],200);
+                return redirect()->route('bankrecivings.index');
+
+            } catch (\Throwable $th) {
+                DB::rollback();
+                throw $th;
+            }
+
+
+
+    }
+
+
 }

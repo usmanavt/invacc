@@ -184,7 +184,7 @@
             },
             {title:"Delete" , formatter:deleteIcon, hozAlign:"center",headerSort:false, responsive:0,
                 cellClick:function(e, cell){
-                    window.open(window.location + "/" + cell.getRow().getData().id  ,"_self");
+                    window.open(window.location + "/" + cell.getData().id + "/deleterec"   ,"_self");
                 }
             },
             {title:"Print" , formatter:printIcon, hozAlign:"center",headerSort:false, responsive:0,

@@ -96,10 +96,10 @@
                 cellClick:function(e, cell){
                     window.open(window.location + "/" + cell.getData().transaction + "/edit" ,"_self");
             }},
-            // {title:"Delete" , formatter:deleteIcon, hozAlign:"center",headerSort:false, responsive:0,
-            //     cellClick:function(e, cell){
-            //         window.open(window.location + "/" + cell.getData().id + "/ddelete" ,"_self");
-            //     }},
+            {title:"Delete" , formatter:deleteIcon, hozAlign:"center",headerSort:false, responsive:0,
+                cellClick:function(e, cell){
+                    window.open(window.location + "/" + cell.getData().transaction + "/deleterec"  ,"_self");
+                }},
                 {title:"Print" , formatter:printIcon, hozAlign:"center",headerSort:false, responsive:0,
                 cellClick:function(e, cell){
                     window.open(window.location + "/" + cell.getRow().getData().id + "/printcontract"  ,"_self");

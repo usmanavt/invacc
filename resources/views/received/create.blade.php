@@ -49,8 +49,8 @@
                                 @endforeach
                             </select>
 
-                            <x-input-text title="Cheque No" name="cheque_no" id="cheque_no" req required class="col-span-2"  />
-                            <x-input-date title="Cheque Date" id="cheque_date" name="cheque_date" req required class="col-span-2" />
+                            <x-input-text title="Cheque No" name="cheque_no" id="cheque_no" req required class="col-span-2" disabled />
+                            <x-input-date title="Cheque Date" id="cheque_date" name="cheque_date" req required class="col-span-2" disabled />
                             <x-input-text title="Received From" name="pmntto" id="pmntto"  class="col-span-2"   />
 
                         </div>
@@ -764,29 +764,30 @@ var updateValues = (cell) => {
     }
 
 
+    bank_id.addEventListener("change", () => {
+    var sid = document.getElementById("bank_id");
+        var bank_id = sid.options[sid.selectedIndex];
+        if(bank_id.value==1)
+        { cheque_no.disabled=true;
+          cheque_date.disabled=true;
+          cheque_no.style.color ="black";
+          cheque_date.style.color ="black";
+        }
+        else
+        { cheque_no.disabled=false;
+          cheque_date.disabled=false;
+          cheque_no.value='';
+          cheque_no.style.color ="black";
+          cheque_date.style.color ="black";
+        }
+
+});
 
 
 
 
 
 
-    // function advpayment(adv) {
-    //     var advtxt = document.getElementById("advtxt");
-    //     amount_fc.disabled = advtxt.checked ? true : false;
-
-    //     amount_fc.disabled = per.checked ? true : false;
-
-    //     if(adv.checked==true)
-    //     {
-    //         advtxt.value=1;
-    //     }
-    //     else
-    //     {
-    //         advtxt.value=0;
-    //     }
-
-
-    // }
 
     amount_fc.onblur=function(){
     amount_pkr.value=(amount_fc.value * conversion_rate.value).toFixed(0);

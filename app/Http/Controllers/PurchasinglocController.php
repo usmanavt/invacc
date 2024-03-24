@@ -40,23 +40,41 @@ class PurchasinglocController extends Controller
 
     public function getMaster(Request $request)
     {
-        $status =$request->status ;
+        // $status =$request->status ;
+        // $search = $request->search;
+        // $size = $request->size;
+        // $field = $request->sort[0]["field"];     //  Nested Array
+        // $dir = $request->sort[0]["dir"];         //  Nested Array
+        // $cis = Purchasing::where('status',$status)
+        // ->where(function ($query) use ($search){
+        //         $query->where('purinvsno','LIKE','%' . $search . '%');
+        //         // ->orWhere('invoiceno','LIKE','%' . $search . '%');
+        //     })
+        //     ->whereHas('supplier', function ($query) {
+        //         $query->where('source_id','<>','2');
+
+        //     })
+        // ->with('supplier:id,title')
+        // ->orderBy($field,$dir)
+        // ->paginate((int) $size);
+        // return $cis;
+
         $search = $request->search;
         $size = $request->size;
         $field = $request->sort[0]["field"];     //  Nested Array
         $dir = $request->sort[0]["dir"];         //  Nested Array
-        $cis = Purchasing::where('status',$status)
-        ->where(function ($query) use ($search){
-                $query->where('purinvsno','LIKE','%' . $search . '%');
-                // ->orWhere('invoiceno','LIKE','%' . $search . '%');
-            })
-            ->whereHas('supplier', function ($query) {
-                $query->where('source_id','<>','2');
-            })
-        ->with('supplier:id,title')
+        $cis = DB::table('vwgdrcvdindex')
+        // ->join('suppliers', 'contracts.supplier_id', '=', 'suppliers.id')
+        // ->select('contracts.*', 'suppliers.title')
+        ->where('supname', 'like', "%$search%")
+        ->orWhere('purinvsno', 'like', "%$search%")
         ->orderBy($field,$dir)
         ->paginate((int) $size);
         return $cis;
+
+
+
+
     }
 
 
@@ -246,26 +264,44 @@ class PurchasinglocController extends Controller
 
     public function edit($id)
     {
-    //     $cd = DB::table('skus')->select('id AS dunitid','title AS dunit')
-    //     ->whereIn('id',[1,2])->get();
-    //    $data=compact('cd');
 
-    // $supplier = DB::table('suppliers')
-    // ->join('purchasings', 'purchasings.supplier_id', '=', 'suppliers.id')
-    // ->select('suppliers.id','suppliers.title as supname')
-    // ->where('purchasings.id',$id)->get();
-    // $data1=compact('supplier');
-
-
-
+        $passwrd = DB::table('tblpwrd')->select('pwrdtxt')->max('pwrdtxt');
     $cd = DB::select('call proclocpuredit(?)',array( $id ));
     $data=compact('cd');
-        return view('purchasingloc.edit')
+        return view('purchasingloc.edit',compact('passwrd'))
         ->with('purchasing',Purchasing::findOrFail($id))
         ->with('supplier',Supplier::select('id','title')->get())
         ->with($data);
 
     }
+
+    public function deleterec($id)
+    {
+
+    $passwrd = DB::table('tblpwrd')->select('pwrdtxtdel')->max('pwrdtxtdel');
+    // $srchcid= Purchasing::where('id',$id)->max('contract_id');
+    // $prgp = CommercialInvoice::where('contract_id',$srchcid)->max('contract_id');
+
+    $cd = DB::select('call proclocpuredit(?)',array( $id ));
+    $data=compact('cd');
+        return view('purchasingloc.deleterec',compact('passwrd'))
+        ->with('purchasing',Purchasing::findOrFail($id))
+        ->with('supplier',Supplier::select('id','title')->get())
+        ->with($data);
+
+    }
+
+
+
+
+
+
+
+
+
+
+
+
 
     public function update(Request $request, Purchasing $purchasing)
     {
@@ -350,7 +386,8 @@ class PurchasinglocController extends Controller
                     UPDATE commercial_invoices c
                     INNER JOIN (
                     SELECT contract_id, SUM(purtotpcs) as pcs,SUM(purtotwt) AS wt,SUM(purtotfeet) AS tfeet
-                    FROM purchasings where  contract_id=$ci->contract_id  GROUP BY contract_id
+                    FROM purchasings AS a INNER JOIN suppliers AS b ON a.supplier_id=b.id AND b.source_id=13
+                    where  contract_id=$ci->contract_id  GROUP BY contract_id
                     ) x ON c.id = x.contract_id
                     SET c.dutybal = c.tpcs - x.pcs,c.wtbal= c.twt-x.wt,c.agencychrgs=c.miscexpenses-x.tfeet
                     where  id = $ci->contract_id  "));
@@ -360,8 +397,10 @@ class PurchasinglocController extends Controller
             DB::update(DB::raw("
                 UPDATE commercial_invoice_details c
                 INNER JOIN (
-                SELECT contract_id,material_id,SUM(purpcstot) as pcs,SUM(purwttot) AS wt,SUM(purfeettot) AS tfeet
-                FROM purchasing_details where  contract_id = $ci->contract_id    GROUP BY contract_id,material_id
+
+                SELECT a.contract_id,material_id,SUM(purpcstot) as pcs,SUM(purwttot) AS wt,SUM(purfeettot) AS tfeet
+                FROM purchasing_details AS a INNER JOIN purchasings AS b ON a.purid=b.id INNER JOIN suppliers AS c ON b.supplier_id=c.id AND c.source_id=13
+                WHERE  a.contract_id = $ci->contract_id    GROUP BY a.contract_id,material_id
                 ) x ON c.contract_id = x.contract_id and c.material_id=x.material_id
                 SET c.bundle1 = c.pcs - x.pcs,c.dbalwt= c.gdswt-x.wt,c.bundle2=c.qtyinfeet-x.tfeet WHERE  c.commercial_invoice_id = $ci->contract_id
             "));
@@ -396,8 +435,60 @@ class PurchasinglocController extends Controller
         }
     }
 
-    public function destroy(CommercialInvoice $commercialInvoice)
+
+    public function deleteBankRequest(Request $request)
     {
-        //
+
+        DB::beginTransaction();
+            try {
+
+
+
+                DB::update(DB::raw(" update purchasing_details SET purpcstot=0,purwttot=0,purfeettot=0 where contract_id=$request->purid "));
+                DB::update(DB::raw(" update purchasings SET purtotpcs=0,purtotwt=0 where id=$request->purid "));
+
+
+
+            //****################# Transfert Contract Balance to Contracts
+            DB::update(DB::raw("
+                    UPDATE commercial_invoices c
+                    INNER JOIN (
+                    SELECT contract_id, SUM(purtotpcs) as pcs,SUM(purtotwt) AS wt,SUM(purtotfeet) AS tfeet
+                    FROM purchasings AS a INNER JOIN suppliers AS b ON a.supplier_id=b.id AND b.source_id=13
+                    where  contract_id=$request->contract_id  GROUP BY contract_id
+                    ) x ON c.id = x.contract_id
+                    SET c.dutybal = c.tpcs - x.pcs,c.wtbal= c.twt-x.wt,c.agencychrgs=c.miscexpenses-x.tfeet
+                    where  id = $request->contract_id  "));
+
+
+            //****################# Transfert item wise Contract Balance from detail to detail
+            DB::update(DB::raw("
+                UPDATE commercial_invoice_details c
+                INNER JOIN (
+
+                SELECT a.contract_id,material_id,SUM(purpcstot) as pcs,SUM(purwttot) AS wt,SUM(purfeettot) AS tfeet
+                FROM purchasing_details AS a INNER JOIN purchasings AS b ON a.purid=b.id INNER JOIN suppliers AS c ON b.supplier_id=c.id AND c.source_id=13
+                WHERE  a.contract_id = $request->contract_id    GROUP BY a.contract_id,material_id
+                ) x ON c.contract_id = x.contract_id and c.material_id=x.material_id
+                SET c.bundle1 = c.pcs - x.pcs,c.dbalwt= c.gdswt-x.wt,c.bundle2=c.qtyinfeet-x.tfeet WHERE  c.commercial_invoice_id = $request->contract_id
+            "));
+
+
+
+                DB::delete(DB::raw(" delete from purchasings where id=$request->purid"  ));
+                DB::delete(DB::raw(" delete from purchasing_details where purid=$request->purid   "));
+
+                DB::delete(DB::raw(" delete from godown_stock where ttypeid=3 and  transaction_id=$request->purid   "));
+
+                // DB::update(DB::raw(" update contracts set closed=0 where id=$request->contract_id "));
+
+                DB::commit();
+                Session::flash('success','Record Deleted Successfully');
+                return response()->json(['success'],200);
+
+            } catch (\Throwable $th) {
+                DB::rollback();
+                throw $th;
+            }
     }
 }

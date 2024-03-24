@@ -1,9 +1,9 @@
 <x-app-layout>
 
     <x-slot name="header">
-        <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-           Edit Bank Recivings
-        </h2>
+        <div style="font-size: 1.5rem;font-weight: bold;color:brown;border:blue">
+            Delete Record Information for Cheque Transaction
+        </div>
     </x-slot>
 
 
@@ -21,9 +21,9 @@
 
 
                         <div class="flex flex-col justify-start items-center">
-                            <form action="{{ route('bankrecivings.update',$bt) }}" method="post" class="flex flex-col">
+                            <form action="{{ route('bankrecivings.del') }}" method="post" class="flex flex-col">
                                 @csrf
-                                @method('PUT')
+                                @method('POST')
                                 <input type="hidden" name="id" value="{{ $bt->id }}">
                                 {{-- <label for="">Bank</label>
                                 <select autocomplete="on" name="bank_id" required>
@@ -33,10 +33,10 @@
                                     @endforeach
                                 </select> --}}
                                 {{-- Head --}}
-                                <x-input-date title="Document Date" name="documentdate" value="{{ $bt->documentdate }}"/>
-                                <x-input-text title="Bank Naration" name="banknaration" value="{{ $bt->banknaration }}"/>
+                                <x-input-date title="Document Date" name="documentdate" value="{{ $bt->documentdate }}" disabled/>
+                                <x-input-text title="Bank Naration" name="banknaration" value="{{ $bt->banknaration }}" disabled/>
                                 <label for="">Head</label>
-                                <select autocomplete="on" name="head_id" id="head_id" required onchange="populateSelect()">
+                                <select autocomplete="on" name="head_id" id="head_id" disabled required onchange="populateSelect()">
                                     <option disabled selected value="">--Select</option>
                                     @foreach ($heads as $head)
                                         <option value="{{ $head->id }}" @if($head->id === $bt->head_id) selected @endif>{{ $head->title }}</option>
@@ -53,7 +53,7 @@
                                 {{-- Supplier --}}
                                 <label for="">Supplier</label>
                                 <select autocomplete="on" name="supplier_id" id="supplier_id" disabled class="disabled:opacity-50">
-                                    <option disabled selected value="">--Select</option>
+.                                    <option disabled selected value="">--Select</option>
                                     @foreach ($suppliers as $supplier)
                                         <option value="{{ $supplier->id }}" @if($supplier->id === $bt->supplier_id) selected @endif>{{ $supplier->title }}</option>
                                     @endforeach
@@ -68,10 +68,10 @@
                                 </select>
 
                                 {{-- <x-input-numeric title="Conversion Rate" name="conversion_rate" id="conversion_rate" value="1" min="1" step="0.01" required  onblur="convamounttodlr()" value="{{ $bt->conversion_rate }}"/> --}}
-                                <x-input-numeric title="Receiving" name="received" id="received"    value="{{ $bt->received }}"/>
-                                <x-input-numeric title="Payment" name="payment" id="payment"    class="" value="{{ $bt->payment }}"/>
-                                <x-input-text title="Cheque #" name="cheque_no" req required class="" value="{{ $bt->cheque_no }}"/>
-                                <x-input-date title="Cheque Date" name="cheque_date" value="{{ $bt->cheque_date }}" req required/>
+                                <x-input-numeric title="Receiving" name="received" id="received" disabled    value="{{ $bt->received }}"/>
+                                <x-input-numeric title="Payment" name="payment" id="payment"  disabled   class="" value="{{ $bt->payment }}"/>
+                                <x-input-text title="Cheque #" name="cheque_no" disabled class="" value="{{ $bt->cheque_no }}"/>
+                                <x-input-date title="Cheque Date" name="cheque_date" disabled value="{{ $bt->cheque_date }}" req required/>
 
 
                             <div>
@@ -103,18 +103,18 @@
                                         <i class="fa fa-save fa-fw"></i>
                                             Submit
                                     </x-button>
-                                    <x-input-text title="Password For Edition" name="edtpw" id="edtpw" type="password"     />
+                                    <x-input-text title="Password For Deletion" name="edtpw" id="edtpw" type="password"     />
                                     <x-input-text title="" name="dbpwrd2" id="dbpwrd2"  class="col-span-2" hidden  value="{{$passwrd}}" />
 
                                 </div>
-                                <div class="mt-2">
-                                    {{-- <input class="checked:bg-blue-500 checked:border-blue-500 focus:outline-none"  type="checkbox"  name="del" id="del" disabled   onclick="delmode(this)" >
+                                {{-- <div class="mt-2">
+                                    <input class="checked:bg-blue-500 checked:border-blue-500 focus:outline-none"  type="checkbox"  name="del" id="del" disabled   onclick="delmode(this)" >
                                     <label for="">
                                         <span style="color: brown;font-weight: bold"> Delete Mode </span> <span class="text-red-500 font-semibold font-size:1rem "></span>
-                                        </label> --}}
+                                        </label>
 
-                                {{-- <x-input-text title="Password For Deletion" name="delpwrd" id="delpwrd" type="password" class="col-span-2"    /> --}}
-                                {{-- <x-input-text title="" name="delpwrd2" id="delpwrd2"  class="col-span-2" hidden   value="{{$passwrddel}}" /> --}}
+                                <x-input-text title="Password For Deletion" name="delpwrd" id="delpwrd" type="password" class="col-span-2"    />
+                                <x-input-text title="" name="delpwrd2" id="delpwrd2"  class="col-span-2" hidden   value="{{$passwrddel}}" /> --}}
                                 <x-input-text title="" name="p2" id="p2" value="0" hidden  />
 
                                 </div>
@@ -240,7 +240,7 @@
     // }
 
 
-    }
+    // }
 
 
 

@@ -273,6 +273,14 @@ class ClearanceController extends Controller
             ->with('cd',Sku::whereIn('id',[1,2])->get());
         }
 
+        public function deleterec($id)
+        {
+
+            $passwrd = DB::table('tblpwrd')->select('pwrdtxtdel')->max('pwrdtxtdel');
+            return view('clearance.deleterec',compact('passwrd'))->with('clearance',Clearance::where('id',$id)->first())
+            ->with('banks',Bank::where('status',1)->get())
+            ->with('cd',Sku::whereIn('id',[1,2])->get());
+        }
 
 
 
@@ -821,21 +829,75 @@ public function update(Request $request)
     }
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-public function destroy(CommercialInvoice $commercialInvoice)
+    public function deleteBankRequest(Request $request)
     {
-        //
+
+
+//  dd($request->invsid);
+        DB::beginTransaction();
+            try {
+
+
+                DB::update(DB::raw(" update clearance_completed_details set gdswt=0,pcs=0,amtindollar=0,bundle1=0,total=0
+                where clearance_id=$request->clearance_id  "));
+
+
+
+
+                DB::update(DB::raw("
+                UPDATE commercial_invoices c
+                INNER JOIN (
+                SELECT commercial_invoice_id,sum(gdswt) AS wt,sum(pcs) AS pcs,sum(amtindollar) as amtindollar,
+                sum(bundle1) AS nosofpack,sum(total) AS amount FROM clearance_completed_details
+                where  commercial_invoice_id = $request->cominvsid group by commercial_invoice_id
+                ) x ON c.id = x.commercial_invoice_id
+                SET c.payed = x.amount,c.dutybal=c.tduty-x.amount,c.wtbal=c.twt-x.wt,c.packingwtbal=c.packingwt-x.nosofpack,
+                c.tdutvalbal=c.tdutval-x.amtindollar,c.pcsbal=c.tpcs-x.pcs
+                where  id = $request->cominvsid "));
+
+
+            DB::update(DB::raw("
+            UPDATE commercial_invoice_details c
+            INNER JOIN (
+                   SELECT commercial_invoice_id,material_id,SUM(pcs) as pcs,SUM(gdswt) AS wt,SUM(total) AS amount,SUM(bundle1) AS bundle1,SUM(bundle2) AS bundle2
+                FROM clearance_completed_details where  commercial_invoice_id = $request->cominvsid  GROUP BY commercial_invoice_id,material_id
+             ) x ON c.commercial_invoice_id = x.commercial_invoice_id and c.material_id=x.material_id
+            SET c.dbalwt = c.dutygdswt - x.wt,c.dbalpcs= c.pcs-x.pcs,c.dtybal=c.total-x.amount,c.dbundle1=c.bundle1-x.bundle1,c.dbundle2=c.bundle2-x.bundle2
+                WHERE   c.commercial_invoice_id = $request->cominvsid  "));
+
+
+
+                DB::delete(DB::raw(" delete from clearances where id=$request->clearance_id   "));
+                DB::delete(DB::raw(" delete from clearance_completed_details where clearance_id=$request->clearance_id   "));
+
+                // DB::delete(DB::raw(" delete from office_item_bal where ttypeid=2 and  transaction_id=$request->clearance_id   "));
+
+                DB::commit();
+
+
+                Session::flash('success','Record Deleted Successfully');
+                return response()->json(['success'],200);
+
+            } catch (\Throwable $th) {
+                DB::rollback();
+                throw $th;
+            }
+
+
+
     }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 }

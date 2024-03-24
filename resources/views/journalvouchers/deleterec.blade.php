@@ -8,11 +8,10 @@
     @endpush
 
     <x-slot name="header">
-        <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-           Edit Journal Voucher {{ $transaction }}
-        </h2>
+        <div style="font-size: 2rem;font-weight: bold;color:brown;border:blue">
+            Delete Record Information for Journal Voucher
+        </div>
     </x-slot>
-
     <div class="py-6">
         <div class="max-w-7xl mx-auto sm:px-2 lg:px-4">
             <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg p-4">
@@ -23,7 +22,7 @@
 
                         {{-- Form Data --}}
                         <div class="flex flex-col justify-start items-center">
-                            <form action="{{ route('jv.ddelete',$transaction) }}" method="post" class="flex flex-col">
+                            <form action="{{ route('jv.deleterec',$transaction) }}" method="post" class="flex flex-col">
                                 @csrf
                                 <fieldset class="border px-4 py-2 rounded">
                                     <legend>Transaction Date</legend>
@@ -52,11 +51,24 @@
                                     </x-button>
                                     <label>Over/Under</label>
                                     <x-input id="balance" type="number" disabled/>
-                                    <x-input-text title="Password For Edition" name="edtpw" id="edtpw" type="password"     />
+                                    <x-input-text title="Password For Deletion" name="edtpw" id="edtpw" type="password"     />
                                     <x-input-text title="" name="dbpwrd2" id="dbpwrd2"  class="col-span-2" hidden value="{{$passwrd}}" />
 
-
                                 </div>
+                                <div>
+
+                                    {{-- <input class="checked:bg-blue-500 checked:border-blue-500 focus:outline-none"  type="checkbox"  name="del" id="del" disabled   onclick="delmode(this)" >
+                                    <label for="">
+                                        <span style="color: brown;font-weight: bold"> Delete Mode </span> <span class="text-red-500 font-semibold font-size:1rem "></span>
+                                        </label> --}}
+
+                                    {{-- <x-input-text title="Password For Deletion" name="delpwrd" id="delpwrd" type="password" class="col-span-2"    />
+                                    <x-input-text title="" name="delpwrd2" id="delpwrd2" hidden  class="col-span-2"    value="{{$passwrddel}}" /> --}}
+                                    <x-input-text title="" name="p2" id="p2" value="0" hidden  />
+                                    <x-input-text title="" name="cheque_nofd" id="cheque_nofd" hidden value="{{ $cheque_no }}" req required class="col-span-2" disabled  />
+                                    <x-input-text title="" name="gdno" id="gdno" value="{{ $vgdno }}" hidden disabled  />
+                                </div>
+
                             </form>
 
                         </div>
@@ -97,6 +109,8 @@ document.addEventListener('DOMContentLoaded',()=>{
 
     document.addEventListener('DOMContentLoaded', () => {
         heads.forEach(e => {headsList.push({value:e.title, label:e.title})})
+        // document.getElementById('del').disabled=true;
+
     })
     document.addEventListener('keyup', (e)=>{
         //  We are using ctrl key + 'ArrowUp'
@@ -177,12 +191,12 @@ document.addEventListener('DOMContentLoaded',()=>{
             e.document_date = document_date
         })
         //  Now Post Data
-        var mydata = {'document_no':document_no.value,'jvdate':jvdate.value,'cheque_no':cheque_no.value,
+        var mydata = {'document_no':document_no.value,'jvdate':jvdate.value,'cheque_no':cheque_no.value,'p2':p2.value,
             'vouchers': data
         }
-        fetch(@json(route('jv.update',$transaction)),{
+        fetch(@json(route('jv.del')),{
             credentials: 'same-origin', // 'include', default: 'omit'
-            method: 'PUT', // 'GET', 'PUT', 'DELETE', etc.
+            method: 'POST', // 'GET', 'PUT', 'DELETE', etc.
             // body: formData, // Coordinate the body type with 'Content-Type'
             body:JSON.stringify(mydata),
             headers: new Headers({
@@ -223,6 +237,38 @@ document.addEventListener('DOMContentLoaded',()=>{
     {document.getElementById("submitButton").disabled = true;}
 
     }
+
+    function delmode(del) {
+        var p2 = document.getElementById("p2");
+        if(del.checked==true)
+        {
+            document.getElementById("submitButton").disabled = false;
+            p2.value=1;
+        }
+        else
+        {
+            document.getElementById("submitButton").disabled = true;
+            p2.value=0;
+        }
+
+    }
+
+    // delpwrd.onblur=function(){
+    // if(delpwrd.value == delpwrd2.value )
+    //  {
+    //     // document.getElementById("submitButton").disabled = false;
+    //     document.getElementById('del').disabled=false;
+
+    // }
+    // else
+    // {
+    //     // document.getElementById("submitButton").disabled = true;
+    //     document.getElementById('del').disabled=true;
+
+    // }
+
+
+    // }
 
 
 

@@ -8,9 +8,9 @@
     @endpush
 
     <x-slot name="header">
-        <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-            Edit GatePass
-        </h2>
+        <div style="font-size: 3rem;font-weight: bold;color:brown;border:blue">
+            Delete Record Information For Sale GatePass
+        </div>
     </x-slot>
 
     <div class="py-6">
@@ -62,8 +62,8 @@
                                 <i class="fa fa-save fa-fw"></i>
                                 Submit
                             </x-button>
-                            <x-input-text title="Password For Edition" name="edtpw" id="edtpw" type="password"     />
-                            <x-input-text title="" name="dbpwrd2" id="dbpwrd2"  class="col-span-2" hidden  value="{{$passwrd}}" />
+                            <x-input-text title="Password For Deletion" name="edtpw" id="edtpw" type="password"     />
+                            <x-input-text title="" name="dbpwrd2" id="dbpwrd2"  class="col-span-2" hidden value="{{$passwrd}}" />
 
                         </div>
 
@@ -83,12 +83,9 @@
 
     @push('scripts')
 <script>
-        document.addEventListener('DOMContentLoaded',()=>{
-            // calculateButton.disabled = true
-            submitbutton.disabled = true
-        })
-
-
+document.addEventListener('DOMContentLoaded',()=>{
+        document.getElementById("submitbutton").disabled = true;
+     })
 
 let table;
 let searchValue = "";
@@ -315,157 +312,157 @@ return calc;
 }
 
 //  Dynamic Table [User data]
-dynamicTable = new Tabulator("#dynamicTable", {
-    data:dynamicTableData,
-    layout:'fitData',
-    reactiveData:true,
-    columns:[
-        {title:"Delete" , formatter:deleteIcon, headerSort:false, responsive:0,
-            cellClick:function(e, cell){
-                cell.getRow().delete();
-                dynamicTableData = dynamicTable.getData(); // Ensure that our data is clean
-                dynamicTable.redraw();
-                // disableSubmitButton();
-            }
-        },
+// dynamicTable = new Tabulator("#dynamicTable", {
+//     data:dynamicTableData,
+//     layout:'fitData',
+//     reactiveData:true,
+//     columns:[
+//         {title:"Delete" , formatter:deleteIcon, headerSort:false, responsive:0,
+//             cellClick:function(e, cell){
+//                 cell.getRow().delete();
+//                 dynamicTableData = dynamicTable.getData(); // Ensure that our data is clean
+//                 dynamicTable.redraw();
+//                 // disableSubmitButton();
+//             }
+//         },
 
-        {title:"Id",           field:"id", visible:false,cssClass:"bg-gray-200 font-semibold"},
-                {title:"Material Name", field:"material_title",responsive:0,cssClass:"bg-gray-200 font-semibold"},
-                {title:"Material Size",    field:"dimension",responsive:0,frozen:true, headerMenu:headerMenu,cssClass:"bg-gray-200 font-semibold"},
-                {title:"UOM",         field:"sku",responsive:0, hozAlign:"center",cssClass:"bg-gray-200 font-semibold"},
-                {title:"Unitid",       field:"sku_id",visible:false},
+//         {title:"Id",           field:"id", visible:false,cssClass:"bg-gray-200 font-semibold"},
+//                 {title:"Material Name", field:"material_title",responsive:0,cssClass:"bg-gray-200 font-semibold"},
+//                 {title:"Material Size",    field:"dimension",responsive:0,frozen:true, headerMenu:headerMenu,cssClass:"bg-gray-200 font-semibold"},
+//                 {title:"UOM",         field:"sku",responsive:0, hozAlign:"center",cssClass:"bg-gray-200 font-semibold"},
+//                 {title:"Unitid",       field:"sku_id",visible:false},
 
-                {
-                    title:'Sale Invoice Data', headerHozAlign:"center",
-                    columns:[
-                        // {   title:"Replace Name",headerHozAlign :'center',field:"repname",responsive:0,editor:true},
-                        // {   title:"Brand",headerHozAlign :'center',field:"mybrand",responsive:0,editor:true},
-                        {   title:"Pcs",headerHozAlign :'right',hozAlign:"right",responsive:0,field:"totpcs",bottomCalc:"sum",
-                                        formatter:"money",cellEdited: updateValues,validator:["required","numeric"],cssClass:"bg-gray-200 font-semibold",formatterParams:{thousand:",",precision:2}},
-                        {   title:"Weight",headerHozAlign :'right',hozAlign:"right",responsive:0,field:"gdswt",bottomCalc:"sum",
-                            formatter:"money",cellEdited: updateValues,validator:["required","numeric"],cssClass:"bg-gray-200 font-semibold",formatterParams:{thousand:",",precision:2}},
-                            {   title:"Feet",editor:true,headerHozAlign :'right',hozAlign:"right",responsive:0,field:"salefeet",bottomCalc:"sum",
-                            formatter:"money",cellEdited: updateValues,validator:["required","numeric"],formatterParams:{thousand:",",precision:2}},
-                            ]},
+//                 {
+//                     title:'Sale Invoice Data', headerHozAlign:"center",
+//                     columns:[
+//                         // {   title:"Replace Name",headerHozAlign :'center',field:"repname",responsive:0,editor:true},
+//                         // {   title:"Brand",headerHozAlign :'center',field:"mybrand",responsive:0,editor:true},
+//                         {   title:"Pcs",headerHozAlign :'right',hozAlign:"right",responsive:0,field:"totpcs",bottomCalc:"sum",
+//                                         formatter:"money",cellEdited: updateValues,validator:["required","numeric"],cssClass:"bg-gray-200 font-semibold",formatterParams:{thousand:",",precision:2}},
+//                         {   title:"Weight",headerHozAlign :'right',hozAlign:"right",responsive:0,field:"gdswt",bottomCalc:"sum",
+//                             formatter:"money",cellEdited: updateValues,validator:["required","numeric"],cssClass:"bg-gray-200 font-semibold",formatterParams:{thousand:",",precision:2}},
+//                             {   title:"Feet",editor:true,headerHozAlign :'right',hozAlign:"right",responsive:0,field:"salefeet",bottomCalc:"sum",
+//                             formatter:"money",cellEdited: updateValues,validator:["required","numeric"],formatterParams:{thousand:",",precision:2}},
+//                             ]},
 
-                // {   title:"length",headerHozAlign :'right',hozAlign:"right",editor:true,responsive:0,field:"length",bottomCalc:"sum"},
+//                 // {   title:"length",headerHozAlign :'right',hozAlign:"right",editor:true,responsive:0,field:"length",bottomCalc:"sum"},
 
-                {title:"Replace Description",field:"repname",responsive:0,       editor:true},
-                {title:"Brand",              field:"brand",responsive:0,     editor:true},
-
-
-
-                {title:"dimension_id", field:"dimension_id",visible:false},
-                {
-                    title:'E-13', headerHozAlign:"center",
-                    columns:[
-                        {   title:"Pcs",editor:true,headerHozAlign :'right',hozAlign:"right",responsive:0,field:"gppcse13",bottomCalc:"sum",
-                                        formatter:"money",cellEdited: updateValues,validator:["required","numeric"],formatterParams:{thousand:",",precision:2}},
-                        {   title:"Weight",editor:true,headerHozAlign :'right',hozAlign:"right",responsive:0,field:"gpwte13",bottomCalc:"sum",
-                            formatter:"money",cellEdited: updateValues,validator:["required","numeric"],formatterParams:{thousand:",",precision:2}},
-
-                            {   title:"Feet",editor:true,headerHozAlign :'right',hozAlign:"right",responsive:0,field:"gpfeete13",bottomCalc:"sum",
-                            formatter:"money",cellEdited: updateValues,validator:["required","numeric"],formatterParams:{thousand:",",precision:2}},
+//                 {title:"Replace Description",field:"repname",responsive:0,       editor:true},
+//                 {title:"Brand",              field:"brand",responsive:0,     editor:true},
 
 
 
+//                 {title:"dimension_id", field:"dimension_id",visible:false},
+//                 {
+//                     title:'E-13', headerHozAlign:"center",
+//                     columns:[
+//                         {   title:"Pcs",editor:true,headerHozAlign :'right',hozAlign:"right",responsive:0,field:"gppcse13",bottomCalc:"sum",
+//                                         formatter:"money",cellEdited: updateValues,validator:["required","numeric"],formatterParams:{thousand:",",precision:2}},
+//                         {   title:"Weight",editor:true,headerHozAlign :'right',hozAlign:"right",responsive:0,field:"gpwte13",bottomCalc:"sum",
+//                             formatter:"money",cellEdited: updateValues,validator:["required","numeric"],formatterParams:{thousand:",",precision:2}},
 
-
-                        ]},
-
-                        {
-                    title:'GALI NO 2', headerHozAlign:"center",
-                    columns:[
-                        {   title:"Pcs",editor:true,headerHozAlign :'right',hozAlign:"right",responsive:0,field:"gppcsgn2",bottomCalc:"sum",
-                                        formatter:"money",cellEdited: updateValues,validator:["required","numeric"],formatterParams:{thousand:",",precision:2}},
-                        {   title:"Weight",editor:true,headerHozAlign :'right',hozAlign:"right",responsive:0,field:"gpwtgn2",bottomCalc:"sum",
-                            formatter:"money",cellEdited: updateValues,validator:["required","numeric"],formatterParams:{thousand:",",precision:2}},
-                            {   title:"Feet",editor:true,headerHozAlign :'right',hozAlign:"right",responsive:0,field:"gpfeetgn2",bottomCalc:"sum",
-                            formatter:"money",cellEdited: updateValues,validator:["required","numeric"],formatterParams:{thousand:",",precision:2}}
-                        ]},
-
-                        {
-                    title:'A.MALIK SHOP', headerHozAlign:"center",
-                    columns:[
-                        {   title:"Pcs",editor:true,headerHozAlign :'right',hozAlign:"right",responsive:0,field:"gppcsams",bottomCalc:"sum",
-                                        formatter:"money",cellEdited: updateValues,validator:["required","numeric"],formatterParams:{thousand:",",precision:2}},
-                        {   title:"Weight",editor:true,headerHozAlign :'right',hozAlign:"right",responsive:0,field:"gpwtams",bottomCalc:"sum",
-                            formatter:"money",cellEdited: updateValues,validator:["required","numeric"],formatterParams:{thousand:",",precision:2}},
-                            {   title:"Feet",editor:true,headerHozAlign :'right',hozAlign:"right",responsive:0,field:"gpfeetams",bottomCalc:"sum",
-                            formatter:"money",cellEdited: updateValues,validator:["required","numeric"],formatterParams:{thousand:",",precision:2}}
-                        ]},
-
-                        {
-                        title:'E-24', headerHozAlign:"center",
-                    columns:[
-                        {   title:"Pcs",editor:true,headerHozAlign :'right',hozAlign:"right",responsive:0,field:"gppcse24",bottomCalc:"sum",
-                                        formatter:"money",cellEdited: updateValues,validator:["required","numeric"],formatterParams:{thousand:",",precision:2}},
-                        {   title:"Weight",editor:true,headerHozAlign :'right',hozAlign:"right",responsive:0,field:"gpwte24",bottomCalc:"sum",
-                            formatter:"money",cellEdited: updateValues,validator:["required","numeric"],formatterParams:{thousand:",",precision:2}},
-                            {   title:"Feet",editor:true,headerHozAlign :'right',hozAlign:"right",responsive:0,field:"gpfeete24",bottomCalc:"sum",
-                            formatter:"money",cellEdited: updateValues,validator:["required","numeric"],formatterParams:{thousand:",",precision:2}}
-                        ]},
-
-                        {
-                        title:'BOLTON SHOP', headerHozAlign:"center",
-                    columns:[
-                        {   title:"Pcs",editor:true,headerHozAlign :'right',hozAlign:"right",responsive:0,field:"gppcsbs",bottomCalc:"sum",
-                                        formatter:"money",cellEdited: updateValues,validator:["required","numeric"],formatterParams:{thousand:",",precision:2}},
-                        {   title:"Weight",editor:true,headerHozAlign :'right',hozAlign:"right",responsive:0,field:"gpwtbs",bottomCalc:"sum",
-                            formatter:"money",cellEdited: updateValues,validator:["required","numeric"],formatterParams:{thousand:",",precision:2}},
-                            {   title:"Feet",editor:true,headerHozAlign :'right',hozAlign:"right",responsive:0,field:"gpfeetbs",bottomCalc:"sum",
-                            formatter:"money",cellEdited: updateValues,validator:["required","numeric"],formatterParams:{thousand:",",precision:2}}
-                        ]},
-
-                       {
-                        title:'OTHERS', headerHozAlign:"center",
-                    columns:[
-                        {   title:"Pcs",visible:false,editor:true,headerHozAlign :'right',hozAlign:"right",responsive:0,field:"gppcsoth",bottomCalc:"sum",
-                                        formatter:"money",cellEdited: updateValues,validator:["required","numeric"],formatterParams:{thousand:",",precision:2}},
-                        {   title:"Weight",visible:false,editor:true,headerHozAlign :'right',hozAlign:"right",responsive:0,field:"gpwtoth",bottomCalc:"sum",
-                            formatter:"money",cellEdited: updateValues,validator:["required","numeric"],formatterParams:{thousand:",",precision:2}},
-                            {   title:"Feet",editor:true,visible:false,headerHozAlign :'right',hozAlign:"right",responsive:0,field:"gpfeetoth",bottomCalc:"sum",
-                            formatter:"money",cellEdited: updateValues,validator:["required","numeric"],formatterParams:{thousand:",",precision:2}}
-                        ]},
-
-                        {
-                        title:'TOTAL', headerHozAlign:"center",
-                    columns:[
-                        {   title:"Pcs",headerHozAlign :'right',hozAlign:"right",responsive:0,field:"gppcstot",bottomCalc:"sum",
-                                        formatter:"money",cellEdited: updateValues,validator:["required","numeric"],cssClass:"bg-green-200 font-semibold",formatterParams:{thousand:",",precision:2}},
-                        {   title:"Weight",headerHozAlign :'right',hozAlign:"right",responsive:0,field:"gpwttot",bottomCalc:"sum",
-                            formatter:"money",cellEdited: updateValues,validator:["required","numeric"],cssClass:"bg-green-200 font-semibold",formatterParams:{thousand:",",precision:2}},
-                            {   title:"Feet",headerHozAlign :'right',hozAlign:"right",responsive:0,field:"gpfeettot",bottomCalc:"sum",
-                            formatter:"money",cellEdited: updateValues,validator:["required","numeric"],cssClass:"bg-green-200 font-semibold",formatterParams:{thousand:",",precision:2}}
-                        ]},
-
-                        {title:"gpkgrate",           field:"gpkgrate", visible:false},
-                        {title:"gppcsrate",           field:"gppcsrate", visible:false},
-                        {title:"gpfeetrate",           field:"gpfeetrate", visible:false},
+//                             {   title:"Feet",editor:true,headerHozAlign :'right',hozAlign:"right",responsive:0,field:"gpfeete13",bottomCalc:"sum",
+//                             formatter:"money",cellEdited: updateValues,validator:["required","numeric"],formatterParams:{thousand:",",precision:2}},
 
 
 
 
 
-            ],
-        })
+//                         ]},
+
+//                         {
+//                     title:'GALI NO 2', headerHozAlign:"center",
+//                     columns:[
+//                         {   title:"Pcs",editor:true,headerHozAlign :'right',hozAlign:"right",responsive:0,field:"gppcsgn2",bottomCalc:"sum",
+//                                         formatter:"money",cellEdited: updateValues,validator:["required","numeric"],formatterParams:{thousand:",",precision:2}},
+//                         {   title:"Weight",editor:true,headerHozAlign :'right',hozAlign:"right",responsive:0,field:"gpwtgn2",bottomCalc:"sum",
+//                             formatter:"money",cellEdited: updateValues,validator:["required","numeric"],formatterParams:{thousand:",",precision:2}},
+//                             {   title:"Feet",editor:true,headerHozAlign :'right',hozAlign:"right",responsive:0,field:"gpfeetgn2",bottomCalc:"sum",
+//                             formatter:"money",cellEdited: updateValues,validator:["required","numeric"],formatterParams:{thousand:",",precision:2}}
+//                         ]},
+
+//                         {
+//                     title:'A.MALIK SHOP', headerHozAlign:"center",
+//                     columns:[
+//                         {   title:"Pcs",editor:true,headerHozAlign :'right',hozAlign:"right",responsive:0,field:"gppcsams",bottomCalc:"sum",
+//                                         formatter:"money",cellEdited: updateValues,validator:["required","numeric"],formatterParams:{thousand:",",precision:2}},
+//                         {   title:"Weight",editor:true,headerHozAlign :'right',hozAlign:"right",responsive:0,field:"gpwtams",bottomCalc:"sum",
+//                             formatter:"money",cellEdited: updateValues,validator:["required","numeric"],formatterParams:{thousand:",",precision:2}},
+//                             {   title:"Feet",editor:true,headerHozAlign :'right',hozAlign:"right",responsive:0,field:"gpfeetams",bottomCalc:"sum",
+//                             formatter:"money",cellEdited: updateValues,validator:["required","numeric"],formatterParams:{thousand:",",precision:2}}
+//                         ]},
+
+//                         {
+//                         title:'E-24', headerHozAlign:"center",
+//                     columns:[
+//                         {   title:"Pcs",editor:true,headerHozAlign :'right',hozAlign:"right",responsive:0,field:"gppcse24",bottomCalc:"sum",
+//                                         formatter:"money",cellEdited: updateValues,validator:["required","numeric"],formatterParams:{thousand:",",precision:2}},
+//                         {   title:"Weight",editor:true,headerHozAlign :'right',hozAlign:"right",responsive:0,field:"gpwte24",bottomCalc:"sum",
+//                             formatter:"money",cellEdited: updateValues,validator:["required","numeric"],formatterParams:{thousand:",",precision:2}},
+//                             {   title:"Feet",editor:true,headerHozAlign :'right',hozAlign:"right",responsive:0,field:"gpfeete24",bottomCalc:"sum",
+//                             formatter:"money",cellEdited: updateValues,validator:["required","numeric"],formatterParams:{thousand:",",precision:2}}
+//                         ]},
+
+//                         {
+//                         title:'BOLTON SHOP', headerHozAlign:"center",
+//                     columns:[
+//                         {   title:"Pcs",editor:true,headerHozAlign :'right',hozAlign:"right",responsive:0,field:"gppcsbs",bottomCalc:"sum",
+//                                         formatter:"money",cellEdited: updateValues,validator:["required","numeric"],formatterParams:{thousand:",",precision:2}},
+//                         {   title:"Weight",editor:true,headerHozAlign :'right',hozAlign:"right",responsive:0,field:"gpwtbs",bottomCalc:"sum",
+//                             formatter:"money",cellEdited: updateValues,validator:["required","numeric"],formatterParams:{thousand:",",precision:2}},
+//                             {   title:"Feet",editor:true,headerHozAlign :'right',hozAlign:"right",responsive:0,field:"gpfeetbs",bottomCalc:"sum",
+//                             formatter:"money",cellEdited: updateValues,validator:["required","numeric"],formatterParams:{thousand:",",precision:2}}
+//                         ]},
+
+//                        {
+//                         title:'OTHERS', headerHozAlign:"center",
+//                     columns:[
+//                         {   title:"Pcs",visible:false,editor:true,headerHozAlign :'right',hozAlign:"right",responsive:0,field:"gppcsoth",bottomCalc:"sum",
+//                                         formatter:"money",cellEdited: updateValues,validator:["required","numeric"],formatterParams:{thousand:",",precision:2}},
+//                         {   title:"Weight",visible:false,editor:true,headerHozAlign :'right',hozAlign:"right",responsive:0,field:"gpwtoth",bottomCalc:"sum",
+//                             formatter:"money",cellEdited: updateValues,validator:["required","numeric"],formatterParams:{thousand:",",precision:2}},
+//                             {   title:"Feet",editor:true,visible:false,headerHozAlign :'right',hozAlign:"right",responsive:0,field:"gpfeetoth",bottomCalc:"sum",
+//                             formatter:"money",cellEdited: updateValues,validator:["required","numeric"],formatterParams:{thousand:",",precision:2}}
+//                         ]},
+
+//                         {
+//                         title:'TOTAL', headerHozAlign:"center",
+//                     columns:[
+//                         {   title:"Pcs",headerHozAlign :'right',hozAlign:"right",responsive:0,field:"gppcstot",bottomCalc:"sum",
+//                                         formatter:"money",cellEdited: updateValues,validator:["required","numeric"],cssClass:"bg-green-200 font-semibold",formatterParams:{thousand:",",precision:2}},
+//                         {   title:"Weight",headerHozAlign :'right',hozAlign:"right",responsive:0,field:"gpwttot",bottomCalc:"sum",
+//                             formatter:"money",cellEdited: updateValues,validator:["required","numeric"],cssClass:"bg-green-200 font-semibold",formatterParams:{thousand:",",precision:2}},
+//                             {   title:"Feet",headerHozAlign :'right',hozAlign:"right",responsive:0,field:"gpfeettot",bottomCalc:"sum",
+//                             formatter:"money",cellEdited: updateValues,validator:["required","numeric"],cssClass:"bg-green-200 font-semibold",formatterParams:{thousand:",",precision:2}}
+//                         ]},
+
+//                         {title:"gpkgrate",           field:"gpkgrate", visible:false},
+//                         {title:"gppcsrate",           field:"gppcsrate", visible:false},
+//                         {title:"gpfeetrate",           field:"gpfeetrate", visible:false},
+
+
+
+
+
+//             ],
+//         })
 // Add event handler to read keyboard key up event
 document.addEventListener('keyup', (e)=>{
     //  We are using ctrl key + 'ArrowUp' to show Modal
-    if(e.ctrlKey && e.keyCode == 32){
+    if(e.ctrlKey && e.keyCode == 500){
         showModal()
     }
 })
 // Ensure Buttons Are Closed
-function disableSubmitButton()
-{
-    if(dynamicTableData.length <= 0 )
-    {
-        document.getElementById("submitbutton").disabled = true;
-    }else {
-        document.getElementById("submitbutton").disabled = false;
-    }
-}
+// function disableSubmitButton()
+// {
+//     if(dynamicTableData.length <= 0 )
+//     {
+//         document.getElementById("submitbutton").disabled = true;
+//     }else {
+//         document.getElementById("submitbutton").disabled = false;
+//     }
+// }
   // Validation & Post
 
 function validateForm()
@@ -530,16 +527,16 @@ function validateForm()
     // }
     // dynamicTableData = dynamicTable.getData();
     // // Qty Required
-    for (let index = 0; index < dynamicTableData.length; index++) {
-        const element = dynamicTableData[index];
-        if(element.gppcstot > element.totpcs || element.gpwttot > element.gdswt || element.gpfeettot > element.salefeet )
-                {
-                    showSnackbar("GatePass Qty must be less than sale invoice qty","info");
-                    return;
-                }
-    }
+    // for (let index = 0; index < dynamicTableData.length; index++) {
+    //     const element = dynamicTableData[index];
+    //     if(element.gppcstot > element.totpcs || element.gpwttot > element.gdswt || element.gpfeettot > element.salefeet )
+    //             {
+    //                 showSnackbar("GatePass Qty must be less than sale invoice qty","info");
+    //                 return;
+    //             }
+    // }
     // 'total' : parseFloat(banktotal.value).toFixed(2),
-    disableSubmitButton(true);
+    // disableSubmitButton(true);
     //  var data = { 'sales' : dynamicTableData,'contract_id':parseFloat(contract_id.value).toFixed(0),'bankntotal':parseFloat(bankntotal.value).toFixed(0),'collofcustom':parseFloat(exataxoffie.value).toFixed(0),'exataxoffie':parseFloat(exataxoffie.value).toFixed(0) ,'bankcharges':parseFloat(bankcharges.value).toFixed(0) ,'supplier_id': supplier_id.value,'invoice_date':invoice_date.value,'invoiceno':invoiceno.value};
     //  var data = { 'customerorder' : dynamicTableData,'rcvblamount':rcvblamount.value,'cartage':cartage.value,'discntamt':discntamt.value,'discntper':discntper.value ,
     //  'customer_id': customer_id.value,'saldate':saldate.value,'qutno':qutno.value,'prno':prno.value,'sale_invoice_id':sale_invoice_id.value,
@@ -562,9 +559,9 @@ function validateForm()
 
 
 
-    fetch(@json(route('gatepasse.update',$gatepasse)),{
+    fetch(@json(route('gatepasse.del')),{
         credentials: 'same-origin', // 'include', default: 'omit'
-        method: 'PUT', // 'GET', 'PUT', 'DELETE', etc.
+        method: 'POST', // 'GET', 'PUT', 'DELETE', etc.
         // body: formData, // Coordinate the body type with 'Content-Type'
         body:JSON.stringify(data),
         headers: new Headers({

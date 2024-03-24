@@ -15,6 +15,15 @@ use App\Models\SaleInvoicesDetails;
 use App\Models\CreateSaleRate;
 use App\Models\ItemBal;
 
+use App\Models\Gatepasse;
+use App\Models\ReceiveDetails;
+use App\Models\BankTransaction;
+
+
+
+
+
+
 
 use App\Models\Material;
 use App\Models\Customer;
@@ -350,6 +359,47 @@ class SalesInvoicesController  extends Controller
     }
 
 
+
+
+    public function deleterec($id)
+    {
+
+
+        $fugp = Gatepasse::where('sale_invoice_id',$id)->max('sale_invoice_id');;
+        $rcvvchr = ReceiveDetails::where('invoice_id',$id)->max('invoice_id');
+        $pmtvchr = BankTransaction::where('cusinvid',$id)->max('cusinvid');
+
+
+
+        $cd = DB::select('call procdetailcustplanedit (?)',array( $id ));
+        $passwrd = DB::table('tblpwrd')->select('pwrdtxtdel')->max('pwrdtxtdel');
+
+        $data=compact('cd');
+         $locations = Location::select('id','title')->where('status',1)->get();
+
+        return view('sales.deleterec',compact('passwrd','fugp','rcvvchr','pmtvchr'))
+        ->with('customer',Customer::select('id','title')->get())
+        ->with('saleinvoices',SaleInvoices::findOrFail($id))
+        ->with($data)
+        ->with('skus',Sku::select('id','title')->get())
+        ->with('locations',Location::select('id','title')->get());
+
+        // return view('contracts.edit')->with('suppliers',Supplier::select('id','title')->get())->with('contract',$contract)->with('cd',ContractDetails::where('contract_id',$contract->id)->get());
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
     public function update(Request $request, SaleInvoices $saleinvoices)
     {
         //  dd($commercialinvoice->commercial_invoice_id());
@@ -584,4 +634,38 @@ class SalesInvoicesController  extends Controller
         // 'S': returns the PDF document as a string
         // 'F': save as file $file_out
     }
+
+
+
+    public function deleteBankRequest(Request $request)
+    {
+
+
+//  dd($request->invsid);
+        DB::beginTransaction();
+            try {
+
+                DB::delete(DB::raw(" delete from sale_invoices where id=$request->sale_invoice_id   "));
+                DB::delete(DB::raw(" delete from sale_invoices_details where sale_invoice_id=$request->sale_invoice_id   "));
+
+
+
+                DB::delete(DB::raw(" delete from office_item_bal where ttypeid=4 and  transaction_id=$request->sale_invoice_id   "));
+
+                DB::commit();
+
+
+                Session::flash('success','Record Deleted Successfully');
+                return response()->json(['success'],200);
+
+            } catch (\Throwable $th) {
+                DB::rollback();
+                throw $th;
+            }
+
+
+
+    }
+
+
 }

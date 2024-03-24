@@ -16,6 +16,10 @@ use App\Models\CreateSaleRate;
 use App\Models\ItemBal;
 use App\Models\BankTransaction;
 
+use App\Models\Gatepasse;
+use App\Models\ReceiveDetails;
+
+
 
 
 use App\Models\Material;
@@ -452,6 +456,31 @@ class SalesInvoiceWopoController  extends Controller
     }
 
 
+    public function deleterec($id)
+    {
+
+        $fugp = Gatepasse::where('sale_invoice_id',$id)->max('sale_invoice_id');;
+        $rcvvchr = ReceiveDetails::where('invoice_id',$id)->max('invoice_id');
+        $pmtvchr = BankTransaction::where('cusinvid',$id)->max('cusinvid');
+
+        $passwrd = DB::table('tblpwrd')->select('pwrdtxtdel')->max('pwrdtxtdel');
+         $cd = DB::select('call procsalewosoedit (?)',array( $id ));
+         $data=compact('cd');
+         $locations = Location::select('id','title')->where('status',1)->get();
+        return view('salewopo.deleterec',compact('passwrd','fugp','rcvvchr','pmtvchr'))
+        ->with('customer',Customer::select('id','title')->get())
+        ->with('saleinvoices',SaleInvoices::findOrFail($id))
+        ->with($data)
+        ->with('skus',Sku::select('id','title')->get());
+    }
+
+
+
+
+
+
+
+
     public function update(Request $request, SaleInvoices $saleinvoices)
     {
         //  dd($commercialinvoice->commercial_invoice_id());
@@ -732,4 +761,84 @@ class SalesInvoiceWopoController  extends Controller
         // 'S': returns the PDF document as a string
         // 'F': save as file $file_out
     }
+
+
+
+    public function deleteBankRequest(Request $request)
+    {
+
+
+//  dd($request->invsid);
+        DB::beginTransaction();
+            try {
+
+                DB::delete(DB::raw(" delete from sale_invoices where id=$request->sale_invoice_id   "));
+                DB::delete(DB::raw(" delete from sale_invoices_details where sale_invoice_id=$request->sale_invoice_id   "));
+
+
+                // DB::update(DB::raw("
+                // UPDATE sale_invoices c
+                // INNER JOIN (
+
+                //     SELECT customer_id,invoiceid,SUM(invsbal) AS invoicebal FROM
+                //     (
+
+                //         SELECT customer_id ,id AS invoiceid,totrcvbamount AS invsbal FROM sale_invoices
+                //         WHERE customer_id=$request->customer_id  AND id=$request->sale_invoice_id
+                //         UNION ALL
+                //          SELECT subhead_id, invoice_id,b.totrcvd*-1 AS invsbal
+                //          FROM bank_transactions AS a INNER join receive_details AS b ON a.id=b.receivedid and a.subhead_id =$request->customer_id
+                //          AND invoice_id =$request->sale_invoice_id
+                //          UNION all
+                //          SELECT a.customer_id,invoice_id,a.totrcvbamount*-1 AS invsbal
+                //          FROM sale_returns AS a INNER JOIN sale_invoices AS b  ON a.invoice_id=b.id  WHERE a.customer_id =$request->customer_id
+                //          AND invoice_id =$request->sale_invoice_id
+                //          UNION all
+                //          SELECT a.subhead_id, b.id AS  invoice_id,a.amount_fc AS invsbal
+                //          FROM bank_transactions AS a INNER join sale_invoices AS b ON a.cusinvid=b.dcno AND a.subhead_id =$request->customer_id
+                //          AND b.id  =$request->sale_invoice_id
+
+                //    ) AS w GROUP BY customer_id,invoiceid
+                // ) x ON c.id = x.invoiceid
+                // SET c.paymentbal = x.invoicebal
+                // where  c.id = $request->sale_invoice_id "));
+
+
+
+                DB::delete(DB::raw(" delete from office_item_bal where ttypeid=4 and  transaction_id=$request->sale_invoice_id   "));
+
+                DB::commit();
+
+
+                Session::flash('success','Record Deleted Successfully');
+                return response()->json(['success'],200);
+
+            } catch (\Throwable $th) {
+                DB::rollback();
+                throw $th;
+            }
+
+
+
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 }

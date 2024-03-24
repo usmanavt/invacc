@@ -181,6 +181,9 @@
     var editIcon = function(cell, formatterParams, onRendered){ return "<i class='fa fa-edit text-blue-600'></i>";};
     var lockIcon = function(cell, formatterParams, onRendered){ return "<i class='fa fa-lock text-red-600'></i>";};
     var unlockIcon = function(cell, formatterParams, onRendered){ return "<i class='fa fa-lock text-green-600'></i>";};
+    var deleteIcon = function(cell, formatterParams, onRendered){ return "<i class='fa fa-trash text-red-600'></i>";};
+    var printIcon = function(cell, formatterParams, onRendered){ return "<i class='fa fa-print text-pink-500'></i>";};
+
 
     const getMaster = @json(route('bankrecivings.master'));
     let table;
@@ -270,6 +273,19 @@
                 cellClick:function(e, cell){
                     window.open(window.location + "/" + cell.getData().id + "/edit" ,"_self");
             }},
+
+            {title:"Delete" , formatter:deleteIcon, hozAlign:"center",headerSort:false, responsive:0,
+                cellClick:function(e, cell){
+                    window.open(window.location + "/" + cell.getRow().getData().id + "/deleterec"  ,"_self");
+                }
+            },
+            {title:"Print" , formatter:printIcon, hozAlign:"center",headerSort:false, responsive:0,
+                cellClick:function(e, cell){
+                    window.open(window.location + "/" + cell.getRow().getData().id + "/printcontract"  ,"_self");
+                }
+            },
+
+
             // {title:"Unlock",field:'unlock' , formatter:unlockIcon, hozAlign:"center",headerSort:false, responsive:0,
             //     cellClick:function(e,cell){
             //         if(confirm('Do you really want to Unlock this Bank?'))

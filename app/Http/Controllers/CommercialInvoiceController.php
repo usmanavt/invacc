@@ -24,8 +24,8 @@ use App\Models\Material;
 use App\Models\Packaging;
 use App\Models\Sku;
 use App\Models\Voucher;
-
-
+use App\Models\PaymentDetail;
+use App\Models\BankTransaction;
 
 
 class CommercialInvoiceController extends Controller
@@ -473,17 +473,12 @@ class CommercialInvoiceController extends Controller
 
     public function edit($id)
     {
-
-
         // $pack = DB::table('packagings')->select('id AS packid ','title AS packing')->get();
         // $data1=compact('pack');
         $passwrd = DB::table('tblpwrd')->select('pwrdtxt')->max('pwrdtxt');
         $cd = DB::table('skus')->select('id AS dunitid','title AS dunit')
         ->whereIn('id',[1,2])->get();
        $data=compact('cd');
-
-
-
         return view('commercialinvoices.edit',compact('passwrd'))
         ->with('i',CommercialInvoice::whereId($id)->with('commericalInvoiceDetails.material.hscodes')->first())
         ->with('locations',Location::select('id','title')->get())
@@ -492,6 +487,35 @@ class CommercialInvoiceController extends Controller
         ->with('hscodes',Hscode::all())
         ->with($data);
     }
+
+    public function deleterec($id)
+    {
+
+        $passwrd = DB::table('tblpwrd')->select('pwrdtxtdel')->max('pwrdtxtdel');
+        $fugp = Clearance::where('commercial_invoice_id',$id)->max('commercial_invoice_id');;
+        $rcvvchr = PaymentDetail::where('invoice_id',$id)->max('invoice_id');
+        $pmtvchr = BankTransaction::where('supinvid',$id)->max('supinvid');
+
+        $cd = DB::table('skus')->select('id AS dunitid','title AS dunit')
+        ->whereIn('id',[1,2])->get();
+       $data=compact('cd');
+        return view('commercialinvoices.deleterec',compact('passwrd','fugp','rcvvchr','pmtvchr'))
+        ->with('i',CommercialInvoice::whereId($id)->with('commericalInvoiceDetails.material.hscodes')->first())
+        ->with('locations',Location::select('id','title')->get())
+        // ->with('pack',Packaging::select('id','title')->get())
+        ->with('packaging',Packaging::all())
+        ->with('hscodes',Hscode::all())
+        ->with($data);
+    }
+
+
+
+
+
+
+
+
+
 
     public function update(Request $request, CommercialInvoice $commercialInvoice)
     {
@@ -792,8 +816,37 @@ if($request->jv1==1)
         }
     }
 
-    public function destroy(CommercialInvoice $commercialInvoice)
+    public function deleteBankRequest(Request $request)
     {
-        //
+
+
+//  dd($request->invsid);
+        DB::beginTransaction();
+            try {
+
+                DB::delete(DB::raw(" delete from commercial_invoices where id=$request->commercial_invoice_id   "));
+                DB::delete(DB::raw(" delete from commercial_invoice_details where commercial_invoice_id=$request->commercial_invoice_id   "));
+
+                DB::delete(DB::raw(" delete from office_item_bal where ttypeid=2 and  transaction_id=$request->commercial_invoice_id   "));
+
+                DB::commit();
+
+
+                Session::flash('success','Record Deleted Successfully');
+                return response()->json(['success'],200);
+
+            } catch (\Throwable $th) {
+                DB::rollback();
+                throw $th;
+            }
+
+
+
     }
+
+
+
+
+
+
 }

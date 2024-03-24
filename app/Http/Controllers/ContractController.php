@@ -324,6 +324,27 @@ class ContractController extends Controller
         // ->with('cd',ContractDetails::where('contract_id',$contract->id)->get());
     }
 
+
+    public function deleterec($id )
+    {
+
+        // dd($cd);
+        $cd = DB::table('contract_details')->select('*')
+        ->where('contract_id',$id)->get();
+        $data=compact('cd');
+        $passwrd = DB::table('tblpwrd')->select('pwrdtxtdel')->max('pwrdtxtdel');
+
+        $grcvd = DB::table('vwimprcvd')->where('contract_id',$id)->max('contract_id');
+
+        return view('contracts.deleterec',compact('passwrd','grcvd'))->with('suppliers',Supplier::select('id','title')->where('source_id',2)->get())
+        // ->with('contract',$contract)
+        // ->with('pcontract',$pcontract)
+        ->with('contract',Contract::findOrFail($id))
+        ->with($data);
+        // ->with('cd',ContractDetails::where('contract_id',$contract->id)->get());
+    }
+
+
     public function update(Request $request, Contract $contract,Pcontract $pcontract)
     {
         //    dd($request->all());
@@ -606,6 +627,34 @@ class ContractController extends Controller
         // 'I': serves in-line to the browser
         // 'S': returns the PDF document as a string
         // 'F': save as file $file_out
+    }
+
+
+
+    public function deleteBankRequest(Request $request)
+    {
+
+
+//  dd($request->invsid);
+        DB::beginTransaction();
+            try {
+
+                DB::delete(DB::raw(" delete from contracts where id=$request->cid   "));
+                DB::delete(DB::raw(" delete from contract_details where contract_id=$request->cid   "));
+
+                DB::commit();
+
+
+                Session::flash('success','Record Deleted Successfully');
+                return response()->json(['success'],200);
+
+            } catch (\Throwable $th) {
+                DB::rollback();
+                throw $th;
+            }
+
+
+
     }
 
 }
