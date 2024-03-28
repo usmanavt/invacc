@@ -81,6 +81,19 @@
                                     <textarea name="description" id="description" cols="30" rows="3" maxlength="255" class="rounded"></textarea>
                                 </div>
 
+                                <div class="flex flex-col">
+                                    {{-- Report Parameters --}}
+                                    <x-input-date title="" name="fdt" id="fdt" hidden  />
+                                    <x-input-date title="" name="edt" id="edt" hidden  />
+
+
+                                </div>
+
+
+
+
+
+
                                 <div class="mt-2">
                                     {{-- <x-button type="button" onclick="calculate()">
                                         <i class="fa fa-save fa-fw"></i>
@@ -173,11 +186,14 @@
         // payment.value = (parseFloat(conversion_rate.value) * parseFloat(received.value)).toFixed(2)
         // submitButton.disabled = false
     }
+
+
 </script>
 @endpush
 
 @push('scripts')
 <script>
+    // const fdt = document.getElementById('fdt')
     var editIcon = function(cell, formatterParams, onRendered){ return "<i class='fa fa-edit text-blue-600'></i>";};
     var lockIcon = function(cell, formatterParams, onRendered){ return "<i class='fa fa-lock text-red-600'></i>";};
     var unlockIcon = function(cell, formatterParams, onRendered){ return "<i class='fa fa-lock text-green-600'></i>";};

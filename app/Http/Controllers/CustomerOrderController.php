@@ -519,52 +519,99 @@ class CustomerOrderController  extends Controller
         }
     }
 
-
-    public function destroy(Contract $contract)
+    public function getMPDFSettings($orientation = 'A4')
     {
-        //
+
+        $format;
+        $orientation == 'P' ? $format = 'A4': 'A4';
+
+        $mpdf = new PDF( [
+            'mode' => 'utf-8',
+            'format' => $orientation,
+            'margin_header' => '2',
+            'margin_top' => '5',
+            'margin_bottom' => '5',
+            'margin_footer' => '2',
+            'default_font_size' => 9,
+            'margin_left' => '6',
+            'margin_right' => '6',
+        ]);
+        $mpdf->showImageErrors = true;
+        $mpdf->curlAllowUnsafeSslRequests = true;
+        $mpdf->debug = true;
+        return $mpdf;
     }
+
+
 
     public function printContract($id)
     {
-        // dd($id);
-        $contract = Contract::findOrFail($id);
-        $cd = ContractDetails::where('contract_id',$contract->id)->get();
-        $html = view('contracts.print')->with('cd',$cd)->with('contract',$contract)->render();
-        $filename = $contract->id . '.pdf';
-        ini_set('max_execution_time', '2000');
-        ini_set("pcre.backtrack_limit", "100000000");
-        ini_set("memory_limit","8000M");
-        ini_set('allow_url_fopen',1);
-        $temp = storage_path('temp');
-        // Create the mPDF document
-        $mpdf = new PDF( [
-            'mode' => 'utf-8',
-            'format' => 'A4',
-            'margin_header' => '3',
-            'margin_top' => '20',
-            'margin_bottom' => '20',
-            'margin_footer' => '2',
-            'default_font_size' => 9,
-            'orientation' => 'L'
-        ]);
-        $mpdf->SetHTMLFooter('
-            <table width="100%" style="border-top:1px solid gray">
-                <tr>
-                    <td width="33%">{DATE j-m-Y}</td>
-                    <td width="33%" align="center">{PAGENO}/{nbpg}</td>
-                    <td width="33%" style="text-align: right;">' . $filename . '</td>
-                </tr>
-            </table>');
-        $chunks = explode("chunk", $html);
-        foreach($chunks as $key => $val) {
-            $mpdf->WriteHTML($val);
+        // $vrtype = $request->p2;
+        // $hdng1 = $request->cname;
+        // $hdng2 = $request->csdrs;
+        // $hdng3 = $request->toc;
+        // $head_id = $request->head_id;
+        // $head = Head::findOrFail($head_id);
+        // $head = Customer::findOrFail($head_id);
+        // if($request->has('subhead_id')){
+        //     $subhead_id = $request->subhead_id;
+            //  Clear Data from Table
+            DB::table('tmpqutparrpt')->truncate();
+            // foreach($request->subhead_id as $id)
+            // {
+                DB::table('tmpqutparrpt')->insert([ 'qutid' => $id ]);
+        //     }
+        // }
+        //  Call Procedure
+        $mpdf = $this->getMPDFSettings();
+
+        // if($vrtype == 0)
+        // {
+            $data = DB::select('call procsaleorders()');
+        // }
+        // if($vrtype == 1)
+        // {
+        //     $data = DB::select('call proccompsaleorders()');
+        // }
+
+        if(!$data)
+        {
+            Session::flash('info','No data available');
+            return redirect()->back();
         }
-        $mpdf->Output($filename,'I');
-        // 'D': download the PDF file
-        // 'I': serves in-line to the browser
-        // 'S': returns the PDF document as a string
-        // 'F': save as file $file_out
+        $mpdf = $this->getMPDFSettings();
+        $collection = collect($data);                   //  Make array a collection
+        // $grouped = $collection->groupBy('SupName');       //  Sort collection by SupName
+        $grouped = $collection->groupBy('id');       //  Sort collection by SupName
+        $grouped->values()->all();                       //  values() removes indices of array
+
+        // dd($grouped);
+
+        foreach($grouped as $g){
+             $html =  view('custorders.print')->with('data',$g)->render();
+            //  ->with('fromdate',$fromdate)
+            //  ->with('todate',$todate)
+            //  ->with('headtype',$head->title)
+            //  ->with('hdng1',$hdng1)->with('hdng2',$hdng2)->with('hdng3',$hdng3)
+            //  ->render();
+            // $html =  view('salerpt.glhw')->with('data',$g)->with('fromdate',$fromdate)->with('todate',$todate)->render();
+            $filename = $g[0]->id  .'.pdf';
+            // $mpdf->SetHTMLFooter('
+            // <table width="100%" style="border-top:1px solid gray">
+            //     <tr>
+            //         <td width="33%">{DATE d-m-Y}</td>
+            //         <td width="33%" align="center">{PAGENO}/{nbpg}</td>
+            //     </tr>
+            // </table>');
+            $chunks = explode("chunk", $html);
+            foreach($chunks as $key => $val) {
+                $mpdf->WriteHTML($val);
+            }
+            $mpdf->AddPage();
+        }
+        return response($mpdf->Output($filename,'I'),200)->header('Content-Type','application/pdf');
+
+
     }
 
 

@@ -26,6 +26,7 @@ use App\Models\Sku;
 use App\Models\Voucher;
 use App\Models\PaymentDetail;
 use App\Models\BankTransaction;
+use \Mpdf\Mpdf as PDF;
 
 
 class CommercialInvoiceController extends Controller
@@ -815,6 +816,104 @@ if($request->jv1==1)
             throw $th;
         }
     }
+
+    public function getMPDFSettings($orientation = 'A4')
+    {
+
+        $format;
+        $orientation == 'P' ? $format = 'A4': 'A4';
+
+        $mpdf = new PDF( [
+            'mode' => 'utf-8',
+            'format' => $orientation,
+            'margin_header' => '2',
+            'margin_top' => '5',
+            'margin_bottom' => '5',
+            'margin_footer' => '2',
+            'default_font_size' => 9,
+            'margin_left' => '6',
+            'margin_right' => '6',
+        ]);
+        $mpdf->showImageErrors = true;
+        $mpdf->curlAllowUnsafeSslRequests = true;
+        $mpdf->debug = true;
+        return $mpdf;
+    }
+
+
+
+
+
+    public function printcontract($id)
+    {
+
+            $hdng1 = '211';
+            $hdng2 = '21';
+            // $head_id = '1212';
+            $head = '21';
+            // if($request->has('subhead_id')){
+            //     $subhead_id = $request->subhead_id;
+                //  Clear Data from Table
+                DB::table('contparameterrpt')->truncate();
+                // foreach($request->subhead_id as $id)
+                // {
+                    DB::table('contparameterrpt')->insert([ 'GLCODE' => $id ]);
+                // }
+            // }
+            //  Call Procedure
+            // imppurdtl.blade
+            // if($request->p5==0)
+             $data = DB::select('call procimpcominvs()');
+            // else
+            // { $data = DB::select('call procipdetail()'); }
+             if(!$data)
+            {
+                Session::flash('info','No data available');
+                return redirect()->back();
+            }
+            $mpdf = $this->getMPDFSettings();
+            $collection = collect($data);                   //  Make array a collection
+            $grouped = $collection->groupBy('purid');       //  Sort collection by SupName
+            $grouped->values()->all();                       //  values() removes indices of array
+            foreach($grouped as $g){
+
+                // if($report_type === 'impcominvs')
+                // {
+                //     if($request->p5==0)
+                         $html =  view('commercialinvoices.print')->with('hdng1',$hdng1)->with('hdng2',$hdng2)->with('data',$g)->render();
+                //     else
+                //     { $html =  view('purrpt.imppurdtl')->with('hdng1',$hdng1)->with('hdng2',$hdng2)->with('data',$g)->with('fromdate',$fromdate)->with('todate',$todate)->with('headtype',$head->title)->render(); }
+
+                // }
+                // if($report_type === 'impcominvs1')
+                // {
+                // $html =  view('purrpt.impcominvs1')->with('hdng1',$hdng1)->with('hdng2',$hdng2)->with('data',$g)->with('fromdate',$fromdate)->with('todate',$todate)->with('headtype',$head->title)->render();
+                // }
+
+                // $html =  view('purrpt.glhw')->with('data',$g)->with('fromdate',$fromdate)->with('todate',$todate)->render();
+                $fromdate='lkl';
+                $todate='ioio';
+
+                $filename = $g[0]->purid  .'-'.$fromdate.'-'.$todate.'.pdf';
+                $chunks = explode("chunk", $html);
+                foreach($chunks as $key => $val) {
+                    $mpdf->WriteHTML($val);
+                }
+                $mpdf->AddPage();
+            }
+            return response($mpdf->Output($filename,'I'),200)->header('Content-Type','application/pdf');
+        }
+
+
+
+
+
+
+
+
+
+
+
 
     public function deleteBankRequest(Request $request)
     {

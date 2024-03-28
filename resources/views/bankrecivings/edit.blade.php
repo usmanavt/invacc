@@ -132,9 +132,9 @@
 @push('scripts')
 <script>
 
-    document.addEventListener('DOMContentLoaded',()=>{
-        document.getElementById("submitButton").disabled = true;
-     })
+    // document.addEventListener('DOMContentLoaded',()=>{
+    //     document.getElementById("submitButton").disabled = true;
+    //  })
     let subheads = @json($subheads);
     let supplier_id = @json($bt->supplier_id);
     let customer_id = @json($bt->customer_id);
@@ -153,7 +153,9 @@
     const customer = document.getElementById('customer_id')
 
     document.addEventListener('DOMContentLoaded',()=>{
-       populateSelect()
+        document.getElementById("submitButton").disabled = true;
+        populateSelect()
+
     })
 // xyz
     const populateSelect = ()=>{
@@ -240,7 +242,7 @@
     // }
 
 
-    }
+    // }
 
 
 

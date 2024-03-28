@@ -94,7 +94,7 @@ body{
     @endphp
     @if ( count($data) <= $showlines )
         {{-- Report Header --}}
-        @include('localpurchase.components.headerlocinv')
+        @include('localpurchase.components.purreheader')
         {{-- Databox --}}
         <div class="databox">
 
@@ -124,15 +124,15 @@ body{
 
                     <tr>
                         {{-- <td  style="text-align: center font-size:0.5rem;font-weight: bold"> --}}
-                            <th class="column-headers" width="3%">S#</th>
-                            <th class="column-headers" width="30%">Description Of Items</th>
-                            <th class="column-headers" width="9%">Quantity</th>
-                            <th class="column-headers" width="5%">Unit</th>
-                            <th class="column-headers" width="19%">ForCustomer</th>
-                            <th class="column-headers" width="8%">Rate</th>
-                            <th class="column-headers" width="9%">Amount</th>
-                            <th class="column-headers" width="8%">Rate<br>W.Cost</th>
-                            <th class="column-headers" width="9%">Amount<br>W.Cost</th>
+                            <th class="column-headers" width="5%">S#</th>
+                            <th class="column-headers" width="53%">Description Of Items</th>
+                            <th class="column-headers" width="12%">Quantity</th>
+                            <th class="column-headers" width="6%">Unit</th>
+                            {{-- <th class="column-headers" width="19%">ForCustomer</th> --}}
+                            <th class="column-headers" width="12%">Rate</th>
+                            <th class="column-headers" width="12%">Amount</th>
+                            {{-- <th class="column-headers" width="8%">Rate<br>W.Cost</th> --}}
+                            {{-- <th class="column-headers" width="9%">Amount<br>W.Cost</th> --}}
 
                         {{-- </td> --}}
                     </tr>
@@ -151,17 +151,17 @@ body{
                         <tr>
 
                             {{ $vwt += $data[$i]->purqty }}; {{ $vvlues += $data[$i]->vlues }}
-                            {{ $wcvwt += $data[$i]->perft }}; {{ $wcvvlues += $data[$i]->pricevaluecostsheet }}
+                            {{-- {{ $wcvwt += $data[$i]->perft }}; {{ $wcvvlues += $data[$i]->pricevaluecostsheet }} --}}
 
-                            <td style=" border-top: 1px solid lightgray;  text-align:center" width="3%">{{ $i+1 }}</td>
-                            <td style=" border-top: 1px solid lightgray; text-align:left" width="30%">{{ $data[$i]->material_title }} </td>
-                            <td style=" border-top: 1px solid lightgray; text-align:right" width="9%">{{ number_format($data[$i]->purqty,1) }} </td>
-                            <td style=" border-top: 1px solid lightgray; text-align:center" width="4%">{{ $data[$i]->unit }} </td>
-                            <td style=" border-top: 1px solid lightgray; text-align:center" width="20%">{{ $data[$i]->forcust }} </td>
-                            <td style=" border-top: 1px solid lightgray; text-align:right" width="8%">{{ number_format($data[$i]->price,1) }} </td>
-                            <td style=" border-top: 1px solid lightgray;text-align:right" width="9%">{{ number_format($data[$i]->vlues,0) }} </td>
-                            <td style=" border-top: 1px solid lightgray;text-align:right" width="8%">{{ number_format($data[$i]->perft,2) }} </td>
-                            <td style=" border-top: 1px solid lightgray;text-align:right" width="9%">{{ number_format($data[$i]->pricevaluecostsheet,0) }} </td>
+                            <td style=" border-top: 1px solid lightgray;  text-align:center" width="5%">{{ $i+1 }}</td>
+                            <td style=" border-top: 1px solid lightgray; text-align:left" width="53%">{{ $data[$i]->material_title }} </td>
+                            <td style=" border-top: 1px solid lightgray; text-align:right" width="12%">{{ number_format($data[$i]->purqty,1) }} </td>
+                            <td style=" border-top: 1px solid lightgray; text-align:center" width="6%">{{ $data[$i]->unit }} </td>
+                            {{-- <td style=" border-top: 1px solid lightgray; text-align:center" width="20%">{{ $data[$i]->forcust }} </td> --}}
+                            <td style=" border-top: 1px solid lightgray; text-align:right" width="12%">{{ number_format($data[$i]->price,1) }} </td>
+                            <td style=" border-top: 1px solid lightgray;text-align:right" width="12%">{{ number_format($data[$i]->vlues,0) }} </td>
+                            {{-- <td style=" border-top: 1px solid lightgray;text-align:right" width="8%">{{ number_format($data[$i]->perft,2) }} </td> --}}
+                            {{-- <td style=" border-top: 1px solid lightgray;text-align:right" width="9%">{{ number_format($data[$i]->pricevaluecostsheet,0) }} </td> --}}
 
                         </tr>
                     @endfor
@@ -170,22 +170,22 @@ body{
                         @for ($j = $i ; $j <= $showlines ; $j++)
                         <tr>
                             <td class="" width="3%">&nbsp;</td>
-                            <td style="font-size:12px" width="30%">&nbsp;</td>
-                            <td style="text-align:center;font-size:12px" width="9%"> </td>
-                            <td style="text-align:left;font-size:12px" width="4%"></td>
-                            <td style="font-size:12px" width="20%"></td>
-                            <td style="font-size:12px" width="8%"></td>
-                            <td style="text-align:right;font-size:12px" width="9%"></td>
-                            <td style="text-align:right;font-size:12px" width="8%"></td>
-                            <td style="text-align:right;font-size:12px" width="9%"></td>
+                            <td style="font-size:12px" width="53%">&nbsp;</td>
+                            <td style="text-align:center;font-size:12px" width="12%"> </td>
+                            <td style="text-align:left;font-size:12px" width="6%"></td>
+                            {{-- <td style="font-size:12px" width="20%"></td> --}}
+                            <td style="font-size:12px" width="12%"></td>
+                            <td style="text-align:right;font-size:12px" width="12%"></td>
+                            {{-- <td style="text-align:right;font-size:12px" width="8%"></td> --}}
+                            {{-- <td style="text-align:right;font-size:12px" width="9%"></td> --}}
                         </tr>
                         @endfor
                     @endif
                     <tr>
                         <td class="column-headers" colspan="2"  style="text-align: right;font-weight: bold;border-bottom: 1px solid lightgray;">Total</td>
                         <td class="column-headers" colspan="1"  style="text-align: right;font-weight: bold;border-bottom: 1px solid lightgray;">{{ number_format($vwt,0) }} </td>
-                        <td class="column-headers" colspan="4"  style="text-align: right;font-weight: bold;border-bottom: 1px solid lightgray;">{{ number_format($vvlues,0) }} </td>
-                        <td class="column-headers" colspan="2"  style="text-align: right;font-weight: bold;border-bottom: 1px solid lightgray;">{{ number_format($wcvvlues,0) }} </td>
+                        <td class="column-headers" colspan="3"  style="text-align: right;font-weight: bold;border-bottom: 1px solid lightgray;">{{ number_format($vvlues,0) }} </td>
+                        {{-- <td class="column-headers" colspan="2"  style="text-align: right;font-weight: bold;border-bottom: 1px solid lightgray;">{{ number_format($wcvvlues,0) }} </td> --}}
                     </tr>
 
                 </tbody>

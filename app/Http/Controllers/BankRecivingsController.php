@@ -12,6 +12,7 @@ use App\Models\ChequeTransaction;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Session;
+use \Mpdf\Mpdf as PDF;
 
 class BankRecivingsController extends Controller
 {
@@ -291,6 +292,95 @@ DB::beginTransaction();
 
 
     }
+
+
+    public function getMPDFSettingsL($orientation = 'Legal-L')
+    {
+
+        $format;
+        $orientation == 'L' ? $format = 'Legal': 'Legal';
+
+        $mpdf = new PDF( [
+            'mode' => 'utf-8',
+            'format' => $orientation,
+            'margin_header' => '2',
+            'margin_top' => '5',
+            'margin_bottom' => '5',
+            'margin_footer' => '2',
+            'default_font_size' => 9,
+            'margin_left' => '10',
+            'margin_right' => '10',
+        ]);
+        $mpdf->showImageErrors = true;
+        $mpdf->curlAllowUnsafeSslRequests = true;
+        $mpdf->debug = true;
+        return $mpdf;
+    }
+
+
+
+
+    public function printContract(Request $request)
+    {
+            //  dd($request->all());
+            // // $head_id = $request->head_id;
+            // $hdng1 = $request->cname;
+            // $hdng2 = $request->csdrs;
+                // $vrtype4 = $request->p4;
+                //  dd($vrtype);
+                // $head = Head::findOrFail($head_id);
+                // if($request->has('subhead_id')){
+                //     $subhead_id = $request->subhead_id;
+                //     DB::table('glparameterrpt')->truncate();
+                //     foreach($request->subhead_id as $id)
+                //     {
+                //         DB::table('glparameterrpt')->insert([ 'GLCODE' => $id ]);
+                //     }
+                // }
+                //  Call Procedure
+            $fromdate=$request->fdt;
+            $todate=$request->edt;
+
+
+        // dd($fromdate);
+            $data = DB::select('call procchequetrans(?,?)',array($fromdate,$todate));
+            if(!$data)
+            {
+                Session::flash('info','No data available');
+                return redirect()->back();
+            }
+            $mpdf = $this->getMPDFSettingsL();
+            $collection = collect($data);                   //  Make array a collection
+            $grouped = $collection->groupBy('grp');       //  Sort collection by SupName
+            $grouped->values()->all();                       //  values() removes indices of array
+            foreach($grouped as $g){
+
+                $html =  view('bankrecivings.print')->with('data',$g)->with('fromdate',$fromdate)->with('todate',$todate)->render();
+
+                // ->with('hdng1',$hdng1)->with('hdng2',$hdng2)->with('data',$g)->with('fromdate',$fromdate)->with('todate',$todate)->render();
+
+
+
+               $filename = $g[0]->grp  .'-'.$fromdate.'-'.$todate.'.pdf';
+
+               $chunks = explode("chunk", $html);
+                foreach($chunks as $key => $val) {
+                    $mpdf->WriteHTML($val);
+                }
+                // $mpdf->AddPage();
+            }
+            //  $mpdf->Output($filename,'I');
+            return response($mpdf->Output($filename,'I'),200)->header('Content-Type','application/pdf');
+
+
+    }
+
+
+
+
+
+
+
 
 
 }

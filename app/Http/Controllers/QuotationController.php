@@ -488,51 +488,107 @@ class QuotationController  extends Controller
     }
 
 
-    public function destroy(Contract $contract)
+    public function getMPDFSettings($orientation = 'A4')
     {
-        //
+
+        $format;
+        $orientation == 'P' ? $format = 'A4': 'A4';
+
+        $mpdf = new PDF( [
+            'mode' => 'utf-8',
+            'format' => $orientation,
+            'margin_header' => '2',
+            'margin_top' => '5',
+            'margin_bottom' => '5',
+            'margin_footer' => '2',
+            'default_font_size' => 9,
+            'margin_left' => '6',
+            'margin_right' => '6',
+        ]);
+        $mpdf->showImageErrors = true;
+        $mpdf->curlAllowUnsafeSslRequests = true;
+        $mpdf->debug = true;
+        return $mpdf;
     }
+
 
     public function printContract($id)
     {
-        // dd($id);
-        $contract = Contract::findOrFail($id);
-        $cd = ContractDetails::where('contract_id',$contract->id)->get();
-        $html = view('contracts.print')->with('cd',$cd)->with('contract',$contract)->render();
-        $filename = $contract->id . '.pdf';
-        ini_set('max_execution_time', '2000');
-        ini_set("pcre.backtrack_limit", "100000000");
-        ini_set("memory_limit","8000M");
-        ini_set('allow_url_fopen',1);
-        $temp = storage_path('temp');
-        // Create the mPDF document
-        $mpdf = new PDF( [
-            'mode' => 'utf-8',
-            'format' => 'A4',
-            'margin_header' => '3',
-            'margin_top' => '20',
-            'margin_bottom' => '20',
-            'margin_footer' => '2',
-            'default_font_size' => 9,
-            'orientation' => 'L'
-        ]);
-        $mpdf->SetHTMLFooter('
-            <table width="100%" style="border-top:1px solid gray">
-                <tr>
-                    <td width="33%">{DATE j-m-Y}</td>
-                    <td width="33%" align="center">{PAGENO}/{nbpg}</td>
-                    <td width="33%" style="text-align: right;">' . $filename . '</td>
-                </tr>
-            </table>');
-        $chunks = explode("chunk", $html);
-        foreach($chunks as $key => $val) {
-            $mpdf->WriteHTML($val);
+
+        // $hdng1 = $request->cname;
+        // $hdng2 = $request->csdrs;
+        // $t1 = $request->t1;
+        // $t2 = $request->t2;
+        // $t3 = $request->t3;
+        // $t4 = $request->t4;
+        // $t5 = $request->t5;
+        // $head_id = $request->head_id;
+        // $head = Head::findOrFail($head_id);
+        // $head = Customer::findOrFail($head_id);
+        // if($request->has('subhead_id')){
+        //     $subhead_id = $request->subhead_id;
+            //  Clear Data from Table
+            DB::table('tmpqutparrpt')->truncate();
+            // foreach($request->subhead_id as $id)
+            // {
+                DB::table('tmpqutparrpt')->insert([ 'qutid' => $id ]);
+        //     }
+        // }
+        //  Call Procedure
+        // $mpdf = $this->getMPDFSettingslndscap();
+        $data = DB::select('call procquotation()');
+        if(!$data)
+        {
+            Session::flash('info','No data available');
+            return redirect()->back();
         }
-        $mpdf->Output($filename,'I');
-        // 'D': download the PDF file
-        // 'I': serves in-line to the browser
-        // 'S': returns the PDF document as a string
-        // 'F': save as file $file_out
+        $mpdf = $this->getMPDFSettings();
+        $collection = collect($data);                   //  Make array a collection
+        ///// THIS IS CHANGED FOR REPORT//////////
+        // Filter non grpid
+        $nogrp = $collection->filter(function ($item){
+            return $item->grpid != 1;
+        })->values();
+        $nogrp->values()->all();
+        // Now FIlter Collection for grpid == 1
+        $collection = $collection->filter(function ($item){
+            return $item->grpid == 1;
+        })->values();
+        ///// THIS IS CHANGED FOR REPORT//////////
+        $grouped = $collection->groupBy('id');
+        $grouped->values()->all();        //  values() removes indices of array
+
+        foreach($grouped as $g){
+            // $mpdf = $this->getMPDFSettingslndscap();
+             $html =  view('quotations.print')->with('data',$g)->with('nogrp',$nogrp)->render();
+            //  ->with('fromdate',$fromdate)->with('todate',$todate)
+            //  ->with('headtype',$head->title)
+            //  ->with('hdng1',$hdng1)->with('hdng2',$hdng2)->with('t1',$t1)->with('t2',$t2)->with('t3',$t3)->with('t4',$t4)->with('t5',$t5)
+            //  ->render();
+            // $html =  view('salerpt.glhw')->with('data',$g)->with('fromdate',$fromdate)->with('todate',$todate)->render();
+            $filename = $g[0]->id  .'.pdf';
+
+            // $mpdf->SetHTMLFooter('
+            // <table width="100%" style="border-top:1px solid gray">
+            //     <tr>
+            //         <td width="33%">{DATE d-m-Y}</td>
+            //         <td width="33%" align="center">{PAGENO}/{nbpg}</td>
+
+            //     </tr>
+            // </table>');
+            $chunks = explode("chunk", $html);
+            foreach($chunks as $key => $val) {
+                $mpdf->WriteHTML($val);
+            }
+            $mpdf->AddPage();
+        }
+        return response($mpdf->Output($filename,'I'),200)->header('Content-Type','application/pdf');
+
+
+
+
+
+
     }
 
 

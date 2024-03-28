@@ -235,6 +235,31 @@
         },
     })
 
+
+    table.on("cellClick", function(e, cell){
+    var row = cell.getRow();
+    // Check if the clicked cell is in the "selected" column
+    if (cell.getField() !== "selected") {
+        e.stopPropagation();
+        // Perform actions for clicks on other columns
+        var rowData = row.getData();
+        packagesTitle.textContent = rowData["name"];
+        tablePackages.setData(rowData["upgradable packages"]);
+    }
+});
+
+
+
+
+    table.on("rowClick", function(e, row){
+    if (row.isSelected()){
+        row.deselect();
+    } else {
+        row.select();
+    }
+});
+
+
 </script>
 @endpush
 

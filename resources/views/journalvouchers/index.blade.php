@@ -77,6 +77,9 @@
         groupBy:'transaction',
         columns:[
             // Master Data
+            {formatter:"rowSelection", titleFormatter:"rowSelection", hozAlign:"center", headerSort:false, cellClick:function(e, cell){
+        cell.getRow().toggleSelect();
+        }},
             {title:"Id", field:"id" , responsive:0,visible:false},
             {title:"Transaction", field:"transaction" , responsive:0},
             {title:"Doc Date", field:"document_date" ,  responsive:0},

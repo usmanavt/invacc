@@ -7,6 +7,7 @@ use App\Models\Subhead;
 use App\Models\Voucher;
 use App\Models\Customer;
 use App\Models\Supplier;
+use \Mpdf\Mpdf as PDF;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Session;
@@ -265,6 +266,111 @@ class VoucherController extends Controller
     }
 
 
+
+
+
+    public function getMPDFSettings($orientation = 'A4')
+    {
+
+        $format;
+        $orientation == 'P' ? $format = 'A4': 'A4';
+
+        $mpdf = new PDF( [
+            'mode' => 'utf-8',
+            'format' => $orientation,
+            'margin_header' => '2',
+            'margin_top' => '5',
+            'margin_bottom' => '5',
+            'margin_footer' => '2',
+            'default_font_size' => 9,
+            'margin_left' => '6',
+            'margin_right' => '6',
+        ]);
+        $mpdf->showImageErrors = true;
+        $mpdf->curlAllowUnsafeSslRequests = true;
+        $mpdf->debug = true;
+        return $mpdf;
+    }
+
+
+
+
+
+    public function printContract($id)
+    {
+
+        $hdng1 = 'usman';
+        $hdng2 = 'abc';
+
+        // $head_id = $request->head_id;
+        $head = 'shakoor';
+        // if($request->has('subhead_id')){
+        //     $subhead_id = $request->subhead_id;
+        //     //  Clear Data from Table
+            // DB::table('tmpvoucherrpt')->truncate();
+        //     foreach($request->subhead_id as $id)
+        //     {
+                // DB::table('tmpvoucherrpt')->insert([ 'supid' => $jvno ]);
+        //     }
+        // }
+        //  Call Procedure
+        // $data = DB::select('call ProcGLHW(?,?,?)',array($fromdate,$todate,$head_id));
+        // if($head_id == 5)
+        //     {
+                // $data = DB::select('call procvoucherrptjv()');
+                $data = DB::select('call procvoucherrptjvfrm(?)',array($id));
+        //     }
+        // else
+        //     {
+        //         $data = DB::select('call procvoucherrpt()');
+        //     }
+
+
+        if(!$data)
+        {
+            Session::flash('info','No data available');
+            return redirect()->back();
+        }
+        $mpdf = $this->getMPDFSettings();
+        $collection = collect($data);                   //  Make array a collection
+
+
+        // $grouped1 = $collection->groupBy('transno');       //  Sort collection by SupName
+        // $grouped1->values()->all();
+
+        // foreach($grouped1 as $g)
+        // {
+            $grouped = $collection->groupBy('jvno');       //  Sort collection by SupName
+            $grouped->values()->all();                       //  values() removes indices of array
+            foreach($grouped as $g)
+            {
+
+            // if($head_id == 5)
+            // {
+                $html =  view('journalvouchers.print')->with('hdng1',$hdng1)->with('hdng2',$hdng2)->with('data',$g)->with('headtype','kdfasfds')->render();
+            // }
+            // else
+            // {
+            //     $html =  view('reports.voucher')->with('hdng1',$hdng1)->with('hdng2',$hdng2)->with('data',$g)->with('fromdate',$fromdate)->with('todate',$todate)->with('headtype',$head->title)->render();
+            // }
+
+            $fromdate="";
+            $todate="";
+
+                $filename = $g[0]->transno  .'-'.$fromdate.'-'.$todate.'.pdf';
+                $chunks = explode("chunk", $html);
+                foreach($chunks as $key => $val) {
+                    $mpdf->WriteHTML($val);
+                }
+                // $mpdf->AddPage();
+            // }
+        // $mpdf->AddPage();
+        }
+        //  $mpdf->Output($filename,'I');
+        return response($mpdf->Output($filename,'I'),200)->header('Content-Type','application/pdf');
+
+
+    }
 
 
 

@@ -635,54 +635,74 @@ if($request->dltid==1)
 
 
 
-    public function destroy(Contract $contract)
+    public function getMPDFSettings($orientation = 'A4')
     {
-        //
+
+        $format;
+        $orientation == 'P' ? $format = 'A4': 'A4';
+
+        $mpdf = new PDF( [
+            'mode' => 'utf-8',
+            'format' => $orientation,
+            'margin_header' => '2',
+            'margin_top' => '5',
+            'margin_bottom' => '5',
+            'margin_footer' => '2',
+            'default_font_size' => 9,
+            'margin_left' => '6',
+            'margin_right' => '6',
+        ]);
+        $mpdf->showImageErrors = true;
+        $mpdf->curlAllowUnsafeSslRequests = true;
+        $mpdf->debug = true;
+        return $mpdf;
     }
 
     public function printContract($id)
     {
 
-        console.log('abc');
-        Session::flash('info','No data available');
-        // $gp = Gatepass::findOrFail($id);
-        // $gpd = GatepassDetail::whereGatepassId($gp->id)->whereDeleted(0)->get();
+        $hdng1 = 'daf';
+        $hdng2 = 'dfsf';
+
+        // $head_id = $request->head_id;
+        // $head = Supplier::findOrFail($head_id);
+        // if($request->has('subhead_id')){
+            // $subhead_id = $request->subhead_id;
+            //  Clear Data from Table
+            DB::table('contparameterrpt')->truncate();
+            // foreach($request->subhead_id as $id)
+            // {
+                DB::table('contparameterrpt')->insert([ 'GLCODE' => $id ]);
+            // }
+        // }
+
+        //  Call Procedure
         $data = DB::select('call procpurinvcloc()');
-        $html = view('purrpt.loccominvsrpt')->render();
-        // Report::getPDFByMpdf($html, $gp->id.'.pdf');
-        $filename = $gp->id . '.pdf';
-        ini_set('max_execution_time', '2000');
-        ini_set("pcre.backtrack_limit", "100000000");
-        ini_set("memory_limit","8000M");
-        ini_set('allow_url_fopen',1);
-        $temp = storage_path('temp');
-        // Create the mPDF document
-        $mpdf = new PDF( [
-            'mode' => 'utf-8',
-            'format' => 'A4',
-            'margin_header' => '3',
-            'margin_top' => '20',
-            'margin_bottom' => '20',
-            'margin_footer' => '2',
-            'default_font_size' => 9,
-        ]);
-        $mpdf->SetHTMLFooter('
-            <table width="100%" style="border-top:1px solid gray">
-                <tr>
-                    <td width="33%">{DATE j-m-Y}</td>
-                    <td width="33%" align="center">{PAGENO}/{nbpg}</td>
-                    <td width="33%" style="text-align: right;">' . $filename . '</td>
-                </tr>
-            </table>');
-        $chunks = explode("chunk", $html);
-        foreach($chunks as $key => $val) {
-            $mpdf->WriteHTML($val);
+        if(!$data)
+        {
+            Session::flash('info','No data available');
+            return redirect()->back();
         }
-        $mpdf->Output($filename,'I');
-        // 'D': download the PDF file
-        // 'I': serves in-line to the browser
-        // 'S': returns the PDF document as a string
-        // 'F': save as file $file_out
+        $collection = collect($data);                   //  Make array a collection
+
+        $mpdf = $this->getMPDFSettings();
+        $grouped = $collection->groupBy('purid');       //  Sort collection by SupName
+        $grouped->values()->all();                       //  values() removes indices of array
+        foreach($grouped as $g){
+            $html =  view('localpurchase.print')->with('hdng1',$hdng1)->with('hdng2',$hdng2)
+               ->with('data',$g)->render();
+            //    ->with('fromdate',$fromdate)
+            //    ->with('todate',$todate)
+            //    ->with('headtype',$head->title)->render();
+
+            $filename = $g[0]->purid  .'.pdf';
+            $chunks = explode("chunk", $html);
+            foreach($chunks as $key => $val) {
+                $mpdf->WriteHTML($val);
+            }
+            $mpdf->AddPage();
+        }
+        return response($mpdf->Output($filename,'I'),200)->header('Content-Type','application/pdf');
 
     }
 

@@ -193,8 +193,8 @@ Route::resource('users',UserController::class);
 // Contract Controller
 
 
-
-Route::get('/contracts/{contract}/printcontract', [ContractController::class, 'printContract'])->name('contracts.print');
+Route::get('/contracts/{id}/printcontract', [ContractController::class, 'printContract'])->name('jv.print');
+// Route::get('/contracts/{contract}/printcontract', [ContractController::class, 'printContract'])->name('contracts.print');
 Route::post('/contracts/deleteBankRequest', [ContractController::class, 'deleteBankRequest'])->name('contracts.del');
 Route::get('/contracts/{id}/deleterec', [ContractController::class, 'deleterec']);
 
@@ -210,6 +210,7 @@ Route::resource('contracts', ContractController::class);
 
 //  CommercialInvoice
 
+Route::get('/cis/{id}/printcontract', [CommercialInvoiceController::class, 'printContract'])->name('cis.print');
 Route::post('/cis/deleteBankRequest', [CommercialInvoiceController::class, 'deleteBankRequest'])->name('cis.del');
 Route::get('/cis/{id}/deleterec', [CommercialInvoiceController::class, 'deleterec']);
 
@@ -228,6 +229,7 @@ Route::resource('cis', CommercialInvoiceController::class);
 //  CommercialInvoice - LOCAL NEW
 
 
+Route::get('/localpurchase/{id}/printcontract', [LocalPurchaseController::class, 'printContract'])->name('localpurchase.print');
 Route::post('/localpurchase/deleteBankRequest', [LocalPurchaseController::class, 'deleteBankRequest'])->name('localpurchase.del');
 Route::get('/localpurchase/{id}/deleterec', [LocalPurchaseController::class, 'deleterec']);
 
@@ -250,6 +252,7 @@ Route::resource('openinggodownstock', OpeningGodownStockController::class);
 
 //  Sales Invoices with purchase orders
 
+Route::get('/saleinvoices/{id}/printcontract', [SalesInvoicesController::class, 'printContract'])->name('saleinvoices.print');
 Route::post('/sales/deleteBankRequest', [SalesInvoicesController::class, 'deleteBankRequest'])->name('sales.del');
 Route::get('/saleinvoices/{id}/deleterec', [SalesInvoicesController::class, 'deleterec']);
 
@@ -263,6 +266,7 @@ Route::resource('saleinvoices', SalesInvoicesController::class);
 
 //  Sales Invoices with out purchase orders
 
+Route::get('/salewopo/{id}/printcontract', [SalesInvoiceWopoController::class, 'printContract'])->name('salewopo.print');
 Route::post('/salewopo/deleteBankRequest', [SalesInvoiceWopoController::class, 'deleteBankRequest'])->name('salewopo.del');
 Route::get('/salewopo/{id}/deleterec', [SalesInvoiceWopoController::class, 'deleterec']);
 
@@ -320,6 +324,7 @@ Route::resource('gatepasse', GatepasseController::class);
 
 //  Sales Return Invoices
 
+Route::get('/salereturn/{id}/printcontract', [SalesRetunrsController::class, 'printContract'])->name('salereturn.print');
 Route::post('/salereturn/deleteBankRequest', [SalesRetunrsController::class, 'deleteBankRequest'])->name('salereturn.del');
 Route::get('/salereturn/{id}/deleterec', [SalesRetunrsController::class, 'deleterec']);
 
@@ -335,6 +340,7 @@ Route::resource('salereturn', SalesRetunrsController::class);
 //  Quotation
 
 
+Route::get('/quotations/{id}/printcontract', [QuotationController::class, 'printContract'])->name('quotations.print');
 Route::post('/quotations/deleteBankRequest', [QuotationController::class, 'deleteBankRequest'])->name('quotations.del');
 Route::get('/quotations/{id}/deleterec', [QuotationController::class, 'deleterec']);
 
@@ -348,6 +354,7 @@ Route::resource('quotations', QuotationController::class);
 
 //  Customer Orders
 
+Route::get('/customerorder/{id}/printcontract', [CustomerOrderController::class, 'printContract'])->name('customerorder.print');
 Route::post('/customerorder/deleteBankRequest', [CustomerOrderController::class, 'deleteBankRequest'])->name('customerorder.del');
 Route::get('/customerorder/{id}/deleterec', [CustomerOrderController::class, 'deleterec']);
 
@@ -362,6 +369,7 @@ Route::resource('customerorder', CustomerOrderController::class);
 
 //  Payment Voucher
 // Route::get('/materials/{id}/copyMaterial', [MaterialController::class, 'copyMaterial'])->name('materials.copy');
+Route::get('/banktransaction/{id}/printcontract', [PaymentController::class, 'printContract'])->name('banktransaction.print');
 Route::post('/banktransaction/deleteBankRequest', [PaymentController::class, 'deleteBankRequest'])->name('banktransaction.del');
 Route::get('/banktransaction/{id}/deleterec', [PaymentController::class, 'deleterec']);
 
@@ -376,7 +384,7 @@ Route::resource('banktransaction', PaymentController::class);
 
 
 //  Received Voucher
-
+Route::get('/banktransactionr/{id}/printcontract', [ReceiveController::class, 'printContract'])->name('banktransactionr.print');
 Route::post('/banktransactionr/deleteBankRequest', [ReceiveController::class, 'deleteBankRequest'])->name('banktransactionr.del');
 Route::get('/banktransactionr/{id}/deleterec', [ReceiveController::class, 'deleterec']);
 
@@ -389,14 +397,8 @@ Route::resource('banktransactionr', ReceiveController::class);
 
 
 
-
-
-
-
-
-
-
 //  Purchase Return
+Route::get('/purchasereturn/{id}/printcontract', [PurchaseReturnController::class, 'printContract'])->name('purchasereturn.print');
 Route::post('/purchasereturn/deleteBankRequest', [PurchaseReturnController::class, 'deleteBankRequest'])->name('purchasereturn.del');
 Route::get('/purchasereturn/{id}/deleterec', [PurchaseReturnController::class, 'deleterec']);
 
@@ -491,6 +493,8 @@ Route::resource('recivings', RecivingController::class)->except(['create','store
 // Route::get('/clearances/details', [ClearanceController::class, 'getDetails'])->name('clearances.details');
 //  Route::get('/clearances/ccd', [ClearanceController::class, 'updateCompletedClearance'])->name('clearances.updatercd');
 
+
+Route::get('/clearance/{id}/printcontract', [ClearanceController::class, 'printContract'])->name('clearance.print');
 Route::post('/clearance/deleteBankRequest', [ClearanceController::class, 'deleteBankRequest'])->name('clearance.del');
 Route::get('/clearance/{id}/deleterec', [ClearanceController::class, 'deleterec']);
 
@@ -515,7 +519,7 @@ Route::resource('bankpayments',BankPaymentsController::class)->except(['create',
 //  Bank Recivings
 
 
-
+Route::get('/bankrecivings/{id}/printcontract', [BankRecivingsController::class, 'printContract'])->name('bankrecivings.print');
 Route::post('/bankrecivings/deleteBankRequest', [BankRecivingsController::class, 'deleteBankRequest'])->name('bankrecivings.del');
 Route::get('/bankrecivings/{id}/deleterec', [BankRecivingsController::class, 'deleterec'])->name('bankrecivings.deleterec');
 
@@ -535,6 +539,7 @@ Route::resource('cashrecivings',CashRecivingsController::class)->except(['create
 //  Journal Vouchers
 
 
+Route::get('/jv/{id}/printcontract', [VoucherController::class, 'printContract'])->name('jv.print');
 Route::post('/jv/deleteBankRequest', [VoucherController::class, 'deleteBankRequest'])->name('jv.del');
 Route::get('/jv/{id}/deleterec', [VoucherController::class, 'deleterec'])->name('jv.deleterec');
 
