@@ -25,7 +25,7 @@ use App\Models\Sku;
 use App\Models\Purchasing;
 use App\Models\PurchasingDetails;
 use App\Models\Supplier;
-
+use \Mpdf\Mpdf as PDF;
 
 
 class PurchasinglocController extends Controller
@@ -491,4 +491,88 @@ class PurchasinglocController extends Controller
                 throw $th;
             }
     }
+
+    public function getMPDFSettingsA3($orientation = 'A3-L')
+    {
+
+        $format;
+        $orientation == 'L' ? $format = 'A3': 'A3';
+
+        $mpdf = new PDF( [
+            'mode' => 'utf-8',
+            'format' => $orientation,
+            'margin_header' => '2',
+            'margin_top' => '5',
+            'margin_bottom' => '5',
+            'margin_footer' => '2',
+            'default_font_size' => 9,
+            'margin_left' => '5',
+            'margin_right' => '2',
+        ]);
+        $mpdf->showImageErrors = true;
+        $mpdf->curlAllowUnsafeSslRequests = true;
+        $mpdf->debug = true;
+        return $mpdf;
+    }
+
+
+
+    public function printContract($id)
+    {
+
+      //  dd($request->all());
+    //   $hdng1 = $request->cname;
+    //   $hdng2 = $request->csdrs;
+
+    //   $head_id = $request->head_id;
+    //   $head = Supplier::findOrFail($head_id);
+    //   if($request->has('subhead_id')){
+    //       $subhead_id = $request->subhead_id;
+          //  Clear Data from Table
+          DB::table('contparameterrpt')->truncate();
+        //   foreach($request->subhead_id as $id)
+        //   {
+              DB::table('contparameterrpt')->insert([ 'GLCODE' => $id ]);
+    //       }
+    //   }
+      //  Call Procedure
+      $data = DB::select('call procgdnpur()');
+      if(!$data)
+      {
+          Session::flash('info','No data available');
+          return redirect()->back();
+      }
+      $mpdf = $this->getMPDFSettingsA3();
+      $collection = collect($data);                   //  Make array a collection
+      $grouped = $collection->groupBy('id');       //  Sort collection by SupName
+      $grouped->values()->all();                       //  values() removes indices of array
+
+      foreach($grouped as $g){
+           $html =  view('purchasingloc.print')->with('data',$g)->render();
+            //   ->with('hdng1',$hdng1)->with('hdng2',$hdng2)
+            //   ->with('data',$g)
+            //   ->with('fromdate',$fromdate)
+            //   ->with('todate',$todate)
+            //   ->with('headtype',$head->title)->render();
+          $filename = $g[0]->id  .'.pdf';
+          $chunks = explode("chunk", $html);
+          foreach($chunks as $key => $val) {
+              $mpdf->WriteHTML($val);
+          }
+          $mpdf->AddPage();
+      }
+      return response($mpdf->Output($filename,'I'),200)->header('Content-Type','application/pdf');
+  }
+
+
+
+
+
+
+
+
+
+
+
+
 }

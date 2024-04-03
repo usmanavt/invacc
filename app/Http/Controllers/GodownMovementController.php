@@ -279,6 +279,39 @@ class GodownMovementController  extends Controller
     }
 
 
+
+    public function deleterec($id)
+    {
+
+        $passwrd = DB::table('tblpwrd')->select('pwrdtxtdel')->max('pwrdtxtdel');
+
+
+         $cd = DB::select('call procgmedit (?)',array( $id ));
+         $data=compact('cd');
+        //  $locations = Location::select('id','title')->where('status',1)->get();
+        return view('godownmovement.deleterec',compact('passwrd'))
+        // ->with('customer',Customer::select('id','title')->get())
+        ->with('godownmovement',GodownMovement::findOrFail($id))
+        ->with($data)
+        ->with('skus',Sku::select('id','title')->get())
+        ->with('locations',Location::select('id','title')->get());
+
+        // return view('contracts.edit')->with('suppliers',Supplier::select('id','title')->get())->with('contract',$contract)->with('cd',ContractDetails::where('contract_id',$contract->id)->get());
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
     public function update(Request $request, GodownMovement $godownmovement)
     {
         //  dd($commercialinvoice->commercial_invoice_id());
@@ -295,8 +328,6 @@ class GodownMovementController  extends Controller
             $ci->tog = $request->tog;
             $ci->mremarks = $request->mremarks;
             $ci->save();
-
-
 
 
 
@@ -440,50 +471,106 @@ class GodownMovementController  extends Controller
     }
 
 
-    public function destroy(Contract $contract)
+    public function getMPDFSettingsP($orientation = 'A4')
     {
-        //
+
+        $format;
+        $orientation == 'L' ? $format = 'A4': 'A4';
+
+        $mpdf = new PDF( [
+            'mode' => 'utf-8',
+            'format' => $orientation,
+            'margin_header' => '2',
+            'margin_top' => '5',
+            'margin_bottom' => '5',
+            'margin_footer' => '2',
+            'default_font_size' => 9,
+            'margin_left' => '10',
+            'margin_right' => '10',
+        ]);
+        $mpdf->showImageErrors = true;
+        $mpdf->curlAllowUnsafeSslRequests = true;
+        $mpdf->debug = true;
+        return $mpdf;
     }
+
+
+
+
+
+
+
+
+
+
+
 
     public function printContract($id)
     {
-        // dd($id);
-        $contract = Contract::findOrFail($id);
-        $cd = ContractDetails::where('contract_id',$contract->id)->get();
-        $html = view('contracts.print')->with('cd',$cd)->with('contract',$contract)->render();
-        $filename = $contract->id . '.pdf';
-        ini_set('max_execution_time', '2000');
-        ini_set("pcre.backtrack_limit", "100000000");
-        ini_set("memory_limit","8000M");
-        ini_set('allow_url_fopen',1);
-        $temp = storage_path('temp');
-        // Create the mPDF document
-        $mpdf = new PDF( [
-            'mode' => 'utf-8',
-            'format' => 'A4',
-            'margin_header' => '3',
-            'margin_top' => '20',
-            'margin_bottom' => '20',
-            'margin_footer' => '2',
-            'default_font_size' => 9,
-            'orientation' => 'L'
-        ]);
-        $mpdf->SetHTMLFooter('
-            <table width="100%" style="border-top:1px solid gray">
-                <tr>
-                    <td width="33%">{DATE j-m-Y}</td>
-                    <td width="33%" align="center">{PAGENO}/{nbpg}</td>
-                    <td width="33%" style="text-align: right;">' . $filename . '</td>
-                </tr>
-            </table>');
-        $chunks = explode("chunk", $html);
-        foreach($chunks as $key => $val) {
-            $mpdf->WriteHTML($val);
-        }
-        $mpdf->Output($filename,'I');
-        // 'D': download the PDF file
-        // 'I': serves in-line to the browser
-        // 'S': returns the PDF document as a string
-        // 'F': save as file $file_out
+
+            $data = DB::select('call procstorptfrm(?)',array($id));
+            if(!$data)
+            {
+                Session::flash('info','No data available');
+                return redirect()->back();
+            }
+            $mpdf = $this->getMPDFSettingsP();
+            $collection = collect($data);                   //  Make array a collection
+            $grouped = $collection->groupBy('stono');
+            $grouped->values()->all();        //  values() removes indices of array
+            foreach($grouped as $g){
+                 $html =  view('godownmovement.print')->with('data',$g)->render();
+                //  ->with('fromdate',$fromdate)->with('todate',$todate)
+                //  ->with('headtype',$head->title)->render();
+                $filename = $g[0]->stono .'.pdf';
+                $chunks = explode("chunk", $html);
+                foreach($chunks as $key => $val) {
+                    $mpdf->WriteHTML($val);
+                }
+                // $mpdf->AddPage();
+            }
+            return response($mpdf->Output($filename,'I'),200)->header('Content-Type','application/pdf');
+
     }
+
+
+
+    public function deleteBankRequest(Request $request)
+    {
+
+
+                DB::beginTransaction();
+                try {
+
+                 DB::delete(DB::raw(" delete FROM godown_movements WHERE id=$request->godown_movement_id; "));
+                 DB::delete(DB::raw(" delete FROM godown_movement_details WHERE godown_movement_id=$request->godown_movement_id; "));
+
+
+
+
+
+                DB::commit();
+                Session::flash('success','Record Deleted Successfully');
+                // return redirect()->route('godownmovement.index');
+                return response()->json(['success'],200);
+
+            } catch (\Throwable $th) {
+                DB::rollback();
+                throw $th;
+            }
+
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
 }

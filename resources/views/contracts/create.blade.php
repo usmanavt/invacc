@@ -111,7 +111,11 @@
 @push('scripts')
 <script>
     //  ---------------- For MODAL -----------------------//
-    function showModal(){ modal.style.display = "block"}
+    function showModal(){
+        modal.style.display = "block"
+        const inp = document.getElementById('data_filter')
+        inp.focus()
+    }
     function closeModal(){  modal.style.display = "none"}
     //  When the user clicks anywhere outside of the modal, close it
     window.onclick = function(event) {
@@ -168,6 +172,7 @@
     {
         searchValue = element.value;
         table.setData(getMaster,{search:searchValue});
+        searchValue.focus()
     }
     //  The Table for Materials Modal
     table = new Tabulator("#tableData", {
@@ -181,7 +186,7 @@
         sortMode:"remote",
         filterMode:"remote",
         paginationSize:10,
-    paginationSizeSelector:[10,15],
+        paginationSizeSelector:[10,15],
         ajaxParams: function(){
             return {search:searchValue};
         },

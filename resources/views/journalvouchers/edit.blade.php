@@ -223,7 +223,7 @@ document.addEventListener('DOMContentLoaded',()=>{
         var cheque_no = document.getElementById("cheque_no");
         cheque_no.disabled = per.checked ? false : true;
         cheque_no.style.color ="black";
-        cheque_no.value="";
+        // cheque_no.value="";
         // if (!discntper.disabled) {
         //     discntper.focus();
         // }

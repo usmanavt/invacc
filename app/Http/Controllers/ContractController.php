@@ -604,7 +604,43 @@ class ContractController extends Controller
         return $mpdf;
     }
 
-
+    public function printContractSelected(Request $request)
+    // public function printContractSelected($ids)
+    {
+        $ids = $request->all();
+        $head = 'fdsg';
+        DB::table('contparameterrpt')->truncate();
+        foreach ($ids as $id) {
+                // dd($id);
+            DB::table('contparameterrpt')->insert([ 'GLCODE' => (int)$id ]);
+        }
+        //  Call Procedure
+        $data = DB::select('call procpurinvc()');
+        if(!$data)
+        {
+            Session::flash('info','No data available');
+            return redirect()->back();
+        }
+        // dd($data);
+        $mpdf = $this->getMPDFSettings();
+        $collection = collect($data);                   //  Make array a collection
+        $grouped = $collection->groupBy('purid');       //  Sort collection by SupName
+        $grouped->values()->all();                       //  values() removes indices of array
+        // dd($grouped);
+        foreach($grouped as $g){
+             $html =  view('contracts.print')->with('data',$g)->render();
+                // ->with('headtype',$head->title)->render();
+            $filename = $g[0]->purid.'.pdf';
+            $chunks = explode("chunk", $html);
+            foreach($chunks as $key => $val) {
+                $mpdf->WriteHTML($val);
+            }
+            $mpdf->AddPage();
+        }
+        // $mpdf->Output($filename,'I');
+        // return response('done',200);
+        return response($mpdf->Output($filename,'I'),200)->header('Content-Type','application/pdf');
+    }
 
     public function printContract($id)
     {
@@ -674,5 +710,103 @@ class ContractController extends Controller
 
 
     }
+
+
+
+
+
+    public function printrpt(Request $request)
+    {
+        //   dd($request->all());
+        // $this->validate($request,[
+        //     'invoice_date' => 'required|min:3|date',
+        //     'number' => 'required|min:3',
+        //     'supplier_id' => 'required'
+        // ]);
+        DB::beginTransaction();
+        try {
+            // Create Master Record
+
+
+            // $contract = new Contract();
+            // $contract->supplier_id = $request->supplier_id;
+            // $contract->user_id = auth()->id();
+            // $contract->invoice_date = $request->invoice_date;
+            // $contract->number =$request->number;
+            // $contract->save();
+            // Add Details
+            // $pcontract = new Pcontract();
+            // $pcontract->contract_id=$contract->id;
+            // $pcontract->supplier_id = $request->supplier_id;
+            // $pcontract->user_id = auth()->id();
+            // $pcontract->invoice_date = $request->invoice_date;
+            // $pcontract->number =$request->number;
+            // $pcontract->save();
+
+            foreach ($request->contracts as $cont) {
+
+                DB::insert(DB::raw("
+                INSERT INTO contparameterrpt(glcode) values($ci->id)
+                "));
+
+
+
+
+                // $material = Material::findOrFail($cont['id']);
+                // $cd = new ContractDetails();
+                // $cd->contract_id = $contract->id;
+                // $cd->material_id = $material->id;
+                // $cd->material_title = $material->title;
+                // $cd->supplier_id = $contract->supplier_id;
+                // $cd->user_id = auth()->id();
+                // $cd->category_id = $material->category_id;
+                // $cd->sku_id = $material->sku_id;
+                // $cd->dimension_id = $material->dimension_id;
+                // $cd->source_id = $material->source_id;
+                // $cd->brand_id = $material->brand_id;
+                // $cd->category = $material->category;
+                // $cd->sku = $material->sku;
+                // $cd->dimension = $material->dimension;
+                // $cd->source = $material->source;
+                // $cd->brand = $material->brand;
+                // $cd->bundle1 = $cont['bundle1'];
+                // $cd->pcspbundle1 = $cont['pcspbundle1'];
+                // $cd->bundle2 = $cont['bundle2'];
+                // $cd->pcspbundle2 = $cont['pcspbundle2'];
+                // $cd->gdswt = $cont['gdswt'];
+                // $cd->dutygdswt = $cont['gdswt'];
+                // $cd->gdsprice = $cont['gdsprice'];
+                // $cd->dtyrate = $cont['dtyrate'];
+                // $cd->invsrate = $cont['invsrate'];
+                // $cd->purval = $cont['gdspricetot'];
+                // $cd->dutval = $cont['gdspricedtytot'];
+                // // $cd->totpcs = $cont['ttpcs'];
+                // $cd->totpcs = $cont['bundle1'];
+
+                // $cd->tbalwt = $cont['gdswt'];
+                // $cd->tbalpcs = $cont['bundle1'];
+                // $cd->tbalsupval = $cont['gdspricetot'];
+
+                // $cd->save();
+
+
+
+            }
+            DB::commit();
+            Session::flash('success','Contract Information Saved');
+            return response()->json(['success'],200);
+        } catch (\Throwable $th) {
+            DB::rollback();
+            throw $th;
+        }
+
+    }
+
+
+
+
+
+
+
 
 }

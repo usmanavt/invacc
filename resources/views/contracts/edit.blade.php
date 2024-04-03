@@ -414,7 +414,7 @@ dynamicTable = new Tabulator("#dynamicTable", {
             field:"purval",
             cssClass:"bg-gray-200 font-semibold",
             bottomCalc:"sum",
-            formatterParams:{thousand:",",precision:3},
+            // formatterParams:{thousand:",",precision:3},
             bottomCalcParams:{precision:3} ,
             formatter:"money",
             formatterParams:{
@@ -429,12 +429,12 @@ dynamicTable = new Tabulator("#dynamicTable", {
                     if(cell.getData().sku_id == 1)
                     {
 
-                        return (cell.getData().gdswt * cell.getData().gdsprice)
+                        return (cell.getData().gdswt * cell.getData().gdsprice).toFixed(3)
 
                     }
                     else if (cell.getData().sku_id == 2)
                     {
-                        return (cell.getData().bundle1)  * (cell.getData().gdsprice)
+                        return (cell.getData().bundle1)  * (cell.getData().gdsprice).toFixed(3)
                     }
                     else {
                         // Add for other types
@@ -461,12 +461,12 @@ dynamicTable = new Tabulator("#dynamicTable", {
                     if(cell.getData().sku_id == 1)
                     {
 
-                        return (cell.getData().gdswt * cell.getData().dtyrate)
+                        return (cell.getData().gdswt * cell.getData().dtyrate).toFixed(3)
 
                     }
                     else if (cell.getData().sku_id == 2)
                     {
-                        return (cell.getData().bundle1) *  (cell.getData().dtyrate)
+                        return (cell.getData().bundle1) *  (cell.getData().dtyrate).toFixed(3)
                     }
                     else {
                         // Add for other types

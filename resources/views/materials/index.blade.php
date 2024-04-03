@@ -17,8 +17,10 @@
 
 
 
+
+
     <div class="py-6">
-        <div class="max-w-7x2 mx-auto sm:px-2 lg:px-4">
+        <div class="max-w-7x3 mx-auto sm:px-2 lg:px-4">
             <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg p4">
             {{-- Create Form --}}
             <div class="p-6" >
@@ -144,9 +146,56 @@
                                         {{ __('Submit') }}
                                     </button>
                                 </div>
-                            </form>
 
-                    </div>
+                                <div class="mt-8" style="font-weight: bold;font-size:2rem">Reports Criteria</div>
+
+                                {{-- <div class="mt-2">Reports Type</div> --}}
+
+                                <x-label for="" value="Report Type"/>
+                                <select autocomplete="on" required name="rptid" id= "rptid" class="bg-indigo-100 w-full" onchange="myFunction()" >
+                                    {{-- <option value="" selected>--Report Type</option> --}}
+                                    @foreach ($frmrptparamtrs as $frmrptparamtr)
+                                        <option value="{{ $frmrptparamtr->id }}">{{ $frmrptparamtr->mytitle }}</option>
+                                    @endforeach
+                                </select>
+
+
+                                <div  class="mt-2">
+                                <x-label for="" value="Godown Selection"/>
+                                <select autocomplete="on" required name="gdid" id= "gdid" class="bg-indigo-100 w-full"  >
+                                    <option value="" selected>--Godown Selection</option>
+                                    @foreach ($locations as $location)
+                                        <option value="{{ $location->id }}">{{ $location->title }}</option>
+                                    @endforeach
+                                </select>
+                             </div>
+
+
+                                <div  class="mt-4 float-right">
+                                    <x-input-date title="From" req id="fromdate" name="fromdate" required/>
+                                </div>
+
+                                <div  class="mt-2 float-right">
+                                    <x-input-date title="To" req id="todate" name="todate" required/>
+                                </div>
+
+                                <div  class="mt-6">
+                                    <x-button
+                                        id="submitbutton" onclick="printselection()"
+                                        class="bg-green-500 text-white rounded hover:bg-green-700 inline-flex items-center px-4 py-1  text-center float-right my-2">
+                                        <i class="fa fa-print fa-fw"></i>
+                                        Print Stock Reports
+                                    </x-button>
+                                    </div>
+
+                            </form>
+                            <input type="text" title="t1"  id="p1" name="p1" value="0" hidden   >
+                        </div>
+
+
+
+
+
                     {{-- Listing --}}
                     <div class="px-4 pb-14 border rounded-md w-full">
                         {{-- tabulator component --}}
@@ -159,15 +208,27 @@
 
 
 
+
+
+
+
 @push('scripts')
 <script src="{{ asset('js/tabulator.min.js') }}"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/downloadjs/1.4.8/download.min.js"></script>
 
 @endpush
 
+
+
+
+
 @push('scripts')
 <script>
-    var editIcon = function(cell, formatterParams, onRendered){ return "<i class='fa fa-edit text-blue-600'></i>";};
+
     var copyIcon = function(cell, formatterParams, onRendered){ return "<i class='fa fa-copy text-red-600'></i>";};
+    var editIcon = function(cell, formatterParams, onRendered){ return "<i class='fa fa-edit text-blue-600'></i>";};
+    var deleteIcon = function(cell, formatterParams, onRendered){ return "<i class='fa fa-trash text-red-600'></i>";};
+    var printIcon = function(cell, formatterParams, onRendered){ return "<i class='fa fa-print text-pink-500'></i>";};
 
 
     const getMaster = @json(route('materials.master'));
@@ -175,13 +236,79 @@
     let table;
     let searchValue = "";
 
+
+    let csrfToken = document.head.querySelector("[name~=csrf-token][content]").content;
+    function printselection()
+    {
+
+        var sid = document.getElementById("rptid");
+            var rptid = sid.options[sid.selectedIndex].value;
+            var fromdate = document.getElementById("fromdate").value;
+            var todate = document.getElementById("todate").value;
+            var gdid = document.getElementById("gdid").value;
+
+
+        var selectedData = table.getSelectedData()
+        var ids = []
+        selectedData.forEach(e => {
+            ids.push(e.id)
+        });
+
+        // console.log(rptid, fromdate, todate, ids )
+
+
+        fetch(@json(route('materials.printselected')),{
+            credentials: 'same-origin', // 'include', default: 'omit'
+            method: 'POST', // 'GET', 'PUT', 'DELETE', etc.
+            // body: formData, // Coordinate the body type with 'Content-Type'
+            body:JSON.stringify({rptid: rptid, ids: ids , from: fromdate , to : todate,gdwn:gdid }),
+            headers: new Headers({
+                "Content-Type": "application/json",
+                "Accept": "application/json",
+                "X-Requested-With": "XMLHttpRequest",
+                "X-CSRF-Token":csrfToken
+            }),
+        })
+        .then(response => response.blob() )
+        .then( blob => {
+            download(blob,"mulit-contract123.pdf")
+        })
+        .catch(error => {
+            console.log(error)
+            showSnackbar("Errors occured","red");
+        })
+
+    }
+
+
     //  Table Filter
+
+
+
+
+
+
+
     function dataFilter(element)
     {
         searchValue = element.value;
         table.setData(getMaster,{search:searchValue});
     }
     // The Table for Items Modal
+
+
+
+
+
+
+
+
+
+
+
+
+
+
     table = new Tabulator("#tableData", {
         width:"100px",
         autoResize:true,
@@ -194,7 +321,7 @@
         sortMode:"remote",
         filterMode:"remote",
         paginationSize:20,
-        paginationSizeSelector:[10,25,50,100],
+        paginationSizeSelector:[10,25,50,100,500,1000],
         ajaxParams: function(){
             return {search:searchValue};
         },
@@ -205,6 +332,11 @@
 
         columns:[
             // Master Data
+            {formatter:"rowSelection", titleFormatter:"rowSelection", hozAlign:"center", headerSort:false, cellClick:function(e, cell){
+        cell.getRow().toggleSelect();
+        }},
+
+
             {title:"Id", field:"id" , responsive:0},
             {title:"Category", field:"source" ,  responsive:0},
             {title:"Item", field:"category" ,  responsive:0},
@@ -229,16 +361,33 @@
             //         }
             //     return cell.getData().status === 1 ? 'Active':'Locked';
             // }},
-            {title:"Edit" , formatter:editIcon, hozAlign:"center",headerSort:false, responsive:0,
-                cellClick:function(e, cell){
-                    window.open(window.location + "/" + cell.getData().id + "/edit" ,"_self");
-            }},
+
             {title:"Copy",formatter:copyIcon, hozAlign:"center",headerSort:false, responsive:0,
                 cellClick:function(e,cell){
                           window.open(window.location + "/" + cell.getData().id + "/copyMaterial"  ,"_self");
 
                 }
             },
+
+            {title:"Edit" , formatter:editIcon, hozAlign:"center",headerSort:false, responsive:0,
+                cellClick:function(e, cell){
+                    window.open(window.location + "/" + cell.getData().id + "/edit" ,"_self");
+            }},
+            {title:"Delete" , formatter:deleteIcon, hozAlign:"center",headerSort:false, responsive:0,
+                cellClick:function(e, cell){
+                    window.open(window.location + "/" + cell.getRow().getData().id + "/deleterec"   ,"_self");
+                }
+            },
+            {title:"Print" , formatter:printIcon, hozAlign:"center",headerSort:false, responsive:0,
+                cellClick:function(e, cell){
+                    window.open(window.location + "/" + cell.getRow().getData().id + "/printcontract"  ,"_self");
+                }
+            },
+
+
+
+
+
             // {title:"Lock",field:'lock' , formatter:lockIcon, hozAlign:"center",headerSort:false, responsive:0,
             //     cellClick:function(e,cell){
             //         if(confirm('Do you really want to Lock this Bank?'))
@@ -292,6 +441,13 @@
                 break;
         }
     }
+
+    function myFunction() {
+        var x = document.getElementById("rptid").value;
+        p1.value=x;
+        // document.getElementById("demo").innerHTML = x;
+    }
+
 
 
 </script>

@@ -61,6 +61,18 @@
         table.setData(getMaster,{search:searchValue});
     }
     // The Table for Items Modal
+
+
+
+
+
+
+
+
+
+
+
+
     table = new Tabulator("#tableData", {
         autoResize:true,
         responsiveLayout:"collapse",

@@ -185,6 +185,12 @@ Route::resource('subheads', SubheadController::class)->except(['create','show','
 Route::get('/hscodes/master', [HscodeController::class, 'getMaster'])->name('hscodes.master');
 Route::resource('hscodes', HscodeController::class);
 //  Material Controller
+
+
+
+
+Route::get('/materials/{id}/printcontract', [MaterialController::class, 'printContract'])->name('materials.print');
+Route::post('/materials/printcontractSelected', [MaterialController::class, 'printContractSelected'])->name('materials.printselected');
 Route::get('/materials/getMaterialMaster', [MaterialController::class, 'getMaster'])->name('materials.master');
 Route::get('/materials/{id}/copyMaterial', [MaterialController::class, 'copyMaterial'])->name('materials.copy');
 Route::resource('materials', MaterialController::class);
@@ -193,9 +199,14 @@ Route::resource('users',UserController::class);
 // Contract Controller
 
 
-Route::get('/contracts/{id}/printcontract', [ContractController::class, 'printContract'])->name('jv.print');
-// Route::get('/contracts/{contract}/printcontract', [ContractController::class, 'printContract'])->name('contracts.print');
+// Route::get('/contracts/{id}/printcontract', [ContractController::class, 'printContract'])->name('jv.print');
+ Route::get('/contracts/{contract}/printcontract', [ContractController::class, 'printContract'])->name('contracts.print');
+ Route::post('/contracts/printcontractSelected', [ContractController::class, 'printContractSelected'])->name('contracts.printselected');
 Route::post('/contracts/deleteBankRequest', [ContractController::class, 'deleteBankRequest'])->name('contracts.del');
+
+// Route::post('/contracts/printrpt', [ContractController::class, 'printrpt'])->name('contracts.printrpt');
+
+
 Route::get('/contracts/{id}/deleterec', [ContractController::class, 'deleterec']);
 
 
@@ -279,6 +290,10 @@ Route::resource('salewopo', SalesInvoiceWopoController::class);
 
 
 //  Stock Transfer Order
+
+Route::get('/godownmovement/{id}/printcontract', [GodownMovementController::class, 'printContract'])->name('godownmovement.print');
+Route::post('/godownmovement/deleteBankRequest', [GodownMovementController::class, 'deleteBankRequest'])->name('godownmovement.del');
+Route::get('/godownmovement/{id}/deleterec', [GodownMovementController::class, 'deleterec'])->name('godownmovement.deleterec');
 
 Route::get('/godownmovement/getSalesMaster', [GodownMovementController::class, 'getMaster'])->name('godownmovement.master');
 Route::get('/godownmovement/getSalesDetails', [GodownMovementController::class, 'getDetail'])->name('godownmovement.details');
@@ -413,6 +428,7 @@ Route::resource('purchasereturn', PurchaseReturnController::class);
 
 //  Purchasing Imported
 
+Route::get('/purchasing/{id}/printcontract', [PurchasingController::class, 'printContract'])->name('purchasing.print');
 Route::post('/purchasing/deleteBankRequest', [PurchasingController::class, 'deleteBankRequest'])->name('purchasing.del');
 Route::get('/purchasing/{id}/deleterec', [PurchasingController::class, 'deleterec']);
 
@@ -425,6 +441,7 @@ Route::resource('purchasing', PurchasingController::class);
 
 
 //  Purchasing Local
+Route::get('/purchasingloc/{id}/printcontract', [PurchasinglocController::class, 'printContract'])->name('purchasingloc.print');
 Route::post('/purchasingloc/deleteBankRequest', [PurchasinglocController::class, 'deleteBankRequest'])->name('purchasingloc.del');
 Route::get('/purchasingloc/{id}/deleterec', [PurchasinglocController::class, 'deleterec']);
 
@@ -519,6 +536,7 @@ Route::resource('bankpayments',BankPaymentsController::class)->except(['create',
 //  Bank Recivings
 
 
+// Route::get('/bankrecivings/printcontract', [BankRecivingsController::class, 'printContract'])->name('bankrecivings.print');
 Route::get('/bankrecivings/{id}/printcontract', [BankRecivingsController::class, 'printContract'])->name('bankrecivings.print');
 Route::post('/bankrecivings/deleteBankRequest', [BankRecivingsController::class, 'deleteBankRequest'])->name('bankrecivings.del');
 Route::get('/bankrecivings/{id}/deleterec', [BankRecivingsController::class, 'deleterec'])->name('bankrecivings.deleterec');

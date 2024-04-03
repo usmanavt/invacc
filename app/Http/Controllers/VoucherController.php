@@ -62,6 +62,32 @@ class VoucherController extends Controller
         $data = $request->validate([
             'document_date' => ['required'],
         ]);
+
+        // dd($request->dbtamt);
+
+        if($request->cheque_no != ' ' )
+        {
+         // $dupchqno = BankTransaction::where('cheque_no',$request->cheque_no)->first();
+         $chqamount = DB::table('cheque_transactions')->where('cheque_no',$request->cheque_no)->first();
+         if(!$chqamount)
+           {
+            Session::flash('info','Invalid Cheque_no ');
+            return response()->json(['success'],200);
+           }
+
+         if($chqamount) {
+            if($request->dbtamt <> $chqamount->received )
+            {
+             Session::flash('info','Invalid Cheque Amount ');
+             return response()->json(['success'],200);
+            }
+                       }
+         }
+
+
+
+
+
         DB::beginTransaction();
         $transaction_id = Voucher::generateUniqueTransaction();
         try {
@@ -158,6 +184,29 @@ class VoucherController extends Controller
 
         // $mydate = $request->document_date;
         // $myjvno = $request->jvno;
+
+        if($request->cheque_no != ' ' )
+        {
+         // $dupchqno = BankTransaction::where('cheque_no',$request->cheque_no)->first();
+         $chqamount = DB::table('cheque_transactions')->where('cheque_no',$request->cheque_no)->first();
+         if(!$chqamount)
+           {
+            Session::flash('info','Invalid Cheque_no ');
+            return response()->json(['success'],200);
+           }
+
+         if($chqamount) {
+            if($request->dbtamt <> $chqamount->received )
+            {
+             Session::flash('info','Invalid Cheque Amount ');
+             return response()->json(['success'],200);
+            }
+                       }
+         }
+
+
+
+
 
 
         DB::beginTransaction();

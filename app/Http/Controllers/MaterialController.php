@@ -11,6 +11,14 @@ use App\Models\Category;
 use App\Models\Material;
 use App\Models\Dimension;
 use App\Models\Specification;
+use App\Models\Frmrptparamtr;
+use App\Models\Location;
+
+
+
+use Carbon\Carbon;
+use \Mpdf\Mpdf as PDF;
+
 
 
 use Illuminate\Http\Request;
@@ -39,6 +47,8 @@ class MaterialController extends Controller
         ->with('sources',Source::all())
         // ->with('brands',Brand::all())
         ->with('specifications',Specification::all())
+        ->with('locations',Location::all())
+        ->with('frmrptparamtrs',Frmrptparamtr::where('rptid',1)->get())
         ->with('hscodes',Hscode::select('id','hscode')->get());
     }
 
@@ -51,7 +61,7 @@ class MaterialController extends Controller
         //  With Tables
         $materials = Material::where(function ($query) use ($search){
             $query->where('srchb','LIKE','%' . $search . '%');
-            // ->orWhere('dimension','LIKE','%' . $search . '%')
+            // ->orWhere('title','LIKE','%' . $search . '%');
             // ->orWhere('category','LIKE','%' . $search . '%')
             // ->orWhere('brand','LIKE','%' . $search . '%')
             // ->orWhere('sku','LIKE','%' . $search . '%')
@@ -77,6 +87,511 @@ class MaterialController extends Controller
         //     ;
     }
 
+    public function getMPDFSettingsL($orientation = 'Legal-L')
+    {
+
+        $format;
+        $orientation == 'L' ? $format = 'Legal': 'Legal';
+
+        $mpdf = new PDF( [
+            'mode' => 'utf-8',
+            'format' => $orientation,
+            'margin_header' => '2',
+            'margin_top' => '5',
+            'margin_bottom' => '5',
+            'margin_footer' => '2',
+            'default_font_size' => 9,
+            'margin_left' => '10',
+            'margin_right' => '10',
+        ]);
+        $mpdf->showImageErrors = true;
+        $mpdf->curlAllowUnsafeSslRequests = true;
+        $mpdf->debug = true;
+        return $mpdf;
+    }
+
+
+
+    public function getMPDFSettingsP($orientation = 'A4')
+    {
+
+        $format;
+        $orientation == 'L' ? $format = 'A4': 'A4';
+
+        $mpdf = new PDF( [
+            'mode' => 'utf-8',
+            'format' => $orientation,
+            'margin_header' => '2',
+            'margin_top' => '5',
+            'margin_bottom' => '5',
+            'margin_footer' => '2',
+            'default_font_size' => 9,
+            'margin_left' => '10',
+            'margin_right' => '10',
+        ]);
+        $mpdf->showImageErrors = true;
+        $mpdf->curlAllowUnsafeSslRequests = true;
+        $mpdf->debug = true;
+        return $mpdf;
+    }
+
+    public function getMPDFSettingsA3($orientation = 'A3-L')
+    {
+
+        $format;
+        $orientation == 'L' ? $format = 'A3': 'A3';
+
+        $mpdf = new PDF( [
+            'mode' => 'utf-8',
+            'format' => $orientation,
+            'margin_header' => '2',
+            'margin_top' => '5',
+            'margin_bottom' => '5',
+            'margin_footer' => '2',
+            'default_font_size' => 9,
+            'margin_left' => '10',
+            'margin_right' => '10',
+        ]);
+        $mpdf->showImageErrors = true;
+        $mpdf->curlAllowUnsafeSslRequests = true;
+        $mpdf->debug = true;
+        return $mpdf;
+    }
+
+    public function getMPDFSettingsA4L($orientation = 'A4-L')
+    {
+
+        $format;
+        $orientation == 'L' ? $format = 'A4': 'A4';
+
+        $mpdf = new PDF( [
+            'mode' => 'utf-8',
+            'format' => $orientation,
+            'margin_header' => '2',
+            'margin_top' => '5',
+            'margin_bottom' => '5',
+            'margin_footer' => '2',
+            'default_font_size' => 9,
+            'margin_left' => '10',
+            'margin_right' => '10',
+        ]);
+        $mpdf->showImageErrors = true;
+        $mpdf->curlAllowUnsafeSslRequests = true;
+        $mpdf->debug = true;
+        return $mpdf;
+    }
+
+
+
+
+
+    public function printContractSelected(Request $request)
+
+    {
+
+//  if($request->rptid == 1)
+//   {
+
+    // dd($request->all());
+    $rptid= $request->rptid;
+    // $rptid= 1;
+    $gc=$request->gdwn;;
+
+    // $fromdate = Carbon::now()->startOfMonth();
+    // $todate = Carbon::now();
+
+    $fromdate = $request->from;
+    $todate = $request->to;
+
+
+    $ids = $request->ids;
+
+    // dd($rptid);
+
+    $ltype ="Office Stock";
+    DB::table('tmpstockrptpar')->truncate();
+    foreach ($ids as $id) {
+        DB::table('tmpstockrptpar')->insert([ 'GLCODE' => (int)$id ]);
+    }
+    $mpdf = $this->getMPDFSettingsP();
+
+
+    if($rptid==1)
+                {
+                    $data = DB::select('call procstockledgeros(?,?,?)',array($fromdate,$todate,1));
+                    if(!$data)
+                    {
+                        Session::flash('info','No data available');
+                        return redirect()->back();
+                    }
+                    $collection = collect($data);                   //  Make array a collection
+                    $grouped = $collection->groupBy('grpid');
+                    $grouped->values()->all();        //  values() removes indices of array
+                    foreach($grouped as $g){
+                        $html =  view('stockledgers.slsummary')->with('data',$g)->with('fromdate',$fromdate)->with('todate',$todate)
+                        ->with('ltype',$ltype)->render();
+                        $filename = $g[0]->grpid  .'-'.$fromdate.'-'.$todate.'.pdf';
+                        $chunks = explode("chunk", $html);
+                        foreach($chunks as $key => $val) {
+                            $mpdf->WriteHTML($val);
+                        }
+                        // $mpdf->AddPage();
+                    }
+                    return response($mpdf->Output($filename,'I'),200)->header('Content-Type','application/pdf');
+                }
+
+    if($rptid==2)
+                {
+                    $data = DB::select('call procstockledgerallunitos(?,?)',array($fromdate,$todate));
+                    if(!$data)
+                    {
+                        Session::flash('info','No data available');
+                        return redirect()->back();
+                    }
+                    $mpdf = $this->getMPDFSettingsL();
+                    $collection = collect($data);                   //  Make array a collection
+                    $grouped = $collection->groupBy('grpid');
+                    $grouped->values()->all();        //  values() removes indices of array
+                    foreach($grouped as $g){
+                        $html =  view('stockledgers.slsummaryalunit')->with('data',$g)->with('fromdate',$fromdate)->with('todate',$todate)
+                        ->with('ltype',$ltype)->render();
+                        $filename = $g[0]->grpid  .'-'.$fromdate.'-'.$todate.'.pdf';
+                        $chunks = explode("chunk", $html);
+                        foreach($chunks as $key => $val) {
+                            $mpdf->WriteHTML($val);
+                        }
+                        // $mpdf->AddPage();
+                    }
+                    return response($mpdf->Output($filename,'I'),200)->header('Content-Type','application/pdf');
+                }
+
+    if($rptid==3)
+                {
+
+                    $data = DB::select('call procindvstockos(?,?)',array($fromdate,$todate));
+                    if(!$data)
+                    {
+                        Session::flash('info','No data available');
+                        return redirect()->back();
+                    }
+                    $collection = collect($data);                   //  Make array a collection
+                    $grouped = $collection->groupBy('material_id');
+                    $grouped->values()->all();        //  values() removes indices of array
+                    foreach($grouped as $g){
+                         $html =  view('stockledgers.indvstockgsmu')->with('data',$g)->with('fromdate',$fromdate)->with('todate',$todate)
+                         ->with('ltype',$ltype)->render();
+                        $filename = $g[0]->material_id  .'-'.$fromdate.'-'.$todate.'.pdf';
+                        $chunks = explode("chunk", $html);
+                        foreach($chunks as $key => $val) {
+                            $mpdf->WriteHTML($val);
+                        }
+                        $mpdf->AddPage();
+                    }
+                    return response($mpdf->Output($filename,'I'),200)->header('Content-Type','application/pdf');
+    }
+
+    if($rptid==4)
+                    {
+
+                        $data = DB::select('call procstockledgerosval(?,?,?)',array($fromdate,$todate,1));
+                        if(!$data)
+                        {
+                            Session::flash('info','No data available');
+                            return redirect()->back();
+                        }
+                        $mpdf = $this->getMPDFSettingsL();
+                        $collection = collect($data);                   //  Make array a collection
+                        $grouped = $collection->groupBy('grpid');
+                        $grouped->values()->all();        //  values() removes indices of array
+                        foreach($grouped as $g){
+                                $html =  view('stockledgers.smsvaluation')->with('data',$g)->with('fromdate',$fromdate)->with('todate',$todate)
+                                ->with('ltype',$ltype)->render();
+                            $filename = $g[0]->grpid  .'-'.$fromdate.'-'.$todate.'.pdf';
+                            $chunks = explode("chunk", $html);
+                            foreach($chunks as $key => $val) {
+                                $mpdf->WriteHTML($val);
+                            }
+                            // $mpdf->AddPage();
+                        }
+                        return response($mpdf->Output($filename,'I'),200)->header('Content-Type','application/pdf');
+                    }
+
+
+    if($rptid==5)
+                    {
+
+                        $data = DB::select('call procstorpt(?,?,?)',array($fromdate,$todate,0));
+                        if(!$data)
+                        {
+                            Session::flash('info','No data available');
+                            return redirect()->back();
+                        }
+                        $collection = collect($data);                   //  Make array a collection
+                        $grouped = $collection->groupBy('stono');
+                        $grouped->values()->all();        //  values() removes indices of array
+                        foreach($grouped as $g){
+                                $html =  view('stockledgers.sto')->with('data',$g)->with('fromdate',$fromdate)->with('todate',$todate)
+                                ->with('ltype',$ltype)->render();
+                            $filename = $g[0]->stono  .'-'.$fromdate.'-'.$todate.'.pdf';
+                            $chunks = explode("chunk", $html);
+                            foreach($chunks as $key => $val) {
+                                $mpdf->WriteHTML($val);
+                            }
+                            $mpdf->AddPage();
+                        }
+                        return response($mpdf->Output($filename,'I'),200)->header('Content-Type','application/pdf');
+                    }
+
+    if($rptid==6)
+                    {
+
+                        $data = DB::select('call procstorpt(?,?,?)',array($fromdate,$todate,1));
+                        if(!$data)
+                        {
+                            Session::flash('info','No data available');
+                            return redirect()->back();
+                        }
+                        $collection = collect($data);                   //  Make array a collection
+                        $grouped = $collection->groupBy('stono');
+                        $grouped->values()->all();        //  values() removes indices of array
+                        foreach($grouped as $g){
+                                $html =  view('stockledgers.sto')->with('data',$g)->with('fromdate',$fromdate)->with('todate',$todate)
+                                ->with('ltype',$ltype)->render();
+                            $filename = $g[0]->stono  .'-'.$fromdate.'-'.$todate.'.pdf';
+                            $chunks = explode("chunk", $html);
+                            foreach($chunks as $key => $val) {
+                                $mpdf->WriteHTML($val);
+                            }
+                            $mpdf->AddPage();
+                        }
+                        return response($mpdf->Output($filename,'I'),200)->header('Content-Type','application/pdf');
+                    }
+
+    if($rptid==7)
+                    {
+
+                        $ltype ="Godown Stock";
+                        $data = DB::select('call procstockledgergs(?,?)',array($fromdate,$todate));
+                        if(!$data)
+                        {
+                            Session::flash('info','No data available');
+                            return redirect()->back();
+                        }
+                        $collection = collect($data);                   //  Make array a collection
+                        $grouped = $collection->groupBy('grpid');
+                        $grouped->values()->all();        //  values() removes indices of array
+                        foreach($grouped as $g){
+                                $html =  view('stockledgers.slsummary')->with('data',$g)->with('fromdate',$fromdate)->with('todate',$todate)
+                                ->with('ltype',$ltype)->render();
+                            $filename = $g[0]->grpid  .'-'.$fromdate.'-'.$todate.'.pdf';
+                            $chunks = explode("chunk", $html);
+                            foreach($chunks as $key => $val) {
+                                $mpdf->WriteHTML($val);
+                            }
+                            // $mpdf->AddPage();
+                        }
+                        return response($mpdf->Output($filename,'I'),200)->header('Content-Type','application/pdf');
+                    }
+
+    if($rptid==8)
+                    {
+
+                        $ltype ="Godown Stock";
+                        $data = DB::select('call procstockledgerallunitgs(?,?)',array($fromdate,$todate));
+                        if(!$data)
+                        {
+                            Session::flash('info','No data available');
+                            return redirect()->back();
+                        }
+                        $mpdf = $this->getMPDFSettingsL();
+                        $collection = collect($data);                   //  Make array a collection
+                        $grouped = $collection->groupBy('grpid');
+                        $grouped->values()->all();        //  values() removes indices of array
+                        foreach($grouped as $g){
+                                $html =  view('stockledgers.slsummaryalunit')->with('data',$g)->with('fromdate',$fromdate)->with('todate',$todate)
+                                ->with('ltype',$ltype)->render();
+                            $filename = $g[0]->grpid  .'-'.$fromdate.'-'.$todate.'.pdf';
+                            $chunks = explode("chunk", $html);
+                            foreach($chunks as $key => $val) {
+                                $mpdf->WriteHTML($val);
+                            }
+                            // $mpdf->AddPage();
+                        }
+                        return response($mpdf->Output($filename,'I'),200)->header('Content-Type','application/pdf');
+                    }
+
+
+    if($rptid==10)
+                    {
+
+                        $ltype ="Godown Stock";
+                        $data = DB::select('call procgwsstock(?,?,?)',array($fromdate,$todate,$gc));
+                        if(!$data)
+                        {
+                            Session::flash('info','No data available');
+                            return redirect()->back();
+                        }
+
+                        $collection = collect($data);                   //  Make array a collection
+                        $grouped = $collection->groupBy('ldesc');
+                        $grouped->values()->all();        //  values() removes indices of array
+                        foreach($grouped as $g){
+                                $html =  view('stockledgers.gwstkledger')->with('data',$g)->with('fromdate',$fromdate)->with('todate',$todate)
+                                ->with('ltype',$ltype)->render();
+                            $filename = $g[0]->ldesc  .'-'.$fromdate.'-'.$todate.'.pdf';
+                            $chunks = explode("chunk", $html);
+                            foreach($chunks as $key => $val) {
+                                $mpdf->WriteHTML($val);
+                            }
+                            // $mpdf->AddPage();
+                        }
+                        return response($mpdf->Output($filename,'I'),200)->header('Content-Type','application/pdf');
+                    }
+
+    if($rptid==11)
+                    {
+
+                        $ltype ="Godown Stock";
+                        $data = DB::select('call procgwsstockau(?,?,?)',array($fromdate,$todate,$gc));
+                        if(!$data)
+                        {
+                            Session::flash('info','No data available');
+                            return redirect()->back();
+                        }
+                        $mpdf = $this->getMPDFSettingsA3();
+                        $collection = collect($data);                   //  Make array a collection
+                        $grouped = $collection->groupBy('ldesc');
+                        $grouped->values()->all();        //  values() removes indices of array
+                        foreach($grouped as $g){
+                                $html =  view('stockledgers.gwstkledgerau')->with('data',$g)->with('fromdate',$fromdate)->with('todate',$todate)
+                                ->with('ltype',$ltype)->render();
+                            $filename = $g[0]->ldesc  .'-'.$fromdate.'-'.$todate.'.pdf';
+                            $chunks = explode("chunk", $html);
+                            foreach($chunks as $key => $val) {
+                                $mpdf->WriteHTML($val);
+                            }
+                            // $mpdf->AddPage();
+                        }
+                        return response($mpdf->Output($filename,'I'),200)->header('Content-Type','application/pdf');
+                    }
+
+    if($rptid==12)
+                    {
+
+                        $ltype ="Godown Stock";
+                        $data = DB::select('call procindvstockgs(?,?,?)',array($fromdate,$todate,$gc));
+                        if(!$data)
+                        {
+                            Session::flash('info','No data available');
+                            return redirect()->back();
+                        }
+                        $mpdf = $this->getMPDFSettingsA4L();
+                        $collection = collect($data);                   //  Make array a collection
+                        $grouped = $collection->groupBy('material_id');
+                        $grouped->values()->all();        //  values() removes indices of array
+                        foreach($grouped as $g){
+                                $html =  view('stockledgers.indvstockgsmugs')->with('data',$g)->with('fromdate',$fromdate)->with('todate',$todate)
+                                ->with('ltype',$ltype)->render();
+                            $filename = $g[0]->material_id  .'-'.$fromdate.'-'.$todate.'.pdf';
+                            $chunks = explode("chunk", $html);
+                            foreach($chunks as $key => $val) {
+                                $mpdf->WriteHTML($val);
+                            }
+                            $mpdf->AddPage();
+                        }
+                        return response($mpdf->Output($filename,'I'),200)->header('Content-Type','application/pdf');
+                    }
+
+
+    if($rptid==13)
+                    {
+
+                        $ltype ="Godown Stock";
+                        $data = DB::select('call procstockledgergsval(?,?,?)',array($fromdate,$todate,$gc));
+                        if(!$data)
+                        {
+                            Session::flash('info','No data available');
+                            return redirect()->back();
+                        }
+                        $mpdf = $this->getMPDFSettingsL();
+                        $collection = collect($data);                   //  Make array a collection
+                        $grouped = $collection->groupBy('lid');
+                        $grouped->values()->all();        //  values() removes indices of array
+                        foreach($grouped as $g){
+                                $html =  view('stockledgers.smsvaluationgs')->with('data',$g)->with('fromdate',$fromdate)->with('todate',$todate)
+                                ->with('ltype',$ltype)->render();
+                            $filename = $g[0]->lid  .'-'.$fromdate.'-'.$todate.'.pdf';
+                            $chunks = explode("chunk", $html);
+                            foreach($chunks as $key => $val) {
+                                $mpdf->WriteHTML($val);
+                            }
+                            $mpdf->AddPage();
+                        }
+                        return response($mpdf->Output($filename,'I'),200)->header('Content-Type','application/pdf');
+                    }
+
+
+
+}
+
+
+
+
+
+
+    public function printContract($id)
+    {
+
+        $ltype ="Office Stock";
+        // $head_id = $request->head_id;
+        // $head = Head::findOrFail($head_id);
+        // $head = Category::findOrFail($head_id);
+        // if($request->has('subhead_id')){
+        //     $subhead_id = $request->subhead_id;
+            //  Clear Data from Table
+            DB::table('tmpstockrptpar')->truncate();
+            // foreach($request->subhead_id as $id)
+            // {
+                DB::table('tmpstockrptpar')->insert([ 'glcode' => $id ]);
+        //     }
+        // }
+        //  Call Procedure
+        $mpdf = $this->getMPDFSettingsP();
+
+
+        $fromdate = Carbon::now()->startOfMonth();
+        $todate = Carbon::now();
+        // $data = DB::select('call procindvstockos(?,?)',array($fromdate,$todate));
+        $data = DB::select('call procstockledgeros(?,?,?)',array($fromdate,$todate,1));
+        if(!$data)
+        {
+            Session::flash('info','No data available');
+            return redirect()->back();
+        }
+        $collection = collect($data);                   //  Make array a collection
+        $grouped = $collection->groupBy('grpid');
+        $grouped->values()->all();        //  values() removes indices of array
+        foreach($grouped as $g){
+             $html =  view('materials.print')->with('data',$g)->with('fromdate',$fromdate)->with('todate',$todate)
+             ->with('ltype',$ltype)->render();
+            $filename = $g[0]->grpid  .'-'.$fromdate.'-'.$todate.'.pdf';
+            $chunks = explode("chunk", $html);
+            foreach($chunks as $key => $val) {
+                $mpdf->WriteHTML($val);
+            }
+            $mpdf->AddPage();
+        }
+        return response($mpdf->Output($filename,'I'),200)->header('Content-Type','application/pdf');
+
+    }
+
+
+
+
+
+
+
+
     public function store(Request $request)
     {
         //   dd($request->all());
@@ -86,6 +601,8 @@ class MaterialController extends Controller
             // 'srchb'=>'required|unique:materials'
         ]);
 
+
+        // dd($request->p1);
         $title = $request->title;
         $category_id=$request->category_id;
         $dimension_id = $request->dimension_id;

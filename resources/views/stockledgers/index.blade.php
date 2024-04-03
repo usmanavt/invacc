@@ -170,10 +170,6 @@
                                     </div>
                                 </fieldset>
 
-
-
-
-
                                 <fieldset class="border px-4 py-2 rounded w-full">
                                     <legend>Godown Selection</legend>
                                     <div class="flex justify-between py-1">
@@ -192,8 +188,11 @@
 
 
                                 <fieldset class="border px-4 py-2 rounded w-full">
+
+                                    {{-- <div><input type="text" title="Searching"  id="srch" name="srch"   > </div> --}}
                                     <legend>Invoices Selection <span class="text-xs text-mute">shift & click to select multiple items</span></legend>
-                                        <select search="true" size="20" multiple class="h-full w-full" name="subhead_id[]" id="subhead_id" required class="w-full disabled:opacity-50" disabled>
+                                        <select search="true" size="20" multiple class="h-full w-full" name="subhead_id[]" id="subhead_id"
+                                        required class="w-full disabled:opacity-50"  disabled>
                                         </select>
                                     </div>
                                 </fieldset>
@@ -918,7 +917,7 @@ brand_id.addEventListener("change", () => {
 const value = head.value
   const value1 = source.value
   const value3 = specification.value
-  console.info(value)
+//   console.info(value)
   //  const value = 6
 subhead.options.length = 0 // Reset List
 fetch(funcstkos + `?head_id=${value} &source_id=${value1} &brand_id=${value3} `,{

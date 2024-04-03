@@ -746,6 +746,8 @@ var totalVal = function(values, data, calcParams){
                             editor:true,
                         },
 
+
+
                     ]},
 
                     {title: "id",field: "skuid",visible:false},
@@ -766,8 +768,8 @@ var totalVal = function(values, data, calcParams){
                     columns:[
 
 
-                    {title:"Conversion", field:"unitconver",cellEdited: updateValues,editor:"number",visible:false},
-                    {title:"Quantity", field:"feedqty",cellEdited: updateValues,bottomCalc:"sum",editor:"number"},
+                    {title:"Conversion", field:"unitconver",cellEdited: updateValues,editor:"number",visible:false,responsive:0},
+                    {title:"Quantity", field:"feedqty",cellEdited: updateValues,bottomCalc:"sum",editor:"number",responsive:0},
 
 
 
@@ -775,6 +777,7 @@ var totalVal = function(values, data, calcParams){
 
 
             ],
+
         })
         dynamicTable.on("dataLoaded", function(data){
             //data - all data loaded into the table
@@ -830,12 +833,35 @@ var totalVal = function(values, data, calcParams){
                         //         return;
 
                         //     }
-                            if(Number(element.qtypcs).toFixed(0) > Number(element.sqtypcs).toFixed(0) || Number(element.qtykg).toFixed(0) > Number(element.sqtykg).toFixed(0) || Number(element.qtyfeet).toFixed(0) > Number(element.sqtyfeet).toFixed(0) )
+
+                        // console.log(element.sqtyfeet)
+                        // console.log(element.qtyfeet)
+
+                            if(Number(element.qtypcs) > Number(element.sqtypcs) )
                                 {
 
-                                    showSnackbar("sale qty must be less than stock qty","info");
+                                    showSnackbar("Transfer Pcs Qty must be less than stock qty","info");
                                     return;
                                 }
+
+                                if(Number(element.qtykg) > Number(element.sqtykg) )
+                                {
+
+                                    showSnackbar("Transfer Kg Qty must be less than stock qty","info");
+                                    return;
+                                }
+
+                                if(Number(element.qtyfeet) > Number(element.sqtyfeet) )
+                                {
+
+                                    showSnackbar("Transfer Feet Qty must be less than stock qty","info");
+                                    return;
+                                }
+
+
+
+
+
                                 if(Number(element.feedqty ) <= 0 )
                                     {
                                         showSnackbar("Transfer Qty must be Greater than 0","info");

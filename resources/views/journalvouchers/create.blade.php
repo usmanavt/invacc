@@ -34,6 +34,7 @@
                             <legend>Transaction Date</legend>
                             {{-- <x-input-text title="Description" name="description"  /> --}}
                             <x-input-text title="Cheque No" name="cheque_no" id="cheque_no" req required class="col-span-2" disabled  />
+                            {{-- <x-input-numeric title="Cheque Amount" name="chequamt" id="chequamt" req required class="col-span-2"   /> --}}
                             <input class="checked:bg-blue-500 checked:border-blue-500 focus:outline-none" type="checkbox" name="per" id="per" onclick="EnableDisableTextBox(this)" >
                             <label for="">
                                 <span style="color: brown;font-weight: bold"> J.V Against Cheque Collection </span> <span class="text-red-500 font-semibold  ">(*)</span>
@@ -41,7 +42,11 @@
 
                         </fieldset>
 
-
+                        <fieldset class="max-w-7xl border px-4 py-2 gap-4 rounded mt-8">
+                            <legend>Total J.V Amount</legend>
+                            <x-input-numeric title="Debit Amount" name="dbtamt" id="dbtamt" req required class="col-span-2" disabled   />
+                            <x-input-numeric title="Credit Amount" name="cdtamt" id="cdtamt" req required class="col-span-2" disabled   />
+                        </fieldset>
 
 
 
@@ -86,6 +91,10 @@
     const subheadsList = []    //  To get Value / Label Objects
     const submitButton = document.getElementById('submitButton')
 
+
+
+
+
     document.addEventListener('DOMContentLoaded', () => {
         heads.forEach(e => {headsList.push({value:e.title, label:e.title})})
     })
@@ -127,6 +136,7 @@
                     subs.forEach(e => {
                         subheadsList.push({value:e.title, label:e.title})
                     })
+                    // grdummary();
                }
             },
             {title:"Subhead", width:150, field:"subhead_title",headerSort: false, editor:"list", responsive:0,validator:['required'], editorParams:{
@@ -134,7 +144,8 @@
             }},
             // {title:"JV #", width:100,validator:['required'],  field:"jvno",headerSort: false, responsive:0, editor:"input",cssClass:"bg-green-200 font-semibold"},
             // {title:"JV #", width:100,validator:['required'],  field:"jvno",headerSort: false, responsive:0, editor:"input",cssClass:"bg-green-200 font-semibold"},
-            {title:"Amount (PKR)", field:"amount",headerSort: false, editor:"number", responsive:0,cssClass:"bg-green-200 font-semibold",validator:['required','numeric']},
+            {title:"Amount (PKR)", field:"amount",headerSort: false, editor:"number", responsive:0,cssClass:"bg-green-200 font-semibold",
+            validator:['required','numeric'],bottomCalc:"sum"},
             {title:"Description", width:300, field:"description",headerSort: false, responsive:0,validator:['required'],  editor:"input",cssClass:"bg-green-200 font-semibold"},
         ],
     })
@@ -153,6 +164,30 @@
     //     })
     //     console.info(subheadsList)
     // });
+
+    // const grdummary = () =>{
+    //     const data = dynamicTable.getData()
+    //     //  Filter -->select data
+    //     data.forEach(e => {
+    //         if(e.transaction_type === 'DEBIT')
+    //         { vdbamt+=e.amount }
+    //         if(e.transaction_type === 'CREDIT')
+    //         {  vcdamt+=e.amount  }
+    //     })
+
+    //     document.getElementById('cdtamt').value =  vcdamt
+    //     document.getElementById('dbtamt').value = vdbamt
+
+
+    // }
+
+
+
+
+
+
+
+
     const submitData = () =>{
         const rowCount = dynamicTable.getDataCount()
         if(rowCount < 2 ) { alert('Atleast 2 rows for Credit/Debit required'); return }
@@ -169,11 +204,26 @@
         if(filtered.length>0){ alert('Select proper subhead'); return}
         //  Calculate and check if Debit/Credit is 0
         let valid = 0;
+        let vdbamt=0;
+        let vcdamt=0;
+
         data.forEach(e => {
-            if(e.transaction_type === 'DEBIT') { valid -= e.amount}
-            if(e.transaction_type === 'CREDIT') { valid += e.amount}
+            if(e.transaction_type === 'DEBIT')
+            { valid -= e.amount
+                vdbamt+=e.amount
+            }
+            if(e.transaction_type === 'CREDIT')
+            { valid += e.amount
+              vcdamt+=e.amount
+            }
         })
-        document.getElementById('balance').value = valid
+
+        document.getElementById('cdtamt').value =  vcdamt
+        document.getElementById('dbtamt').value = vdbamt
+
+        document.getElementById('balance').value =valid
+
+
         if(valid != 0) { alert('Debit/Credit should be settled before procedding'); return }
         //  Correct Data
         // data.forEach(e => {
@@ -188,8 +238,9 @@
         var mydata = {
             'document_date': document.getElementById('document_date').value,
             'document_no': document.getElementById('document_no').value,
-            // 'description': document.getElementById('description').value,
             'cheque_no': document.getElementById('cheque_no').value,
+            'dbtamt': document.getElementById('dbtamt').value,
+            'cdtamt': document.getElementById('cdtamt').value,
             'voucher': data
         }
         fetch(@json(route('jv.store')),{
@@ -225,7 +276,6 @@
         //     discntper.focus();
         // }
     }
-
 
 
 

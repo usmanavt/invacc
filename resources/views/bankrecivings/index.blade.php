@@ -81,13 +81,6 @@
                                     <textarea name="description" id="description" cols="30" rows="3" maxlength="255" class="rounded"></textarea>
                                 </div>
 
-                                <div class="flex flex-col">
-                                    {{-- Report Parameters --}}
-                                    <x-input-date title="" name="fdt" id="fdt" hidden  />
-                                    <x-input-date title="" name="edt" id="edt" hidden  />
-
-
-                                </div>
 
 
 
@@ -105,6 +98,19 @@
                                     </x-button>
                                 </div>
                             </form>
+
+                            {{-- <div class="flex flex-col">
+                                Report Parameters
+                                <x-input-date title="" name="fdt" id="fdt"   />
+                                <x-input-date title="" name="edt" id="edt"   />
+
+
+                            </div> --}}
+
+
+
+
+
 
                         </div>
 

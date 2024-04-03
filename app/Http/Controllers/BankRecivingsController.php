@@ -13,6 +13,7 @@ use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Session;
 use \Mpdf\Mpdf as PDF;
+use Carbon\Carbon;
 
 class BankRecivingsController extends Controller
 {
@@ -338,8 +339,11 @@ DB::beginTransaction();
                 //     }
                 // }
                 //  Call Procedure
-            $fromdate=$request->fdt;
-            $todate=$request->edt;
+            // $fromdate='2024-01-01';
+            // $todate='2024-03-30';
+
+            $fromdate = Carbon::now()->startOfMonth();
+            $todate = Carbon::now();
 
 
         // dd($fromdate);
