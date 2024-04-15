@@ -186,15 +186,8 @@
 
                                     </div>
 
-
-
-
-
-
-
-
                                 </fieldset>
-
+                                <x-input-text title="Searching" name="srch" id="srch"/>
                                 <fieldset class="border px-4 py-2 rounded w-full">
                                     <legend>Supplier Selection</legend>
                                     <div class="flex justify-between py-1">
@@ -1524,7 +1517,22 @@ function imppur(imppurf2) {
 
     }
 
+    srch.onblur=function(){
+    //  console.log('dfadsfasf');
 
+
+    var sid = document.getElementById("head_id");
+    var head_id = sid.options[sid.selectedIndex];
+    var xyz=head_id.data.value;
+    const subheadsList = [];
+    xyz.forEach(e => {
+                        subheadsList.push({value:e.title, label:e.title})
+                    })
+
+    // const valuess = head_id.value;
+    console.log({subheadsList});
+
+}
 
 
 

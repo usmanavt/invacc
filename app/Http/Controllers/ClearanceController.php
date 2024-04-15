@@ -101,6 +101,12 @@ class ClearanceController extends Controller
     public function create()
     {
 
+        $result = DB::table('banks')->whereNotIn('id',[1,2,30,36,37,38])->get();
+        $resultArray = $result->toArray();
+        $data1=compact('resultArray');
+
+
+
         $cd = DB::table('skus')->select('id AS dunitid','title AS dunit')
          ->whereIn('id',[1,2])->get();
         $data=compact('cd');
@@ -112,7 +118,9 @@ class ClearanceController extends Controller
         ->with('hscodes',Hscode::all())
         // ->with('locations',Location::select('id','title')->get())
         ->with($data)
-        ->with($bdata);
+        ->with($bdata)
+        ->with($data1)
+        ;
 
     }
 

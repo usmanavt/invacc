@@ -111,6 +111,8 @@ class QuotationController  extends Controller
         ->leftJoin('last_sale_rate AS b', function($join) use ($customerid){
             $join->on('a.id', '=', 'b.material_id')
                  ->where('b.customer_id', '=', $customerid);
+        // dd($customerid);
+
         })
 
         // ->leftJoin('last_sale_rate', 'materials.id', '=', 'last_sale_rate.material_id')
@@ -133,12 +135,16 @@ class QuotationController  extends Controller
 
 
 
-
-
-
     public function create()
     {
         // $locations = Location::select('id','title')->where('status',1)->get();
+
+        $result = DB::table('customers')->whereNotIn('id',[0,1])->get();
+        $resultArray = $result->toArray();
+        $data=compact('resultArray');
+
+
+
 
         // return view('sales.create')
         $mycname='MUHAMMAD HABIB & Co.';
@@ -146,6 +152,7 @@ class QuotationController  extends Controller
         // $maxblno = DB::table('sale_invoices')->select('*')->max('prno')+1;
         // $maxgpno = DB::table('sale_invoices')->select('*')->max('gpno')+1;
         return \view ('quotations.create',compact('maxdcno','mycname'))
+        ->with($data)
         ->with('customers',Customer::select('id','title')->where('id','<>','1')->get())
         ->with('locations',Location::select('id','title')->get())
         ->with('skus',Sku::select('id','title')->get());

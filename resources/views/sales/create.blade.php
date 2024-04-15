@@ -190,7 +190,13 @@
         // }
 
         // -----------------FOR MODAL -------------------------------//
-        function showModal(){ modal.style.display = "block"}
+        function showModal()
+        {
+            modal.style.display = "block"
+            const inp = document.getElementById('data_filter')
+            inp.focus()
+
+        }
         function closeModal(){ modal.style.display = "none"}
         //  When the user clicks anywhere outside of the modal, close it
         window.onclick = function(event) {

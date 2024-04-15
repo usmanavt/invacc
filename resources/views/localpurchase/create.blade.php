@@ -24,13 +24,28 @@
                         {{-- Contract Master --}}
                         <div class="grid grid-cols-12 gap-1 py-2 items-center">
 
-                            <label for="supplier_id">Supplier<x-req /></label>
+                            {{-- <label for="supplier_id">Supplier<x-req /></label>
                             <select autocomplete="on" class="col-span-2" name="supplier_id" id="supplier_id" required>
                                 <option value="" selected>--Supplier</option>
                                 @foreach($suppliers as $supplier)
                                 <option value="{{$supplier->id}}"> {{$supplier->title}} </option>
                                 @endforeach
-                            </select>
+                            </select> --}}
+
+                            <label for="autocompleted" >Supplier<x-req /></label>
+                            <div class="w-96 relative"   onclick="event.stopImmediatePropagation();" >
+                                <input id="autocompleted" placeholder="Select Conuntry Name" class=" px-5 py-3 w-full border border-gray-400 rounded-md"
+                                onkeyup="onkeyUp(event)" />
+                                <div>
+                                    <select  id="supplier_id" name="supplier_id" size="20"  class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full h-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                                    </select>
+                                </div>
+                            </div>
+
+
+
+
+
 
                             <label for="invoice_date">Invoice Date<x-req /></label>
                             <input type="date" value="{{ date('Y-m-d') }}" class="col-span-2" id="invoice_date" name="invoice_date" required>
@@ -113,6 +128,11 @@
 
 @push('scripts')
 <script>
+
+window.onload = function() {
+            var input = document.getElementById("autocompleted").focus();
+        }
+
     // let supplierId = document.getElementById('supplier_id');
     let table;
     let searchValue = "";
@@ -174,6 +194,9 @@
         }
     }
 
+
+
+
     var tamount=0;
     function tnetamount()
         {
@@ -195,7 +218,15 @@
 @push('scripts')
 <script>
     //  ---------------- For MODAL -----------------------//
-    function showModal(){ modal.style.display = "block" }
+    function showModal()
+
+    {
+        modal.style.display = "block"
+        const inp = document.getElementById('data_filter')
+        inp.focus()
+
+
+    }
     function closeModal(){  modal.style.display = "none"}
     //  When the user clicks anywhere outside of the modal, close it
     window.onclick = function(event) {
@@ -664,9 +695,6 @@ var calculate = function(){
     }
 
 
-    window.onload = function() {
-            var input = document.getElementById("supplier_id").focus();
-        }
 
         function EnableDisableTextBox(per) {
         var insurance = document.getElementById("insurance");
@@ -708,6 +736,77 @@ function chqcol(comp) {
         }
 
     }
+
+//    *********************** For Search List Box
+
+const addSelectElement = (select,id,value) => {
+        var option = document.createElement('option')
+        option.value = id
+        option.text  = value
+        select.appendChild(option)
+    }
+
+myarray=@json($resultArray);
+const contries = myarray;
+function onkeyUp(e)
+{
+    let keyword= e.target.value;
+    var supplier_id = document.getElementById("supplier_id");
+    supplier_id.classList.remove("hidden");
+
+    let filteredContries=contries.filter((c)=>c.title.toLowerCase().includes(keyword.toLowerCase()));
+    console.log(filteredContries);
+    renderOptions(filteredContries);
+
+}
+
+
+document.addEventListener('DOMContentLoaded',()=> {
+    hidedropdown();
+        });
+
+function renderOptions(xyz){
+
+    let dropdownEl=document.getElementById("supplier_id");
+
+                dropdownEl.length = 0
+                xyz.forEach(e => {
+                    addSelectElement(dropdownEl,e.id,e.title)
+                });
+}
+
+document.addEventListener("click" , () => {
+    hidedropdown();
+});
+
+
+function hidedropdown()
+{
+    var supplier_id = document.getElementById("supplier_id");
+    supplier_id.classList.add("hidden");
+}
+
+
+supplier_id.addEventListener("click", () => {
+
+    let supplier_id= document.getElementById("supplier_id");
+    let input= document.getElementById("autocompleted");
+    input.value=supplier_id.options[supplier_id.selectedIndex].text;
+    hidedropdown();
+});
+
+
+supplier_id.addEventListener("keyup", function(event) {
+if (event.keyCode === 13) {
+event.preventDefault();
+
+let supplier_id= document.getElementById("supplier_id");
+    let input= document.getElementById("autocompleted");
+    input.value=supplier_id.options[supplier_id.selectedIndex].text;
+    hidedropdown();
+
+}
+});
 
 
 

@@ -78,51 +78,110 @@
 
 
         <div class=" w-full h-[100vh] bg-slate-200 flex justify-center items-center flex-col ">
-            <div class="w-96 relative"   onclick="event.stopImmediatePropagation();" >
-                <input id="autocompleted" placeholder="Select Conuntry Name" class="px-5 py-3 w-full border border-gray-400 rounded-md"
-                onkeyup="onkeyUp(event)" />
-                <div>
-                    <select  id="head_id" name="head_id" size="20"  class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full h-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
-                    </select>
-                </div>
+        <div class="w-96 relative" onkeyup="handleEvt(event,this, 1)"  onclick="event.stopImmediatePropagation();" >
+            <input id="itemval" placeholder="itemval" />
+            <input id="autocompleted" placeholder="Select Conuntry Name" class="px-5 py-3 w-full border border-gray-400 rounded-md"
+            onkeyup="onkeyUp(event)"
+            />
+            <div id="dropdown" class="w-full h-60 border border-gray-300 rounded-md bg-white absolute overflow-y-scroll ">
             </div>
+
+
+
+
         </div>
 
-<script>
-const addSelectElement = (select,id,value) => {
-        var option = document.createElement('option')
-        option.value = id
-        option.text  = value
-        select.appendChild(option)
-    }
+        {{-- <div  class="w-96">
+            <input placeholder="Select Conuntry Name" class="px-5 py-3 w-full border border-gray-400 rounded-md" />
 
+        </div> --}}
+
+    </div>
+
+
+<div>
+
+    {{-- let category[] = ''; --}}
+    <label for="customer_id">Payment From<x-req /></label>
+    <select autocomplete="on"  name="customer_id" id="customer_id" class="col-span-2" >
+        @foreach($customers as $customer)
+        <option value="{{$customer->id}}"> {{$customer->title}} </option>
+        @endforeach
+
+    </select>
+
+
+</div>
+
+
+
+
+
+
+<script>
+// console.log($resultArray);
 myarray=@json($resultArray);
-const contries = myarray;
+// console.log(myarray);
+// let contries=["PAKISTAN","INDIA","AMERACA","BRAZIL","JERMANY","SAPAIN","FRANCE","RUSSIA","POLAND","OMAN"]
+
+//  let myarray='';
+// let myarray=[{"code": "AF", "code3": "AFG", "name": "Afghanistan", "number": "004"},{"code": "AL", "code3": "ALB", "name": "Albania", "number": "008"}]
+
+   const contries = myarray;
+//    const contries=[{"code": "AF", "code3": "AFG", "name": "Afghanistan", "number": "004"},{"code": "AL", "code3": "ALB", "name": "Albania", "number": "008"}];
+//    console.log(contries);
+
+
+// dropdownEl.innerHTML=newHtml;
+
+
+
+// const contries = [
+// 	{"code": "AF", "code3": "AFG", "name": "Afghanistan", "number": "004"},
+// 	{"code": "AL", "code3": "ALB", "name": "Albania", "number": "008"},
+// 	{"code": "DZ", "code3": "DZA", "name": "Algeria", "number": "012"},
+// 	{"code": "UM", "code3": "UMI", "name": "United States Minor Outlying Islands (the)", "number": "581"},
+// 	{"code": "EH", "code3": "ESH", "name": "Western Sahara", "number": "732"},
+// 	{"code": "YE", "code3": "YEM", "name": "Yemen", "number": "887"},
+// 	{"code": "ZM", "code3": "ZMB", "name": "Zambia", "number": "894"},
+// 	{"code": "ZW", "code3": "ZWE", "name": "Zimbabwe", "number": "716"},
+// 	{"code": "AX", "code3": "ALA", "name": "Åland Islands", "number": "248"}
+// ];
+
+
+
+
+
 function onkeyUp(e)
 {
     let keyword= e.target.value;
-    var head_id = document.getElementById("head_id");
-    head_id.classList.remove("hidden");
+    var dropdown = document.getElementById("dropdown");
+    dropdown.classList.remove("hidden");
 
     let filteredContries=contries.filter((c)=>c.title.toLowerCase().includes(keyword.toLowerCase()));
-    console.log(filteredContries);
+
     renderOptions(filteredContries);
-    //  var vindx=-1;
 }
 
 
-// document.addEventListener('DOMContentLoaded',()=> {
-//     renderOptions(contries);
-//         });
+document.addEventListener('DOMContentLoaded',()=> {
+    renderOptions(contries);
 
-function renderOptions(xyz){
+        });
 
-    let dropdownEl=document.getElementById("head_id");
+function renderOptions(options){
 
-                dropdownEl.length = 0
-                xyz.forEach(e => {
-                    addSelectElement(dropdownEl,e.id,e.title)
-                });
+    let dropdownEl=document.getElementById("dropdown");
+
+    let newHtml=``;
+    options.forEach((country) => {
+        newHtml+=`<div onclick="selectOption('${country.title}','${country.id}')" class="px-6 py-3 w-full border-b border-gray-200   text-red-800 cursor-pointer hover:bg-slate-100 transition-colors "> ${country.title}</div>`;
+
+    });
+
+//    console.log(newHtml);
+    dropdownEl.innerHTML=newHtml;
+    console.log(outerHTML=newHtml);
 }
 
 document.addEventListener("click" , () => {
@@ -132,66 +191,30 @@ document.addEventListener("click" , () => {
 
 function hidedropdown()
 {
-    var head_id = document.getElementById("head_id");
-    head_id.classList.add("hidden");
+    var dropdown = document.getElementById("dropdown");
+    dropdown.classList.add("hidden");
 }
 
 
-head_id.addEventListener("click", () => {
+function selectOption(selectedOption,selectedOptionval)
+{
 
-    let head_id= document.getElementById("head_id");
-    let input= document.getElementById("autocompleted");
-    input.value=head_id.options[head_id.selectedIndex].text;
     hidedropdown();
-});
-
-
-head_id.addEventListener("keyup", function(event) {
-if (event.keyCode === 13) {
-event.preventDefault();
-let head_id= document.getElementById("head_id");
     let input= document.getElementById("autocompleted");
-    input.value=head_id.options[head_id.selectedIndex].text;
-    hidedropdown();
+    let itemval= document.getElementById("itemval");
+
+    input.value=selectedOption;
+
+    itemval.value=selectedOptionval;
 
 }
-});
-
-
-// autocompleted.addEventListener("keyup", function(event) {
-
-// if (event.keyCode === 40) {
-//     event.preventDefault();
-//     vindx=vindx+1;
-//     let head_id= document.getElementById("head_id");
-//     // alert(vindx);
-//     head_id.selectedIndex=vindx;
-// }
-
-// if (event.keyCode === 38) {
-//     event.preventDefault();
-//     vindx=vindx-1;
-//     let head_id= document.getElementById("head_id");
-//     // alert(vindx);
-//     head_id.selectedIndex=vindx;
-// }
-
-// if (event.keyCode === 13) {
-// event.preventDefault();
-// let head_id= document.getElementById("head_id");
-//     let input= document.getElementById("autocompleted");
-//     input.value=head_id.options[head_id.selectedIndex].text;
-//     hidedropdown();
-
-// }
-
-// });
-
-
-
-
 
 
 </script>
+
+
+
+
+
 
 </x-app-layout>

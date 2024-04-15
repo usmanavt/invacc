@@ -176,7 +176,13 @@ class ContractController extends Controller
 
     public function create()
     {
-        return view('contracts.create')->with('suppliers',Supplier::select('id','title')->where('source_id',2)->get());
+        $result = DB::table('suppliers')->where('source_id',2)->get();
+        $resultArray = $result->toArray();
+        $data=compact('resultArray');
+
+
+
+        return view('contracts.create')->with($data)->with('suppliers',Supplier::select('id','title')->where('source_id',2)->get());
     }
 
     /** Function Complete*/

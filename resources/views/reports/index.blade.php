@@ -184,8 +184,23 @@
 
                         <div class="flex flex-col md:flex-row w-full gap-2 px-6 pt-4">
 
+
+
+
+
                             <fieldset class="border px-4 py-2 rounded w-full">
                                 <legend>Sub Head <span class="text-xs text-mute">shift & click to select multiple items</span></legend>
+
+                                <label for="autocompleted" >S E A R C H I N G<x-req /></label>
+                                <div class="w-96 relative"   onclick="event.stopImmediatePropagation();" >
+                                    <input id="autocompleted"  class=" px-5 py-3 w-full border border-gray-400 rounded-md"
+                                    onkeyup="onkeyUp(event)" />
+                               </div>
+
+
+
+
+
                                 <div class="flex justify-between py-1">
                                     <select size="18" multiple class="h-full w-full" name="subhead_id[]" id="subhead_id" required class="w-full disabled:opacity-50" disabled>
                                     </select>
@@ -274,9 +289,6 @@
 
 
 
-
-
-
              case 'vchr':
             // console.log(subhead);
             fetch(vouchers + `?todate=${todate.value}&fromdate=${fromdate.value}&head=${value}`,{
@@ -287,8 +299,9 @@
                     .then( data => {
                         if(data.length > 0)
                         {
-                            data.forEach(e => {
-                                addSelectElement(subhead,e.id,e.Title)
+                            list=data;
+                            list.forEach(e => {
+                                addSelectElement(subhead,e.Subhead,e.title)
                             });
                             subhead.setAttribute('required','')
                             subhead.removeAttribute('disabled','')
@@ -551,10 +564,82 @@
     }
 
 
+//    *********************** For Search List Box
+
+// const addSelectElement = (select,id,value) => {
+//         var option = document.createElement('option')
+//         option.value = id
+//         option.text  = value
+//         select.appendChild(option)
+//     }
 
 
+// myarray=@json($subheads);
 
 
+// const contries = myarray;
+function onkeyUp(e)
+{
+    let keyword= e.target.value;
+    var subhead_id = document.getElementById("subhead_id");
+    // subhead_id.classList.remove("hidden");
+
+    let filteredContries=list.filter((c)=>c.title.toLowerCase().includes(keyword.toLowerCase()));
+    console.log(filteredContries);
+    renderOptions(filteredContries);
+
+}
+
+
+document.addEventListener('DOMContentLoaded',()=> {
+    // hidedropdown();
+        });
+
+function renderOptions(xyz){
+
+    let dropdownEl=document.getElementById("subhead_id");
+
+                dropdownEl.length = 0
+                xyz.forEach(e => {
+                   // addSelectElement(dropdownEl,e.id,e.title)
+
+                    addSelectElement(dropdownEl,e.Subhead,e.title)
+                    // console.log(e.id);
+                });
+}
+
+// document.addEventListener("click" , () => {
+//     // hidedropdown();
+// });
+
+
+// function hidedropdown()
+// {
+//     var subhead_id = document.getElementById("subhead_id");
+//     subhead_id.classList.add("hidden");
+// }
+
+
+// subhead_id.addEventListener("click", () => {
+
+//     let subhead_id= document.getElementById("subhead_id");
+//     let input= document.getElementById("autocompleted");
+//     input.value=subhead_id.options[subhead_id.selectedIndex].text;
+//     hidedropdown();
+// });
+
+
+// subhead_id.addEventListener("keyup", function(event) {
+// if (event.keyCode === 13) {
+// event.preventDefault();
+
+// let subhead_id= document.getElementById("subhead_id");
+//     let input= document.getElementById("autocompleted");
+//     input.value=subhead_id.options[subhead_id.selectedIndex].text;
+//     hidedropdown();
+
+// }
+// });
 
 
 </script>

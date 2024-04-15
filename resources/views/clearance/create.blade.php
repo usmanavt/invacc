@@ -80,13 +80,29 @@
                         Contract Details --}}
 
                         <div class="grid grid-cols-12 gap-2 py-2 items-center">
-                            <label for="">Debit to </label>
+                            {{-- <label for="">Debit to </label>
                             <select autocomplete="on" name="bank_id" id="bank_id" required>
                                 <option disabled selected value="">--Select</option>
                                 @foreach ($bnk as $bank)
                                     <option value="{{ $bank->id }}">{{ $bank->title }}</option>
                                 @endforeach
-                            </select>
+                            </select> --}}
+
+                            <label for="autocompleted" >Supplier<x-req /></label>
+                            <div class="w-96 relative"   onclick="event.stopImmediatePropagation();" >
+                                <input id="autocompleted" placeholder="Select Bank" class=" px-5 py-3 w-full border border-gray-400 rounded-md"
+                                onkeyup="onkeyUp(event)" />
+                                <div>
+                                    <select  id="bank_id" name="bank_id" size="20"  class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full h-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                                    </select>
+                                </div>
+                            </div>
+
+
+
+
+
+
                             <x-input-date title="cheque date" name="cheque_date" req required />
                             <x-input-numeric title="cheque no" name="cheque_no" req required    />
 
@@ -210,7 +226,7 @@
 @push('scripts')
     <script>
         window.onload = function() {
-            var input = document.getElementById("gdno.focus").focus();
+            var input = document.getElementById("gdno").focus();
         }
 
         // -----------------FOR MODAL -------------------------------//
@@ -1420,6 +1436,82 @@ var updateValues = (cell) => {
                 // disableSubmitButton(false);
             })
         }
+
+
+
+//    *********************** For Search List Box
+
+const addSelectElement = (select,id,value) => {
+        var option = document.createElement('option')
+        option.value = id
+        option.text  = value
+        select.appendChild(option)
+    }
+
+myarray=@json($resultArray);
+const contries = myarray;
+function onkeyUp(e)
+{
+    let keyword= e.target.value;
+    var bank_id = document.getElementById("bank_id");
+    bank_id.classList.remove("hidden");
+
+    let filteredContries=contries.filter((c)=>c.title.toLowerCase().includes(keyword.toLowerCase()));
+    console.log(filteredContries);
+    renderOptions(filteredContries);
+
+}
+
+
+document.addEventListener('DOMContentLoaded',()=> {
+    hidedropdown();
+        });
+
+function renderOptions(xyz){
+
+    let dropdownEl=document.getElementById("bank_id");
+
+                dropdownEl.length = 0
+                xyz.forEach(e => {
+                    addSelectElement(dropdownEl,e.id,e.title)
+                });
+}
+
+document.addEventListener("click" , () => {
+    hidedropdown();
+});
+
+
+function hidedropdown()
+{
+    var bank_id = document.getElementById("bank_id");
+    bank_id.classList.add("hidden");
+}
+
+
+bank_id.addEventListener("click", () => {
+
+    let bank_id= document.getElementById("bank_id");
+    let input= document.getElementById("autocompleted");
+    input.value=bank_id.options[bank_id.selectedIndex].text;
+    hidedropdown();
+});
+
+
+bank_id.addEventListener("keyup", function(event) {
+if (event.keyCode === 13) {
+event.preventDefault();
+
+let bank_id= document.getElementById("bank_id");
+    let input= document.getElementById("autocompleted");
+    input.value=bank_id.options[bank_id.selectedIndex].text;
+    hidedropdown();
+
+}
+});
+
+
+
 
 
 

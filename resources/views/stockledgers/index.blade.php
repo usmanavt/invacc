@@ -191,6 +191,16 @@
 
                                     {{-- <div><input type="text" title="Searching"  id="srch" name="srch"   > </div> --}}
                                     <legend>Invoices Selection <span class="text-xs text-mute">shift & click to select multiple items</span></legend>
+
+                                    <label for="autocompleted" >S E A R C H I N G<x-req /></label>
+                                    <div class="w-96 relative"   onclick="event.stopImmediatePropagation();" >
+                                        <input id="autocompleted"  class=" px-5 py-3 w-full border border-gray-400 rounded-md"
+                                        onkeyup="onkeyUp(event)" />
+                                   </div>
+
+
+
+
                                         <select search="true" size="20" multiple class="h-full w-full" name="subhead_id[]" id="subhead_id"
                                         required class="w-full disabled:opacity-50"  disabled>
                                         </select>
@@ -391,10 +401,11 @@
                         {
 
                             let a = 0;
-                            data.forEach(e => {
+                            list=data;
+                            list.forEach(e => {
 
                                 a += 1;
-                                addSelectElement(subhead,e.Subhead,a + ' - ' + e.title)
+                                addSelectElement(subhead,e.Subhead,a + '         ' + e.title )
                             });
                             subhead.setAttribute('required','')
                             subhead.removeAttribute('disabled','')
@@ -439,10 +450,12 @@ const getSubheadVoucherData2 = async (value) =>{
                         {
 
                             let a = 0;
-                            data.forEach(e => {
+                            list=data;
+                            list.forEach(e => {
 
                                 a += 1;
-                                addSelectElement(subhead,e.Subhead,a + ' - ' + e.title)
+                                // addSelectElement(subhead,e.Subhead,a + ' - ' + e.title)
+                                addSelectElement(subhead,e.Subhead,a + '         ' + e.title )
                             });
                             subhead.setAttribute('required','')
                             subhead.removeAttribute('disabled','')
@@ -480,10 +493,12 @@ const getSubheadVoucherData3 = async (value) =>{
                         {
 
                             let a = 0;
-                            data.forEach(e => {
-
+                            list=data;
+                            list.forEach(e => {
                                 a += 1;
-                                addSelectElement(subhead,e.Subhead,a + ' - ' + e.title)
+                                // addSelectElement(subhead,e.Subhead,a + ' - ' + e.title)
+                                addSelectElement(subhead,e.Subhead,a + '         ' + e.title )
+
                             });
                             subhead.setAttribute('required','')
                             subhead.removeAttribute('disabled','')
@@ -525,8 +540,13 @@ const getSubheadVoucherData4 = async (value) =>{
                     .then( data => {
                         if(data.length > 0)
                         {
-                            data.forEach(e => {
-                                addSelectElement(subhead,e.id,e.Title)
+
+                            let a = 0;
+                            list=data;
+                            list.forEach(e => {
+                                a += 1;
+                                // addSelectElement(subhead,e.id,e.Title)
+                                addSelectElement(subhead,e.Subhead,a + '         ' + e.title )
                             });
                             subhead.setAttribute('required','')
                             subhead.removeAttribute('disabled','')
@@ -828,10 +848,11 @@ const getSubheadVoucherData4 = async (value) =>{
                         {
 
                             let a = 0;
-                            data.forEach(e => {
+                            list=data;
+                            list.forEach(e => {
 
                                 a += 1;
-                                addSelectElement(subhead,e.Subhead,e.title + ' - '+ e.Subhead + ' - ' + a)
+                                addSelectElement(subhead,e.Subhead,a + '         ' + e.title )
                             });
                             subhead.setAttribute('required','')
                             subhead.removeAttribute('disabled','')
@@ -879,10 +900,11 @@ fetch(funcstkos + `?head_id=${value} &source_id=${value1} &brand_id=${value3} `,
                 {
 
                     let a = 0;
-                    data.forEach(e => {
-
+                    list=data;
+                    list.forEach(e => {
                         a += 1;
-                         addSelectElement(subhead,e.Subhead,e.title + ' - '+ e.Subhead + ' - ' + a)
+                        //  addSelectElement(subhead,e.Subhead,e.title + ' - '+ e.Subhead + ' - ' + a)
+                        addSelectElement(subhead,e.Subhead,a + '         ' + e.title )
                     });
                     subhead.setAttribute('required','')
                     subhead.removeAttribute('disabled','')
@@ -928,13 +950,14 @@ fetch(funcstkos + `?head_id=${value} &source_id=${value1} &brand_id=${value3} `,
             .then( data => {
                 if(data.length > 0)
                 {
-
                     let a = 0;
-                    data.forEach(e => {
+                    list=data;
+                    list.forEach(e => {
 
                         a += 1;
                         // addSelectElement(subhead,e.Subhead,a + ' - '+ e.Subhead + ' - ' + e.title)
-                        addSelectElement(subhead,e.Subhead,e.title + ' - '+ e.Subhead + ' - ' + a)
+                        // addSelectElement(subhead,e.Subhead,e.title + ' - '+ e.Subhead + ' - ' + a)
+                        addSelectElement(subhead,e.Subhead,a + '         ' + e.title )
                     });
                     subhead.setAttribute('required','')
                     subhead.removeAttribute('disabled','')
@@ -998,13 +1021,35 @@ function psto(adv) {
     }
 
 
+    function onkeyUp(e)
+{
+    let keyword= e.target.value;
+    var subhead_id = document.getElementById("subhead_id");
+    // subhead_id.classList.remove("hidden");
+
+    let filteredContries=list.filter((c)=>c.title.toLowerCase().includes(keyword.toLowerCase()));
+    console.log(filteredContries);
+    renderOptions(filteredContries);
+
+}
 
 
+document.addEventListener('DOMContentLoaded',()=> {
+    // hidedropdown();
+        });
 
+function renderOptions(xyz){
 
+    let dropdownEl=document.getElementById("subhead_id");
 
-
-
+                dropdownEl.length = 0
+                let a = 0;
+                xyz.forEach(e => {
+                    a += 1;
+                    // addSelectElement(dropdownEl,e.Subhead,a + ' - ' + e.title)
+                    addSelectElement(subhead,e.Subhead,a + '         ' + e.title )
+                });
+}
 
 
 

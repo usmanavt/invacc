@@ -24,14 +24,26 @@
                         {{-- Contract Master --}}
                         <div class="grid grid-cols-12 gap-1 py-1 items-center">
                             {{-- onchange="return showcategory()" --}}
-                            <label for="customer_id">Customer<x-req /></label>
+                            {{-- <label for="customer_id">Customer<x-req /></label>
                             <select autocomplete="on" class="col-span-2" name="customer_id" id="customer_id"    >
                                 <option value = "" selected>--Customer</option>
                                 @foreach($customers as $customer)
                                 <option value="{{$customer->id}}"> {{$customer->title}} </option>
                                 @endforeach
-                            </select>
-                            {{-- <input type="text" title="t1"  id="p1" name="p1"    > --}}
+                            </select> --}}
+
+                            <label for="autocompleted" >Customers<x-req /></label>
+                            <div class="w-96 relative"   onclick="event.stopImmediatePropagation();" >
+                                <input id="autocompleted" placeholder="Select Conuntry Name"  class=" px-5 py-3 w-50 border border-gray-400 rounded-md"
+                                onkeyup="onkeyUp(event)" />
+                                <div>
+                                    <select  id="customer_id" name="customer_id" size="20"  class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full h-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                                    </select>
+                                </div>
+                            </div>
+
+
+                            <input type="text" title="custid"  id="custid" name="custid" value=0 hidden    >
                             <label for="saldate">Quotation Date<x-req /></label>
                             <input type="date" value="{{ date('Y-m-d') }}" class="col-span-2"  id="saldate" name="saldate" required>
 
@@ -40,8 +52,10 @@
 
                             <label for="qutno">Quotation No <x-req /></label>
                             <input type="text" class="col-span-2" id="qutno" name="qutno" value="{{$maxdcno}}"    placeholder="qutno" required>
+                        </div>
 
-                            <label for="prno">P.R No#<x-req /></label>
+                        <div class="grid grid-cols-12 gap-1 py-1 items-center">
+                        <label for="prno">P.R No#<x-req /></label>
                             <input type="text" class="col-span-2" id="prno" name="prno"  placeholder="prno" required>
                             <label for="">
                                 Cash Customer <span class="text-red-500 font-semibold">(*)</span>
@@ -101,14 +115,14 @@
 
 @push('scripts')
 <script>
-    let customerid = document.getElementById('customer_id');
+    let customerid = document.getElementById('custid');
     let customerDropdown;
     let table;
     let searchValue = "";
     const deleteIcon = function(cell,formatterParams){return "<i class='fa fa-trash text-red-500'></i>";};
 
     window.onload = function() {
-        customerDropdown = document.getElementById("customer_id").focus();
+        customerDropdown = document.getElementById("autocompleted").focus();
     }
 // Populate sku in Tabulator
 const skus = @json($skus);
@@ -135,10 +149,12 @@ const skus = @json($skus);
         if(e.ctrlKey && e.keyCode == 32){
 
             if (
-                customerid.options[customerid.selectedIndex].value != ""
+                // customerid.options[customerid.selectedIndex].value != ""
+                customerid.value != ""
                 ||
-                customerid.options[customerid.selectedIndex].value != 0 )  {
-                    console.log(customerid.options[customerid.selectedIndex].value)
+                // customerid.options[customerid.selectedIndex].value != 0 )  {
+                customerid.value != 0 ){
+                    console.log(customerid.value);
                     showModal()
             }
 
@@ -192,9 +208,14 @@ const skus = @json($skus);
 @push('scripts')
 <script>
     //  ---------------- For MODAL -----------------------//
+
+
     function showModal(){
         modal.style.display = "block"
-        console.log(customerDropdown)
+        // console.log(customerDropdown)
+        const inp = document.getElementById('data_filter')
+        inp.focus()
+
     }
     function closeModal(){  modal.style.display = "none"}
     //  When the user clicks anywhere outside of the modal, close it
@@ -261,9 +282,11 @@ const skus = @json($skus);
     //  Table Filter
     function dataFilter(element)
     {
-        table.setData(getMaster,{search:searchValue,customerid:customerid.options[customerid.selectedIndex].value});
+        // table.setData(getMaster,{search:searchValue,customerid:customerid.options[customerid.selectedIndex].value});
+        table.setData(getMaster,{search:searchValue,customerid:customerid.value});
         searchValue = element.value;
         table.setData(getMaster,{search:searchValue});
+        searchValue.focus()
     }
     //  The Table for Materials Modal
     table = new Tabulator("#tableData", {
@@ -282,7 +305,8 @@ const skus = @json($skus);
         paginationSize:10,
         paginationSizeSelector:[10,25,50,100],
         ajaxParams: function(){
-            return {search:searchValue,customerid:customerid.options[customerid.selectedIndex].value};
+            // return {search:searchValue,customerid:customerid.options[customerid.selectedIndex].value};
+            return {search:searchValue,customerid:customerid.value};
             return {search:searchValue};
         },
         ajaxURL: getMaster,
@@ -634,56 +658,89 @@ discntamt.onblur=function(){
 
 
 
-customer_id.addEventListener("change", () => {
-    var sid = document.getElementById("customer_id");
-        var customer_id = sid.options[sid.selectedIndex];
-        p1.value=customer_id.value;
-//  const value = customer_id.value
-// console.log(value)
-//   console.info(customer_id.value)
-  //  const value = 6
-// subhead.options.length = 0 // Reset List
-// fetch(funcstkos + `?head_id=${value} &source_id=${value1} &brand_id=${value3} `,{
-//             method:"GET",
-//             headers: { 'Accept':'application/json','Content-type':'application/json'},
-//             })
-//             .then(response => response.json())
-//             .then( data => {
-//                 if(data.length > 0)
-//                 {
+// customer_id.addEventListener("change", () => {
+//     var sid = document.getElementById("customer_id");
+//         var customer_id = sid.options[sid.selectedIndex];
+//         p1.value=customer_id.value;
+// });
 
-//                     let a = 0;
-//                     data.forEach(e => {
 
-//                         a += 1;
-//                         addSelectElement(subhead,e.Subhead,a + ' - '+ e.Subhead + ' - ' + e.title)
-//                     });
-//                     subhead.setAttribute('required','')
-//                     subhead.removeAttribute('disabled','')
-//                 }else{
-//                     subhead.removeAttribute('required','')
-//                     subhead.setAttribute('disabled','')
-//                 }
-//             })
-//             .catch(error => console.error(error))
-//         // break;
 
-// // FOR CONTRACT FILL
-// const getSubheadVoucherData1 = async (value) =>{
-// let data = await fetch(funcstkos + `?head_id=${value} &source_id=${value1} &brand_id=${value3} `,{
-//     method:"GET",
-//     headers: { 'Accept':'application/json','Content-type':'application/json'},
-//     })
-//     .then(response => response.json())
-//     .then( data => { return data })
-//     .catch(error => console.error(error))
-// }
-// const getStkos1 =async  (value) => {
-// const Stkos1 = await getSubheadVoucherData1(value)
-// return Stkos1
-// }
+//    *********************** For Search List Box
 
+const addSelectElement = (select,id,value) => {
+        var option = document.createElement('option')
+        option.value = id
+        option.text  = value
+        select.appendChild(option)
+    }
+
+myarray=@json($resultArray);
+const contries = myarray;
+function onkeyUp(e)
+{
+    let keyword= e.target.value;
+    var customer_id = document.getElementById("customer_id");
+    customer_id.classList.remove("hidden");
+
+    let filteredContries=contries.filter((c)=>c.title.toLowerCase().includes(keyword.toLowerCase()));
+    console.log(filteredContries);
+    renderOptions(filteredContries);
+
+}
+
+
+document.addEventListener('DOMContentLoaded',()=> {
+    hidedropdown();
+        });
+
+function renderOptions(xyz){
+
+    let dropdownEl=document.getElementById("customer_id");
+
+                dropdownEl.length = 0
+                xyz.forEach(e => {
+                    addSelectElement(dropdownEl,e.id,e.title)
+                });
+}
+
+document.addEventListener("click" , () => {
+    hidedropdown();
 });
+
+
+function hidedropdown()
+{
+    var customer_id = document.getElementById("customer_id");
+    customer_id.classList.add("hidden");
+}
+
+
+customer_id.addEventListener("click", () => {
+
+    let customer_id= document.getElementById("customer_id");
+    let custid= document.getElementById("custid");
+    let input= document.getElementById("autocompleted");
+    input.value=customer_id.options[customer_id.selectedIndex].text;
+    custid.value= (customer_id.options[customer_id.selectedIndex].value);
+    hidedropdown();
+});
+
+
+customer_id.addEventListener("keyup", function(event) {
+if (event.keyCode === 13) {
+event.preventDefault();
+
+let customer_id= document.getElementById("customer_id");
+    let input= document.getElementById("autocompleted");
+    let custid= document.getElementById("custid");
+    input.value=customer_id.options[customer_id.selectedIndex].text;
+    custid.value= (customer_id.options[customer_id.selectedIndex].value);
+    hidedropdown();
+
+}
+});
+
 
 </script>
 

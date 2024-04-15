@@ -160,9 +160,14 @@ class LocalPurchaseController  extends Controller
 
     public function create()
     {
+        $result = DB::table('suppliers')->where('source_id',13)->get();
+        $resultArray = $result->toArray();
+        $data=compact('resultArray');
+
+
         // $locations = Location::select('id','title')->where('status',1)->get();
         $maxgpno = DB::table('commercial_invoices')->select('gpassno')->max('gpassno')+1;
-        return view('localpurchase.create',compact('maxgpno'))
+        return view('localpurchase.create',compact('maxgpno'))->with($data)
         // return \view ('sales.create',compact('maxdcno','maxblno','maxgpno'))
         ->with('suppliers',Supplier::select('id','title')->where('source_id','<>','2')->get())
         // ->where('source_id',1)->get())
@@ -352,7 +357,7 @@ class LocalPurchaseController  extends Controller
         $data=compact('cd');
 
          return view('localpurchase.edit',compact('passwrd'))
-        ->with('suppliers',Supplier::select('id','title')->get())
+        ->with('suppliers',Supplier::select('id','title')->where('source_id',13)->get())
         ->with('commercialInvoice',CommercialInvoice::findOrFail($id))
         // ->with('cd',CommercialInvoiceDetails::where('commercial_invoice_id',$id)->get())
         ->with('locations',Location::select('id','title')->get())

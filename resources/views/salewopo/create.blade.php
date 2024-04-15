@@ -26,27 +26,37 @@
                             <legend>Other Invoice Level Charges</legend>
                             <div class="grid grid-cols-12 gap-1 py-2 items-center">
 
-                                <label for="customer_id">Customer<x-req /></label>
+                                {{-- <label for="customer_id">Customer<x-req /></label>
                                     <select autocomplete="on" class="col-span-2" name="customer_id" id="customer_id" >
-                                        {{-- <option value="" selected></option> --}}
                                         @foreach($customers as $customer)
                                         <option value="{{$customer->id}}"> {{$customer->title}} </option>
                                         @endforeach
-                                    </select>
+                                    </select> --}}
                                 {{-- <x-input-text title="Customer Name" name="custname" id="custname" req required class="col-span-2" disabled  /> --}}
                                 {{-- <x-input-text title="P.O No" name="pono" id="pono" req required class="col-span-2" disabled  /> --}}
                                 {{-- <x-input-date title="P.O Date" name="podate" id="podate" req required class="col-span-2" disabled  /> --}}
+
+                                <label for="autocompleted" >Customers<x-req /></label>
+                                <div class="w-96 relative"   onclick="event.stopImmediatePropagation();" >
+                                    <input id="autocompleted" placeholder="Select Conuntry Name"  class=" px-5 py-3 w-50 border border-gray-400 rounded-md"
+                                    onkeyup="onkeyUp(event)" />
+                                    <div>
+                                        <select  id="customer_id" name="customer_id" size="20"  class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full h-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                                        </select>
+                                    </div>
+                                </div>
+
                                 <x-input-text title="G.Pass No" name="gpno" id="gpno" value="{{$maxgpno}}"     required   />
                                 <x-input-date title="Deilivery Date" id="deliverydt" name="deliverydt" req required class="col-span-2" />
                             </div>
                             <div class="grid grid-cols-12 gap-1 py-2 items-center">
-                                <x-input-text title="DC No" name="dcno" id="dcno" class="col-span-2" value="{{$maxdcno}}"     required   />
+                                <x-input-text title="DC No" name="dcno" id="dcno"  class="col-span-2;width=50 " value="{{$maxdcno}}"     required   />
                                 <x-input-text title="Bill No" name="billno" id="billno" class="col-span-2;w-20"  value="{{$maxbillno}}"     required   />
                                 <label for="">
                                     Descripiton <span class="text-red-500 font-semibold"></span>
                                 </label>
                                 <textarea name="saldescription" id="saldescription" class="col-span-2" cols="30" rows="2" maxlength="150" required class="rounded"></textarea>
-                                <x-input-text title="abc" name="abc" id="abc"     required hidden   />
+                                <x-input-text title="" name="abc" id="abc"     required hidden   />
                             </div>
                         </fieldset>
 
@@ -69,12 +79,11 @@
                             </div>
                         </fieldset>
 
-                        <div class="flex flex-row px-4 py-2 items-center">
+                        {{-- <div class="flex flex-row px-4 py-2 items-center">
                             <x-label value="Add Pcs & Feet Size & Press"></x-label>
                             <x-button id="calculate" class="mx-2" type="button" onclick="calculate()">Calculate</x-button>
                             <x-label value="This will prepare your commercial invoice for Submission"></x-label>
-                            {{-- <input class="checked:bg-blue-500 checked:border-blue-500 focus:outline-none" title="W/Qutation" type="checkbox" value="checked" name="woq" id="woq"   > --}}
-                        </div>
+                        </div> --}}
 
 
 
@@ -113,7 +122,7 @@
         });
 
         window.onload = function() {
-            var input = document.getElementById("customer_id").focus();
+            var input = document.getElementById("autocompleted").focus();
         }
 
 
@@ -145,7 +154,7 @@
         let csrfToken = document.head.querySelector("[name~=csrf-token][content]").content;
         //
         let modal = document.getElementById("myModal")
-        let calculateButton = document.getElementById("calculate")
+        // let calculateButton = document.getElementById("calculate")
         let submitButton = document.getElementById("submitbutton")
 
         let dynamicTable = ""
@@ -184,7 +193,15 @@
         // }
 
         // -----------------FOR MODAL -------------------------------//
-        function showModal(){ modal.style.display = "block"}
+        function showModal()
+        {
+            modal.style.display = "block"
+            const inp = document.getElementById('data_filter')
+            inp.focus()
+
+
+
+        }
         function closeModal(){ modal.style.display = "none"}
         //  When the user clicks anywhere outside of the modal, close it
         window.onclick = function(event) {
@@ -273,7 +290,7 @@
             detailsUrl = `${getDetails}/?id=${data.id}`
             fetchDataFromServer(detailsUrl)
             // adopted = true
-            calculateButton.disabled = false
+            // calculateButton.disabled = false
             // closeModal()
         })
     </script>
@@ -962,7 +979,84 @@ discntamt.onblur=function(){
 
 
 }
-    </script>
+
+
+
+const addSelectElement = (select,id,value) => {
+        var option = document.createElement('option')
+        option.value = id
+        option.text  = value
+        select.appendChild(option)
+    }
+
+myarray=@json($resultArray);
+const contries = myarray;
+function onkeyUp(e)
+{
+    let keyword= e.target.value;
+    var customer_id = document.getElementById("customer_id");
+    customer_id.classList.remove("hidden");
+
+    let filteredContries=contries.filter((c)=>c.title.toLowerCase().includes(keyword.toLowerCase()));
+    console.log(filteredContries);
+    renderOptions(filteredContries);
+
+}
+
+
+document.addEventListener('DOMContentLoaded',()=> {
+    hidedropdown();
+        });
+
+function renderOptions(xyz){
+
+    let dropdownEl=document.getElementById("customer_id");
+
+                dropdownEl.length = 0
+                xyz.forEach(e => {
+                    addSelectElement(dropdownEl,e.id,e.title)
+                });
+}
+
+document.addEventListener("click" , () => {
+    hidedropdown();
+});
+
+
+function hidedropdown()
+{
+    var customer_id = document.getElementById("customer_id");
+    customer_id.classList.add("hidden");
+}
+
+
+customer_id.addEventListener("click", () => {
+
+    let customer_id= document.getElementById("customer_id");
+    // let custid= document.getElementById("custid");
+    let input= document.getElementById("autocompleted");
+    input.value=customer_id.options[customer_id.selectedIndex].text;
+    // custid.value= (customer_id.options[customer_id.selectedIndex].value);
+    hidedropdown();
+});
+
+
+customer_id.addEventListener("keyup", function(event) {
+if (event.keyCode === 13) {
+// event.preventDefault();
+
+let customer_id= document.getElementById("customer_id");
+    let input= document.getElementById("autocompleted");
+    // let custid= document.getElementById("custid");
+    input.value=customer_id.options[customer_id.selectedIndex].text;
+    // custid.value= (customer_id.options[customer_id.selectedIndex].value);
+    hidedropdown();
+
+}
+});
+
+
+</script>
 @endpush
 
 </x-app-layout>

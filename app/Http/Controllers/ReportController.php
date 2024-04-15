@@ -15,6 +15,7 @@ class ReportController extends Controller
     public function index()
     {
         return view('reports.index')
+
         ->with('heads',Head::where('status',1)->whereIn('id',[32,33,34,100,101,102,103,104,105,106,107,110,111,112,113,114])->get())
         ->with('glheads',Head::where('status',1)->whereIn('id',[1,2,30,36,37,38])->get())
         ->with('vchrheads',Head::where('status',1)->whereIn('id',[5,6,7,8,9,50])->get())

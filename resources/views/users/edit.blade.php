@@ -5,13 +5,60 @@
         </h2>
     </x-slot>
 
+
+
+    @push('styles')
+    <link rel="stylesheet" href="node_modules/virtual-select-plugin/dist/virtual-select.min.css">
+    <script src="node_modules/virtual-select-plugin/dist/virtual-select.min.js"></script>
+    <link rel="stylesheet" href="node_modules/tooltip-plugin/dist/tooltip.min.css">
+    <script src="node_modules/tooltip-plugin/dist/tooltip.min.js"></script>
+
+
+    @endpush
+
+    <span class="text-gray-700">{{ __('Select Users') }}</span>
+    <div>
+        <div id="users-select" wire:ignore></div>
+    </div>
+
+
+    <!-- optional -->
+
+<script>
+        let myOptions = [
+                    @foreach($user as $usera)
+                        { label: "{{ $usera->name }}", value: "{{ $usera->id }}" },
+                    @endforeach
+                ];
+            VirtualSelect.init({
+                ele: '#users-select',
+                options: myOptions,
+                multiple: true,
+                search: true,
+                placeholder: "{{__('Select Picked Orders')}}",
+                noOptionsText: "{{__('No results found')}}",
+            });
+            let selectedUsers = document.querySelector('#users-select')
+            selectedUsers.addEventListener('change', () => {
+                let data = selectedUsers.value
+                @this.set('selectedUsers', data)
+            })
+    </script>
+
+
+
+
+
+
+
+
     <div class="py-6">
         <div class="max-w-2xl mx-auto sm:px-2 lg:px-4">
             <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
 
                 {{-- Create Form --}}
                 <div class="px-6 py-2" >
-                    
+
                     <div class="flex gap-8">
                         {{-- Form Data --}}
                         <div class="flex flex-col justify-start items-center">
@@ -21,11 +68,11 @@
                                 <x-label for="name" value="Name"/>
                                 <x-input id="name" class="bg-indigo-100" type="text" name="name" value="{{ $user->name}}"  required minlength="3"/>
                                 @if($errors->has('name'))<div class="text-red-500 text-xs">{{ $errors->first('name') }}</div>@endif
-                               
+
                                 <x-label for="email" value="Email"/>
                                 <x-input id="email" class="bg-indigo-100" type="email" name="email" value="{{ $user->email}}"  required />
                                 @if($errors->has('email'))<div class="text-red-500 text-xs">{{ $errors->first('email') }}</div>@endif
-                             
+
                                 <fieldset class="border rounded my-2 py-2 px-2">
                                     <legend>Password Setup</legend>
 
@@ -38,7 +85,7 @@
                                     @if($errors->has('password_confirmation'))<div class="text-red-500 text-xs">{{ $errors->first('password_confirmation') }}</div>@endif
 
                                 </fieldset>
-                           
+
                                 <div class="mt-2">
                                     <button class="inline-flex items-center px-4 py-2 bg-green-500 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-green-700 active:bg-green-900 focus:outline-none focus:border-green-900 focus:ring ring-gray-300 disabled:opacity-25 transition ease-in-out duration-150">
                                         <i class="fa fa-save fa-fw"></i>

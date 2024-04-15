@@ -151,7 +151,12 @@ class SalesInvoiceWopoController  extends Controller
 
     public function create()
     {
-         $locations = Location::select('id','title')->where('status',1)->get();
+
+        $result = DB::table('customers')->whereNotIn('id',[0,1])->get();
+        $resultArray = $result->toArray();
+        $data=compact('resultArray');
+
+        $locations = Location::select('id','title')->where('status',1)->get();
 
         // return view('sales.create')
         // $mycname='MUHAMMAD HABIB & Co.';
@@ -159,7 +164,7 @@ class SalesInvoiceWopoController  extends Controller
         $maxgpno = DB::table('sale_invoices')->select('gpno')->max('gpno')+1;
         $maxbillno = DB::table('sale_invoices')->select('billno')->max('billno')+1;
 
-        return \view ('salewopo.create',compact('maxdcno','maxgpno','maxbillno'))
+        return \view ('salewopo.create',compact('maxdcno','maxgpno','maxbillno'))->with($data)
         ->with('customers',Customer::select('id','title')->get())
         //  ->with('locations',Location::select('id','title')->get());
          ->with('skus',Sku::select('id','title')->get());

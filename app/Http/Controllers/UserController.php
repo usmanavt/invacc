@@ -3,20 +3,32 @@
 namespace App\Http\Controllers;
 
 use App\Models\User;
+use App\Models\Customer;
+use App\Models\Category;
+
+
+
+
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Session;
 
 class UserController extends Controller
 {
-    
+
     public function __construct(){
         $this->middleware('auth');
-    }           
+    }
 
     public function index(Request $request)
     {
         $search = $request->search;
+
+        $result = DB::table('categories')->get();
+        $resultArray = $result->toArray();
+        $data=compact('resultArray');
+
+
         $users = User::select('id','name','email')
         ->where(function($q) use ($search){
             $q->where('name','LIKE',"%$search%")
@@ -24,7 +36,11 @@ class UserController extends Controller
         })
         ->orderBy('id','desc')
         ->paginate(5);
-         return view('users.index')->with('users',$users);
+         return view('users.index')
+         ->with($data)
+         ->with('users',$users)
+         ->with('customers',DB::table('customers')->select('*')->get())
+         ->with('heads',Category::where('status',1)->get());
     }
 
 

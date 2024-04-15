@@ -127,9 +127,13 @@
 
         columns:[
             //  Detail Data
-            {formatter:"rowSelection", titleFormatter:"rowSelection", hozAlign:"center", headerSort:false, cellClick:function(e, cell){
-        cell.getRow().toggleSelect();
-        }},
+            {
+        //         formatter:"rowSelection", titleFormatter:"rowSelection", hozAlign:"center", headerSort:false, cellClick:function(e, cell){
+        // cell.getRow().toggleSelect();
+        // }
+
+
+    },
             // {formatter:hideIcon, hozAlign:"center", title:"Details",headerSort:false, cellClick:function(e, row, formatterParams){
             //     let tableHolder = document.getElementById("subTable" + row.getData().id + "");
             //     tableHolder.classList.toggle('hide-subtable');

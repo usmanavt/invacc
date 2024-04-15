@@ -48,12 +48,12 @@
 
                         {{-- Submit Button --}}
                         <div class="pt-2">
-                            <button
+                            <x-button
                                 id="submitbutton" onclick="validateForm()"
                                 class="bg-green-500 text-white rounded hover:bg-green-700 inline-flex items-center px-4 py-1 w-28 text-center">
                                 <i class="fa fa-save fa-fw"></i>
                                 Submit
-                            </button>
+                            </x-button>
                             <x-input-text title="Password For Edition Permission" name="edtpw" id="edtpw" type="password"     />
                             <x-input-text title="" name="dbpwrd2" id="dbpwrd2"  class="col-span-2" hidden  value="{{$passwrd}}" />
 
