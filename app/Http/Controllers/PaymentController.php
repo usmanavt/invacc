@@ -131,13 +131,18 @@ class PaymentController  extends Controller
     public function create()
     {
 
-        $result = DB::table('banks')->whereNotIn('id',[1,2])->get();
+
+        $result1 = DB::table('vwpaymentmaster')->get();
+        $resultArray1 = $result1->toArray();
+        $data1=compact('resultArray1');
+
+        $result = DB::table('banks')->whereNotIn('id',[2])->get();
         $resultArray = $result->toArray();
         $data=compact('resultArray');
 
 
         $maxposeqno = DB::table('bank_transactions')->select('*')->max('transno')+1;
-        return \view ('payments.create',compact('maxposeqno'))->with($data)
+        return \view ('payments.create',compact('maxposeqno'))->with($data)->with($data1)
         ->with('heads',Head::where('status',1)->where('forcp',1)->get())
         ->with('banks',Bank::where('status',1)->get());
     }

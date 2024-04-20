@@ -5,53 +5,6 @@
         </h2>
     </x-slot>
 
-
-
-    @push('styles')
-    <link rel="stylesheet" href="node_modules/virtual-select-plugin/dist/virtual-select.min.css">
-    <script src="node_modules/virtual-select-plugin/dist/virtual-select.min.js"></script>
-    <link rel="stylesheet" href="node_modules/tooltip-plugin/dist/tooltip.min.css">
-    <script src="node_modules/tooltip-plugin/dist/tooltip.min.js"></script>
-
-
-    @endpush
-
-    <span class="text-gray-700">{{ __('Select Users') }}</span>
-    <div>
-        <div id="users-select" wire:ignore></div>
-    </div>
-
-
-    <!-- optional -->
-
-<script>
-        let myOptions = [
-                    @foreach($user as $usera)
-                        { label: "{{ $usera->name }}", value: "{{ $usera->id }}" },
-                    @endforeach
-                ];
-            VirtualSelect.init({
-                ele: '#users-select',
-                options: myOptions,
-                multiple: true,
-                search: true,
-                placeholder: "{{__('Select Picked Orders')}}",
-                noOptionsText: "{{__('No results found')}}",
-            });
-            let selectedUsers = document.querySelector('#users-select')
-            selectedUsers.addEventListener('change', () => {
-                let data = selectedUsers.value
-                @this.set('selectedUsers', data)
-            })
-    </script>
-
-
-
-
-
-
-
-
     <div class="py-6">
         <div class="max-w-2xl mx-auto sm:px-2 lg:px-4">
             <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">

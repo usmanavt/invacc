@@ -77,7 +77,7 @@
         </div>
 
 
-        <div class=" w-full h-[100vh] bg-slate-200 flex justify-center items-center flex-col ">
+        {{-- <div class=" w-full h-[100vh] bg-slate-200 flex justify-center items-center flex-col ">
             <div class="w-96 relative"   onclick="event.stopImmediatePropagation();" >
                 <input id="autocompleted" placeholder="Select Conuntry Name" class="px-5 py-3 w-full border border-gray-400 rounded-md"
                 onkeyup="onkeyUp(event)" />
@@ -185,7 +185,7 @@ let head_id= document.getElementById("head_id");
 
 // }
 
-// });
+// }); --}}
 
 
 

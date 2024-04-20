@@ -831,11 +831,11 @@ const getSubheadVoucherData4 = async (value) =>{
 
 
     head_id.addEventListener("change", () => {
-
+        console.log('head_id')
         const value = head.value
           const value1 = source.value
           const value3 = specification.value
-          console.info(value)
+          console.info(value3)
           //  const value = 6
         subhead.options.length = 0 // Reset List
         fetch(funcstkos + `?head_id=${value} &source_id=${value1} &brand_id=${value3} `,{
@@ -883,7 +883,7 @@ const getSubheadVoucherData1 = async (value) =>{
 
 
 source_id.addEventListener("change", () => {
-
+    console.log('source')
 const value = head.value
   const value1 = source.value
   const value3 = specification.value
@@ -1026,7 +1026,7 @@ function psto(adv) {
     let keyword= e.target.value;
     var subhead_id = document.getElementById("subhead_id");
     // subhead_id.classList.remove("hidden");
-
+    console.log(list);
     let filteredContries=list.filter((c)=>c.title.toLowerCase().includes(keyword.toLowerCase()));
     console.log(filteredContries);
     renderOptions(filteredContries);
@@ -1047,7 +1047,7 @@ function renderOptions(xyz){
                 xyz.forEach(e => {
                     a += 1;
                     // addSelectElement(dropdownEl,e.Subhead,a + ' - ' + e.title)
-                    addSelectElement(subhead,e.Subhead,a + '         ' + e.title )
+                    addSelectElement(dropdownEl,e.Subhead,a + '         ' + e.title )
                 });
 }
 

@@ -53,57 +53,15 @@
                             {{-- </div> --}}
                         {{-- </fieldset> --}}
 
-                    {{-- <label class="block"> --}}
-
-
-
-                        {{-- class="w-96 relative"   onclick="event.stopImmediatePropagation();" --}}
-
-
-
-
-
-
-                    <fieldset class="border px-4 py-2 rounded">
-                        <legend>Item Description</legend>
-
-                        <div class="w-96 relative grid grid-cols-4 gap-1 px-10 py-5  "   onclick="event.stopImmediatePropagation();" >
-                            <input id="autocompleted" placeholder="Select Material Name" class=" px-5 py-3 w-full border border-gray-400 rounded-md"
-                            onkeyup="onkeyUp(event)" />
-                            <div>
-                                <select  id="supplier_id" name="supplier_id" size="20"  class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full h-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
-                                </select>
+                        <fieldset  class="border px-4 py-2 rounded">
+                            <legend>Item Description</legend>
+                            <div class="grid grid-cols-16 gap-1 py-1 items-center ">
+                                <x-input-text title="Material Name" name="material_title"  disabled    />
+                                <x-input-text title="Dimension" name="dimension" disabled    />
+                                <x-input-date title="O/Date" name="opdate"  />
+                                <x-input-numeric title="" name="material_id" hidden  />
                             </div>
-                            {{-- <div> --}}
-
-                                {{-- <input tabindex="-1" class="checked:bg-blue-500 checked:border-blue-500 focus:outline-none" type="checkbox" name="os"  id="os" onclick="mydt(this)" > --}}
-                            {{-- </div> --}}
-
-                        </div>
-
-                        <div class="grid grid-cols-12 gap-1 py-1  items-center">
-                            {{-- <input id="autocompleted" placeholder="Select Conuntry Name" class=" px-5 py-3 w-full border border-gray-400 rounded-md" onkeyup="onkeyUp(event)" /> --}}
-
-                            <x-input-date tabindex="-1" title="Opening/Date" name="opdate"   />
-                            <x-input-text title="Unit" id="unitid" name="unitid" class=" px-5 py-3 w-full border border-gray-400 rounded-md" disabled    />
-                            <x-input-text title="Item Source" id="itmsrc" name="itmsrc" class=" px-5 py-3 w-full border border-gray-400 rounded-md" disabled    />
-                            <x-input-numeric title="" name="material_id" hidden     />
-                            <div>
-                    </fieldset>
-
-
-
-
-
-                    <fieldset class="border px-4 py-2 rounded">
-                        <legend>COST</legend>
-                        <div class="grid grid-cols-12 gap-1 py-1 items-center">
-                            <x-input-numeric title="InKg" name="ocostwt"      />
-                            <x-input-numeric title="InPcs" name="ocostpcs"     />
-                            <x-input-numeric title="InFeet" name="ocostfeet"  />
-                        </div>
-                    </fieldset>
-
+                        </fieldset>
 
 
                         <fieldset class="border px-4 py-2 rounded">
@@ -112,7 +70,7 @@
                                 <x-input-numeric title="InKg" name="ostkwte13"  onblur="tnetamount()"    />
                                 <x-input-numeric title="InPcs" name="ostkpcse13" onblur="tnetamount()"     />
                                 <x-input-numeric title="InFeet" name="ostkfeete13" onblur="tnetamount()"  />
-                                <input tabindex="-1" class="checked:bg-blue-500 checked:border-blue-500 focus:outline-none" type="checkbox" name="e13"  id="e13" onclick="grp1(this)" >
+                                <input class="checked:bg-blue-500 checked:border-blue-500 focus:outline-none" type="checkbox" name="e13"  id="e13" onclick="grp1(this)" >
                             </div>
                         </fieldset>
 
@@ -122,7 +80,7 @@
                                 <x-input-numeric title="InKg" name="ostkwtgn2" onblur="tnetamount()"     />
                                 <x-input-numeric title="InPcs" name="ostkpcsgn2" onblur="tnetamount()"     />
                                 <x-input-numeric title="InFeet" name="ostkfeetgn2" onblur="tnetamount()"  />
-                                <input tabindex="-1" class="checked:bg-blue-500 checked:border-blue-500 focus:outline-none" type="checkbox" name="gn2"  id="gn2" onclick="grp2(this)" >
+                                <input class="checked:bg-blue-500 checked:border-blue-500 focus:outline-none" type="checkbox" name="gn2"  id="gn2" onclick="grp2(this)" >
                             </div>
                         </fieldset>
 
@@ -132,7 +90,7 @@
                                 <x-input-numeric title="InKg" name="ostkwtams" onblur="tnetamount()"     />
                                 <x-input-numeric title="InPcs" name="ostkpcsams" onblur="tnetamount()"    />
                                 <x-input-numeric title="InFeet" name="ostkfeetams" onblur="tnetamount()"  />
-                                <input tabindex="-1" class="checked:bg-blue-500 checked:border-blue-500 focus:outline-none" type="checkbox" name="ams"  id="ams" onclick="grp3(this)" >
+                                <input class="checked:bg-blue-500 checked:border-blue-500 focus:outline-none" type="checkbox" name="ams"  id="ams" onclick="grp3(this)" >
                             </div>
                         </fieldset>
 
@@ -142,7 +100,7 @@
                                 <x-input-numeric title="InKg" name="ostkwte24" onblur="tnetamount()"    />
                                 <x-input-numeric title="InPcs" name="ostkpcse24" onblur="tnetamount()"    />
                                 <x-input-numeric title="InFeet" name="ostkfeete24" onblur="tnetamount()"  />
-                                <input tabindex="-1" class="checked:bg-blue-500 checked:border-blue-500 focus:outline-none" type="checkbox" name="e24"  id="e24" onclick="grp4(this)" >
+                                <input class="checked:bg-blue-500 checked:border-blue-500 focus:outline-none" type="checkbox" name="e24"  id="e24" onclick="grp4(this)" >
                             </div>
                         </fieldset>
 
@@ -152,7 +110,7 @@
                                 <x-input-numeric title="InKg" name="ostkwtbs"  onblur="tnetamount()"   />
                                 <x-input-numeric title="InPcs" name="ostkpcsbs" onblur="tnetamount()"    />
                                 <x-input-numeric title="InFeet" name="ostkfeetbs" onblur="tnetamount()"  />
-                                <input tabindex="-1" class="checked:bg-blue-500 checked:border-blue-500 focus:outline-none" type="checkbox" name="bs"  id="bs" onclick="grp5(this)" >
+                                <input class="checked:bg-blue-500 checked:border-blue-500 focus:outline-none" type="checkbox" name="bs"  id="bs" onclick="grp5(this)" >
                             </div>
                         </fieldset>
 
@@ -162,7 +120,7 @@
                                 <x-input-numeric title="InKg" name="ostkwtoth"  onblur="tnetamount()"   />
                                 <x-input-numeric title="InPcs" name="ostkpcsoth"  onblur="tnetamount()"   />
                                 <x-input-numeric title="InFeet" name="ostkfeetoth" onblur="tnetamount()" />
-                                <input tabindex="-1" class="checked:bg-blue-500 checked:border-blue-500 focus:outline-none" type="checkbox" name="oth"  id="oth" onclick="grp6(this)" >
+                                <input class="checked:bg-blue-500 checked:border-blue-500 focus:outline-none" type="checkbox" name="oth"  id="oth" onclick="grp6(this)" >
                             </div>
                         </fieldset>
 
@@ -176,11 +134,23 @@
                         </fieldset>
 
 
+
+
+                        <fieldset class="border px-4 py-2 rounded">
+                            <legend>COST</legend>
+                            <div class="grid grid-cols-12 gap-1 py-1 items-center">
+                                <x-input-numeric title="InKg" name="ocostwt"     />
+                                <x-input-numeric title="InPcs" name="ocostpcs"     />
+                                <x-input-numeric title="InFeet" name="ocostfeet"  />
+                            </div>
+                        </fieldset>
+
+
                         {{-- <x-tabulator-dynamic /> --}}
 
                         {{-- Submit Button --}}
                         <div class="pt-2">
-                            <x-button id="submitbutton" type="button"  onclick="validateForm()">
+                            <x-button id="submitbutton" type="button" onclick="validateForm()">
                                 <i class="fa fa-save fa-fw"></i>
                                 Submit
                             </x-button>
@@ -201,11 +171,6 @@
 
 @push('scripts')
     <script>
-
-window.onload = function() {
-            var input = document.getElementById("autocompleted").focus();
-        }
-
         let table;
         let searchValue = "";
         const deleteIcon = function(cell,formatterParams){return "<i class='fa fa-trash text-red-500'></i>";};
@@ -234,7 +199,7 @@ window.onload = function() {
         document.addEventListener('keyup', (e)=>{
 
             //  We are using ctrl key + 'ArrowUp' to show Modal
-            if(e.ctrlKey && e.keyCode == 500){
+            if(e.ctrlKey && e.keyCode == 32){
 
                 if(!adopted)
                 {
@@ -676,36 +641,14 @@ window.onload = function() {
                 return;
             }
 
-
-            if(ocostwt.value == 0 && unitid.value=="KG")
+            if(ocostwt.value == 0 || ocostpcs.value == 0|| ocostfeet.value == 0)
             {
                 showSnackbar("Material Cost Required","error");
                 ocostwt.focus();
                 return;
             }
 
-            if(ocostpcs.value == 0 && unitid.value=="PCS")
-            {
-                showSnackbar("Material Cost Required","error");
-                ocostpcs.focus();
-                return;
-            }
 
-            if(ocostfeet.value == 0 && unitid.value=="FEET")
-            {
-                showSnackbar("Material Cost Required","error");
-                ocostfeet.focus();
-                return;
-            }
-
-
-
-            // if(ocostwt.value == 0 || ocostpcs.value == 0|| ocostfeet.value == 0)
-            // {
-            //     showSnackbar("Material Cost Required","error");
-            //     ocostwt.focus();
-            //     return;
-            // }
 
 
 
@@ -743,15 +686,7 @@ window.onload = function() {
             .then( response => {
                 if (response == 'success')
                 {
-                    // window.open(window.location.origin + "/openinggodownstock","_self" );
-                    // showSnackbar("Record Save Successfully","green");
-                    alert("Record Save Successfully")
-                    clearform();
-                    // autocompleted.value="";
-
-                    var input = document.getElementById("autocompleted").focus();
-                    hidedropdown();
-
+                    window.open(window.location.origin + "/openinggodownstock","_self" );
                 }
             })
             .catch(error => {
@@ -773,15 +708,6 @@ window.onload = function() {
         ostkpcse13.style.color ="black";
         ostkfeete13.style.color ="black";
         }
-
-        // function mydt(os) {
-        // var opdate = document.getElementById("opdate");
-        // opdate.disabled = os.checked ? true : false;
-        // opdate.style.color ="black";
-        // }
-
-
-
 
 
         function grp2(gn2) {
@@ -856,157 +782,22 @@ function grp6(bs) {
         ostkfeetoth.style.color ="black";
     }
 
-    const addSelectElement = (select,id,value) => {
-        var option = document.createElement('option')
-        option.value = id
-        option.text  = value
-        select.appendChild(option)
-    }
-
-myarray=@json($resultArray);
-const contries = myarray;
-function onkeyUp(e)
-{
-    let keyword= e.target.value;
-    var supplier_id = document.getElementById("supplier_id");
-    supplier_id.classList.remove("hidden");
-
-    let filteredContries=contries.filter((c)=>c.srchb.toLowerCase().includes(keyword.toLowerCase()));
-    console.log(filteredContries);
-    renderOptions(filteredContries);
-    // e.id + '      '+ e.srchb+' '+e.dimension
-}
-
-
-document.addEventListener('DOMContentLoaded',()=> {
-    hidedropdown();
-        });
-
-function renderOptions(xyz){
-
-    let dropdownEl=document.getElementById("supplier_id");
-
-
-                $product= [];
-                $itmunit= [];
-                dropdownEl.length = 0
-                a=0;
-                xyz.forEach(e => {
-                    // str_pad($i,2,'0',STR_PAD_LEFT)
-                    addSelectElement(dropdownEl,e.id,e.srchb)
-                    $product =e.source;
-                    $itmunit =e.sku;
-                    // console.log(e.keyCode);
-                });
-}
-
-document.addEventListener("click" , () => {
-    hidedropdown();
-});
-
-
-function hidedropdown()
-{
-    var supplier_id = document.getElementById("supplier_id");
-    supplier_id.classList.add("hidden");
-}
-
-
-supplier_id.addEventListener("click", () => {
-
-    let supplier_id= document.getElementById("supplier_id");
-    let input= document.getElementById("autocompleted");
-    let material_id= document.getElementById("material_id");
-    let itmsrc= document.getElementById("itmsrc");
-    let unitid= document.getElementById("unitid");
-
-    input.value=supplier_id.options[supplier_id.selectedIndex].text;
-    material_id.value=supplier_id.options[supplier_id.selectedIndex].value;
-    itmsrc.value=$product;
-    unitid.value=$itmunit;
-    hidedropdown();
-});
-
-
-supplier_id.addEventListener("keyup", function(event) {
-if (event.keyCode === 13) {
-// event.preventDefault();
-
-    let supplier_id= document.getElementById("supplier_id");
-    let input= document.getElementById("autocompleted");
-    let material_id= document.getElementById("material_id");
-    let itmsrc= document.getElementById("itmsrc");
-    let unitid= document.getElementById("unitid");
-
-    input.value=supplier_id.options[supplier_id.selectedIndex].text;
-    material_id.value=supplier_id.options[supplier_id.selectedIndex].value;
-    itmsrc.value=$product;
-    unitid.value=$itmunit;
-    hidedropdown();
-
-}
-});
-
-// $(window).keypress(function(event) {
-//     if (!(event.which == 115 && event.ctrlKey) && !(event.which == 19)) return true;
-//     let submitButton = document.getElementById("submitbutton")
-//     event.preventDefault();
-//     submitButton.click();
-
-//     return false;
-// });
-
-document.onkeydown=function(e){
-    if(e.keyCode == 17) isCtrl=true;
-    if(e.keyCode == 83 && isCtrl == true) {
-        //run code for CTRL+S -- ie, save!
-        // alert("dfadfasd");
-        submitButton.click();
-        return false;
-    }
-}
-
-
-function clearform()
-{
-    document.getElementById("ostkwte13").value=0;
-    document.getElementById("ostkpcse13").value=0;
-    document.getElementById("ostkfeete13").value=0;
-    document.getElementById("autocompleted").value='';
-
-    document.getElementById("ostkwtgn2").value=0;
-    document.getElementById("ostkpcsgn2").value=0;
-    document.getElementById("ostkfeetgn2").value=0;
-
-    document.getElementById("ostkwtams").value=0;
-    document.getElementById("ostkpcsams").value=0;
-    document.getElementById("ostkfeetams").value=0;
-
-    document.getElementById("ostkwte24").value=0;
-    document.getElementById("ostkpcse24").value=0;
-    document.getElementById("ostkfeete24").value=0;
-
-    document.getElementById("ostkwtbs").value=0;
-    document.getElementById("ostkpcsbs").value=0;
-    document.getElementById("ostkfeetbs").value=0;
-
-    document.getElementById("ostkwtoth").value=0;
-    document.getElementById("ostkpcsoth").value=0;
-    document.getElementById("ostkfeetoth").value=0;
-
-    document.getElementById("ocostwt").value=0;
-    document.getElementById("ocostpcs").value=0;
-    document.getElementById("ocostfeet").value=0;
-
-    document.getElementById("ostkwttot").value=0;
-    document.getElementById("ostkpcstot").value=0;
-    document.getElementById("ostkfeettot").value=0;
-    document.getElementById("material_id").value=0;
-}
 
 
 
 
+
+
+
+
+
+//     discntper.onblur=function(){
+//     per=false
+//      tnetamount();
+// discntamt.onblur=function(){
+//      tnetamount();
+
+// }
     </script>
 @endpush
 

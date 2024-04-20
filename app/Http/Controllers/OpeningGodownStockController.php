@@ -16,6 +16,7 @@ use App\Models\OpeningGodownStock;
 
 use \Mpdf\Mpdf as PDF;
 use Illuminate\Support\Facades\Session;
+use Illuminate\Support\Facades\Validator;
 
 // LocalPurchaseController
 class OpeningGodownStockController  extends Controller
@@ -133,9 +134,14 @@ class OpeningGodownStockController  extends Controller
 
     public function create()
     {
+
+        $result = DB::table('vwobmatlist')->get();
+        $resultArray = $result->toArray();
+        $data=compact('resultArray');
+
         // $locations = Location::select('id','title')->where('status',1)->get();
         // $maxgpno = DB::table('commercial_invoices')->select('gpassno')->max('gpassno')+1;
-        return view('opstock.create');
+        return view('opstock.create')->with($data);
         // return \view ('sales.create',compact('maxdcno','maxblno','maxgpno'))
         // ->with('suppliers',Supplier::select('id','title')->where('source_id',1)->get())
         // ->with('locations',Location::select('id','title')->get())
@@ -146,13 +152,27 @@ class OpeningGodownStockController  extends Controller
     /** Function Complete*/
     public function store(Request $request)
     {
-            //    dd($request->all());
-        $this->validate($request,[
-            // 'invoice_date' => 'required|min:3|date',
-            // 'number' => 'required|min:3',
-            // 'supplier_id' => 'required',
-             'material_id' => 'required|unique:opening_godown_stocks'
+
+        // $this->validate($request,[
+        //      'material_id' => 'required|unique:opening_godown_stocks'
+        // ]
+        // , [
+        //     'material_id.required' => 'Material Already Excist',
+        // ]);
+
+        $validator = Validator::make($request->all(), [
+            'material_id' => 'required|unique:opening_godown_stocks'
+        ], [
+            'material_id.unique' => 'Title unique custom message',
         ]);
+
+        if ($validator->fails()) {
+            return redirect()->back()
+                        ->withErrors($validator)
+                        ->withInput();
+        }
+
+
 
         DB::beginTransaction();
         try {
@@ -162,37 +182,95 @@ class OpeningGodownStockController  extends Controller
             $ci->opdate = $request->opdate;
             $ci->material_id = $request->material_id;
 
-            $ci->ostkwte13 = $request->ostkwte13;
-            $ci->ostkpcse13 = $request->ostkpcse13;
-            $ci->ostkfeete13 = $request->ostkfeete13;
+            // $ci->ostkwte13 = $request->ostkwte13;
+            // $ci->ostkpcse13 = $request->ostkpcse13;
+            // $ci->ostkfeete13 = $request->ostkfeete13;
 
-            $ci->ostkwtgn2 = $request->ostkwtgn2;
-            $ci->ostkpcsgn2 = $request->ostkpcsgn2;
-            $ci->ostkfeetgn2 = $request->ostkfeetgn2;
 
-            $ci->ostkwtams = $request->ostkwtams;
-            $ci->ostkpcsams = $request->ostkpcsams;
-            $ci->ostkfeetams = $request->ostkfeetams;
+            $ci->ostkwte13 = $request->ostkwte13=== null ? 0 : $request->ostkwte13;
+            $ci->ostkpcse13 = $request->ostkpcse13=== null ? 0 : $request->ostkpcse13;
+            $ci->ostkfeete13 = $request->ostkfeete13=== null ? 0 : $request->ostkfeete13;
 
-            $ci->ostkwte24 = $request->ostkwte24;
-            $ci->ostkpcse24 = $request->ostkpcse24;
-            $ci->ostkfeete24 = $request->ostkfeete24;
 
-            $ci->ostkwtbs = $request->ostkwtbs;
-            $ci->ostkpcsbs = $request->ostkpcsbs;
-            $ci->ostkfeetbs = $request->ostkfeetbs;
+            // $item = $item === null ? '' : $item;
 
-            $ci->ostkwtoth = $request->ostkwtoth;
-            $ci->ostkpcsoth = $request->ostkpcsoth;
-            $ci->ostkfeetoth = $request->ostkfeetoth;
 
-            $ci->ostkwttot = $request->ostkwttot;
-            $ci->ostkpcstot = $request->ostkpcstot;
-            $ci->ostkfeettot = $request->ostkfeettot;
 
-            $ci->ocostwt = $request->ocostwt;
-            $ci->ocostpcs = $request->ocostpcs;
-            $ci->ocostfeet = $request->ocostfeet;
+            // $ci->ostkwtgn2 = $request->ostkwtgn2;
+            // $ci->ostkpcsgn2 = $request->ostkpcsgn2;
+            // $ci->ostkfeetgn2 = $request->ostkfeetgn2;
+
+            $ci->ostkwtgn2 = $request->ostkwtgn2=== null ? 0 : $request->ostkwtgn2;
+            $ci->ostkpcsgn2 = $request->ostkpcsgn2=== null ? 0 : $request->ostkpcsgn2;
+            $ci->ostkfeetgn2 = $request->ostkfeetgn2=== null ? 0 : $request->ostkfeetgn2;
+
+
+
+            // $ci->ostkwtams = $request->ostkwtams;
+            // $ci->ostkpcsams = $request->ostkpcsams;
+            // $ci->ostkfeetams = $request->ostkfeetams;
+
+            $ci->ostkwtams = $request->ostkwtams=== null ? 0 : $request->ostkwtams;
+            $ci->ostkpcsams = $request->ostkpcsams=== null ? 0 : $request->ostkpcsams;
+            $ci->ostkfeetams = $request->ostkfeetams=== null ? 0 : $request->ostkfeetams;
+
+
+
+
+
+            // $ci->ostkwte24 = $request->ostkwte24;
+            // $ci->ostkpcse24 = $request->ostkpcse24;
+            // $ci->ostkfeete24 = $request->ostkfeete24;
+
+            $ci->ostkwte24 = $request->ostkwte24=== null ? 0 : $request->ostkwte24;
+            $ci->ostkpcse24 = $request->ostkpcse24=== null ? 0 : $request->ostkpcse24;
+            $ci->ostkfeete24 = $request->ostkfeete24=== null ? 0 : $request->ostkfeete24;
+
+
+
+            // $ci->ostkwtbs = $request->ostkwtbs;
+            // $ci->ostkpcsbs = $request->ostkpcsbs;
+            // $ci->ostkfeetbs = $request->ostkfeetbs;
+
+            $ci->ostkwtbs = $request->ostkwtbs=== null ? 0 : $request->ostkwtbs;
+            $ci->ostkpcsbs = $request->ostkpcsbs=== null ? 0 : $request->ostkpcsbs;
+            $ci->ostkfeetbs = $request->ostkfeetbs=== null ? 0 : $request->ostkfeetbs;
+
+
+
+
+
+            // $ci->ostkwtoth = $request->ostkwtoth;
+            // $ci->ostkpcsoth = $request->ostkpcsoth;
+            // $ci->ostkfeetoth = $request->ostkfeetoth;
+
+            $ci->ostkwtoth = $request->ostkwtoth=== null ? 0 : $request->ostkwtoth;
+            $ci->ostkpcsoth = $request->ostkpcsoth=== null ? 0 : $request->ostkpcsoth;
+            $ci->ostkfeetoth = $request->ostkfeetoth=== null ? 0 : $request->ostkfeetoth;
+
+
+            // $ci->ostkwttot = $request->ostkwttot;
+            // $ci->ostkpcstot = $request->ostkpcstot;
+            // $ci->ostkfeettot = $request->ostkfeettot;
+
+            $ci->ostkwttot = $request->ostkwttot=== null ? 0 : $request->ostkwttot;
+            $ci->ostkpcstot = $request->ostkpcstot=== null ? 0 : $request->ostkpcstot;
+            $ci->ostkfeettot = $request->ostkfeettot=== null ? 0 : $request->ostkfeettot;
+
+
+
+
+
+            // $ci->ocostwt = $request->ocostwt;
+            // $ci->ocostpcs = $request->ocostpcs;
+            // $ci->ocostfeet = $request->ocostfeet;
+
+            $ci->ocostwt = $request->ocostwt=== null ? 0 : $request->ocostwt;
+            $ci->ocostpcs = $request->ocostpcs=== null ? 0 : $request->ocostpcs;
+            $ci->ocostfeet = $request->ocostfeet=== null ? 0 : $request->ocostfeet;
+
+
+
 
             $ci->save();
 
@@ -289,12 +367,10 @@ class OpeningGodownStockController  extends Controller
 
 
             DB::commit();
-             Session::flash('success','Contract Information Saved');
+            //  Session::flash('success','Contract Information Saved');
              return response()->json(['success'],200);
             // Session::flash('success','O/Balance created Successfully');
-            //    return redirect()->back();
-
-
+            return redirect()->back();
 
         } catch (\Throwable $th) {
             DB::rollback();

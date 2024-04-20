@@ -188,38 +188,146 @@ table{
         <tbody>
 
 
-            {{ $owt = 0 }};{{ $opcs = 0 }}; {{ $ofeet = 0 }}
-            {{ $pwt = 0 }};{{ $ppcs = 0 }}; {{ $pfeet = 0 }}
-            {{ $swt = 0 }};{{ $spcs = 0 }}; {{ $sfeet = 0 }}
-            {{ $cwt = 0 }};{{ $cpcs = 0 }}; {{ $cfeet = 0 }}
 
-            {{ $gwt = 0 }};{{ $gpcs = 0 }}; {{ $gfeet = 0 }}
-            {{ $giwt = 0 }};{{ $gipcs = 0 }}; {{ $gifeet = 0 }}
+
+            {{-- Category total --}}
+            {{ $owtc = 0 }};{{ $opcsc = 0 }}; {{ $ofeetc = 0 }};{{ $pwtc = 0 }};{{ $ppcsc = 0 }}; {{ $pfeetc = 0 }};{{ $swtc = 0 }};{{ $spcsc = 0 }}; {{ $sfeetc = 0 }}
+            {{ $cwtc = 0 }};{{ $cpcsc = 0 }}; {{ $cfeetc = 0 }};{{ $gwtc = 0 }};{{ $gpcsc = 0 }}; {{ $gfeetc = 0 }};{{ $giwtc = 0 }};{{ $gipcsc = 0 }}; {{ $gifeetc = 0 }}
+
+            {{-- Source total --}}
+            {{ $owtm= 0 }};{{ $opcsm = 0 }}; {{ $ofeetm = 0 }};{{ $pwtm = 0 }};{{ $ppcsm = 0 }}; {{ $pfeetm = 0 }};{{ $swtm = 0 }};{{ $spcsm = 0 }}; {{ $sfeetm = 0 }}
+            {{ $cwtm = 0 }};{{ $cpcsm = 0 }}; {{ $cfeetm = 0 }};{{ $gwtm = 0 }};{{ $gpcsm = 0 }}; {{ $gfeetm = 0 }};{{ $giwtm = 0 }};{{ $gipcsm = 0 }}; {{ $gifeetm = 0 }}
+
+            {{-- Grand total --}}
+            {{ $owt = 0 }};{{ $opcs = 0 }}; {{ $ofeet = 0 }};{{ $pwt = 0 }};{{ $ppcs = 0 }}; {{ $pfeet = 0 }};{{ $swt = 0 }};{{ $spcs = 0 }}; {{ $sfeet = 0 }}
+            {{ $cwt = 0 }};{{ $cpcs = 0 }}; {{ $cfeet = 0 }};{{ $gwt = 0 }};{{ $gpcs = 0 }}; {{ $gfeet = 0 }};{{ $giwt = 0 }};{{ $gipcs = 0 }}; {{ $gifeet = 0 }}
 
 
             @for ($i = 0 ; $i < count($data) ; $i++)
 
-            @if( $i==0 )
+@if( $i==0 )
             <tr>
                 <td colspan="26" width="100%" style="text-align: left;font-size:1.2rem;border-bottom: 2px solid rgb(211, 211, 211);"> {{ $data[$i]->Itemgroupe}} </td>
             </tr>
-        @else
+@else
+                {{ $srno = $i - 1 }}
+                {{-- Category Total     --}}
+                {{ $owtc += $data[$srno]->oqtykg }};{{ $opcsc += $data[$srno]->oqtypcs }};{{ $ofeetc += $data[$srno]->oqtyfeet }}
+                {{ $pwtc += $data[$srno]->pqtykg }};{{ $ppcsc += $data[$srno]->pqtypcs }};{{ $pfeetc += $data[$srno]->pqtyfeet }}
+                {{ $swtc += $data[$srno]->sqtykg }};{{ $spcsc += $data[$srno]->sqtypcs }};{{ $sfeetc += $data[$srno]->sqtyfeet }}
+                {{ $cwtc += $data[$srno]->cbkg }};{{ $cpcsc += $data[$srno]->cbpcs }};{{ $cfeetc += $data[$srno]->cbfeet }}
+                {{ $gwtc += $data[$srno]->gmqtykg }};{{ $gpcsc += $data[$srno]->gmqtypcs }};{{ $gfeetc += $data[$srno]->gmqtyfeet }}
+                {{ $giwtc += $data[$srno]->gmiqtykg }};{{ $gipcsc += $data[$srno]->gmiqtypcs }};{{ $gifeetc += $data[$srno]->gmiqtyfeet }}
 
-        {{ $srno = $i - 1 }}
+
+                {{-- Source Total     --}}
+                {{ $owtm += $data[$srno]->oqtykg }};{{ $opcsm += $data[$srno]->oqtypcs }};{{ $ofeetm += $data[$srno]->oqtyfeet }}
+                {{ $pwtm += $data[$srno]->pqtykg }};{{ $ppcsm += $data[$srno]->pqtypcs }};{{ $pfeetm += $data[$srno]->pqtyfeet }}
+                {{ $swtm += $data[$srno]->sqtykg }};{{ $spcsm += $data[$srno]->sqtypcs }};{{ $sfeetm += $data[$srno]->sqtyfeet }}
+                {{ $cwtm += $data[$srno]->cbkg }};{{ $cpcsm += $data[$srno]->cbpcs }};{{ $cfeetm += $data[$srno]->cbfeet }}
+                {{ $gwtm += $data[$srno]->gmqtykg }};{{ $gpcsm += $data[$srno]->gmqtypcs }};{{ $gfeetm += $data[$srno]->gmqtyfeet }}
+                {{ $giwtm += $data[$srno]->gmiqtykg }};{{ $gipcsm += $data[$srno]->gmiqtypcs }};{{ $gifeetm += $data[$srno]->gmiqtyfeet }}
+
+
+
         @if ($data[$i]->Itemgroupe  <> $data[$srno]->Itemgroupe)
+
+        <tr>
+
+            <td colspan="2"  style="text-align: right;font-weight: bold;background: #e3e3e3;border-bottom: 1px solid lightgray;">Total For {{ $data[$srno]->Itemgroupe }} </td>
+            <td colspan="1"  style="text-align: right;font-weight: bold;background: #e3e3e3;border-bottom: 1px solid lightgray;">{{ number_format($owtc,0) }} </td>
+            <td colspan="1"  style="text-align: right;font-weight: bold;background: #e3e3e3;border-bottom: 1px solid lightgray;">{{ number_format($opcsc,0) }} </td>
+            <td colspan="1"  style="text-align: right;font-weight: bold;background: #e3e3e3;border-bottom: 1px solid lightgray;">{{ number_format($ofeetc,0) }} </td>
+
+            <td colspan="1"  style="text-align: right;font-weight: bold;background: #e3e3e3;border-bottom: 1px solid lightgray;">{{ number_format($pwtc,0) }} </td>
+            <td colspan="1"  style="text-align: right;font-weight: bold;background: #e3e3e3;border-bottom: 1px solid lightgray;">{{ number_format($ppcsc,0) }} </td>
+            <td colspan="1"  style="text-align: right;font-weight: bold;background: #e3e3e3;border-bottom: 1px solid lightgray;">{{ number_format($pfeetc,0) }} </td>
+
+            <td colspan="1"  style="text-align: right;font-weight: bold;background: #e3e3e3;border-bottom: 1px solid lightgray;">{{ number_format($swtc,0) }} </td>
+            <td colspan="1"  style="text-align: right;font-weight: bold;background: #e3e3e3;border-bottom: 1px solid lightgray;">{{ number_format($spcsc,0) }} </td>
+            <td colspan="1"  style="text-align: right;font-weight: bold;background: #e3e3e3;border-bottom: 1px solid lightgray;">{{ number_format($sfeetc,0) }} </td>
+
+            <td colspan="7"  style="text-align: right;font-weight: bold;background: #e3e3e3;border-bottom: 1px solid lightgray;">{{ number_format($gwtc,0) }} </td>
+            <td colspan="1"  style="text-align: right;font-weight: bold;background: #e3e3e3;border-bottom: 1px solid lightgray;">{{ number_format($gpcsc,0) }} </td>
+            <td colspan="1"  style="text-align: right;font-weight: bold;background: #e3e3e3;border-bottom: 1px solid lightgray;">{{ number_format($gfeetc,0) }} </td>
+
+            <td colspan="1"  style="text-align: right;font-weight: bold;background: #e3e3e3;border-bottom: 1px solid lightgray;">{{ number_format($giwtc,0) }} </td>
+            <td colspan="1"  style="text-align: right;font-weight: bold;background: #e3e3e3;border-bottom: 1px solid lightgray;">{{ number_format($gipcsc,0) }} </td>
+            <td colspan="1"  style="text-align: right;font-weight: bold;background: #e3e3e3;border-bottom: 1px solid lightgray;">{{ number_format($gifeetc,0) }} </td>
+            <td colspan="1"  style="text-align: right;font-weight: bold;background: #e3e3e3;border-bottom: 1px solid lightgray;">{{ number_format($cwtc,0) }} </td>
+            <td colspan="1"  style="text-align: right;font-weight: bold;background: #e3e3e3;border-bottom: 1px solid lightgray;">{{ number_format($cpcsc,0) }} </td>
+            <td colspan="1"  style="text-align: right;font-weight: bold;background: #e3e3e3;border-bottom: 1px solid lightgray;">{{ number_format($cfeetc,0) }} </td>
+
+        </tr>
+
+            {{-- Category total --}}
+            {{ $owtc = 0 }};{{ $opcsc = 0 }}; {{ $ofeetc = 0 }};{{ $pwtc = 0 }};{{ $ppcsc = 0 }}; {{ $pfeetc = 0 }};{{ $swtc = 0 }};{{ $spcsc = 0 }}; {{ $sfeetc = 0 }}
+            {{ $cwtc = 0 }};{{ $cpcsc = 0 }}; {{ $cfeetc = 0 }};{{ $gwtc = 0 }};{{ $gpcsc = 0 }}; {{ $gfeetc = 0 }};{{ $giwtc = 0 }};{{ $gipcsc = 0 }}; {{ $gifeetc = 0 }}
+            @if ($data[$i]->matsource_id  == $data[$srno]->matsource_id)
+                <tr>
+                        <td colspan="26" width="100%" style="text-align:left;font-size:1.2rem;border-bottom: 2px solid rgb(211, 211, 211);"> {{ $data[$i]->Itemgroupe}} </td>
+                </tr>
+            @endif
+        @endif
+
+
+
+        @if ($data[$i]->matsource_id  <> $data[$srno]->matsource_id)
+
+        <tr>
+
+            <td colspan="2"  style="text-align: right;font-weight: bold;background: #e3e3e3;border-bottom: 1px solid lightgray;">Total For {{ $data[$srno]->matsource }} </td>
+            <td colspan="1"  style="text-align: right;font-weight: bold;background: #e3e3e3;border-bottom: 1px solid lightgray;">{{ number_format($owtm,0) }} </td>
+            <td colspan="1"  style="text-align: right;font-weight: bold;background: #e3e3e3;border-bottom: 1px solid lightgray;">{{ number_format($opcsm,0) }} </td>
+            <td colspan="1"  style="text-align: right;font-weight: bold;background: #e3e3e3;border-bottom: 1px solid lightgray;">{{ number_format($ofeetm,0) }} </td>
+
+            <td colspan="1"  style="text-align: right;font-weight: bold;background: #e3e3e3;border-bottom: 1px solid lightgray;">{{ number_format($pwtm,0) }} </td>
+            <td colspan="1"  style="text-align: right;font-weight: bold;background: #e3e3e3;border-bottom: 1px solid lightgray;">{{ number_format($ppcsm,0) }} </td>
+            <td colspan="1"  style="text-align: right;font-weight: bold;background: #e3e3e3;border-bottom: 1px solid lightgray;">{{ number_format($pfeetm,0) }} </td>
+
+            <td colspan="1"  style="text-align: right;font-weight: bold;background: #e3e3e3;border-bottom: 1px solid lightgray;">{{ number_format($swtm,0) }} </td>
+            <td colspan="1"  style="text-align: right;font-weight: bold;background: #e3e3e3;border-bottom: 1px solid lightgray;">{{ number_format($spcsm,0) }} </td>
+            <td colspan="1"  style="text-align: right;font-weight: bold;background: #e3e3e3;border-bottom: 1px solid lightgray;">{{ number_format($sfeetm,0) }} </td>
+
+            <td colspan="7"  style="text-align: right;font-weight: bold;background: #e3e3e3;border-bottom: 1px solid lightgray;">{{ number_format($gwtm,0) }} </td>
+            <td colspan="1"  style="text-align: right;font-weight: bold;background: #e3e3e3;border-bottom: 1px solid lightgray;">{{ number_format($gpcsm,0) }} </td>
+            <td colspan="1"  style="text-align: right;font-weight: bold;background: #e3e3e3;border-bottom: 1px solid lightgray;">{{ number_format($gfeetm,0) }} </td>
+
+            <td colspan="1"  style="text-align: right;font-weight: bold;background: #e3e3e3;border-bottom: 1px solid lightgray;">{{ number_format($giwtm,0) }} </td>
+            <td colspan="1"  style="text-align: right;font-weight: bold;background: #e3e3e3;border-bottom: 1px solid lightgray;">{{ number_format($gipcsm,0) }} </td>
+            <td colspan="1"  style="text-align: right;font-weight: bold;background: #e3e3e3;border-bottom: 1px solid lightgray;">{{ number_format($gifeetm,0) }} </td>
+            <td colspan="1"  style="text-align: right;font-weight: bold;background: #e3e3e3;border-bottom: 1px solid lightgray;">{{ number_format($cwtm,0) }} </td>
+            <td colspan="1"  style="text-align: right;font-weight: bold;background: #e3e3e3;border-bottom: 1px solid lightgray;">{{ number_format($cpcsm,0) }} </td>
+            <td colspan="1"  style="text-align: right;font-weight: bold;background: #e3e3e3;border-bottom: 1px solid lightgray;">{{ number_format($cfeetm,0) }} </td>
+
+        </tr>
+
+            {{-- Source total --}}
+            {{ $owtm= 0 }};{{ $opcsm = 0 }}; {{ $ofeetm = 0 }};{{ $pwtm = 0 }};{{ $ppcsm = 0 }}; {{ $pfeetm = 0 }};{{ $swtm = 0 }};{{ $spcsm = 0 }}; {{ $sfeetm = 0 }}
+            {{ $cwtm = 0 }};{{ $cpcsm = 0 }}; {{ $cfeetm = 0 }};{{ $gwtm = 0 }};{{ $gpcsm = 0 }}; {{ $gfeetm = 0 }};{{ $giwtm = 0 }};{{ $gipcsm = 0 }}; {{ $gifeetm = 0 }}
+
             <tr>
                     <td colspan="26" width="100%" style="text-align:left;font-size:1.2rem;border-bottom: 2px solid rgb(211, 211, 211);"> {{ $data[$i]->Itemgroupe}} </td>
             </tr>
         @endif
-        @endif
+
+
+
+
+
+
+
+
+@endif
             <tr>
 
 
+
+                {{-- Grand Total     --}}
                 {{ $owt += $data[$i]->oqtykg }};{{ $opcs += $data[$i]->oqtypcs }};{{ $ofeet += $data[$i]->oqtyfeet }}
                 {{ $pwt += $data[$i]->pqtykg }};{{ $ppcs += $data[$i]->pqtypcs }};{{ $pfeet += $data[$i]->pqtyfeet }}
                 {{ $swt += $data[$i]->sqtykg }};{{ $spcs += $data[$i]->sqtypcs }};{{ $sfeet += $data[$i]->sqtyfeet }}
                 {{ $cwt += $data[$i]->cbkg }};{{ $cpcs += $data[$i]->cbpcs }};{{ $cfeet += $data[$i]->cbfeet }}
-
                 {{ $gwt += $data[$i]->gmqtykg }};{{ $gpcs += $data[$i]->gmqtypcs }};{{ $gfeet += $data[$i]->gmqtyfeet }}
                 {{ $giwt += $data[$i]->gmiqtykg }};{{ $gipcs += $data[$i]->gmiqtypcs }};{{ $gifeet += $data[$i]->gmiqtyfeet }}
 
@@ -269,8 +377,6 @@ table{
             </tr>
             @endfor
             <tr>
-                {{-- <td colspan="20" width="100%" style="text-align: right;border-bottom: 1px solid lightgray;"></td> --}}
-
                 <td colspan="3"  style="text-align: right;font-weight: bold;border-bottom: 1px solid lightgray;">{{ number_format($owt,0) }} </td>
                 <td colspan="1"  style="text-align: right;font-weight: bold;border-bottom: 1px solid lightgray;">{{ number_format($opcs,0) }} </td>
                 <td colspan="1"  style="text-align: right;font-weight: bold;border-bottom: 1px solid lightgray;">{{ number_format($ofeet,0) }} </td>
@@ -293,8 +399,6 @@ table{
                 <td colspan="1"  style="text-align: right;font-weight: bold;border-bottom: 1px solid lightgray;">{{ number_format($cwt,0) }} </td>
                 <td colspan="1"  style="text-align: right;font-weight: bold;border-bottom: 1px solid lightgray;">{{ number_format($cpcs,0) }} </td>
                 <td colspan="1"  style="text-align: right;font-weight: bold;border-bottom: 1px solid lightgray;">{{ number_format($cfeet,0) }} </td>
-
-
 
             </tr>
 

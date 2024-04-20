@@ -130,10 +130,8 @@ table{
                     <th class="column-headers" width="8%">Sale</th>
                     <th class="column-headers" width="8%">Purchase<br>Return</th>
                     <th class="column-headers" width="8%">Sale<br>Return</th>
-
                     <th class="column-headers" width="8%">Godown<br>In</th>
                     <th class="column-headers" width="8%">Godown<br>Out</th>
-
                     <th class="column-headers" width="8%">Closing<br>Balance</th>
 
             </tr>
@@ -143,49 +141,83 @@ table{
     <table class="data" cellspacing="0">
         <tbody>
 
-            {{ $vob = 0 }}
-            {{ $vrcvd = 0 }}
-            {{ $vsl = 0 }}
-            {{ $vcb = 0 }}
-
-
+            {{-- For category --}}
+            {{ $vobc = 0 }};{{ $vrcvdc = 0 }};{{ $vslc = 0 }};{{ $vcbc = 0 }};{{ $vprc = 0 }};{{ $vsrc = 0 }};{{ $vginc = 0 }};{{ $vgoutc = 0 }}
+            {{-- For Source --}}
+            {{ $vobm = 0 }};{{ $vrcvdm = 0 }};{{ $vslm = 0 }};{{ $vcbm = 0 }};{{ $vprm = 0 }};{{ $vsrm = 0 }};{{ $vginm = 0 }};{{ $vgoutm = 0 }}
+            {{-- For grand total --}}
+            {{ $vob = 0 }};{{ $vrcvd = 0 }};{{ $vsl = 0 }};{{ $vcb = 0 }};{{ $vpr = 0 }};{{ $vsr = 0 }};{{ $vgin = 0 }};{{ $vgout = 0 }}
 
             @for ($i = 0 ; $i < count($data) ; $i++)
 
-            @if( $i==0 )
+@if( $i==0 )
                 <tr>
                     <td colspan="11" width="100%" style="text-align: left;font-size:1.2rem;border-bottom: 2px solid rgb(211, 211, 211);"> {{ $data[$i]->Itemgroupe}} </td>
                 </tr>
-            @else
+@else
 
             {{ $srno = $i - 1 }}
+            {{ $vobm += $data[$srno]->OBALANCE }}; {{ $vrcvdm += $data[$srno]->PURQTY }};{{ $vslm += $data[$srno]->SALQTY }};{{ $vcbm += $data[$srno]->CB }}
+            {{ $vprm += $data[$srno]->PURRET }}; {{ $vsrm += $data[$srno]->SALRET }};{{ $vginm += $data[$srno]->gmin }};{{ $vgoutm += $data[$srno]->gmout }}
+
+
+            {{ $vobc += $data[$srno]->OBALANCE }}; {{ $vrcvdc += $data[$srno]->PURQTY }};{{ $vslc += $data[$srno]->SALQTY }};{{ $vcbc += $data[$srno]->CB }}
+            {{ $vprc += $data[$srno]->PURRET }}; {{ $vsrc += $data[$srno]->SALRET }};{{ $vginc += $data[$srno]->gmin }};{{ $vgoutc += $data[$srno]->gmout }}
+
             @if ($data[$i]->Itemgroupe  <> $data[$srno]->Itemgroupe)
+            <tr>
+                <td colspan="2"  style="font-weight: bold;background: #e3e3e3;text-align: right;border-bottom: 1px solid lightgray;"> Total For {{ $data[$srno]->Itemgroupe }}  </td>
+                <td colspan="2"  style="font-weight: bold;background: #e3e3e3;text-align: right;border-bottom: 1px solid lightgray;">{{ number_format($vobc,0) }} </td>
+                <td colspan="1"  style="font-weight: bold;background: #e3e3e3;text-align: right;border-bottom: 1px solid lightgray;">{{ number_format($vrcvdc,0) }} </td>
+                <td colspan="1"  style="font-weight: bold;background: #e3e3e3;text-align: right;border-bottom: 1px solid lightgray;">{{ number_format($vslc,0) }} </td>
+
+                <td colspan="1"  style="font-weight: bold;background: #e3e3e3;text-align: right;border-bottom: 1px solid lightgray;">{{ number_format($vprc,0) }} </td>
+                <td colspan="1"  style="font-weight: bold;background: #e3e3e3;text-align: right;border-bottom: 1px solid lightgray;">{{ number_format($vsrc,0) }} </td>
+                <td colspan="1"  style="font-weight: bold;background: #e3e3e3;text-align: right;border-bottom: 1px solid lightgray;">{{ number_format($vginc,0) }} </td>
+                <td colspan="1"  style="font-weight: bold;background: #e3e3e3;text-align: right;border-bottom: 1px solid lightgray;">{{ number_format($vgoutc,0) }} </td>
+                <td colspan="1"  style="font-weight: bold;background: #e3e3e3;text-align: right;border-bottom: 1px solid lightgray;">{{ number_format($vcbc,0) }} </td>
+            </tr>
+            {{ $vobc = 0 }};{{ $vrcvdc = 0 }};{{ $vslc = 0 }};{{ $vcbc = 0 }};{{ $vprc = 0 }};{{ $vsrc = 0 }};{{ $vginc = 0 }};{{ $vgoutc = 0 }}
+                @if ($data[$i]->matsource_id  == $data[$srno]->matsource_id)
+                        <tr>
+                                <td colspan="11" width="100%" style="text-align:left;font-size:1.2rem;border-bottom: 2px solid rgb(211, 211, 211);"> {{ $data[$i]->Itemgroupe}} </td>
+                        </tr>
+                @endif
+            @endif
+
+           @if ($data[$i]->matsource_id  <> $data[$srno]->matsource_id)
+            <tr>
+                <td colspan="2"  style="font-weight: bold;background: #e3e3e3;text-align: right;border-bottom: 1px solid lightgray;"> Total For {{$data[$srno]->matsource}}  </td>
+                <td colspan="2"  style="font-weight: bold;background: #e3e3e3;text-align: right;border-bottom: 1px solid lightgray;">{{ number_format($vobm,0) }} </td>
+                <td colspan="1"  style="font-weight: bold;background: #e3e3e3;text-align: right;border-bottom: 1px solid lightgray;">{{ number_format($vrcvdm,0) }} </td>
+                <td colspan="1"  style="font-weight: bold;background: #e3e3e3;text-align: right;border-bottom: 1px solid lightgray;">{{ number_format($vslm,0) }} </td>
+                <td colspan="1"  style="font-weight: bold;background: #e3e3e3;text-align: right;border-bottom: 1px solid lightgray;">{{ number_format($vprm,0) }} </td>
+                <td colspan="1"  style="font-weight: bold;background: #e3e3e3;text-align: right;border-bottom: 1px solid lightgray;">{{ number_format($vsrm,0) }} </td>
+                <td colspan="1"  style="font-weight: bold;background: #e3e3e3;text-align: right;border-bottom: 1px solid lightgray;">{{ number_format($vginm,0) }} </td>
+                <td colspan="1"  style="font-weight: bold;background: #e3e3e3;text-align: right;border-bottom: 1px solid lightgray;">{{ number_format($vgoutm,0) }} </td>
+                <td colspan="1"  style="font-weight: bold;background: #e3e3e3;text-align: right;border-bottom: 1px solid lightgray;">{{ number_format($vcbm,0) }} </td>
+            </tr>
+            {{ $vobm = 0 }};{{ $vrcvdm = 0 }};{{ $vslm = 0 }};{{ $vcbm = 0 }};{{ $vprm = 0 }};{{ $vsrm = 0 }};{{ $vginm = 0 }};{{ $vgoutm = 0 }}
+
                 <tr>
                         <td colspan="11" width="100%" style="text-align:left;font-size:1.2rem;border-bottom: 2px solid rgb(211, 211, 211);"> {{ $data[$i]->Itemgroupe}} </td>
                 </tr>
+
             @endif
-            @endif
 
-            {{-- {{ $vmatsrc = $data[$i]->matsource }}   --}}
-
-
-
+@endif
             <tr>
 
-                {{ $vob += $data[$i]->OBALANCE }}
-                {{ $vrcvd += $data[$i]->PURQTY }}
-                {{ $vsl += $data[$i]->SALQTY }}
-                {{ $vcb += $data[$i]->CB }}
+                {{ $vob += $data[$i]->OBALANCE }}; {{ $vrcvd += $data[$i]->PURQTY }};{{ $vsl += $data[$i]->SALQTY }};{{ $vcb += $data[$i]->CB }}
 
-
-                <td style="text-align:center" width="3%">{{ $i+1 }}</td>
+                <td style="text-align:center" width="5%">{{ $i+1 }}</td>
                 <td width="28%">{{ $data[$i]->matname}} </td>
                 <td style="text-align:center" width="5%">{{ $data[$i]->unit }} </td>
                 <td style="text-align:right" width="8%">{{ number_format($data[$i]->OBALANCE,0) }} </td>
                 <td style="text-align:right" width="8%">{{ number_format($data[$i]->PURQTY,0) }} </td>
                 <td style="text-align:right" width="8%">{{ number_format($data[$i]->SALQTY,0) }} </td>
-                <td style="text-align:right" width="8%">{{ number_format($data[$i]->PURRET,0) }} </td>
-                <td style="text-align:right" width="8%">{{ number_format($data[$i]->SALRET,0) }} </td>
+                <td style="text-align:right" width="7%">{{ number_format($data[$i]->PURRET,0) }} </td>
+                <td style="text-align:right" width="7%">{{ number_format($data[$i]->SALRET,0) }} </td>
 
                 <td style="text-align:right" width="8%">{{ number_format($data[$i]->gmin,0) }} </td>
                 <td style="text-align:right" width="8%">{{ number_format($data[$i]->gmout,0) }} </td>
@@ -194,18 +226,19 @@ table{
             </tr>
             @endfor
             <tr>
-                <td colspan="4"  style="text-align: right;border-bottom: 1px solid lightgray;">{{ number_format($vob,0) }} </td>
-                <td colspan="1"  style="text-align: right;border-bottom: 1px solid lightgray;">{{ number_format($vrcvd,0) }} </td>
-                <td colspan="1"  style="text-align: right;border-bottom: 1px solid lightgray;">{{ number_format($vsl,0) }} </td>
-                <td colspan="6"  style="text-align: right;border-bottom: 1px solid lightgray;">{{ number_format($vcb,0) }} </td>
+                <td colspan="2"  style=" font-weight: bold;background: #e3e3e3; text-align: right;border-bottom: 1px solid lightgray;"> Grand Total </td>
+                <td colspan="2"  style=" font-weight: bold;background: #e3e3e3; text-align: right;border-bottom: 1px solid lightgray;">{{ number_format($vob,0) }} </td>
+                <td colspan="1"  style=" font-weight: bold;background: #e3e3e3;text-align: right;border-bottom: 1px solid lightgray;">{{ number_format($vrcvd,0) }} </td>
+                <td colspan="1"  style="font-weight: bold;background: #e3e3e3;text-align: right;border-bottom: 1px solid lightgray;">{{ number_format($vsl,0) }} </td>
+                <td colspan="1"  style="font-weight: bold;background: #e3e3e3;text-align: right;border-bottom: 1px solid lightgray;">{{ number_format($vpr,0) }} </td>
+                <td colspan="1"  style="font-weight: bold;background: #e3e3e3;text-align: right;border-bottom: 1px solid lightgray;">{{ number_format($vsr,0) }} </td>
+                <td colspan="1"  style="font-weight: bold;background: #e3e3e3;text-align: right;border-bottom: 1px solid lightgray;">{{ number_format($vginc,0) }} </td>
+                <td colspan="1"  style="font-weight: bold;background: #e3e3e3;text-align: right;border-bottom: 1px solid lightgray;">{{ number_format($vginc,0) }} </td>
+                <td colspan="1"  style="font-weight: bold;background: #e3e3e3;text-align: right;border-bottom: 1px solid lightgray;">{{ number_format($vgoutc,0) }} </td>
+
 
 
             </tr>
-
-
-
-
-
 
         </tbody>
     </table>

@@ -146,6 +146,10 @@ table{
             {{-- FOR LAST GROUP SUBTOTAL --}}
             {{-- {{ $sob1 = 0 }};{{ $srcvd1 = 0 }};{{ $ssl1 = 0 }};{{ $scb1 = 0 }};{{ $spr1 = 0 }};{{ $ssr1 = 0 }} --}}
 
+            {{-- For Source --}}
+            {{ $mob = 0 }};{{ $mrcvd = 0 }};{{ $msl = 0 }};{{ $mcb = 0 }};{{ $mpr = 0 }};{{ $msr = 0 }}
+
+
 
             @for ($i = 0 ; $i < count($data) ; $i++)
 
@@ -160,17 +164,14 @@ table{
             {{ $sob += $data[$srno]->OBALANCE }};{{ $srcvd += $data[$srno]->PURQTY }};{{ $ssl += $data[$srno]->SALQTY }};
             {{ $spr += $data[$srno]->PURRET }};{{ $ssr += $data[$srno]->SALRET }};{{ $scb += $data[$srno]->CB }}
 
-                {{-- FOR LAST SUBTOTAL  --}}
-            {{-- {{ $sob1 += $data[$i]->OBALANCE }};{{ $srcvd1 += $data[$i]->PURQTY }};{{ $ssl1 += $data[$i]->SALQTY }}; --}}
 
-
-
-
+            {{ $mob += $data[$srno]->OBALANCE }};{{ $mrcvd += $data[$srno]->PURQTY }};{{ $msl += $data[$srno]->SALQTY }};
+            {{ $mpr += $data[$srno]->PURRET }};{{ $msr += $data[$srno]->SALRET }};{{ $mcb += $data[$srno]->CB }}
 
             @if ($data[$i]->Itemgroupe  <> $data[$srno]->Itemgroupe )
 
             <tr>
-                <td colspan="2"  style="font-weight: bold;background: #e3e3e3;text-align: right;border-bottom: 1px solid lightgray;">Sub Total </td>
+                <td colspan="2"  style="font-weight: bold;background: #e3e3e3;text-align: right;border-bottom: 1px solid lightgray;"> Total For {{ $data[$srno]->Itemgroupe }}  </td>
                 <td colspan="2"  style="font-weight: bold;background: #e3e3e3;text-align: right;border-bottom: 1px solid lightgray;">{{ number_format($sob,0) }} </td>
                 <td colspan="1"  style="font-weight: bold;background: #e3e3e3;text-align: right;border-bottom: 1px solid lightgray;">{{ number_format($srcvd,0) }} </td>
                 <td colspan="1"  style="font-weight: bold;background: #e3e3e3;text-align: right;border-bottom: 1px solid lightgray;">{{ number_format($ssl,0) }} </td>
@@ -178,22 +179,39 @@ table{
                 <td colspan="1"  style="font-weight: bold;background: #e3e3e3;text-align: right;border-bottom: 1px solid lightgray;">{{ number_format($ssr,0) }} </td>
                 <td colspan="1"  style="font-weight: bold;background: #e3e3e3;text-align: right;border-bottom: 1px solid lightgray;">{{ number_format($scb,0) }} </td>
             </tr>
-           {{ $sob = 0 }};{{ $srcvd = 0 }};{{ $ssl = 0 }};{{ $scb = 0 }};{{ $spr = 0 }};{{ $ssr = 0 }}
-           {{-- {{ $sob1 = 0 }};{{ $srcvd1 = 0 }};{{ $ssl1 = 0 }};{{ $scb1 = 0 }};{{ $spr1 = 0 }};{{ $ssr1 = 0 }} --}}
+            {{ $sob = 0 }};{{ $srcvd = 0 }};{{ $ssl = 0 }};{{ $scb = 0 }};{{ $spr = 0 }};{{ $ssr = 0 }}
 
+            @if ($data[$i]->matsource_id  == $data[$srno]->matsource_id )
+                    <tr>
+                            <td colspan="9" width="100%" style="text-align:left;font-size:1.2rem;border-bottom: 2px solid rgb(211, 211, 211);"> {{ $data[$i]->Itemgroupe}} </td>
+                    </tr>
+                @endif
+            @endif
+
+            @if ($data[$i]->matsource_id  <> $data[$srno]->matsource_id )
+
+            <tr>
+                <td colspan="2"  style="font-weight: bold;background: #dbcb20;text-align: right;border-bottom: 1px solid lightgray;">Total For {{$data[$srno]->matsource}}  </td>
+                <td colspan="2"  style="font-weight: bold;background: #dbcb20;text-align: right;border-bottom: 1px solid lightgray;">{{ number_format($mob,0) }} </td>
+                <td colspan="1"  style="font-weight: bold;background: #dbcb20;text-align: right;border-bottom: 1px solid lightgray;">{{ number_format($mrcvd,0) }} </td>
+                <td colspan="1"  style="font-weight: bold;background: #dbcb20;text-align: right;border-bottom: 1px solid lightgray;">{{ number_format($msl,0) }} </td>
+                <td colspan="1"  style="font-weight: bold;background: #dbcb20;text-align: right;border-bottom: 1px solid lightgray;">{{ number_format($mpr,0) }} </td>
+                <td colspan="1"  style="font-weight: bold;background: #dbcb20;text-align: right;border-bottom: 1px solid lightgray;">{{ number_format($msr,0) }} </td>
+                <td colspan="1"  style="font-weight: bold;background: #dbcb20;text-align: right;border-bottom: 1px solid lightgray;">{{ number_format($mcb,0) }} </td>
+            </tr>
+            {{ $mob = 0 }};{{ $mrcvd = 0 }};{{ $msl = 0 }};{{ $mcb = 0 }};{{ $mpr = 0 }};{{ $msr = 0 }}
                  <tr>
                         <td colspan="9" width="100%" style="text-align:left;font-size:1.2rem;border-bottom: 2px solid rgb(211, 211, 211);"> {{ $data[$i]->Itemgroupe}} </td>
                 </tr>
             @endif
+
+
             @endif
 
             <tr>
 
                 {{ $vob += $data[$i]->OBALANCE }};{{ $vrcvd += $data[$i]->PURQTY }};{{ $vsl += $data[$i]->SALQTY }}
                 {{ $vpr += $data[$i]->PURRET }};{{ $vsr += $data[$i]->SALRET }};{{ $vcb += $data[$i]->CB }}
-
-
-
 
                 <td style="text-align:center" width="5%">{{ $i+1 }}</td>
                 <td width="35%">{{ $data[$i]->matname}} </td>

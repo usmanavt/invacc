@@ -123,7 +123,7 @@ class ReceiveController  extends Controller
     public function create()
     {
 
-        $result = DB::table('banks')->whereNotIn('id',[1,2])->get();
+        $result = DB::table('banks')->whereNotIn('id',[2])->get();
         $resultArray = $result->toArray();
         $data=compact('resultArray');
 

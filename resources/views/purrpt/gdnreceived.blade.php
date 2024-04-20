@@ -127,7 +127,7 @@ table{
                     Contract No
                 </td>
                 <td>
-                    {{ $data[0]->contract_id }}
+                    {{ $data[0]->continvsno }}
                 </td>
 
             </tr>
@@ -151,6 +151,15 @@ table{
                 <td>
                     {{ $data[0]->contract_date }}
                 </td>
+                <td>
+                    G.R No
+                </td>
+                <td>
+                    {{ $data[0]->grno }}
+                </td>
+
+
+
 
 
             </tr>

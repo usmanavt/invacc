@@ -179,9 +179,14 @@ table{
             {{ $oqtys = 0 }};{{ $ovals = 0 }};{{ $purqtys = 0 }};{{ $pvals = 0 }};{{ $salqtys = 0 }};{{ $svals = 0 }};{{ $purrets = 0 }};
             {{ $prvals = 0 }};{{ $salrets = 0 }};{{ $srvals = 0 }};{{ $cbs = 0 }};{{ $cbs = 0 }};{{ $cbvals = 0 }};{{ $cbvals = 0 }};
 
+            {{-- FOR SUB TOTAL Source --}}
+            {{ $oqtym = 0 }};{{ $ovalm = 0 }};{{ $purqtym = 0 }};{{ $pvalm = 0 }};{{ $salqtym = 0 }};{{ $svalm = 0 }};{{ $purretm = 0 }};
+            {{ $prvalm = 0 }};{{ $salretm = 0 }};{{ $srvalm = 0 }};{{ $cbm = 0 }};{{ $cbm = 0 }};{{ $cbvalm = 0 }};{{ $cbvalm = 0 }};
+
+
 
             @for ($i = 0 ; $i < count($data) ; $i++)
-            @if( $i==0 )
+@if( $i==0 )
 
             <tr>
                 <td colspan="21" width="100%" style="text-align: left;font-size:1.2rem;border-bottom: 2px solid rgb(211, 211, 211);"> {{ $data[$i]->Itemgroupe}} </td>
@@ -195,46 +200,68 @@ table{
                 {{ $salqtys += $data[$srno]->salqty }};{{ $svals += $data[$srno]->sval }};{{ $purrets += $data[$srno]->purret }};{{ $prvals += $data[$srno]->prval }};
                 {{ $salrets += $data[$srno]->salret }};{{ $srvals += $data[$srno]->srval }};{{ $cbs += $data[$i]->cb }};{{ $cbvals += $data[$srno]->cbval }};
 
+                {{-- FOR GRAND TOTAL Source  --}}
+                {{ $oqtym += $data[$srno]->oqty }};{{ $ovalm += $data[$srno]->oval }};{{ $purqtym += $data[$srno]->purqty }};{{ $pvalm += $data[$srno]->pval }};
+                {{ $salqtym += $data[$srno]->salqty }};{{ $svalm += $data[$srno]->sval }};{{ $purretm += $data[$srno]->purret }};{{ $prvalm += $data[$srno]->prval }};
+                {{ $salretm += $data[$srno]->salret }};{{ $srvalm += $data[$srno]->srval }};{{ $cbm += $data[$i]->cb }};{{ $cbvalm += $data[$srno]->cbval }};
 
+            @if ($data[$i]->Itemgroupe  <> $data[$srno]->Itemgroupe)
+                <tr>
+                    <td colspan="3"  style="text-align: right;border-bottom: 1px solid lightgray;background: #e3e3e3;font-weight: bold">Total For {{$data[$srno]->Itemgroupe}}</td>
+                    <td colspan="1"  style="text-align: right;border-bottom: 1px solid lightgray;background: #e3e3e3;font-weight: bold">{{ number_format($oqtys,0) }} </td>
+                    <td colspan="2"  style="text-align: right;border-bottom: 1px solid lightgray;background: #e3e3e3;font-weight: bold">{{ number_format($ovals,0) }} </td>
+                    <td colspan="1"  style="text-align: right;border-bottom: 1px solid lightgray;background: #e3e3e3;font-weight: bold">{{ number_format($purqtys,0) }} </td>
+                    <td colspan="2"  style="text-align: right;border-bottom: 1px solid lightgray;background: #e3e3e3;font-weight: bold">{{ number_format($pvals,0) }} </td>
+                    <td colspan="1"  style="text-align: right;border-bottom: 1px solid lightgray;background: #e3e3e3;font-weight: bold">{{ number_format($salqtys,0) }} </td>
+                    <td colspan="2"  style="text-align: right;border-bottom: 1px solid lightgray;background: #e3e3e3;font-weight: bold">{{ number_format($svals,0) }} </td>
+                    <td colspan="1"  style="text-align: right;border-bottom: 1px solid lightgray;background: #e3e3e3;font-weight: bold">{{ number_format($purrets,0) }} </td>
+                    <td colspan="2"  style="text-align: right;border-bottom: 1px solid lightgray;background: #e3e3e3;font-weight: bold">{{ number_format($prvals,0) }} </td>
+                    <td colspan="1"  style="text-align: right;border-bottom: 1px solid lightgray;background: #e3e3e3;font-weight: bold">{{ number_format($salrets,0) }} </td>
+                    <td colspan="2"  style="text-align: right;border-bottom: 1px solid lightgray;background: #e3e3e3;font-weight: bold">{{ number_format($srvals,0) }} </td>
+                    <td colspan="1"  style="text-align: right;border-bottom: 1px solid lightgray;background: #e3e3e3;font-weight: bold">{{ number_format($cbs,0) }} </td>
+                    <td colspan="2"  style="text-align: right;border-bottom: 1px solid lightgray;background: #e3e3e3;font-weight: bold">{{ number_format($cbvals,0) }} </td>
+                </tr>
 
-        @if ($data[$i]->Itemgroupe  <> $data[$srno]->Itemgroupe)
+                    @if ($data[$i]->matsource_id  == $data[$srno]->matsource_id )
+                         <tr>
+                                <td colspan="21" width="100%" style="text-align:left;font-size:1.2rem;border-bottom: 2px solid rgb(211, 211, 211);"> {{ $data[$i]->Itemgroupe}} </td>
+                        </tr>
+                    @endif
+                        {{-- FOR SUB TOTAL --}}
+                    {{ $oqtys = 0 }};{{ $ovals = 0 }};{{ $purqtys = 0 }};{{ $pvals = 0 }};{{ $salqtys = 0 }};{{ $svals = 0 }};{{ $purrets = 0 }};
+                    {{ $prvals = 0 }};{{ $salrets = 0 }};{{ $srvals = 0 }};{{ $cbs = 0 }};{{ $cbs = 0 }};{{ $cbvals = 0 }};{{ $cbvals = 0 }};
 
-        <tr>
-
-            <td colspan="3"  style="text-align: right;border-bottom: 1px solid lightgray;background: #e3e3e3;font-weight: bold">Total(s)</td>
-            <td colspan="1"  style="text-align: right;border-bottom: 1px solid lightgray;background: #e3e3e3;font-weight: bold">{{ number_format($oqtys,0) }} </td>
-            <td colspan="2"  style="text-align: right;border-bottom: 1px solid lightgray;background: #e3e3e3;font-weight: bold">{{ number_format($ovals,0) }} </td>
-
-            <td colspan="1"  style="text-align: right;border-bottom: 1px solid lightgray;background: #e3e3e3;font-weight: bold">{{ number_format($purqtys,0) }} </td>
-            <td colspan="2"  style="text-align: right;border-bottom: 1px solid lightgray;background: #e3e3e3;font-weight: bold">{{ number_format($pvals,0) }} </td>
-
-            <td colspan="1"  style="text-align: right;border-bottom: 1px solid lightgray;background: #e3e3e3;font-weight: bold">{{ number_format($salqtys,0) }} </td>
-            <td colspan="2"  style="text-align: right;border-bottom: 1px solid lightgray;background: #e3e3e3;font-weight: bold">{{ number_format($svals,0) }} </td>
-
-            <td colspan="1"  style="text-align: right;border-bottom: 1px solid lightgray;background: #e3e3e3;font-weight: bold">{{ number_format($purrets,0) }} </td>
-            <td colspan="2"  style="text-align: right;border-bottom: 1px solid lightgray;background: #e3e3e3;font-weight: bold">{{ number_format($prvals,0) }} </td>
-
-            <td colspan="1"  style="text-align: right;border-bottom: 1px solid lightgray;background: #e3e3e3;font-weight: bold">{{ number_format($salrets,0) }} </td>
-            <td colspan="2"  style="text-align: right;border-bottom: 1px solid lightgray;background: #e3e3e3;font-weight: bold">{{ number_format($srvals,0) }} </td>
-
-            <td colspan="1"  style="text-align: right;border-bottom: 1px solid lightgray;background: #e3e3e3;font-weight: bold">{{ number_format($cbs,0) }} </td>
-            <td colspan="2"  style="text-align: right;border-bottom: 1px solid lightgray;background: #e3e3e3;font-weight: bold">{{ number_format($cbvals,0) }} </td>
-
-        </tr>
-
-             <tr>
-                    <td colspan="21" width="100%" style="text-align:left;font-size:1.2rem;border-bottom: 2px solid rgb(211, 211, 211);"> {{ $data[$i]->Itemgroupe}} </td>
-             </tr>
-            {{-- FOR SUB TOTAL --}}
-            {{ $oqtys = 0 }};{{ $ovals = 0 }};{{ $purqtys = 0 }};{{ $pvals = 0 }};{{ $salqtys = 0 }};{{ $svals = 0 }};{{ $purrets = 0 }};
-            {{ $prvals = 0 }};{{ $salrets = 0 }};{{ $srvals = 0 }};{{ $cbs = 0 }};{{ $cbs = 0 }};{{ $cbvals = 0 }};{{ $cbvals = 0 }};
-
-
+            @endif
 
 
 
-        @endif
-        @endif
+            @if ($data[$i]->matsource_id  <> $data[$srno]->matsource_id )
+                <tr>
+                    <td colspan="3"  style="text-align: right;border-bottom: 1px solid lightgray;background: #8d8d8d;font-weight: bold">Total For {{$data[$srno]->matsource}}</td>
+                    <td colspan="1"  style="text-align: right;border-bottom: 1px solid lightgray;background: #8d8d8d;font-weight: bold">{{ number_format($oqtym,0) }} </td>
+                    <td colspan="2"  style="text-align: right;border-bottom: 1px solid lightgray;background: #8d8d8d;font-weight: bold">{{ number_format($ovalm,0) }} </td>
+                    <td colspan="1"  style="text-align: right;border-bottom: 1px solid lightgray;background: #8d8d8d;font-weight: bold">{{ number_format($purqtym,0) }} </td>
+                    <td colspan="2"  style="text-align: right;border-bottom: 1px solid lightgray;background: #8d8d8d;font-weight: bold">{{ number_format($pvalm,0) }} </td>
+                    <td colspan="1"  style="text-align: right;border-bottom: 1px solid lightgray;background: #8d8d8d;font-weight: bold">{{ number_format($salqtym,0) }} </td>
+                    <td colspan="2"  style="text-align: right;border-bottom: 1px solid lightgray;background: #8d8d8d;font-weight: bold">{{ number_format($svalm,0) }} </td>
+                    <td colspan="1"  style="text-align: right;border-bottom: 1px solid lightgray;background: #8d8d8d;font-weight: bold">{{ number_format($purretm,0) }} </td>
+                    <td colspan="2"  style="text-align: right;border-bottom: 1px solid lightgray;background: #8d8d8d;font-weight: bold">{{ number_format($prvalm,0) }} </td>
+                    <td colspan="1"  style="text-align: right;border-bottom: 1px solid lightgray;background: #8d8d8d;font-weight: bold">{{ number_format($salretm,0) }} </td>
+                    <td colspan="2"  style="text-align: right;border-bottom: 1px solid lightgray;background: #8d8d8d;font-weight: bold">{{ number_format($srvalm,0) }} </td>
+                    <td colspan="1"  style="text-align: right;border-bottom: 1px solid lightgray;background: #8d8d8d;font-weight: bold">{{ number_format($cbm,0) }} </td>
+                    <td colspan="2"  style="text-align: right;border-bottom: 1px solid lightgray;background: #8d8d8d;font-weight: bold">{{ number_format($cbvalm,0) }} </td>
+                </tr>
+                    <tr>
+                            <td colspan="21" width="100%" style="text-align:left;font-size:1.2rem;border-bottom: 2px solid rgb(211, 211, 211);"> {{ $data[$i]->Itemgroupe}} </td>
+                    </tr>
+                    {{-- FOR SUB TOTAL Source --}}
+                    {{ $oqtym = 0 }};{{ $ovalm = 0 }};{{ $purqtym = 0 }};{{ $pvalm = 0 }};{{ $salqtym = 0 }};{{ $svalm = 0 }};{{ $purretm = 0 }};
+                    {{ $prvalm = 0 }};{{ $salretm = 0 }};{{ $srvalm = 0 }};{{ $cbm = 0 }};{{ $cbm = 0 }};{{ $cbvalm = 0 }};{{ $cbvalm = 0 }};
+
+
+            @endif
+
+@endif
 
 
             <tr>
