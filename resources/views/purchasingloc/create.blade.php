@@ -44,7 +44,8 @@
                             </div>
                             <div class="grid grid-cols-12 gap-1 py-2 items-center">
                                 <x-input-date title="G.R Date" id="purdate" name="purdate"  />
-                                <x-input-text title="G.R #" name="purinvsno" class="col-span-2" />
+                                {{-- <x-input-text title="G.R #" name="purinvsno" class="col-span-2" hidden    /> --}}
+                                <x-input-text title="G.R #" name="purseqid" id="purseqid" value="{{$maxpurseqid}}"   />
                                 {{-- <input class="checked:bg-blue-500 checked:border-blue-500 focus:outline-none" type="checkbox" name="per" id="per" onclick="EnableDisableTextBox(this)" > --}}
 
                                 {{-- <x-input-text title="P.O Seq.#" name="poseqno" id="poseqno" value="{{$maxpurseqid}}"    placeholder="poseqno" required   /> --}}
@@ -56,7 +57,7 @@
                                 <textarea name="remarks" id="remarks" cols="10" rows="2" maxlength="200" class="col-span-2" class="rounded"></textarea>
 
                             </div>
-                            <x-input-text title="" name="purseqid" id="purseqid" value="{{$maxpurseqid}}"  hidden />
+
                         </fieldset>
 
                         {{-- <fieldset class="border px-4 py-2 rounded">
@@ -257,7 +258,7 @@
             continvsno.value=data.invoiceno
             contract_date.value=data.invoice_date
             supname.value=data.supname
-            purinvsno.value=data.invoiceno
+            // purinvsno.value=data.invoiceno
 
 
             // quotation_id = data.id
@@ -680,16 +681,16 @@ var updateValues = (cell) => {
         function validateForm()
         {
 
-             var purinvsno = document.getElementById("purinvsno")
+            //  var purinvsno = document.getElementById("purinvsno")
             // var poseqno = document.getElementById("poseqno")
             var per= document.getElementById("per");
 
-            if(purinvsno.value === '')
-            {
-                showSnackbar("Invoice No Required","error");
-                purinvsno.focus();
-                return;
-            }
+            // if(purinvsno.value === '')
+            // {
+            //     showSnackbar("Invoice No Required","error");
+            //     purinvsno.focus();
+            //     return;
+            // }
 
 
 
@@ -718,7 +719,7 @@ var updateValues = (cell) => {
 
             var data = { 'purchasingloc' : dynamicTableData,
         'supplier_id': supplier_id,'contract_id':contract_id.value,'contract_date':contract_date.value,'purseqid':purseqid.value,
-                          'purdate':purdate.value,'purinvsno':purinvsno.value,'remarks':remarks.value      };
+                          'purdate':purdate.value,'continvsno':continvsno.value,'remarks':remarks.value      };
 
             // All Ok - Proceed
             fetch(@json(route('purchasingloc.store')),{

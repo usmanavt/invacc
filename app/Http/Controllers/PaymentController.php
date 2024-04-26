@@ -61,6 +61,29 @@ class PaymentController  extends Controller
     //     return $localpurchase;
     // }
 
+
+
+    public function headlistp(Request $request)
+    {
+        //  dd($request->all());
+        $head_id = $request->head_id;
+        // procpaymentmaster(32)
+        return  DB::select('call procpaymentmaster(?)',array($head_id));
+
+    }
+
+    public function mseqnop(Request $request)
+    {
+        //  dd($request->all());
+        $head_id = $request->head_id;
+        $maxposeqno = DB::table('bank_transactions')->select('*')->max('transno')+1;
+        return  $maxposeqno;
+
+    }
+
+
+
+
     public function getMaster(Request $request)
     {
 
@@ -103,7 +126,7 @@ class PaymentController  extends Controller
         $contracts = DB::table('vwpaymentmaster')
         // ->join('suppliers', 'contracts.supplier_id', '=', 'suppliers.id')
         // ->select('contracts.*', 'suppliers.title')
-        ->where('supname', 'like', "%$search%")
+        // ->where('supname', 'like', "%$search%")
         // ->orWhere('prno', 'like', "%$search%")
         ->orderBy($field,$dir)
         ->paginate((int) $size);
@@ -174,19 +197,14 @@ class PaymentController  extends Controller
         }
 
 
-
-
-
-
-
         DB::beginTransaction();
         try {
             $ci = new BankTransaction();
-
+            // hdid,subhdid
             // dd($request->per());
             $ci->bank_id = $request->bank_id;
-            $ci->head_id = $request->head_id;
-            $ci->subhead_id = $request->supplier_id;
+            $ci->head_id = $request->hdid;
+            $ci->subhead_id = $request->subhdid;
             $ci->impgdno = $request->impgdno;
             $ci->cusinvid = $request->cusinvid;
             $ci->pmntto = $request->pmntto;
@@ -211,7 +229,7 @@ class PaymentController  extends Controller
             $ci->description = $request->description;
             $ci->transno = $request->transno;
             $ci->advance = $request->advtxt;
-            $ci->supname = $request->supname;
+            $ci->supname = $request->shname;
 
 
             $ci->save();
@@ -358,17 +376,17 @@ class PaymentController  extends Controller
                     SELECT suppid,invsid,SUM(invoiceamount) AS invoicebal FROM
                     (
                     SELECT b.id AS suppid,a.id AS invsid,case WHEN b.source_id=2 then a.tval else  total end AS invoiceamount FROM commercial_invoices AS a
-                    INNER JOIN suppliers AS b ON a.supplier_id=b.id  AND b.id=$request->supplier_id AND a.id in(  SELECT invoice_id FROM payment_details WHERE paymentid=$ci->id )
+                    INNER JOIN suppliers AS b ON a.supplier_id=b.id  AND b.id=$request->subhdid AND a.id in(  SELECT invoice_id FROM payment_details WHERE paymentid=$ci->id )
                     UNION all
                      SELECT a.subhead_id,b.invoice_id,b.payedusd*-1 AS payment
-                    FROM bank_transactions AS a INNER join payment_details AS b ON a.id=b.paymentid and a.subhead_id =$request->supplier_id
+                    FROM bank_transactions AS a INNER join payment_details AS b ON a.id=b.paymentid and a.subhead_id =$request->subhdid
                     AND b.invoice_id in(  SELECT invoice_id FROM payment_details WHERE paymentid=$ci->id )
                    UNION ALL
-                    SELECT supplier_id,commercial_invoice_id,prtamount*-1 AS retqty FROM purchase_returns WHERE supplier_id =$request->supplier_id
+                    SELECT supplier_id,commercial_invoice_id,prtamount*-1 AS retqty FROM purchase_returns WHERE supplier_id =$request->subhdid
                     AND commercial_invoice_id in(  SELECT commercial_invoice_id FROM purchase_returns WHERE id=$ci->id )
                    UNION ALL
                     SELECT a.subhead_id, b.id AS  invoice_id,a.amount_fc AS Receivedqty
-                    FROM bank_transactions AS a INNER join commercial_invoices AS b ON a.supinvid=b.invoiceno AND a.subhead_id =$request->supplier_id
+                    FROM bank_transactions AS a INNER join commercial_invoices AS b ON a.supinvid=b.invoiceno AND a.subhead_id =$request->subhdid
                     AND b.id  in(  SELECT invoice_id FROM payment_details WHERE paymentid=$ci->id )
                    ) AS w GROUP BY suppid,invsid
                 ) x ON c.id = x.invsid
@@ -420,8 +438,10 @@ class PaymentController  extends Controller
 
 
             DB::commit();
-            Session::flash('success','Payment Information Saved');
             return response()->json(['success'],200);
+            return redirect()->back();
+            // Session::flash('success','Payment Information Saved');
+            // return response()->json(['success'],200);
             // return redirect()->back();
             // Session::flash('success','Bank Transaction created');
             // return redirect()->route('banktransaction.create')->with('message','Operation Successful !');;

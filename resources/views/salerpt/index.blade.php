@@ -136,10 +136,27 @@
 
                                 <fieldset class="border px-4 py-2 rounded w-full">
                                     <legend>Customer Selection</legend>
-                                    <div class="flex justify-between py-1">
+
+                                    {{-- <div class="flex justify-between py-1">
                                         <select  name="head_id" id="head_id" required class="w-full" disabled onchange="headSelected()">
                                         </select>
+                                    </div> --}}
+
+                                    <div class="w-96 relative grid grid-cols-4 gap-1 px-10 py-5  "   onclick="event.stopImmediatePropagation();" >
+                                        {{-- <label for="autocompleted1">Sub Head<x-req /></label> --}}
+                                        <input id="autocompleted1" title="Head Name" placeholder="Select Sub Head Name" class=" px-5 py-3 w-full border border-gray-400 rounded-md"
+                                        onkeyup="onkeyUp1(event)" />
+                                        <div>
+                                            <select
+                                                id="head_id" name="head_id" size="20" onchange="headSelected()"  class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full h-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                                            </select>
+                                        </div>
                                     </div>
+
+
+
+
+
                                 </fieldset>
 
                                 <fieldset class="border px-4 py-2 rounded w-full">
@@ -1049,6 +1066,86 @@ const getSubheadVoucherData14 = async (value) =>{
         }
 
     }
+
+
+// SEARCNING **************************************
+    list=@json($resultArray);
+// const contries1 = myarray1;
+function onkeyUp1(e)
+{
+    let keyword= e.target.value;
+    var head_id = document.getElementById("head_id");
+    head_id.classList.remove("hidden");
+
+    let filteredContries=list.filter((c)=>c.custname.toLowerCase().includes(keyword.toLowerCase()));
+    // console.log($mychqno);
+    renderOptions1(filteredContries);
+
+}
+
+
+var mychqno=[] ;
+function renderOptions1(sup){
+
+    let dropdownEl=document.getElementById("head_id");
+
+
+                //  $mychqdt= [];
+                //  $mychqno=[];
+                //  $mnhdid=[];
+                dropdownEl.length = 0
+                // a=0;
+                sup.forEach( e =>  {
+                    addSelectElement(dropdownEl,e.id,e.custname )
+                    // a=a+1;
+                    // $shid =e.id;
+                    // $mnhdid =e.head_id;
+                    // $mychqdt =e.cheque_date;
+                    //  $mychqno[e.id]=[ { chqno:e.cheque_no,chqdt:e.cheque_date,mychqamount:e.received,mychkid:e.cheque_id }  ];
+
+                    });
+
+
+}
+
+document.addEventListener("click" , () => {
+    hidedropdown();
+});
+
+
+function hidedropdown()
+{
+    var head_id = document.getElementById("head_id");
+    head_id.classList.add("hidden");
+}
+
+
+
+
+head_id.addEventListener("keyup", function(event) {
+if (event.keyCode === 13) {
+// event.preventDefault();
+head_id.click();
+
+}
+});
+
+
+
+head_id.addEventListener("click", () => {
+
+let input1= document.getElementById("autocompleted1");
+let hdid= document.getElementById("hdid");
+
+
+input1.value=head_id.options[head_id.selectedIndex].text;
+// hdid.value=head_id.options[head_id.selectedIndex].value;
+
+hidedropdown();
+
+});
+
+
 
 
 

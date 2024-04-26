@@ -38,7 +38,7 @@
 
                             <x-input-text title="Purchase.Invoice ID" name="contract_id" id="contract_id" value="{{ $purchasing->contract_id }}" disabled  />
                             <x-input-date title="Purchase.Invoice Date" id="contract_date" name="contract_date" value="{{ $purchasing->contract_date }}"  disabled />
-                            <x-input-text title="Purchase.Invice#" id="continvsno" name="continvsno" value="{{ $purchasing->continvsno }}"  disabled />
+                            <x-input-text title="Purchase.Invice#" id="continvsno" name="continvsno" value="{{ $purchasing->purinvsno }}"  disabled />
                             <x-input-numeric title="" name="purid" id="purid" value="{{ $purchasing->id }}" hidden  />
 
 
@@ -46,8 +46,8 @@
                         </div>
                         <div class="grid grid-cols-12 gap-1 py-2 items-center">
                             <x-input-date title="G.R Date" id="purdate" name="purdate" value="{{ $purchasing->purdate }}"  />
-                            <x-input-text title="G.R #" name="purinvsno" value="{{ $purchasing->purinvsno }}" />
-                            <x-input-text title="" name="purseqid" id="purseqid" value="{{ $purchasing->purseqid }}"  hidden />
+                            {{-- <x-input-text title="G.R #" name="purseqid" id= "purseqid" value="{{ $purchasing->purseqid }}" /> --}}
+                            <x-input-text title="G.R No" name="purseqid" id="purseqid" value="{{ $purchasing->purseqid }}"   />
                             {{-- <input class="checked:bg-blue-500 checked:border-blue-500 focus:outline-none" type="checkbox" name="per" id="per" onclick="EnableDisableTextBox(this)" > --}}
 
 
@@ -507,7 +507,7 @@ function validateForm()
     var sid = document.getElementById("supplier_id");
         var supplier_id = sid.options[sid.selectedIndex];
         var per= document.getElementById("per");
-        var purinvsno = document.getElementById("purinvsno")
+        // var purinvsno = document.getElementById("purinvsno")
 
 
     // Required
@@ -530,12 +530,12 @@ function validateForm()
         //     return;
         // }
 
-        if(purinvsno.value == "")
-        {
-            showSnackbar("Please add prno");
-            purinvsno.focus();
-            return;
-        }
+        // if(purinvsno.value == "")
+        // {
+        //     showSnackbar("Please add prno");
+        //     purinvsno.focus();
+        //     return;
+        // }
 
         // if(customer_id.value == 0)
         // {
@@ -591,7 +591,7 @@ function validateForm()
 
     var data = { 'purchasingloc' : dynamicTableData,
         'supplier_id': supplier_id.value,'contract_id':contract_id.value,'contract_date':contract_date.value,'purseqid':purseqid.value,
-                          'purdate':purdate.value,'purinvsno':purinvsno.value,'purid':purid.value,'remarks':remarks.value      };
+                          'purdate':purdate.value,'continvsno':continvsno.value,'purid':purid.value,'remarks':remarks.value      };
 
 
 

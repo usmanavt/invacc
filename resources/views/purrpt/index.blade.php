@@ -6,7 +6,7 @@
     </x-slot>
 
     <div class="py-4">
-        <div class="max-w-7xl mx-auto">
+        <div class="max-w-full mx-auto">
             <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
                 <div class="p-6 bg-white border-b border-gray-200">
 
@@ -16,6 +16,8 @@
                         <div class="flex flex-col md:flex-row flex-wrap gap-2 justify-center">
                             <fieldset class="border px-4 py-2 rounded">
                                 <legend>Report Type</legend>
+                                {{-- <x-input-text title="hdid" name="hdid" id="hdid" /> --}}
+
                                 <div>
                                     <input type="radio" name="report_type" value="glhw" required onchange="checkReportType('glhw')">
                                     <label for="">CONTRACTS </label>
@@ -23,8 +25,18 @@
 
                                 <div>
                                     <input type="radio" name="report_type" value="gdnrcvd" required onchange="checkReportType('gdnrcvd')" >
-                                    <label for="">GOODS RECEIPT NOTE ( GRN ) </label>
+                                    <label for="">GOODS RECEIPT NOTE IMPORTED ( GRN ) </label>
                                 </div>
+
+                                <div>
+                                    <input type="radio" name="report_type" value="gdnrcvdlocal" required onchange="checkReportType('gdnrcvdlocal')" >
+                                    <label for="">GOODS RECEIPT NOTE LOCAL ( GRN ) </label>
+                                </div>
+
+
+
+
+
 
                                 <div>
                                     <input type="radio" name="report_type" value="impcominvs" required onchange="checkReportType('impcominvs')">
@@ -187,14 +199,33 @@
                                     </div>
 
                                 </fieldset>
-                                <x-input-text title="Searching" name="srch" id="srch"/>
-                                <fieldset class="border px-4 py-2 rounded w-full">
+                                {{-- <x-input-text title="Searching" name="srch" id="srch"/> --}}
+
+
+                                {{-- <fieldset class="border px-4 py-2 rounded w-full">
                                     <legend>Supplier Selection</legend>
                                     <div class="flex justify-between py-1">
                                         <select  name="head_id" id="head_id" required class="w-full"  onchange="headSelected()">
                                         </select>
                                     </div>
-                                </fieldset>
+                                </fieldset> --}}
+
+                                <div class="w-96 relative grid grid-cols-4 gap-1 px-10 py-5  "   onclick="event.stopImmediatePropagation();" >
+                                    {{-- <label for="autocompleted1">Sub Head<x-req /></label> --}}
+                                    <input id="autocompleted1" title="Head Name" placeholder="Select Sub Head Name" class=" px-5 py-3 w-full border border-gray-400 rounded-md"
+                                    onkeyup="onkeyUp1(event)" />
+                                    <div>
+                                        <select
+                                            id="head_id" name="head_id" size="20" onchange="headSelected()"  class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full h-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                                        </select>
+                                    </div>
+                                </div>
+
+
+
+
+
+
 
                                 <fieldset class="border px-4 py-2 rounded w-full">
                                     <legend>Inoices Selection <span class="text-xs text-mute">shift & click to select multiple items</span></legend>
@@ -279,6 +310,8 @@
 
 
     const funcpurcat = @json(route('purrpt.funcpurcat'));
+    const funcpurcatlocal = @json(route('purrpt.funcpurcatlocal'));
+
     const dutycategory = @json(route('purrpt.dutycategory'));
     const pnddutycategory = @json(route('purrpt.pnddutycategory'));
     const pndcontractcategory = @json(route('purrpt.pndcontractcategory'));
@@ -398,11 +431,6 @@ const getSubheadVoucherData8 = async (value) =>{
 
 
 
-
-
-
-
-
     case 'gdnrcvd':
             //  console.log(todate.value)
             fetch(funcpurcat + `?todate=${todate.value}&fromdate=${fromdate.value}&head=${value}`,{
@@ -427,19 +455,47 @@ const getSubheadVoucherData8 = async (value) =>{
                 break;
 
 // FOR CONTRACT FILL
-const getSubheadVoucherData2 = async (value) =>{
-        let data = await fetch(funcpurcat + `?todate=${todate.value}&fromdate=${fromdate.value}&head=${value}`,{
-            method:"GET",
-            headers: { 'Accept':'application/json','Content-type':'application/json'},
-            })
-            .then(response => response.json())
-            .then( data => { return data })
-            .catch(error => console.error(error))
-    }
-    const getGdnrcvd =async  (value) => {
-        const gdnrcvd = await getSubheadVoucherData2(value)
-        return gdnrcvd
-    }
+// const getSubheadVoucherData2 = async (value) =>{
+//         let data = await fetch(funcpurcat + `?todate=${todate.value}&fromdate=${fromdate.value}&head=${value}`,{
+//             method:"GET",
+//             headers: { 'Accept':'application/json','Content-type':'application/json'},
+//             })
+//             .then(response => response.json())
+//             .then( data => { return data })
+//             .catch(error => console.error(error))
+//     }
+//     const getGdnrcvd =async  (value) => {
+//         const gdnrcvd = await getSubheadVoucherData2(value)
+//         return gdnrcvd
+//     }
+
+
+    case 'gdnrcvdlocal':
+            //  console.log('21212')
+            fetch(funcpurcatlocal + `?todate=${todate.value}&fromdate=${fromdate.value}&head=${value}`,{
+                    method:"GET",
+                    headers: { 'Accept':'application/json','Content-type':'application/json'},
+                    })
+                    .then(response => response.json())
+                    .then( data => {
+                        if(data.length > 0)
+                        {
+
+                            data.forEach(e => {
+                                addSelectElement(subhead,e.Subhead,e.title)
+                            });
+                            subhead.setAttribute('required','')
+                            subhead.removeAttribute('disabled','')
+                        }else{
+                            subhead.removeAttribute('required','')
+                            subhead.setAttribute('disabled','')
+                        }
+                    })
+                    .catch(error => console.error(error))
+                break;
+
+
+
 
     case 'dtyclrnc':
             //  console.log(todate.value)
@@ -1072,6 +1128,27 @@ const getCominvsimpVoucherData = async (value) =>{
                 headSelected()
                 break;
 
+                case 'gdnrcvdlocal':
+                // Show Head
+                rptType = 'gdnrcvdlocal'
+                // head.setAttribute('required','')
+                // head.disabled = false
+                // head.length = 0
+                subhead.removeAttribute('required')
+                subhead.disabled = true
+                subhead.length = 0
+                // heads.forEach(e => {
+                //     addSelectElement(head,e.id,e.title)
+                // });
+                headSelected()
+                break;
+
+
+
+
+
+
+
                 case 'dtyclrnc':
                 // Show Head
                 rptType = 'dtyclrnc'
@@ -1343,69 +1420,62 @@ const getCominvsimpVoucherData = async (value) =>{
                 // sources.forEach(e => {
                 //     addSelectElement(source,e.id,e.title)
                 // });
+                hidedropdown();
 
-                var sid = document.getElementById("source_id");
-    var source_id = sid.options[sid.selectedIndex];
+//     var sid = document.getElementById("source_id");
+//     var source_id = sid.options[sid.selectedIndex];
+//     const value = source_id.value
 
-
-    const value = source_id.value
-
-//   console.info(value)
-  //  const value = 6
-fetch(funcgetsuplr + `?source_id=${value} `,{
-            method:"GET",
-            headers: { 'Accept':'application/json','Content-type':'application/json'},
-            })
-            .then(response => response.json())
-            .then( data => {
-                if(data.length > 0)
-                {
-
-
-                //     head.length = 0
-                // heads.forEach(e => {
-
-                //     addSelectElement(head,e.id,e.title)
-                // });
+// //   console.info(value)
+//   //  const value = 6
+// fetch(funcgetsuplr + `?source_id=${value} `,{
+//             method:"GET",
+//             headers: { 'Accept':'application/json','Content-type':'application/json'},
+//             })
+//             .then(response => response.json())
+//             .then( data => {
+//                 if(data.length > 0)
+//                 {
 
 
-                head.length = 0
-                    let a = 0;
-                    data.forEach(e => {
+//                 //     head.length = 0
+//                 // heads.forEach(e => {
 
-                        a += 1;
-                        addSelectElement(head,e.id,e.title)
-                    });
-                    // heads.setAttribute('required','')
-                    // heads.removeAttribute('disabled','')
-                }else{
-                    // heads.removeAttribute('required','')
-                    // heads.setAttribute('disabled','')
-                }
-            })
-            .catch(error => console.error(error))
-        // break;
-
-// FOR CONTRACT FILL
-const getSubheadVoucherData1 = async (value) =>{
-let data = await fetch(funcgetsuplr + `?source_id=${value} `,{
-    method:"GET",
-    headers: { 'Accept':'application/json','Content-type':'application/json'},
-    })
-    .then(response => response.json())
-    .then( data => { return data })
-    .catch(error => console.error(error))
-}
-const getFuncgetsuplr =async  (value) => {
-const Funcgetsuplr = await getSubheadVoucherData1(value)
-return Funcgetsuplr
-}
+//                 //     addSelectElement(head,e.id,e.title)
+//                 // });
 
 
+//                 head.length = 0
+//                     let a = 0;
+//                     data.forEach(e => {
 
+//                         a += 1;
+//                         addSelectElement(head,e.id,e.title)
+//                     });
+//                     // heads.setAttribute('required','')
+//                     // heads.removeAttribute('disabled','')
+//                 }else{
+//                     // heads.removeAttribute('required','')
+//                     // heads.setAttribute('disabled','')
+//                 }
+//             })
+//             .catch(error => console.error(error))
+//         // break;
 
-
-
+// // FOR CONTRACT FILL
+// const getSubheadVoucherData1 = async (value) =>{
+// let data = await fetch(funcgetsuplr + `?source_id=${value} `,{
+//     method:"GET",
+//     headers: { 'Accept':'application/json','Content-type':'application/json'},
+//     })
+//     .then(response => response.json())
+//     .then( data => { return data })
+//     .catch(error => console.error(error))
+// }
+// const getFuncgetsuplr =async  (value) => {
+// const Funcgetsuplr = await getSubheadVoucherData1(value)
+// return Funcgetsuplr
+// }
 
 
     });
@@ -1437,13 +1507,14 @@ fetch(funcgetsuplr + `?source_id=${value} `,{
                 // });
 
 
-                head.length = 0
+                head_id.length = 0
                 subhead.length=0
                     let a = 0;
-                    data.forEach(e => {
+                    list=data;
+                    list.forEach(e => {
 
                         a += 1;
-                        addSelectElement(head,e.id,e.title)
+                        addSelectElement(head_id,e.id,e.title)
                     });
                     // heads.setAttribute('required','')
                     // heads.removeAttribute('disabled','')
@@ -1474,14 +1545,6 @@ return Funcgetsuplr
 
 
 
-head_id.addEventListener("change", () => {
-
-
-
-
-
-
-});
 
 function imppur(imppurf2) {
         var p5 = document.getElementById("p5");
@@ -1517,22 +1580,183 @@ function imppur(imppurf2) {
 
     }
 
-    srch.onblur=function(){
-    //  console.log('dfadsfasf');
+//     srch.onblur=function(){
+//     //  console.log('dfadsfasf');
 
 
-    var sid = document.getElementById("head_id");
-    var head_id = sid.options[sid.selectedIndex];
-    var xyz=head_id.data.value;
-    const subheadsList = [];
-    xyz.forEach(e => {
-                        subheadsList.push({value:e.title, label:e.title})
-                    })
+//     var sid = document.getElementById("head_id");
+//     var head_id = sid.options[sid.selectedIndex];
+//     var xyz=head_id.data.value;
+//     const subheadsList = [];
+//     xyz.forEach(e => {
+//                         subheadsList.push({value:e.title, label:e.title})
+//                     })
 
-    // const valuess = head_id.value;
-    console.log({subheadsList});
+//     // const valuess = head_id.value;
+//     // console.log({subheadsList});
+
+// }
+
+
+
+
+// For Supplier List load
+
+
+list=@json($resultArray);
+// const contries1 = myarray1;
+function onkeyUp1(e)
+{
+    let keyword= e.target.value;
+    var head_id = document.getElementById("head_id");
+    head_id.classList.remove("hidden");
+
+    let filteredContries=list.filter((c)=>c.supname.toLowerCase().includes(keyword.toLowerCase()));
+    // console.log($mychqno);
+    renderOptions1(filteredContries);
 
 }
+
+
+var mychqno=[] ;
+function renderOptions1(sup){
+
+    let dropdownEl=document.getElementById("head_id");
+
+
+                //  $mychqdt= [];
+                //  $mychqno=[];
+                //  $mnhdid=[];
+                dropdownEl.length = 0
+                // a=0;
+                sup.forEach( e =>  {
+                    addSelectElement(dropdownEl,e.id,e.supname )
+                    // a=a+1;
+                    // $shid =e.id;
+                    // $mnhdid =e.head_id;
+                    // $mychqdt =e.cheque_date;
+                    //  $mychqno[e.id]=[ { chqno:e.cheque_no,chqdt:e.cheque_date,mychqamount:e.received,mychkid:e.cheque_id }  ];
+
+                    });
+
+
+}
+
+document.addEventListener("click" , () => {
+    hidedropdown();
+});
+
+
+function hidedropdown()
+{
+    var head_id = document.getElementById("head_id");
+    head_id.classList.add("hidden");
+}
+
+
+
+
+head_id.addEventListener("keyup", function(event) {
+if (event.keyCode === 13) {
+// event.preventDefault();
+head_id.click();
+
+}
+});
+
+
+
+head_id.addEventListener("click", () => {
+
+let input1= document.getElementById("autocompleted1");
+let hdid= document.getElementById("hdid");
+
+
+input1.value=head_id.options[head_id.selectedIndex].text;
+// hdid.value=head_id.options[head_id.selectedIndex].value;
+
+hidedropdown();
+
+});
+
+
+
+
+
+
+// document.onkeydown=function(e){
+//         if(e.ctrlKey && e.which === 83){
+//         submitbutton.click();
+//         return false;
+//     }
+// }
+
+
+
+source_id.addEventListener("change", () => {
+
+    var sid = document.getElementById("source_id");
+    var source_id = sid.options[sid.selectedIndex];
+    const value = source_id.value
+    // console.log(value);
+    let dropdownEl=document.getElementById("head_id");
+    autocompleted1.value='';
+    dropdownEl.options.length = 0 // Reset List
+        fetch(funcgetsuplr + `?source_id=${value} `,{
+            method:"GET",
+            headers: { 'Accept':'application/json','Content-type':'application/json'},
+            })
+            .then(response => response.json())
+            .then( data => {
+                if(data.length > 0)
+                {
+
+                    // console.log(data);
+                //     head.length = 0
+                // heads.forEach(e => {
+
+                //     addSelectElement(head,e.id,e.title)
+                // });
+
+
+                // head.length = 0
+                // subhead.length=0
+                //     let a = 0;
+                    data.forEach(e => {
+                        addSelectElement(dropdownEl,e.id,e.supname)
+                    });
+                    // heads.setAttribute('required','')
+                    // heads.removeAttribute('disabled','')
+                }else{
+                    data.forEach(e => {
+                        addSelectElement(dropdownEl,e.id,e.supname)
+                    });
+
+
+                }
+            })
+            .catch(error => console.error(error))
+        // break;
+
+// FOR CONTRACT FILL
+// const getSubheadVoucherData1 = async (value) =>{
+// let data = await fetch(funcgetsuplr + `?source_id=${value} `,{
+//     method:"GET",
+//     headers: { 'Accept':'application/json','Content-type':'application/json'},
+//     })
+//     .then(response => response.json())
+//     .then( data => { return data })
+//     .catch(error => console.error(error))
+// }
+// const getFuncgetsuplr =async  (value) => {
+// const Funcgetsuplr = await getSubheadVoucherData1(value)
+// return Funcgetsuplr
+// }
+
+});
+
+
+
 
 
 

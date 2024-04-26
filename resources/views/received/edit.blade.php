@@ -70,7 +70,7 @@
                         </div>
 
                         <div class="grid grid-cols-12 gap-2 py-2 items-center">
-                            <x-input-numeric title="Amount(USD)" name="amount_fc" id="amount_fc" class="col-span-2" value="{{ $banktransaction->amount_fc }}"      />
+                            <x-input-numeric title="Amount(USD)" name="amount_fc" id="amount_fc" class="col-span-2" onkeyup="chngpkr(event)" value="{{ $banktransaction->amount_fc }}"      />
 
 
                                 {{-- <label for="">
@@ -84,9 +84,9 @@
                                     </label>
                                 <input class="checked:bg-blue-500 checked:border-blue-500 focus:outline-none"  type="checkbox" name="adv" id="adv" @if( $banktransaction->advance==1  )  checked else unchecked @endif    onclick="advpayment(this)" > --}}
 
-                                <x-input-numeric title="conversion_rate" name="conversion_rate" id="conversion_rate" class="col-span-2"  value="{{ $banktransaction->conversion_rate }}" disabled   />
+                                <x-input-numeric tabindex="-1" title="conversion_rate" name="conversion_rate" id="conversion_rate" onkeyup="chngpkr(event)" class="col-span-2"  value="{{ $banktransaction->conversion_rate }}"    />
                                 <x-input-numeric title="Amount(pkr)" name="amount_pkr" id="amount_pkr" class="col-span-2"  value="{{ $banktransaction->amount_pkr }}" disabled />
-                                 <input class="checked:bg-blue-500 checked:border-blue-500 focus:outline-none " class="col-span-2"  type="checkbox" name="per" id="per"   onclick="EnableDisableTextBox(this)" >
+                                 <input tabindex="-1" class="checked:bg-blue-500 checked:border-blue-500 focus:outline-none " class="col-span-2"  type="checkbox" name="per" id="per"   onclick="EnableDisableTextBox(this)" >
                                  {{-- @if( $banktransaction->invslvl==1  )  checked else unchecked @endif  --}}
                                  <x-input-numeric title="" name="advtxt" id="advtxt"    value="{{ $banktransaction->advance }}" hidden    />
                                 <x-input-numeric title="" name="head_id" class="col-span-2" value="{{ $banktransaction->head_id}}" hidden  />
@@ -98,7 +98,7 @@
                                     </label>
                                 <textarea name="description" id="description" cols="150" rows="2" maxlength="150" class="col-span-2" required class="rounded"> {{ $banktransaction->description }} </textarea>
                                 <x-input-text title="Supp.Invoice No" name="supinvid" id="supinvid" class="col-span-2" value="{{ $banktransaction->supinvid }}"    disabled     />
-                                <input class="checked:bg-blue-500 checked:border-blue-500 focus:outline-none"  type="checkbox" name="invid" id="invid" onclick="enbldspl(this)" >
+                                <input tabindex="-1" class="checked:bg-blue-500 checked:border-blue-500 focus:outline-none"  type="checkbox" name="invid" id="invid" onclick="enbldspl(this)" >
 
                             </div>
 
@@ -630,15 +630,25 @@ function EnableDisableTextBox(per) {
 
     // }
 
-    amount_fc.onblur=function(){
+//     amount_fc.onblur=function(){
+//     amount_pkr.value=(amount_fc.value * conversion_rate.value).toFixed(0);
+//     // bankntotal.value= ( Number(100)-Number(discntamt.value))+Number(exataxoffie.value) +Number(otherchrgs.value)  ;
+//    }
+
+//    conversion_rate.onblur=function(){
+//     amount_pkr.value=(amount_fc.value * conversion_rate.value).toFixed(0);
+//     // bankntotal.value= ( Number(100)-Number(discntamt.value))+Number(exataxoffie.value) +Number(otherchrgs.value)  ;
+//    }
+
+
+function chngpkr()
+   {
+
     amount_pkr.value=(amount_fc.value * conversion_rate.value).toFixed(0);
-    // bankntotal.value= ( Number(100)-Number(discntamt.value))+Number(exataxoffie.value) +Number(otherchrgs.value)  ;
+
    }
 
-   conversion_rate.onblur=function(){
-    amount_pkr.value=(amount_fc.value * conversion_rate.value).toFixed(0);
-    // bankntotal.value= ( Number(100)-Number(discntamt.value))+Number(exataxoffie.value) +Number(otherchrgs.value)  ;
-   }
+
 
 
    edtpw.onblur=function(){

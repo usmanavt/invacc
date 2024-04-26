@@ -91,85 +91,85 @@
 
         columns:[
             //  Detail Data
-            {formatter:hideIcon, hozAlign:"center", title:"Details",headerSort:false, cellClick:function(e, row, formatterParams){
-                let tableHolder = document.getElementById("subTable" + row.getData().id + "");
-                tableHolder.classList.toggle('hide-subtable');
-                var r = row.getElement() //  Get Info About Cell
-                if(tableHolder.classList.contains('hide-subtable'))
-                {
-                    r.childNodes[0].classList.remove('fa-eye-slash','text-gray-500')
-                    r.childNodes[0].classList.add('fa-eye','text-gray-400')
-                }
-                else {
-                    r.childNodes[0].classList.add('fa-eye-slash','text-gray-500')
-                    r.childNodes[0].classList.remove('fa-eye','text-gray-400')
-                }
-                subTable = new Tabulator(tableHolder, {
-                    layout:"fitData",                       //fit columns to width of table
-                    responsiveLayout:"collapse",            //hide columns that dont fit on the table
-                    index:'id',                             //Table Row Id
-                    placeholder:"No Data Available",        //Placeholder text for empty table
-                    // Pagination
-                    pagination:"remote",                    //paginate the data
-                    paginationSize:10,                      //starting page size
-                    paginationSizeSelector:[10,25,50,100],  //  Page Size Selector
-                    ajaxParams: function(){
-                        return {id:row.getData().id};
-                    },
-                    ajaxURL: getDetails,
-                    columns: [
-                        {title: "material_title",field: "material_title" ,headerVertical:true,},
-                        {title: "pcs",field: "pcs" ,headerVertical:true,},
-                        {title: "gdswt",field: "gdswt" ,headerVertical:true,},
-                        {title: "inkg",field: "inkg" ,headerVertical:true,},
-                        {title: "gdsprice",field: "gdsprice" ,headerVertical:true,},
-                        {title: "otherexpenses",field: "otherexpenses" ,headerVertical:true,},
-                        {title: "amtindollar",field: "amtindollar" ,headerVertical:true,},
-                        {title: "amtinpkr",field: "amtinpkr" ,headerVertical:true,},
-                        {title: "length",field: "length" ,headerVertical:true,},
-                        {title: "itmratio",field: "itmratio" ,headerVertical:true,},
-                        {title: "insuranceperitem",field: "insuranceperitem" ,headerVertical:true,},
-                        {title: "amountwithoutinsurance",field: "amountwithoutinsurance" ,headerVertical:true,},
-                        {title: "onepercentdutypkr",field: "onepercentdutypkr" ,headerVertical:true,},
-                        {title: "pricevaluecostsheet",field: "pricevaluecostsheet" ,headerVertical:true,},
-                        {title: "cda",field: "cda" ,headerVertical:true,},
-                        {title: "sta",field: "sta" ,headerVertical:true,},
-                        {title: "rda",field: "rda" ,headerVertical:true,},
-                        {title: "acda",field: "acda" ,headerVertical:true,},
-                        {title: "asta",field: "asta" ,headerVertical:true,},
-                        {title: "ita",field: "ita" ,headerVertical:true,},
-                        {title: "wsca",field: "wsca" ,headerVertical:true,},
-                        {title: "total",field: "total" ,headerVertical:true,},
-                        {title: "perpc",field: "perpc" ,headerVertical:true,},
-                        {title: "perkg",field: "perkg" ,headerVertical:true,},
-                        {title: "perft",field: "perft" ,headerVertical:true,},
+            // {formatter:hideIcon, hozAlign:"center", title:"Details",headerSort:false, cellClick:function(e, row, formatterParams){
+            //     let tableHolder = document.getElementById("subTable" + row.getData().id + "");
+            //     tableHolder.classList.toggle('hide-subtable');
+            //     var r = row.getElement() //  Get Info About Cell
+            //     if(tableHolder.classList.contains('hide-subtable'))
+            //     {
+            //         r.childNodes[0].classList.remove('fa-eye-slash','text-gray-500')
+            //         r.childNodes[0].classList.add('fa-eye','text-gray-400')
+            //     }
+            //     else {
+            //         r.childNodes[0].classList.add('fa-eye-slash','text-gray-500')
+            //         r.childNodes[0].classList.remove('fa-eye','text-gray-400')
+            //     }
+            //     subTable = new Tabulator(tableHolder, {
+            //         layout:"fitData",                       //fit columns to width of table
+            //         responsiveLayout:"collapse",            //hide columns that dont fit on the table
+            //         index:'id',                             //Table Row Id
+            //         placeholder:"No Data Available",        //Placeholder text for empty table
+            //         // Pagination
+            //         pagination:"remote",                    //paginate the data
+            //         paginationSize:10,                      //starting page size
+            //         paginationSizeSelector:[10,25,50,100],  //  Page Size Selector
+            //         ajaxParams: function(){
+            //             return {id:row.getData().id};
+            //         },
+            //         ajaxURL: getDetails,
+            //         columns: [
+            //             {title: "material_title",field: "material_title" ,headerVertical:true,},
+            //             {title: "pcs",field: "pcs" ,headerVertical:true,},
+            //             {title: "gdswt",field: "gdswt" ,headerVertical:true,},
+            //             {title: "inkg",field: "inkg" ,headerVertical:true,},
+            //             {title: "gdsprice",field: "gdsprice" ,headerVertical:true,},
+            //             {title: "otherexpenses",field: "otherexpenses" ,headerVertical:true,},
+            //             {title: "amtindollar",field: "amtindollar" ,headerVertical:true,},
+            //             {title: "amtinpkr",field: "amtinpkr" ,headerVertical:true,},
+            //             {title: "length",field: "length" ,headerVertical:true,},
+            //             {title: "itmratio",field: "itmratio" ,headerVertical:true,},
+            //             {title: "insuranceperitem",field: "insuranceperitem" ,headerVertical:true,},
+            //             {title: "amountwithoutinsurance",field: "amountwithoutinsurance" ,headerVertical:true,},
+            //             {title: "onepercentdutypkr",field: "onepercentdutypkr" ,headerVertical:true,},
+            //             {title: "pricevaluecostsheet",field: "pricevaluecostsheet" ,headerVertical:true,},
+            //             {title: "cda",field: "cda" ,headerVertical:true,},
+            //             {title: "sta",field: "sta" ,headerVertical:true,},
+            //             {title: "rda",field: "rda" ,headerVertical:true,},
+            //             {title: "acda",field: "acda" ,headerVertical:true,},
+            //             {title: "asta",field: "asta" ,headerVertical:true,},
+            //             {title: "ita",field: "ita" ,headerVertical:true,},
+            //             {title: "wsca",field: "wsca" ,headerVertical:true,},
+            //             {title: "total",field: "total" ,headerVertical:true,},
+            //             {title: "perpc",field: "perpc" ,headerVertical:true,},
+            //             {title: "perkg",field: "perkg" ,headerVertical:true,},
+            //             {title: "perft",field: "perft" ,headerVertical:true,},
 
-                    ],
-                    ajaxResponse:function(getDetails, params, response){
-                        return response.data;
-                    },
-                })}
-            },
+            //         ],
+            //         ajaxResponse:function(getDetails, params, response){
+            //             return response.data;
+            //         },
+            //     })}
+            // },
       //      Master Data
 
             // {title: "Dated",field: "created_at"},
 
             // trantype,manhead,subhead,ref,suppliertype,documentdate,amount_fc,conversion_rate,amount_pkr,cheque_date,cheque_no
-            {title: "id",field: "id"},
-            {title: "Transaction Type",field: "trantype"},
-            {title: "Main.Head",field: "manhead"},
-            {title: "Sub.Head",field: "subhead"},
-            {title: "Ref.",field: "ref"},
-            {title: "G.D No For Import.",field: "impgdno",hozAlign:"center"},
-            {title: "Supp.Source",field: "suppliertype"},
-            {title: "Payment Date",field: "documentdate"},
-            {title: "Amount(FC)",field: "amount_fc",bottomCalc:"sum",},
-            {title: "ConversionRate",field: "conversion_rate"},
-            {title: "Amount(LC)",field: "amount_pkr",bottomCalc:"sum",},
-            {title: "Transaction Bank",field: "bankname"},
-            {title: "ChequeDate",field: "cheque_date"},
-            {title: "ChequeNo",field: "cheque_no"},
-            {title: "Description",field: "description"},
+            {title: "id",field: "id",responsive:0},
+            {title: "Transaction Type",field: "trantype",responsive:0},
+            {title: "Main.Head",field: "manhead",responsive:0},
+            {title: "Sub.Head",field: "subhead",responsive:0},
+            {title: "Ref.",field: "ref",responsive:0},
+            {title: "G.D No For Import.",field: "impgdno",hozAlign:"center",responsive:0},
+            {title: "Supp.Source",field: "suppliertype",responsive:0},
+            {title: "Payment Date",field: "documentdate",responsive:0},
+            {title: "Amount(FC)",field: "amount_fc",bottomCalc:"sum",responsive:0},
+            {title: "ConversionRate",field: "conversion_rate",responsive:0},
+            {title: "Amount(LC)",field: "amount_pkr",bottomCalc:"sum",responsive:0},
+            {title: "Transaction Bank",field: "bankname",responsive:0},
+            {title: "ChequeDate",field: "cheque_date",responsive:0},
+            {title: "ChequeNo",field: "cheque_no",responsive:0},
+            {title: "Description",field: "description",responsive:0},
          //   {title: "Description",field: "description"},
             // {title:"View" , formatter:viewIcon, hozAlign:"center",headerSort:false, responsive:0,
             //     cellClick:function(e, cell){

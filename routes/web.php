@@ -92,6 +92,8 @@ Route::post('analysis/fetch',[StockanalysisController::class, 'fetch'])->name('a
 Route::get('purrpt',[PurchaseRptController::class, 'index'])->name('purrpt.index');
 Route::get('contlistfill',[PurchaseRptController::class, 'contlistfill'])->name('purrpt.contlistfill');
 Route::get('funcpurcat',[PurchaseRptController::class, 'funcpurcat'])->name('purrpt.funcpurcat');
+Route::get('funcpurcatlocal',[PurchaseRptController::class, 'funcpurcatlocal'])->name('purrpt.funcpurcatlocal');
+
 Route::get('dutycategory',[PurchaseRptController::class, 'dutycategory'])->name('purrpt.dutycategory');
 Route::get('pnddutycategory',[PurchaseRptController::class, 'pnddutycategory'])->name('purrpt.pnddutycategory');
 Route::get('pndcontractcategory',[PurchaseRptController::class, 'pndcontractcategory'])->name('purrpt.pndcontractcategory');
@@ -386,10 +388,9 @@ Route::resource('customerorder', CustomerOrderController::class);
 // Route::get('/materials/{id}/copyMaterial', [MaterialController::class, 'copyMaterial'])->name('materials.copy');
 Route::get('/banktransaction/{id}/printcontract', [PaymentController::class, 'printContract'])->name('banktransaction.print');
 Route::post('/banktransaction/deleteBankRequest', [PaymentController::class, 'deleteBankRequest'])->name('banktransaction.del');
+Route::get('headlistp',[PaymentController::class, 'headlistp'])->name('banktransaction.headlistp');
+Route::get('mseqnop',[PaymentController::class, 'mseqnop'])->name('banktransaction.mseqnop');
 Route::get('/banktransaction/{id}/deleterec', [PaymentController::class, 'deleterec']);
-
-
-
 
 Route::get('/banktransaction/getQuotationsMaster', [PaymentController::class, 'getMaster'])->name('banktransaction.master');
 Route::get('/banktransaction/getQuotationsDetails', [PaymentController::class, 'getDetail'])->name('banktransaction.details');
@@ -407,6 +408,11 @@ Route::get('/banktransactionr/getQuotationsMaster', [ReceiveController::class, '
 Route::get('/banktransactionr/getQuotationsDetails', [ReceiveController::class, 'getDetail'])->name('banktransactionr.details');
 Route::get('/banktransactionr/getcidMaster', [ReceiveController::class, 'getMasterqut'])->name('banktransactionr.quotations');
 Route::get('/banktransactionr/getCustordersQuotationsdtl', [ReceiveController::class, 'getDetailsqut'])->name('banktransactionr.quotationsdtl');
+Route::get('headlist',[ReceiveController::class, 'headlist'])->name('banktransactionr.headlist');
+Route::get('mseqno',[ReceiveController::class, 'mseqno'])->name('banktransactionr.mseqno');
+Route::get('chqvalid',[ReceiveController::class, 'chqvalid'])->name('banktransactionr.chqvalid');
+
+
 Route::resource('banktransactionr', ReceiveController::class);
 
 

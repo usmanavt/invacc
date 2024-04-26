@@ -22,9 +22,14 @@ class PurchaseRptController extends Controller
         $todate = $request->todate;
         $xyz = $request->source_id;
 
+        $result = DB::table('vwmheadpurrpt')->get();
+        $resultArray = $result->toArray();
+        $data=compact('resultArray');
 
 
-        return view('purrpt.index')
+
+
+        return view('purrpt.index')->with($data)
         ->with('heads',Supplier::where('status',1)->get())
         ->with('glheads',Supplier::where('status',1)->get())
         ->with('vchrheads',Supplier::where('status',1)->get())
@@ -63,6 +68,15 @@ class PurchaseRptController extends Controller
         $todate = $request->todate;
         $head = $request->head;
         return  DB::select('call procpurcategory(?,?,?)',array($fromdate,$todate,$head));
+    }
+
+    public function funcpurcatlocal(Request $request)
+    {
+    //  dd($request->all());
+        $fromdate = $request->fromdate;
+        $todate = $request->todate;
+        $head = $request->head;
+        return  DB::select('call procpurcategorylocal(?,?,?)',array($fromdate,$todate,$head));
     }
 
 
@@ -388,7 +402,8 @@ class PurchaseRptController extends Controller
         }
 
         if($report_type === 'glhw'){
-            //  dd($request->all());
+
+            // dd($request->head_id);
             $head_id = $request->head_id;
             $hdng1 = $request->cname;
             $hdng2 = $request->csdrs;
@@ -609,6 +624,55 @@ class PurchaseRptController extends Controller
             }
             return response($mpdf->Output($filename,'I'),200)->header('Content-Type','application/pdf');
         }
+
+
+        if($report_type === 'gdnrcvdlocal'){
+            //  dd($request->all());
+            $hdng1 = $request->cname;
+            $hdng2 = $request->csdrs;
+
+            $head_id = $request->head_id;
+            $head = Supplier::findOrFail($head_id);
+            if($request->has('subhead_id')){
+                $subhead_id = $request->subhead_id;
+                //  Clear Data from Table
+                DB::table('contparameterrpt')->truncate();
+                foreach($request->subhead_id as $id)
+                {
+                    DB::table('contparameterrpt')->insert([ 'GLCODE' => $id ]);
+                }
+            }
+            //  Call Procedure
+            $data = DB::select('call procgdnpurlocal()');
+            if(!$data)
+            {
+                Session::flash('info','No data available');
+                return redirect()->back();
+            }
+            $mpdf = $this->getMPDFSettingsA3();
+            $collection = collect($data);                   //  Make array a collection
+            $grouped = $collection->groupBy('id');       //  Sort collection by SupName
+            $grouped->values()->all();                       //  values() removes indices of array
+
+            foreach($grouped as $g){
+                 $html =  view('purrpt.gdnreceivedlocal')->with('hdng1',$hdng1)->with('hdng2',$hdng2)
+                    ->with('data',$g)
+                    ->with('fromdate',$fromdate)
+                    ->with('todate',$todate)
+                    ->with('headtype',$head->title)->render();
+                $filename = $g[0]->id  .'-'.$fromdate.'-'.$todate.'.pdf';
+                $chunks = explode("chunk", $html);
+                foreach($chunks as $key => $val) {
+                    $mpdf->WriteHTML($val);
+                }
+                $mpdf->AddPage();
+            }
+            return response($mpdf->Output($filename,'I'),200)->header('Content-Type','application/pdf');
+        }
+
+
+
+
 
 
 

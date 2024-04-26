@@ -110,16 +110,17 @@
 </table>
 
 
-
-
-
 <table class="ledger">
     <tbody>
         <tr>
-            {{-- <td> Supplier Name </td> --}}
             <td > Supplier Name:  <span style="font-weight: bold">{{ $data[0]->supname }}</span> </td>
+        </tr>
+        <tr>
             <td > Address:  <span style="font-weight: bold">{{ $data[0]->address }}</span> </td>
         </tr>
+
+
+
     </tbody>
 </table>
 
@@ -129,7 +130,7 @@
             <td > Invoice No:  <span style="font-weight: bold">{{ $data[0]->invoiceno }}</span> </td>
             <td > Bill No:  <span style="font-weight: bold">{{ $data[0]->challanno }}</span> </td>
             <td > Invoice Date:  <span style="font-weight: bold">{{ $data[0]->invoice_date }}</span> </td>
-            {{-- <td > G.R No:  <span style="font-weight: bold">{{ $data[0]->purinvsno }}</span> </td> --}}
+            <td > G.R No:  <span style="font-weight: bold">{{ $data[0]->grno }}</span> </td>
             {{-- <td > GatePass No:  <span style="font-weight: bold">{{ $data[0]->GRGP }}</span> </td> --}}
         </tr>
     </tbody>

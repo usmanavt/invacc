@@ -93,7 +93,7 @@ table{
                 </td>            </tr>
             <tr>
                 <td  style="text-align: center;">
-                    <span style="font-size:2rem">GODOWN RECEIVING CONTRACT </span>
+                    <span style="font-size:2rem">GODOWN RECEIVING NOTE (LOCAL) </span>
                 </td>
             </tr>
 
@@ -128,10 +128,10 @@ table{
                 </td>
 
                 <td>
-                    Contract No
+                    Invoice Date
                 </td>
                 <td>
-                    {{ $data[0]->contract_id }}
+                    {{ $data[0]->contract_date }}
                 </td>
 
             </tr>
@@ -143,18 +143,27 @@ table{
                     From {{ $fromdate }} to {{ $todate }}
                 </td> --}}
                 <td>
-                    Invoice Date
+                    G.R No
+                </td>
+                <td>
+                    {{ $data[0]->grno }}
+                </td>
+
+                <td>
+                    G.R Date
                 </td>
                 <td>
                     {{ $data[0]->invoice_date }}
                 </td>
+                {{-- <td>
+                    G.R Date
+                </td>
+                <td>
+                    {{ $data[0]->invoice_date }}
+                </td> --}}
 
-                <td>
-                    Contract Date
-                </td>
-                <td>
-                    {{ $data[0]->contract_date }}
-                </td>
+
+
 
 
             </tr>

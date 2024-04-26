@@ -89,7 +89,7 @@ table{
                 </td>            </tr>
             <tr>
                 <td  style="text-align: center;">
-                    <span style="font-size:2rem">GODOWN RECEIVING CONTRACT </span>
+                    <span style="font-size:2rem"> GOODS RECEIPT NOTE ( LOCAL ) </span>
                 </td>
             </tr>
 

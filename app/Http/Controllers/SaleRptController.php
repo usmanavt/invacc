@@ -19,11 +19,16 @@ class SaleRptController extends Controller
         $fromdate = $request->fromdate;
         $todate = $request->todate;
 
+        $result = DB::table('vwmheadsalrpt')->get();
+        $resultArray = $result->toArray();
+        $data=compact('resultArray');
+
+
 
         //  $fromdate = '2023-07-01';
         //  $todate = '2023-07-31';
 
-        return view('salerpt.index')
+        return view('salerpt.index')->with($data)
         ->with('heads',Customer::where('status',1)->get())
         ->with('glheads',Customer::where('status',1)->whereIn('id',[1,2,3,4,5,6,7,8,9,10])->get())
         ->with('vchrheads',Customer::where('status',1)->whereIn('id',[6,7,8,9])->get())

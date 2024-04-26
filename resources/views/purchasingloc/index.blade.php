@@ -155,9 +155,10 @@
 
             {title: "Supplier",field: "supname"},
             {title: "Invoice Id",field: "contract_id"},
-            {title: "Invoice Date",field: "contract_date"},
             {title: "Purchase Id",field: "id"},
-            {title: "Invoice No",field: "purinvsno"}]},
+            {title: "Invoice Date",field: "contract_date"},
+            {title: "Invoice No",field: "purinvsno"},
+            {title: "G.R No",field: "grno"}]},
 
             {
                     title:'Total Quantity', headerHozAlign:"center",

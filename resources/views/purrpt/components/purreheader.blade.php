@@ -114,16 +114,21 @@
         <tr>
             {{-- <td> Supplier Name </td> --}}
             <td > Supplier Name:  <span style="font-weight: bold">{{ $data[0]->supname }}</span> </td>
+        </tr>
+        <tr>
+            {{-- <td> Supplier Name </td> --}}
             <td > Address:  <span style="font-weight: bold">{{ $data[0]->address }}</span> </td>
         </tr>
+
     </tbody>
 </table>
 
 <table class="ledger">
     <tbody>
         <tr>
-            <td > Pur.Return Date:  <span style="font-weight: bold">{{ $data[0]->prdate }}</span> </td>
-            <td > Pur.Return No:  <span style="font-weight: bold">{{ $data[0]->prno }}</span> </td>
+            <td > Return Date:  <span style="font-weight: bold">{{ $data[0]->prdate }}</span> </td>
+            <td > Return No:  <span style="font-weight: bold">{{ $data[0]->prno }}</span> </td>
+            <td > G.P#:  <span style="font-weight: bold">{{ $data[0]->gpno }}</span> </td>
             <td > Invoice Date:  <span style="font-weight: bold">{{ $data[0]->invoice_date }}</span> </td>
             <td > Invoice No:  <span style="font-weight: bold">{{ $data[0]->invoiceno }}</span> </td>
         </tr>

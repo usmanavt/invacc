@@ -24,18 +24,50 @@
 
                         <fieldset class="border px-4 py-2 rounded">
                             <legend>Invoice Level Entries</legend>
+
+
                             <div class="grid grid-cols-12 gap-2 py-2 items-center">
 
-                                <x-input-text title="Customer Name" name="custname" id="custname" class="col-span-2" disabled  />
+                                <label for="autocompleted" >Bank<x-req /></label>
+                                <div class="w-96 relative"   onclick="event.stopImmediatePropagation();" >
+                                    <input id="autocompleted" placeholder="Select Bank" class=" px-5 py-3 w-full border border-gray-400 rounded-md"
+                                    onkeyup="onkeyUp(event)" />
+                                    <div  >
+                                        <select  id="bank_id" name="bank_id" size="20"  class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full h-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                                        </select>
+                                    </div>
+                                </div>
+
+
+
+                                <label for="head_id">Main Head<x-req /></label>
+
+                                    <select autocomplete="on" class="col-span-2" name="head_id" id="head_id" >
+                                            {{-- <option value="" selected>--Payment Head</option> --}}
+                                            @foreach($heads as $head)
+                                            <option value="{{$head->id}}"> {{$head->title}} </option>
+                                            @endforeach
+                                        </select>
+
+                                <div class="w-96 relative grid grid-cols-4 gap-1 px-10 py-5  "   onclick="event.stopImmediatePropagation();" >
+                                    {{-- <label for="autocompleted1">Sub Head<x-req /></label> --}}
+                                    <input id="autocompleted1" title="Head Name" placeholder="Select Sub Head Name" class=" px-5 py-3 w-full border border-gray-400 rounded-md"
+                                    onkeyup="onkeyUp1(event)" />
+                                    <div>
+                                        <select  id="supplier_id" name="supplier_id" size="20"  class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full h-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                                        </select>
+                                    </div>
+                                </div>
+                                </div>
+
+
+                            <div class="grid grid-cols-12 gap-2 py-2 items-center">
+
+                                {{-- <x-input-text title="Customer Name" name="custname" id="custname" class="col-span-2" disabled  /> --}}
                                 <x-input-date title="Received Date" name="documentdate" class="col-span-2" />
-                                {{-- <label for="head_id">Payment To<x-req /></label>
-                                    <select autocomplete="on" class="col-span-2" name="customer_id" id="customer_id" >
-                                        <option value="" selected>--Payment Head</option>
-                                        @foreach($heads as $head)
-                                        <option value="{{$head->id}}"> {{$head->title}} </option>
-                                        @endforeach
-                                    </select> --}}
-                                    <x-input-text title="Received Seq.#" name="transno" id="transno" value="{{$maxposeqno}}"  class="col-span-2"    />
+                                <x-input-text title="Received Seq.#" name="transno" id="transno" value="{{$maxposeqno}}"  class="col-span-2"    />
+                                <x-input-text title="Received From" name="pmntto" id="pmntto"  class="col-span-2"   />
+
 
                             </div>
 
@@ -48,43 +80,27 @@
                                 @endforeach
                             </select> --}}
 
-                            <label for="autocompleted" >Bank<x-req /></label>
-                            <div class="w-96 relative"   onclick="event.stopImmediatePropagation();" >
-                                <input id="autocompleted" placeholder="Select Bank" class=" px-5 py-3 w-48 border border-gray-400 rounded-md"
-                                onkeyup="onkeyUp(event)" />
-                                <div  >
-                                    <select  id="bank_id" name="bank_id" size="20"  class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full h-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
-                                    </select>
-                                </div>
-                            </div>
 
 
                             <x-input-text title="Cheque No" name="cheque_no" id="cheque_no" req required class="col-span-2" disabled />
                             <x-input-date title="Cheque Date" id="cheque_date" name="cheque_date" req required class="col-span-2" disabled />
-                            <x-input-text title="Received From" name="pmntto" id="pmntto"  class="col-span-2"   />
+                            <x-input-text title="Cheque Amount" name="chqamount" id="chqamount" disabled  class="col-span-2"    />
+
 
                         </div>
                         <div class="grid grid-cols-12 gap-2 py-2 items-center">
 
-                            <x-input-numeric title="Amount(USD)" name="amount_fc" id="amount_fc" class="col-span-2"     />
-                            <x-input-numeric title="conversion_rate" name="conversion_rate" id="conversion_rate"  class="col-span-2" value=1      />
+                            <x-input-numeric title="Amount(USD)" name="amount_fc" id="amount_fc" onkeyup="chngpkr(event)"  class="col-span-2"      />
+                            <x-input-numeric tabindex="-1" title="conversion_rate" name="conversion_rate" id="conversion_rate" onkeyup="chngpkr(event)"  class="col-span-2" value=1      />
                             <x-input-numeric title="Amount(PKR)" name="amount_pkr" id="amount_pkr" class="col-span-2" disabled    />
                             {{-- <input class="checked:bg-blue-500 checked:border-blue-500 focus:outline-none" class="col-span-2" type="checkbox" name="per" id="per" onclick="EnableDisableTextBox(this)" > --}}
 
-                            <x-input-numeric title="" name="chqamount" id="chqamount" class="col-span-2" hidden     />
-                            <x-input-text title="" name="chqno" id="chqno" class="col-span-2" hidden     />
+                            {{-- <x-input-numeric title="" name="chqamount" id="chqamount" class="col-span-2" hidden     /> --}}
+                            <x-input-text title="" name="chqno" id="chqno" class="col-span-2"  hidden    />
 
                         </div>
                         <div class="grid grid-cols-12 gap-2 py-2 items-center">
 
-                                {{-- Invoice Level Receive <span class="text-red-500 font-semibold  ">(*)</span>
-                            </label>
-                            <input class="checked:bg-blue-500 checked:border-blue-500 focus:outline-none"  type="checkbox" name="per" id="per" checked=true onclick="EnableDisableTextBox(this)" >
-
-                        <label for="">
-                            Advance Received For Clearance Future Invoices <span class="text-red-500 font-semibold  ">(*)</span>
-                            </label>
-                        <input class="checked:bg-blue-500 checked:border-blue-500 focus:outline-none"  type="checkbox" name="adv" id="adv"  onclick="advpayment(this)" > --}}
 
                         <x-input-numeric title="Prvs. Credit Amount" name="prvscrdtamt" id="prvscrdtamt" class="col-span-2" disabled     />
                         <x-input-numeric title="Prvs. Invs.Clrd Amount" name="prvsinvsamt" id="prvsinvsamt" class="col-span-2" disabled     />
@@ -97,11 +113,16 @@
                         <textarea name="description" id="description" cols="100" rows="2" maxlength="100"  required class="col-span-2" ></textarea>
                         <label for="">
                         <x-input-text title="Supp.Invoice No" name="supinvid" id="supinvid" class="col-span-2"  disabled     />
-                        <input class="checked:bg-blue-500 checked:border-blue-500 focus:outline-none"  type="checkbox" name="invid" id="invid" onclick="enbldspl(this)" >
+                        <input tabindex="-1" class="checked:bg-blue-500 checked:border-blue-500 focus:outline-none"  type="checkbox" name="invid" id="invid" onclick="enbldspl(this)" >
                         <x-input-numeric title="" name="advtxt" id="advtxt" value="0" hidden       />
 
                         </div>
+                        <div>
+                            <x-input-text  title="subhead" name="subhdid" id="subhdid" hidden       />
+                            <x-input-text  title="mhed" name="hdid" id="hdid" hidden      />
+                            <x-input-text  title="name" name="shname" id="shname" hidden     />
 
+                        </div>
 
                     </fieldset>
 
@@ -158,11 +179,13 @@
     <script>
 
 window.onload = function() {
-            var input = document.getElementById("bank_id").focus();
+            var input = document.getElementById("autocompleted").focus();
         }
 
-
-
+        let list;
+        const headlist = @json(route('banktransactionr.headlist'));
+        const head = document.getElementById('head_id')
+        const value = head.value
         let table;
         let searchValue = "";
         const deleteIcon = function(cell,formatterParams){return "<i class='fa fa-trash text-red-500'></i>";};
@@ -181,12 +204,15 @@ window.onload = function() {
         let dynamicTableData = []
         let adopted = false
         let detailsUrl = ''
-        let head_id = '';
-        let supplier_id = '';
+        // let head_id = '';
+        // let supplier_id = '';
 
 
         // let prno= document.getElementById("prno")
         document.addEventListener('DOMContentLoaded',()=>{
+            hidedropdown();
+            hidedropdown1();
+
         })
         // Add event handler to read keyboard key up event & conversionrate
         document.addEventListener('keyup', (e)=>{
@@ -316,7 +342,51 @@ window.onload = function() {
          //   calculateButton.disabled = false
             closeModal()
         })
-    </script>
+
+
+supplier_id.addEventListener("click", () => {
+
+let supplier_id= document.getElementById("supplier_id");
+let input1= document.getElementById("autocompleted1");
+let subhdid= document.getElementById("subhdid");
+let hdid= document.getElementById("hdid");
+let shname= document.getElementById("shname");
+let cheque_date= document.getElementById("cheque_date");
+let cheque_no= document.getElementById("cheque_no");
+let chqno= document.getElementById("chqno");
+let chqamount= document.getElementById("chqamount");
+
+
+subhdid.value=$mychqno[supplier_id.options[supplier_id.selectedIndex].value][0].shid;
+hdid.value=$mnhdid;
+shname.value= supplier_id.options[supplier_id.selectedIndex].text;
+cheque_no.value=$mychqno[supplier_id.options[supplier_id.selectedIndex].value][0].chqno;
+chqno.value=$mychqno[supplier_id.options[supplier_id.selectedIndex].value][0].chqno;
+cheque_date.value=$mychqno[supplier_id.options[supplier_id.selectedIndex].value][0].chqdt;
+chqamount.value=$mychqno[supplier_id.options[supplier_id.selectedIndex].value][0].mychqamount;
+input1.value=supplier_id.options[supplier_id.selectedIndex].text;
+
+
+hidedropdown1();
+
+
+
+
+// detailsUrl = `${getDetails}/?id=${supplier_id.options[supplier_id.selectedIndex].value}`
+detailsUrl = `${getDetails}/?id=${subhdid.value}`
+    fetchDataFromServer(detailsUrl)
+    adopted = true
+
+});
+
+
+
+
+
+
+
+
+</script>
 @endpush
 
 @push('scripts')
@@ -481,7 +551,7 @@ var updateValues = (cell) => {
             calc += Number(value) ;
         });
         // tamount = calc;
-        // tnetamount();
+        tnetamount();
         return calc;
 
     }
@@ -670,13 +740,19 @@ var updateValues = (cell) => {
             var sid = document.getElementById("bank_id");
             var bank_id = sid.options[sid.selectedIndex];
             var transno = document.getElementById("transno")
+
+            var sid1 = document.getElementById("supplier_id");
+            var supplier_id = sid1.options[sid1.selectedIndex];
+
+
+
             // var per= document.getElementById("per");
 
-            console.log(bank_id.index);
+            //  console.log(bank_id);
 
-            if(bank_id.value <0)
+            if(bank_id==undefined || supplier_id==undefined    )
             {
-                showSnackbar("Payment Head Required","error");
+                showSnackbar("Bank/SubHead Required","error");
                 bank_id.focus();
                 return;
             }
@@ -689,7 +765,7 @@ var updateValues = (cell) => {
             // if( chqamount.value <> amount_pkr.value)
 
                     // {
-                            showSnackbar("Cheque Amont can not change","error");
+                            showSnackbar("Invalid Cheque Amont ","error");
                             amount_fc.value=chqamount.value;
                             amount_fc.focus();
                             return;
@@ -724,8 +800,7 @@ var updateValues = (cell) => {
             var data = { 'banktransactionr' : dynamicTableData,'supplier_id':supplier_id,'transno':transno.value,'bank_id':bank_id.value,'documentdate':documentdate.value,
             'cheque_no':cheque_no.value,'cheque_date':cheque_date.value,'head_id':head_id ,'description': description.value,'transno':transno.value
         ,'amount_fc':amount_fc.value,'amount_pkr':amount_pkr.value,'conversion_rate':conversion_rate.value,'advtxt':advtxt.value,
-        'custname':custname.value,'supinvid':supinvid.value,'pmntto':pmntto.value};
-
+        'supinvid':supinvid.value,'pmntto':pmntto.value,'subhdid':subhdid.value,'hdid':hdid.value,'shname':shname.value};
 
             // All Ok - Proceed
             fetch(@json(route('banktransactionr.store')),{
@@ -744,7 +819,18 @@ var updateValues = (cell) => {
             .then( response => {
                 if (response == 'success')
                 {
-                    window.open(window.location.origin + "/banktransactionr","_self" );
+                    // window.open(window.location.origin + "/banktransactionr","_self" );
+
+                  alert("Record Save Successfully")
+                   clearform();
+                   newsno();
+                   var input = document.getElementById("autocompleted1").focus();
+                }
+
+                else
+                {
+                    alert("Invalid Data")
+
                 }
             })
             .catch(error => {
@@ -782,18 +868,23 @@ var updateValues = (cell) => {
     bank_id.addEventListener("change", () => {
     var sid = document.getElementById("bank_id");
         var bank_id = sid.options[sid.selectedIndex];
+        // var cheque_no = document.getElementById("cheque_no");
         if(bank_id.value==1)
-        { cheque_no.disabled=true;
+        {
+        cheque_no.disabled=true;
           cheque_date.disabled=true;
-          cheque_no.style.color ="black";
-          cheque_date.style.color ="black";
+        //   cheque_no.style.color ="black";
+        //   cheque_date.style.color ="black";
         }
         else
-        { cheque_no.disabled=false;
+        {
+          cheque_no.disabled=false;
           cheque_date.disabled=false;
           cheque_no.value='';
-          cheque_no.style.color ="black";
-          cheque_date.style.color ="black";
+          document.getElementById('cheque_no').style.color = 'black';
+          document.getElementById('cheque_date').style.color = 'black';
+          //   cheque_no.style.color ="black";
+        //   cheque_date.style.color ="black";
         }
 
 });
@@ -804,15 +895,33 @@ var updateValues = (cell) => {
 
 
 
-    amount_fc.onblur=function(){
+//     amount_fc.onblur=function(){
+//     amount_pkr.value=(amount_fc.value * conversion_rate.value).toFixed(0);
+//     // bankntotal.value= ( Number(100)-Number(discntamt.value))+Number(exataxoffie.value) +Number(otherchrgs.value)  ;
+//    }
+
+//    conversion_rate.onblur=function(){
+//     amount_pkr.value=(amount_fc.value * conversion_rate.value).toFixed(0);
+//     // bankntotal.value= ( Number(100)-Number(discntamt.value))+Number(exataxoffie.value) +Number(otherchrgs.value)  ;
+//    }
+
+   function chngpkr()
+   {
+
     amount_pkr.value=(amount_fc.value * conversion_rate.value).toFixed(0);
-    // bankntotal.value= ( Number(100)-Number(discntamt.value))+Number(exataxoffie.value) +Number(otherchrgs.value)  ;
+
    }
 
-   conversion_rate.onblur=function(){
-    amount_pkr.value=(amount_fc.value * conversion_rate.value).toFixed(0);
-    // bankntotal.value= ( Number(100)-Number(discntamt.value))+Number(exataxoffie.value) +Number(otherchrgs.value)  ;
-   }
+
+
+//    function updateInput(amount_pkr){
+
+//     // document.getElementById("fieldname").value = ish;
+//     document.getElementById("amount_pkr").value=(amount_fc.value * conversion_rate.value).toFixed(0);
+// }
+
+
+
 
 
 
@@ -840,9 +949,9 @@ function onkeyUp(e)
 }
 
 
-document.addEventListener('DOMContentLoaded',()=> {
-    hidedropdown();
-        });
+// document.addEventListener('DOMContentLoaded',()=> {
+//     hidedropdown();
+//         });
 
 function renderOptions(xyz){
 
@@ -886,6 +995,203 @@ let bank_id= document.getElementById("bank_id");
 
 }
 });
+
+
+// ********* search list for suppliers
+
+list=@json($resultArray1);
+// const contries1 = myarray1;
+function onkeyUp1(e)
+{
+    let keyword= e.target.value;
+    var supplier_id = document.getElementById("supplier_id");
+    supplier_id.classList.remove("hidden");
+
+    let filteredContries=list.filter((c)=>c.custname.toLowerCase().includes(keyword.toLowerCase()));
+    // console.log($mychqno);
+    renderOptions1(filteredContries);
+
+}
+
+
+var mychqno=[] ;
+function renderOptions1(sup){
+
+    let dropdownEl=document.getElementById("supplier_id");
+
+
+                 $mychqno=[];
+                 $mnhdid=[];
+                dropdownEl.length = 0
+                // a=0;
+                sup.forEach( e =>  {
+                    addSelectElement(dropdownEl,e.id,e.custname )
+                    // a=a+1;
+                    // $shid =e.id;
+                    $mnhdid =e.head_id;
+                    $mychqdt =e.cheque_date;
+                     $mychqno[e.id]=[ { chqno:e.cheque_no,chqdt:e.cheque_date,mychqamount:e.received,shid:e.subheadid }  ];
+
+                    });
+
+
+}
+
+document.addEventListener("click" , () => {
+    hidedropdown();
+    hidedropdown1();
+});
+
+
+function hidedropdown1()
+{
+    var supplier_id = document.getElementById("supplier_id");
+    supplier_id.classList.add("hidden");
+}
+
+
+
+
+supplier_id.addEventListener("keyup", function(event) {
+if (event.keyCode === 13) {
+// event.preventDefault();
+supplier_id.click();
+
+}
+});
+
+document.onkeydown=function(e){
+    // if(e.keyCode == 17) isCtrl=true;
+    // if(e.keyCode == 83 && isCtrl == true) {
+        if(e.ctrlKey && e.which === 83){
+        //run code for CTRL+S -- ie, save!
+        // alert("dfadfasd");
+        submitbutton.click();
+        return false;
+    }
+}
+
+head_id.addEventListener("change", () => {
+    const value = head.value
+        autocompleted1.value='';
+        supplier_id.options.length = 0 // Reset List
+        fetch(headlist + `?head_id=${value} `,{
+                    method:"GET",
+                    headers: { 'Accept':'application/json','Content-type':'application/json'},
+                    })
+                    .then(response => response.json())
+                    .then( data => {
+                        if(data.length > 0)
+                        {
+
+                            let a = 0;
+
+                            // $shid= [];
+                            $mnhdid= [];
+                            // $shdname= [];
+
+                            list=data;
+                            list.forEach(e => {
+                                a += 1;
+                                addSelectElement(supplier_id,e.id,e.custname )
+                                // $shid =e.id;
+                                $mnhdid =e.head_id;
+                                // $shdname =e.osuppname;
+                            });
+                        }else{
+                        }
+                    })
+                    .catch(error => console.error(error))
+                // break;
+
+
+});
+
+function clearform()
+{
+
+    document.getElementById("autocompleted1").value="";
+    document.getElementById("hdid").value="";
+    document.getElementById("subhdid").value="";
+    document.getElementById("shname").value="";
+    document.getElementById("autocompleted").value='';
+    document.getElementById("cheque_no").value='';
+    document.getElementById("pmntto").value='';
+
+    document.getElementById("amount_fc").value=0;
+    document.getElementById("conversion_rate").value=1;
+    document.getElementById("amount_pkr").value=0;
+    document.getElementById("description").value='';
+    // document.getElementById("impgdno").value='';
+    document.getElementById("supinvid").value='';
+// document.getElementById("transno").value=document.getElementById("transno").value + 1;
+
+// var shname = document.getElementById("shname");
+// shname.value="";
+
+
+}
+
+
+const mseqno = @json(route('banktransactionr.mseqno'));
+
+function newsno()
+{
+
+    const transno = document.getElementById('transno');
+    fetch(mseqno ,{
+                    method:"GET",
+                    headers: { 'Accept':'application/json','Content-type':'application/json'},
+                    })
+                    .then(response => response.json())
+                    .then( data => {
+                        if(data.length > 0)
+                        {
+                            transno.value=data;
+                        }else{
+                            transno.value=data;
+                            // console.log(data);
+                            // subhead.removeAttribute('required','')
+                            // subhead.setAttribute('disabled','')
+                        }
+                    })
+                    .catch(error => console.error(error))
+
+}
+
+// const chqvalid = @json(route('banktransactionr.chqvalid'));
+
+// function chqvld()
+// {
+
+
+//     fetch(chqvalid ,{
+//                     method:"GET",
+//                     headers: { 'Accept':'application/json','Content-type':'application/json'},
+//                     })
+//                     .then(response => response.json())
+//                     .then( data => {
+//                         if(data.length > 0)
+//                         {
+//                             console.log(data);
+//                         }else{
+//                             console.log(data);
+//                             // console.log(data);
+//                             // subhead.removeAttribute('required','')
+//                             // subhead.setAttribute('disabled','')
+//                         }
+//                     })
+//                     .catch(error => console.error(error))
+
+// }
+
+
+
+
+
+
+
+
 
 
     </script>

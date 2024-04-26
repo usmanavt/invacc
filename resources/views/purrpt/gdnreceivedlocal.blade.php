@@ -68,7 +68,7 @@ table{
                     {{-- <img src="{{ asset('/images/pipesfittings.jpg') }}" width="90"> --}}
                 </td>
                 <td align="center" style="width:60%;">
-                    <h1>MUHAMMAD NAZIR & Co</h1>
+                    <h1>{{ $hdng1 }}</h1>
                 </td>
                 <td align="right" style="width:20%;">
                     &nbsp;&nbsp;&nbsp;&nbsp;
@@ -76,7 +76,6 @@ table{
 .            </tr>
         </tbody>
     </table>
-
 
     {{-- Address --}}
     <table>
@@ -86,15 +85,11 @@ table{
                     {{-- <h3 style="font-size:0.7rem">Steam Pipes, Pipe Fitting, Flanges Valves, S.S Pipes</h3>
                     <h3 style="font-size:0.7rem">Plot # 8 Near Allah Malik Godown Shershah Kabari Bazar,</h3>
                     <h3 style="font-size:0.7rem">Phone : 021-32588781, 021-32574285 , Fax : 021-32588782</h3> --}}
-                    <h2 style="font-size:0.9rem">Steam Pipes, Pipe Fitting, Flanges Valves, S.S Pipes <br>
-                        Plot # 8 Near Allah Malik Godown Shershah Kabari Bazar,<br>
-                        Phone : 021-32588781, 021-32574285 , Fax : 021-32588782
-                    </h2>
-
+                    <h3> {{ $hdng2 }} </h3>
                 </td>            </tr>
             <tr>
                 <td  style="text-align: center;">
-                    <span style="font-size:2rem">GODOWN RECEIVING NOTE ( IMPORT ) </span>
+                    <span style="font-size:2rem"> GOODS RECEIPT NOTE (LOCAL) </span>
                 </td>
             </tr>
 
@@ -129,10 +124,10 @@ table{
                 </td>
 
                 <td>
-                    Contract No
+                    Invoice Date
                 </td>
                 <td>
-                    {{ $data[0]->continvsno }}
+                    {{ $data[0]->contract_date }}
                 </td>
 
             </tr>
@@ -144,24 +139,24 @@ table{
                     From {{ $fromdate }} to {{ $todate }}
                 </td> --}}
                 <td>
-                    Invoice Date
-                </td>
-                <td>
-                    {{ $data[0]->invoice_date }}
-                </td>
-
-                <td>
-                    Contract Date
-                </td>
-                <td>
-                    {{ $data[0]->contract_date }}
-                </td>
-                <td>
                     G.R No
                 </td>
                 <td>
                     {{ $data[0]->grno }}
                 </td>
+
+                <td>
+                    G.R Date
+                </td>
+                <td>
+                    {{ $data[0]->invoice_date }}
+                </td>
+                {{-- <td>
+                    G.R Date
+                </td>
+                <td>
+                    {{ $data[0]->invoice_date }}
+                </td> --}}
 
 
 

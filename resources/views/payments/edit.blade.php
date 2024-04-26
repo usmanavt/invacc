@@ -78,8 +78,8 @@
                            </div>
 
                         <div class="grid grid-cols-12 gap-2 py-2 items-center">
-                            <x-input-numeric title="Amount(USD)" name="amount_fc" id="amount_fc" class="col-span-2" value="{{ $banktransaction->amount_fc }}"   disabled     />
-                            <x-input-numeric title="Conversion Rate" name="conversion_rate" id="conversion_rate" class="col-span-2" value="{{ $banktransaction->conversion_rate }}" disabled   />
+                            <x-input-numeric title="Amount(USD)" name="amount_fc" id="amount_fc" class="col-span-2" onkeyup="chngpkr(event)" value="{{ $banktransaction->amount_fc }}"   disabled     />
+                            <x-input-numeric title="Conversion Rate" name="conversion_rate" id="conversion_rate" onkeyup="chngpkr(event)" class="col-span-2" value="{{ $banktransaction->conversion_rate }}" disabled   />
                             <x-input-numeric title="Amount(PKR)" name="amount_pkr" id="amount_pkr" class="col-span-2" value="{{ $banktransaction->amount_pkr }}" disabled />
                             <label for="">
                                 Invoice Level Payment <span class="text-red-500 font-semibold  ">(*)</span>
@@ -623,15 +623,24 @@ function EnableDisableTextBox(per) {
 
     }
 
-    amount_fc.onblur=function(){
+//     amount_fc.onblur=function(){
+//     amount_pkr.value=(amount_fc.value * conversion_rate.value).toFixed(0);
+//     // bankntotal.value= ( Number(100)-Number(discntamt.value))+Number(exataxoffie.value) +Number(otherchrgs.value)  ;
+//    }
+
+//    conversion_rate.onblur=function(){
+//     amount_pkr.value=(amount_fc.value * conversion_rate.value).toFixed(0);
+//     // bankntotal.value= ( Number(100)-Number(discntamt.value))+Number(exataxoffie.value) +Number(otherchrgs.value)  ;
+//    }
+
+
+function chngpkr()
+   {
+
     amount_pkr.value=(amount_fc.value * conversion_rate.value).toFixed(0);
-    // bankntotal.value= ( Number(100)-Number(discntamt.value))+Number(exataxoffie.value) +Number(otherchrgs.value)  ;
+
    }
 
-   conversion_rate.onblur=function(){
-    amount_pkr.value=(amount_fc.value * conversion_rate.value).toFixed(0);
-    // bankntotal.value= ( Number(100)-Number(discntamt.value))+Number(exataxoffie.value) +Number(otherchrgs.value)  ;
-   }
 
 
    bank_id.addEventListener("change", () => {

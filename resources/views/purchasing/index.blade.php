@@ -157,6 +157,7 @@
             {title: "Contract No",field: "contract_id"},
             {title: "Contract Date",field: "contract_date"},
             {title: "Purchase Id",field: "id"},
+            {title: "GR.No",field: "grno"},
             {title: "Invoice No",field: "purinvsno"}]},
 
             {

@@ -61,6 +61,41 @@ class ReceiveController  extends Controller
     //     return $localpurchase;
     // }
 
+
+    public function headlist(Request $request)
+    {
+        //  dd($request->all());
+        $head_id = $request->head_id;
+        // procpaymentmaster(32)
+        return  DB::select('call procreceivedmaster(?)',array($head_id));
+
+    }
+
+    public function mseqno(Request $request)
+    {
+        //  dd($request->all());
+        $head_id = $request->head_id;
+        $maxposeqno = DB::table('bank_transactions')->select('*')->max('transno')+1;
+        return  $maxposeqno;
+
+    }
+
+    public function chqvalid(Request $request)
+    {
+        //  dd($request->all());
+        $chequeno = $request->cheque_no;
+        $chqamnt = DB::table('cheque_transactions')->select('*')->where('cheque_no',$chequeno)->first();
+        dd($chqamnt);
+        return  $chqamnt;
+
+
+
+    }
+
+
+
+
+
     public function getMaster(Request $request)
     {
 
@@ -101,8 +136,8 @@ class ReceiveController  extends Controller
         $contracts = DB::table('vwreceivedmaster')
         // ->join('suppliers', 'contracts.supplier_id', '=', 'suppliers.id')
         // ->select('contracts.*', 'suppliers.title')
-        ->where('custname', 'like', "%$search%")
-        ->orWhere('cheque_no', 'like', "%$search%")
+        // ->where('custname', 'like', "%$search%")
+        // ->orWhere('cheque_no', 'like', "%$search%")
         ->orderBy($field,$dir)
         ->paginate((int) $size);
         return $contracts;
@@ -123,12 +158,20 @@ class ReceiveController  extends Controller
     public function create()
     {
 
+
+        // $result1 = DB::table('vwreceivedmaster')->get();
+        // $resultArray1 = $result1->toArray();
+        $resultArray1 = DB::select('call procreceivedmaster1st');
+        $data1=compact('resultArray1');
+
+
+
         $result = DB::table('banks')->whereNotIn('id',[2])->get();
         $resultArray = $result->toArray();
         $data=compact('resultArray');
 
         $maxposeqno = DB::table('bank_transactions')->select('*')->max('transno')+1;
-        return \view ('received.create',compact('maxposeqno'))->with($data)
+        return \view ('received.create',compact('maxposeqno'))->with($data)->with($data1)
         ->with('heads',Head::where('status',1)->where('forcp',1)->get())
         ->with('banks',Bank::where('status',1)->get());
     }
@@ -147,15 +190,43 @@ class ReceiveController  extends Controller
             // 'customer_id' => 'required'
         ]);
 
-        if($request->bank_id > 1 && $request->cheque_no != ' ' )
-        {
-         // $dupchqno = BankTransaction::where('cheque_no',$request->cheque_no)->first();
-         $dupchqno = DB::table('vwdupchqno')->where('cheque_no',$request->cheque_no)->first();
-         if($dupchqno) {
-             Session::flash('info','Record not Save Successfully Due to "Duplicate Cheque_no" ');
-             return response()->json(['success'],200);
-                       }
-         }
+
+
+
+
+        // if($request->bank_id > 1 && $request->cheque_no != ' ' )
+        // {
+        //  // $dupchqno = BankTransaction::where('cheque_no',$request->cheque_no)->first();
+        //  $dupchqno = DB::table('vwdupchqno')->where('cheque_no',$request->cheque_no)->first();
+        //  if($dupchqno) {
+        //      Session::flash('info','Record not Save Successfully Due to "Duplicate Cheque_no" ');
+        //      return response()->json(['success'],200);
+        //                }
+        //  }
+
+        // if($request->bank_id > 1 && $request->cheque_no != ' ' )
+        // {
+
+        //     $chqno = DB::table('cheque_transactions')->where('cheque_no',$request->cheque_no)->first();
+        //     // dd($chqno);
+        //     if($chqno)
+        //     {
+        //         $chqamount = DB::table('cheque_transactions')->where('cheque_no',$request->cheque_no)->where('received',$request->amount_fc)->first();
+        //         if(!$chqamount)
+        //         {
+        //                  Session::flash('info','Record not Save Successfully Due to "Invalid Cheque Amount" ');
+        //                  return response()->json(['success'],200);
+        //         }
+
+
+        //     }
+
+
+
+        // }
+
+
+
 
         DB::beginTransaction();
         try {
@@ -163,8 +234,8 @@ class ReceiveController  extends Controller
 
             // dd($request->per());
             $ci->bank_id = $request->bank_id;
-            $ci->head_id = $request->head_id;
-            $ci->subhead_id = $request->supplier_id;
+            $ci->head_id = $request->hdid;
+            $ci->subhead_id = $request->subhdid;
             $ci->pmntto = $request->pmntto;
 
 
@@ -196,7 +267,7 @@ class ReceiveController  extends Controller
             $ci->description = $request->description;
             $ci->transno = $request->transno;
             $ci->advance = $request->advtxt;
-            $ci->supname = $request->custname;
+            $ci->supname = $request->shname;
             $ci->supinvid = $request->supinvid;
             $ci->save();
 

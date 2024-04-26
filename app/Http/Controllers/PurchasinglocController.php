@@ -146,7 +146,7 @@ class PurchasinglocController extends Controller
             $ci->supplier_id = $request->supplier_id;
             $ci->purseqid = $request->purseqid;
             $ci->purdate = $request->purdate;
-            $ci->purinvsno = $request->purinvsno;
+            $ci->purinvsno = $request->continvsno;
             $ci->remarks = $request->remarks;
 
             $ci->save();
@@ -319,7 +319,7 @@ class PurchasinglocController extends Controller
             $ci->supplier_id = $request->supplier_id;
             $ci->purseqid = $request->purseqid;
             $ci->purdate = $request->purdate;
-            $ci->purinvsno = $request->purinvsno;
+            $ci->purinvsno = $request->continvsno;
             $ci->remarks = $request->remarks;
             $ci->save();
 
@@ -536,7 +536,7 @@ class PurchasinglocController extends Controller
     //       }
     //   }
       //  Call Procedure
-      $data = DB::select('call procgdnpur()');
+      $data = DB::select('call procgdnpurlocal()');
       if(!$data)
       {
           Session::flash('info','No data available');
