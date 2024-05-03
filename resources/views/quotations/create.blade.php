@@ -32,7 +32,7 @@
                                 @endforeach
                             </select> --}}
 
-                            <label for="autocompleted" >Customers<x-req /></label>
+                            <label for="autocompleted" >Customers/Items<x-req /></label>
                             <div class="w-96 relative"   onclick="event.stopImmediatePropagation();" >
                                 <input id="autocompleted" placeholder="Select Conuntry Name"  class=" px-5 py-3 w-50 border border-gray-400 rounded-md"
                                 onkeyup="onkeyUp(event)" />
@@ -42,20 +42,33 @@
                                 </div>
                             </div>
 
+                            <label for="autocompleted1" ><x-req /></label>
+                            <div class="w-96 relative"   onclick="event.stopImmediatePropagation();" >
+                                <input id="autocompleted1" placeholder="Select Item Name" class=" px-0 py-10 w-full border border-gray-400 rounded-md"
+                                onkeyup="onkeyUp1(event)" />
 
-                            <input type="text" title="custid"  id="custid" name="custid" value=0 hidden    >
-                            <label for="saldate">Quotation Date<x-req /></label>
-                            <input type="date" value="{{ date('Y-m-d') }}" class="col-span-2"  id="saldate" name="saldate" required>
+                            <div>
+                                <select  id="item_id" name="item_id" size="20"  class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-96 h-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                                </select>
+                            </div>
+
+                            </div>
+
+
+
+                            <label for="saldate">Quotation   Date<x-req /></label>
+                            <input type="date" value="{{ date('Y-m-d') }}" size="10" class="px-0 py-10"  id="saldate" name="saldate" required>
 
                             <label for="valdate">Valid Date<x-req /></label>
                             <input type="date" value="{{ date('Y-m-d') }}" class="col-span-2"  id="valdate" name="valdate" required>
-
-                            <label for="qutno">Quotation No <x-req /></label>
-                            <input type="text" class="col-span-2" id="qutno" name="qutno" value="{{$maxdcno}}"    placeholder="qutno" required>
+                            <input type="text" title="custid"  id="custid" name="custid" value=0 hidden    >
                         </div>
 
                         <div class="grid grid-cols-12 gap-1 py-1 items-center">
-                        <label for="prno">P.R No#<x-req /></label>
+                            <label for="qutno">Quotation No <x-req /></label>
+                            <input type="text" class="col-span-2" id="qutno" name="qutno" value="{{$maxdcno}}"    placeholder="qutno" disabled required>
+                            <input tabindex="-1" class="checked:bg-blue-500 checked:border-blue-500 focus:outline-none" type="checkbox" name="qutid" id="qutid"  onclick="EnableDisableTextBox(this)" >
+                            <label for="prno">P.R No#<x-req /></label>
                             <input type="text" class="col-span-2" id="prno" name="prno"  placeholder="prno" required>
                             <label for="">
                                 Cash Customer <span class="text-red-500 font-semibold">(*)</span>
@@ -146,7 +159,7 @@ const skus = @json($skus);
     // Add event handler to read keyboard key up event
     document.addEventListener('keyup', (e)=>{
         //  We are using ctrl key + 'ArrowUp' to show Modal
-        if(e.ctrlKey && e.keyCode == 32){
+        if(e.ctrlKey && e.keyCode == 500){
 
             if (
                 // customerid.options[customerid.selectedIndex].value != ""
@@ -154,7 +167,7 @@ const skus = @json($skus);
                 ||
                 // customerid.options[customerid.selectedIndex].value != 0 )  {
                 customerid.value != 0 ){
-                    console.log(customerid.value);
+                    // console.log(customerid.value);
                     showModal()
             }
 
@@ -349,6 +362,70 @@ const skus = @json($skus);
             pushDynamicData(data)
         }
     })
+
+
+    item_id.addEventListener("click", () => {
+
+        var result = dynamicTableData.filter( dt => dt.id == item_id.options[item_id.selectedIndex].value)
+        if(result.length <= 0)
+        {
+
+        var inArray = dynamicTableData.filter( i => dynamicTableData.id == item_id.options[item_id.selectedIndex].value)
+
+        dynamicTableData.push({ id:item_id.options[item_id.selectedIndex].value})
+
+
+        dynamicTable.addData([
+            {
+                id:item_id.options[item_id.selectedIndex].value,
+                title:item_id.options[item_id.selectedIndex].text,
+                category_id:$itmdata[item_id.options[item_id.selectedIndex].value][0].category_id,
+                category:$itmdata[item_id.options[item_id.selectedIndex].value][0].category,
+
+                source_id:$itmdata[item_id.options[item_id.selectedIndex].value][0].source_id,
+                source:$itmdata[item_id.options[item_id.selectedIndex].value][0].source,
+
+                brand_id:$itmdata[item_id.options[item_id.selectedIndex].value][0].brand_id,
+                brand:$itmdata[item_id.options[item_id.selectedIndex].value][0].brand,
+
+                sku_id:$itmdata[item_id.options[item_id.selectedIndex].value][0].sku_id,
+                sku:$itmdata[item_id.options[item_id.selectedIndex].value][0].sku,
+
+                dimension_id:$itmdata[item_id.options[item_id.selectedIndex].value][0].dimension_id,
+                dimension:$itmdata[item_id.options[item_id.selectedIndex].value][0].dimension,
+
+                supp1:'',
+                        supp2:'',
+                        supp3:'',
+
+                        mrktprice1:0,
+                        mrktprice2:0,
+                        mrktprice3:0,
+
+                        bundle1:0,
+                        bundle2:0,
+                        pcspbundle1:$itmdata[item_id.options[item_id.selectedIndex].value][0].lsalrate,
+                        lsalunit:$itmdata[item_id.options[item_id.selectedIndex].value][0].lsalunit,
+                        pcspbundle2:0,
+                        gdswt:0,
+                        gdsprice:0,
+                        dtyrate:0,
+                        invsrate:0,
+                        gdspricetot:0,
+                        price:0,
+                        repname:'',
+                        mybrand:'',
+
+            }
+        ])
+
+
+        }
+
+
+        });
+
+
     var updateValues = (cell) => {
         var data = cell.getData();
         //   var sum = (Number(data.bundle1) * Number(data.pcspbundle1)) + (Number(data.bundle2) * Number(data.pcspbundle2))
@@ -410,18 +487,37 @@ const skus = @json($skus);
             },
 
 
-            {title:"LastSalePrice",
-                field:"pcspbundle1",
-                // editor:"number",
-                cssClass:"bg-gray-200 font-semibold",
-                validator:"required",
-                formatter:"money",
-                formatterParams:{thousand:",",precision:2},
-                // validator:["required","integer"],
-                cellEdited: updateValues,
-               },
+            // {title:"LastSalePrice",
+            //     field:"pcspbundle1",
+            //     // editor:"number",
+            //     cssClass:"bg-gray-200 font-semibold",
+            //     validator:"required",
+            //     formatter:"money",
+            //     formatterParams:{thousand:",",precision:2},
+            //     // validator:["required","integer"],
+            //     cellEdited: updateValues,
+            //    },
 
-            {
+
+               {
+            title:'Last Sale', headerHozAlign:"center",
+            columns:[
+
+            {title:"Price",field:"pcspbundle1",width:100,editor:true,responsive:0,headerHozAlign:"center"},
+            {title:"Unit",field:"lsalunit",width:100,editor:true,responsive:0,headerHozAlign:"center"},
+
+
+        ]},
+
+
+
+
+
+
+
+
+
+        {
             title:'Market Suppliers', headerHozAlign:"center",
             columns:[
 
@@ -633,7 +729,13 @@ const skus = @json($skus);
         .then( response => {
             if (response == 'success')
             {
-                window.open(window.location.origin + "/quotations","_self" );
+                // window.open(window.location.origin + "/quotations","_self" );
+                alert("Record Save Successfully")
+                   clearform();
+                   newqutid();
+                dynamicTable.setData();
+                   var input = document.getElementById("autocompleted").focus();
+
             }
         })
         .catch(error => {
@@ -684,7 +786,7 @@ function onkeyUp(e)
     customer_id.classList.remove("hidden");
 
     let filteredContries=contries.filter((c)=>c.title.toLowerCase().includes(keyword.toLowerCase()));
-    console.log(filteredContries);
+    // console.log(filteredContries);
     renderOptions(filteredContries);
 
 }
@@ -692,6 +794,7 @@ function onkeyUp(e)
 
 document.addEventListener('DOMContentLoaded',()=> {
     hidedropdown();
+    hidedropdown1();
         });
 
 function renderOptions(xyz){
@@ -742,17 +845,203 @@ let customer_id= document.getElementById("customer_id");
 });
 
 
+
+
+
+
+
+
+
+
+
+// ********* search list for item_id
+
+
+list1=@json($resultArray1);
+// const list1 = List1;
+function onkeyUp1(e)
+{
+    let keyword= e.target.value;
+    var item_id = document.getElementById("item_id");
+    item_id.classList.remove("hidden");
+
+    let filteredContries=list1.filter((c)=>c.srchb.toLowerCase().includes(keyword.toLowerCase()));
+    renderOptions1(filteredContries);
+
+
+    // e.id + '      '+ e.srchb+' '+e.dimension
+}
+
+function renderOptions1(xyz){
+
+    let dropdownEl=document.getElementById("item_id");
+
+
+                $itmdata= [];
+                dropdownEl.length = 0
+                xyz.forEach(e => {
+                    // addSelectElement(dropdownEl,e.id,e.supname )
+                    addSelectElement(dropdownEl,e.id,e.srchb)
+                    $itmdata[e.id]=[ { sku_id:e.sku_id,sku:e.sku,source_id:e.source_id,source:e.source,category_id:e.category_id,category:e.category,
+                                dimension_id:e.dimension_id,dimension:e.dimension,brand:e.brand,brand_id:e.brand_id,lsalunit:e.lsalunit,lsalrate:e.lsalrate }  ];
+
+                 });
+
+
+}
+
+
+
+function hidedropdown1()
+{
+    var item_id = document.getElementById("item_id");
+    item_id.classList.add("hidden");
+}
+
+
+item_id.addEventListener("keyup", function(event) {
+if (event.keyCode === 13) {
+// event.preventDefault();
+item_id.click();
+
+}
+});
+
+document.onkeydown=function(e){
+    // if(e.keyCode == 17) isCtrl=true;
+    // if(e.keyCode == 83 && isCtrl == true) {
+        if(e.ctrlKey && e.which === 83){
+        //run code for CTRL+S -- ie, save!
+        // alert("dfadfasd");
+        submitbutton.click();
+        return false;
+    }
+}
+
+    item_id.onblur=function(){
+   hidedropdown1();
+
+   }
+
+
+const itemlistwrate = @json(route('quotations.itemlistwrate'));
+const customer = document.getElementById('customer_id')
+// const value = customer.value
+
+
+customer.addEventListener("change", () => {
+        const value = customer.value
+        // console.log(value);
+        autocompleted1.value='';
+        let dropdownEl=document.getElementById("item_id");
+        item_id.options.length = 0 // Reset List
+        fetch(itemlistwrate + `?customer_id=${value} `,{
+                    method:"GET",
+                    headers: { 'Accept':'application/json','Content-type':'application/json'},
+                    })
+                    .then(response => response.json())
+                    .then( data => {
+                        if(data.length > 0)
+                        {
+
+                        //    console.log(data);
+                            // let a = 0;
+
+                            // $shid= [];
+                            // $mnhdid= [];
+                            // $shdname= [];
+
+                            $itmdata= [];
+                            list1=data;
+                            list1.forEach(e => {
+                                addSelectElement(dropdownEl,e.id,e.srchb)
+                                $itmdata[e.id]=[ { sku_id:e.sku_id,sku:e.sku,source_id:e.source_id,source:e.source,category_id:e.category_id,category:e.category,
+                                dimension_id:e.dimension_id,dimension:e.dimension,brand:e.brand,brand_id:e.brand_id,lsalunit:e.lsalunit,lsalrate:e.lsalrate }  ];
+                        //    console.log($itmdata[e.id]);
+                            });
+
+                        }else{
+                        }
+                    })
+                    .catch(error => console.error(error))
+                // break;
+
+
+});
+
+
+
+
+
+
+
+
+
+
+
+
+
+function clearform()
+{
+
+
+    document.getElementById("autocompleted").value='';
+    document.getElementById("autocompleted1").value="";
+    document.getElementById("qutno").value="";
+    document.getElementById("prno").value="";
+    document.getElementById("cashcustomer").value="";
+    document.getElementById("cashcustadrs").value='';
+    document.getElementById("discntper").value=0;
+    document.getElementById("discntamt").value=0;
+    document.getElementById("rcvblamount").value=0;
+    document.getElementById("saletaxper").value=0;
+    document.getElementById("saletaxamt").value=0;
+    document.getElementById("cartage").value=0;
+    document.getElementById("totrcvbamount").value=0;
+
+}
+
+
+
+function EnableDisableTextBox(qutid) {
+        var qutno = document.getElementById("qutno");
+        qutno.disabled = qutid.checked ? false : true;
+        qutno.style.color ="black";
+        // if (!discntper.disabled) {
+        //     discntper.focus();
+        // }
+    }
+
+
+    const qutseqno = @json(route('quotations.qutseqno'));
+
+function newqutid()
+{
+
+    const qutno = document.getElementById('qutno');
+    fetch(qutseqno ,{
+                    method:"GET",
+                    headers: { 'Accept':'application/json','Content-type':'application/json'},
+                    })
+                    .then(response => response.json())
+                    .then( data => {
+                        if(data.length > 0)
+                        {
+                            qutno.value=data;
+                        }else{
+                            qutno.value=data;
+                        }
+                    })
+                    .catch(error => console.error(error))
+
+}
+
+
+
 </script>
 
 
 @endpush
-
-{{-- required  onblur="Discper()" --}}
-{{-- required  onblur="DiscAmount()" --}}
-
-
-
-
 
 
 </x-app-layout>

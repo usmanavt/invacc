@@ -43,7 +43,7 @@
 
                                 {{-- <x-input-text title="P.O No" name="pono" id="pono" req required class="col-span-2" value="{{ $saleinvoices->pono }}" disabled  /> --}}
                                 {{-- <x-input-date title="P.O Date" name="podate" id="podate" req required class="col-span-2" value="{{ $saleinvoices->podate->format('Y-m-d') }}" disabled  /> --}}
-                                <x-input-text title="G.Pass No" name="gpno" id="gpno" value="{{ $saleinvoices->gpno }}"     required   />
+                                {{-- <x-input-text title="G.Pass No" name="gpno" id="gpno" value="{{ $saleinvoices->gpno }}"     required   /> --}}
                                 <x-input-date title="Deilivery Date" id="deliverydt" name="deliverydt"  class="col-span-2" value="{{ $saleinvoices->saldate->format('Y-m-d') }}" />
                                 {{-- <x-input-text title="prvscustno" name="pcustno" id="pcustno" value="{{ $saleinvoices->customer_id }}"   /> --}}
 
@@ -651,12 +651,12 @@ function validateForm()
 
 
 
-        if(gpno.value == "")
-        {
-            showSnackbar("Please add gpno");
-            gpno.focus();
-            return;
-        }
+        // if(gpno.value == "")
+        // {
+        //     showSnackbar("Please add gpno");
+        //     gpno.focus();
+        //     return;
+        // }
     if(dynamicTableData.length == 0)
     {
         showSnackbar("You must have atleast 1 row of item to Proceed","info");
@@ -703,7 +703,7 @@ function validateForm()
     var data = { 'salewopo' : dynamicTableData,'rcvblamount':rcvblamount.value,'cartage':cartage.value,'discntamt':discntamt.value,'discntper':discntper.value,'discntper':discntper.value ,
         'customer_id': customer_id.value,'deliverydt':deliverydt.value,'custplan_id':custplan_id.value,
         'saletaxper':saletaxper.value,'saletaxamt':saletaxamt.value,'totrcvbamount':totrcvbamount.value,
-        'dcno':dcno.value,'gpno':gpno.value,'billno':billno.value
+        'dcno':dcno.value,'billno':billno.value
     ,'sale_invoice_id':sale_invoice_id.value,'saldescription':saldescription.value};
 
 

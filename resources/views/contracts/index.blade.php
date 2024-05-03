@@ -114,7 +114,7 @@
         paginationMode:"remote",
         sortMode:"remote",
         filterMode:"remote",
-        paginationSize:20,
+        paginationSize:10,
         paginationSizeSelector:[10,25,50,100],
         ajaxParams: function(){
             return {search:searchValue};

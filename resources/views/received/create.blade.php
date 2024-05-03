@@ -42,7 +42,7 @@
 
                                 <label for="head_id">Main Head<x-req /></label>
 
-                                    <select autocomplete="on" class="col-span-2" name="head_id" id="head_id" >
+                                    <select tabindex="-1" autocomplete="on" class="col-span-2" name="head_id" id="head_id" >
                                             {{-- <option value="" selected>--Payment Head</option> --}}
                                             @foreach($heads as $head)
                                             <option value="{{$head->id}}"> {{$head->title}} </option>
@@ -51,7 +51,7 @@
 
                                 <div class="w-96 relative grid grid-cols-4 gap-1 px-10 py-5  "   onclick="event.stopImmediatePropagation();" >
                                     {{-- <label for="autocompleted1">Sub Head<x-req /></label> --}}
-                                    <input id="autocompleted1" title="Head Name" placeholder="Select Sub Head Name" class=" px-5 py-3 w-full border border-gray-400 rounded-md"
+                                    <input id="autocompleted1" title="Head Name" placeholder="Select Sub Head Name" class="col-span-2 px-5 py-3 w-full border border-gray-400 rounded-md"
                                     onkeyup="onkeyUp1(event)" />
                                     <div>
                                         <select  id="supplier_id" name="supplier_id" size="20"  class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full h-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
@@ -118,8 +118,8 @@
 
                         </div>
                         <div>
-                            <x-input-text  title="subhead" name="subhdid" id="subhdid" hidden       />
-                            <x-input-text  title="mhed" name="hdid" id="hdid" hidden      />
+                            <x-input-text  title="subhead" name="subhdid" id="subhdid"   hidden     />
+                            <x-input-text  title="mhed" name="hdid" id="hdid"  hidden     />
                             <x-input-text  title="name" name="shname" id="shname" hidden     />
 
                         </div>
@@ -218,7 +218,7 @@ window.onload = function() {
         document.addEventListener('keyup', (e)=>{
 
             //  We are using ctrl key + 'ArrowUp' to show Modal
-            if(e.ctrlKey && e.keyCode == 32){
+            if(e.ctrlKey && e.keyCode == 500){
 
                 if(!adopted)
                 {
@@ -357,9 +357,16 @@ let chqno= document.getElementById("chqno");
 let chqamount= document.getElementById("chqamount");
 
 
+// $mychqno[e.id]=[ { chqno:e.cheque_no,chqdt:e.cheque_date,mychqamount:e.received,shid:e.subheadid,mnhdid:e.head_id }  ];
+
 subhdid.value=$mychqno[supplier_id.options[supplier_id.selectedIndex].value][0].shid;
-hdid.value=$mnhdid;
-shname.value= supplier_id.options[supplier_id.selectedIndex].text;
+
+// hdid.value=$mnhdid;
+
+// shname.value= supplier_id.options[supplier_id.selectedIndex].text;
+
+shname.value=$mychqno[supplier_id.options[supplier_id.selectedIndex].value][0].subhdname;
+hdid.value=$mychqno[supplier_id.options[supplier_id.selectedIndex].value][0].mnhdid;
 cheque_no.value=$mychqno[supplier_id.options[supplier_id.selectedIndex].value][0].chqno;
 chqno.value=$mychqno[supplier_id.options[supplier_id.selectedIndex].value][0].chqno;
 cheque_date.value=$mychqno[supplier_id.options[supplier_id.selectedIndex].value][0].chqdt;
@@ -824,6 +831,7 @@ var updateValues = (cell) => {
                   alert("Record Save Successfully")
                    clearform();
                    newsno();
+                   dynamicTable.setData();
                    var input = document.getElementById("autocompleted1").focus();
                 }
 
@@ -1021,16 +1029,16 @@ function renderOptions1(sup){
 
 
                  $mychqno=[];
-                 $mnhdid=[];
+                //  $mnhdid=[];
                 dropdownEl.length = 0
                 // a=0;
                 sup.forEach( e =>  {
                     addSelectElement(dropdownEl,e.id,e.custname )
                     // a=a+1;
                     // $shid =e.id;
-                    $mnhdid =e.head_id;
-                    $mychqdt =e.cheque_date;
-                     $mychqno[e.id]=[ { chqno:e.cheque_no,chqdt:e.cheque_date,mychqamount:e.received,shid:e.subheadid }  ];
+                    // $mnhdid =e.head_id;
+                    // $mychqdt =e.cheque_date;
+                     $mychqno[e.id]=[ { chqno:e.cheque_no,chqdt:e.cheque_date,mychqamount:e.received,shid:e.subheadid,mnhdid:e.head_id,subhdname:e.custname }  ];
 
                     });
 
@@ -1087,15 +1095,18 @@ head_id.addEventListener("change", () => {
                             let a = 0;
 
                             // $shid= [];
-                            $mnhdid= [];
+                            // $mnhdid= [];
                             // $shdname= [];
-
+                            // $itmdata= [];
+                            $mychqno=[];
                             list=data;
                             list.forEach(e => {
                                 a += 1;
                                 addSelectElement(supplier_id,e.id,e.custname )
+                                $mychqno[e.id]=[ { chqno:e.cheque_no,chqdt:e.cheque_date,mychqamount:e.received,shid:e.subheadid,mnhdid:e.head_id,subhdname:e.custname }  ];
                                 // $shid =e.id;
-                                $mnhdid =e.head_id;
+                                // $itmdata[e.id]=[ { mnhdid:e.head_id,mnhdname:e.head}  ];
+                                // $mnhdid =e.head_id;
                                 // $shdname =e.osuppname;
                             });
                         }else{
@@ -1111,10 +1122,10 @@ function clearform()
 {
 
     document.getElementById("autocompleted1").value="";
-    document.getElementById("hdid").value="";
-    document.getElementById("subhdid").value="";
+    document.getElementById("hdid").value=0;
+    // document.getElementById("subhdid").value=0;
     document.getElementById("shname").value="";
-    document.getElementById("autocompleted").value='';
+    // document.getElementById("autocompleted").value='';
     document.getElementById("cheque_no").value='';
     document.getElementById("pmntto").value='';
 
@@ -1123,7 +1134,7 @@ function clearform()
     document.getElementById("amount_pkr").value=0;
     document.getElementById("description").value='';
     // document.getElementById("impgdno").value='';
-    document.getElementById("supinvid").value='';
+    document.getElementById("supinvid").value=0;
 // document.getElementById("transno").value=document.getElementById("transno").value + 1;
 
 // var shname = document.getElementById("shname");

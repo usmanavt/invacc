@@ -135,25 +135,12 @@ body{
 
 
     {{-- Ledger Info --}}
-    <table  >
-        <tbody>
-            <tr >
-                {{-- <td > Customer Name:</td>
-                <td align ="left" style="font-size:12px;font-weight: bold;" > {{ $data[0]->custname }}</td>
-                <td> Address:</td>
-                <td align ="left" style="font-size:12px;font-weight: bold;" > {{ $data[0]->custadrs }}</td> --}}
-                <td > Customer Name:  <span style="font-weight: bold"> {{ $data[0]->custname }}</span>
-                <td > Address:  <span style="font-weight: bold"> {{ $data[0]->custadrs }}</span> </td>
 
-            </tr>
-        </tbody>
-    </table>
-
-
-    <table  >
+    <table style="Padding:5px; border:1.5px solid burlywood; "  >
         <tbody>
             <tr>
 
+                <td >G.Pass No:  <span style="font-weight: bold"> {{ $data[0]->gpno }}</span>
                 <td >P.O No:  <span style="font-weight: bold"> {{ $data[0]->podate }}</span>
                 <td >D.C No:  <span style="font-weight: bold"> {{ $data[0]->dcno }}</span>
                 <td >Bill No:  <span style="font-weight: bold"> {{ $data[0]->billno }}</span>
@@ -161,6 +148,24 @@ body{
             </tr>
         </tbody>
     </table>
+
+    <table style="Padding:3px; border:1.5px solid burlywood; "  >
+        <tbody>
+            <tr >
+                <td > Customer Name:  <span style="font-weight: bold"> {{ $data[0]->custname }}</span>
+            </tr>
+            <tr >
+                <td > Address:  <span style="font-weight: bold"> {{ $data[0]->custadrs }}</span> </td>
+            </tr>
+
+
+        </tbody>
+    </table>
+
+
+
+
+
     {{-- column headers --}}
     <table class="column-headers ">
         <thead >

@@ -106,8 +106,8 @@
                         </div>
 
                     <div>
-                        <x-input-text tabindex="-1" title="" name="subhdid" id="subhdid" hidden     />
-                        <x-input-text tabindex="-1" title="" name="hdid" id="hdid" hidden     />
+                        <x-input-text tabindex="-1" title="" name="subhdid" id="subhdid" hidden      />
+                        <x-input-text tabindex="-1" title="" name="hdid" id="hdid" hidden      />
                         <x-input-text tabindex="-1" title="" name="shname" id="shname" hidden     />
 
                     </div>
@@ -325,8 +325,11 @@ supplier_id.addEventListener("click", () => {
 
         input1.value=supplier_id.options[supplier_id.selectedIndex].text;
         subhdid.value=supplier_id.options[supplier_id.selectedIndex].value;
-        hdid.value=$mnhdid;
-        shname.value= supplier_id.options[supplier_id.selectedIndex].text;
+        // hdid.value=$mnhdid;
+        hdid.value =$itmdata[supplier_id.options[supplier_id.selectedIndex].value][0].mnhdid,
+        // shname.value= supplier_id.options[supplier_id.selectedIndex].text;
+        shname.value =$itmdata[supplier_id.options[supplier_id.selectedIndex].value][0].shdname,
+
         detailsUrl = `${getDetails}/?id=${supplier_id.options[supplier_id.selectedIndex].value}`
             fetchDataFromServer(detailsUrl)
             adopted = true
@@ -785,6 +788,7 @@ var updateValues = (cell) => {
                    alert("Record Save Successfully")
                    clearform();
                    newsno();
+                   dynamicTable.setData();
                    var input = document.getElementById("autocompleted1").focus();
 
                 }
@@ -980,15 +984,17 @@ function renderOptions1(sup){
     let dropdownEl=document.getElementById("supplier_id");
 
 
-                $shid= [];
-                $mnhdid= [];
-                $shdname= [];
+                // $shid= [];
+                // $mnhdid= [];
+                // $shdname= [];
+                $itmdata=[];
                 dropdownEl.length = 0
                 sup.forEach(e => {
                     addSelectElement(dropdownEl,e.id,e.supname )
-                    $shid =e.id;
-                    $mnhdid =e.head_id;
-                    $shdname =e.osuppname;
+                    // $shid =e.id;
+                    // $mnhdid =e.head_id;
+                    // $shdname =e.osuppname;
+                    $itmdata[e.id]=[ { shid:e.id,mnhdid:e.head_id,shdname:e.osuppname }  ];
                 });
 
 
@@ -1071,17 +1077,20 @@ head_id.addEventListener("change", () => {
 
                             let a = 0;
 
-                            $shid= [];
-                            $mnhdid= [];
-                            $shdname= [];
-
+                            // $shid= [];
+                            // $mnhdid= [];
+                            // $shdname= [];
+                            $itmdata= [];
                             list=data;
                             list.forEach(e => {
                                 a += 1;
                                 addSelectElement(supplier_id,e.id,a + '         ' + e.supname )
-                                $shid =e.id;
-                                $mnhdid =e.head_id;
-                                $shdname =e.osuppname;
+                                // $shid =e.id;
+                                // $mnhdid =e.head_id;
+                                // $shdname =e.osuppname;
+                                $itmdata[e.id]=[ { shid:e.id,mnhdid:e.head_id,shdname:e.osuppname }  ];
+
+
                             });
                         }else{
                         }
@@ -1097,8 +1106,8 @@ function clearform()
 {
 
     document.getElementById("autocompleted1").value="";
-    document.getElementById("hdid").value="";
-    document.getElementById("subhdid").value="";
+    document.getElementById("hdid").value=0;
+    document.getElementById("subhdid").value=0;
     document.getElementById("shname").value="";
     document.getElementById("autocompleted").value='';
     document.getElementById("cheque_no").value='';
@@ -1109,7 +1118,7 @@ function clearform()
     document.getElementById("amount_pkr").value=0;
     document.getElementById("description").value='';
     document.getElementById("impgdno").value='';
-    document.getElementById("cusinvid").value='';
+    document.getElementById("cusinvid").value=0;
 // document.getElementById("transno").value=document.getElementById("transno").value + 1;
 
 // var shname = document.getElementById("shname");

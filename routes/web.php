@@ -205,6 +205,7 @@ Route::resource('users',UserController::class);
  Route::get('/contracts/{contract}/printcontract', [ContractController::class, 'printContract'])->name('contracts.print');
  Route::post('/contracts/printcontractSelected', [ContractController::class, 'printContractSelected'])->name('contracts.printselected');
 Route::post('/contracts/deleteBankRequest', [ContractController::class, 'deleteBankRequest'])->name('contracts.del');
+Route::get('dupno',[ContractController::class, 'dupno'])->name('contracts.dupno');
 
 // Route::post('/contracts/printrpt', [ContractController::class, 'printrpt'])->name('contracts.printrpt');
 
@@ -244,6 +245,9 @@ Route::resource('cis', CommercialInvoiceController::class);
 
 Route::get('/localpurchase/{id}/printcontract', [LocalPurchaseController::class, 'printContract'])->name('localpurchase.print');
 Route::post('/localpurchase/deleteBankRequest', [LocalPurchaseController::class, 'deleteBankRequest'])->name('localpurchase.del');
+
+Route::get('maxgtpass',[LocalPurchaseController::class, 'maxgtpass'])->name('localpurchase.maxgtpass');
+
 Route::get('/localpurchase/{id}/deleterec', [LocalPurchaseController::class, 'deleterec']);
 
 
@@ -365,6 +369,9 @@ Route::get('/quotations/getQuotationsMaster', [QuotationController::class, 'getM
 Route::get('/quotations/getQuotationsDetails', [QuotationController::class, 'getDetail'])->name('quotations.details');
 Route::get('/quotations/getMmfrqut', [QuotationController::class, 'getmmfrqut'])->name('quotations.mmfrqut');
 Route::get('/quotations/getqutindex', [QuotationController::class, 'qutIndex'])->name('quotations.qIndex');
+
+Route::get('itemlistwrate',[QuotationController::class, 'itemlistwrate'])->name('quotations.itemlistwrate');
+Route::get('qutseqno',[QuotationController::class, 'qutseqno'])->name('quotations.qutseqno');
 
 
 Route::resource('quotations', QuotationController::class);

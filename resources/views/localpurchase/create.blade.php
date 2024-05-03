@@ -34,7 +34,7 @@
 
                             <label for="autocompleted" >Supplier<x-req /></label>
                             <div class="w-96 relative"   onclick="event.stopImmediatePropagation();" >
-                                <input id="autocompleted" placeholder="Select Conuntry Name" class=" px-5 py-3 w-full border border-gray-400 rounded-md"
+                                <input id="autocompleted" placeholder="Select Supplier Name" class=" px-5 py-3 w-full border border-gray-400 rounded-md"
                                 onkeyup="onkeyUp(event)" />
                                 <div>
                                     <select  id="supplier_id" name="supplier_id" size="20"  class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full h-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
@@ -42,25 +42,30 @@
                                 </div>
                             </div>
 
+                            <label for="autocompleted1" >Items<x-req /></label>
+                            <div class="w-96 relative"   onclick="event.stopImmediatePropagation();" >
+                                {{-- <label for="autocompleted1">Item Name<x-req /></label> --}}
+                                {{-- <input type="text"  class="col-span-2" id="autocompleted1" name="autocompleted1" placeholder="Select Items Name"
+                                onkeyup="onkeyUp1(event)"  > --}}
+                                <input id="autocompleted1" placeholder="Select Item Name" class=" px-5 py-10 w-full border border-gray-400 rounded-md"
+                                onkeyup="onkeyUp1(event)" />
 
+                            <div>
+                                <select  id="item_id" name="item_id" size="20"  class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-96 h-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                                </select>
+                            </div>
 
-
-
+                            </div>
 
                             <label for="invoice_date">Invoice Date<x-req /></label>
-                            <input type="date" value="{{ date('Y-m-d') }}" class="col-span-2" id="invoice_date" name="invoice_date" required>
+                            <input type="date" value="{{ date('Y-m-d') }}"  size="10" id="invoice_date" name="invoice_date" required>
 
                             <label for="number">Invoice #<x-req /></label>
-                            <input type="text" class="col-span-2" id="number" name="number" placeholder="Invoice No" >
+                            <input type="text"  id="number" name="number" size="10" placeholder="Invoice No" >
 
                             <label for="challanno">Bill #<x-req /></label>
-                            <input type="text" class="col-span-2" id="challanno" name="challanno"  >
-
-                            {{-- <input type="text"  id="abc" name="abc"  > --}}
-
-
-                                {{-- <label for="gpassno">GatePass #<x-req /></label> --}}
-                                <input type="text" class="col-span-2" id="gpassno" name="gpassno" value="{{$maxgpno}}" hidden  placeholder="gpassno">
+                            <input type="text"  id="challanno" size="10" name="challanno"  >
+                            <input type="text" class="col-span-2" id="gpassno" name="gpassno" value="{{$maxgpno}}" hidden   placeholder="gpassno">
 
                         </div>
 
@@ -71,8 +76,8 @@
                                 <legend>Invoice Level Expenses</legend>
                                 <div class="grid grid-cols-12 gap-2 py-2 items-center">
                                     <x-input-numeric title="Discou(%)" name="insurance" id="insurance" disabled    />
-                                    <input class="checked:bg-blue-500 checked:border-blue-500 focus:outline-none" type="checkbox" name="per" id="per" onclick="EnableDisableTextBox(this)" >
-                                    <x-input-numeric title="Discount(Amount)" name="collofcustom"     />
+                                    <input tabindex="-1" class="checked:bg-blue-500 checked:border-blue-500 focus:outline-none" type="checkbox" name="per" id="per" onclick="EnableDisableTextBox(this)" >
+                                    <x-input-numeric title="Discount(Amount)" name="collofcustom" class="col-span-2"     />
                                     <x-input-numeric title="Cartage/Loading Charges" name="exataxoffie" required  onblur="tnetamount()"  />
                                     <x-input-numeric title="Cutting/Reapair Charges" name="otherchrgs" required  onblur="tnetamount()"  />
                                     <x-input-numeric title="Payble Amount" name="bankntotal" disabled />
@@ -80,8 +85,8 @@
                             </fieldset>
 
                             <div class="flex flex-row px-4 py-2 items-center">
-                                <x-label value="Add Pcs & Feet Size & Press"></x-label>
-                                <x-button id="calculate" class="mx-2" type="button" onclick="calculate()">Generate Item Cost With Other Charges</x-button>
+                                {{-- <x-label value="Add Pcs & Feet Size & Press"></x-label> --}}
+                                <x-button tabindex="-1"  id="calculate" class="mx-2" type="button" onclick="calculate()">Generate Item Cost With Other Charges</x-button>
                                 {{-- <x-label value="This will prepare your commercial invoice for Submission"></x-label> --}}
 
                                 <label for="">
@@ -91,12 +96,13 @@
                             </div>
 
                             <div>
-                                <input class="checked:bg-blue-500 checked:border-blue-500 focus:outline-none"  type="checkbox" name="comp" id="comp"   onclick="chqcol(this)" >
+                                <input tabindex="-1" class="checked:bg-blue-500 checked:border-blue-500 focus:outline-none"  type="checkbox" name="comp" id="comp"   onclick="chqcol(this)" >
 
                                 <label for="">
                                     <span style="color: brown;font-weight: bold"> Temporary </span> <span class="text-red-500 font-semibold  "></span>
                                      </label>
                                      <input type="text" title="t1"  id="p9" name="p9" value="0" hidden    >
+                                     <input type="text" title="supid"  id="supid" name="supid" value="0" hidden     >
                             </div>
 
 
@@ -388,6 +394,66 @@ var calculate = function(){
             pushDynamicData(data)
         }
     })
+
+    item_id.addEventListener("click", () => {
+
+    var result = dynamicTableData.filter( dt => dt.id == item_id.options[item_id.selectedIndex].value)
+    if(result.length <= 0)
+    {
+
+    var inArray = dynamicTableData.filter( i => dynamicTableData.id == item_id.options[item_id.selectedIndex].value)
+
+    dynamicTableData.push({ id:item_id.options[item_id.selectedIndex].value})
+
+
+    dynamicTable.addData([
+        {
+            id:item_id.options[item_id.selectedIndex].value,
+            title:item_id.options[item_id.selectedIndex].text,
+            category_id:$itmdata[item_id.options[item_id.selectedIndex].value][0].category_id,
+            category:$itmdata[item_id.options[item_id.selectedIndex].value][0].category,
+
+            source_id:$itmdata[item_id.options[item_id.selectedIndex].value][0].source_id,
+            source:$itmdata[item_id.options[item_id.selectedIndex].value][0].source,
+
+            brand_id:$itmdata[item_id.options[item_id.selectedIndex].value][0].brand_id,
+            brand:$itmdata[item_id.options[item_id.selectedIndex].value][0].brand,
+
+            sku_id:$itmdata[item_id.options[item_id.selectedIndex].value][0].sku_id,
+            sku:$itmdata[item_id.options[item_id.selectedIndex].value][0].sku,
+
+            dimension_id:$itmdata[item_id.options[item_id.selectedIndex].value][0].dimension_id,
+            dimension:$itmdata[item_id.options[item_id.selectedIndex].value][0].dimension,
+
+                machineno:'',
+                repname:'',
+                forcust:'',
+                purunit:'',
+
+                 gdswt:0,
+                 pcs:0,
+                 qtyinfeet:0,
+                 gdsprice:0,
+                 length:0,
+                 amtinpkr:0,
+                 cstrt:0,
+                 cstamt:0
+
+
+
+
+        }
+    ])
+
+
+}
+
+
+});
+
+
+
+
     var updateValues = (cell) => {
         var data = cell.getData();
         // var leninft = Number(data.pcs) * Number(data.length)
@@ -685,7 +751,14 @@ var calculate = function(){
         .then( response => {
             if (response == 'success')
             {
-                window.open(window.location.origin + "/localpurchase","_self" );
+                // window.open(window.location.origin + "/localpurchase","_self" );
+
+                alert("Record Saved Successfully")
+                clearform();
+                dynamicTable.setData();
+                newgpno();
+                var input = document.getElementById("autocompleted").focus();
+
             }
         })
         .catch(error => {
@@ -763,6 +836,7 @@ function onkeyUp(e)
 
 document.addEventListener('DOMContentLoaded',()=> {
     hidedropdown();
+    hidedropdown1();
         });
 
 function renderOptions(xyz){
@@ -792,21 +866,148 @@ supplier_id.addEventListener("click", () => {
     let supplier_id= document.getElementById("supplier_id");
     let input= document.getElementById("autocompleted");
     input.value=supplier_id.options[supplier_id.selectedIndex].text;
+    supid.value=supplier_id.options[supplier_id.selectedIndex].value;
+
     hidedropdown();
 });
 
 
 supplier_id.addEventListener("keyup", function(event) {
 if (event.keyCode === 13) {
-event.preventDefault();
+// event.preventDefault();
 
-let supplier_id= document.getElementById("supplier_id");
-    let input= document.getElementById("autocompleted");
-    input.value=supplier_id.options[supplier_id.selectedIndex].text;
-    hidedropdown();
+// let supplier_id= document.getElementById("supplier_id");
+//     let input= document.getElementById("autocompleted");
+//     input.value=supplier_id.options[supplier_id.selectedIndex].text;
+//     hidedropdown();
+supplier_id.click();
 
 }
 });
+
+
+
+
+// ********* search list for item_id
+
+
+list1=@json($resultArray1);
+// const list1 = List1;
+function onkeyUp1(e)
+{
+    let keyword= e.target.value;
+    var item_id = document.getElementById("item_id");
+    item_id.classList.remove("hidden");
+
+    let filteredContries=list1.filter((c)=>c.srchb.toLowerCase().includes(keyword.toLowerCase()));
+    renderOptions1(filteredContries);
+
+
+    // e.id + '      '+ e.srchb+' '+e.dimension
+}
+
+function renderOptions1(xyz){
+
+    let dropdownEl=document.getElementById("item_id");
+
+
+                $itmdata= [];
+                dropdownEl.length = 0
+                xyz.forEach(e => {
+                    // addSelectElement(dropdownEl,e.id,e.supname )
+                    addSelectElement(dropdownEl,e.id,e.srchb)
+                    $itmdata[e.id]=[ { sku_id:e.sku_id,sku:e.sku,source_id:e.source_id,source:e.source,category_id:e.category_id,category:e.category,
+                                       dimension_id:e.dimension_id,dimension:e.dimension,brand:e.brand,brand_id:e.brand_id }  ];
+                        // console.log($itmdata[e.id].data);
+
+                 });
+
+
+}
+
+
+
+function hidedropdown1()
+{
+    var item_id = document.getElementById("item_id");
+    item_id.classList.add("hidden");
+}
+
+
+item_id.addEventListener("keyup", function(event) {
+if (event.keyCode === 13) {
+// event.preventDefault();
+item_id.click();
+
+}
+});
+
+document.onkeydown=function(e){
+    // if(e.keyCode == 17) isCtrl=true;
+    // if(e.keyCode == 83 && isCtrl == true) {
+        if(e.ctrlKey && e.which === 83){
+        //run code for CTRL+S -- ie, save!
+        // alert("dfadfasd");
+        submitbutton.click();
+        return false;
+    }
+}
+
+    item_id.onblur=function(){
+   hidedropdown1();
+
+   }
+
+
+
+
+
+
+
+   function clearform()
+{
+
+
+    document.getElementById("autocompleted").value="";
+    document.getElementById("autocompleted1").value="";
+    document.getElementById("number").value="";
+    document.getElementById("challanno").value="";
+    document.getElementById("insurance").value="";
+    document.getElementById("collofcustom").value='';
+    document.getElementById("exataxoffie").value='';
+    document.getElementById("otherchrgs").value='';
+
+    document.getElementById("bankntotal").value=0;
+    document.getElementById("comdescription").value=1;
+    document.getElementById("supid").value=0;
+}
+
+
+const maxgtpass = @json(route('localpurchase.maxgtpass'));
+
+function newgpno()
+{
+
+    const gpassno = document.getElementById('gpassno');
+    fetch(maxgtpass ,{
+                    method:"GET",
+                    headers: { 'Accept':'application/json','Content-type':'application/json'},
+                    })
+                    .then(response => response.json())
+                    .then( data => {
+                        if(data.length > 0)
+                        {
+                            gpassno.value=data;
+                        }else{
+                            gpassno.value=data;
+                            // console.log(data);
+                            // subhead.removeAttribute('required','')
+                            // subhead.setAttribute('disabled','')
+                        }
+                    })
+                    .catch(error => console.error(error))
+
+}
 
 
 
@@ -818,8 +1019,6 @@ let supplier_id= document.getElementById("supplier_id");
 
 @endpush
 
-{{-- required  onblur="Discper()" --}}
-{{-- required  onblur="DiscAmount()" --}}
 
 </x-app-layout>
 

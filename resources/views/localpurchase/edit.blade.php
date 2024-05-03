@@ -23,7 +23,7 @@
                         <div class="grid grid-cols-12 gap-2 py-2 items-center">
                             {{-- Contract Master --}}
                             <label for="supplier_id">Supplier</label>
-                            <select  autocomplete="on" class="col-span-2" name="supplier_id" id="supplier_id" required>
+                            <select  autocomplete="on" class="col-span-2" name="supplier_id" id="supplier_id" disabled >
                                 @foreach($suppliers as $supplier)
                                     @if ($supplier->id == $commercialInvoice->supplier_id)
                                     <option value="{{$supplier->id}}" selected> {{$supplier->title}} </option>
@@ -32,17 +32,28 @@
                                 @endforeach
                             </select>
 
+                            <label for="autocompleted1" >Items<x-req /></label>
+                            <div class="w-96 relative"   onclick="event.stopImmediatePropagation();" >
+                                <input id="autocompleted1" placeholder="Select Item Name" class=" px-5 py-10 w-full border border-gray-400 rounded-md"
+                                onkeyup="onkeyUp1(event)" />
+
+                            <div>
+                                <select  id="item_id" name="item_id" size="20"  class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-96 h-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                                </select>
+                            </div>
+
+                            </div>
 
                             <label for="invoice_date">Invoice Date</label>
-                            <input type="date" class="col-span-2" id="invoice_date" name="invoice_date" value="{{ $commercialInvoice->invoice_date->format('Y-m-d') }}"  required>
+                            <input type="date"  id="invoice_date" size="10" name="invoice_date" value="{{ $commercialInvoice->invoice_date->format('Y-m-d') }}"  required>
                             {{-- ->format('Y-m-d') --}}
                             {{-- Contract Master - Invoice Number --}}
                             <label for="invoiceno">Invoice #</label>
-                            <input type="text" class="col-span-2" id="invoiceno" name="invoiceno" placeholder="Invoice No"
+                            <input type="text"  id="invoiceno" size="10" name="invoiceno" placeholder="Invoice No"
                                 minlength="3" title="minimum 3 characters required" value="{{ $commercialInvoice->invoiceno }}" required>
 
                             <label for="challanno">Bill #<x-req /></label>
-                            <input type="text" class="col-span-2" id="challanno" name="challanno" value="{{ $commercialInvoice->challanno }}" >
+                            <input type="text"  id="challanno" name="challanno" size="10" value="{{ $commercialInvoice->challanno }}" >
 
 
                                 {{-- <label for="gpassno">GatePass #<x-req /></label> --}}
@@ -65,7 +76,7 @@
                         </fieldset>
 
                         <div class="flex flex-row px-4 py-2 items-center">
-                            <x-label value="Add Pcs & Feet Size & Press"></x-label>
+                            {{-- <x-label value="Add Pcs & Feet Size & Press"></x-label> --}}
                             <x-button id="calculate" class="mx-2" type="button" onclick="calculate()">Generate Item Cost With Other Charges</x-button>
                             {{-- <x-label value="This will prepare your commercial invoice for Submission"></x-label> --}}
                             <label for="">
@@ -118,6 +129,8 @@
 
 document.addEventListener('DOMContentLoaded',()=>{
         document.getElementById("submitbutton").disabled = true;
+        document.getElementById("autocompleted1").focus();
+        hidedropdown1();
      })
 
 let table;
@@ -270,6 +283,68 @@ let dynamicTableData = @json($cd);
     // -----------------FOR MODAL -------------------------------//
 let abc=0;
 //  Adds actual data to row - EDIT Special
+
+item_id.addEventListener("click", () => {
+
+var result = dynamicTableData.filter( dt => dt.id == item_id.options[item_id.selectedIndex].value)
+
+if(result.length <= 0)
+{
+
+// var inArray = dynamicTableData.filter( i => dynamicTableData.id == item_id.options[item_id.selectedIndex].value)
+
+// dynamicTableData.push({ id:item_id.options[item_id.selectedIndex].value})
+
+dynamicTableData.push({
+// dynamicTable.addData([
+//     {
+
+
+        material_id:item_id.options[item_id.selectedIndex].value,
+        id:0,
+        title:item_id.options[item_id.selectedIndex].text,
+        category_id:$itmdata[item_id.options[item_id.selectedIndex].value][0].category_id,
+        category:$itmdata[item_id.options[item_id.selectedIndex].value][0].category,
+
+        source_id:$itmdata[item_id.options[item_id.selectedIndex].value][0].source_id,
+        source:$itmdata[item_id.options[item_id.selectedIndex].value][0].source,
+
+        brand_id:$itmdata[item_id.options[item_id.selectedIndex].value][0].brand_id,
+        brand:$itmdata[item_id.options[item_id.selectedIndex].value][0].brand,
+
+        sku_id:$itmdata[item_id.options[item_id.selectedIndex].value][0].sku_id,
+        sku:$itmdata[item_id.options[item_id.selectedIndex].value][0].sku,
+
+        dimension_id:$itmdata[item_id.options[item_id.selectedIndex].value][0].dimension_id,
+        dimension:$itmdata[item_id.options[item_id.selectedIndex].value][0].dimension,
+
+            machineno:'',
+            repname:'',
+            forcust:'',
+            purunit:'',
+
+             gdswt:0,
+             pcs:0,
+             qtyinfeet:0,
+             gdsprice:0,
+             length:0,
+             amtinpkr:0,
+             cstrt:0,
+             cstamt:0
+
+
+    }
+
+)
+// dynamicTable.setData(dynamicTableData);
+
+}
+
+
+});
+
+
+
 function pushDynamicData(data)
 {
 
@@ -533,7 +608,7 @@ dynamicTable = new Tabulator("#dynamicTable", {
 // Add event handler to read keyboard key up event
 document.addEventListener('keyup', (e)=>{
     //  We are using ctrl key + 'ArrowUp' to show Modal
-    if(e.ctrlKey && e.keyCode == 32){
+    if(e.ctrlKey && e.keyCode == 500){
         showModal()
     }
 })
@@ -684,15 +759,99 @@ function chqcol(comp) {
 
 
 
+// ********* search list for item_id
+
+
+const addSelectElement = (select,id,value) => {
+        var option = document.createElement('option')
+        option.value = id
+        option.text  = value
+        select.appendChild(option)
+    }
+
+
+list1=@json($resultArray1);
+// const list1 = List1;
+function onkeyUp1(e)
+{
+    let keyword= e.target.value;
+    var item_id = document.getElementById("item_id");
+    item_id.classList.remove("hidden");
+
+    let filteredContries=list1.filter((c)=>c.srchb.toLowerCase().includes(keyword.toLowerCase()));
+    renderOptions1(filteredContries);
+
+
+    // e.id + '      '+ e.srchb+' '+e.dimension
+}
+
+function renderOptions1(xyz){
+
+    let dropdownEl=document.getElementById("item_id");
+
+
+                $itmdata= [];
+                dropdownEl.length = 0
+                xyz.forEach(e => {
+                    // addSelectElement(dropdownEl,e.id,e.supname )
+                    addSelectElement(dropdownEl,e.id,e.srchb)
+                    $itmdata[e.id]=[ { sku_id:e.sku_id,sku:e.sku,source_id:e.source_id,source:e.source,category_id:e.category_id,category:e.category,
+                                       dimension_id:e.dimension_id,dimension:e.dimension,brand:e.brand,brand_id:e.brand_id }  ];
+                        // console.log($itmdata[e.id].data);
+
+                 });
+
+
+}
+
+
+
+function hidedropdown1()
+{
+    var item_id = document.getElementById("item_id");
+    item_id.classList.add("hidden");
+}
+
+
+item_id.addEventListener("keyup", function(event) {
+if (event.keyCode === 13) {
+// event.preventDefault();
+item_id.click();
+
+}
+});
+
+// document.onkeydown=function(e){
+//     // if(e.keyCode == 17) isCtrl=true;
+//     // if(e.keyCode == 83 && isCtrl == true) {
+//         if(e.ctrlKey && e.which === 83){
+//         //run code for CTRL+S -- ie, save!
+//         // alert("dfadfasd");
+//         submitbutton.click();
+//         return false;
+//     }
+// }
+
+    item_id.onblur=function(){
+   hidedropdown1();
+
+   }
+
+
+
+
+
+
+
+
+
+
+
+
 </script>
 
 
 @endpush
-
-
-
-
-
 
 </x-app-layout>
 

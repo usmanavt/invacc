@@ -41,10 +41,11 @@
                         </div>
                         <div class="grid grid-cols-12 gap-1 py-2 items-center">
                             <x-input-date title="GatePass Date" id="gpdate" name="gpdate" value="{{$gatepasse->gpdate}}"  />
-                            <x-input-text title="GatePass Seq. #" name="gpseqid" id="gpseqid" value="{{$gatepasse->gpseqid }}"  disabled />
-                                <x-input-text title="gpno" name="gpid" id="gpid" value="{{$gatepasse->id }}"  disabled />
-                                    <x-input-text title="sale_invoice_id" name="sale_invoice_id" id="sale_invoice_id" value="{{$gatepasse->sale_invoice_id }}"  disabled />
+                            <x-input-text title="GatePass#" name="gpseqid" id="gpseqid" class="col-span-2" value="{{$gatepasse->gpseqid }}"  disabled />
                                 <input class="checked:bg-blue-500 checked:border-blue-500 focus:outline-none" type="checkbox" name="per" id="per" onclick="EnableDisableTextBox(this)" >
+                                <x-input-text title="" name="gpid" id="gpid" value="{{$gatepasse->id }}" hidden  disabled />
+                                    <x-input-text title="" name="sale_invoice_id" id="sale_invoice_id" value="{{$gatepasse->sale_invoice_id }}"  hidden />
+
                         </div>
                     </fieldset>
 
@@ -587,20 +588,20 @@ function validateForm()
     })
 }
 
-function EnableDisableTextBox(per) {
-        var discntper = document.getElementById("discntper");
-        discntper.disabled = per.checked ? false : true;
-        discntper.style.color ="black";
-        // if (!discntper.disabled) {
-        //     discntper.focus();
-        // }
-    }
+// function EnableDisableTextBox(per) {
+//         var discntper = document.getElementById("discntper");
+//         discntper.disabled = per.checked ? false : true;
+//         discntper.style.color ="black";
+//         // if (!discntper.disabled) {
+//         //     discntper.focus();
+//         // }
+//     }
 
 
     function EnableDisableTextBox(per) {
-        var purseqid = document.getElementById("purseqid");
-        purseqid.disabled = per.checked ? false : true;
-        purseqid.style.color ="black";
+        var gpseqid = document.getElementById("gpseqid");
+        gpseqid.disabled = per.checked ? false : true;
+        gpseqid.style.color ="black";
         // if (!discntper.disabled) {
         //     discntper.focus();
         // }

@@ -137,10 +137,10 @@ class SalesInvoicesController  extends Controller
         // return view('sales.create')
         // $mycname='MUHAMMAD HABIB & Co.';
         $maxdcno = DB::table('sale_invoices')->select('dcno')->max('dcno')+1;
-        $maxgpno = DB::table('sale_invoices')->select('gpno')->max('gpno')+1;
+        // $maxgpno = DB::table('sale_invoices')->select('gpno')->max('gpno')+1;
         $maxbillno = DB::table('sale_invoices')->select('billno')->max('billno')+1;
 
-        return \view ('sales.create',compact('maxdcno','maxgpno','maxbillno'))
+        return \view ('sales.create',compact('maxdcno','maxbillno'))
         ->with('customers',Customer::select('id','title')->get())
          ->with('locations',Location::select('id','title')->get());
         // ->with('skus',Sku::select('id','title')->get());
@@ -172,7 +172,7 @@ class SalesInvoicesController  extends Controller
             $ci->podate = $request->podate;
             $ci->saldate = $request->deliverydt;
             $ci->dcno = $request->dcno;
-            $ci->gpno = $request->gpno;
+            // $ci->gpno = $request->gpno;
             $ci->billno = $request->billno;
             $ci->customer_id = $request->customer_id;
             $ci->discntper = $request->discntper;
@@ -414,7 +414,7 @@ class SalesInvoicesController  extends Controller
             $sale_invoices->podate = $request->podate;
             $sale_invoices->saldate = $request->deliverydt;
             $sale_invoices->dcno = $request->dcno;
-            $sale_invoices->gpno = $request->gpno;
+            // $sale_invoices->gpno = $request->gpno;
             $sale_invoices->billno = $request->billno;
             $sale_invoices->customer_id = $request->customer_id;
             $sale_invoices->discntper = $request->discntper;

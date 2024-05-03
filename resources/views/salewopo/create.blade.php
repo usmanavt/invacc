@@ -38,7 +38,7 @@
 
                                 <label for="autocompleted" >Customers<x-req /></label>
                                 <div class="w-96 relative"   onclick="event.stopImmediatePropagation();" >
-                                    <input id="autocompleted" placeholder="Select Conuntry Name"  class=" px-5 py-3 w-50 border border-gray-400 rounded-md"
+                                    <input id="autocompleted" placeholder="Select Conuntry Name"  class=" px-5 py-3 w-full border border-gray-400 rounded-md"
                                     onkeyup="onkeyUp(event)" />
                                     <div>
                                         <select  id="customer_id" name="customer_id" size="20"  class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full h-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
@@ -46,10 +46,11 @@
                                     </div>
                                 </div>
 
-                                <x-input-text title="G.Pass No" name="gpno" id="gpno" value="{{$maxgpno}}"     required   />
-                                <x-input-date title="Deilivery Date" id="deliverydt" name="deliverydt" req required class="col-span-2" />
+                                {{-- <x-input-text title="G.Pass No" name="gpno" id="gpno"      required   /> --}}
+
                             </div>
                             <div class="grid grid-cols-12 gap-1 py-2 items-center">
+                                <x-input-date title="Deilivery Date" id="deliverydt" name="deliverydt" req required class="col-span-2" />
                                 <x-input-text title="DC No" name="dcno" id="dcno"  class="col-span-2;width=50 " value="{{$maxdcno}}"     required   />
                                 <x-input-text title="Bill No" name="billno" id="billno" class="col-span-2;w-20"  value="{{$maxbillno}}"     required   />
                                 <label for="">
@@ -919,7 +920,7 @@ var totalVal = function(values, data, calcParams){
             var data = { 'sales' : dynamicTableData,'rcvblamount':rcvblamount.value,'cartage':cartage.value,'discntamt':discntamt.value,'discntper':discntper.value,'discntper':discntper.value ,
         'customer_id': customer_id.value,'deliverydt':deliverydt.value,'custplan_id':custplan_id,
         'saletaxper':saletaxper.value,'saletaxamt':saletaxamt.value,'totrcvbamount':totrcvbamount.value,
-        'dcno':dcno.value,'gpno':gpno.value,'billno':billno.value,'saldescription':saldescription.value};
+        'dcno':dcno.value,'billno':billno.value,'saldescription':saldescription.value};
 
             // All Ok - Proceed
             fetch(@json(route('salewopo.store')),{

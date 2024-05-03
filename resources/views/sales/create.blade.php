@@ -36,7 +36,7 @@
                                 <x-input-text title="Customer Name" name="custname" id="custname"  class="col-span-2" disabled  />
                                 <x-input-text title="P.O No" name="pono" id="pono"  class="col-span-2" disabled  />
                                 <x-input-date title="P.O Date" name="podate" id="podate"  class="col-span-2" disabled  />
-                                <x-input-text title="G.Pass No" name="gpno" id="gpno" value="{{$maxgpno}}"     class="col-span-2"   />
+                                {{-- <x-input-text title="G.Pass No" name="gpno" id="gpno"      class="col-span-2"   /> --}}
                             </div>
                             <div class="grid grid-cols-12 gap-1 py-2 items-center">
                                 <x-input-date title="Deilivery Date" id="deliverydt" name="deliverydt"  class="col-span-2" />
@@ -477,7 +477,7 @@ var updateValues = (cell) => {
   if(Number(data.totqty) > 0  )
 
 {
-       if(cell.getData().sku_id==1)
+       if(cell.getData().sku=="KG")
          {
 
             var sum = (Number(data.feedqty) * Number(data.price))
@@ -487,11 +487,11 @@ var updateValues = (cell) => {
             qtypcs=((pr2*Number(data.sqtypcs))/100).toFixed(4)
             qtyfeet=((pr2*Number(data.sqtyfeet))/100).toFixed(4)
             // qtykg=((pr2*Number(data.sqtykg))/100).toFixed(2)
-            qtykg=Number(data.sqtykg)
+            qtykg=Number(data.feedqty)
 
 
          }
-         else if(cell.getData().sku_id==2 )
+         else if(cell.getData().sku=="PCS" )
          {
             var sum = (Number(data.feedqty) * Number(data.price))
             var pr1=(Number(data.feedqty) / Number(data.totqty))*100
@@ -502,7 +502,7 @@ var updateValues = (cell) => {
 
          }
 
-         else if(cell.getData().sku_id==3)
+         else if(cell.getData().sku=="FEET")
          {
             var sum = (Number(data.feedqty) * Number(data.price))
             // var pr1=(Number(data.qtyfeet) / Number(data.totqty))*100
@@ -511,7 +511,7 @@ var updateValues = (cell) => {
             qtykg=((pr2*Number(data.sqtykg))/100).toFixed(4)
             qtypcs=((pr2*Number(data.sqtypcs))/100).toFixed(4)
             // qtyfeet=((pr2*Number(data.sqtyfeet))/100).toFixed(2)
-            qtyfeet=Number(data.sqtyfeet)
+            qtyfeet=Number(data.feedqty)
 
          }
         else
@@ -906,7 +906,7 @@ var totalVal = function(values, data, calcParams){
             var data = { 'sales' : dynamicTableData,'rcvblamount':rcvblamount.value,'cartage':cartage.value,'discntamt':discntamt.value,'discntper':discntper.value,'discntper':discntper.value ,
         'customer_id': customer_id,'deliverydt':deliverydt.value,'custplan_id':custplan_id,
         'saletaxper':saletaxper.value,'saletaxamt':saletaxamt.value,'totrcvbamount':totrcvbamount.value,
-        'podate':podate.value,'pono':pono.value,'dcno':dcno.value,'gpno':gpno.value,'billno':billno.value,'saldescription':saldescription.value};
+        'podate':podate.value,'pono':pono.value,'dcno':dcno.value,'billno':billno.value,'saldescription':saldescription.value};
 
             // All Ok - Proceed
             fetch(@json(route('saleinvoices.store')),{

@@ -226,7 +226,7 @@ class GatepasseController extends Controller
             INNER JOIN (
                   SELECT sale_invoice_id, SUM(gptotpcs) as pcs,SUM(gptotwt) AS wt,SUM(gptotfeet) AS ft
             FROM gatepasses where  sale_invoice_id=$ci->sale_invoice_id  GROUP BY sale_invoice_id) x ON c.id = x.sale_invoice_id
-            SET c.balsltpcs = c.sltpcs - x.pcs,c.balsltwt= c.sltwt-x.wt,c.balslfeet=slfeet-x.ft
+            SET c.balsltpcs = c.sltpcs - x.pcs,c.balsltwt= c.sltwt-x.wt,c.balslfeet=slfeet-x.ft,c.gpno=$ci->gpseqid
             where  id = $ci->sale_invoice_id  "));
 
             // //****################# Transfert item wise Contract Balance from detail to detail
@@ -394,7 +394,7 @@ class GatepasseController extends Controller
             INNER JOIN (
                   SELECT sale_invoice_id, SUM(gptotpcs) as pcs,SUM(gptotwt) AS wt,SUM(gptotfeet) AS ft
             FROM gatepasses where  sale_invoice_id=$ci->sale_invoice_id  GROUP BY sale_invoice_id) x ON c.id = x.sale_invoice_id
-            SET c.balsltpcs = c.sltpcs - x.pcs,c.balsltwt= c.sltwt-x.wt,c.balslfeet=slfeet-x.ft
+            SET c.balsltpcs = c.sltpcs - x.pcs,c.balsltwt= c.sltwt-x.wt,c.balslfeet=slfeet-x.ft,c.gpno=$ci->gpseqid
             where  id = $ci->sale_invoice_id  "));
 
             // //****################# Transfert item wise Contract Balance from detail to detail

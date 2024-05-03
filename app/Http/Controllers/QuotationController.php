@@ -29,6 +29,30 @@ class QuotationController  extends Controller
     }
 
 
+    public function qutseqno(Request $request)
+    {
+        //  dd($request->all());
+        // $head_id = $request->head_id;
+        $newqutno = DB::table('quotations')->select('qutno')->max('qutno')+1;
+        return  $newqutno;
+
+    }
+
+
+
+    public function itemlistwrate(Request $request)
+    {
+        //  dd($request->all());
+        $customerid = $request->customer_id;
+        // procpaymentmaster(32)
+        return  DB::select('call procqutmatfrmlist(?)',array($customerid));
+
+    }
+
+
+
+
+
     public function getMaster(Request $request)
     {
         // dd($request->all());
@@ -139,11 +163,26 @@ class QuotationController  extends Controller
     {
         // $locations = Location::select('id','title')->where('status',1)->get();
 
-        $result = DB::table('customers')->whereNotIn('id',[0,1])->get();
+        $result = DB::table('vwcusfrmlist')->get();
         $resultArray = $result->toArray();
         $data=compact('resultArray');
 
 
+        $result1 = DB::table('vwcontfrmmatlist')->get();
+        $resultArray1 = $result1->toArray();
+        $data1=compact('resultArray1');
+
+        // $result1=DB::table('materials as a')
+        // ->leftJoin('last_sale_rate AS b', function($join) {
+        //     $join->on('a.id', '=', 'b.material_id')
+        //          ->where('b.customer_id', '=', 65);
+        // // dd($customerid);
+
+        // });
+        // $resultArray1 = $result1->toArray();
+        // $data1=compact('resultArray1');
+
+// dd($contracts);
 
 
         // return view('sales.create')
@@ -152,7 +191,7 @@ class QuotationController  extends Controller
         // $maxblno = DB::table('sale_invoices')->select('*')->max('prno')+1;
         // $maxgpno = DB::table('sale_invoices')->select('*')->max('gpno')+1;
         return \view ('quotations.create',compact('maxdcno','mycname'))
-        ->with($data)
+        ->with($data)->with($data1)
         ->with('customers',Customer::select('id','title')->where('id','<>','1')->get())
         ->with('locations',Location::select('id','title')->get())
         ->with('skus',Sku::select('id','title')->get());
@@ -264,6 +303,16 @@ class QuotationController  extends Controller
     public function edit($id)
     {
 
+        $result = DB::table('vwcusfrmlist')->get();
+        $resultArray = $result->toArray();
+        $data0=compact('resultArray');
+
+
+        $result1 = DB::table('vwcontfrmmatlist')->get();
+        $resultArray1 = $result1->toArray();
+        $data1=compact('resultArray1');
+
+
         $passwrd = DB::table('tblpwrd')->select('pwrdtxt')->max('pwrdtxt');
 
         $cd = DB::table('quotation_details')
@@ -273,9 +322,6 @@ class QuotationController  extends Controller
         ->where('sale_invoice_id',$id)->get();
          $data=compact('cd');
 
-        // DB::table('skus')->select('id AS dunitid','title AS dunit')
-        // ->whereIn('id',[1,2])->get();
-
 
 
         return view('quotations.edit',compact('passwrd'))
@@ -283,7 +329,7 @@ class QuotationController  extends Controller
         // ->with('materials',Material::select('id','category')->get())
         ->with('quotation',Quotation::findOrFail($id))
         // ->with('cd',QuotationDetails::where('sale_invoice_id',$id)->get())
-        ->with($data)
+        ->with($data)->with($data0)->with($data1)
         ->with('locations',Location::select('id','title')->get())
         ->with('skus',Sku::select('id','title')->get());
 

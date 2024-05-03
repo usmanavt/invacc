@@ -22,7 +22,7 @@
                         {{-- Contract Master --}}
                         <div class="grid grid-cols-12 gap-2 py-2 items-center">
                             {{-- Contract Master --}}
-                            <label for="supplier_id">Supplier</label>
+                            {{-- <label for="supplier_id">Supplier</label>
                             <select  autocomplete="on" class="col-span-2" name="supplier_id" id="supplier_id" required>
                                 @foreach($suppliers as $supplier)
                                     @if ($supplier->id == $contract->supplier_id)
@@ -30,7 +30,38 @@
                                     @endif
                                     <option value="{{$supplier->id}}"> {{$supplier->title}} </option>
                                 @endforeach
-                            </select>
+                            </select> --}}
+
+                            <label for="autocompleted" >Supplier/Item/Date<x-req /></label>
+                            <div class="w-96 relative"   onclick="event.stopImmediatePropagation();" >
+                                <input id="autocompleted" placeholder="Select Supplier Name" disabled value="{{$pcontract}}"   class=" px-5 py-3 w-full border border-gray-400 rounded-md"
+                                onkeyup="onkeyUp(event)" />
+
+
+
+
+                                <div>
+                                    <select  id="supplier_id" name="supplier_id" size="20"  class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full h-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                                   </select>
+                                </div>
+                            </div>
+
+
+                            <label for="autocompleted1" >Items<x-req /></label>
+                            <div class="w-96 relative"   onclick="event.stopImmediatePropagation();" >
+                                {{-- <label for="autocompleted1">Item Name<x-req /></label> --}}
+                                {{-- <input type="text"  class="col-span-2" id="autocompleted1" name="autocompleted1" placeholder="Select Items Name"
+                                onkeyup="onkeyUp1(event)"  > --}}
+                                <input id="autocompleted1" placeholder="Select Item Name" class=" px-5 py-10 w-full border border-gray-400 rounded-md"
+                                onkeyup="onkeyUp1(event)" />
+
+                            <div>
+                                <select  id="item_id" name="item_id" size="20"  class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-96 h-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                                </select>
+                            </div>
+
+                            </div>
+
 
                             {{-- Contract Master - Invoice Date --}}
                             <label for="invoice_date">Contract Date</label>
@@ -41,7 +72,10 @@
                             <input type="text" class="col-span-2" id="number" name="number" placeholder="Invoice No"
                                 minlength="3" title="minimum 3 characters required" value="{{ $contract->number }}" required>
 
+                                <input type="text"  id="supid" name="supid" class="col-span-2" hidden   value="{{ $contract->supplier_id }}" >
                         </div>
+
+
 
                         {{-- Contract Details --}}
                         <x-tabulator-dynamic />
@@ -171,6 +205,58 @@ window.onclick = function(event) {
 }
 // -----------------FOR MODAL -------------------------------//
 
+
+
+item_id.addEventListener("click", () => {
+
+// var result = dynamicTableData.filter( dt => dt.id == item_id.options[item_id.selectedIndex].value)
+if(!dynamicTableData.filter( dt => dt.material_id === item_id.options[item_id.selectedIndex].value).length)
+{
+
+    dynamicTableData.push({
+            material_id:item_id.options[item_id.selectedIndex].value,
+            material_title:item_id.options[item_id.selectedIndex].text,
+            category_id:$itmdata[item_id.options[item_id.selectedIndex].value][0].category_id,
+            category:$itmdata[item_id.options[item_id.selectedIndex].value][0].category,
+
+            source_id:$itmdata[item_id.options[item_id.selectedIndex].value][0].source_id,
+            source:$itmdata[item_id.options[item_id.selectedIndex].value][0].source,
+
+            brand_id:$itmdata[item_id.options[item_id.selectedIndex].value][0].brand_id,
+            brand:$itmdata[item_id.options[item_id.selectedIndex].value][0].brand,
+
+            sku_id:$itmdata[item_id.options[item_id.selectedIndex].value][0].sku_id,
+            sku:$itmdata[item_id.options[item_id.selectedIndex].value][0].sku,
+
+            dimension_id:$itmdata[item_id.options[item_id.selectedIndex].value][0].dimension_id,
+            dimension:$itmdata[item_id.options[item_id.selectedIndex].value][0].dimension,
+
+            bundle1:0,
+            bundle2:0,
+            pcspbundle1:0,
+            pcspbundle2:0,
+            gdswt:0,
+            gdsprice:0,
+            dtyrate:0,
+            invsrate:0,
+            gdspricetot:0.00,
+
+
+
+        })
+
+
+}
+
+
+});
+
+
+
+
+
+
+
 //  Adds actual data to row - EDIT Special
 function pushDynamicData(data)
 {
@@ -237,37 +323,32 @@ var updateValues = (cell) => {
     });
 }
 
-// var totalVal = function(values, data, calcParams){
-//     //values - array of column values
-//     //data - all table data
-//     //calcParams - params passed from the column definition object
-//     console.log(values,data,calcParams)
+
+
+// var totval = function(values, data, calcParams){
 //     var calc = 0;
 //     values.forEach(function(value){
-//         calc += value ;
+//             calc += Number(value) ;
+
 //     });
+
+//     // console.info(abc);
 //     return calc;
 // }
 
-var totval = function(values, data, calcParams){
-    //values - array of column values
-    //data - all table data
-    //calcParams - params passed from the column definition object
-
-    var calc = 0;
-    // var abc=0;
-    values.forEach(function(value){
-        // if(value > 18){
-
+var totalVal = function(values, data, calcParams){
+        var calc = 0;
+        // values=0;
+        values.forEach(function(value){
             calc += Number(value) ;
-            // abc += Number(value) ;
+            // totwt+= value ;
+            console.log(calc);
 
+        });
+        // totwt=calc;
+        return calc;
+    }
 
-    });
-
-    // console.info(abc);
-    return calc;
-}
 
 var customMutator = function(value, data, type, params, component){
     //value - original value of the cell
@@ -406,14 +487,10 @@ dynamicTable = new Tabulator("#dynamicTable", {
         },
 
 
-
-
-
-
         {   title:"Supp.Val($)",
             field:"purval",
             cssClass:"bg-gray-200 font-semibold",
-            bottomCalc:"sum",
+            // bottomCalc:totalVal,
             // formatterParams:{thousand:",",precision:3},
             bottomCalcParams:{precision:3} ,
             formatter:"money",
@@ -421,7 +498,6 @@ dynamicTable = new Tabulator("#dynamicTable", {
                 decimal:".",
                 thousand:",",
                 symbol:"$",
-
                 precision:3     },
             formatter:function(cell,row)
             {
@@ -429,25 +505,28 @@ dynamicTable = new Tabulator("#dynamicTable", {
                     if(cell.getData().sku_id == 1)
                     {
 
-                        return (cell.getData().gdswt * cell.getData().gdsprice).toFixed(3)
+                        return (cell.getData().gdswt * cell.getData().gdsprice).toFixed(3);
+
 
                     }
                     else if (cell.getData().sku_id == 2)
                     {
-                        return (cell.getData().bundle1)  * (cell.getData().gdsprice).toFixed(3)
+                        return ((cell.getData().bundle1)  * (cell.getData().gdsprice)).toFixed(3);
                     }
                     else {
                         // Add for other types
-                    } bottomCalc:"sum2"
+                    }
 
                 }
+                 ,bottomCalc:totalVal
         },
 
 
         {   title:"Duty.Val($)",
             field:"dutval",
             cssClass:"bg-gray-200 font-semibold",
-             bottomCalc:"sum",
+            // bottomCalc:"sum2",
+            bottomCalc:totalVal,
             bottomCalcParams:{precision:0} ,
             formatter:"money",
             formatterParams:{
@@ -466,13 +545,15 @@ dynamicTable = new Tabulator("#dynamicTable", {
                     }
                     else if (cell.getData().sku_id == 2)
                     {
-                        return (cell.getData().bundle1) *  (cell.getData().dtyrate).toFixed(3)
+                        return ((cell.getData().bundle1) *  (cell.getData().dtyrate)).toFixed(3)
                     }
                     else {
                         // Add for other types
-                    } bottomCalc:"sum3"
+                    }
+
 
                 }
+                // ,bottomCalc:totval
         }
 
 
@@ -505,7 +586,7 @@ dynamicTable = new Tabulator("#dynamicTable", {
 // Add event handler to read keyboard key up event
 document.addEventListener('keyup', (e)=>{
     //  We are using ctrl key + 'ArrowUp' to show Modal
-    if(e.ctrlKey && e.keyCode == 32){
+    if(e.ctrlKey && e.keyCode == 500){
         showModal()
     }
 })
@@ -522,13 +603,14 @@ function disableSubmitButton()
   // Validation & Post
 function validateForm()
 {
-    var sid = document.getElementById("supplier_id");
-    var supplier_id = sid.options[sid.selectedIndex];
+    // var sid = document.getElementById("supplier_id");
+    // var supplier_id = sid.options[sid.selectedIndex];
     var invoice_date = document.getElementById("invoice_date");
+    var supid = document.getElementById("supid");
     var number = document.getElementById("number");
 
     // Required
-    if(supplier_id.value <= 0)
+    if(supid.value == 0 )
     {
         showSnackbar("Please select From Supplier");
         supplier_id.focus();
@@ -581,7 +663,7 @@ function validateForm()
 
     }
     disableSubmitButton(true);
-    var data = { 'contracts' : dynamicTableData ,'supplier_id': supplier_id.value,'invoice_date':invoice_date.value,'number':number.value};
+    var data = { 'contracts' : dynamicTableData ,'supid': supid.value,'invoice_date':invoice_date.value,'number':number.value};
     // All Ok - Proceed
     fetch(@json(route('contracts.update',$contract)),{
         credentials: 'same-origin', // 'include', default: 'omit'
@@ -617,6 +699,166 @@ edtpw.onblur=function(){
     {document.getElementById("submitbutton").disabled = true;}
 
     }
+
+
+//    *********************** For Search List Box
+
+
+
+
+const addSelectElement = (select,id,value) => {
+        var option = document.createElement('option')
+        option.value = id
+        option.text  = value
+        select.appendChild(option)
+    }
+
+myarray=@json($resultArray);
+const contries = myarray;
+function onkeyUp(e)
+{
+    let keyword= e.target.value;
+    var supplier_id = document.getElementById("supplier_id");
+    supplier_id.classList.remove("hidden");
+
+    let filteredContries=contries.filter((c)=>c.title.toLowerCase().includes(keyword.toLowerCase()));
+    // console.log(filteredContries);
+    renderOptions(filteredContries);
+
+}
+
+
+document.addEventListener('DOMContentLoaded',()=> {
+    hidedropdown();
+    hidedropdown1();
+        });
+
+function renderOptions(xyz){
+
+    let dropdownEl=document.getElementById("supplier_id");
+
+                dropdownEl.length = 0
+                xyz.forEach(e => {
+                    addSelectElement(dropdownEl,e.id,e.title)
+                });
+}
+
+document.addEventListener("click" , () => {
+    hidedropdown();
+    hidedropdown1();
+});
+
+
+function hidedropdown()
+{
+    var supplier_id = document.getElementById("supplier_id");
+    supplier_id.classList.add("hidden");
+}
+
+
+supplier_id.addEventListener("click", () => {
+
+    let supplier_id= document.getElementById("supplier_id");
+    let input= document.getElementById("autocompleted");
+    let supid= document.getElementById("supid");
+
+    input.value=supplier_id.options[supplier_id.selectedIndex].text;
+    supid.value=supplier_id.options[supplier_id.selectedIndex].value;
+
+
+    hidedropdown();
+});
+
+
+supplier_id.addEventListener("keyup", function(event) {
+if (event.keyCode === 13) {
+event.preventDefault();
+supplier_id.click();
+
+// let supplier_id= document.getElementById("supplier_id");
+//     let input= document.getElementById("autocompleted");
+//     input.value=supplier_id.options[supplier_id.selectedIndex].text;
+//     hidedropdown();
+
+}
+});
+
+
+
+
+// ********* search list for item_id
+
+
+list1=@json($resultArray1);
+// const list1 = List1;
+function onkeyUp1(e)
+{
+    let keyword= e.target.value;
+    var item_id = document.getElementById("item_id");
+    item_id.classList.remove("hidden");
+
+    let filteredContries=list1.filter((c)=>c.srchb.toLowerCase().includes(keyword.toLowerCase()));
+    renderOptions1(filteredContries);
+
+
+    // e.id + '      '+ e.srchb+' '+e.dimension
+}
+
+function renderOptions1(xyz){
+
+    let dropdownEl=document.getElementById("item_id");
+
+
+                $itmdata= [];
+                dropdownEl.length = 0
+                xyz.forEach(e => {
+                    // addSelectElement(dropdownEl,e.id,e.supname )
+                    addSelectElement(dropdownEl,e.id,e.srchb)
+                    $itmdata[e.id]=[ { sku_id:e.sku_id,sku:e.sku,source_id:e.source_id,source:e.source,category_id:e.category_id,category:e.category,
+                                       dimension_id:e.dimension_id,dimension:e.dimension,brand:e.brand,brand_id:e.brand_id }  ];
+                        // console.log($itmdata[e.id].data);
+
+                 });
+
+
+}
+
+
+
+function hidedropdown1()
+{
+    var item_id = document.getElementById("item_id");
+    item_id.classList.add("hidden");
+}
+
+
+item_id.addEventListener("keyup", function(event) {
+if (event.keyCode === 13) {
+// event.preventDefault();
+item_id.click();
+
+}
+});
+
+// document.onkeydown=function(e){
+//     // if(e.keyCode == 17) isCtrl=true;
+//     // if(e.keyCode == 83 && isCtrl == true) {
+//         if(e.ctrlKey && e.which === 83){
+//         //run code for CTRL+S -- ie, save!
+//         // alert("dfadfasd");
+//         submitbutton.click();
+//         return false;
+//     }
+// }
+
+    item_id.onblur=function(){
+   hidedropdown1();
+
+   }
+
+
+
+
 
 
 </script>

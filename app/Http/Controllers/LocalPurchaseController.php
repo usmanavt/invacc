@@ -26,6 +26,23 @@ use Illuminate\Support\Facades\Session;
 // LocalPurchaseController
 class LocalPurchaseController  extends Controller
 {
+
+
+    public function maxgtpass(Request $request)
+    {
+        //  dd($request->all());
+        // $head_id = $request->head_id;
+        $maxgpno = DB::table('commercial_invoices')->select('gpassno')->max('gpassno')+1;
+        return  $maxgpno;
+
+    }
+
+
+
+
+
+
+
     public function index(Request $request)
     {
          return view('localpurchase.index');
@@ -164,10 +181,15 @@ class LocalPurchaseController  extends Controller
         $resultArray = $result->toArray();
         $data=compact('resultArray');
 
+        $result1 = DB::table('vwlpurfrmmatlist')->get();
+        $resultArray1 = $result1->toArray();
+        $data1=compact('resultArray1');
+
+
 
         // $locations = Location::select('id','title')->where('status',1)->get();
         $maxgpno = DB::table('commercial_invoices')->select('gpassno')->max('gpassno')+1;
-        return view('localpurchase.create',compact('maxgpno'))->with($data)
+        return view('localpurchase.create',compact('maxgpno'))->with($data)->with($data1)
         // return \view ('sales.create',compact('maxdcno','maxblno','maxgpno'))
         ->with('suppliers',Supplier::select('id','title')->where('source_id','<>','2')->get())
         // ->where('source_id',1)->get())
@@ -217,8 +239,21 @@ class LocalPurchaseController  extends Controller
                 $ci->insurance =  0;
               }
 
-            $ci->collofcustom = $request->collofcustom;
-            $ci->exataxoffie = $request->exataxoffie;
+
+              if (!empty($request->collofcustom)) {
+                $ci->collofcustom = $request->collofcustom;
+              }
+              else{
+                $ci->collofcustom =  0;
+              }
+
+              if (!empty($request->exataxoffie)) {
+                $ci->exataxoffie = $request->exataxoffie;
+              }
+              else{
+                $ci->exataxoffie =  0;
+              }
+
             $ci->lngnshipdochrgs = 0;
             $ci->localcartage = 0;
             $ci->miscexplunchetc = 0;
@@ -328,7 +363,7 @@ class LocalPurchaseController  extends Controller
 
 
             DB::commit();
-            Session::flash('success','Contract Information Saved');
+            // Session::flash('success','Contract Information Saved');
             return response()->json(['success'],200);
         } catch (\Throwable $th) {
             DB::rollback();
@@ -340,6 +375,14 @@ class LocalPurchaseController  extends Controller
     // public function edit(Contract $contract)
     public function edit($id)
     {
+
+
+        $result1 = DB::table('vwlpurfrmmatlist')->get();
+        $resultArray1 = $result1->toArray();
+        $data1=compact('resultArray1');
+
+
+
 
         $passwrd = DB::table('tblpwrd')->select('pwrdtxt')->max('pwrdtxt');
         $cd = DB::table('commercial_invoices as a')
@@ -362,7 +405,7 @@ class LocalPurchaseController  extends Controller
         // ->with('cd',CommercialInvoiceDetails::where('commercial_invoice_id',$id)->get())
         ->with('locations',Location::select('id','title')->get())
         ->with('skus',Sku::select('id','title')->get())
-        ->with($data);
+        ->with($data)->with($data1);
 
     }
 
@@ -422,6 +465,8 @@ class LocalPurchaseController  extends Controller
 
 if($request->dltid==0)
 {
+
+
             $commercialinvoice = CommercialInvoice::findOrFail($request->contract_id);
             $commercialinvoice->invoiceno = $request->invoiceno;
             $commercialinvoice->invoice_date = $request->invoice_date;
@@ -440,8 +485,20 @@ if($request->dltid==0)
               else{
                 $commercialinvoice->insurance = 0;
               }
-            $commercialinvoice->collofcustom = $request->collofcustom;;
-            $commercialinvoice->exataxoffie = $request->exataxoffie;
+
+              if (!empty($commercialinvoice->collofcustom)) {
+                $commercialinvoice->collofcustom = $request->collofcustom;
+              }
+              else{
+                $commercialinvoice->collofcustom = 0;
+              }
+
+              if (!empty($commercialinvoice->exataxoffie)) {
+                $commercialinvoice->exataxoffie = $request->exataxoffie;
+              }
+              else{
+                $commercialinvoice->exataxoffie = 0;
+              }
             $commercialinvoice->otherchrgs = $request->otherchrgs;
             $commercialinvoice->total = $request->bankntotal;
             $commercialinvoice->invoicebal = $request->bankntotal;
@@ -459,12 +516,17 @@ if($request->dltid==0)
             }
             // Now update existing and add new
             foreach ($cds as $cd) {
+                // dd($request->invoice_date);
                 if($cd->id)
                 {
+
+                    // dd($request->invoice_date);
                     $cds = CommercialInvoiceDetails::where('id',$cd->id)->first();
-                    $cds->machine_date = $cd->invoice_date;
-                    $cds->invoiceno = $cd->invoiceno;
-                    // $cds->commercial_invoice_id = $cd->id;
+                    // dd('dfadsf');
+                    // $cds->invoiceno = '2211';
+                    // dd($cd->id);
+                    $cds->invoiceno = $request->invoiceno;
+                    $cds->machine_date = $request->invoice_date;
                     $cds->contract_id = 0;
                     $cds->material_id = $cd->material_id;
                     $cds->supplier_id = $cd->supplier_id;
@@ -509,13 +571,17 @@ if($request->dltid==0)
                   $cds->bundle2 = $cd['qtyinfeet'];
 
                     $cds->save();
-                }else
+                }
+                else
                 {
                     //  The item is new, Add it
 
-                    $cds = new CommercialInvoiceDetails();
 
+                    // dd($request->invoice_date);
+                    $cds = new CommercialInvoiceDetails();
                     $cds->commercial_invoice_id = $commercialinvoice->id;
+                    $cds->invoiceno = $request->invoiceno;
+                    $cds->machine_date = $request->invoice_date;
                     $cds->repname = $cd->repname;
                     $cds->supplier_id = $request->supplier_id;
                     $cds->user_id =  auth()->id();
@@ -531,19 +597,13 @@ if($request->dltid==0)
                     // $cds->gdswt = $cd->gdswt;
                     $cds->perkg = 0;
                     $cds->amtinpkr = $cd->amtinpkr;
-                    // $cds->location = $cd->location;
-                    // $location = Location::where("title", $cd['location'])->first();
-                    // $cds->locid = $location->id;
                     $unitid = Sku::where("title", $cd['sku'])->first();
                     $cds->sku_id = $unitid->id;
-           // if($lpd->sku_id==1)
                     $cds->gdswt = $cd['gdswt'];
                     $cds->dbalwt = $cd['gdswt'];
-
                     // if($lpd->sku_id==2)
                     $cds->pcs = $cd['pcs'];
                     $cds->bundle1 = $cd['pcs'];
-
                     // if($lpd->sku_id==3)
                         $cds->qtyinfeet = $cd['qtyinfeet'];
                         $cds->bundle2 = $cd['qtyinfeet'];

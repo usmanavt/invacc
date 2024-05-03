@@ -21,35 +21,59 @@
 
                     <div class="grid grid-cols-1">
                         {{-- Contract Master --}}
+
+                        {{-- <label for="autocompleted1" >Items<x-req /></label> --}}
+                        {{-- <div class="w-96 relative grid grid-cols-4 gap-1 px-10 py-5  "   onclick="event.stopImmediatePropagation();" > --}}
+
+                         {{-- <div> --}}
+                            {{-- <label for="invoice_date">Contract Date<x-req /></label> --}}
+                            {{-- <input type="date" value="{{ date('Y-m-d') }}" class="col-span-2" id="invoice_date" name="Contract_date" required> --}}
+
+                            {{-- <label for="autocompleted1">Sub Head<x-req /></label> --}}
+                        {{-- </div> --}}
+
+
+
                         <div class="grid grid-cols-12 gap-2 py-2 items-center">
 
-                            {{-- <label for="supplier_id">Supplier<x-req /></label>
-                            <select autocomplete="on" class="col-span-2" name="supplier_id" id="supplier_id" required>
-                                <option value="" selected>--Supplier</option>
-                                @foreach($suppliers as $supplier)
-                                @if ($supplier->id>1)
-                                    <option value="{{$supplier->id}}"> {{$supplier->title}} </option>
-                                @endif
-                                @endforeach
-                            </select> --}}
-                            {{-- <div class=" w-full h-[100vh] bg-slate-200 flex justify-center items-center flex-col "> --}}
-                            {{-- <div title="Supplier"> --}}
-                                <label for="autocompleted" >Supplier<x-req /></label>
-                                <div class="w-96 relative"   onclick="event.stopImmediatePropagation();" >
-                                    <input id="autocompleted" placeholder="Select Conuntry Name" class=" px-5 py-3 w-full border border-gray-400 rounded-md"
-                                    onkeyup="onkeyUp(event)" />
-                                    <div>
-                                        <select  id="supplier_id" name="supplier_id" size="20"  class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full h-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
-                                        </select>
-                                    </div>
+                            {{-- <input id="autocompleted1" title="Head Name" placeholder="Select Item Name"
+                            class=" w-96 border border-gray-400 rounded-md"
+                            onkeyup="onkeyUp1(event)" /> --}}
+
+                            <label for="autocompleted" >Supplier/Item/Date<x-req /></label>
+                            <div class="w-96 relative"   onclick="event.stopImmediatePropagation();" >
+                                <input id="autocompleted" placeholder="Select Supplier Name" class=" px-5 py-3 w-full border border-gray-400 rounded-md"
+                                onkeyup="onkeyUp(event)" />
+                                <div>
+                                    <select  id="supplier_id" name="supplier_id" size="20"  class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full h-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                                    </select>
                                 </div>
-                            {{-- </div> --}}
+                            </div>
+
+
+                            <label for="autocompleted1" >Items<x-req /></label>
+                            <div class="w-96 relative"   onclick="event.stopImmediatePropagation();" >
+                                {{-- <label for="autocompleted1">Item Name<x-req /></label> --}}
+                                {{-- <input type="text"  class="col-span-2" id="autocompleted1" name="autocompleted1" placeholder="Select Items Name"
+                                onkeyup="onkeyUp1(event)"  > --}}
+                                <input id="autocompleted1" placeholder="Select Item Name" class=" px-5 py-10 w-full border border-gray-400 rounded-md"
+                                onkeyup="onkeyUp1(event)" />
+
+                            <div>
+                                <select  id="item_id" name="item_id" size="20"  class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-96 h-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                                </select>
+                            </div>
+
+                            </div>
+
+
+
 
                             <label for="invoice_date">Contract Date<x-req /></label>
-                            <input type="date" value="{{ date('Y-m-d') }}" class="col-span-2" id="invoice_date" name="Contract_date" required>
+                            <input type="date" value="{{ date('Y-m-d') }}" class="col-span-2" id="invoice_date" name="Contract_date"  required>
 
                             <label for="number">Contract #<x-req /></label>
-                            <input type="text" class="col-span-2" id="number" name="number" placeholder="Contract No"
+                            <input type="text"  id="number" name="number"   placeholder="Contract No"
                                 minlength="3" title="minimum 3 characters required" required>
 
 
@@ -94,6 +118,7 @@ window.onload = function() {
 
 
     let table;
+
     let searchValue = "";
 
     const deleteIcon = function(cell,formatterParams){return "<i class='fa fa-trash text-red-500'></i>";};
@@ -110,7 +135,7 @@ window.onload = function() {
     // Add event handler to read keyboard key up event
     document.addEventListener('keyup', (e)=>{
         //  We are using ctrl key + 'ArrowUp' to show Modal
-        if(e.ctrlKey && e.keyCode == 32){
+        if(e.ctrlKey && e.keyCode == 500){
             showModal()
         }
     })
@@ -191,7 +216,7 @@ window.onload = function() {
     {
         searchValue = element.value;
         table.setData(getMaster,{search:searchValue});
-        searchValue.focus()
+        // searchValue.focus();
     }
     //  The Table for Materials Modal
     table = new Tabulator("#tableData", {
@@ -241,7 +266,7 @@ window.onload = function() {
     table.on('rowClick',function(e,row){
         var simple = {...row}
         var data = simple._row.data
-        // console.log(data);
+        //  console.log(data);
         //  Filter Data here .
         var result = dynamicTableData.filter( dt => dt.id == data.id)
         if(result.length <= 0)
@@ -249,6 +274,59 @@ window.onload = function() {
             pushDynamicData(data)
         }
     })
+
+    item_id.addEventListener("click", () => {
+
+        var result = dynamicTableData.filter( dt => dt.id == item_id.options[item_id.selectedIndex].value)
+        if(result.length <= 0)
+        {
+            // data=$itmdata[item_id.options[item_id.selectedIndex].value];
+            // console.log(data);
+            // pushDynamicData(data)
+
+            var inArray = dynamicTableData.filter( i => dynamicTableData.id == item_id.options[item_id.selectedIndex].value)
+
+            dynamicTableData.push({ id:item_id.options[item_id.selectedIndex].value})
+
+            dynamicTable.addData([
+                {
+                    id:item_id.options[item_id.selectedIndex].value,
+                    title:item_id.options[item_id.selectedIndex].text,
+                    category_id:$itmdata[item_id.options[item_id.selectedIndex].value][0].category_id,
+                    category:$itmdata[item_id.options[item_id.selectedIndex].value][0].category,
+
+                    source_id:$itmdata[item_id.options[item_id.selectedIndex].value][0].source_id,
+                    source:$itmdata[item_id.options[item_id.selectedIndex].value][0].source,
+
+                    brand_id:$itmdata[item_id.options[item_id.selectedIndex].value][0].brand_id,
+                    brand:$itmdata[item_id.options[item_id.selectedIndex].value][0].brand,
+
+                    sku_id:$itmdata[item_id.options[item_id.selectedIndex].value][0].sku_id,
+                    sku:$itmdata[item_id.options[item_id.selectedIndex].value][0].sku,
+
+                    dimension_id:$itmdata[item_id.options[item_id.selectedIndex].value][0].dimension_id,
+                    dimension:$itmdata[item_id.options[item_id.selectedIndex].value][0].dimension,
+
+                    bundle1:0,
+                    bundle2:0,
+                    pcspbundle1:0,
+                    pcspbundle2:0,
+                    gdswt:0,
+                    gdsprice:0,
+                    dtyrate:0,
+                    invsrate:0,
+                    gdspricetot:0.00
+                }
+            ])
+
+
+        }
+
+
+});
+
+
+
     var updateValues = (cell) => {
         var data = cell.getData();
         // var sum = (Number(data.bundle1) * Number(data.pcspbundle1)) + (Number(data.bundle2) * Number(data.pcspbundle2))
@@ -503,16 +581,34 @@ window.onload = function() {
     {
         var sid = document.getElementById("supplier_id");
         var supplier_id = sid.options[sid.selectedIndex];
+
+        var sid1 = document.getElementById("item_id");
+        var item_id = sid1.options[sid1.selectedIndex];
+
         var invoice_date = document.getElementById("invoice_date");
         var number = document.getElementById("number");
 
+
+
         // Required
-        if(supplier_id.value <= 0)
-        {
-            showSnackbar("Please select From Supplier");
-            supplier_id.focus();
-            return;
-        }
+        // if(supplier_id.value <= 0)
+        // {
+        //     showSnackbar("Please select From Supplier");
+        //     supplier_id.focus();
+        //     return;
+        // }
+
+        if(supplier_id==undefined    )
+            {
+                showSnackbar("Supplier/Items Required","error");
+                supplier_id.focus();
+                return;
+            }
+
+
+
+
+
         if(invoice_date.value === "")
         {
             showSnackbar("Please select From Invoice Date");
@@ -573,7 +669,15 @@ window.onload = function() {
         .then( response => {
             if (response == 'success')
             {
-                window.open(window.location.origin + "/contracts","_self" );
+                // window.open(window.location.origin + "/contracts","_self" );
+                alert("Record Saved Successfully")
+                document.getElementById("autocompleted").value="";
+                document.getElementById("autocompleted1").value="";
+                document.getElementById("number").value="";
+                dynamicTable.setData();
+               // call contdupno();
+                var input = document.getElementById("autocompleted").focus();
+
             }
         })
         .catch(error => {
@@ -607,7 +711,7 @@ function onkeyUp(e)
     supplier_id.classList.remove("hidden");
 
     let filteredContries=contries.filter((c)=>c.title.toLowerCase().includes(keyword.toLowerCase()));
-    console.log(filteredContries);
+    // console.log(filteredContries);
     renderOptions(filteredContries);
 
 }
@@ -615,6 +719,7 @@ function onkeyUp(e)
 
 document.addEventListener('DOMContentLoaded',()=> {
     hidedropdown();
+    hidedropdown1();
         });
 
 function renderOptions(xyz){
@@ -629,6 +734,7 @@ function renderOptions(xyz){
 
 document.addEventListener("click" , () => {
     hidedropdown();
+    hidedropdown1();
 });
 
 
@@ -663,8 +769,102 @@ let supplier_id= document.getElementById("supplier_id");
 
 
 
+// ********* search list for item_id
 
 
+list1=@json($resultArray1);
+// const list1 = List1;
+function onkeyUp1(e)
+{
+    let keyword= e.target.value;
+    var item_id = document.getElementById("item_id");
+    item_id.classList.remove("hidden");
+
+    let filteredContries=list1.filter((c)=>c.srchb.toLowerCase().includes(keyword.toLowerCase()));
+    renderOptions1(filteredContries);
+
+
+    // e.id + '      '+ e.srchb+' '+e.dimension
+}
+
+function renderOptions1(xyz){
+
+    let dropdownEl=document.getElementById("item_id");
+
+
+                $itmdata= [];
+                dropdownEl.length = 0
+                xyz.forEach(e => {
+                    // addSelectElement(dropdownEl,e.id,e.supname )
+                    addSelectElement(dropdownEl,e.id,e.srchb)
+                    $itmdata[e.id]=[ { sku_id:e.sku_id,sku:e.sku,source_id:e.source_id,source:e.source,category_id:e.category_id,category:e.category,
+                                       dimension_id:e.dimension_id,dimension:e.dimension,brand:e.brand,brand_id:e.brand }  ];
+                        // console.log($itmdata[e.id].data);
+
+                 });
+
+
+}
+
+
+
+function hidedropdown1()
+{
+    var item_id = document.getElementById("item_id");
+    item_id.classList.add("hidden");
+}
+
+
+item_id.addEventListener("keyup", function(event) {
+if (event.keyCode === 13) {
+// event.preventDefault();
+item_id.click();
+
+}
+});
+
+document.onkeydown=function(e){
+    // if(e.keyCode == 17) isCtrl=true;
+    // if(e.keyCode == 83 && isCtrl == true) {
+        if(e.ctrlKey && e.which === 83){
+        //run code for CTRL+S -- ie, save!
+        // alert("dfadfasd");
+        submitbutton.click();
+        return false;
+    }
+}
+
+    item_id.onblur=function(){
+   hidedropdown1();
+
+   }
+
+
+const dupno = @json(route('contracts.dupno'));
+function contdupno()
+{
+
+    const number = document.getElementById('number');
+    fetch(dupno ,{
+                    method:"GET",
+                    headers: { 'Accept':'application/json','Content-type':'application/json'},
+                    })
+                    .then(response => response.json())
+                    .then( data => {
+                        if(data.length > 0)
+                        {
+                            // transno.value=data;
+                            console.log(data);
+                        }else{
+                            // transno.value=data;
+                            console.log(data);
+                            // subhead.removeAttribute('required','')
+                            // subhead.setAttribute('disabled','')
+                        }
+                    })
+                    .catch(error => console.error(error))
+
+}
 
 
 

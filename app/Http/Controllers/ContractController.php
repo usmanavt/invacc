@@ -21,6 +21,23 @@ use Illuminate\Support\Facades\Session;
 class ContractController extends Controller
 {
 
+
+
+    public function dupno(Request $request)
+    {
+        //  dd($request->all());
+        $contno = $request->number;
+        // $maxposeqno = DB::table('bank_transactions')->select('*')->max('transno')+1;
+        $vardupno = DB::table('contracts')->select('*')->where('number',$request->number);
+        return  $vardupno;
+
+    }
+
+
+
+
+
+
     public function index(Request $request)
     {
         return view('contracts.index');
@@ -176,13 +193,16 @@ class ContractController extends Controller
 
     public function create()
     {
-        $result = DB::table('suppliers')->where('source_id',2)->get();
+        $result = DB::table('vwdrpdwncontract')->where('source_id',2)->get();
         $resultArray = $result->toArray();
         $data=compact('resultArray');
 
+        $result1 = DB::table('vwcontfrmmatlist')->get();
+        $resultArray1 = $result1->toArray();
+        $data1=compact('resultArray1');
 
 
-        return view('contracts.create')->with($data)->with('suppliers',Supplier::select('id','title')->where('source_id',2)->get());
+        return view('contracts.create')->with($data)->with($data1)->with('suppliers',Supplier::select('id','title')->where('source_id',2)->get());
     }
 
     /** Function Complete*/
@@ -190,7 +210,7 @@ class ContractController extends Controller
     {
         //   dd($request->all());
         $this->validate($request,[
-            'invoice_date' => 'required|min:3|date',
+            // 'invoice_date' => 'required|min:3|date',
             'number' => 'required|min:3',
             'supplier_id' => 'required'
         ]);
@@ -303,7 +323,7 @@ class ContractController extends Controller
 
             }
             DB::commit();
-            Session::flash('success','Contract Information Saved');
+            // Session::flash('success','Contract Information Saved');
             return response()->json(['success'],200);
         } catch (\Throwable $th) {
             DB::rollback();
@@ -315,19 +335,32 @@ class ContractController extends Controller
     public function edit(Contract $contract, Pcontract $pcontract )
     {
 
+
+        $result = DB::table('vwdrpdwncontract')->where('source_id',2)->get();
+        $resultArray = $result->toArray();
+        $data0=compact('resultArray');
+
+        $result1 = DB::table('vwcontfrmmatlist')->get();
+        $resultArray1 = $result1->toArray();
+        $data1=compact('resultArray1');
+
+
         // dd($cd);
         $cd = DB::table('contract_details')->select('*')
         ->where('contract_id',$contract->id)->get();
          $data=compact('cd');
 
-// for update change
 
         $passwrd = DB::table('tblpwrd')->select('pwrdtxt')->max('pwrdtxt');
-        return view('contracts.edit',compact('passwrd'))->with('suppliers',Supplier::select('id','title')->where('source_id',2)->get())
+        // $supname = DB::table('suppliers')->select('title')->where('id',18)->first();
+        // $pcontract = Supplier::select('title')->where('id',$contract->supplier_id)->first();
+        $pcontract = Supplier::where('id',$contract->supplier_id)->first()->title;
+
+        // $myField = Model::where('name', 'John Doe')->first()->my_field;
+        return view('contracts.edit',compact('passwrd','pcontract'))
         ->with('contract',$contract)
-        // ->with('pcontract',$pcontract)
-        ->with($data);
-        // ->with('cd',ContractDetails::where('contract_id',$contract->id)->get());
+        ->with($data)->with($data0)->with($data1);
+
     }
 
 
@@ -357,9 +390,10 @@ class ContractController extends Controller
         DB::beginTransaction();
         try {
             // Save Contract Data First : If changed
+            // dd($request->supid);
             $contract->number = $request->number;
             $contract->invoice_date = $request->invoice_date;
-            $contract->supplier_id = $request->supplier_id;
+            $contract->supplier_id = $request->supid;
             $contract->save();
 
             // $pcontract = Pcontract::where('contract_id',$contract->id)->first();
@@ -384,6 +418,8 @@ class ContractController extends Controller
             foreach ($cds as $cd) {
                 if($cd->id)
                 {
+
+                    // dd($cds);
                     $cds = ContractDetails::where('id',$cd->id)->first();
                     $cds->contract_id = $cd->contract_id;
                     $cds->material_id = $cd->material_id;

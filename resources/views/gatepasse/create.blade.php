@@ -44,7 +44,7 @@
                             </div>
                             <div class="grid grid-cols-12 gap-1 py-2 items-center">
                                 <x-input-date title="GatePass Date" id="gpdate" name="gpdate"  />
-                                <x-input-text title="GatePass Seq. #" name="gpseqid" id="gpseqid" value="{{$maxgpseqid}}"  disabled />
+                                <x-input-text title="GatePass #" name="gpseqid" id="gpseqid" value="{{$maxgpseqid}}"  disabled />
                                 <input class="checked:bg-blue-500 checked:border-blue-500 focus:outline-none" type="checkbox" name="per" id="per" onclick="EnableDisableTextBox(this)" >
                                 {{-- <x-input-text title="Pur.Invoice #" name="purinvsno" /> --}}
                                 {{-- <x-input-text title="P.O Seq.#" name="poseqno" id="poseqno" value="{{$maxpurseqid}}"    placeholder="poseqno" required   /> --}}

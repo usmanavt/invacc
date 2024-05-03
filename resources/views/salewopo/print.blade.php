@@ -178,57 +178,32 @@ body{
 
 
     {{-- Ledger Info --}}
-    <table >
+    <table style="Padding:5px; border:1.5px solid burlywood; "  >
         <tbody>
-            <tr class="hd1">
-                <td > Customer Name:</td>
-                <td align ="left" style="font-size:12px;font-weight: bold" > {{ $data[0]->custname }}</td>
-                <td> Address:</td>
-                <td align ="left" style="font-size:12px;font-weight: bold" > {{ $data[0]->custadrs }}</td>
-           </tr>
-
-
-
-
             <tr>
-                <td>P.O No:</td>
 
-                <td align ="left" style="font-size:12px;font-weight: bold"  >
-                    {{ $data[0]->pono }}
-                </td>
-                <td >
-                    P.O Date:
-                </td>
-                <td align ="left" style="font-size:12px;font-weight: bold">
-                    {{ $data[0]->podate }}
-                </td>
-            {{-- </tr> --}}
-                {{-- <tr> --}}
-                    <td>
-                        D.C No:
-                    </td>
-                    <td align ="left" style="font-size:12px;font-weight: bold">
-                        {{-- From {{ $fromdate }} to {{ $todate }} --}}
-                        {{ $data[0]->dcno }}
-                    </td>
-                    <td>
-                        Bill No:
-                    </td>
-                    <td align ="left" style="font-size:12px;font-weight: bold">
-                        {{-- From {{ $fromdate }} to {{ $todate }} --}}
-                        {{ $data[0]->billno }}
-                    </td>
-
-
-                    <td>
-                        Delivery Date:
-                    </td>
-                    <td align ="left" style="font-size:12px;font-weight: bold">
-                        {{ $data[0]->saldate }}
-                    </td>
-                </tr>
+                <td >G.Pass No:  <span style="font-weight: bold"> {{ $data[0]->gpno }}</span>
+                <td >P.O No:  <span style="font-weight: bold"> {{ $data[0]->podate }}</span>
+                <td >D.C No:  <span style="font-weight: bold"> {{ $data[0]->dcno }}</span>
+                <td >Bill No:  <span style="font-weight: bold"> {{ $data[0]->billno }}</span>
+                <td >Delivery Date:  <span style="font-weight: bold">  {{ $data[0]->saldate }}</span>
+            </tr>
         </tbody>
     </table>
+
+    <table style="Padding:3px; border:1.5px solid burlywood; "  >
+        <tbody>
+            <tr >
+                <td > Customer Name:  <span style="font-weight: bold"> {{ $data[0]->custname }}</span>
+            </tr>
+            <tr >
+                <td > Address:  <span style="font-weight: bold"> {{ $data[0]->custadrs }}</span> </td>
+            </tr>
+
+
+        </tbody>
+    </table>
+
     {{-- column headers --}}
     <table class="column-headers ">
         <thead >
