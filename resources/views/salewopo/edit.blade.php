@@ -27,7 +27,7 @@
 
 
                             <label for="customer_id">Customer</label>
-                            <select  autocomplete="on" class="col-span-2" name="customer_id" id="customer_id"  required>
+                            <select  autocomplete="on" class="col-span-2" name="customer_id" id="customer_id"  disabled>
                                 @foreach($customer as $customer)
                                     @if ($customer->id == $saleinvoices->customer_id)
                                     <option value="{{$customer->id}}" selected> {{$customer->title}} </option>
@@ -35,6 +35,20 @@
                                     <option value="{{$customer->id}}"> {{$customer->title}} </option>
                                 @endforeach
                             </select>
+
+
+                            <label for="autocompleted1" style="text-align:right " ><x-req /> Items</label>
+                            <div class="w-96 relative"   onclick="event.stopImmediatePropagation();" >
+                                <input id="autocompleted1" size="60" class=" border border-gray-400 rounded-md" placeholder="Select Item Name" class=" col-span-2  px-0 py-10 w-full border border-gray-400 rounded-md"
+                                onkeyup="onkeyUp1(event)" />
+
+                            <div>
+                                <select  id="item_id" name="item_id" size="20"  class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-auto h-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                                </select>
+                            </div>
+
+                            </div>
+
 
                             <x-input-text title="" name="custplan_id" id="custplan_id" value="{{ $saleinvoices->custplan_id }}" hidden     />
                             {{-- <x-input-text title="Quotation No" name="qutno" id="qutno" value="{{ $customerorder->pqutno }}" disabled     />
@@ -44,14 +58,14 @@
                                 {{-- <x-input-text title="P.O No" name="pono" id="pono" req required class="col-span-2" value="{{ $saleinvoices->pono }}" disabled  /> --}}
                                 {{-- <x-input-date title="P.O Date" name="podate" id="podate" req required class="col-span-2" value="{{ $saleinvoices->podate->format('Y-m-d') }}" disabled  /> --}}
                                 {{-- <x-input-text title="G.Pass No" name="gpno" id="gpno" value="{{ $saleinvoices->gpno }}"     required   /> --}}
-                                <x-input-date title="Deilivery Date" id="deliverydt" name="deliverydt"  class="col-span-2" value="{{ $saleinvoices->saldate->format('Y-m-d') }}" />
+                                <x-input-date style="text-align: right" title="Deilivery Date" id="deliverydt" name="deliverydt"  class="col-span-2" value="{{ $saleinvoices->saldate->format('Y-m-d') }}" />
                                 {{-- <x-input-text title="prvscustno" name="pcustno" id="pcustno" value="{{ $saleinvoices->customer_id }}"   /> --}}
 
 
                         </div>
                         <div class="grid grid-cols-12 gap-1 py-2 items-center">
-                            <x-input-text title="DC No" name="dcno" id="dcno" value="{{ $saleinvoices->dcno }}"    class="col-span-2"   />
-                            <x-input-text title="Bill No" name="billno" id="billno"   value="{{ $saleinvoices->billno }}"  class="col-span-2"   />
+                            <x-input-text tabindex="-1" title="DC No" name="dcno" id="dcno" value="{{ $saleinvoices->dcno }}"    class="col-span-2"   />
+                            <x-input-text tabindex="-1" title="Bill No" name="billno" id="billno"   value="{{ $saleinvoices->billno }}"  class="col-span-2"   />
                                 <label for="">
                                     Descripiton <span class="text-red-500 font-semibold"></span>
                                 </label>
@@ -141,6 +155,9 @@
 
 document.addEventListener('DOMContentLoaded',()=>{
         document.getElementById("submitbutton").disabled = true;
+        document.getElementById("autocompleted1").focus();
+        hidedropdown1();
+
      })
 
 
@@ -238,6 +255,63 @@ let dynamicTableData = @json($cd);
     }
 
     })
+
+item_id.addEventListener("click", () => {
+
+        var result = dynamicTableData.filter( dt => dt.id == item_id.options[item_id.selectedIndex].value)
+        if(result.length <= 0)
+        {
+
+        var inArray = dynamicTableData.filter( i => dynamicTableData.id == item_id.options[item_id.selectedIndex].value)
+
+        // dynamicTableData.push({ id:item_id.options[item_id.selectedIndex].value})
+dynamicTable.addData([
+    {
+        id:0,
+        material_id:item_id.options[item_id.selectedIndex].value,
+        material_title:item_id.options[item_id.selectedIndex].text,
+        category_id:$itmdata[item_id.options[item_id.selectedIndex].value][0].category_id,
+        category:$itmdata[item_id.options[item_id.selectedIndex].value][0].category,
+
+        source_id:$itmdata[item_id.options[item_id.selectedIndex].value][0].source_id,
+        source:$itmdata[item_id.options[item_id.selectedIndex].value][0].source,
+
+        brand_id:$itmdata[item_id.options[item_id.selectedIndex].value][0].brand_id,
+        brand:$itmdata[item_id.options[item_id.selectedIndex].value][0].brand,
+
+        sku_id:$itmdata[item_id.options[item_id.selectedIndex].value][0].sku_id,
+        sku:$itmdata[item_id.options[item_id.selectedIndex].value][0].sku,
+
+        dimension_id:$itmdata[item_id.options[item_id.selectedIndex].value][0].dimension_id,
+        dimension:$itmdata[item_id.options[item_id.selectedIndex].value][0].dimension,
+
+        bundle1:0,
+        bundle2:0,
+        pcspbundle1:0,
+        pcspbundle2:0,
+        gdswt:0,
+        gdsprice:0,
+        gdspricetot:0,
+        qtykg:0,
+        qtypcs:0,
+        qtyfeet:0
+
+
+    }
+])
+
+
+}
+
+
+});
+
+
+
+
+
+
+
     function showModal(){ modal.style.display = "block"}
     function closeModal(){  modal.style.display = "none"}
     //  When the user clicks anywhere outside of the modal, close it
@@ -769,6 +843,84 @@ discntamt.onblur=function(){
 
     }
 
+
+    const addSelectElement = (select,id,value) => {
+        var option = document.createElement('option')
+        option.value = id
+        option.text  = value
+        select.appendChild(option)
+    }
+
+
+
+
+    list1=@json($resultArray1);
+// const list1 = List1;
+function onkeyUp1(e)
+{
+    let keyword= e.target.value;
+    var item_id = document.getElementById("item_id");
+    item_id.classList.remove("hidden");
+
+    let filteredContries=list1.filter((c)=>c.srchb.toLowerCase().includes(keyword.toLowerCase()));
+    renderOptions1(filteredContries);
+
+
+    // e.id + '      '+ e.srchb+' '+e.dimension
+}
+
+function renderOptions1(xyz){
+
+    let dropdownEl=document.getElementById("item_id");
+
+
+                $itmdata= [];
+                dropdownEl.length = 0
+                xyz.forEach(e => {
+                    // addSelectElement(dropdownEl,e.id,e.supname )
+                    addSelectElement(dropdownEl,e.id,e.srchb)
+                    $itmdata[e.id]=[ { sku_id:e.sku_id,sku:e.sku,source_id:e.source_id,source:e.source,category_id:e.category_id,category:e.category,
+                                dimension_id:e.dimension_id,dimension:e.dimension,brand:e.brand,brand_id:e.brand_id,lsalunit:e.lsalunit,lsalrate:e.lsalrate }  ];
+
+                 });
+
+}
+
+function hidedropdown1()
+{
+    var item_id = document.getElementById("item_id");
+    item_id.classList.add("hidden");
+}
+
+
+item_id.addEventListener("keyup", function(event) {
+if (event.keyCode === 13) {
+// event.preventDefault();
+item_id.click();
+
+}
+});
+
+// document.onkeydown=function(e){
+//     // if(e.keyCode == 17) isCtrl=true;
+//     // if(e.keyCode == 83 && isCtrl == true) {
+//         if(e.ctrlKey && e.which === 83){
+//         //run code for CTRL+S -- ie, save!
+//         // alert("dfadfasd");
+//         submitbutton.click();
+//         return false;
+//     }
+// }
+
+   item_id.onblur=function(){
+   hidedropdown1();
+
+   }
+
+
+   document.addEventListener("click" , () => {
+    hidedropdown1();
+});
 
 </script>
 

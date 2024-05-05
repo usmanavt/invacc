@@ -28,8 +28,33 @@
         </tr>
     </tbody>
 </table>
+
+
+<table style="Padding:5px; border:1.5px solid burlywood; "  >
+    <tbody>
+        <tr>
+
+            <td >Quotation Date:  <span style="font-weight: bold"> {{ $data[0]->saldate }}</span>
+            <td >Quotation No:  <span style="font-weight: bold"> {{ $data[0]->qutno }}</span>
+            <td >P.R No:  <span style="font-weight: bold"> {{ $data[0]->prno }}</span>
+            {{-- <td >P.O Date:  <span style="font-weight: bold"> {{ $data[0]->podate }}</span>
+            <td >P.O Date:  <span style="font-weight: bold"> {{ $data[0]->podate }}</span>                 --}}
+            <td >Valid Date:  <span style="font-weight: bold">{{ $data[0]->valdate }}</span>
+        </tr>
+    </tbody>
+</table>
+
+
+
+
+
+
+
+
+
+
 {{-- Ledger Info --}}
-<table class="ledger">
+{{-- <table class="ledger">
     <tbody>
         <tr>
             <td>
@@ -48,7 +73,6 @@
                 P.R No:
             </td>
             <td align ="left" style="font-size:12px;font-weight: bold">
-                {{-- From {{ $fromdate }} to {{ $todate }} --}}
                 {{ $data[0]->prno }}
             </td>
 
@@ -60,4 +84,4 @@
             </td>
         </tr>
     </tbody>
-</table>
+</table> --}}

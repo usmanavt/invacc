@@ -4,7 +4,6 @@
     {{-- <link rel="stylesheet" href="{{ asset('css/tabulator_simple.min.css') }}"> --}}
     <link href="https://unpkg.com/tabulator-tables/dist/css/tabulator.min.css" rel="stylesheet">
     <script type="text/javascript" src="https://unpkg.com/tabulator-tables/dist/js/tabulator.min.js"></script>
-
     @endpush
 
 
@@ -22,20 +21,9 @@
 
                     <div class="grid">
 
-                        <fieldset class="border px-4 py-2 rounded">
+                        <fieldset class="border px-8 py-4 rounded">
                             <legend>Other Invoice Level Charges</legend>
                             <div class="grid grid-cols-12 gap-1 py-2 items-center">
-
-                                {{-- <label for="customer_id">Customer<x-req /></label>
-                                    <select autocomplete="on" class="col-span-2" name="customer_id" id="customer_id" >
-                                        @foreach($customers as $customer)
-                                        <option value="{{$customer->id}}"> {{$customer->title}} </option>
-                                        @endforeach
-                                    </select> --}}
-                                {{-- <x-input-text title="Customer Name" name="custname" id="custname" req required class="col-span-2" disabled  /> --}}
-                                {{-- <x-input-text title="P.O No" name="pono" id="pono" req required class="col-span-2" disabled  /> --}}
-                                {{-- <x-input-date title="P.O Date" name="podate" id="podate" req required class="col-span-2" disabled  /> --}}
-
                                 <label for="autocompleted" >Customers<x-req /></label>
                                 <div class="w-96 relative"   onclick="event.stopImmediatePropagation();" >
                                     <input id="autocompleted" placeholder="Select Conuntry Name"  class=" px-5 py-3 w-full border border-gray-400 rounded-md"
@@ -46,13 +34,25 @@
                                     </div>
                                 </div>
 
+                                <label for="autocompleted1" style="text-align:right " ><x-req /> Items</label>
+                                <div class="w-96 relative"   onclick="event.stopImmediatePropagation();" >
+                                    <input id="autocompleted1" size="60" class=" border border-gray-400 rounded-md" placeholder="Select Item Name" class=" col-span-2  px-0 py-10 w-full border border-gray-400 rounded-md"
+                                    onkeyup="onkeyUp1(event)" />
+
+                                <div>
+                                    <select  id="item_id" name="item_id" size="20"  class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-auto h-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                                    </select>
+                                </div>
+
+                                </div>
+
                                 {{-- <x-input-text title="G.Pass No" name="gpno" id="gpno"      required   /> --}}
 
                             </div>
                             <div class="grid grid-cols-12 gap-1 py-2 items-center">
-                                <x-input-date title="Deilivery Date" id="deliverydt" name="deliverydt" req required class="col-span-2" />
-                                <x-input-text title="DC No" name="dcno" id="dcno"  class="col-span-2;width=50 " value="{{$maxdcno}}"     required   />
-                                <x-input-text title="Bill No" name="billno" id="billno" class="col-span-2;w-20"  value="{{$maxbillno}}"     required   />
+                                <x-input-date tabindex="-1" title="Deilivery Date" id="deliverydt" name="deliverydt" req required class="col-span-2" />
+                                <x-input-text tabindex="-1" title="DC No" name="dcno" id="dcno"  class="col-span-2;width=50 " value="{{$maxdcno}}"     required   />
+                                <x-input-text tabindex="-1" title="Bill No" name="billno" id="billno" class="col-span-2;w-20"  value="{{$maxbillno}}"     required   />
                                 <label for="">
                                     Descripiton <span class="text-red-500 font-semibold"></span>
                                 </label>
@@ -65,7 +65,7 @@
                             {{-- <legend>Invoice Level Expenses</legend> --}}
                             <div class="grid grid-cols-12 gap-2 py-2 items-center">
                                 <x-input-numeric title="Discou(%)" name="discntper" id="discntper" class="col-span-2" disabled    />
-                                <input class="checked:bg-blue-500 checked:border-blue-500 focus:outline-none" type="checkbox" name="per" id="per" onclick="EnableDisableTextBox(this)" >
+                                <input tabindex="-1" class="checked:bg-blue-500 checked:border-blue-500 focus:outline-none" type="checkbox" name="per" id="per" onclick="EnableDisableTextBox(this)" >
                                 <x-input-numeric title="Discount(Amount)" name="discntamt" id="discntamt" class="col-span-2;w-20"  />
                                 <x-input-numeric title="Receivable Amount" name="rcvblamount" class="col-span-2" disabled />
                             </div>
@@ -299,6 +299,15 @@
 
 @push('scripts')
     <script>
+
+item_id.addEventListener("click", () => {
+
+    // detailsUrl = `${getDetails}/?id=${data.id}`
+            detailsUrl = `${getDetails}/?id=${item_id.options[item_id.selectedIndex].value}`
+            fetchDataFromServer(detailsUrl)
+
+});
+
 
         //  ------------------Dynamic Table----------------------//
         async function fetchDataFromServer(url)
@@ -831,12 +840,19 @@ var totalVal = function(values, data, calcParams){
             //     pono.focus();
             //     return;
             // }
-            if(customer_id.value < 0)
-                {
-                    showSnackbar("Please select From Customer");
-                    customer_id.focus();
-                    return;
-                }
+            // if(customer_id.value < 0)
+            //     {
+            //         showSnackbar("Please select From Customer");
+            //         customer_id.focus();
+            //         return;
+            //     }
+
+            if(customer_id==undefined  )
+            {
+                showSnackbar("Customer Required","error");
+                autocompleted.focus();
+                return;
+            }
 
 
             const dynamicTableData = dynamicTable.getData();
@@ -939,7 +955,13 @@ var totalVal = function(values, data, calcParams){
             .then( response => {
                 if (response == 'success')
                 {
-                    window.open(window.location.origin + "/salewopo","_self" );
+                    // window.open(window.location.origin + "/salewopo","_self" );
+                    alert("Record Save Successfully")
+                    clearform();
+                    newbillid();
+                    newdcid();
+                    dynamicTable.setData();
+                    var input = document.getElementById("autocompleted").focus();
                 }
             })
             .catch(error => {
@@ -1007,6 +1029,7 @@ function onkeyUp(e)
 
 document.addEventListener('DOMContentLoaded',()=> {
     hidedropdown();
+    hidedropdown1();
         });
 
 function renderOptions(xyz){
@@ -1021,6 +1044,7 @@ function renderOptions(xyz){
 
 document.addEventListener("click" , () => {
     hidedropdown();
+    hidedropdown1();
 });
 
 
@@ -1055,6 +1079,147 @@ let customer_id= document.getElementById("customer_id");
 
 }
 });
+
+
+
+
+
+
+
+
+// ********* search list for item_id
+
+
+list1=@json($resultArray1);
+// const list1 = List1;
+function onkeyUp1(e)
+{
+    let keyword= e.target.value;
+    var item_id = document.getElementById("item_id");
+    item_id.classList.remove("hidden");
+
+    let filteredContries=list1.filter((c)=>c.srchb.toLowerCase().includes(keyword.toLowerCase()));
+    renderOptions1(filteredContries);
+
+
+    // e.id + '      '+ e.srchb+' '+e.dimension
+}
+
+function renderOptions1(xyz){
+
+    let dropdownEl=document.getElementById("item_id");
+
+
+                $itmdata= [];
+                dropdownEl.length = 0
+                xyz.forEach(e => {
+                    // addSelectElement(dropdownEl,e.id,e.supname )
+                    addSelectElement(dropdownEl,e.id,e.srchb)
+                    $itmdata[e.id]=[ { sku_id:e.sku_id,sku:e.sku,source_id:e.source_id,source:e.source,category_id:e.category_id,category:e.category,
+                                dimension_id:e.dimension_id,dimension:e.dimension,brand:e.brand,brand_id:e.brand_id,lsalunit:e.lsalunit,lsalrate:e.lsalrate }  ];
+
+                 });
+
+
+}
+
+
+
+function hidedropdown1()
+{
+    var item_id = document.getElementById("item_id");
+    item_id.classList.add("hidden");
+}
+
+
+item_id.addEventListener("keyup", function(event) {
+if (event.keyCode === 13) {
+// event.preventDefault();
+item_id.click();
+
+}
+});
+
+document.onkeydown=function(e){
+    // if(e.keyCode == 17) isCtrl=true;
+    // if(e.keyCode == 83 && isCtrl == true) {
+        if(e.ctrlKey && e.which === 83){
+        //run code for CTRL+S -- ie, save!
+        // alert("dfadfasd");
+        submitbutton.click();
+        return false;
+    }
+}
+
+   item_id.onblur=function(){
+   hidedropdown1();
+
+   }
+
+
+
+   function clearform()
+{
+
+    document.getElementById("autocompleted").value='';
+    document.getElementById("autocompleted1").value="";
+    // document.getElementById("dcno").value=0;
+    // document.getElementById("billno").value="";
+    document.getElementById("discntper").value=0;
+    document.getElementById("discntamt").value=0;
+    document.getElementById("rcvblamount").value=0;
+    document.getElementById("saletaxper").value=0;
+    document.getElementById("saletaxamt").value=0;
+    document.getElementById("cartage").value=0;
+    document.getElementById("totrcvbamount").value=0;
+    document.getElementById("saldescription").value='';
+
+}
+
+
+
+const mdcno = @json(route('salewopo.mdcno'));
+function newdcid()
+{
+
+    const dcno = document.getElementById('dcno');
+    fetch(mdcno ,{
+                    method:"GET",
+                    headers: { 'Accept':'application/json','Content-type':'application/json'},
+                    })
+                    .then(response => response.json())
+                    .then( data => {
+                        if(data.length > 0)
+                        {
+                            dcno.value=data;
+                        }else{
+                            dcno.value=data;
+                        }
+                    })
+                    .catch(error => console.error(error))
+}
+
+
+const mbillno = @json(route('salewopo.mbillno'));
+function newbillid()
+{
+
+    const billno = document.getElementById('billno');
+    fetch(mbillno ,{
+                    method:"GET",
+                    headers: { 'Accept':'application/json','Content-type':'application/json'},
+                    })
+                    .then(response => response.json())
+                    .then( data => {
+                        if(data.length > 0)
+                        {
+                            billno.value=data;
+                        }else{
+                            billno.value=data;
+                        }
+                    })
+                    .catch(error => console.error(error))
+}
 
 
 </script>

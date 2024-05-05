@@ -137,7 +137,23 @@ padding-left: 8px;
 
 
     {{-- Ledger Info --}}
-    <table class="ledger">
+
+    <table style="Padding:5px; border:1.5px solid burlywood; "  >
+        <tbody>
+            <tr>
+
+                <td >Qut.Date:  <span style="font-weight: bold"> {{ $data[0]->qutdate }}</span>
+                <td >Qut.No:  <span style="font-weight: bold"> {{ $data[0]->pqutno }}</span>
+                <td >P.O No:  <span style="font-weight: bold"> {{ $data[0]->pono }}</span>
+                <td >P.O Date:  <span style="font-weight: bold"> {{ $data[0]->podate }}</span>
+                <td >Delivery Date:  <span style="font-weight: bold">{{ $data[0]->deliverydt }}</span>
+            </tr>
+        </tbody>
+    </table>
+
+
+
+    {{-- <table class="ledger">
         <tbody>
             <tr>
                 <td>
@@ -173,7 +189,7 @@ padding-left: 8px;
                     </td>
                 </tr>
         </tbody>
-    </table>
+    </table> --}}
     {{-- column headers --}}
     <table class="column-headers ">
         <thead >
@@ -181,7 +197,7 @@ padding-left: 8px;
                 {{-- <td  style="text-align: center font-size:0.5rem;font-weight: bold"> --}}
                     <th class="" width="4%">S#</th>
                     {{-- <th class="" width="16%">Group Name</th> --}}
-                    <th class="" width="40%">Material Name</th>
+                    <th class="" width="40%">Goods Description</th>
                     <th class="" width="7%">Unit</th>
                     <th class="" width="20%">Brand</th>
                     <th class="" width="9%">Quantity</th>
@@ -194,7 +210,7 @@ padding-left: 8px;
 
     <div style="height:500px;border:1px solid;">
 
-        <table>
+        {{-- <table>
             <tbody>
                   <tr>
                     <td  style="text-align: left;">
@@ -202,7 +218,7 @@ padding-left: 8px;
                     </td>
                 </tr>
             </tbody>
-        </table>
+        </table> --}}
 
         <table class="data" cellspacing="10">
             <tbody>
@@ -241,7 +257,7 @@ padding-left: 8px;
 
         <div style="margin-top:10px;">
 
-            <table>
+            {{-- <table>
                 <tbody>
                       <tr>
                         <td  style="text-align: left;">
@@ -249,7 +265,7 @@ padding-left: 8px;
                         </td>
                     </tr>
                 </tbody>
-            </table>
+            </table> --}}
 
             <table class="data1" >
 

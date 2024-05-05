@@ -222,6 +222,16 @@ class QuotationController  extends Controller
             $ci->qutno = $request->qutno;
             $ci->prno = $request->prno;
             $ci->customer_id = $request->customer_id;
+            $ci->t1 = $request->t1;
+            $ci->t2 = $request->t2;
+            $ci->t3 = $request->t3;
+            $ci->t4 = $request->t4;
+            $ci->t5 = $request->t5;
+
+
+
+
+
             $ci->fstatus = 0;
 
             $ci->cashcustomer = $request->cashcustomer;
@@ -400,6 +410,12 @@ class QuotationController  extends Controller
             $quotation->customer_id = $request->customer_id;
             $quotation->cashcustomer = $request->cashcustomer;
             $quotation->cashcustadrs = $request->cashcustadrs;
+            $quotation->t1 = $request->t1;
+            $quotation->t2 = $request->t2;
+            $quotation->t3 = $request->t3;
+            $quotation->t4 = $request->t4;
+            $quotation->t5 = $request->t5;
+
 
             $quotation->discntper = $request->discntper;
             $quotation->discntamt = $request->discntamt;

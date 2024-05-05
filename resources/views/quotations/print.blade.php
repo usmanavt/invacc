@@ -87,7 +87,7 @@ body{
         {{-- Databox --}}
         <div class="databox">
 
-            <table>
+            {{-- <table>
                 <tbody>
                     <tr>
                         <td  style="text-align: left;">
@@ -95,14 +95,14 @@ body{
                         </td>
                     </tr>
                 </tbody>
-            </table>
+            </table> --}}
 
             {{-- column headers --}}
             <table class="column-headers ">
                 <thead >
                     <tr>
                         <th class="" width="4%">S#</th>
-                        <th class="" width="57%">Material Name</th>
+                        <th class="" width="57%">Goods Description</th>
                         <th class="" width="7%">Unit</th>
                         {{-- <th class="" width="20%">Brand</th> --}}
                         <th class="" width="10%">Quantity</th>
@@ -169,7 +169,7 @@ body{
             {{-- Databox --}}
          <div class="databox">
 
-            <table>
+            {{-- <table>
                 <tbody>
                     <tr>
                         <td  style="text-align: left;">
@@ -177,7 +177,7 @@ body{
                         </td>
                     </tr>
                 </tbody>
-            </table>
+            </table> --}}
 
             {{-- column headers --}}
 
@@ -217,6 +217,7 @@ body{
         </table>
 
         {{-- Actual Data --}}
+
         <table class="data" cellspacing="10" style="display:table-cell">
             <tbody>
 

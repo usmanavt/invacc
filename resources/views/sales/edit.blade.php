@@ -318,7 +318,7 @@ if(Number(data.totqty) > 0  )
 
 {
 
-        if(cell.getData().sku_id==1)
+        if(cell.getData().sku=="KG")
          {
 
             var sum = (Number(data.feedqty) * Number(data.price))
@@ -330,7 +330,7 @@ if(Number(data.totqty) > 0  )
             // qtykg=((pr2*Number(data.sqtykg))/100).toFixed(2)
             qtykg=data.feedqty
          }
-        else if(cell.getData().sku_id==2 )
+        else if(cell.getData().sku=="PCS" )
          {
             var sum = (Number(data.feedqty) * Number(data.price))
             var pr1=(Number(data.feedqty) / Number(data.totqty))*100
@@ -342,7 +342,7 @@ if(Number(data.totqty) > 0  )
          }
 
 
-         else if(cell.getData().sku_id==3)
+         else if(cell.getData().sku=="FEET")
          {
             var sum = (Number(data.feedqty) * Number(data.price))
             // var pr1=(Number(data.qtyfeet) / Number(data.totqty))*100
@@ -351,7 +351,7 @@ if(Number(data.totqty) > 0  )
             qtykg=((pr2*Number(data.sqtykg))/100).toFixed(0)
             qtypcs=((pr2*Number(data.sqtypcs))/100).toFixed(0)
             // qtyfeet=((pr2*Number(data.sqtyfeet))/100).toFixed(2)
-            qtyfeet=data.qtyfeet
+            qtyfeet=(Number(data.feedqty) )
 
          }
          else

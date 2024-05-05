@@ -1,7 +1,7 @@
 {{-- Footer  --}}
 <div style="margin-top:10px;">
 
-    <table>
+    {{-- <table>
         <tbody>
                 <tr>
                 <td  style="text-align: left;">
@@ -9,7 +9,7 @@
                 </td>
             </tr>
         </tbody>
-    </table>
+    </table> --}}
 
     <table class="data1" >
 
@@ -42,10 +42,6 @@
 
 
 
-
-
-
-
 <table style="border:1px solid gray">
     <tbody  >
 
@@ -54,27 +50,27 @@
         </tr>
         <tr align ="left" style="width:60%;"  >
             <td align ="left" style="width:100%;font-size:12px;">
-                {{ $t1 }}
+                {{ $data[0]->t1 }}
             </td>
         </tr>
         <tr align ="left" style="width:60%;"  >
             <td align ="left" style="width:100%;font-size:12px;">
-                {{ $t2 }}
+                {{ $data[0]->t2 }}
             </td>
             </tr>
         <tr align ="left" style="width:60%;"  >
             <td align ="left" style="width:100%;font-size:12px;">
-                {{ $t3 }}
+                {{ $data[0]->t3 }}
             </td>
         </tr>
         <tr align ="left" style="width:60%;"  >
             <td align ="left" style="width:100%;font-size:12px;">
-                {{ $t4 }}
+                {{ $data[0]->t4 }}
             </td>
         </tr>
         <tr align ="left" style="width:60%;"  >
             <td align ="left" style="width:100%;font-size:12px;">
-                {{ $t5 }}
+                {{ $data[0]->t5 }}
             </td>
         </tr>
 

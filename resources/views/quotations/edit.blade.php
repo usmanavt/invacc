@@ -35,7 +35,7 @@
                         {{-- Contract Master --}}
                         <div class="grid grid-cols-12 gap-2 py-2 items-center">
                             {{-- Contract Master --}}
-                            <label for="customer_id">Customer / Items</label>
+                            <label for="customer_id" style="text-align: right">Customer</label>
                             <select  autocomplete="on" class="col-span-2" name="customer_id" id="customer_id" disabled>
                                 @foreach($customer as $customer)
                                     @if ($customer->id == $quotation->customer_id)
@@ -46,7 +46,7 @@
                             </select>
 
 
-                            <label for="autocompleted1" ><x-req /></label>
+                            <label for="autocompleted1" style="text-align: right" > Items<x-req /></label>
                             <div class="w-96 relative"   onclick="event.stopImmediatePropagation();" >
                                 <input id="autocompleted1" placeholder="Select Item Name" class=" px-0 py-10 w-full border border-gray-400 rounded-md"
                                 onkeyup="onkeyUp1(event)" />
@@ -59,14 +59,15 @@
                             </div>
 
 
-
-
-
                             <label for="saldate">Quotation Date<x-req /></label>
-                            <input type="date"  size="10"  id="saldate" name="saldate" value="{{ $quotation->saldate->format('Y-m-d') }}" required>
+                            <input type="date"  size="10" class="col-span-2" style="text-align: right"  id="saldate" name="saldate" value="{{ $quotation->saldate->format('Y-m-d') }}" required>
 
                             <label for="valdate">Valid Date<x-req /></label>
-                            <input type="date"  size="10"  id="valdate" name="valdate" value="{{ $quotation->valdate->format('Y-m-d') }}" required>
+                            <input type="date"  size="10"  id="valdate" style="text-align: right" class="col-span-2" name="valdate" value="{{ $quotation->valdate->format('Y-m-d') }}" required>
+                        </div>
+
+
+                        <div class="grid grid-cols-12 gap-2 py-2 items-center">
 
                             <label for="qutno">Quotation No <x-req /></label>
                             <input type="text" class="col-span-2" id="qutno" name="qutno" value="{{ $quotation->qutno }}"    placeholder="qutno" required>
@@ -90,22 +91,23 @@
                             {{ $quotation->cashcustadrs }} </textarea>
 
                         </div>
+
+                        <div class="grid grid-cols-12 gap-1 py-1 items-center">
+                            <label for="t1">Term & Condition <x-req /></label>
+                            <input type="text" class="col-span-2" id="t1" name="t1" value="{{ $quotation->t1 }}" >
+                            <input type="text" class="col-span-2" id="t2" name="t2" value="{{ $quotation->t2 }}" >
+                            <input type="text" class="col-span-2" id="t3" name="t3" value="{{ $quotation->t3 }}" >
+                            <input type="text" class="col-span-2" id="t4" name="t4" value="{{ $quotation->t4 }}" >
+                            <input type="text" class="col-span-2" id="t5" name="t5" value="{{ $quotation->t5 }}" >
+
+
+                        </div>
+
+
+
+
+
                         <input type="text"  id="p5" name="p5" value="{{ $quotation->closed }}" hidden   >
-                        {{-- <div class="flex flex-col-12"> --}}
-
-                            {{-- <div class="flex flex-col"> --}}
-
-                                {{-- <label for="">
-                                    General Customer <span class="text-red-500 font-semibold">(*)</span>
-                                </label>
-                                <textarea name="ucustomer" id="ucustomer" cols="20" rows="2" maxlength="150" required class="rounded"></textarea>
-
-                                <label for="">
-                                    General Customer Address <span class="text-red-500 font-semibold">(*)</span>
-                                </label>
-                                <textarea name="ucustomeradr" id="ucustomeradr" cols="30" rows="2" maxlength="150" required class="rounded"></textarea> --}}
-
-                        {{-- </div> --}}
 
                         <fieldset class="border px-4 py-2 rounded">
                             <legend>Invoice Level Expenses</legend>
@@ -738,7 +740,8 @@ function validateForm()
      var data = { 'quotations' : dynamicTableData,'rcvblamount':rcvblamount.value,'cartage':cartage.value,'discntamt':discntamt.value,'discntper':discntper.value ,
      'customer_id': customer_id.value,'saldate':saldate.value,'qutno':qutno.value,'prno':prno.value,'sale_invoice_id':sale_invoice_id.value,
      'saletaxper':saletaxper.value,'saletaxamt':saletaxamt.value,'totrcvbamount':totrcvbamount.value,
-     'valdate':valdate.value,'cashcustomer':cashcustomer.value,'cashcustadrs':cashcustadrs.value,'p5':p5.value};
+     'valdate':valdate.value,'cashcustomer':cashcustomer.value,'cashcustadrs':cashcustadrs.value,'p5':p5.value,
+     't1':t1.value,'t2':t2.value,'t3':t3.value,'t4':t4.value,'t5':t5.value};
 
      // var data = { 'contracts' : dynamicTableData,'banktotal':parseFloat(total.value).toFixed(2),'exataxoffie':parseFloat(exataxoffie.value).toFixed(2),'collofcustom':parseFloat(collofcustom.value).toFixed(2),'bankcharges':parseFloat(bankcharges.value).toFixed(2) ,'supplier_id': supplier_id.value,'invoice_date':invoice_date.value,'invoiceno':number.value};
     // All Ok - Proceed

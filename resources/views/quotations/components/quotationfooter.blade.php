@@ -1,7 +1,7 @@
 {{-- Footer  --}}
 <div style="margin-top:10px;">
 
-    <table>
+    {{-- <table>
         <tbody>
                 <tr>
                 <td  style="text-align: left;">
@@ -9,7 +9,7 @@
                 </td>
             </tr>
         </tbody>
-    </table>
+    </table> --}}
 
     <table class="data1" >
 

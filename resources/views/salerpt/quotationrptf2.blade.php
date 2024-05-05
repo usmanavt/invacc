@@ -140,7 +140,30 @@ padding-left: 8px;
 
     {{-- Ledger Info --}}
 
-    <table class="ledger">
+    <table style="Padding:5px; border:1.5px solid burlywood; "  >
+        <tbody>
+            <tr>
+
+                <td >Quotation Date:  <span style="font-weight: bold"> {{ $data[0]->saldate }}</span>
+                <td >Quotation No:  <span style="font-weight: bold"> {{ $data[0]->qutno }}</span>
+                <td >P.R No:  <span style="font-weight: bold"> {{ $data[0]->prno }}</span>
+                {{-- <td >P.O Date:  <span style="font-weight: bold"> {{ $data[0]->podate }}</span>
+                <td >P.O Date:  <span style="font-weight: bold"> {{ $data[0]->podate }}</span>                 --}}
+                <td >Valid Date:  <span style="font-weight: bold">{{ $data[0]->valdate }}</span>
+            </tr>
+        </tbody>
+    </table>
+
+
+
+
+
+
+
+
+
+
+    {{-- <table class="ledger">
         <tbody>
             <tr>
                 <td>
@@ -159,7 +182,6 @@ padding-left: 8px;
                     P.R No:
                 </td>
                 <td align ="left" style="font-size:10px;font-weight: bold">
-                    {{-- From {{ $fromdate }} to {{ $todate }} --}}
                     {{ $data[0]->prno }}
                 </td>
 
@@ -171,7 +193,7 @@ padding-left: 8px;
                 </td>
             </tr>
         </tbody>
-    </table>
+    </table> --}}
 
 
 
@@ -183,7 +205,7 @@ padding-left: 8px;
                 {{-- <td  style="text-align: center font-size:0.5rem;font-weight: bold"> --}}
                     <th class="" width="3%">S#</th>
                     {{-- <th class="" width="16%">Group Name</th> --}}
-                    <th style="font-size:09px;font-weight: bold" width="19%">Material Name</th>
+                    <th style="font-size:09px;font-weight: bold" width="19%">Goods Description</th>
                     <th style="font-size:09px;font-weight: bold" width="6%">Unit</th>
                     <th style="font-size:09px;font-weight: bold" width="9%">Supplier1</th>
                     <th style="font-size:09px;font-weight: bold" width="6%">Price1</th>
@@ -202,7 +224,7 @@ padding-left: 8px;
 
     <div style="height:600px;border:1px solid;">
 
-        <table>
+        {{-- <table>
             <tbody>
                   <tr>
                     <td  style="text-align: left;">
@@ -210,7 +232,7 @@ padding-left: 8px;
                     </td>
                 </tr>
             </tbody>
-        </table>
+        </table> --}}
 
         <table class="data" cellspacing="10">
             <tbody>
@@ -255,7 +277,7 @@ padding-left: 8px;
 
         <div style="margin-top:05px;">
 
-            <table>
+            {{-- <table>
                 <tbody>
                       <tr>
                         <td  style="text-align: left;">
@@ -263,7 +285,7 @@ padding-left: 8px;
                         </td>
                     </tr>
                 </tbody>
-            </table>
+            </table> --}}
 
             <table class="data1" >
 
@@ -295,7 +317,7 @@ padding-left: 8px;
                     {{-- border:1px solid burlywood; --}}
 
 
-                    <h3 style="font-size:1rem">Term and condition: {{ $hdng3 }}</h3>
+                    {{-- <h3 style="font-size:1rem">Term and condition: {{ $hdng3 }}</h3> --}}
                 </tbody>
                 </table>
             </div>
@@ -307,13 +329,47 @@ padding-left: 8px;
         {{-- <table > --}}
 
 
+            <table style="border:1px solid gray">
+                <tbody  >
+
+                    <tr style="width:100%;"  >
+                        <td  style="width:60%;font-size:14px;font-weight: bold;" > Term of Condition:  </td>
+                    </tr>
+                    <tr align ="left" style="width:60%;"  >
+                        <td align ="left" style="width:100%;font-size:12px;">
+                            {{ $data[0]->t1 }}
+                        </td>
+                    </tr>
+                    <tr align ="left" style="width:60%;"  >
+                        <td align ="left" style="width:100%;font-size:12px;">
+                            {{ $data[0]->t2 }}
+                        </td>
+                        </tr>
+                    <tr align ="left" style="width:60%;"  >
+                        <td align ="left" style="width:100%;font-size:12px;">
+                            {{ $data[0]->t3 }}
+                        </td>
+                    </tr>
+                    <tr align ="left" style="width:60%;"  >
+                        <td align ="left" style="width:100%;font-size:12px;">
+                            {{ $data[0]->t4 }}
+                        </td>
+                    </tr>
+                    <tr align ="left" style="width:60%;"  >
+                        <td align ="left" style="width:100%;font-size:12px;">
+                            {{ $data[0]->t5 }}
+                        </td>
+                    </tr>
+
+                </tbody>
+            </table>
 
 
 
 
 
 
-            <div style="margin-top:100px;">
+            {{-- <div style="margin-top:100px;"> --}}
             {{-- <table>
                 <tbody>
 
@@ -337,5 +393,5 @@ padding-left: 8px;
                     </tr>
             </tbody>
         </table> --}}
-    </body>
-</html>
+    {{-- </body> --}}
+{{-- </html> --}}

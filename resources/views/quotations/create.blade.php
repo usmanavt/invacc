@@ -23,18 +23,9 @@
                     <div class="grid grid-cols-1">
                         {{-- Contract Master --}}
                         <div class="grid grid-cols-12 gap-1 py-1 items-center">
-                            {{-- onchange="return showcategory()" --}}
-                            {{-- <label for="customer_id">Customer<x-req /></label>
-                            <select autocomplete="on" class="col-span-2" name="customer_id" id="customer_id"    >
-                                <option value = "" selected>--Customer</option>
-                                @foreach($customers as $customer)
-                                <option value="{{$customer->id}}"> {{$customer->title}} </option>
-                                @endforeach
-                            </select> --}}
-
-                            <label for="autocompleted" >Customers/Items<x-req /></label>
+                            <label for="autocompleted" >Customers<x-req /></label>
                             <div class="w-96 relative"   onclick="event.stopImmediatePropagation();" >
-                                <input id="autocompleted" placeholder="Select Conuntry Name"  class=" px-5 py-3 w-50 border border-gray-400 rounded-md"
+                                <input id="autocompleted" placeholder="Select Customer Name"  class=" px-5 py-3 w-50 border border-gray-400 rounded-md"
                                 onkeyup="onkeyUp(event)" />
                                 <div>
                                     <select  id="customer_id" name="customer_id" size="20"  class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full h-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
@@ -42,24 +33,22 @@
                                 </div>
                             </div>
 
-                            <label for="autocompleted1" ><x-req /></label>
+                            <label for="autocompleted1" style="text-align:right " ><x-req /> Items</label>
                             <div class="w-96 relative"   onclick="event.stopImmediatePropagation();" >
-                                <input id="autocompleted1" placeholder="Select Item Name" class=" px-0 py-10 w-full border border-gray-400 rounded-md"
+                                <input id="autocompleted1" class="col-span-2 border border-gray-400 rounded-md" placeholder="Select Item Name" class=" col-span-2  px-0 py-10 w-full border border-gray-400 rounded-md"
                                 onkeyup="onkeyUp1(event)" />
 
                             <div>
-                                <select  id="item_id" name="item_id" size="20"  class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-96 h-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                                <select  id="item_id" name="item_id" size="20"  class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-auto h-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
                                 </select>
                             </div>
 
                             </div>
 
 
-
-                            <label for="saldate">Quotation   Date<x-req /></label>
-                            <input type="date" value="{{ date('Y-m-d') }}" size="10" class="px-0 py-10"  id="saldate" name="saldate" required>
-
-                            <label for="valdate">Valid Date<x-req /></label>
+                            <label for="saldate" style="text-align:right ">Date<x-req /></label>
+                            <input type="date" value="{{ date('Y-m-d') }}" size="10" class="col-span-2"  id="saldate" name="saldate" required>
+                            <label for="valdate" style="text-align:right ">Valid Date<x-req /></label>
                             <input type="date" value="{{ date('Y-m-d') }}" class="col-span-2"  id="valdate" name="valdate" required>
                             <input type="text" title="custid"  id="custid" name="custid" value=0 hidden    >
                         </div>
@@ -78,8 +67,24 @@
                             <label for="">
                                 Cash Cust.Address <span class="text-red-500 font-semibold">(*)</span>
                             </label>
-                            <textarea name="cashcustadrs" id="cashcustadrs" cols="30" rows="2" maxlength="150" required class="rounded"></textarea>
+                            <textarea name="cashcustadrs" id="cashcustadrs" class="col-span-8" cols="30" rows="2" maxlength="150" required class="rounded"></textarea>
+
                         </div>
+
+                        <div class="grid grid-cols-12 gap-1 py-1 items-center">
+                            <label for="t1">Term & Condition <x-req /></label>
+                            <input type="text" class="col-span-2" id="t1" name="t1" >
+                            <input type="text" class="col-span-2" id="t2" name="t2" >
+                            <input type="text" class="col-span-2" id="t3" name="t3" >
+                            <input type="text" class="col-span-2" id="t4" name="t4" >
+                            <input type="text" class="col-span-2" id="t5" name="t5" >
+
+
+                        </div>
+
+
+
+
 
                         <div class="grid grid-cols-1">
                             {{-- Contract Master --}}
@@ -711,7 +716,8 @@ const skus = @json($skus);
         var data = { 'contracts' : dynamicTableData,'rcvblamount':rcvblamount.value,'cartage':cartage.value,'discntamt':discntamt.value,'discntper':discntper.value,'discntper':discntper.value ,
         'customer_id': customer_id.value,'saldate':saldate.value,'qutno':qutno.value,'prno':prno.value,
         'saletaxper':saletaxper.value,'saletaxamt':saletaxamt.value,'totrcvbamount':totrcvbamount.value,
-        'valdate':valdate.value,'cashcustomer':cashcustomer.value,'cashcustadrs':cashcustadrs.value};
+        'valdate':valdate.value,'cashcustomer':cashcustomer.value,'cashcustadrs':cashcustadrs.value,
+        't1':t1.value,'t2':t2.value,'t3':t3.value,'t4':t4.value,'t5':t5.value};
         // All Ok - Proceed
         fetch(@json(route('quotations.store')),{
             credentials: 'same-origin', // 'include', default: 'omit'
@@ -998,6 +1004,12 @@ function clearform()
     document.getElementById("saletaxamt").value=0;
     document.getElementById("cartage").value=0;
     document.getElementById("totrcvbamount").value=0;
+    document.getElementById("t1").value='';
+    document.getElementById("t2").value='';
+    document.getElementById("t3").value='';
+    document.getElementById("t4").value='';
+    document.getElementById("t5").value='';
+
 
 }
 
@@ -1013,7 +1025,7 @@ function EnableDisableTextBox(qutid) {
     }
 
 
-    const qutseqno = @json(route('quotations.qutseqno'));
+ const qutseqno = @json(route('quotations.qutseqno'));
 
 function newqutid()
 {

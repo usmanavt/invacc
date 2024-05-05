@@ -34,6 +34,31 @@ use Illuminate\Support\Facades\Session;
 // LocalPurchaseController
 class SalesInvoiceWopoController  extends Controller
 {
+
+
+    public function mdcno(Request $request)
+    {
+        //  dd($request->all());
+        // $head_id = $request->head_id;
+        $newdcno = DB::table('sale_invoices')->select('dcno')->max('dcno')+1;
+        return  $newdcno;
+
+    }
+
+    public function mbillno(Request $request)
+    {
+        //  dd($request->all());
+        // $head_id = $request->head_id;
+        $newbillno = DB::table('sale_invoices')->select('billno')->max('billno')+1;
+        return  $newbillno;
+
+    }
+
+
+
+
+
+
     public function index(Request $request)
     {
          return view('salewopo.index');
@@ -156,6 +181,11 @@ class SalesInvoiceWopoController  extends Controller
         $resultArray = $result->toArray();
         $data=compact('resultArray');
 
+        $result1 = DB::table('vwswofrmmatlist')->get();
+        $resultArray1 = $result1->toArray();
+        $data1=compact('resultArray1');
+
+
         $locations = Location::select('id','title')->where('status',1)->get();
 
         // return view('sales.create')
@@ -164,7 +194,7 @@ class SalesInvoiceWopoController  extends Controller
         // $maxgpno = DB::table('sale_invoices')->select('gpno')->max('gpno')+1;
         $maxbillno = DB::table('sale_invoices')->select('billno')->max('billno')+1;
 
-        return \view ('salewopo.create',compact('maxdcno','maxbillno'))->with($data)
+        return \view ('salewopo.create',compact('maxdcno','maxbillno'))->with($data)->with($data1)
         ->with('customers',Customer::select('id','title')->get())
         //  ->with('locations',Location::select('id','title')->get());
          ->with('skus',Sku::select('id','title')->get());
@@ -433,7 +463,7 @@ class SalesInvoiceWopoController  extends Controller
 
 
             DB::commit();
-            Session::flash('success','Contract Information Saved');
+            // Session::flash('success','Contract Information Saved');
             return response()->json(['success'],200);
         } catch (\Throwable $th) {
             DB::rollback();
@@ -446,14 +476,20 @@ class SalesInvoiceWopoController  extends Controller
     public function edit($id)
     {
 
-        $passwrd = DB::table('tblpwrd')->select('pwrdtxt')->max('pwrdtxt');
+
+        $result1 = DB::table('vwswofrmmatlist')->get();
+        $resultArray1 = $result1->toArray();
+        $data1=compact('resultArray1');
+
+
+         $passwrd = DB::table('tblpwrd')->select('pwrdtxt')->max('pwrdtxt');
          $cd = DB::select('call procsalewosoedit (?)',array( $id ));
          $data=compact('cd');
          $locations = Location::select('id','title')->where('status',1)->get();
         return view('salewopo.edit',compact('passwrd'))
         ->with('customer',Customer::select('id','title')->get())
         ->with('saleinvoices',SaleInvoices::findOrFail($id))
-        ->with($data)
+        ->with($data)->with($data1)
         ->with('skus',Sku::select('id','title')->get());
         // ->with('locations',Location::select('id','title')->get());
 

@@ -123,6 +123,24 @@ padding-left: 8px;
     </tbody>
     </table>
 
+    <table style="Padding:5px; border:1.5px solid burlywood; "  >
+        <tbody>
+            <tr>
+
+                <td >Quotation Date:  <span style="font-weight: bold"> {{ $data[0]->qutdate }}</span>
+                <td >Quotation No:  <span style="font-weight: bold"> {{ $data[0]->qutno }}</span>
+                <td >P.R No:  <span style="font-weight: bold"> {{ $data[0]->prno }}</span>
+                {{-- <td >P.O Date:  <span style="font-weight: bold"> {{ $data[0]->podate }}</span>
+                <td >P.O Date:  <span style="font-weight: bold"> {{ $data[0]->podate }}</span>                 --}}
+                <td >Valid Date:  <span style="font-weight: bold">{{ $data[0]->valdate }}</span>
+            </tr>
+        </tbody>
+    </table>
+
+
+
+
+
     {{-- <table align ="right" style="width:50%;">
         <tbody >
 
@@ -140,7 +158,7 @@ padding-left: 8px;
 
     {{-- Ledger Info --}}
 
-    <table class="ledger">
+    {{-- <table class="ledger">
         <tbody>
             <tr>
                 <td>
@@ -159,7 +177,6 @@ padding-left: 8px;
                     P.R No:
                 </td>
                 <td align ="left" style="font-size:12px;font-weight: bold">
-                    {{-- From {{ $fromdate }} to {{ $todate }} --}}
                     {{ $data[0]->prno }}
                 </td>
 
@@ -173,7 +190,7 @@ padding-left: 8px;
         </tbody>
     </table>
 
-
+ --}}
 
 
     {{-- column headers --}}
@@ -191,7 +208,7 @@ padding-left: 8px;
             <tr>
                 {{-- <td  style="text-align: center font-size:0.5rem;font-weight: bold"> --}}
                     <th style="font-size:08px ;border: 1px solid black; "  width="2%">S#</th>
-                    <th style="font-size:08px ;border: 1px solid black; " width="17%">Material Name</th>
+                    <th style="font-size:08px ;border: 1px solid black; " width="17%">Goods Description</th>
                     <th style="font-size:08px ;border: 1px solid black;" width="3%">Unit</th>
 
                     {{-- Quotation Data --}}

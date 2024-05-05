@@ -285,6 +285,11 @@ Route::resource('saleinvoices', SalesInvoicesController::class);
 
 Route::get('/salewopo/{id}/printcontract', [SalesInvoiceWopoController::class, 'printContract'])->name('salewopo.print');
 Route::post('/salewopo/deleteBankRequest', [SalesInvoiceWopoController::class, 'deleteBankRequest'])->name('salewopo.del');
+
+Route::get('mdcno',[SalesInvoiceWopoController::class, 'mdcno'])->name('salewopo.mdcno');
+Route::get('mbillno',[SalesInvoiceWopoController::class, 'mbillno'])->name('salewopo.mbillno');
+
+
 Route::get('/salewopo/{id}/deleterec', [SalesInvoiceWopoController::class, 'deleterec']);
 
 

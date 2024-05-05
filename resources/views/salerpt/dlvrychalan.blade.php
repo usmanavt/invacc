@@ -136,11 +136,35 @@ body{
         </tbody>
     </table>
 
+    <table style="Padding:5px; border:1.5px solid burlywood; "  >
+        <tbody>
+            <tr>
 
+                <td >G.Pass No:  <span style="font-weight: bold"> {{ $data[0]->gpno }}</span>
+                <td >P.O No:  <span style="font-weight: bold"> {{ $data[0]->pono }}</span>
+                <td >D.C No:  <span style="font-weight: bold"> {{ $data[0]->dcno }}</span>
+                <td >Bill No:  <span style="font-weight: bold"> {{ $data[0]->billno }}</span>
+                <td >Delivery Date:  <span style="font-weight: bold">  {{ $data[0]->saldate }}</span>
+            </tr>
+        </tbody>
+    </table>
+
+    <table style="Padding:3px; border:1.5px solid burlywood; "  >
+        <tbody>
+            <tr >
+                <td > Customer Name:  <span style="font-weight: bold"> {{ $data[0]->custname }}</span>
+            </tr>
+            <tr >
+                <td > Address:  <span style="font-weight: bold"> {{ $data[0]->custadrs }}</span> </td>
+            </tr>
+
+
+        </tbody>
+    </table>
 
 
     {{-- Ledger Info --}}
-    <table >
+    {{-- <table >
         <tbody>
             <tr class="hd1">
                 <td > Customer Name:</td>
@@ -148,9 +172,6 @@ body{
                 <td> Address:</td>
                 <td align ="left" style="font-size:12px;font-weight: bold" > {{ $data[0]->custadrs }}</td>
            </tr>
-
-
-
 
             <tr>
                 <td>P.O No:</td>
@@ -164,13 +185,10 @@ body{
                 <td align ="left" style="font-size:12px;font-weight: bold">
                     {{ $data[0]->podate }}
                 </td>
-            {{-- </tr> --}}
-                {{-- <tr> --}}
                     <td>
                         D.C No:
                     </td>
                     <td align ="left" style="font-size:12px;font-weight: bold">
-                        {{-- From {{ $fromdate }} to {{ $todate }} --}}
                         {{ $data[0]->dcno }}
                     </td>
 
@@ -182,7 +200,7 @@ body{
                     </td>
                 </tr>
         </tbody>
-    </table>
+    </table> --}}
     {{-- column headers --}}
     <table class="column-headers ">
         <thead >
@@ -190,7 +208,7 @@ body{
                 {{-- <td  style="text-align: center font-size:0.5rem;font-weight: bold"> --}}
                     <th  width="6%">S#</th>
                     {{-- <th class="" width="16%">Group Name</th> --}}
-                    <th width="52%">Material Name</th>
+                    <th width="52%">Goods Description</th>
                     <th width="8%">Unit</th>
                     <th width="20%">Brand</th>
                     <th width="14%">Quantity</th>
@@ -201,7 +219,7 @@ body{
         </thead>
     </table>
 
-    <div style="height:700px;border:1px solid;">
+    <div style="height:650px;border:1px solid;">
 
         {{-- <table>
             <tbody>

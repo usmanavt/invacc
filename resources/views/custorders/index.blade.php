@@ -1,7 +1,10 @@
 <x-app-layout>
 
     @push('styles')
-    <link rel="stylesheet" href="{{ asset('css/tabulator_simple.min.css') }}">
+    {{-- <link rel="stylesheet" href="{{ asset('css/tabulator_simple.min.css') }}"> --}}
+    <link href="https://unpkg.com/tabulator-tables/dist/css/tabulator.min.css" rel="stylesheet">
+    <script type="text/javascript" src="https://unpkg.com/tabulator-tables/dist/js/tabulator.min.js"></script>
+
     @endpush
 
     <x-slot name="header">
@@ -152,9 +155,9 @@
             {
                 title:'Quotation Status', headerHozAlign:"center",
                     columns:[
-            {title: "Quotation No",field: "pqutno"},
-            {title: "Quotation Date",field: "qutdate"},
-            {title: "Quotation Qty",field: "tqqty",bottomCalc:"max"}
+            {title: "Quotation No",field: "pqutno",responsive:0},
+            {title: "Quotation Date",field: "qutdate",responsive:0},
+            {title: "Quotation Qty",field: "tqqty",bottomCalc:"max",responsive:0}
                     ]}
 
             ,
@@ -164,15 +167,15 @@
                     columns:[
 
 
-            {title: "Sale Order id",field: "id"},
-            {title: "P.O Date",field: "podate"},
-            {title: "P.O No",field: "pono"},
-            {title: "P.O Seq.No",field: "poseqno"},
-            {title: "Delivery Date",field: "deliverydt"},
-            {title: "Customer",field: "custname"},
-            {title: "Plan Qty",field: "tplnqty",bottomCalc:"sum"},
-            {title: "W/O GST",field: "rcvblamount",bottomCalc:"sum"},
-            {title: "W/GST",field: "totrcvbamount",bottomCalc:"sum"}
+            {title: "Sale Order id",field: "id",responsive:0},
+            {title: "P.O Date",field: "podate",responsive:0},
+            {title: "P.O No",field: "pono",responsive:0},
+            {title: "P.O Seq.No",field: "poseqno",responsive:0},
+            {title: "Delivery Date",field: "deliverydt",responsive:0},
+            {title: "Customer",field: "custname",responsive:0},
+            {title: "Plan Qty",field: "tplnqty",bottomCalc:"sum",responsive:0},
+            {title: "W/O GST",field: "rcvblamount",bottomCalc:"sum",responsive:0},
+            {title: "W/GST",field: "totrcvbamount",bottomCalc:"sum",responsive:0}
                     ]} ,
 
 
@@ -180,10 +183,10 @@
                 title:'Sales', headerHozAlign:"center",
                     columns:[
 
-            {title: "Delivered(Qty)",field: "tslwt",bottomCalc:"sum"},
-            {title: "Delivered(Amount)",field: "delivered",bottomCalc:"sum"},
-            {title: "Pending(Amount)",field: "salordbal",bottomCalc:"sum"},
-            {title:"Status", field:"compstatus", hozAlign:"center", formatter:"tickCross", headerSort:false},
+            {title: "Delivered(Qty)",field: "tslwt",bottomCalc:"sum",responsive:0},
+            {title: "Delivered(Amount)",field: "delivered",bottomCalc:"sum",responsive:0},
+            {title: "Pending(Amount)",field: "salordbal",bottomCalc:"sum",responsive:0},
+            {title:"Status", field:"compstatus",responsive:0, hozAlign:"center", formatter:"tickCross", headerSort:false},
 
 
         ]},

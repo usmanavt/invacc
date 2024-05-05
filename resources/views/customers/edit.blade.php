@@ -18,13 +18,13 @@
                             <div class="flex flex-col md:flex-row justify-start flex-wrap gap-2 items-center">
 
                                 <div class="basis-0 md:basis-1/6">
-                                    <x-label for="title" value="Name" />
+                                    <x-label for="title" value="Customer Name" />
                                     <x-input id="title" class="bg-indigo-100" type="text" name="title" value="{{ $customer->title }}"  required/>
                                     @if($errors->has('title'))<div class="text-red-500 text-xs">{{ $errors->first('title') }}</div>@endif
                                 </div>
 
                                 <div class="basis-0 md:basis-1/6">
-                                    <x-label for="nick" value="Nick" />
+                                    <x-label for="nick" value="Nick Name" />
                                     <x-input id="nick" class="bg-indigo-100" type="text" name="nick" value="{{ $customer->nick }}"  />
                                     @if($errors->has('nick'))<div class="text-red-500 text-xs">{{ $errors->first('nick') }}</div>@endif
                                 </div>

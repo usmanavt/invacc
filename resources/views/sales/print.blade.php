@@ -180,7 +180,7 @@ body{
         <tr>
 
             <td >G.Pass No:  <span style="font-weight: bold"> {{ $data[0]->gpno }}</span>
-            <td >P.O No:  <span style="font-weight: bold"> {{ $data[0]->podate }}</span>
+            <td >P.O No:  <span style="font-weight: bold"> {{ $data[0]->pono }}</span>
             <td >D.C No:  <span style="font-weight: bold"> {{ $data[0]->dcno }}</span>
             <td >Bill No:  <span style="font-weight: bold"> {{ $data[0]->billno }}</span>
             <td >Delivery Date:  <span style="font-weight: bold">  {{ $data[0]->saldate }}</span>
@@ -209,7 +209,7 @@ body{
             <tr>
                 {{-- <td  style="text-align: center font-size:0.5rem;font-weight: bold"> --}}
                     <th  width="4%">S#</th>
-                    <th width="52%">Material Name</th>
+                    <th width="52%">Goods Description</th>
                     <th width="8%">Unit</th>
                     {{-- <th width="15%">Brand</th> --}}
                     <th width="12%">Quantity</th>
@@ -268,7 +268,7 @@ body{
 
         <div style="margin-top:10px;">
 
-            <table>
+            {{-- <table>
                 <tbody>
                       <tr>
                         <td  style="text-align: left;">
@@ -276,7 +276,7 @@ body{
                         </td>
                     </tr>
                 </tbody>
-            </table>
+            </table> --}}
 
             <table class="data1" >
 

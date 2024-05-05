@@ -97,23 +97,23 @@
                                     <label for="">
                                         Customer Address <span class="text-red-500 font-semibold w-10 ">(*)</span>
                                     </label>
-                                    <textarea name="csdrs" id="csdrs" cols="40" rows="5" maxlength="255"   class="rounded">
+                                    <textarea style="text-align: left" name="csdrs" id="csdrs" cols="40" rows="8" maxlength="255"   class="rounded">
                                         Steam Pipes, Pipe Fitting, Flanges Valves, S.S Pipes
-                                        PLOT NO. E-13, S.I.T.E AREA KARACHI MOBILE NO. 0333-3804744"
+                                        PLOT NO. E-13, S.I.T.E AREA KARACHI MOBILE NO. 0333-3804744
                                         Phone : 021-32588781, 021-32574285 , Fax : 021-32588782
 
                                     </textarea>
 
-                                    <label for="">
+                                    {{-- <label for="">
                                         Term of Condition(For Quotation) <span class="text-red-500 font-semibold w-10 ">(*)</span>
-                                    </label>
+                                    </label> --}}
                                     {{-- <textarea name="toc" id="toc" cols="40" rows="4" maxlength="255"  class="rounded"></textarea> --}}
 
-                                    <input type="text" title="Term-a" class="col-span-2" id="t1" name="t1"  >
-                                    <input type="text" title="Term-b" class="col-span-2" id="t2" name="t2"  >
-                                    <input type="text" title="Term-c" class="col-span-2" id="t3" name="t3"  >
-                                    <input type="text" title="Term-d" class="col-span-2" id="t4" name="t4"  >
-                                    <input type="text" title="Term-e" class="col-span-2" id="t5" name="t5"  >
+                                    <input type="text" title="" class="col-span-2" id="t1" name="t1" hidden  >
+                                    <input type="text" title="" class="col-span-2" id="t2" name="t2" hidden  >
+                                    <input type="text" title="" class="col-span-2" id="t3" name="t3" hidden  >
+                                    <input type="text" title="" class="col-span-2" id="t4" name="t4" hidden  >
+                                    <input type="text" title="" class="col-span-2" id="t5" name="t5" hidden  >
 
 
                                 </div>
