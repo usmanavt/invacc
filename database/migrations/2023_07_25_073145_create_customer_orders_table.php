@@ -17,7 +17,7 @@ class CreateCustomerOrdersTable extends Migration
             $table->id();
             $table->smallInteger('customer_id');
             $table->string('pono',50)->nullable();
-            $table->smallInteger('poseqno',50)->nullable();
+            $table->string('poseqno',50)->nullable();
             $table->date('podate')->nullable();
             $table->date('deliverydt')->nullable();
             $table->decimal('discntper', 6, 2)->default(0.00);
