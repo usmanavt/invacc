@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class AddColumnToSaleInvoicesDetails extends Migration
+class AddColumnToSaleInvoicesDetail extends Migration
 {
     /**
      * Run the migrations.
@@ -13,7 +13,7 @@ class AddColumnToSaleInvoicesDetails extends Migration
      */
     public function up()
     {
-        Schema::table('sale_invoices_details', function (Blueprint $table) {
+        Schema::table('sale_invoices_detail', function (Blueprint $table) {
             $table->decimal('unitconver', 10, 3)->default(00.000);
         });
     }
@@ -25,7 +25,7 @@ class AddColumnToSaleInvoicesDetails extends Migration
      */
     public function down()
     {
-        Schema::table('sale_invoices_details', function (Blueprint $table) {
+        Schema::table('sale_invoices_detail', function (Blueprint $table) {
             //
         });
     }
