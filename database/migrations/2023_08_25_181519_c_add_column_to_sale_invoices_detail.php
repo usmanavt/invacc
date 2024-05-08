@@ -13,7 +13,7 @@ class CAddColumnToSaleInvoicesDetails extends Migration
      */
     public function up()
     {
-        Schema::table('sale_invoices_details', function (Blueprint $table) {
+        Schema::table('sale_invoices_detail', function (Blueprint $table) {
             $table->decimal('feedqty', 15, 3)->default(0.000);
             $table->decimal('sqtykg', 15, 3)->default(0.000);
             $table->integer('sqtypcs')->default(0);
@@ -41,7 +41,7 @@ class CAddColumnToSaleInvoicesDetails extends Migration
      */
     public function down()
     {
-        Schema::table('sale_invoices_details', function (Blueprint $table) {
+        Schema::table('sale_invoices_detail', function (Blueprint $table) {
             //
         });
     }
