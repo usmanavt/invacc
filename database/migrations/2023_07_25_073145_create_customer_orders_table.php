@@ -15,7 +15,7 @@ class CreateCustomerOrdersTable extends Migration
     {
         Schema::create('customer_orders', function (Blueprint $table) {
             $table->id();
-            $table->smallInteger('customer_id')->default(0);
+            $table->smallInteger('customer_id');
             $table->string('pono',50)->nullable();
             $table->smallInteger('poseqno',50)->nullable();
             $table->date('podate')->nullable();
