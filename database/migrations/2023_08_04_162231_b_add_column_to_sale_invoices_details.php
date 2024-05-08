@@ -13,7 +13,7 @@ class BAddColumnToSaleInvoicesDetails extends Migration
      */
     public function up()
     {
-        Schema::table('sales_invoices_details', function (Blueprint $table) {
+        Schema::table('sale_invoices_details', function (Blueprint $table) {
             $table->string('brand', 50)->nullable();
             $table->Integer('cominvid')->default(0);
             $table->decimal('qtykgcrt', 12, 2)->default(0.00);
