@@ -14,7 +14,7 @@ class AddColumnToSalesInvoices extends Migration
     public function up()
     {
         Schema::table('sale_invoices', function (Blueprint $table) {
-            $table->smallInteger('status')->default(1); //
+            // $table->smallInteger('status')->default(1); //
         });
     }
 
