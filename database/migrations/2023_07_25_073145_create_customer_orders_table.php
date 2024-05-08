@@ -40,6 +40,6 @@ class CreateCustomerOrdersTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('purchase_order');
+        Schema::dropIfExists('customer_orders');
     }
 }
