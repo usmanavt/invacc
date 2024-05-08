@@ -32,7 +32,7 @@ class CreateGodownMovementsTable extends Migration
 
             $table->tinyInteger('clrldstatus')->default(0);
             $table->date('clrddate')->nullable();
-            $table->date('clrdid')->default(0);
+            $table->date('clrdid')->useCurrent();
 
 
             $table->timestamps();
