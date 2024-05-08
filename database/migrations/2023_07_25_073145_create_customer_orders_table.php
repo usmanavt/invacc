@@ -21,7 +21,7 @@ class CreateCustomerOrdersTable extends Migration
             $table->date('podate')->nullable();
             $table->date('deliverydt')->nullable();
             $table->decimal('discntper', 6, 2)->default(0.00);
-            $table->integer('discntamt', 15, 3)->default(0);
+            $table->integer('discntamt', 15, 3)->default(0.00);
             $table->smallInteger('cartage', 15, 3)->default(0);
             $table->integer('rcvblamount', 15, 3)->default(0);
             $table->decimal('saletaxper', 6, 2)->default(0.00);
