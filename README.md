@@ -1,3 +1,2 @@
 # My First Project
-dfd
-Added some info by -Ali Jibran
+09 May 2024 - Full Project Online
