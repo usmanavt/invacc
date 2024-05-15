@@ -87,7 +87,7 @@
                                 <x-input-numeric title="Amount" name="amount" id="amount"  class="col-span-2"      />
                                 <x-input-text title="Description" name="mdescription" id="mdescription" class="col-span-2" />
                                 <x-button   id="arw" class="mx-2" type="button" onclick="addgrdrw()">Add Row</x-button>
-                                <x-input-text title="" name="chqtext" id="chqtext" value=0  hidden  />
+                                <x-input-text title="" name="chqtext" id="chqtext"     />
                             </div>
                             </fieldset>
 
@@ -142,6 +142,17 @@ let dyanmicTable = ""; // Tabulator
         heads.forEach(e => {headsList.push({value:e.title, label:e.title})})
         var document_date = document.getElementById("document_date").focus();
         hidedropdown1();
+        if(per.checked==true)
+        {
+            chqtext.value=1;
+        }
+        else
+        {
+            chqtext.value=0;
+        }
+
+
+
         filldrplst();
    })
     document.addEventListener('keyup', (e)=>{
