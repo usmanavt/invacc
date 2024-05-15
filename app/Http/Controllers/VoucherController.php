@@ -14,6 +14,31 @@ use Illuminate\Support\Facades\Session;
 
 class VoucherController extends Controller
 {
+
+
+
+    public function headlistp(Request $request)
+    {
+        //  dd($request->all());
+        $head_id = $request->head_id;
+        $chqtext=$request->chqtext;
+
+        return  DB::select('call procjvcatmaster(?,?)',array($chqtext,$head_id));
+        // procpaymentmaster
+    }
+
+    // public function getchqstts(Request $request)
+    // {
+    //     //  dd($request->all());
+    //     $head_id = $request->head_id;
+    //     $supplier_id = $request->supplier_id;
+
+    //     $chqno = DB::table('cheque_transactions')->select('cheque_no')->where('clrstatus',0)->where('head_id',$head_id)->where('customer_id',$supplier_id)->first();
+    //     // dd($chqno);
+    //     return  $chqno;
+    // }
+
+
     public function __construct(){ $this->middleware('auth'); }
     public function index()
     {
@@ -51,8 +76,17 @@ class VoucherController extends Controller
 
     public function create()
     {
+
+        $result1 = DB::table('vwpaymentmaster')->get();
+        $resultArray1 = $result1->toArray();
+        $data1=compact('resultArray1');
+
+
+
+
         $maxjvno = DB::table('vouchers')->select('jvno')->max('jvno')+1;
         return view('journalvouchers.create',compact('maxjvno'))
+        ->with($data1)
         ->with('heads',Head::select(['id','title'])->where('forjv',1)->get()) //
         ->with('subheads',DB::table('VwCategory')->select('*')->get()->toArray());
     }
@@ -63,26 +97,26 @@ class VoucherController extends Controller
             'document_date' => ['required'],
         ]);
 
-        // dd($request->dbtamt);
+        //  dd($request->chqtext);
 
-        if($request->cheque_no != ' ' )
-        {
-         // $dupchqno = BankTransaction::where('cheque_no',$request->cheque_no)->first();
-         $chqamount = DB::table('cheque_transactions')->where('cheque_no',$request->cheque_no)->first();
-         if(!$chqamount)
-           {
-            Session::flash('info','Invalid Cheque_no ');
-            return response()->json(['success'],200);
-           }
+        // if($request->chqtext== 1 )
+        // {
+        //  // $dupchqno = BankTransaction::where('cheque_no',$request->cheque_no)->first();
+        //  $chqamount = DB::table('cheque_transactions')->where('cheque_no',$request->cheque_no)->first();
+        //  if(!$chqamount)
+        //    {
+        //     Session::flash('info','Invalid Cheque_no ');
+        //     return response()->json(['success'],200);
+        //    }
 
-         if($chqamount) {
-            if($request->dbtamt <> $chqamount->received )
-            {
-             Session::flash('info','Invalid Cheque Amount ');
-             return response()->json(['success'],200);
-            }
-                       }
-         }
+        //  if($chqamount) {
+        //     if($request->dbtamt <> $chqamount->received )
+        //     {
+        //      Session::flash('info','Invalid Cheque Amount ');
+        //      return response()->json(['success'],200);
+        //     }
+        //                }
+        //  }
 
 
 
@@ -93,8 +127,9 @@ class VoucherController extends Controller
         try {
             foreach($request->voucher as $vuch)
             {
-                $head_title = $vuch['head_title'];
-                $subhead_title = $vuch['subhead_title'];
+                $head_title = $vuch['mhead'];
+                $subhead_title = $vuch['shead'];
+                // dd($subhead_title);
                 $sub = DB::select('select * from VwCategory where mtitle = ? AND title = ? LIMIT 1', [$head_title,$subhead_title]);
                 // return $sub;
                 // return compact('head_title','subhead_title','sub');
@@ -105,28 +140,41 @@ class VoucherController extends Controller
                 // $v->description = $request->description;
 
                 $v->cheque_no = $request->cheque_no;
-                $v->transaction_type = $vuch['transaction_type'];
+                $v->transaction_type = $vuch['ttype'];
                 // $v->jvno = $vuch['jvno'];
-                $v->amount = $vuch['amount'];
+                $v->amount = $vuch['tamount'];
                 $v->description = $vuch['description'];
-                foreach($sub as $s)
-                {
-                    $v->head_id = $s->MHEAD;
-                    $v->head_title = $s->mtitle;
-                    $v->subhead_id = $s->Subhead;
-                    $v->subhead_title = $s->title;
-                }
+                $v->head_id = $vuch['mheadid'];
+                $v->subhead_id = $vuch['sheadid'] ;
+
+                $v->head_title = $vuch['mhead'];
+                $v->subhead_title = $vuch['shead'] ;
+
+
+
+
+                // foreach($sub as $s)
+                // {
+                //     $v->head_title = $s->mtitle;
+                //     $v->subhead_title = $s->title;
+                //     // $v->head_id = $s->MHEAD;
+                //     // $v->subhead_id = $s->Subhead;
+                //     $v->head_id = $s->mheadid;
+                //     $v->subhead_id = $s->sheadid;
+
+                // }
                 $v->save();
             }
 
             DB::update(DB::raw("
             UPDATE cheque_transactions c
-            INNER JOIN (SELECT distinct jvno,document_date,cheque_no,'JV' as transaction_type,subhead_id as bank_id FROM vouchers WHERE  jvno=$v->jvno) x
-            ON c.cheque_no=x.cheque_no
-            SET c.bank_id=x.bank_id, c.clrstatus=1,c.clrdate=x.document_date,clrid=x.jvno,c.ref=CONCAT(x.transaction_type,'-',LPAD(x.jvno,4,'0')) "));
+            INNER JOIN (SELECT distinct jvno,document_date,cheque_no,'JV' as transaction_type,subhead_id as bank_id,amount FROM vouchers
+            WHERE transaction_type='CREDIT' AND  jvno=$v->jvno) x    ON c.cheque_no=x.cheque_no
+            SET c.bank_id=x.bank_id, c.clrstatus=1,c.clrdate=x.document_date,clrid=x.jvno,crdtcust=x.amount,invsclrd=x.amount,
+            c.ref=CONCAT(x.transaction_type,'-',LPAD(x.jvno,4,'0')) "));
 
             DB::commit();
-            Session::flash('success','Journal Voucer created');
+            // Session::flash('success','Journal Voucer created');
             return response()->json(['success'],200);
         } catch (\Throwable $th) {
             DB::rollback();
