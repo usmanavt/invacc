@@ -166,7 +166,7 @@
 @push('scripts')
     <script>
 let list;
-const headlistp = @json(route('banktransaction.headlistp'));
+const headlistp = @json(route('banktransaction.headlistp1'));
 const head = document.getElementById('head_id')
 const value = head.value
 
@@ -914,6 +914,7 @@ function onkeyUp(e)
 
 
 document.addEventListener('DOMContentLoaded',()=> {
+    filldrplst();
     hidedropdown();
     hidedropdown1();
         });
@@ -1063,40 +1064,33 @@ function newsno()
 
 
 head_id.addEventListener("change", () => {
-        const value = head.value
-        autocompleted1.value='';
-        supplier_id.options.length = 0 // Reset List
-        fetch(headlistp + `?head_id=${value} `,{
-                    method:"GET",
-                    headers: { 'Accept':'application/json','Content-type':'application/json'},
-                    })
-                    .then(response => response.json())
-                    .then( data => {
-                        if(data.length > 0)
-                        {
+    filldrplst();
+    // const value = head.value
+        // autocompleted1.value='';
+        // supplier_id.options.length = 0 // Reset List
+        // fetch(headlistp + `?head_id=${value} `,{
+        //             method:"GET",
+        //             headers: { 'Accept':'application/json','Content-type':'application/json'},
+        //             })
+        //             .then(response => response.json())
+        //             .then( data => {
+        //                 if(data.length > 0)
+        //                 {
 
-                            let a = 0;
+        //                     let a = 0;
 
-                            // $shid= [];
-                            // $mnhdid= [];
-                            // $shdname= [];
-                            $itmdata= [];
-                            list=data;
-                            list.forEach(e => {
-                                a += 1;
-                                addSelectElement(supplier_id,e.id,a + '         ' + e.supname )
-                                // $shid =e.id;
-                                // $mnhdid =e.head_id;
-                                // $shdname =e.osuppname;
-                                $itmdata[e.id]=[ { shid:e.id,mnhdid:e.head_id,shdname:e.osuppname }  ];
-
-
-                            });
-                        }else{
-                        }
-                    })
-                    .catch(error => console.error(error))
-                // break;
+        //                     $itmdata= [];
+        //                     list=data;
+        //                     list.forEach(e => {
+        //                         a += 1;
+        //                         addSelectElement(supplier_id,e.id,a + '         ' + e.supname )
+        //                         $itmdata[e.id]=[ { shid:e.id,mnhdid:e.head_id,shdname:e.osuppname }  ];
+        //                     });
+        //                 }else{
+        //                 }
+        //             })
+        //             .catch(error => console.error(error))
+        //         // break;
 
 
 });
@@ -1128,7 +1122,37 @@ function clearform()
 }
 
 
+function filldrplst()
+{
 
+    const value = head.value
+        autocompleted1.value='';
+        supplier_id.options.length = 0 // Reset List
+        fetch(headlistp + `?head_id=${value} `,{
+                    method:"GET",
+                    headers: { 'Accept':'application/json','Content-type':'application/json'},
+                    })
+                    .then(response => response.json())
+                    .then( data => {
+                        if(data.length > 0)
+                        {
+
+                            let a = 0;
+
+                            $itmdata= [];
+                            list=data;
+                            list.forEach(e => {
+                                a += 1;
+                                addSelectElement(supplier_id,e.id,a + '         ' + e.supname )
+                                $itmdata[e.id]=[ { shid:e.id,mnhdid:e.head_id,shdname:e.osuppname }  ];
+                            });
+                        }else{
+                        }
+                    })
+                    .catch(error => console.error(error))
+                // break;
+
+}
 
 
 

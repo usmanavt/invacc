@@ -63,7 +63,7 @@ class PaymentController  extends Controller
 
 
 
-    public function headlistp(Request $request)
+    public function headlistp1(Request $request)
     {
         //  dd($request->all());
         $head_id = $request->head_id;

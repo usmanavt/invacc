@@ -400,7 +400,7 @@ Route::resource('customerorder', CustomerOrderController::class);
 // Route::get('/materials/{id}/copyMaterial', [MaterialController::class, 'copyMaterial'])->name('materials.copy');
 Route::get('/banktransaction/{id}/printcontract', [PaymentController::class, 'printContract'])->name('banktransaction.print');
 Route::post('/banktransaction/deleteBankRequest', [PaymentController::class, 'deleteBankRequest'])->name('banktransaction.del');
-Route::get('headlistp',[PaymentController::class, 'headlistp'])->name('banktransaction.headlistp');
+Route::get('headlistp1',[PaymentController::class, 'headlistp1'])->name('banktransaction.headlistp1');
 Route::get('mseqnop',[PaymentController::class, 'mseqnop'])->name('banktransaction.mseqnop');
 Route::get('/banktransaction/{id}/deleterec', [PaymentController::class, 'deleterec']);
 

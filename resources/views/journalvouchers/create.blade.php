@@ -87,7 +87,7 @@
                                 <x-input-numeric title="Amount" name="amount" id="amount"  class="col-span-2"      />
                                 <x-input-text title="Description" name="mdescription" id="mdescription" class="col-span-2" />
                                 <x-button   id="arw" class="mx-2" type="button" onclick="addgrdrw()">Add Row</x-button>
-                                <x-input-text title="" name="chqtext" id="chqtext"     />
+                                <x-input-text title="" name="chqtext" id="chqtext" hidden    />
                             </div>
                             </fieldset>
 
@@ -630,8 +630,6 @@ function addgrdrw()
 //                     .catch(error => console.error(error))
 
 // }
-
-
 
 function filldrplst()
 {

@@ -284,11 +284,11 @@ padding-left: 8px;
                                 {{-- <td class="" width="16%">{{ $data[$i]->grpname }} </td> --}}
                                 <td style="font-size:12px;border-right: 1.5px solid burlywood;font-weight: bold;" width="35%">{{ $data[$i]->matname }} </td>
                                 <td style="text-align:center;font-size:12px ;font-weight: bold;" width="7%">{{ $data[$i]->UOM }} </td>
-                                <td style="text-align:left;font-size:12px;border-right: 1.5px solid burlywood;font-weight: bold;" width="15%">{{ $data[$i]->mybrand }} </td>
+                                {{-- <td style="text-align:left;font-size:12px;border-right: 1.5px solid burlywood;font-weight: bold;" width="15%">{{ $data[$i]->mybrand }} </td>
                                 <td style="text-align:right;font-size:12px;border-right: 1.5px solid burlywood;font-weight: bold;" width="9%">{{ number_format($data[$i]->qty,1) }} </td>
                                 <td style="text-align:right;font-size:12px;border-right: 1.5px solid burlywood;font-weight: bold;" width="9%">{{ number_format($data[$i]->price,1) }} </td>
+                                <td style="text-align:right;font-size:12px;font-weight: bold" width="10%">{{ number_format($data[$i]->balqty,0) }} </td> --}}
                                 <td style="text-align:right;font-size:12px;font-weight: bold" width="11%">{{ number_format($data[$i]->saleamnt,0) }} </td>
-                                <td style="text-align:right;font-size:12px;font-weight: bold" width="10%">{{ number_format($data[$i]->balqty,0) }} </td>
 
                             </tr>
                         @endif

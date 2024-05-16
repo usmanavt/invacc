@@ -42,7 +42,7 @@
 
                                 <label for="head_id">Main Head<x-req /></label>
 
-                                    <select tabindex="-1" autocomplete="on" class="col-span-2" name="head_id" id="head_id" >
+                                    <select  autocomplete="on" class="col-span-2" name="head_id" id="head_id" style="text-align: right"  >
                                             {{-- <option value="" selected>--Payment Head</option> --}}
                                             @foreach($heads as $head)
                                             <option value="{{$head->id}}"> {{$head->title}} </option>
@@ -65,7 +65,7 @@
 
                                 {{-- <x-input-text title="Customer Name" name="custname" id="custname" class="col-span-2" disabled  /> --}}
                                 <x-input-date title="Received Date" name="documentdate" class="col-span-2" />
-                                <x-input-text title="Received Seq.#" name="transno" id="transno" value="{{$maxposeqno}}"  class="col-span-2"    />
+                                <x-input-text tabindex="-1" title="Received Seq.#" name="transno" id="transno" value="{{$maxposeqno}}"  class="col-span-2"    />
                                 <x-input-text title="Received From" name="pmntto" id="pmntto"  class="col-span-2"   />
 
 
@@ -210,6 +210,7 @@ window.onload = function() {
 
         // let prno= document.getElementById("prno")
         document.addEventListener('DOMContentLoaded',()=>{
+            filldrplst();
             hidedropdown();
             hidedropdown1();
 
@@ -1080,39 +1081,32 @@ document.onkeydown=function(e){
 }
 
 head_id.addEventListener("change", () => {
-    const value = head.value
-        autocompleted1.value='';
-        supplier_id.options.length = 0 // Reset List
-        fetch(headlist + `?head_id=${value} `,{
-                    method:"GET",
-                    headers: { 'Accept':'application/json','Content-type':'application/json'},
-                    })
-                    .then(response => response.json())
-                    .then( data => {
-                        if(data.length > 0)
-                        {
+    filldrplst();
+    // const value = head.value
+    //     autocompleted1.value='';
+    //     supplier_id.options.length = 0 // Reset List
+    //     fetch(headlist + `?head_id=${value} `,{
+    //                 method:"GET",
+    //                 headers: { 'Accept':'application/json','Content-type':'application/json'},
+    //                 })
+    //                 .then(response => response.json())
+    //                 .then( data => {
+    //                     if(data.length > 0)
+    //                     {
 
-                            let a = 0;
+    //                         let a = 0;
 
-                            // $shid= [];
-                            // $mnhdid= [];
-                            // $shdname= [];
-                            // $itmdata= [];
-                            $mychqno=[];
-                            list=data;
-                            list.forEach(e => {
-                                a += 1;
-                                addSelectElement(supplier_id,e.id,e.custname )
-                                $mychqno[e.id]=[ { chqno:e.cheque_no,chqdt:e.cheque_date,mychqamount:e.received,shid:e.subheadid,mnhdid:e.head_id,subhdname:e.custname }  ];
-                                // $shid =e.id;
-                                // $itmdata[e.id]=[ { mnhdid:e.head_id,mnhdname:e.head}  ];
-                                // $mnhdid =e.head_id;
-                                // $shdname =e.osuppname;
-                            });
-                        }else{
-                        }
-                    })
-                    .catch(error => console.error(error))
+    //                         $mychqno=[];
+    //                         list=data;
+    //                         list.forEach(e => {
+    //                             a += 1;
+    //                             addSelectElement(supplier_id,e.id,e.custname )
+    //                             $mychqno[e.id]=[ { chqno:e.cheque_no,chqdt:e.cheque_date,mychqamount:e.received,shid:e.subheadid,mnhdid:e.head_id,subhdname:e.custname }  ];
+    //                         });
+    //                     }else{
+    //                     }
+    //                 })
+    //                 .catch(error => console.error(error))
                 // break;
 
 
@@ -1198,7 +1192,35 @@ function newsno()
 
 
 
+function filldrplst()
+{
+    const value = head.value
+        autocompleted1.value='';
+        supplier_id.options.length = 0 // Reset List
+        fetch(headlist + `?head_id=${value} `,{
+                    method:"GET",
+                    headers: { 'Accept':'application/json','Content-type':'application/json'},
+                    })
+                    .then(response => response.json())
+                    .then( data => {
+                        if(data.length > 0)
+                        {
 
+                            let a = 0;
+
+                            $mychqno=[];
+                            list=data;
+                            list.forEach(e => {
+                                a += 1;
+                                addSelectElement(supplier_id,e.id,e.custname )
+                                $mychqno[e.id]=[ { chqno:e.cheque_no,chqdt:e.cheque_date,mychqamount:e.received,shid:e.subheadid,mnhdid:e.head_id,subhdname:e.custname }  ];
+                            });
+                        }else{
+                        }
+                    })
+                    .catch(error => console.error(error))
+
+}
 
 
 
