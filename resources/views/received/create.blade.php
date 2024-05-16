@@ -357,7 +357,7 @@ let cheque_no= document.getElementById("cheque_no");
 let chqno= document.getElementById("chqno");
 let chqamount= document.getElementById("chqamount");
 
-
+dynamicTable.setData();
 // $mychqno[e.id]=[ { chqno:e.cheque_no,chqdt:e.cheque_date,mychqamount:e.received,shid:e.subheadid,mnhdid:e.head_id }  ];
 
 subhdid.value=$mychqno[supplier_id.options[supplier_id.selectedIndex].value][0].shid;

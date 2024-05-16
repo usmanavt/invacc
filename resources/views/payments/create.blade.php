@@ -322,14 +322,13 @@ supplier_id.addEventListener("click", () => {
         let subhdid= document.getElementById("subhdid");
         let hdid= document.getElementById("hdid");
         let shname= document.getElementById("shname");
-
+        dynamicTable.setData();
         input1.value=supplier_id.options[supplier_id.selectedIndex].text;
         subhdid.value=supplier_id.options[supplier_id.selectedIndex].value;
         // hdid.value=$mnhdid;
         hdid.value =$itmdata[supplier_id.options[supplier_id.selectedIndex].value][0].mnhdid,
         // shname.value= supplier_id.options[supplier_id.selectedIndex].text;
         shname.value =$itmdata[supplier_id.options[supplier_id.selectedIndex].value][0].shdname,
-
         detailsUrl = `${getDetails}/?id=${supplier_id.options[supplier_id.selectedIndex].value}`
             fetchDataFromServer(detailsUrl)
             adopted = true
@@ -723,21 +722,25 @@ var updateValues = (cell) => {
             if(bank_id==undefined  )
             {
                 showSnackbar("Bank Required","error");
-                bank_id.focus();
+                // bank_id.focus();
                 return;
             }
 
 
-
-
-            if(hdid.value <=0 || subhdid.value<=0 )
+            if(subhdid.value<=0 )
             {
                 showSnackbar("Invalid Head Selection","error");
-                autocompleted1.focus();
+                // autocompleted1.focus();
                 return;
             }
 
 
+            if(subhdid==undefined  )
+            {
+                showSnackbar("Subhead Required","error");
+                // subhdid.focus();
+                return;
+            }
 
 
 
