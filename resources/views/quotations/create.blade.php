@@ -45,7 +45,6 @@
 
                             </div>
 
-
                             <label for="saldate" style="text-align:right ">Date<x-req /></label>
                             <input type="date" value="{{ date('Y-m-d') }}" size="10" class="col-span-2"  id="saldate" name="saldate" required>
                             <label for="valdate" style="text-align:right ">Valid Date<x-req /></label>

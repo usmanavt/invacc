@@ -159,6 +159,11 @@ class GatepasseController extends Controller
             $ci->gpseqid = $request->gpseqid;
             $ci->gpdate = $request->gpdate;
             $ci->dcno = $request->dcno;
+
+            $ci->vehno = $request->vehno;
+            $ci->drvrname = $request->drvrname;
+            $ci->drvrtelno = $request->drvrtelno;
+            $ci->deptime = $request->deptime;
             $ci->save();
 
 
@@ -298,11 +303,6 @@ class GatepasseController extends Controller
     }
 
 
-
-
-
-
-
     public function update(Request $request, Gatepasse $gatepasse)
     {
 
@@ -321,6 +321,13 @@ class GatepasseController extends Controller
             $ci->gpseqid = $request->gpseqid;
             $ci->gpdate = $request->gpdate;
             $ci->dcno = $request->dcno;
+
+            $ci->vehno = $request->vehno;
+            $ci->drvrname = $request->drvrname;
+            $ci->drvrtelno = $request->drvrtelno;
+            $ci->deptime = $request->deptime;
+
+
             $ci->save();
 
 

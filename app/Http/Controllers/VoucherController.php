@@ -233,24 +233,24 @@ class VoucherController extends Controller
         // $mydate = $request->document_date;
         // $myjvno = $request->jvno;
 
-        if($request->cheque_no != ' ' )
-        {
-         // $dupchqno = BankTransaction::where('cheque_no',$request->cheque_no)->first();
-         $chqamount = DB::table('cheque_transactions')->where('cheque_no',$request->cheque_no)->first();
-         if(!$chqamount)
-           {
-            Session::flash('info','Invalid Cheque_no ');
-            return response()->json(['success'],200);
-           }
+        // if($request->cheque_no != ' ' )
+        // {
+        //  // $dupchqno = BankTransaction::where('cheque_no',$request->cheque_no)->first();
+        //  $chqamount = DB::table('cheque_transactions')->where('cheque_no',$request->cheque_no)->first();
+        //  if(!$chqamount)
+        //    {
+        //     Session::flash('info','Invalid Cheque_no ');
+        //     return response()->json(['success'],200);
+        //    }
 
-         if($chqamount) {
-            if($request->dbtamt <> $chqamount->received )
-            {
-             Session::flash('info','Invalid Cheque Amount ');
-             return response()->json(['success'],200);
-            }
-                       }
-         }
+        //  if($chqamount) {
+        //     if($request->dbtamt <> $chqamount->received )
+        //     {
+        //      Session::flash('info','Invalid Cheque Amount ');
+        //      return response()->json(['success'],200);
+        //     }
+        //                }
+        //  }
 
 
 
@@ -265,7 +265,9 @@ class VoucherController extends Controller
 
 
         $vouchers = $request->vouchers;
+        // dd($vouchers->all());
         $transactions = Voucher::where('transaction',$vouchers[0]['transaction'])->delete();
+
         foreach($vouchers as $vuch)
             {
                 $v = new Voucher();

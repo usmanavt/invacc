@@ -36,6 +36,10 @@
                                 <x-input-text title="Customer Name" name="supname" id="supname"  disabled  />
                                 <x-input-text title="DC No" name="dcno" id="dcno"  disabled  />
                                 <x-input-date title="DC Date" id="saldate" name="saldate"  disabled />
+                                <x-input-date title="GatePass Date" id="gpdate" name="gpdate"  />
+                                <x-input-text title="GatePass #" name="gpseqid" id="gpseqid" value="{{$maxgpseqid}}"  disabled />
+                                <input class="checked:bg-blue-500 checked:border-blue-500 focus:outline-none" type="checkbox" name="per" id="per" onclick="EnableDisableTextBox(this)" >
+
                                 {{-- <x-input-text title="Contract Invice#" id="continvsno" name="continvsno" req required class="col-span-2" disabled /> --}}
 
                                 {{-- <x-input-date title="Receiving Date" name="purdate" id="purdate"    /> --}}
@@ -43,9 +47,12 @@
 
                             </div>
                             <div class="grid grid-cols-12 gap-1 py-2 items-center">
-                                <x-input-date title="GatePass Date" id="gpdate" name="gpdate"  />
-                                <x-input-text title="GatePass #" name="gpseqid" id="gpseqid" value="{{$maxgpseqid}}"  disabled />
-                                <input class="checked:bg-blue-500 checked:border-blue-500 focus:outline-none" type="checkbox" name="per" id="per" onclick="EnableDisableTextBox(this)" >
+
+
+                                <x-input-text title="Vehicle No" name="vehno" id="vehno"    />
+                                <x-input-text title="Driver Name" name="drvrname" id="drvrname"    />
+                                <x-input-text title="Driver Tel.No" name="drvrtelno" id="drvrtelno"    />
+                                <x-input-text title="Departure Time" name="deptime" id="deptime"    />
                                 {{-- <x-input-text title="Pur.Invoice #" name="purinvsno" /> --}}
                                 {{-- <x-input-text title="P.O Seq.#" name="poseqno" id="poseqno" value="{{$maxpurseqid}}"    placeholder="poseqno" required   /> --}}
 
@@ -711,7 +718,7 @@ var updateValues = (cell) => {
 
             var data = { 'gatepasse' : dynamicTableData,
         'customer_id': customer_id,'sale_invoice_id':sale_invoice_id,'saldate':saldate.value,'gpseqid':gpseqid.value,
-                          'gpdate':gpdate.value,'dcno':dcno.value      };
+                          'gpdate':gpdate.value,'dcno':dcno.value,'vehno':vehno.value,'drvrname':drvrname.value,'drvrtelno':drvrtelno.value,'deptime':deptime.value };
 
             // All Ok - Proceed
             fetch(@json(route('gatepasse.store')),{

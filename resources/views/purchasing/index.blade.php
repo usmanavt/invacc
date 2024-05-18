@@ -154,10 +154,12 @@
                     columns:[
 
             {title: "Supplier",field: "supname"},
-            {title: "Contract No",field: "contract_id"},
+            {title: "Contract id",field: "contract_id"},
+            {title: "Contract No",field: "contno"},
             {title: "Contract Date",field: "contract_date"},
             {title: "Purchase Id",field: "id"},
             {title: "GR.No",field: "grno"},
+            {title: "GR.Date",field: "grdate"},
             {title: "Invoice No",field: "purinvsno"}]},
 
             {

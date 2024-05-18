@@ -42,11 +42,24 @@
                         <div class="grid grid-cols-12 gap-1 py-2 items-center">
                             <x-input-date title="GatePass Date" id="gpdate" name="gpdate" value="{{$gatepasse->gpdate}}"  />
                             <x-input-text title="GatePass#" name="gpseqid" id="gpseqid" class="col-span-2" value="{{$gatepasse->gpseqid }}"  disabled />
-                                <input class="checked:bg-blue-500 checked:border-blue-500 focus:outline-none" type="checkbox" name="per" id="per" onclick="EnableDisableTextBox(this)" >
-                                <x-input-text title="" name="gpid" id="gpid" value="{{$gatepasse->id }}" hidden  disabled />
-                                    <x-input-text title="" name="sale_invoice_id" id="sale_invoice_id" value="{{$gatepasse->sale_invoice_id }}"  hidden />
+                             <input class="checked:bg-blue-500 checked:border-blue-500 focus:outline-none" type="checkbox" name="per" id="per" onclick="EnableDisableTextBox(this)" >
+                             <x-input-text title="" name="gpid" id="gpid" value="{{$gatepasse->id }}" hidden  disabled />
+                             <x-input-text title="" name="sale_invoice_id" id="sale_invoice_id" value="{{$gatepasse->sale_invoice_id }}"  hidden />
 
                         </div>
+
+                        <div class="grid grid-cols-12 gap-1 py-2 items-center">
+                            <x-input-text title="Vehicle No" name="vehno" id="vehno" value="{{$gatepasse->vehno }}"    />
+                            <x-input-text title="Driver Name" name="drvrname" id="drvrname" value="{{$gatepasse->drvrname }}"    />
+                            <x-input-text title="Driver Tel.No" name="drvrtelno" id="drvrtelno" value="{{$gatepasse->drvrtelno }}"    />
+                            <x-input-text title="Departure Time" name="deptime" id="deptime" value="{{$gatepasse->deptime }}"    />
+
+                        </div>
+
+
+
+
+
                     </fieldset>
 
 
@@ -558,7 +571,7 @@ function validateForm()
 
     var data = { 'gatepasse' : dynamicTableData,'gpid':gpid.value,
         'customer_id': customer_id.value,'sale_invoice_id':sale_invoice_id.value,'saldate':saldate.value,'gpseqid':gpseqid.value,
-                          'gpdate':gpdate.value,'dcno':dcno.value      };
+                          'gpdate':gpdate.value,'dcno':dcno.value,'vehno':vehno.value,'drvrname':drvrname.value,'drvrtelno':drvrtelno.value,'deptime':deptime.value      };
 
 
 
