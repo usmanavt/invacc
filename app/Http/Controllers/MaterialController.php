@@ -54,24 +54,32 @@ class MaterialController extends Controller
 
     public function getMaster(Request $request)
     {
+        // $search = $request->search;
+        // $size = $request->size;
+        // $field = $request->sort[0]["field"];     //  Nested Array
+        // $dir = $request->sort[0]["dir"];         //  Nested Array
+        // $materials = Material::where(function ($query) use ($search){
+        //     $query->where('srchb','LIKE','%' . $search . '%');
+        // })
+        // ->orderBy($field,$dir)
+        // ->paginate((int) $size);
+        // return $materials;
+
         $search = $request->search;
         $size = $request->size;
         $field = $request->sort[0]["field"];     //  Nested Array
         $dir = $request->sort[0]["dir"];         //  Nested Array
-        //  With Tables
-        $materials = Material::where(function ($query) use ($search){
-            $query->where('srchb','LIKE','%' . $search . '%');
-            // ->orWhere('title','LIKE','%' . $search . '%');
-            // ->orWhere('category','LIKE','%' . $search . '%')
-            // ->orWhere('brand','LIKE','%' . $search . '%')
-            // ->orWhere('sku','LIKE','%' . $search . '%')
-            // ->orWhere('srchi','LIKE','%' . $search . '%')
-            // ->orWhere('srchb','LIKE','%' . $search . '%')
-            // ->orWhere('nick','LIKE','%' . $search . '%');
-        })
+        $cis = DB::table('vwmatmastindex')
+        ->where('compname', 'like', "%$search%")
+        // ->orWhere('supname', 'like', "%$search%")
         ->orderBy($field,$dir)
         ->paginate((int) $size);
-        return $materials;
+        return $cis;
+
+
+
+
+
     }
 
     public function create()
@@ -633,8 +641,8 @@ class MaterialController extends Controller
                 $material->brand_id = $request->brand_id;
                 $material->category = $request->category;
                 $material->dimension = $request->dimension;
-                $material->srchi = $request->srchi;
-                $material->srchb = $request->srchb;
+                // $material->srchi = $request->srchi;
+                // $material->srchb = $request->srchb;
                 $material->brand = $request->brand;
                 $material->save();
 
@@ -735,8 +743,8 @@ class MaterialController extends Controller
             $material->dimension = $request->dimension;
             $material->source = $request->source;
             $material->sku = $request->sku;
-            $material->srchi = $request->srchi;
-            $material->srchb = $request->srchb;
+            // $material->srchi = $request->srchi;
+            // $material->srchb = $request->srchb;
 
             // $material->brand = $request->brand;
             // $material->qtykg = $request->qtykg;

@@ -98,13 +98,13 @@
                                 <x-input class="bg-indigo-100" type="text" name="nick" value="{{ $material->nick }}"  required minlength="3"/>
                                 @if($errors->has('nick'))<div class="text-red-500 text-xs">{{ $errors->first('nick') }}</div>@endif
 
-                                <x-label for="srchi" :value="__('Search Tex For Import/Local')"/>
+                                {{-- <x-label for="srchi" :value="__('Search Tex For Import/Local')"/>
                                 <x-input class="bg-indigo-100" type="text" maxlength='40' name=" srchi" value="{{ $material->srchi }}"  required minlength="3"/>
                                 @if($errors->has('srchi'))<div class="text-red-500 text-xs">{{ $errors->first('srchi') }}</div>@endif
 
                                 <x-label for="srchb" :value="__('Search Tex For Both')"/>
                                 <x-input class="bg-indigo-100" type="text" maxlength='40' name=" srchb" value="{{ $material->srchb }}"  required minlength="3"/>
-                                @if($errors->has('srchb'))<div class="text-red-500 text-xs">{{ $errors->first('srchb') }}</div>@endif
+                                @if($errors->has('srchb'))<div class="text-red-500 text-xs">{{ $errors->first('srchb') }}</div>@endif --}}
 
 
 

@@ -16,9 +16,6 @@
     </x-slot>
 
 
-
-
-
     <div class="py-6">
         <div class="max-w-7x3 mx-auto sm:px-2 lg:px-4">
             <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg p4">
@@ -94,13 +91,13 @@
                                 <x-input id="srchi" class="bg-indigo-100 w-96" type="text" maxlength='15' name="srchi"  value="{{request()->input('srchi')}}"   />
                                 @if($errors->has('srchi'))<div class="text-red-500 text-xs">{{ $errors->first('srchi') }}</div>@endif --}}
 
-                                <x-label for="srchi" value="Searc Text For Local Items"/>
+                                {{-- <x-label for="srchi" value="Searc Text For Local Items"/>
                                 <x-input id="srchi" class="bg-indigo-100 w-96" type="text" maxlength='40' name="srchi"  value="{{request()->input('srchi')}}"   />
                                 @if($errors->has('srchi'))<div class="text-red-500 text-xs">{{ $errors->first('srchi') }}</div>@endif
 
                                 <x-label for="srchb" value="Searc Text For Both Items"/>
                                 <x-input id="srchb"  class="bg-indigo-100 w-96" type="text" maxlength='40' name="srchb"  value="{{request()->input('srchb')}}"   />
-                                @if($errors->has('srchb'))<div class="text-red-500 text-xs">{{ $errors->first('srchb') }}</div>@endif
+                                @if($errors->has('srchb'))<div class="text-red-500 text-xs">{{ $errors->first('srchb') }}</div>@endif --}}
 
 
 
@@ -147,13 +144,9 @@
                                     </button>
                                 </div>
 
-                                <div class="mt-8" style="font-weight: bold;font-size:2rem">Reports Criteria</div>
-
-                                {{-- <div class="mt-2">Reports Type</div> --}}
-
+                                {{-- <div class="mt-8" style="font-weight: bold;font-size:2rem">Reports Criteria</div>
                                 <x-label for="" value="Report Type"/>
                                 <select autocomplete="on" required name="rptid" id= "rptid" class="bg-indigo-100 w-full" onchange="myFunction()" >
-                                    {{-- <option value="" selected>--Report Type</option> --}}
                                     @foreach ($frmrptparamtrs as $frmrptparamtr)
                                         <option value="{{ $frmrptparamtr->id }}">{{ $frmrptparamtr->mytitle }}</option>
                                     @endforeach
@@ -186,7 +179,7 @@
                                         <i class="fa fa-print fa-fw"></i>
                                         Print Stock Reports
                                     </x-button>
-                                    </div>
+                                    </div> --}}
 
                             </form>
                             <input type="text" title="t1"  id="p1" name="p1" value="0" hidden   >
@@ -342,8 +335,8 @@
             {title:"Item", field:"category" ,  responsive:0},
             {title:"Dimension", field:"dimension" ,  responsive:0},
             {title:"Specification", field:"brand" ,  responsive:0},
-            {title:"Complete Name", field:"title" , visible:true ,headerSortStartingDir:"asc" , responsive:0},
-             {title:"Searching", field:"srchb" , headerSortStartingDir:"asc" , responsive:0},
+            // {title:"Complete Name", field:"title" , visible:true ,headerSortStartingDir:"asc" , responsive:0},
+             {title:"Searching", field:"compname" , headerSortStartingDir:"asc" , responsive:0},
 
             //  {title:"Nick", field:"nick" , visible:true , responsive:0},
 

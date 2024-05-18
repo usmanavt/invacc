@@ -225,12 +225,17 @@ padding-left: 8px;
 
         <table class="data" cellspacing="10">
             <tbody>
-                {{ $vvlues = 0 }}
+                {{ $vordamount = 0 }}
+                {{ $vbamount = 0 }}
+
 
                 @for ($i = 0 ; $i < count($data) ; $i++)
                     @if ($data[$i]->grpid  == 1)
                         <tr>
-                            {{ $vvlues += $data[$i]->saleamnt }}
+                            {{ $vordamount += $data[$i]->saleamnt }}
+                            {{ $vbamount += $data[$i]->balamount }}
+
+
                             <td class="text-align:center;font-size:12px" width="4%">{{ $i+1 }}</td>
                             {{-- <td class="" width="16%">{{ $data[$i]->grpname }} </td> --}}
                             <td style="font-size:12px" width="35%">{{ $data[$i]->matname }} </td>
@@ -245,9 +250,9 @@ padding-left: 8px;
                     @endif
                 @endfor
                 <tr>
-                    <td colspan="9" width="100%" style="text-align: right;border-bottom: 1px solid lightgray;"></td>
-                    {{-- <td colspan="4" width="8%" style="text-align: right;border-bottom: 1px solid lightgray;">{{ number_format($vtotpcs,0) }} </td> --}}
-                    {{-- <td class="1" width="8%" style="text-align: right;border-bottom: 1px solid lightgray;">{{ number_format($vwt,0) }} </td> --}}
+                    <td colspan="2"  style="text-align:right;font-size:12px;font-weight: bold;border-bottom: 1px solid lightgray;background: #e3e3e3;">Total</td>
+                    <td colspan="5"  style="text-align:right;font-size:12px;font-weight: bold;border-bottom: 1px solid lightgray;background: #e3e3e3;">{{ number_format($vordamount,0) }} </td>
+                    <td colspan="5"  style="text-align:right;font-size:12px;font-weight: bold;border-bottom: 1px solid lightgray;background: #e3e3e3;">{{ number_format($vbamount,0) }} </td>
                     {{-- <td class="2" width="8%" style="text-align: right;border-bottom: 1px solid lightgray;">{{ number_format($vvlues,0) }} </td> --}}
                </tr>
 

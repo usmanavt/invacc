@@ -218,7 +218,6 @@ class QuotationController  extends Controller
 
             $ci = new Quotation();
             $ci->saldate = $request->saldate;
-            $ci->valdate = $request->valdate;
             $ci->qutno = $request->qutno;
             $ci->prno = $request->prno;
             $ci->customer_id = $request->customer_id;
@@ -227,25 +226,28 @@ class QuotationController  extends Controller
             $ci->t3 = $request->t3;
             $ci->t4 = $request->t4;
             $ci->t5 = $request->t5;
-
-
-
-
-
             $ci->fstatus = 0;
-
             $ci->cashcustomer = $request->cashcustomer;
             $ci->cashcustadrs = $request->cashcustadrs;
-
-
             $ci->discntper = $request->discntper;
             $ci->discntamt = $request->discntamt;
             $ci->cartage = $request->cartage;
             $ci->rcvblamount = $request->rcvblamount;
-
             $ci->saletaxper = $request->saletaxper;
             $ci->saletaxamt = $request->saletaxamt;
             $ci->totrcvbamount = $request->totrcvbamount;
+
+            if($request->txtvaldt==0)
+            {
+                $ci->valdate = '1900-01-01';
+            }
+
+            if($request->txtvaldt==1)
+            {
+                $ci->valdate = $request->valdate;
+            }
+
+
             $ci->save();
             foreach ($request->contracts as $cont) {
                 $material = Material::findOrFail($cont['id']);

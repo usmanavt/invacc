@@ -49,8 +49,10 @@
                             <label for="saldate" style="text-align:right ">Date<x-req /></label>
                             <input type="date" value="{{ date('Y-m-d') }}" size="10" class="col-span-2"  id="saldate" name="saldate" required>
                             <label for="valdate" style="text-align:right ">Valid Date<x-req /></label>
-                            <input type="date" value="{{ date('Y-m-d') }}" class="col-span-2"  id="valdate" name="valdate" required>
+                            <input type="date" value="{{ date('Y-m-d') }}" class="col-span-2" width="10"  id="valdate" name="valdate" hidden   >
+                            <input tabindex="-1" class="checked:bg-blue-500 checked:border-blue-500 focus:outline-none" type="checkbox" name="vdt" id="vdt"  onclick="hideshowTextBox(this)" >
                             <input type="text" title="custid"  id="custid" name="custid" value=0 hidden    >
+                            <input type="text" title="txtvaldt"  id="txtvaldt" name="txtvaldt" value=0     >
                         </div>
 
                         <div class="grid grid-cols-12 gap-1 py-1 items-center">
@@ -60,7 +62,7 @@
                             <label for="prno">P.R No#<x-req /></label>
                             <input type="text" class="col-span-2" id="prno" name="prno"  placeholder="prno" required>
                             <label for="">
-                                Cash Customer <span class="text-red-500 font-semibold">(*)</span>
+                                Cash Customer <span class="text-red-500 font-semibold"></span>
                             </label>
                             <textarea name="cashcustomer" id="cashcustomer" cols="20" rows="2" maxlength="100" required class="rounded"></textarea>
 
@@ -81,10 +83,6 @@
 
 
                         </div>
-
-
-
-
 
                         <div class="grid grid-cols-1">
                             {{-- Contract Master --}}
@@ -1023,6 +1021,27 @@ function EnableDisableTextBox(qutid) {
         //     discntper.focus();
         // }
     }
+
+    function hideshowTextBox(vdt) {
+        var valdate = document.getElementById("valdate");
+        valdate.hidden = vdt.checked ? false : true;
+        // valdate.style.color ="black";
+
+        if(vdt.checked==true)
+        {
+            txtvaldt.value=1;
+        }
+        else
+        {
+            txtvaldt.value=0;
+        }
+
+
+
+    }
+
+
+
 
 
  const qutseqno = @json(route('quotations.qutseqno'));
