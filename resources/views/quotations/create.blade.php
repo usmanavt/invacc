@@ -52,7 +52,7 @@
                             <input type="date" value="{{ date('Y-m-d') }}" class="col-span-2" width="10"  id="valdate" name="valdate" hidden   >
                             <input tabindex="-1" class="checked:bg-blue-500 checked:border-blue-500 focus:outline-none" type="checkbox" name="vdt" id="vdt"  onclick="hideshowTextBox(this)" >
                             <input type="text" title="custid"  id="custid" name="custid" value=0 hidden    >
-                            <input type="text" title="txtvaldt"  id="txtvaldt" name="txtvaldt" value=0     >
+                            <input type="text" title="txtvaldt"  id="txtvaldt" name="txtvaldt" value=0 hidden     >
                         </div>
 
                         <div class="grid grid-cols-12 gap-1 py-1 items-center">
