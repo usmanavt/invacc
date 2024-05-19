@@ -89,7 +89,7 @@ table{
                 </td>            </tr>
             <tr>
                 <td  style="text-align: center;">
-                    <span style="font-size:2rem">DUTY CLEARANCE SUMMARY </span>
+                    <span style="font-size:2rem">DUTY PAYABLE SUMMARY </span>
                 </td>
             </tr>
 
@@ -161,29 +161,16 @@ table{
         <thead >
             {{-- <tr> <th class="column-headers" width="50%">OPENING BNALANCE</th></tr> --}}
             <tr>
-                <td colspan="2" width="8%" style="text-align:center;font-weight: bold;border-right: 1px solid lightgray;">GD Descr.</td>
-                <td colspan="2" width="16%" style="text-align:center;font-weight: bold;border-right: 1px solid lightgray;">Invoice</td>
-                <td colspan="2" width="16%" style="text-align: center;font-weight: bold;border-right: 1px solid lightgray;">GD</td>
-                <td colspan="2" width="12%" style="text-align: center;font-weight: bold;border-right: 1px solid lightgray;">Conversion</td>
-                <td colspan="3" width="18%" style="text-align: center;font-weight: bold;border-right: 1px solid lightgray;">Data For Clearance</td>
-                <td colspan="2" width="12%" style="text-align: center;font-weight: bold;border-right: 1px solid lightgray;">Data Cleared</td>
-                {{-- <td colspan="7" width="29%" style="text-align: center;font-weight: bold;border-right: 1px solid lightgray;">Duty Cleared</td> --}}
-                <td colspan="3" width="18%" style="text-align: center;font-weight: bold;border-right: 1px solid lightgray;">Clearance Pending</td>
-
-
-                {{-- <td colspan="3" width="9%" style="text-align: center;font-weight: bold;border-right: 1px solid lightgray;">Allah Malik Shop</td>
-                <td colspan="3" width="9%" style="text-align: center;font-weight: bold;border-right: 1px solid lightgray;">E - 24</td>
-                <td colspan="3" width="9%" style="text-align: center;font-weight: bold;border-right: 1px solid lightgray;">Bolton Shop</td>
-                <td colspan="3" width="12%" style="text-align: center;font-weight: bold;border-right: 1px solid lightgray;">Total Receiving</td>
-                <td colspan="3" width="9%" style="text-align: center;font-weight: bold;border-right: 1px solid lightgray;">Pending</td> --}}
-
+                <td colspan="3"  style="text-align:center;font-weight: bold;border-right: 1px solid lightgray;">Invoice</td>
+                <td colspan="2"  style="text-align: center;font-weight: bold;border-right: 1px solid lightgray;">GD</td>
+                <td colspan="2"  style="text-align: center;font-weight: bold;border-right: 1px solid lightgray;">Conversion</td>
+                <td colspan="3"  style="text-align: center;font-weight: bold;border-right: 1px solid lightgray;">Duty Payable</td>
+                <td colspan="3"  style="text-align: center;font-weight: bold;border-right: 1px solid lightgray;">Duty Payed</td>
+                <td colspan="3"  style="text-align: center;font-weight: bold;border-right: 1px solid lightgray;">Balance</td>
             </tr>
 
             <tr>
-                {{-- <td  style="text-align: center font-size:0.5rem;font-weight: bold"> --}}
                     <th class="column-headers" width="2%">S#</th>
-                    {{-- <th class="column-headers" width="2%">srtid</th> --}}
-                    <th class="column-headers" width="6%">Description</th>
                     <th class="column-headers" width="8%">Date</th>
                     <th class="column-headers" width="8%">No</th>
                     <th class="column-headers" width="8%">Date</th>
@@ -195,13 +182,7 @@ table{
                     <th class="column-headers" width="6%">Duty</th>
                     <th class="column-headers" width="6%">Bundle</th>
                     <th class="column-headers" width="6%">Weight</th>
-                    {{-- <th class="column-headers" width="4%">CD</th>
-                    <th class="column-headers" width="4%">ST</th>
-                    <th class="column-headers" width="4%">RD</th>
-                    <th class="column-headers" width="4%">ACD</th>
-                    <th class="column-headers" width="4%">AST</th>
-                    <th class="column-headers" width="4%">IT</th>
-                    <th class="column-headers" width="5%">Total</th> --}}
+                    <th class="column-headers" width="6%">Duty</th>
                     <th class="column-headers" width="6%">Bundle</th>
                     <th class="column-headers" width="6%">Weight</th>
                     <th class="column-headers" width="6%">Duty</th>
@@ -213,50 +194,20 @@ table{
     <table class="data" cellspacing="0">
         <tbody>
 
-           {{ $vbund = 0 }};{{ $vwt = 0 }};{{ $vcd = 0 }};{{ $vst = 0 }};{{ $vrd = 0 }};{{ $vacd = 0 }};{{ $vast = 0 }}
-            {{ $vit = 0 }};{{ $vtotal = 0 }};{{ $vpbund = 0 }};{{ $vpwt = 0 }};{{ $vpduty = 0 }}
+           {{ $vbundlpbl = 0 }};{{ $vwtpbl = 0 }};{{ $vdutypbl = 0 }};
+           {{ $vbundlpayed = 0 }};{{ $vwtpayed = 0 }};{{ $vdutypayed = 0 }};
+           {{ $vbundlbal = 0 }};{{ $vwtbal = 0 }};{{ $vdutybal = 0 }};
+
 
             @for ($i = 0 ; $i < count($data) ; $i++)
-            {{-- @if( $i==0 )
-            <tr>
-                <td colspan="20" width="100%" style="text-align: left;font-size:1.2rem;border-bottom: 2px solid rgb(211, 211, 211);"> {{ $data[$i]->Itemgroupe}} </td>
-            </tr>
-        @else
 
-        {{ $srno = $i - 1 }}
-        @if ($data[$i]->Itemgroupe  <> $data[$srno]->Itemgroupe)
-
-
-              <tr>
-                    <td colspan="20" width="100%" style="text-align:left;font-size:1.2rem;border-bottom: 2px solid rgb(211, 211, 211);"> {{ $data[$i]->Itemgroupe}} </td>
-             </tr>
-        @endif --}}
-
-        {{-- @endif --}}
-        {{-- {{ $vinur = 0 }};{{ $vbund = 0 }};{{ $vwt = 0 }};{{ $vcd = 0 }};{{ $vst = 0 }};{{ $vrd = 0 }};{{ $vacd = 0 }};{{ $vast = 0 }} --}}
-        {{-- {{ $vit = 0 }};{{ $vtotal = 0 }};{{ $vpbund = 0 }};{{ $vpwt = 0 }};{{ $vpduty = 0 }} --}}
-
+            {{ $vbundlpbl += $data[$i]->packingwt }};{{ $vwtpbl += $data[$i]->twt }};{{ $vdutypbl += $data[$i]->duty }};
+            {{ $vbundlpayed += $data[$i]->clrbundle }};{{ $vwtpayed += $data[$i]->clrwt }};{{ $vdutypayed += $data[$i]->clrdty }};
+            {{ $vbundlbal += $data[$i]->balbundle }};{{ $vwtbal += $data[$i]->wtbal }};{{ $vdutybal += $data[$i]->balduty }};
 
             <tr>
 
-                {{ $vbund += $data[$i]->dpackingwt }}
-                {{ $vwt += $data[$i]->dtwt }}
-                {{ $vcd += $data[$i]->cda }}
-                {{ $vst += $data[$i]->sta }}
-                {{ $vrd += $data[$i]->rda }}
-                {{ $vacd += $data[$i]->acda }}
-                {{ $vast += $data[$i]->asta }}
-                {{ $vit += $data[$i]->ita }}
-                {{ $vtotal += $data[$i]->dtduty }}
-
-
-
-                {{-- <td  width="30%"> <span style="font-size:0.8rem;font-weight: bold;color:brown">{{ $data[$i]->SupName }}</span> --}}
-
-        @if(  $data[$i]->srtid == 1 )
                 <td style="text-align:center" width="2%">{{ $i+1 }}</td>
-                {{-- <td style="text-align:left" width="2%">{{ $data[$i]->srtid}} </td> --}}
-                <td style="text-align:left " width="6%">{{ $data[$i]->descr}} </td>
                 <td style="text-align:center" width="8%">{{ $data[$i]->invoice_date}} </td>
                 <td style="text-align:center" width="8%">{{ $data[$i]->invoiceno}} </td>
                 <td style="text-align:center" width="8%">{{ $data[$i]->machine_date}} </td>
@@ -265,85 +216,42 @@ table{
                 <td style="text-align:right" width="6%">{{ number_format($data[$i]->insurance,0) }} </td>
                 <td style="text-align:right" width="6%">{{ number_format($data[$i]->packingwt,0) }} </td>
                 <td style="text-align:right" width="6%">{{ number_format($data[$i]->twt,0) }} </td>
-                <td style="text-align:right" width="6%">{{ number_format($data[$i]->tduty,0) }} </td>
-                <td style="text-align:right" width="6%">{{ number_format($data[$i]->dpackingwt,0) }} </td>
-                <td style="text-align:right" width="6%">{{ number_format($data[$i]->dtwt,0) }} </td>
-                {{-- <td style="text-align:right;font-weight: bold;color:brown" width="4%">{{ number_format($data[$i]->cda,0) }} </td>
-                <td style="text-align:right;font-weight: bold;color:brown" width="4%">{{ number_format($data[$i]->sta,0) }} </td>
-                <td style="text-align:right;font-weight: bold;color:brown" width="4%">{{ number_format($data[$i]->rda,0) }} </td>
-                <td style="text-align:right;font-weight: bold;color:brown" width="4%">{{ number_format($data[$i]->acda,0) }} </td>
-                <td style="text-align:right;font-weight: bold;color:brown" width="4%">{{ number_format($data[$i]->asta,0) }} </td>
-                <td style="text-align:right;font-weight: bold;color:brown" width="4%">{{ number_format($data[$i]->ita,0) }} </td>
-                <td style="text-align:right;font-weight: bold;color:brown" width="5%">{{ number_format($data[$i]->dtduty,0) }} </td> --}}
-                <td style="text-align:right" width="6%">{{ number_format($data[$i]->pndpkgs,0) }} </td>
-                <td style="text-align:right" width="6%">{{ number_format($data[$i]->pndwt,0) }} </td>
-                <td style="text-align:right" width="6%">{{ number_format($data[$i]->pndval,0) }} </td>
-    @else
+                <td style="text-align:right" width="6%">{{ number_format($data[$i]->duty,0) }} </td>
 
+                <td style="text-align:right" width="6%">{{ number_format($data[$i]->clrbundle,0) }} </td>
+                <td style="text-align:right" width="6%">{{ number_format($data[$i]->clrwt,0) }} </td>
+                <td style="text-align:right" width="6%">{{ number_format($data[$i]->clrdty,0) }} </td>
 
-                <td style="text-align:center" width="2%">{{ $i+1 }}</td>
-                {{-- <td style="text-align:left" width="2%">{{ $data[$i]->srtid}} </td> --}}
-                <td style="text-align:left" width="6%">{{ $data[$i]->descr}} </td>
-                <td style="text-align:center" width="8%">{{ $data[$i]->invoice_date}} </td>
-                <td style="text-align:center" width="8%">{{ $data[$i]->invoiceno}} </td>
-                <td style="text-align:center" width="8%">{{ $data[$i]->machine_date}} </td>
-                <td style="text-align:center" width="8%">{{ $data[$i]->machineno}} </td>
-                <td style="text-align:right" width="6%">{{ number_format($data[$i]->conversionrate,2) }} </td>
-                <td style="text-align:right" width="6%">{{ number_format($data[$i]->insurance,0) }} </td>
-                <td style="text-align:right" width="6%">{{ number_format($data[$i]->packingwt,0) }} </td>
-                <td style="text-align:right" width="6%">{{ number_format($data[$i]->twt,0) }} </td>
-                <td style="text-align:right" width="6%">{{ number_format($data[$i]->tduty,0) }} </td>
-                <td style="text-align:right" width="6%">{{ number_format($data[$i]->dpackingwt,0) }} </td>
-                <td style="text-align:right" width="6%">{{ number_format($data[$i]->dtwt,0) }} </td>
-                {{-- <td style="text-align:right" width="4%">{{ number_format($data[$i]->cda,0) }} </td>
-                <td style="text-align:right" width="4%">{{ number_format($data[$i]->sta,0) }} </td>
-                <td style="text-align:right" width="4%">{{ number_format($data[$i]->rda,0) }} </td>
-                <td style="text-align:right" width="4%">{{ number_format($data[$i]->acda,0) }} </td>
-                <td style="text-align:right" width="4%">{{ number_format($data[$i]->asta,0) }} </td>
-                <td style="text-align:right" width="4%">{{ number_format($data[$i]->ita,0) }} </td>
-                <td style="text-align:right" width="5%">{{ number_format($data[$i]->dtduty,0) }} </td> --}}
-                <td style="text-align:right" width="6%">{{ number_format($data[$i]->pndpkgs,0) }} </td>
-                <td style="text-align:right" width="6%">{{ number_format($data[$i]->pndwt,0) }} </td>
-                <td style="text-align:right" width="6%">{{ number_format($data[$i]->pndval,0) }} </td>
-    @endif
-
-
+                <td style="text-align:right" width="6%">{{ number_format($data[$i]->balbundle,0) }} </td>
+                <td style="text-align:right" width="6%">{{ number_format($data[$i]->wtbal,0) }} </td>
+                <td style="text-align:right" width="6%">{{ number_format($data[$i]->balduty,0) }} </td>
 
             </tr>
             @endfor
 
-            {{-- {{ $vbund += $data[$i]->dpackingwt }}
-            {{ $vwt += $data[$i]->dtwt }}
-            {{ $vcd += $data[$i]->cda }}
-            {{ $vst += $data[$i]->sta }}
-            {{ $vrd += $data[$i]->rda }}
-            {{ $vacd += $data[$i]->acda }}
-            {{ $vast += $data[$i]->asta }}
-            {{ $vit += $data[$i]->ita }}
-            {{ $vtotal += $data[$i]->dtduty }} --}}
+
+            {{-- {{ $vbundlpbl = 0 }};{{ $vwtpbl = 0 }};{{ $vdutypbl = 0 }};
+            {{ $vbundlpyed = 0 }};{{ $vwtpyed = 0 }};{{ $vdutypyed = 0 }};
+            {{ $vbundlbal = 0 }};{{ $vwtbal = 0 }};{{ $vdutybal = 0 }}; --}}
 
 
 
 
             <tr>
-                {{-- <td class="column-headers" colspan="11" width="3%" style="text-align: right;font-weight: bold; border-bottom: 1px solid lightgray;">Grand Total</td> --}}
-                <td colspan="12"  style="text-align: right;border-bottom: 1px solid lightgray;background: #e3e3e3;font-weight: bold">{{ number_format($vbund,0) }} </td>
-                <td colspan="1"  style="text-align: right;border-bottom: 1px solid lightgray;background: #e3e3e3;font-weight: bold">{{ number_format($vwt,0) }} </td>
-                {{-- <td colspan="1" width="4%" style="text-align: right;border-bottom: 1px solid lightgray;background: #e3e3e3;font-weight: bold">{{ number_format($vcd,0) }} </td>
-                <td colspan="1" width="4%" style="text-align: right;border-bottom: 1px solid lightgray;background: #e3e3e3;font-weight: bold">{{ number_format($vst,0) }} </td>
-                <td colspan="1" width="4%" style="text-align: right;border-bottom: 1px solid lightgray;background: #e3e3e3;font-weight: bold">{{ number_format($vrd,0) }} </td>
-                <td colspan="1" width="4%" style="text-align: right;border-bottom: 1px solid lightgray;background: #e3e3e3;font-weight: bold">{{ number_format($vacd,0) }} </td>
-                <td colspan="1" width="4%" style="text-align: right;border-bottom: 1px solid lightgray;background: #e3e3e3;font-weight: bold">{{ number_format($vast,0) }} </td>
-                <td colspan="1" width="4%" style="text-align: right;border-bottom: 1px solid lightgray;background: #e3e3e3;font-weight: bold">{{ number_format($vit,0) }} </td>
-                <td colspan="1" width="4%" style="text-align: right;border-bottom: 1px solid lightgray;background: #e3e3e3;font-weight: bold">{{ number_format($vtotal,0) }} </td> --}}
-                <td colspan="3"  style="text-align: right;border-bottom: 1px solid lightgray;background: #e3e3e3;font-weight: bold"> </td>
-                {{-- <td colspan="17" width="4%" style="text-align: right;border-bottom: 1px solid lightgray;background: #e3e3e3;font-weight: bold">{{ number_format($rpcs,0) }} </td>
-                <td colspan="1" width="4%" style="text-align: right;border-bottom: 1px solid lightgray;background: #e3e3e3;font-weight: bold">{{ number_format($rwt,0) }} </td>
-                <td colspan="1" width="4%" style="text-align: right;border-bottom: 1px solid lightgray;background: #e3e3e3;font-weight: bold">{{ number_format($rfeet,0) }} </td>
+                <td colspan="7"  style="text-align: right;border-bottom: 1px solid lightgray;background: #e3e3e3;font-weight: bold"> Total </td>
+                <td colspan="1"  style="text-align: right;border-bottom: 1px solid lightgray;background: #e3e3e3;font-weight: bold">{{ number_format($vbundlpbl,0) }} </td>
+                <td colspan="1"  style="text-align: right;border-bottom: 1px solid lightgray;background: #e3e3e3;font-weight: bold">{{ number_format($vwtpbl,0) }} </td>
+                <td colspan="1"  style="text-align: right;border-bottom: 1px solid lightgray;background: #e3e3e3;font-weight: bold">{{ number_format($vdutypbl,0) }} </td>
 
-                <td colspan="1" width="3%" style="text-align: right;border-bottom: 1px solid lightgray;background: #e3e3e3;font-weight: bold">{{ number_format($ppcs,0) }} </td>
-                <td colspan="1" width="3%" style="text-align: right;border-bottom: 1px solid lightgray;background: #e3e3e3;font-weight: bold">{{ number_format($pwt,0) }} </td>
-                <td colspan="1" width="3%" style="text-align: right;border-bottom: 1px solid lightgray;background: #e3e3e3;font-weight: bold">{{ number_format($pfeet,0) }} </td> --}}
+                <td colspan="1"  style="text-align: right;border-bottom: 1px solid lightgray;background: #e3e3e3;font-weight: bold">{{ number_format($vbundlpayed,0) }} </td>
+                <td colspan="1"  style="text-align: right;border-bottom: 1px solid lightgray;background: #e3e3e3;font-weight: bold">{{ number_format($vwtpayed,0) }} </td>
+                <td colspan="1"  style="text-align: right;border-bottom: 1px solid lightgray;background: #e3e3e3;font-weight: bold">{{ number_format($vdutypayed,0) }} </td>
+
+
+                <td colspan="1"  style="text-align: right;border-bottom: 1px solid lightgray;background: #e3e3e3;font-weight: bold">{{ number_format($vbundlbal,0) }} </td>
+                <td colspan="1"  style="text-align: right;border-bottom: 1px solid lightgray;background: #e3e3e3;font-weight: bold">{{ number_format($vwtbal,0) }} </td>
+                <td colspan="1"  style="text-align: right;border-bottom: 1px solid lightgray;background: #e3e3e3;font-weight: bold">{{ number_format($vdutybal,0) }} </td>
+
 
             </tr>
 

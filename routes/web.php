@@ -135,6 +135,8 @@ Route::get('funcdlvrychln',[SaleRptController::class, 'funcdlvrychln'])->name('s
 Route::get('funcsalinvs',[SaleRptController::class, 'funcsalinvs'])->name('salerpt.funcsalinvs');
 Route::get('funcsaltxinvs',[SaleRptController::class, 'funcsaltxinvs'])->name('salerpt.funcsaltxinvs');
 
+Route::get('funcgatepass',[SaleRptController::class, 'funcgatepass'])->name('salerpt.funcgatepass');
+
 
 Route::get('funcsalhist',[SaleRptController::class, 'funcsalhist'])->name('salerpt.funcsalhist');
 

@@ -784,7 +784,7 @@ class PurchaseRptController extends Controller
                 }
             }
             //  Call Procedure
-            $data = DB::select('call procdutytrans()');
+            $data = DB::select('call procpenddutysummary()');
             if(!$data)
             {
                 Session::flash('info','No data available');

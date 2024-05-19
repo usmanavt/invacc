@@ -37,7 +37,7 @@
                                 <input id="autocompleted1" title="Head Name" placeholder="Select Sub Head Name" class=" px-5 py-3 w-full border border-gray-400 rounded-md"
                                 onkeyup="onkeyUp1(event)" />
                                 <div>
-                                    <select  id="supplier_id" name="supplier_id" size="20"  class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full h-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                                    <select  id="supplier_id" name="supplier_id" size="20"  class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-auto h-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
                                     </select>
                                 </div>
                             </div>
@@ -47,7 +47,7 @@
 
                                 {{-- <x-input-text title="Supplier Name" name="supname" id="supname" class="col-span-2" hidden  /> --}}
 
-                                <x-input-date tabindex="-1" title="Payment Date" name="documentdate" class="col-span-2" />
+                                <x-input-date  title="Payment Date" name="documentdate" class="col-span-2" />
                                 <x-input-text tabindex="-1" title="Payment Seq.#" name="transno" id="transno" value="{{$maxposeqno}}"  class="col-span-2"    />
 
                                 <label for="autocompleted" >Bank<x-req /></label>
@@ -55,7 +55,7 @@
                                     <input id="autocompleted" placeholder="Select Bank" class=" px-5 py-3 w-full border border-gray-400 rounded-md"
                                     onkeyup="onkeyUp(event)" />
                                     <div  >
-                                        <select  id="bank_id" name="bank_id" size="20"  class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full h-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                                        <select  id="bank_id" name="bank_id" size="20"  class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-auto h-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
                                         </select>
                                     </div>
                                 </div>
@@ -744,8 +744,6 @@ var updateValues = (cell) => {
 
 
 
-
-
             const dynamicTableData = dynamicTable.getData();
             // if(dynamicTableData.length == 0)
             // {
@@ -770,7 +768,16 @@ var updateValues = (cell) => {
         ,'impgdno':impgdno.value,'pmntto':pmntto.value,'shname':shname.value};
 
 
-            // All Ok - Proceed
+        var shouldDelete = confirm('Do you really want to save this Record?');
+            if (shouldDelete) {
+                                // alert("Record Save Successfully");
+                              }
+            else
+            {
+                return;
+            }
+
+        // All Ok - Proceed
             fetch(@json(route('banktransaction.store')),{
                 credentials: 'same-origin', // 'include', default: 'omit'
                 method: 'POST', // 'GET', 'PUT', 'DELETE', etc.
@@ -788,7 +795,7 @@ var updateValues = (cell) => {
                 if (response == 'success')
                 {
                     // window.open(window.location.origin + "/banktransaction","_self" );
-                   alert("Record Save Successfully")
+                //    alert("Record Save Successfully")
                    clearform();
                    newsno();
                    dynamicTable.setData();

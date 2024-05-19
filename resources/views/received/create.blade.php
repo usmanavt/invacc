@@ -33,7 +33,7 @@
                                     <input id="autocompleted" placeholder="Select Bank" class=" px-5 py-3 w-full border border-gray-400 rounded-md"
                                     onkeyup="onkeyUp(event)" />
                                     <div  >
-                                        <select  id="bank_id" name="bank_id" size="20"  class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full h-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                                        <select  id="bank_id" name="bank_id" size="20"  class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-auto h-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
                                         </select>
                                     </div>
                                 </div>
@@ -51,10 +51,10 @@
 
                                 <div class="w-96 relative grid grid-cols-4 gap-1 px-10 py-5  "   onclick="event.stopImmediatePropagation();" >
                                     {{-- <label for="autocompleted1">Sub Head<x-req /></label> --}}
-                                    <input id="autocompleted1" title="Head Name" placeholder="Select Sub Head Name" class="col-span-2 px-5 py-3 w-full border border-gray-400 rounded-md"
+                                    <input id="autocompleted1" title="Head Name" placeholder="Select Sub Head Name" class="col-span-2 px-5 py-3 w-auto border border-gray-400 rounded-md"
                                     onkeyup="onkeyUp1(event)" />
                                     <div>
-                                        <select  id="supplier_id" name="supplier_id" size="20"  class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full h-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                                        <select  id="supplier_id" name="supplier_id" size="20"  class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-auto h-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
                                         </select>
                                     </div>
                                 </div>
@@ -805,6 +805,19 @@ var updateValues = (cell) => {
             // }
 
 
+            var shouldDelete = confirm('Do you really want to save this Record?');
+            if (shouldDelete) {
+                                // alert("Record Save Successfully");
+                              }
+            else
+            {
+                return;
+            }
+
+
+
+
+
             var data = { 'banktransactionr' : dynamicTableData,'supplier_id':supplier_id,'transno':transno.value,'bank_id':bank_id.value,'documentdate':documentdate.value,
             'cheque_no':cheque_no.value,'cheque_date':cheque_date.value,'head_id':head_id ,'description': description.value,'transno':transno.value
         ,'amount_fc':amount_fc.value,'amount_pkr':amount_pkr.value,'conversion_rate':conversion_rate.value,'advtxt':advtxt.value,
@@ -829,7 +842,7 @@ var updateValues = (cell) => {
                 {
                     // window.open(window.location.origin + "/banktransactionr","_self" );
 
-                  alert("Record Save Successfully")
+                //   alert("Record Save Successfully")
                    clearform();
                    newsno();
                    dynamicTable.setData();
@@ -882,6 +895,9 @@ var updateValues = (cell) => {
         {
         cheque_no.disabled=true;
           cheque_date.disabled=true;
+        //   document.getElementById('cheque_no').style.color = 'green';
+        //   document.getElementById('cheque_date').style.color = 'green';
+
         //   cheque_no.style.color ="black";
         //   cheque_date.style.color ="black";
         }
@@ -968,7 +984,7 @@ function renderOptions(xyz){
 
                 dropdownEl.length = 0
                 xyz.forEach(e => {
-                    addSelectElement(dropdownEl,e.id,e.title)
+                    addSelectElement(dropdownEl,e.id,e.title+' ' + e.cheque_no)
                 });
 }
 

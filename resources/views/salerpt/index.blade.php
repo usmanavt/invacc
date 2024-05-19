@@ -59,10 +59,19 @@
                                     <label for="">Pending Purchase Order </label>
                                 </div>
 
-                                <div>
+                                {{-- <div>
                                     <input type="radio" name="report_type" value="dlvrychln" required onchange="checkReportType('dlvrychln')">
                                     <label for="">Delivery Challan </label>
+                                </div> --}}
+
+                                <div>
+                                    <input type="radio" name="report_type" value="gtps" required onchange="checkReportType('gtps')">
+                                    <label for="">Gate Pass </label>
                                 </div>
+
+
+
+
                                 <div>
                                     <input type="radio" name="report_type" value="salinvs" required onchange="checkReportType('salinvs')">
                                     <label for="">Sale Invoice</label>
@@ -206,6 +215,9 @@
     const funcdlvrychln = @json(route('salerpt.funcdlvrychln'));
     const funcsalinvs = @json(route('salerpt.funcsalinvs'));
     const funcsaltxinvs = @json(route('salerpt.funcsaltxinvs'));
+    const funcgatepass = @json(route('salerpt.funcgatepass'));
+
+
     const funcsalhist = @json(route('salerpt.funcsalhist'));
 
     const funcsalretcat = @json(route('salerpt.funcsalretcat'));
@@ -481,6 +493,66 @@ const getSubheadVoucherData2 = async (value) =>{
         const dlvrychln = await getSubheadVoucherData2(value)
         return dlvrychln
     }
+
+
+
+
+    case 'gtps':
+            // console.log(value)
+            fetch(funcgatepass + `?todate=${todate.value}&fromdate=${fromdate.value}&head=${value}`,{
+                    method:"GET",
+                    headers: { 'Accept':'application/json','Content-type':'application/json'},
+                    })
+                    .then(response => response.json())
+                    .then( data => {
+                        if(data.length > 0)
+                        {
+                            data.forEach(e => {
+                                addSelectElement(subhead,e.Subhead,e.title)
+                            });
+                            subhead.setAttribute('required','')
+                            subhead.removeAttribute('disabled','')
+                        }else{
+                            subhead.removeAttribute('required','')
+                            subhead.setAttribute('disabled','')
+                        }
+                    })
+                    .catch(error => console.error(error))
+                break;
+
+// FOR CONTRACT FILL
+const getSubheadVoucherData22 = async (value) =>{
+        let data = await fetch(funcgatepass + `?todate=${todate.value}&fromdate=${fromdate.value}&head=${value}`,{
+            method:"GET",
+            headers: { 'Accept':'application/json','Content-type':'application/json'},
+            })
+            .then(response => response.json())
+            .then( data => { return data })
+            .catch(error => console.error(error))
+    }
+    const getGatepass =async  (value) => {
+        const gatepass = await getSubheadVoucherData22(value)
+        return gatepass
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -800,20 +872,6 @@ const getSubheadVoucherData14 = async (value) =>{
             case 'salinvs':
                 //  Show Head
                  rptType = 'salinvs'
-                // head.removeAttribute('required','')
-                // head.disabled = true
-                // head.length = 0
-                // subhead.setAttribute('required','')
-                // subhead.disabled = false
-                // subhead.length = 0
-                // subheadavailable = false
-                // glheads.forEach(e => {
-                //     // console.info(e)
-                //     addSelectElement(subhead,e.id,e.title)
-                // });
-                // // Show subheads
-                // break;
-
                 head.setAttribute('required','')
                 head.disabled = false
                 head.length = 0
@@ -825,9 +883,6 @@ const getSubheadVoucherData14 = async (value) =>{
                 });
                 headSelected()
                 break;
-
-
-
 
             case 'dlvrychln':
                 // Show Head
@@ -843,6 +898,30 @@ const getSubheadVoucherData14 = async (value) =>{
                 });
                 headSelected()
                 break;
+
+                case 'gtps':
+                // Show Head
+                rptType = 'gtps'
+                head.setAttribute('required','')
+                head.disabled = false
+                head.length = 0
+                subhead.removeAttribute('required')
+                subhead.disabled = true
+                subhead.length = 0
+                heads.forEach(e => {
+                    addSelectElement(head,e.id,e.title)
+                });
+                headSelected()
+                break;
+
+
+
+
+
+
+
+
+
 
 
                 case 'quotation':

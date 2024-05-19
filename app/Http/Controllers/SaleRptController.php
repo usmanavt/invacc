@@ -84,6 +84,18 @@ class SaleRptController extends Controller
 
     }
 
+    public function funcgatepass(Request $request)
+    {
+        //  dd($request->all());
+        $fromdate = $request->fromdate;
+        $todate = $request->todate;
+        $head = $request->head;
+        return  DB::select('call procgpasscategory(?,?,?)',array($fromdate,$todate,$head));
+
+    }
+
+
+
     public function funcsalinvs(Request $request)
     {
         //  dd($request->all());
@@ -413,6 +425,85 @@ public function funcsalretcat(Request $request)
             return response($mpdf->Output($filename,'I'),200)->header('Content-Type','application/pdf');
 
         }
+
+
+
+
+
+        if($report_type === 'gtps' ){
+            $hdng1 = $request->cname;
+            $hdng2 = $request->csdrs;
+        $head_id = $request->head_id;
+        // $head = Head::findOrFail($head_id);
+        $head = Customer::findOrFail($head_id);
+        if($request->has('subhead_id')){
+            $subhead_id = $request->subhead_id;
+            //  Clear Data from Table
+            DB::table('tmpgpasparrpt')->truncate();
+            foreach($request->subhead_id as $id)
+            {
+                DB::table('tmpgpasparrpt')->insert([ 'gpid' => $id ]);
+            }
+        }
+        //  Call Procedure
+        $mpdf = $this->getMPDFSettings();
+            $data = DB::select('call procgatepassrpt()');
+
+        if(!$data)
+        {
+            Session::flash('info','No data available');
+            return redirect()->back();
+        }
+        $collection = collect($data);                   //  Make array a collection
+        // $grouped = $collection->groupBy('SupName');       //  Sort collection by SupName
+        $grouped = $collection->groupBy('id');       //  Sort collection by SupName
+        $grouped->values()->all();                       //  values() removes indices of array
+            foreach($grouped as $g){
+
+
+               $html =  view('salerpt.gatepass')->with('data',$g)->with('fromdate',$fromdate)->with('todate',$todate)
+                ->with('headtype',$head->title)
+                ->with('hdng1',$hdng1)->with('hdng2',$hdng2)->render();
+
+             // $html =  view('salerpt.glhw')->with('data',$g)->with('fromdate',$fromdate)->with('todate',$todate)->render();
+            $filename = $g[0]->id  .'-'.$fromdate.'-'.$todate.'.pdf';
+            $mpdf->SetHTMLFooter('
+            <table width="100%" style="border-top:1px solid gray">
+                <tr>
+                    <td width="33%">{DATE d-m-Y}</td>
+                    <td width="33%" align="center">{PAGENO}/{nbpg}</td>
+
+                </tr>
+            </table>');
+            $chunks = explode("chunk", $html);
+            foreach($chunks as $key => $val) {
+                $mpdf->WriteHTML($val);
+            }
+            $mpdf->AddPage();
+        }
+            return response($mpdf->Output($filename,'I'),200)->header('Content-Type','application/pdf');
+
+        }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

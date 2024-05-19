@@ -33,11 +33,6 @@
                                     <label for="">GOODS RECEIPT NOTE LOCAL ( GRN ) </label>
                                 </div>
 
-
-
-
-
-
                                 <div>
                                     <input type="radio" name="report_type" value="impcominvs" required onchange="checkReportType('impcominvs')">
                                     <label for="">PURCHASE INVOICE IMPORT </label>
@@ -53,8 +48,6 @@
                                     <input type="radio" name="report_type" value="impcominvs1" required onchange="checkReportType('impcominvs1')">
                                     <label for="">COMMERCIAL INVOICE IMPORT </label>
                                 </div>
-
-
 
                                 <div>
                                     <input type="radio" name="report_type" value="impcominvspc" required onchange="checkReportType('impcominvspc')">

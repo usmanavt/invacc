@@ -43,7 +43,7 @@ class ClearanceController extends Controller
         $cisclr = Clearance::where('status',$status)
         ->where(function ($query) use ($search){
                 $query->where('invoiceno','LIKE','%' . $search . '%')
-                ->orWhere('invoiceno','LIKE','%' . $search . '%');
+                ->orWhere('machineno','LIKE','%' . $search . '%');
             })
             ->whereHas('supplier', function ($query) {
                 $query->where('source_id','=','2');
