@@ -165,10 +165,10 @@ table{
                 <td colspan="2" width="16%" style="text-align:center;font-weight: bold;border-right: 1px solid lightgray;">Invoice</td>
                 <td colspan="2" width="16%" style="text-align: center;font-weight: bold;border-right: 1px solid lightgray;">GD</td>
                 <td colspan="2" width="12%" style="text-align: center;font-weight: bold;border-right: 1px solid lightgray;">Conversion</td>
-                <td colspan="3" width="18%" style="text-align: center;font-weight: bold;border-right: 1px solid lightgray;">Data For Clearance</td>
-                <td colspan="2" width="12%" style="text-align: center;font-weight: bold;border-right: 1px solid lightgray;">Data Cleared</td>
+                <td colspan="3" width="18%" style="text-align: center;font-weight: bold;border-right: 1px solid lightgray;">Duty Payable</td>
+                <td colspan="2" width="12%" style="text-align: center;font-weight: bold;border-right: 1px solid lightgray;">Duty Payed</td>
                 {{-- <td colspan="7" width="29%" style="text-align: center;font-weight: bold;border-right: 1px solid lightgray;">Duty Cleared</td> --}}
-                <td colspan="3" width="18%" style="text-align: center;font-weight: bold;border-right: 1px solid lightgray;">Clearance Pending</td>
+                <td colspan="3" width="18%" style="text-align: center;font-weight: bold;border-right: 1px solid lightgray;">Balance</td>
 
 
                 {{-- <td colspan="3" width="9%" style="text-align: center;font-weight: bold;border-right: 1px solid lightgray;">Allah Malik Shop</td>

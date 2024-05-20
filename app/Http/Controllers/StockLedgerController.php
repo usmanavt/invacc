@@ -428,7 +428,12 @@ class StockLedgerController extends Controller
             }
             //  Call Procedure
             $mpdf = $this->getMPDFSettingsP();
-            $data = DB::select('call procindvstockos(?,?)',array($fromdate,$todate));
+
+            if($request->txtlpcs==0)
+            { $data = DB::select('call procindvstockos(?,?)',array($fromdate,$todate)); }
+            else
+            { $data = DB::select('call procindvstockospcs(?,?)',array($fromdate,$todate)); }
+
             if(!$data)
             {
                 Session::flash('info','No data available');

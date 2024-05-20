@@ -18,6 +18,8 @@
                                 <legend>Report Type</legend>
                                 <input type="text" title="t1"  id="p1" name="p1" value="0" hidden  >
                                 <input type="text" title="t4"  id="p4" name="p4" value="0" hidden   >
+                                <input type="text" title="txtlpcs"  id="txtlpcs" name="txtlpcs" value="0" hidden    >
+
                                 <tr>
                                     <td  style="text-align: center;">
                                         <span style="font-size:1.5rem">--- FOR OFFICE ---</span>
@@ -33,8 +35,6 @@
                                        <span style="color: brown;font-weightn: bold"> Show Only Less than 0 Stock </span> <span class="text-red-500 font-bold  "></span>
                                         </label>
 
-
-
                                 </div>
 
                                 <div>
@@ -47,6 +47,11 @@
                                 <div>
                                     <input type="radio" name="report_type" value="smsind" >
                                     <label for="">SMSL Individual Master Unit </label>
+
+                                    <input class="checked:bg-blue-500 checked:border-blue-500 focus:outline-none"  type="checkbox" name="lpcs" id="lpcs"   onclick="funlpcs(this)" >
+                                    <label for="">
+                                       <span style="color: brown;font-weightn: bold"> Only Pc Unit </span> <span class="text-red-500 font-bold  "></span>
+                                        </label>
                                 </div>
 
                                 <div>
@@ -826,12 +831,13 @@ const getSubheadVoucherData4 = async (value) =>{
                     addSelectElement(locationss,e.id,e.title)
                 });
                 headSelected();
+                ldevent();
 
             })
 
 
     head_id.addEventListener("change", () => {
-        console.log('head_id')
+        // console.log('head_id')
         const value = head.value
           const value1 = source.value
           const value3 = specification.value
@@ -1021,6 +1027,30 @@ function psto(adv) {
     }
 
 
+
+    function funlpcs(lpcs) {
+        var txtlpcs = document.getElementById("txtlpcs");
+
+        if(lpcs.checked==true)
+        {
+            txtlpcs.value=1;
+        }
+        else
+        {
+            txtlpcs.value=0;
+        }
+
+    }
+
+
+
+
+
+
+
+
+
+
     function onkeyUp(e)
 {
     let keyword= e.target.value;
@@ -1050,6 +1080,48 @@ function renderOptions(xyz){
                     addSelectElement(dropdownEl,e.Subhead,a + '         ' + e.title )
                 });
 }
+
+
+function ldevent()
+
+{
+
+    const value = head.value
+          const value1 = source.value
+          const value3 = specification.value
+          console.info(value3)
+          //  const value = 6
+        subhead.options.length = 0 // Reset List
+        fetch(funcstkos + `?head_id=${value} &source_id=${value1} &brand_id=${value3} `,{
+                    method:"GET",
+                    headers: { 'Accept':'application/json','Content-type':'application/json'},
+                    })
+                    .then(response => response.json())
+                    .then( data => {
+                        if(data.length > 0)
+                        {
+
+                            let a = 0;
+                            list=data;
+                            list.forEach(e => {
+
+                                a += 1;
+                                addSelectElement(subhead,e.Subhead,a + '         ' + e.title )
+                            });
+                            subhead.setAttribute('required','')
+                            subhead.removeAttribute('disabled','')
+                        }else{
+                            subhead.removeAttribute('required','')
+                            subhead.setAttribute('disabled','')
+                        }
+                    })
+                    .catch(error => console.error(error))
+                // break;
+
+
+}
+
+
 
 
 
