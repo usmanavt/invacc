@@ -131,11 +131,11 @@ body{
                     <h3>Phone : 021-32588781, 021-32574285 , Fax : 021-32588782 </h3>
 
                 </td>            </tr>
-            <tr>
+            {{-- <tr>
                 <td  style="text-align: center;">
                     <span style="font-size:2rem">CONTRACTS </span>
                 </td>
-            </tr>
+            </tr> --}}
         </tbody>
     </table>
 
