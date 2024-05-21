@@ -172,17 +172,18 @@ table{
     <table class="data" cellspacing="0">
         <tbody>
 
-            {{ $cash = 0 }};{{ $bnk = 0 }};{{ $tot = 0 }}
+            {{ $vtwt = 0 }};{{ $vtduty = 0 }};{{ $vclrdtywt = 0 }};{{ $vdtycleared = 0 }};{{ $vbalwt = 0 }};{{ $vbaldutyclrd = 0 }}
 
             @for ($i = 0 ; $i < count($data) ; $i++)
 
             <tr>
 
-                {{-- {{ $cash += $data[$i]->cashpayable }}.
-                {{ $bnk += $data[$i]->bankpayable }}
-                {{ $tot += $data[$i]->amtdlr }} --}}
-
-
+                {{ $vtwt += $data[$i]->twt }};
+                {{ $vtduty += $data[$i]->tduty }};
+                {{ $vclrdtywt += $data[$i]->clrdtywt }};
+                {{ $vdtycleared += $data[$i]->dtycleared }};
+                {{ $vbalwt += $data[$i]->balwt }};
+                {{ $vbaldutyclrd += $data[$i]->baldutyclrd }};
 
                 <td style="text-align:center" width="3%">{{ $i+1 }}</td>
                 {{-- <td style="text-align:left" width="29%">{{ $data[$i]->supname}} </td> --}}
@@ -202,12 +203,18 @@ table{
 
             </tr>
             @endfor
-            {{-- <tr> --}}
-                {{-- <td class="column-headers" colspan="2"  style="text-align: right;font-weight: bold; border-bottom: 1px solid lightgray;">Total</td> --}}
-                {{-- <td class="column-headers" colspan="5"  style="text-align: right;border-bottom: 1px solid lightgray;background: #e3e3e3;font-weight: bold">{{ number_format($cash,2) }} </td>
-                <td class="column-headers" colspan="1"  style="text-align: right;border-bottom: 1px solid lightgray;background: #e3e3e3;font-weight: bold">{{ number_format($bnk,2) }} </td>
-                <td class="column-headers" colspan="1"  style=" color:brown;font-weight:bold;  text-align: right;border-bottom: 1px solid lightgray;background: #e3e3e3;font-weight: bold">{{ number_format($tot,2) }} </td> --}}
-            {{-- </tr> --}}
+            <tr>
+                <td class="column-headers" colspan="5"  style="text-align: right;font-weight: bold; border-bottom: 1px solid lightgray;">Total</td>
+                <td class="column-headers" colspan="1"  style="text-align: right;border-bottom: 1px solid lightgray;background: #e3e3e3;font-weight: bold">{{ number_format($vtwt,0) }} </td>
+                <td class="column-headers" colspan="1"  style="text-align: right;border-bottom: 1px solid lightgray;background: #e3e3e3;font-weight: bold">{{ number_format($vtduty,0) }} </td>
+                <td class="column-headers" colspan="1"  style="text-align: right;border-bottom: 1px solid lightgray;background: #e3e3e3;font-weight: bold">{{ number_format($vclrdtywt,0) }} </td>
+                <td class="column-headers" colspan="1"  style="text-align: right;border-bottom: 1px solid lightgray;background: #e3e3e3;font-weight: bold">{{ number_format($vdtycleared,0) }} </td>
+                <td class="column-headers" colspan="1"  style="text-align: right;border-bottom: 1px solid lightgray;background: #e3e3e3;font-weight: bold">{{ number_format($vbalwt,0) }} </td>
+                <td class="column-headers" colspan="1"  style="text-align: right;border-bottom: 1px solid lightgray;background: #e3e3e3;font-weight: bold">{{ number_format($vbaldutyclrd,0) }} </td>
+
+
+
+            </tr>
 
 
 

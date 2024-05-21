@@ -469,8 +469,9 @@ supplier_id.click();
 
 supplier_id.addEventListener("click", () => {
     let input1= document.getElementById("autocompleted1");
-    autocompleted1.value=supplier_id.options[supplier_id.selectedIndex].text;
+    // autocompleted1.value=supplier_id.options[supplier_id.selectedIndex].text;
 
+    autocompleted1.value=$itmdata[supplier_id.options[supplier_id.selectedIndex].value][0].shdname;
     if(per.checked==true && ($itmdata[supplier_id.options[supplier_id.selectedIndex].value][0].chqamount) !=0 )
         {
         cheque_no.value =$itmdata[supplier_id.options[supplier_id.selectedIndex].value][0].chqno;

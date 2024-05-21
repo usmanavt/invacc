@@ -200,7 +200,8 @@
             },
             {title:"Print" , formatter:printIcon, hozAlign:"center",headerSort:false, responsive:0,
                 cellClick:function(e, cell){
-                    window.open(window.location + "/" + cell.getRow().getData().id + "/printcontract"  ,"_self");
+                    // window.open(window.location + "/" + cell.getRow().getData().id + "/printcontract"  ,"_self");
+                    window.open(window.location + "/" + cell.getRow().getData().id + "/printGatepass"  ,"_self");
                 }
             },
         ],

@@ -279,6 +279,9 @@ class VoucherController extends Controller
                 $v->cheque_no = $request->cheque_no;
                 $v->head_title = $vuch['head_title'];
                 $v->subhead_title = $vuch['subhead_title'];
+
+
+                // dd($vuch['head_title']);
                 $sub = DB::select('select * from VwCategory where mtitle = ? AND title = ? LIMIT 1', [ $vuch['head_title'], $vuch['subhead_title']]);
                 $v->transaction = $vuch['transaction'];
                 // $v->document_date = $vuch['document_date'];
@@ -286,11 +289,24 @@ class VoucherController extends Controller
                 // $v->jvno = $vuch['jvno'];
                 $v->amount = $vuch['amount'];
                 $v->description = $vuch['description'];
+
+
+            if(!$sub) {
+
+                $v->head_id = $vuch['head_id'];
+                $v->subhead_id = $vuch['subhead_id'];
+                    }
+
+            else
+
+            {
                 foreach($sub as $s)
                 {
+                    // dd($s->Subhead);
                     $v->head_id = $s->MHEAD;
                     $v->subhead_id = $s->Subhead;
                 }
+            }
                 $v->save();
             }
 

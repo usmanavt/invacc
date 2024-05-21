@@ -333,6 +333,10 @@ Route::resource('godownmovementr', GodownMovementControllerR::class);
 //  Gate Pass
 
 Route::post('/gatepasse/deleteBankRequest', [GatepasseController::class, 'deleteBankRequest'])->name('gatepasse.del');
+
+Route::get('/gatepasse/{id}/printGatepass', [GatepasseController::class, 'printGatepass'])->name('gatepasse.print');
+
+
 Route::get('/gatepasse/{id}/deleterec', [GatepasseController::class, 'deleterec']);
 
 
