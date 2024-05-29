@@ -73,6 +73,8 @@ Route::get('/gtransactons', function () {
     return view('gtransaction');
 })->middleware(['auth'])->name('gtransaction');
 
+Route::view('/theme','layouts.auth');
+
 
 // Financial Report
 Route::get('reports',[ReportController::class, 'index'])->name('reports.index');

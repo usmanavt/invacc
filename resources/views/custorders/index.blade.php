@@ -171,7 +171,7 @@
             {title: "P.O Date",field: "podate",responsive:0},
             {title: "P.O No",field: "pono",responsive:0},
             {title: "P.O Seq.No",field: "poseqno",responsive:0},
-            {title: "Delivery Date",field: "deliverydt",responsive:0},
+            {title: "Delivered Date",field: "deliverydt",responsive:0},
             {title: "Customer",field: "custname",responsive:0},
             {title: "Plan Qty",field: "tplnqty",bottomCalc:"sum",responsive:0},
             {title: "W/O GST",field: "rcvblamount",bottomCalc:"sum",responsive:0},

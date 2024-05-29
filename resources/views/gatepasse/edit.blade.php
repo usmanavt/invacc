@@ -76,7 +76,7 @@
                                 <i class="fa fa-save fa-fw"></i>
                                 Submit
                             </x-button>
-                            <x-input-text title="Password For Edition" name="edtpw" id="edtpw" type="password"     />
+                            <x-input-text title="Password For Edition" name="edtpw" id="edtpw" type="password"  autocomplete="off"     />
                             <x-input-text title="" name="dbpwrd2" id="dbpwrd2"  class="col-span-2" hidden  value="{{$passwrd}}" />
 
                         </div>

@@ -245,11 +245,23 @@
     // }
 
 
-
-
-
-
     function imppur(imppurf2) {
+        var sts = document.getElementById("sts");
+        // if sts.value==1
+        // {
+
+        //     var varconfirm = confirm('Do you really want to Return this Cheque After create receive voucher?');
+        //         if (varconfirm) {
+        //                             // alert("Record Save Successfully");
+        //                         }
+        //         else
+        //         {
+        //             return;
+        //         }
+
+
+        // }
+
         var p1 = document.getElementById("p1");
         if(imppurf2.checked==true)
         {

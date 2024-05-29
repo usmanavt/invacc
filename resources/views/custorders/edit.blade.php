@@ -48,7 +48,7 @@
                         <div class="grid grid-cols-12 gap-1 py-2 items-center">
                             <x-input-date title="P.O Date" id="podate" name="podate" value="{{ $customerorder->podate->format('Y-m-d') }}" req required class="col-span-2" />
                             <x-input-text title="P.O #" name="pono" id="pono" value="{{ $customerorder->pono }}"  />
-                            <x-input-date title="Delivery Date" name="deliverydt" value="{{ $customerorder->deliverydt->format('Y-m-d') }}" />
+                            <x-input-date title="Delivery Date" name="deliverydt" hidden value="{{ $customerorder->deliverydt->format('Y-m-d') }}" />
                             <x-input-text title="P.O Seq.#" name="poseqno" id="poseqno" value="{{ $customerorder->poseqno }}"    required   />
 
                             {{-- <label for="">

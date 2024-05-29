@@ -5,7 +5,7 @@
         </h2>
     </x-slot>
 
-    <div class="py-4">
+    {{-- <div class="py-4">
         <div class="max-w-3xl mx-auto">
             <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
                 <div class="p-4 bg-white border-b border-gray-200">
@@ -56,7 +56,7 @@
                         <a  class="basis-0 w-full md:basis-1/4 bg-blue-500 hover:bg-blue-700 text-white px-2 py-4 rounded-lg shadow-lg" href= "{{
                             route('cashrecivings.index') }}" >
                             <i class="fa-solid fa-shop-lock fa-2xl"></i> Cash Receiving
-                        </a>
+                        </a> --}}
 
 
 
@@ -98,8 +98,8 @@
                             <i class="fa-solid fa-arrows-to-circle fa-2xl"></i> Journal Voucher
                         </a> --}}
 
-                </div>
+                {{-- </div>
             </div>
         </div>
-    </div>
+    </div> --}}
 </x-app-layout>

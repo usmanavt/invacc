@@ -71,6 +71,7 @@
         <div class="min-h-screen bg-gray-100">
 
             @include('layouts.navigation')
+            {{-- @include('auth.dashboard') --}}
 
             <!-- Page Heading -->
             <header class="bg-white shadow">

@@ -26,7 +26,7 @@
                             <div class="grid grid-cols-12 gap-1 py-2 items-center">
                                 <label for="autocompleted" >Customers<x-req /></label>
                                 <div class="w-96 relative"   onclick="event.stopImmediatePropagation();" >
-                                    <input id="autocompleted" placeholder="Select Conuntry Name"  class=" px-5 py-3 w-full border border-gray-400 rounded-md"
+                                    <input id="autocompleted" placeholder="Select Customer Name"  class=" px-5 py-3 w-full border border-gray-400 rounded-md"
                                     onkeyup="onkeyUp(event)" />
                                     <div>
                                         <select  id="customer_id" name="customer_id" size="20"  class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full h-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">

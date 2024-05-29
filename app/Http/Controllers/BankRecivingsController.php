@@ -209,6 +209,21 @@ class BankRecivingsController extends Controller
                 $bt->ref = 'CHEQUE_RETURN';
 
             }
+            if($request->p1==1 && $request->sts==1 )
+            {
+                // $bt->clrstatus = 1;
+                $bt->ref = 'CHEQUE_RETURN - '.$request->chqref;
+                // $xyz1='CHEQUE_RETURN';
+                // $xyz2=$request->chqref;
+                // $xyz=$xyz1 . $xyz2;
+                // dd($xyz);
+
+            }
+
+
+
+
+
 
             if($request->p1==0 && $request->sts==1 && $request->chqref=='CHEQUE_RETURN'  )
             {
