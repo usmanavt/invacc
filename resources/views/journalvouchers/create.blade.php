@@ -42,7 +42,7 @@
                             <x-input-text title="Cheque No" name="cheque_no" id="cheque_no" req required class="col-span-2" disabled  />
                             <x-input-text title="Cheque Amount" name="cheque_amt" id="cheque_amt" req required class="col-span-2" disabled  />
 
-                            <input class="checked:bg-blue-500 checked:border-blue-500 focus:outline-none" type="checkbox" name="per" id="per" onclick="EnableDisableTextBox(this)" >
+                            <input tabindex="-1" class="checked:bg-blue-500 checked:border-blue-500 focus:outline-none" type="checkbox" name="per" id="per" onclick="EnableDisableTextBox(this)" >
                             <label for="">
                                 <span style="color: brown;font-weight: bold"> J.V Against Cheque Collection </span> <span class="text-red-500 font-semibold  ">(*)</span>
                                  </label>
@@ -52,8 +52,17 @@
                         <fieldset class="max-w-7xl border px-1 py-1 gap-1 rounded">
 
                             <div class="grid grid-cols-12 gap-2 py-1 items-center">
-                                <x-input-date title="Dcoument Date" class="col-span-2" name="document_date" req required/>
-                                <x-input-text tabindex="-1" title="Dcoument No" class="col-span-2" name="document_no" value="{{$maxjvno}}"/>
+                                <x-input-date title="J.V Date" class="col-span-2" name="document_date" req required/>
+                                <x-input-text tabindex="-1" title="J.V No" class="col-span-2" name="document_no" disabled value="{{$maxjvno}}"/>
+
+                                <input tabindex="-1" class="checked:bg-blue-500 checked:border-blue-500 focus:outline-none" type="checkbox" name="jno" id="jno" onclick="EnableDisablejvno(this)" >
+                                <label for="">
+                                    <span style="color: brown;font-weight: bold"> </span> <span class="text-red-500 font-semibold  "></span>
+                                     </label>
+
+
+
+
 
                                 <label for="j vtype">J.V Type</label>
                                 <select  autocomplete="on" class="col-span-2"  name="jvtype" id="jvtype"  >
@@ -139,6 +148,7 @@ let dyanmicTable = ""; // Tabulator
     const submitButton = document.getElementById('submitButton')
 
     document.addEventListener('DOMContentLoaded', () => {
+        newjvno();
         heads.forEach(e => {headsList.push({value:e.title, label:e.title})})
         var document_date = document.getElementById("document_date").focus();
         hidedropdown1();
@@ -365,6 +375,7 @@ let dyanmicTable = ""; // Tabulator
                 document.getElementById("chqtext").value=0;
                 document.getElementById("amount").value=0;
                 document.getElementById("mdescription").value='';
+                newjvno();
                 dynamicTable.setData();
                 var input = document.getElementById("jvtype").focus();
 
@@ -398,6 +409,19 @@ let dyanmicTable = ""; // Tabulator
 
 
     }
+
+
+    function EnableDisablejvno(jno) {
+        var document_no = document.getElementById("document_no");
+        document_no.disabled = jno.checked ? false : true;
+        document_no.style.color ="black";
+
+    }
+
+
+
+
+
 
 
 
@@ -600,7 +624,45 @@ function addgrdrw()
 
 }
 
-            // {title:"Transaction Type", field:"ttype",headerSort: false, responsive:0,width:"100",cssClass:"bg-green-200 font-semibold"},
+
+const vchrseqno = @json(route('jv.vchrseqno'));
+
+function newjvno()
+{
+
+    const document_no = document.getElementById('document_no');
+    fetch(vchrseqno ,{
+                    method:"GET",
+                    headers: { 'Accept':'application/json','Content-type':'application/json'},
+                    })
+                    .then(response => response.json())
+                    .then( data => {
+                        if(data.length > 0)
+                        {
+                            document_no.value=data;
+                        }else{
+                            document_no.value=data;
+                            // console.log(data);
+                            // subhead.removeAttribute('required','')
+                            // subhead.setAttribute('disabled','')
+                        }
+                    })
+                    .catch(error => console.error(error))
+
+}
+
+
+
+
+
+
+
+
+
+
+
+
+// {title:"Transaction Type", field:"ttype",headerSort: false, responsive:0,width:"100",cssClass:"bg-green-200 font-semibold"},
             // {title:"Main Head", field:"mhead",headerSort: false, responsive:0,width:"200",cssClass:"bg-green-200 font-semibold"},
             // {title:"Sub Head", field:"shead",headerSort: false, responsive:0,width:"400",cssClass:"bg-green-200 font-semibold"},
 
@@ -661,12 +723,6 @@ function filldrplst()
                         }
                     })
                     .catch(error => console.error(error))
-
-
-
-
-
-
 }
 
 </script>

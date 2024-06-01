@@ -39,6 +39,21 @@ class VoucherController extends Controller
     // }
 
 
+    public function vchrseqno(Request $request)
+    {
+        //  dd($request->all());
+        // $head_id = $request->head_id;
+        $maxjvseqno = DB::table('vouchers')->select('*')->max('jvno')+1;
+        return  $maxjvseqno;
+
+    }
+
+
+
+
+
+
+
     public function __construct(){ $this->middleware('auth'); }
     public function index()
     {

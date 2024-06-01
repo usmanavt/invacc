@@ -584,7 +584,7 @@ Route::resource('cashrecivings',CashRecivingsController::class)->except(['create
 
 Route::get('headlistp',[VoucherController::class, 'headlistp'])->name('jv.headlistp');
 // Route::get('getchqstts',[VoucherController::class, 'getchqstts'])->name('jv.getchqstts');
-
+Route::get('vchrseqno',[VoucherController::class, 'vchrseqno'])->name('jv.vchrseqno');
 Route::get('/jv/{id}/printcontract', [VoucherController::class, 'printContract'])->name('jv.print');
 Route::post('/jv/deleteBankRequest', [VoucherController::class, 'deleteBankRequest'])->name('jv.del');
 Route::get('/jv/{id}/deleterec', [VoucherController::class, 'deleterec'])->name('jv.deleterec');
