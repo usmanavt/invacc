@@ -62,7 +62,8 @@ class DimensionController extends Controller
     public function update(Dimension $dimension,Request $request)
     {
 
-    //    dd($request->all(),$dimension);
+    // usman khanr
+        //    dd($request->all(),$dimension);
         $request->validate([
             'title'=>'required|min:1|unique:dimensions,title'
         ]);
