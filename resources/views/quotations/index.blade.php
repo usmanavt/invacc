@@ -159,7 +159,8 @@
             columns:[
 
             {title: "Quanitity",field: "tqqty",hozAlign:"right"},
-            {title: "Amount",field: "rcvblamount",formatterParams:{thousand:",",precision:0},hozAlign:"right"},
+            {title: "NetAmount",field: "rcvblamount",formatterParams:{thousand:",",precision:0},hozAlign:"right"},
+            {title: "GrossAmount",field: "totrcvbamount",formatterParams:{thousand:",",precision:0},hozAlign:"right"},
         ]},
 
         {title:'Pending Status', headerHozAlign:"center",
