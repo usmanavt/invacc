@@ -64,7 +64,7 @@ class DimensionController extends Controller
 
     //    dd($request->all(),$dimension);
         $request->validate([
-            'title'=>'required|min:1|unique:dimensions,title,'.$dimension->id
+            'title'=>'required|min:1|unique:dimensions,title'
         ]);
         DB::beginTransaction();
         try {

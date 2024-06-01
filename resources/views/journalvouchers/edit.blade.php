@@ -27,8 +27,18 @@
                                 @csrf
                                 <fieldset class="border px-4 py-2 rounded">
                                     <legend>Transaction Date</legend>
-                                    <x-input-date title="Dcoument Date" name="jvdate" value="{{ $document_date }}" />
-                                    <x-input-text title="Dcoument No" name="document_no" value="{{ $jvno }}"  />
+                                    <x-input-date title="J.V Date" name="jvdate" value="{{ $document_date }}" />
+                                    <x-input-text title="J.V No" name="document_no" value="{{ $jvno }}" disabled  />
+
+                                    <input tabindex="-1" class="checked:bg-blue-500 checked:border-blue-500 focus:outline-none" type="checkbox" name="jno" id="jno" onclick="EnableDisablejvno(this)" >
+                                    <label for="">
+                                        <span style="color: brown;font-weight: bold"> </span> <span class="text-red-500 font-semibold  "></span>
+                                         </label>
+
+
+
+
+
                                 </fieldset>
 
                                 <fieldset class="border px-4 py-2 rounded">
@@ -271,7 +281,12 @@ document.addEventListener('DOMContentLoaded',()=>{
 
     // }
 
+    function EnableDisablejvno(jno) {
+        var document_no = document.getElementById("document_no");
+        document_no.disabled = jno.checked ? false : true;
+        document_no.style.color ="black";
 
+    }
 
 
 </script>
