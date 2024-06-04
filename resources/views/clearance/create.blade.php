@@ -283,6 +283,7 @@
 
              columns:[
                 // Master Data
+
                 {title:"Id", field:"id" , responsive:0},
                 {title:"Machine No", field:"machineno" , responsive:0},
                 {title:"Machine Date", field:"machine_date" , responsive:0},
@@ -899,6 +900,7 @@ var updateValues = (cell) => {
                         cell.getRow().delete();
                     }
                 },
+                {title:"S.No",            field:"sno", formatter:"rownum",responsive:0},
                 {title:"Id",           field:"id", visible:false},
                 {title:"Packaging Type",     field:"packing",responsive:0},
                 {title:"supplier_id",  field:"supplier_id",visible:false},

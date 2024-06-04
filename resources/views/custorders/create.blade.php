@@ -458,6 +458,7 @@ var updateValues = (cell) => {
                         cell.getRow().delete();
                     }
                 },
+                {title:"S.No",         field:"sno", formatter:"rownum",responsive:0},
                 {title:"Id",           field:"id", visible:false},
                 {title:"Material Name",     field:"material_title",responsive:0,width:300,responsive:0},
                 {title:"Material Size",    field:"dimension",responsive:0,frozen:true, headerMenu:headerMenu,width:150,responsive:0},

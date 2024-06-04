@@ -522,6 +522,7 @@ var calculate = function(){
             },
 
             // {title:"Id",                field:"id",    cssClass:"bg-gray-200 font-semibold"},
+            {title:"S.No",             field:"sno", formatter:"rownum",responsive:0,cssClass:"bg-gray-200 font-semibold"},
             {title:"Material",          field:"title", cssClass:"bg-gray-200 font-semibold"},
             {title:"Category_id",       field:"category_id",    cssClass:"bg-gray-200 font-semibold",visible:false},
             {title:"Category",          field:"category",       cssClass:"bg-gray-200 font-semibold"},

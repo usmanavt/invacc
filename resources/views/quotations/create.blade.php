@@ -473,6 +473,7 @@ const skus = @json($skus);
                     // disableSubmitButton();
                 }
             },
+            {title:"S.No",            field:"sno", formatter:"rownum",responsive:0,cssClass:"bg-gray-200 font-semibold"},
             {title:"Material",          field:"title", cssClass:"bg-gray-200 font-semibold",width:300,responsive:0},
             {title:"Category_id",       field:"category_id",    cssClass:"bg-gray-200 font-semibold",visible:false},
             {title:"Dimension",         field:"dimension_id",   cssClass:"bg-gray-200 font-semibold",visible:false},

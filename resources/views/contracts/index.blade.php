@@ -36,14 +36,14 @@
         </div>
     </div>
 
-    <div class="pt-2">
+    {{-- <div class="pt-2">
         <button
             id="submitbutton" onclick="printselection()"
             class="bg-green-500 text-white rounded hover:bg-green-700 inline-flex items-center px-4 py-1 w-28 text-center">
             <i class="fa fa-save fa-fw"></i>
             Print
         </button>
-    </div>
+    </div> --}}
 {{-- onclick="validateForm()" --}}
 
 @push('scripts')

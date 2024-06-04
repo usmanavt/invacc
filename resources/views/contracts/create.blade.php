@@ -300,6 +300,7 @@ window.onload = function() {
 
                     dimension_id:$itmdata[item_id.options[item_id.selectedIndex].value][0].dimension_id,
                     dimension:$itmdata[item_id.options[item_id.selectedIndex].value][0].dimension,
+                    // rowcnt : dynamicTable.getDataCount()+1,
 
                     bundle1:0,
                     bundle2:0,
@@ -310,12 +311,12 @@ window.onload = function() {
                     dtyrate:0,
                     invsrate:0,
                     gdspricetot:0.00
+
                 }
             ])
 
 
         }
-
 
 });
 
@@ -380,6 +381,9 @@ window.onload = function() {
                     // disableSubmitButton();
                 }
             },
+
+
+            {title:"S.No",             field:"sno", formatter:"rownum",    cssClass:"bg-gray-200 font-semibold"},
             {title:"Id",                field:"id",    cssClass:"bg-gray-200 font-semibold"},
             {title:"Material",          field:"title", cssClass:"bg-gray-200 font-semibold"},
             {title:"Category_id",       field:"category_id",    cssClass:"bg-gray-200 font-semibold",visible:false},

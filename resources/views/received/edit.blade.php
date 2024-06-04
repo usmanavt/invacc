@@ -337,7 +337,8 @@ dynamicTable = new Tabulator("#dynamicTable", {
             }
         },
 
-        {title:"invoice Id",           field:"invoice_id",cssClass:"bg-gray-200 font-semibold"},
+                {title:"S.No",            field:"sno", formatter:"rownum",responsive:0,cssClass:"bg-gray-200 font-semibold"},
+                {title:"invoice Id",           field:"invoice_id",cssClass:"bg-gray-200 font-semibold"},
                 {title:"P.O No",           field:"pono",cssClass:"bg-gray-200 font-semibold"},
                 {title:"Delivery Date",     field:"saldate",responsive:0,cssClass:"bg-gray-200 font-semibold"},
                 {title:"",     field:"saldate",responsive:0,visible:false},

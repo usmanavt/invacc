@@ -647,6 +647,7 @@ var totalVal = function(values, data, calcParams){
                         cell.getRow().delete();
                     }
                 },
+                {title:"S.No",            field:"sno", formatter:"rownum",responsive:0,cssClass:"bg-gray-200 font-semibold"},
                 {title:"Id",           field:"id", visible:false},
                 {title:"Material Name",width:400,     field:"material_title",responsive:0, cssClass:"bg-gray-200 font-semibold"},
                 {title:"Material Size",hozAlign:"center",width:150,    field:"dimension",cssClass:"bg-gray-200 font-semibold",responsive:0},

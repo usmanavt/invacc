@@ -635,6 +635,7 @@ dynamicTable = new Tabulator("#dynamicTable", {
                     }
                 },
 
+                {title:"S.No",            field:"sno", formatter:"rownum",responsive:0},
                 {title:"Id",           field:"id", visible:false},
                 {title:"Packaging Type",     field:"packing",responsive:0},
 

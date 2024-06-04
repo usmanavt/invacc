@@ -330,7 +330,8 @@ dynamicTable = new Tabulator("#dynamicTable", {
             }
         },
 
-        {title:"Id",           field:"id", visible:false,cssClass:"bg-gray-200 font-semibold"},
+                {title:"S.No",            field:"sno", formatter:"rownum",responsive:0,cssClass:"bg-gray-200 font-semibold"},
+                {title:"Id",           field:"id", visible:false,cssClass:"bg-gray-200 font-semibold"},
                 {title:"Material Name", field:"material_title",responsive:0,cssClass:"bg-gray-200 font-semibold"},
                 {title:"Material Size",    field:"dimension",cssClass:"bg-gray-200 font-semibold",responsive:0,frozen:true, headerMenu:headerMenu},
                 {title:"UOM",         field:"sku",responsive:0, hozAlign:"center",cssClass:"bg-gray-200 font-semibold"},

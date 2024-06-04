@@ -157,6 +157,7 @@ table = new Tabulator("#tableData", {
     initialSort:[ {column:"id", dir:"desc"} ],
     height:"100%",
 
+
     columns:[
         // Master Data
         {title:"Id", field:"id" , responsive:0},
@@ -230,7 +231,6 @@ if(!dynamicTableData.filter( dt => dt.material_id === item_id.options[item_id.se
 
             dimension_id:$itmdata[item_id.options[item_id.selectedIndex].value][0].dimension_id,
             dimension:$itmdata[item_id.options[item_id.selectedIndex].value][0].dimension,
-
             bundle1:0,
             bundle2:0,
             pcspbundle1:0,
@@ -240,6 +240,8 @@ if(!dynamicTableData.filter( dt => dt.material_id === item_id.options[item_id.se
             dtyrate:0,
             invsrate:0,
             gdspricetot:0.00,
+            // sno : dynamicTable.getDataCount()+1,
+
 
 
 
@@ -277,7 +279,6 @@ function pushDynamicData(data)
 
         dimension_id:data.dimension_id,
         dimension:data.dimension,
-
         bundle1:0,
         bundle2:0,
         pcspbundle1:0,
@@ -374,6 +375,8 @@ dynamicTable = new Tabulator("#dynamicTable", {
                 // disableSubmitButton();
             }
         },
+
+        {title:"S.No",             field:"sno", formatter:"rownum",    cssClass:"bg-gray-200 font-semibold"},
         {title:"Id",                field:"material_id",    cssClass:"bg-gray-200 font-semibold"},
         {title:"Material",          field:"material_title", cssClass:"bg-gray-200 font-semibold"},
         {title:"Category_id",       field:"category_id",    cssClass:"bg-gray-200 font-semibold",visible:false},

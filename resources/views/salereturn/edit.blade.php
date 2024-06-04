@@ -416,6 +416,7 @@ dynamicTable = new Tabulator("#dynamicTable", {
             }
         },
 
+        {title:"S.No",            field:"sno", formatter:"rownum",responsive:0,cssClass:"bg-gray-200 font-semibold"},
         {title:"Id",                field:"material_id",    cssClass:"bg-gray-200 font-semibold"},
         {title:"Material Name",          field:"material_title",width:300, cssClass:"bg-gray-200 font-semibold"},
         {title:"Material Size",         field:"dimension",width:200,      cssClass:"bg-gray-200 font-semibold"},

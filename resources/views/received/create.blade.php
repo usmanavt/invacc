@@ -596,6 +596,7 @@ var updateValues = (cell) => {
                         cell.getRow().delete();
                     }
                 },
+                {title:"S.No",            field:"sno", formatter:"rownum",responsive:0,cssClass:"bg-gray-200 font-semibold"},
                 {title:"invoice Id",           field:"invoice_id",cssClass:"bg-gray-200 font-semibold"},
                 {title:"P.O No",           field:"pono",cssClass:"bg-gray-200 font-semibold"},
                 {title:"Delivery Date",     field:"saldated",responsive:0,cssClass:"bg-gray-200 font-semibold"},
