@@ -90,7 +90,7 @@
                             <x-dropdown-link href="{{ route('banktransaction.index') }}">Payments Voucher</x-dropdown-link>
                             <x-dropdown-link href="{{ route('banktransactionr.index') }}">Received Voucher</x-dropdown-link>
                             {{-- <x-dropdown-link href="{{ route('bankpayments.index') }}">Bank Payments</x-dropdown-link> --}}
-                            <x-dropdown-link href="{{ route('bankrecivings.index') }}">Cheque Transaction</x-dropdown-link>
+                            <x-dropdown-link href="{{ route('bankrecivings.index') }}">Cheque Collection</x-dropdown-link>
                             {{-- <x-dropdown-link href="{{ route('cashpayments.index') }}">Cash Payments</x-dropdown-link> --}}
                             {{-- <x-dropdown-link href="{{ route('cashrecivings.index') }}">Cash Receiving</x-dropdown-link> --}}
                             <x-dropdown-link href="{{ route('jv.index') }}">Journal Vouchers</x-dropdown-link>

@@ -46,7 +46,29 @@
                             <label for="">
                                 <span style="color: brown;font-weight: bold"> J.V Against Cheque Collection </span> <span class="text-red-500 font-semibold  ">(*)</span>
                                  </label>
-                        </fieldset>
+
+                         </fieldset>
+                         <fieldset class="max-w-7xl border px-4 py-2 gap-4 rounded">
+                                 <label for="jvstts">J.V Status</label>
+                                 <select  autocomplete="on" class="col-span-2"  name="jvstts" id="jvstts"  >
+                                    <option value="0">None</option>
+                                     <option value="1">Payment Through Cheque</option>
+                                     <option value="2">Cheque Return to Supplier</option>
+                                     <option value="3">Cheque Pending</option>
+
+                                 </select>
+                         </fieldset>
+
+
+
+
+
+
+
+
+
+
+
 
 
                         <fieldset class="max-w-7xl border px-1 py-1 gap-1 rounded">
@@ -60,11 +82,7 @@
                                     <span style="color: brown;font-weight: bold"> </span> <span class="text-red-500 font-semibold  "></span>
                                      </label>
 
-
-
-
-
-                                <label for="j vtype">J.V Type</label>
+                                <label for="jvtype">J.V Type</label>
                                 <select  autocomplete="on" class="col-span-2"  name="jvtype" id="jvtype"  >
                                     <option value="1">DEBIT</option>
                                     <option value="2">CREDIT</option>
@@ -87,7 +105,7 @@
                                     <input id="autocompleted1" title="Head Name" placeholder="Select Sub Head Name" class=" px-5 py-3 w-auto border border-gray-400 rounded-md"
                                     onkeyup="onkeyUp1(event)" />
                                     <div>
-                                        <select  id="supplier_id" name="supplier_id" size="20"  class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full h-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                                        <select  id="supplier_id" name="supplier_id" size="20"  class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-auto h-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
                                         </select>
                                     </div>
                                 </div>
@@ -346,8 +364,12 @@ let dyanmicTable = ""; // Tabulator
             'document_date': document.getElementById('document_date').value,
             'document_no': document.getElementById('document_no').value,
             'cheque_no': document.getElementById('cheque_no').value,
-            // 'dbtamt': document.getElementById('dbtamt').value,
-            // 'cdtamt': document.getElementById('cdtamt').value,
+
+            'jvstts':jvstts.options[jvstts.selectedIndex].text,
+            'jvsttsid':jvstts.options[jvstts.selectedIndex].value,
+
+            // 'jvstts': document.getElementById('jvstts').text,
+            // 'jvsttsid': document.getElementById('jvstts').value,
             'voucher': data
         }
         fetch(@json(route('jv.store')),{
@@ -708,9 +730,7 @@ function filldrplst()
                     .then( data => {
                         if(data.length > 0)
                         {
-
                             let a = 0;
-
                             $itmdata= [];
                             list=data;
                             list.forEach(e => {

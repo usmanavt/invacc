@@ -133,10 +133,6 @@ class VoucherController extends Controller
         //                }
         //  }
 
-
-
-
-
         DB::beginTransaction();
         $transaction_id = Voucher::generateUniqueTransaction();
         try {
@@ -146,22 +142,20 @@ class VoucherController extends Controller
                 $subhead_title = $vuch['shead'];
                 // dd($subhead_title);
                 $sub = DB::select('select * from VwCategory where mtitle = ? AND title = ? LIMIT 1', [$head_title,$subhead_title]);
-                // return $sub;
-                // return compact('head_title','subhead_title','sub');
                 $v = new Voucher();
                 $v->transaction = $transaction_id;
                 $v->document_date = $request->document_date;
                 $v->jvno = $request->document_no;
-                // $v->description = $request->description;
-
                 $v->cheque_no = $request->cheque_no;
+
+                $v->jvsttsid = $request->jvsttsid;
+                $v->jvstts = $request->jvstts;
+
                 $v->transaction_type = $vuch['ttype'];
-                // $v->jvno = $vuch['jvno'];
                 $v->amount = $vuch['tamount'];
                 $v->description = $vuch['description'];
                 $v->head_id = $vuch['mheadid'];
                 $v->subhead_id = $vuch['sheadid'] ;
-
                 $v->head_title = $vuch['mhead'];
                 $v->subhead_title = $vuch['shead'] ;
 
@@ -181,14 +175,48 @@ class VoucherController extends Controller
                 $v->save();
             }
 
+        if($v->jvsttsid==1 )
+         {
             DB::update(DB::raw("
             UPDATE cheque_transactions c
             INNER JOIN (SELECT distinct jvno,document_date,cheque_no,'JV' as transaction_type,subhead_id as bank_id,amount FROM vouchers
             WHERE transaction_type='DEBIT' AND  jvno=$v->jvno) x    ON c.cheque_no=x.cheque_no
             SET c.bank_id=x.bank_id, c.clrstatus=1,c.clrdate=x.document_date,clrid=x.jvno,crdtcust=x.amount,invsclrd=x.amount,
             c.ref=CONCAT(x.transaction_type,'-',LPAD(x.jvno,4,'0')) "));
+         }
 
-            DB::commit();
+         if($v->jvsttsid==2 )
+         {
+            DB::update(DB::raw("
+            UPDATE cheque_transactions c
+            INNER JOIN (SELECT distinct jvno,document_date,cheque_no,'JV' as transaction_type,subhead_id as bank_id,amount FROM vouchers
+            WHERE transaction_type='DEBIT' AND  jvno=$v->jvno) x    ON c.cheque_no=x.cheque_no
+            SET c.bank_id=x.bank_id, c.clrstatus=1,c.clrdate=x.document_date,clrid=x.jvno,crdtcust=x.amount,invsclrd=x.amount,
+            c.ref=CONCAT('Cheque Return to Supplier ',LPAD(x.jvno,4,'0')) "));
+         }
+
+         if($v->jvsttsid==3 )
+         {
+            DB::update(DB::raw("
+            UPDATE cheque_transactions c
+            INNER JOIN (SELECT distinct jvno,document_date,cheque_no,'JV' as transaction_type,subhead_id as bank_id,amount FROM vouchers
+            WHERE transaction_type='DEBIT' AND  jvno=$v->jvno) x    ON c.cheque_no=x.cheque_no
+            SET c.bank_id=x.bank_id, c.clrstatus=0,c.clrdate=x.document_date,clrid=x.jvno,crdtcust=x.amount,invsclrd=x.amount,
+            c.ref=CONCAT('Cheque Pending ',LPAD(x.jvno,4,'0')) "));
+         }
+
+
+
+
+
+
+         //  CONCAT('Cheque Return to Supplier ',CONCAT('JV-',LPAD(jvno,4,'0')))
+
+
+
+
+
+           DB::commit();
             // Session::flash('success','Journal Voucer created');
             return response()->json(['success'],200);
         } catch (\Throwable $th) {
@@ -207,11 +235,13 @@ class VoucherController extends Controller
         $dd1 = Voucher::select('jvno')->where('transaction',$id)->first();
         $dd2 = Voucher::select('cheque_no')->where('transaction',$id)->first();
         $delgdno = Voucher::select('vgdno')->where('transaction',$id)->first();
+        $jstatus = Voucher::select('jvsttsid')->where('transaction',$id)->first();
         return view('journalvouchers.edit',compact('passwrd'))
         ->with('jvs',$vouchers)
         ->with('transaction',$id)
         ->with('document_date',$dd->document_date)
         ->with('cheque_no',$dd2->cheque_no)
+        ->with('jvsttsid',$jstatus->jvsttsid)
         ->with('vgdno',$delgdno->vgdno)
         ->with('jvno',$dd1->jvno)
         ->with('heads',Head::select(['id','title'])->where('status',1)->get()) //
@@ -295,6 +325,10 @@ class VoucherController extends Controller
                 $v->head_title = $vuch['head_title'];
                 $v->subhead_title = $vuch['subhead_title'];
 
+                $v->jvsttsid = $request->jvsttsid;
+                $v->jvstts = $request->jvstts;
+
+
 
                 // dd($vuch['head_title']);
                 $sub = DB::select('select * from VwCategory where mtitle = ? AND title = ? LIMIT 1', [ $vuch['head_title'], $vuch['subhead_title']]);
@@ -325,12 +359,36 @@ class VoucherController extends Controller
                 $v->save();
             }
 
-            DB::update(DB::raw("
-            UPDATE cheque_transactions c
-            INNER JOIN (SELECT distinct jvno,document_date,cheque_no,'JV' as transaction_type,subhead_id as bank_id FROM vouchers WHERE  jvno=$v->jvno) x
-            ON c.cheque_no=x.cheque_no
-            SET c.bank_id=x.bank_id, c.clrstatus=1,c.clrdate=x.document_date,clrid=x.jvno,c.ref=CONCAT(x.transaction_type,'-',LPAD(x.jvno,4,'0')) "));
-        // }
+            if($v->jvsttsid==1 )
+            {
+                DB::update(DB::raw("
+                UPDATE cheque_transactions c
+                INNER JOIN (SELECT distinct jvno,document_date,cheque_no,'JV' as transaction_type,subhead_id as bank_id FROM vouchers WHERE  jvno=$v->jvno) x
+                ON c.cheque_no=x.cheque_no
+                SET c.bank_id=x.bank_id, c.clrstatus=1,c.clrdate=x.document_date,clrid=x.jvno,c.ref=CONCAT(x.transaction_type,'-',LPAD(x.jvno,4,'0')) "));
+            }
+
+            if($v->jvsttsid==2 )
+            {
+                DB::update(DB::raw("
+                UPDATE cheque_transactions c
+                INNER JOIN (SELECT distinct jvno,document_date,cheque_no,'JV' as transaction_type,subhead_id as bank_id FROM vouchers WHERE  jvno=$v->jvno) x
+                ON c.cheque_no=x.cheque_no
+                SET c.bank_id=x.bank_id, c.clrstatus=1,c.clrdate=x.document_date,clrid=x.jvno,c.ref=CONCAT('Cheque Return to Supplier ',LPAD(x.jvno,4,'0')) "));
+            }
+
+            if($v->jvsttsid==3 )
+            {
+                DB::update(DB::raw("
+                UPDATE cheque_transactions c
+                INNER JOIN (SELECT distinct jvno,document_date,cheque_no,'JV' as transaction_type,subhead_id as bank_id FROM vouchers WHERE  jvno=$v->jvno) x
+                ON c.cheque_no=x.cheque_no
+                SET c.bank_id=x.bank_id, c.clrstatus=1,c.clrdate=x.document_date,clrid=x.jvno,c.ref=CONCAT('Cheque Return/Pending ',LPAD(x.jvno,4,'0')) "));
+            }
+
+
+
+            // }
 
 
         // if(  $request->p2==1  )

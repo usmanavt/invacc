@@ -34,11 +34,6 @@
                                     <label for="">
                                         <span style="color: brown;font-weight: bold"> </span> <span class="text-red-500 font-semibold  "></span>
                                          </label>
-
-
-
-
-
                                 </fieldset>
 
                                 <fieldset class="border px-4 py-2 rounded">
@@ -50,6 +45,52 @@
                                         <span style="color: brown;font-weight: bold"> J.V Against Cheque Collection </span> <span class="text-red-500 font-semibold  ">(*)</span>
                                          </label>
                                 </fieldset>
+
+                                <fieldset class="border px-4 py-2 rounded">
+                                    <label for="jvstts">J.V Status</label>
+                                    <select  autocomplete="on" class="col-span-2"  name="jvstts" id="jvstts"   >
+                                      @if ( $jvsttsid===0)
+                                        <option value="0" selected >None</option>
+                                      @else
+                                        <option value="0">None</option>
+                                      @endif
+
+                                      @if ( $jvsttsid===1)
+                                        <option value="1" selected>Payment Through Cheque</option>
+                                      @else
+                                        <option value="1" >Payment Through Cheque</option>
+                                      @endif
+
+                                      @if ( $jvsttsid===2)
+                                        <option value="2" selected>Cheque Return to Supplier</option>
+                                      @else
+                                        <option value="2">Cheque Return to Supplier</option>
+                                      @endif
+
+                                      @if ( $jvsttsid===3)
+                                        <option value="3" selected  >Cheque Pending</option>
+                                      @else
+                                        <option value="3"  >Cheque Pending</option>
+                                      @endif
+
+
+
+
+
+
+
+                                    </select>
+
+                            </fieldset>
+
+
+                            {{-- @foreach($customer as $customer)
+                            @if ($customer->id == $customerorder->customer_id)
+                            <option value="{{$customer->id}}" selected> {{$customer->title}} </option>
+                            @endif --}}
+
+
+
 
 
                                 @method('PUT')
@@ -203,6 +244,8 @@ document.addEventListener('DOMContentLoaded',()=>{
         })
         //  Now Post Data
         var mydata = {'document_no':document_no.value,'jvdate':jvdate.value,'cheque_no':cheque_no.value,'p2':p2.value,
+            'jvstts':jvstts.options[jvstts.selectedIndex].text,
+            'jvsttsid':jvstts.options[jvstts.selectedIndex].value,
             'vouchers': data
         }
         fetch(@json(route('jv.update',$transaction)),{

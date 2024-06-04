@@ -65,7 +65,9 @@ class DimensionController extends Controller
     // usman khanr
         //    dd($request->all(),$dimension);
         $request->validate([
-            'title'=>'required|min:1|unique:dimensions,title'
+            // 'title'=>'required|min:1|unique:dimensions,title'
+            // 'title'=>'required|min:1|unique:dimensions'
+            // 'title'=>'required|min:3|unique:dimensions,title,'. $dimension->id ,
         ]);
         DB::beginTransaction();
         try {
@@ -76,13 +78,21 @@ class DimensionController extends Controller
                 $dimension->status = 0;
             }
             $dimension->save();
-            // dd($dimension->id);
-            $cl = Material::where('dimension_id',$dimension->id)->get();
-            if (!count($cl) <= 0)
-            {
-                $cl->dimension = $request->title;
-                $cl->save();
-            }
+            // $cl = Material::where('dimension_id',$dimension->id)->get();
+            // if (!count($cl) <= 0)
+            // {
+            //     // $cl->dimension = $request->title;
+            //     // $cl->save();
+            //     dd($dimension->id);
+            // }
+
+            // DB::update(DB::raw("UPDATE materials set dimension= ' $request->title ' where dimension_id=$dimension->id"));
+
+            DB::update(DB::raw("UPDATE materials INNER JOIN dimensions ON dimensions.id=materials.dimension_id
+            SET DIMENSION=LTRIM(dimensions.title) WHERE materials.id=$dimension->id "));
+
+
+
 
 
             DB::commit();

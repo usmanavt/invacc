@@ -42,7 +42,7 @@
                             <div class="grid grid-cols-12 gap-1 py-2 items-center">
                                 <x-input-date title="P.O Date" id="podate" name="podate" req required class="col-span-2" />
                                 <x-input-text title="P.O #" name="pono" id="pono" req required class="col-span-2"  />
-                                <x-input-date title="Delivery Date" name="deliverydt" hidden req required class="col-span-2"/>
+                                <x-input-date title="" name="deliverydt" hidden req required class="col-span-2"/>
                                 <x-input-text title="P.O Seq.#" name="poseqno" id="poseqno" value="{{$maxposeqno}}"    placeholder="poseqno" required   />
 
 

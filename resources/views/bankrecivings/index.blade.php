@@ -69,7 +69,7 @@
 
                                 {{-- <x-input-numeric title="Conversion Rate" name="conversion_rate" id="conversion_rate" value="1" min="1" step="0.01" required  onblur="convamounttodlr()"/> --}}
                                 <x-input-numeric title="Receiving" name="received" id="received" min="1" required  onblur="convamounttodlr()"/>
-                                <x-input-numeric title="Payment" name="payment" id="payment"   required class=""/>
+                                <x-input-numeric title="" name="payment" id="payment" hidden   value=0/>
                                 <x-input-text title="Cheque #" name="cheque_no" req required class=""/>
                                 <x-input-date title="Cheque Date" name="cheque_date" req required/>
 
@@ -134,6 +134,15 @@
 
 @push('scripts')
 <script>
+
+
+        document.addEventListener('DOMContentLoaded',()=>{
+            var input = document.getElementById("documentdate").focus();
+        })
+
+
+
+
     let subheads = @json($subheads);
     const submitButton = document.getElementById('submitButton')
     // const conversion_rate = document.getElementById('conversion_rate')

@@ -15,7 +15,7 @@
                         <form action="{{route('dimensions.update',$dimension)}}" method="post" >
                             @csrf
                             @method('PUT')
-                                <x-label for="title" value="Title" class="w-24"/>
+                                <x-label for="title" value="Title" class="w-40"/>
                                 <x-input id="title" class="bg-indigo-100" type="text" name="title" value="{{$dimension->title}}" />
                                 @if($errors->has('title'))<div class="text-red-500 text-xs">{{ $errors->first('title') }}</div>@endif
 
