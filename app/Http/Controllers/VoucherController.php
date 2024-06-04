@@ -383,7 +383,7 @@ class VoucherController extends Controller
                 UPDATE cheque_transactions c
                 INNER JOIN (SELECT distinct jvno,document_date,cheque_no,'JV' as transaction_type,subhead_id as bank_id FROM vouchers WHERE  jvno=$v->jvno) x
                 ON c.cheque_no=x.cheque_no
-                SET c.bank_id=x.bank_id, c.clrstatus=1,c.clrdate=x.document_date,clrid=x.jvno,c.ref=CONCAT('Cheque Return/Pending ',LPAD(x.jvno,4,'0')) "));
+                SET c.bank_id=x.bank_id, c.clrstatus=0,c.clrdate=x.document_date,clrid=x.jvno,c.ref=CONCAT('Cheque Return/Pending ',LPAD(x.jvno,4,'0')) "));
             }
 
 
