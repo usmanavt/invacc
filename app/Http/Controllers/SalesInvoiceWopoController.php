@@ -861,10 +861,11 @@ class SalesInvoiceWopoController  extends Controller
         //     </tr>
         // </table>');
         $chunks = explode("chunk", $html);
+        $mpdf->AddPage();
         foreach($chunks as $key => $val) {
             $mpdf->WriteHTML($val);
         }
-        $mpdf->AddPage();
+
     }
         return response($mpdf->Output($filename,'I'),200)->header('Content-Type','application/pdf');
 

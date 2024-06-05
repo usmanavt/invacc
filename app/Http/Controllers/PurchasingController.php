@@ -556,10 +556,11 @@ class PurchasingController extends Controller
             //   ->with('headtype',$head->title)->render();
           $filename = $g[0]->id  .'.pdf';
           $chunks = explode("chunk", $html);
+          $mpdf->AddPage();
           foreach($chunks as $key => $val) {
               $mpdf->WriteHTML($val);
           }
-          $mpdf->AddPage();
+
       }
       return response($mpdf->Output($filename,'I'),200)->header('Content-Type','application/pdf');
   }

@@ -762,10 +762,11 @@ if($request->dltid==1)
 
             $filename = $g[0]->purid  .'.pdf';
             $chunks = explode("chunk", $html);
+            $mpdf->AddPage();
             foreach($chunks as $key => $val) {
                 $mpdf->WriteHTML($val);
             }
-            $mpdf->AddPage();
+
         }
         return response($mpdf->Output($filename,'I'),200)->header('Content-Type','application/pdf');
 

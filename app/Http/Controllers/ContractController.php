@@ -674,10 +674,11 @@ class ContractController extends Controller
                 // ->with('headtype',$head->title)->render();
             $filename = $g[0]->purid.'.pdf';
             $chunks = explode("chunk", $html);
+            $mpdf->AddPage();
             foreach($chunks as $key => $val) {
                 $mpdf->WriteHTML($val);
             }
-            $mpdf->AddPage();
+
         }
         // $mpdf->Output($filename,'I');
         // return response('done',200);

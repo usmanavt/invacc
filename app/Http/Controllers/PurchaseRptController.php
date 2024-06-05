@@ -27,8 +27,6 @@ class PurchaseRptController extends Controller
         $data=compact('resultArray');
 
 
-
-
         return view('purrpt.index')->with($data)
         ->with('heads',Supplier::where('status',1)->get())
         ->with('glheads',Supplier::where('status',1)->get())
@@ -203,8 +201,8 @@ class PurchaseRptController extends Controller
             'margin_bottom' => '5',
             'margin_footer' => '2',
             'default_font_size' => 9,
-            'margin_left' => '5',
-            'margin_right' => '2',
+            'margin_left' => '6',
+            'margin_right' => '6',
         ]);
         $mpdf->showImageErrors = true;
         $mpdf->curlAllowUnsafeSslRequests = true;
@@ -223,13 +221,14 @@ class PurchaseRptController extends Controller
         $mpdf = new PDF( [
             'mode' => 'utf-8',
             'format' => $orientation,
-            'margin_header' => '2',
+            'margin_header' => '1',
             'margin_top' => '2',
-            'margin_bottom' => '2',
-            'margin_footer' => '2',
+            'margin_bottom' => '1',
+            'margin_footer' => '1',
             'default_font_size' => 9,
-            'margin_left' => '6',
-            'margin_right' => '6',
+            'margin_left' => '2',
+            'margin_right' => '2',
+
         ]);
         $mpdf->showImageErrors = true;
         $mpdf->curlAllowUnsafeSslRequests = true;
@@ -348,10 +347,11 @@ class PurchaseRptController extends Controller
                     ->with('headtype',$head->title)->render();
                 $filename = $g[0]->purid  .'-'.$fromdate.'-'.$todate.'.pdf';
                 $chunks = explode("chunk", $html);
+                $mpdf->AddPage();
                 foreach($chunks as $key => $val) {
                     $mpdf->WriteHTML($val);
                 }
-                $mpdf->AddPage();
+
             }
             return response($mpdf->Output($filename,'I'),200)->header('Content-Type','application/pdf');
 
@@ -391,10 +391,11 @@ class PurchaseRptController extends Controller
                     ->with('headtype',$head->title)->render();
                 $filename = $g[0]->purid  .'-'.$fromdate.'-'.$todate.'.pdf';
                 $chunks = explode("chunk", $html);
+                $mpdf->AddPage();
                 foreach($chunks as $key => $val) {
                     $mpdf->WriteHTML($val);
                 }
-                $mpdf->AddPage();
+
             }
             return response($mpdf->Output($filename,'I'),200)->header('Content-Type','application/pdf');
 
@@ -430,15 +431,21 @@ class PurchaseRptController extends Controller
             $grouped = $collection->groupBy('purid');       //  Sort collection by SupName
             $grouped->values()->all();                       //  values() removes indices of array
 
+            $xyz=0;
             foreach($grouped as $g){
-                 $html =  view('purrpt.contactsrpt')->with('data',$g)->with('fromdate',$fromdate)->with('todate',$todate)->with('hdng1',$hdng1)->with('hdng2',$hdng2)
+                $html =  view('purrpt.contactsrpt')->with('data',$g)->with('fromdate',$fromdate)->with('todate',$todate)->with('hdng1',$hdng1)->with('hdng2',$hdng2)
                     ->with('headtype',$head->title)->render();
                 $filename = $g[0]->purid  .'-'.$fromdate.'-'.$todate.'.pdf';
                 $chunks = explode("chunk", $html);
+                $mpdf->AddPage();
                 foreach($chunks as $key => $val) {
                     $mpdf->WriteHTML($val);
+                    // if($xyz>0 )
+
+                    // $xyz=$xyz+1;
                 }
-                $mpdf->AddPage();
+
+
             }
             return response($mpdf->Output($filename,'I'),200)->header('Content-Type','application/pdf');
         }
@@ -564,20 +571,14 @@ class PurchaseRptController extends Controller
                     ->with('headtype',$head->title)->render();
                 $filename = $g[0]->grpid  .'-'.$fromdate.'-'.$todate.'.pdf';
                 $chunks = explode("chunk", $html);
+                $mpdf->AddPage();
                 foreach($chunks as $key => $val) {
                     $mpdf->WriteHTML($val);
                 }
-                $mpdf->AddPage();
+
             }
             return response($mpdf->Output($filename,'I'),200)->header('Content-Type','application/pdf');
         }
-
-
-
-
-
-
-
 
 
 
@@ -617,10 +618,11 @@ class PurchaseRptController extends Controller
                     ->with('headtype',$head->title)->render();
                 $filename = $g[0]->id  .'-'.$fromdate.'-'.$todate.'.pdf';
                 $chunks = explode("chunk", $html);
+                $mpdf->AddPage();
                 foreach($chunks as $key => $val) {
                     $mpdf->WriteHTML($val);
                 }
-                $mpdf->AddPage();
+
             }
             return response($mpdf->Output($filename,'I'),200)->header('Content-Type','application/pdf');
         }
@@ -662,10 +664,11 @@ class PurchaseRptController extends Controller
                     ->with('headtype',$head->title)->render();
                 $filename = $g[0]->id  .'-'.$fromdate.'-'.$todate.'.pdf';
                 $chunks = explode("chunk", $html);
+                $mpdf->AddPage();
                 foreach($chunks as $key => $val) {
                     $mpdf->WriteHTML($val);
                 }
-                $mpdf->AddPage();
+
             }
             return response($mpdf->Output($filename,'I'),200)->header('Content-Type','application/pdf');
         }
@@ -714,10 +717,11 @@ class PurchaseRptController extends Controller
                     ->with('headtype',$head->title)->render();
                 $filename = $g[0]->cominvid  .'-'.$fromdate.'-'.$todate.'.pdf';
                 $chunks = explode("chunk", $html);
+                $mpdf->AddPage();
                 foreach($chunks as $key => $val) {
                     $mpdf->WriteHTML($val);
                 }
-                $mpdf->AddPage();
+
             }
             return response($mpdf->Output($filename,'I'),200)->header('Content-Type','application/pdf');
         }
@@ -760,10 +764,11 @@ class PurchaseRptController extends Controller
                     ->with('headtype',$head->title)->render();
                 $filename = $g[0]->cominvid  .'-'.$fromdate.'-'.$todate.'.pdf';
                 $chunks = explode("chunk", $html);
+                $mpdf->AddPage();
                 foreach($chunks as $key => $val) {
                     $mpdf->WriteHTML($val);
                 }
-                $mpdf->AddPage();
+
             }
             return response($mpdf->Output($filename,'I'),200)->header('Content-Type','application/pdf');
         }
@@ -814,12 +819,6 @@ class PurchaseRptController extends Controller
         }
 
 
-
-
-
-
-
-
         if($report_type === 'loccominvs'){
 
             $hdng1 = $request->cname;
@@ -858,10 +857,11 @@ class PurchaseRptController extends Controller
 
                 $filename = $g[0]->purid  .'-'.$fromdate.'-'.$todate.'.pdf';
                 $chunks = explode("chunk", $html);
+                $mpdf->AddPage();
                 foreach($chunks as $key => $val) {
                     $mpdf->WriteHTML($val);
                 }
-                $mpdf->AddPage();
+
             }
             return response($mpdf->Output($filename,'I'),200)->header('Content-Type','application/pdf');
         }
@@ -902,10 +902,11 @@ class PurchaseRptController extends Controller
 
                 $filename = $g[0]->grp  .'-'.$fromdate.'-'.$todate.'.pdf';
                 $chunks = explode("chunk", $html);
+                $mpdf->AddPage();
                 foreach($chunks as $key => $val) {
                     $mpdf->WriteHTML($val);
                 }
-                $mpdf->AddPage();
+
             }
             return response($mpdf->Output($filename,'I'),200)->header('Content-Type','application/pdf');
         }
@@ -949,10 +950,11 @@ class PurchaseRptController extends Controller
 
                 $filename = $g[0]->id  .'-'.$fromdate.'-'.$todate.'.pdf';
                 $chunks = explode("chunk", $html);
+                $mpdf->AddPage();
                 foreach($chunks as $key => $val) {
                     $mpdf->WriteHTML($val);
                 }
-                $mpdf->AddPage();
+
             }
             return response($mpdf->Output($filename,'I'),200)->header('Content-Type','application/pdf');
         }
@@ -993,20 +995,14 @@ class PurchaseRptController extends Controller
 
                 $filename = $g[0]->grp  .'-'.$fromdate.'-'.$todate.'.pdf';
                 $chunks = explode("chunk", $html);
+                $mpdf->AddPage();
                 foreach($chunks as $key => $val) {
                     $mpdf->WriteHTML($val);
                 }
-                $mpdf->AddPage();
+
             }
             return response($mpdf->Output($filename,'I'),200)->header('Content-Type','application/pdf');
         }
-
-
-
-
-
-
-
 
 
         if($report_type === 'impcominvs' || $report_type === 'impcominvs1' ){
@@ -1057,10 +1053,11 @@ class PurchaseRptController extends Controller
                 // $html =  view('purrpt.glhw')->with('data',$g)->with('fromdate',$fromdate)->with('todate',$todate)->render();
                 $filename = $g[0]->purid  .'-'.$fromdate.'-'.$todate.'.pdf';
                 $chunks = explode("chunk", $html);
+                $mpdf->AddPage();
                 foreach($chunks as $key => $val) {
                     $mpdf->WriteHTML($val);
                 }
-                $mpdf->AddPage();
+
             }
             return response($mpdf->Output($filename,'I'),200)->header('Content-Type','application/pdf');
         }
@@ -1097,10 +1094,11 @@ class PurchaseRptController extends Controller
                 // $html =  view('purrpt.glhw')->with('data',$g)->with('fromdate',$fromdate)->with('todate',$todate)->render();
                 $filename = $g[0]->grp  .'-'.$fromdate.'-'.$todate.'.pdf';
                 $chunks = explode("chunk", $html);
+                $mpdf->AddPage();
                 foreach($chunks as $key => $val) {
                     $mpdf->WriteHTML($val);
                 }
-                $mpdf->AddPage();
+
             }
             return response($mpdf->Output($filename,'I'),200)->header('Content-Type','application/pdf');
         }

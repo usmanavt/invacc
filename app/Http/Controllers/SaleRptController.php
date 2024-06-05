@@ -236,24 +236,6 @@ public function funcsalretcat(Request $request)
     }
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
     public function getMPDFSettingsL($orientation = 'Legal-L')
     {
 
@@ -276,10 +258,6 @@ public function funcsalretcat(Request $request)
         $mpdf->debug = true;
         return $mpdf;
     }
-
-
-
-
 
 
     public function vouchers(Request $request)
@@ -417,10 +395,11 @@ public function funcsalretcat(Request $request)
                 </tr>
             </table>');
             $chunks = explode("chunk", $html);
+            $mpdf->AddPage();
             foreach($chunks as $key => $val) {
                 $mpdf->WriteHTML($val);
             }
-            $mpdf->AddPage();
+
         }
             return response($mpdf->Output($filename,'I'),200)->header('Content-Type','application/pdf');
 
@@ -476,35 +455,15 @@ public function funcsalretcat(Request $request)
                 </tr>
             </table>');
             $chunks = explode("chunk", $html);
+            $mpdf->AddPage();
             foreach($chunks as $key => $val) {
                 $mpdf->WriteHTML($val);
             }
-            $mpdf->AddPage();
+
         }
             return response($mpdf->Output($filename,'I'),200)->header('Content-Type','application/pdf');
 
         }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
@@ -568,10 +527,11 @@ public function funcsalretcat(Request $request)
                 </tr>
             </table>');
             $chunks = explode("chunk", $html);
+            $mpdf->AddPage();
             foreach($chunks as $key => $val) {
                 $mpdf->WriteHTML($val);
             }
-            $mpdf->AddPage();
+
         }
             return response($mpdf->Output($filename,'I'),200)->header('Content-Type','application/pdf');
 
@@ -652,10 +612,6 @@ public function funcsalretcat(Request $request)
 
 
 
-
-
-
-
         if($report_type === 'salrethist' ){
             $hdng1 = $request->cname;
             $hdng2 = $request->csdrs;
@@ -726,15 +682,6 @@ public function funcsalretcat(Request $request)
         }
 
 
-
-
-
-
-
-
-
-
-
         if($report_type === 'quotation' and $request->p1 == '1' ){
             $hdng1 = $request->cname;
             $hdng2 = $request->csdrs;
@@ -796,10 +743,11 @@ public function funcsalretcat(Request $request)
                     </tr>
                 </table>');
                 $chunks = explode("chunk", $html);
+                $mpdf->AddPage();
                 foreach($chunks as $key => $val) {
                     $mpdf->WriteHTML($val);
                 }
-                $mpdf->AddPage();
+
             }
             return response($mpdf->Output($filename,'I'),200)->header('Content-Type','application/pdf');
         }
@@ -862,10 +810,11 @@ public function funcsalretcat(Request $request)
                     </tr>
                 </table>');
                 $chunks = explode("chunk", $html);
+                $mpdf->AddPage();
                 foreach($chunks as $key => $val) {
                     $mpdf->WriteHTML($val);
                 }
-                $mpdf->AddPage();
+
             }
             return response($mpdf->Output($filename,'I'),200)->header('Content-Type','application/pdf');
         }
@@ -928,10 +877,11 @@ public function funcsalretcat(Request $request)
                 //     </tr>
                 // </table>');
                 $chunks = explode("chunk", $html);
+                $mpdf->AddPage();
                 foreach($chunks as $key => $val) {
                     $mpdf->WriteHTML($val);
                 }
-                $mpdf->AddPage();
+
             }
             return response($mpdf->Output($filename,'I'),200)->header('Content-Type','application/pdf');
         }
@@ -995,22 +945,14 @@ public function funcsalretcat(Request $request)
                 //     </tr>
                 // </table>');
                 $chunks = explode("chunk", $html);
+                $mpdf->AddPage();
                 foreach($chunks as $key => $val) {
                     $mpdf->WriteHTML($val);
                 }
-                $mpdf->AddPage();
+
             }
             return response($mpdf->Output($filename,'I'),200)->header('Content-Type','application/pdf');
         }
-
-
-
-
-
-
-
-
-
 
 
         if($report_type === 'custorder'){
@@ -1071,17 +1013,14 @@ public function funcsalretcat(Request $request)
                     </tr>
                 </table>');
                 $chunks = explode("chunk", $html);
+                $mpdf->AddPage();
                 foreach($chunks as $key => $val) {
                     $mpdf->WriteHTML($val);
                 }
-                $mpdf->AddPage();
+
             }
             return response($mpdf->Output($filename,'I'),200)->header('Content-Type','application/pdf');
         }
-
-
-
-
 
 
         if($report_type === 'pendcustorder'){
@@ -1132,10 +1071,11 @@ public function funcsalretcat(Request $request)
                     </tr>
                 </table>');
                 $chunks = explode("chunk", $html);
+                $mpdf->AddPage();
                 foreach($chunks as $key => $val) {
                     $mpdf->WriteHTML($val);
                 }
-                $mpdf->AddPage();
+
             }
             return response($mpdf->Output($filename,'I'),200)->header('Content-Type','application/pdf');
         }
@@ -1237,25 +1177,14 @@ public function funcsalretcat(Request $request)
                     </tr>
                 </table>');
                 $chunks = explode("chunk", $html);
+                // $mpdf->AddPage();
                 foreach($chunks as $key => $val) {
                     $mpdf->WriteHTML($val);
                 }
-                //$mpdf->AddPage();
+
             }
             return response($mpdf->Output($filename,'I'),200)->header('Content-Type','application/pdf');
         }
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 

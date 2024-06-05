@@ -4,11 +4,23 @@
 <meta charset="utf-8">
 <style>
 * {
-    margin:0;
+    /* margin:0;
     padding:0;
     font-size:0.8rem;
     font-style: normal;
-    box-sizing: border-box;
+    box-sizing: border-box; */
+
+
+    /* @page { margin: 0px 0px 0px 0px; }
+    body {
+    background-image: url(../../picture.jpg);
+    background-size: 100% 100%;
+    background-repeat: no-repeat;
+} */
+
+
+
+
 }
 table{
     width:100%;.
@@ -159,20 +171,11 @@ table{
                     <th class="column-headers" width="16%">Size</th>
                     <th class="column-headers" width="5%">Unit</th>
 
-                    {{-- <th class="column-headers" width="7%">Bundle1</th>
-                    <th class="column-headers" width="7%">Bundle2</th> --}}
-
                     <th class="column-headers" width="8%">In Pcs</th>
                     <th class="column-headers" width="8%">In Kg</th>
 
                     <th class="column-headers" width="10%">Price</th>
                     <th class="column-headers" width="10%">Amount</th>
-
-                    {{-- <th class="column-headers" width="7%">Price</th>
-                    <th class="column-headers" width="7%">Amount</th> --}}
-
-                    {{-- <th class="column-headers" width="9%">Price</th> --}}
-                    {{-- <th class="column-headers" width="9%">Amount</th> --}}
 
 
             </tr>
@@ -219,21 +222,11 @@ table{
                 <td style="text-align:center" width="16%">{{ $data[$i]->size}} </td>
                 <td style="text-align:center" width="5%">{{ $data[$i]->unit}} </td>
 
-                {{-- <td style="text-align:center" width="7%">{{ $data[$i]->bundle1 }} </td>
-                <td style="text-align:center" width="7%">{{ $data[$i]->bundle2 }} </td> --}}
-
                 <td style="text-align:right" width="8%">{{ number_format($data[$i]->totpcs,0) }} </td>
                 <td style="text-align:right" width="8%">{{ number_format($data[$i]->wt,2) }} </td>
 
                 <td style="text-align:right" width="10%">{{ number_format($data[$i]->price,3) }} </td>
                 <td style="text-align:right" width="10%">{{ number_format($data[$i]->vlues,3) }} </td>
-
-                {{-- <td style="text-align:right" width="7%">{{ number_format($data[$i]->invsrate,2) }} </td> --}}
-                {{-- <td style="text-align:right" width="7%">{{ number_format($data[$i]->invsvalue,2) }} </td> --}}
-
-                {{-- <td style="text-align:right" width="9%">{{ number_format($data[$i]->dtyrate,2) }} </td> --}}
-                {{-- <td style="text-align:right" width="9%">{{ number_format($data[$i]->dutval,2) }} </td> --}}
-
 
             </tr>
             @endfor
@@ -245,20 +238,14 @@ table{
                 {{-- <td colspan="4"  style="text-align: right;border-bottom: 1px solid lightgray;background: #e3e3e3;font-weight: bold">{{ number_format($dutval,2) }} </td> --}}
 
             </tr>
-
-
-
-
-
-
         </tbody>
     </table>
 
     {{-- Footer  --}}
-    <div style="margin-top:64px;">
+    {{-- <div style="margin-top:60px;">
         <table >
 
-            {{-- <tr style="margin-top:16px;margin-bottom:16px;">
+            <tr style="margin-top:16px;margin-bottom:16px;">
                 <td style="width=33%;font-size:80%;text-align:center">
                     --------------------
                 </td>
@@ -275,24 +262,12 @@ table{
                 <td style="width=33%;font-size:80%;text-align:center">
                     Approved By
                 </td>
-            </tr> --}}
-
-
-
-
-
+            </tr>
 
         </table>
 
+ --}}
+    {{-- </div> --}}
 
-
-
-
-
-    </div>
-
-
-
-    </body>
-
-</html>
+</body>
+</html  >
