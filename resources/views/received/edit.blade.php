@@ -5,10 +5,6 @@
     <link href="https://unpkg.com/tabulator-tables/dist/css/tabulator.min.css" rel="stylesheet">
     <script type="text/javascript" src="https://unpkg.com/tabulator-tables/dist/js/tabulator.min.js"></script>
 
-
-
-
-
     @endpush
 
     <x-slot name="header">
@@ -29,7 +25,7 @@
                             <legend>Invoice Level Entries</legend>
                             <div class="grid grid-cols-12 gap-2 py-2 items-center">
 
-                                {{-- <x-input-text title="Supplier Name" name="supname" id="supname" class="col-span-2" value="{{ $supplier->title }}" disabled  /> --}}
+                                {{-- <x-input-text title="Supplier Name" name="supname" id="supname" class="col-span-2" value="{{ $banktransaction->supname }}" disabled  /> --}}
 
                                     {{-- <label for="supplier_id">Supplier</label>
                                     <select  autocomplete="on" class="col-span-2" name="supplier_id" id="supplier_id" required>
@@ -40,11 +36,40 @@
                                             <option value="{{$supplier->id}}"> {{$supplier->title}} </option>
                                         @endforeach
                                     </select> --}}
-                                <x-input-text title="Customer Name" name="supname" id="supname" class="col-span-2" value="{{ $banktransaction->supname }}" disabled  />
-                                <x-input-date title="Received Date" name="documentdate" class="col-span-2" value="{{ $banktransaction->documentdate->format('Y-m-d') }}"  />
+
+                                    <label for="head_id">Main Head<x-req /></label>
+
+                                    <select  autocomplete="on" class="col-span-2" name="head_id" id="head_id" style="text-align: right"  >
+                                            {{-- <option value="" selected>--Payment Head</option> --}}
+                                            @foreach($heads as $head)
+                                            @if ($head->id == $banktransaction->head_id)
+                                                <option value="{{$head->id}}" selected> {{$head->title}} </option>
+                                            @else
+                                            <option value="{{$head->id}}"> {{$head->title}} </option>
+                                            @endif
+
+                                            @endforeach
+                                        </select>
+
+
+                                        <div class="w-96 relative grid grid-cols-4 gap-1 px-10 py-5  "   onclick="event.stopImmediatePropagation();" >
+                                            {{-- <label for="autocompleted1">Sub Head<x-req /></label> --}}
+                                            {{-- <input id="autocompleted1" title="Head Name" value="{{ $banktransaction->supname }}" placeholder="Select Sub Head Name" class="col-span-2 px-5 py-3 w-auto border border-gray-400 rounded-md" --}}
+                                            <input id="autocompleted1" title="Head Name" placeholder="Select Sub Head Name" class=" px-5 py-3 w-auto border border-gray-400 rounded-md"
+                                            onkeyup="onkeyUp1(event)" />
+                                            <div>
+                                                <select  id="supplier_id" name="supplier_id" size="20"  class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-auto h-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                                                </select>
+                                            </div>
+                                        </div>
+                                        {{-- </div> --}}
+
+
+                                        {{-- <x-input-text title="Customer Name" name="supname" id="supname" class="col-span-2" value="{{ $banktransaction->supname }}" disabled  /> --}}
+                                <x-input-date title="Received Date" name="documentdate" style="text-align:right" class="col-span-2" value="{{ $banktransaction->documentdate->format('Y-m-d') }}"  />
                                     <x-input-text title="Received Seq.#" name="transno" id="transno" value="{{ $banktransaction->transno }}"  class="col-span-2"    />
                                     <x-input-numeric title="" name="receivedid" id="receivedid" value="{{ $banktransaction->id }}" hidden   />
-                                    <x-input-numeric title="" name="subhead_id" id="subhead_id" hidden value="{{ $banktransaction->subhead_id }}"  />
+                                    <x-input-numeric title="" name="subhead_id" id="subhead_id"  value="{{ $banktransaction->subhead_id }}" hidden  />
                                     </div>
 
                         <div class="grid grid-cols-12 gap-2 py-2 ">
@@ -63,6 +88,7 @@
 
                             <x-input-text title="Cheque No" name="cheque_no" id="cheque_no" req required class="col-span-2" value="{{ $banktransaction->cheque_no }}"  />
                             <x-input-date title="Cheque Date" id="cheque_date" name="cheque_date" req required class="col-span-2" value="{{ $banktransaction->cheque_date->format('Y-m-d') }}" />
+                            <x-input-text title="Cheque Amount" name="chqamount" id="chqamount" disabled  class="col-span-2"    />
                             <x-input-text title="Payment to" name="pmntto" id="pmntto"  class="col-span-2" value="{{ $banktransaction->pmntto }}"  />
 
 
@@ -102,6 +128,18 @@
 
                             </div>
 
+                            <div>
+
+                                <x-input-text  title="" name="hdid" id="hdid" value="{{ $banktransaction->head_id }}" hidden       />
+                                {{-- <x-input-text  title="subhead" name="subhdid" id="subhdid" value="{{ $banktransaction->subhead_id }}"        /> --}}
+                                <x-input-text  title="" name="shname" id="shname" value="{{ $banktransaction->supname }}" hidden      />
+                                <x-input-text title="" name="chqno" id="chqno" class="col-span-2"  hidden value="{{ $banktransaction->cheque_no }}"  hidden   />
+                                <x-input-text  title="" name="lastsubhdid" id="lastsubhdid" value="{{ $banktransaction->subhead_id }}" hidden       />
+
+
+                            </div>
+
+
                         </fieldset>
 
                         {{-- Contract Details --}}
@@ -113,8 +151,6 @@
                                 id="submitbutton"  onclick="validateForm()"
                                 class="bg-green-500 text-white rounded hover:bg-green-700 inline-flex items-center px-4 py-1 w-28 text-center">
                                 <i class="fa fa-save fa-fw"></i>
-
-
                                 Submit
                             </x-button>
                             <x-input-text title="Password For Edition Permission" name="edtpw" id="edtpw" type="password"     />
@@ -145,14 +181,24 @@ let submitButton = document.getElementById("submitbutton")
 document.addEventListener('DOMContentLoaded',()=>{
         //  submitButton.disabled = true
         document.getElementById("submitbutton").disabled = true;
+        filldrplst();
+        // hidedropdown();
+        hidedropdown1();
 
-        dbpwrd.value=575;
+
+
      })
 
 
 
 let table;
 let searchValue = "";
+
+
+const headlist = @json(route('banktransactionr.headlist'));
+        const head = document.getElementById('head_id')
+        const value = head.value
+        var getDetails = @json(route('banktransactionr.quotationsdtl'));
 
 var tamount=0;
 function tnetamount()
@@ -285,6 +331,87 @@ function pushDynamicData(data)
     //  dyanmicTable.setData()
      dynamicTable.setData(dynamicTableData);
 }
+
+supplier_id.addEventListener("click", () => {
+
+let supplier_id= document.getElementById("supplier_id");
+let input1= document.getElementById("autocompleted1");
+let subhead_id= document.getElementById("subhead_id");
+// let hdid= document.getElementById("hdid");
+let shname= document.getElementById("shname");
+let cheque_date= document.getElementById("cheque_date");
+let cheque_no= document.getElementById("cheque_no");
+let chqno= document.getElementById("chqno");
+let chqamount= document.getElementById("chqamount");
+
+dynamicTable.setData();
+subhead_id.value=$mychqno[supplier_id.options[supplier_id.selectedIndex].value][0].shid;
+shname.value=$mychqno[supplier_id.options[supplier_id.selectedIndex].value][0].subhdname;
+// hdid.value=$mychqno[supplier_id.options[supplier_id.selectedIndex].value][0].mnhdid;
+cheque_no.value=$mychqno[supplier_id.options[supplier_id.selectedIndex].value][0].chqno;
+chqno.value=$mychqno[supplier_id.options[supplier_id.selectedIndex].value][0].chqno;
+cheque_date.value=$mychqno[supplier_id.options[supplier_id.selectedIndex].value][0].chqdt;
+chqamount.value=$mychqno[supplier_id.options[supplier_id.selectedIndex].value][0].mychqamount;
+input1.value=supplier_id.options[supplier_id.selectedIndex].text;
+hidedropdown1();
+detailsUrl = `${getDetails}/?id=${subhead_id.value}`
+    fetchDataFromServer(detailsUrl)
+    adopted = true
+
+});
+
+async function fetchDataFromServer(url)
+        {
+            var data =  await fetch(url,{
+                method:"GET",
+                headers: { 'Accept':'application/json','Content-type':'application/json'},
+                })
+                .then((response) => response.json()) //Transform data to json
+                .then(function(response){
+                    // console.log(response);
+                    return response;
+                })
+                .catch(function(error){
+                    console.log("Error : " + error);
+            })
+            //  Stremaline Data for Tabulator
+            for (let index = 0; index < data.length; index++) {
+
+                const obj = data[index];
+                const mat = obj['material']
+                var vpcs = obj.totpcs
+                // console.log(vpcs);
+                // var vwinkg = ((obj.gdswt / vpcs ) * 1000).toFixed(3)
+                var vwinkg = ((obj.gdswt / vpcs ) ).toFixed(3)
+                dynamicTable.addData([
+                    {
+
+
+                        pono :        obj.pono,
+                        invoice_id :  obj.invoice_id,
+                        billno :      obj.billno,
+                        saldate :     obj.saldate,
+                        saldated :     obj.saldated,
+                        dcno :        obj.dcno,
+                        dcamount:     obj.dcamount,
+                        staxper:      obj.staxper,
+                        staxamount:   obj.staxamount,
+                        totrcvble:    obj.totrcvble,
+                        totrcvd :     obj.totrcvd,
+                        cartage :     obj.cartage,
+                        invoice_bal:  obj.invoice_bal,
+                        saleretamount:obj.saleretamount,
+
+                    }
+                ])
+            }
+        }
+
+
+
+
+
+
 
 var updateValues = (cell) => {
         var data = cell.getData();
@@ -511,12 +638,12 @@ function validateForm()
                 bank_id.focus();
                 return;
             }
-        // if(saldate.value === "")
-        // {
-        //     showSnackbar("Please select From Invoice Date");
-        //     saldate.focus();
-        //     return;
-        // }
+         if(subhead_id.value == "" || subhead_id.value==0 )
+         {
+             showSnackbar("Please select Subhead");
+             autocompleted1.focus();
+             return;
+         }
         // if(poseqno.value == 0)
         // {
         //     showSnackbar("Please add poseqno");
@@ -575,7 +702,7 @@ function validateForm()
     var data = { 'banktransactionr' : dynamicTableData,'subhead_id':subhead_id.value,'transno':transno.value,'bank_id':bank_id.value,'documentdate':documentdate.value,
             'cheque_no':cheque_no.value,'cheque_date':cheque_date.value,'head_id':head_id.value ,'description': description.value,'transno':transno.value
         ,'amount_fc':amount_fc.value,'amount_pkr':amount_pkr.value,'conversion_rate':conversion_rate.value,'advtxt':advtxt.value,
-        'supname':supname.value,'receivedid':receivedid.value,'supinvid':supinvid.value,'pmntto':pmntto.value};
+        'shname':shname.value,'receivedid':receivedid.value,'supinvid':supinvid.value,'pmntto':pmntto.value,'hdid':hdid.value,'lastsubhdid':lastsubhdid.value};
 
     fetch(@json(route('banktransactionr.update',$banktransaction)),{
         credentials: 'same-origin', // 'include', default: 'omit'
@@ -606,14 +733,10 @@ function EnableDisableTextBox(per) {
         var amount_fc = document.getElementById("amount_fc");
         amount_fc.disabled = per.checked ? true : false;
         amount_fc.style.color ="black";
-        // amount_fc.value =0;
-
 
         var conversion_rate = document.getElementById("conversion_rate");
         conversion_rate.disabled = per.checked ? true : false;
         conversion_rate.style.color ="black";
-        // amount_pkr.value =0;
-        // conversion_rate.value =0;
 
     }
     function enbldspl(invid) {
@@ -625,32 +748,12 @@ function EnableDisableTextBox(per) {
     }
 
 
-
-
-
-
-    // }
-
-//     amount_fc.onblur=function(){
-//     amount_pkr.value=(amount_fc.value * conversion_rate.value).toFixed(0);
-//     // bankntotal.value= ( Number(100)-Number(discntamt.value))+Number(exataxoffie.value) +Number(otherchrgs.value)  ;
-//    }
-
-//    conversion_rate.onblur=function(){
-//     amount_pkr.value=(amount_fc.value * conversion_rate.value).toFixed(0);
-//     // bankntotal.value= ( Number(100)-Number(discntamt.value))+Number(exataxoffie.value) +Number(otherchrgs.value)  ;
-//    }
-
-
 function chngpkr()
    {
 
     amount_pkr.value=(amount_fc.value * conversion_rate.value).toFixed(0);
 
    }
-
-
-
 
    edtpw.onblur=function(){
     if(edtpw.value == dbpwrd2.value )
@@ -663,7 +766,117 @@ function chngpkr()
     }
 
 
+// ********* search list for suppliers
 
+const addSelectElement = (select,id,value) => {
+        var option = document.createElement('option')
+        option.value = id
+        option.text  = value
+        select.appendChild(option)
+    }
+
+list=@json($resultArray1);
+// const contries1 = myarray1;
+function onkeyUp1(e)
+{
+    let keyword= e.target.value;
+    var supplier_id = document.getElementById("supplier_id");
+    supplier_id.classList.remove("hidden");
+
+    let filteredContries=list.filter((c)=>c.custname.toLowerCase().includes(keyword.toLowerCase()));
+    // console.log($mychqno);
+    renderOptions1(filteredContries);
+
+}
+
+
+var mychqno=[] ;
+function renderOptions1(sup){
+
+    let dropdownEl=document.getElementById("supplier_id");
+
+
+                 $mychqno=[];
+                //  $mnhdid=[];
+                dropdownEl.length = 0
+                // a=0;
+                sup.forEach( e =>  {
+                    addSelectElement(dropdownEl,e.id,e.custname )
+                    // a=a+1;
+                    // $shid =e.id;
+                    // $mnhdid =e.head_id;
+                    // $mychqdt =e.cheque_date;
+                     $mychqno[e.id]=[ { chqno:e.cheque_no,chqdt:e.cheque_date,mychqamount:e.received,shid:e.subheadid,mnhdid:e.head_id,subhdname:e.dspcustname }  ];
+
+                    });
+
+
+}
+
+document.addEventListener("click" , () => {
+    // hidedropdown();
+    hidedropdown1();
+});
+
+
+function hidedropdown1()
+{
+    var supplier_id = document.getElementById("supplier_id");
+    supplier_id.classList.add("hidden");
+}
+
+
+
+
+
+
+supplier_id.addEventListener("keyup", function(event) {
+if (event.keyCode === 13) {
+// event.preventDefault();
+supplier_id.click();
+
+}
+});
+
+
+head_id.addEventListener("change", () => {
+    filldrplst();
+    autocompleted1.value="";
+    subhead_id.value="";
+    shname.value=''
+
+
+});
+
+function filldrplst()
+{
+    const value = head.value
+        // autocompleted1.value='';
+        supplier_id.options.length = 0 // Reset List
+        fetch(headlist + `?head_id=${value} `,{
+                    method:"GET",
+                    headers: { 'Accept':'application/json','Content-type':'application/json'},
+                    })
+                    .then(response => response.json())
+                    .then( data => {
+                        if(data.length > 0)
+                        {
+
+                            let a = 0;
+
+                            $mychqno=[];
+                            list=data;
+                            list.forEach(e => {
+                                a += 1;
+                                addSelectElement(supplier_id,e.id,e.custname )
+                                $mychqno[e.id]=[ { chqno:e.cheque_no,chqdt:e.cheque_date,mychqamount:e.received,shid:e.subheadid,mnhdid:e.head_id,subhdname:e.dspcustname }  ];
+                            });
+                        }else{
+                        }
+                    })
+                    .catch(error => console.error(error))
+
+}
 
 
 

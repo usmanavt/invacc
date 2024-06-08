@@ -414,6 +414,11 @@ class ReceiveController  extends Controller
     public function edit($id)
     {
 
+
+        $resultArray1 = DB::select('call procreceivedmaster1st');
+        $data1=compact('resultArray1');
+
+
         $passwrd = DB::table('tblpwrd')->select('pwrdtxt')->max('pwrdtxt');
         $stockdtl = DB::select('call prcsaleretbal()');
         $cd = DB::table('vsvoucherrcvedit')
@@ -431,7 +436,8 @@ class ReceiveController  extends Controller
         return view('received.edit',compact('passwrd'))
         ->with('customers',Customer::select('id','title')->get())
         ->with('banktransaction',BankTransaction::findOrFail($id))
-        ->with($data)
+        ->with('heads',Head::where('status',1)->where('forcr',1)->get())
+        ->with($data)->with($data1)
         ->with('banks',Bank::select('id','title')->get());
 
         // return view('contracts.edit')->with('suppliers',Supplier::select('id','title')->get())->with('contract',$contract)->with('cd',ContractDetails::where('contract_id',$contract->id)->get());
@@ -469,9 +475,92 @@ class ReceiveController  extends Controller
         DB::beginTransaction();
         try {
 
+            //  FOR SUBHEAD CHANGE CODING
+
+            if($request->lastsubhdid!= $request->subhead_id || $request->head_id!= $request->hdid)
+            {
+
+                // dd('dfadfafdf');
+                if($request->hdid==33)
+                {
+
+                    DB::update(DB::raw("  update receive_details SET totrcvd=0 WHERE receivedid=$request->receivedid "));
+                    DB::update(DB::raw("
+                    UPDATE sale_invoices c
+                    INNER JOIN (
+
+                        SELECT customer_id,invoiceid,SUM(invsbal) AS invoicebal FROM
+                        (
+
+                            SELECT customer_id ,id AS invoiceid,totrcvbamount AS invsbal FROM sale_invoices
+                            WHERE customer_id=$request->lastsubhdid  AND id in(  SELECT invoice_id FROM receive_details WHERE receivedid=$request->receivedid )
+                            UNION ALL
+                             SELECT subhead_id, invoice_id,b.totrcvd*-1 AS invsbal
+                             FROM bank_transactions AS a INNER join receive_details AS b ON a.id=b.receivedid and a.subhead_id =$request->lastsubhdid
+                             AND invoice_id in(  SELECT invoice_id FROM receive_details WHERE receivedid=$request->receivedid )
+                             UNION all
+                             SELECT a.customer_id,invoice_id,a.totrcvbamount*-1 AS invsbal
+                             FROM sale_returns AS a INNER JOIN sale_invoices AS b  ON a.invoice_id=b.id  WHERE a.customer_id =$request->lastsubhdid
+                             AND invoice_id in(SELECT invoice_id FROM receive_details WHERE receivedid=$request->receivedid)
+                             UNION all
+                             SELECT a.subhead_id, b.id AS  invoice_id,a.amount_fc AS invsbal
+                             FROM bank_transactions AS a INNER join sale_invoices AS b ON a.cusinvid=b.dcno AND a.subhead_id =$request->lastsubhdid
+                             AND b.id  in(SELECT invoice_id FROM receive_details WHERE receivedid=$request->receivedid)
+
+                       ) AS w GROUP BY customer_id,invoiceid
+                    ) x ON c.id = x.invoiceid
+                    SET c.paymentbal = x.invoicebal
+                    where  c.id in(select invoice_id from receive_details where receivedid=$request->receivedid  ) "));
+                }
+
+                if($request->hdid==32  )
+                {
+
+                    DB::update(DB::raw("  update bank_transactions SET amount_fc=0 WHERE id=$request->receivedid "));
+
+                    DB::update(DB::raw("
+                    UPDATE commercial_invoices c
+                    INNER JOIN (
+
+                        SELECT suppid,invsid,SUM(invoiceamount) AS invoicebal FROM
+                        (
+                        SELECT b.id AS suppid,a.id AS invsid,case WHEN b.source_id=2 then a.tval else  total end AS invoiceamount FROM commercial_invoices AS a
+                        INNER JOIN suppliers AS b ON a.supplier_id=b.id  AND b.id=$request->lastsubhdid AND a.invoiceno='$request->supinvid'
+                        UNION all
+                         SELECT a.subhead_id,b.invoice_id,b.payedusd*-1 AS payment
+                        FROM bank_transactions AS a INNER join payment_details AS b ON a.id=b.paymentid and a.subhead_id =$request->lastsubhdid
+                        AND b.invoice_id in(  SELECT invoice_id FROM payment_details WHERE invoice_no='$request->supinvid' )
+                       UNION ALL
+                        SELECT supplier_id,commercial_invoice_id,prtamount*-1 AS retqty FROM purchase_returns WHERE supplier_id =$request->lastsubhdid
+                        AND commercial_invoice_id in(  SELECT id FROM commercial_invoices WHERE invoiceno='$request->supinvid' )
+                       UNION ALL
+                        SELECT a.subhead_id, b.id AS  invoice_id,a.amount_fc AS Receivedqty
+                        FROM bank_transactions AS a INNER join commercial_invoices AS b ON a.supinvid=b.invoiceno AND a.subhead_id =$request->lastsubhdid
+                        AND b.invoiceno='$request->supinvid'
+                       ) AS w GROUP BY suppid,invsid
+                    ) x ON c.id = x.invsid
+                    SET c.invoicebal = x.invoicebal
+                    where  c.invoiceno='$request->supinvid' "));
+
+                }
+
+
+                    // DB::delete(DB::raw(" delete from bank_transactions where id=$request->receivedid   "));
+                    DB::delete(DB::raw(" delete FROM receive_details WHERE receivedid =$request->receivedid   "));
+
+            }
+            // #######################
+
+
+
+
+
+
+
+
+
             // dd($request->supinvid);
             $ci = BankTransaction::findOrFail($request->receivedid);
-
 
             $ci->bank_id = $request->bank_id;
             $ci->head_id = $request->head_id;
@@ -508,7 +597,7 @@ class ReceiveController  extends Controller
             $ci->description = $request->description;
             $ci->transno = $request->transno;
             $ci->advance = $request->advtxt;
-            $ci->supname = $request->supname;
+            $ci->supname = $request->shname;
             $ci->supinvid = $request->supinvid;
 
             $ci->save();
@@ -797,20 +886,7 @@ class ReceiveController  extends Controller
         //  $mpdf->Output($filename,'I');
         return response($mpdf->Output($filename,'I'),200)->header('Content-Type','application/pdf');
 
-
-
-
-
-
     }
-
-
-
-
-
-
-
-
 
 
     public function deleteBankRequest(Request $request)
@@ -833,9 +909,6 @@ class ReceiveController  extends Controller
             {
 
                 DB::update(DB::raw("  update receive_details SET totrcvd=0 WHERE receivedid=$request->receivedid "));
-
-
-
                 DB::update(DB::raw("
                 UPDATE sale_invoices c
                 INNER JOIN (

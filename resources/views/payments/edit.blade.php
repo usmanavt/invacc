@@ -25,7 +25,7 @@
                             <legend>Invoice Level Entries</legend>
                             <div class="grid grid-cols-12 gap-2 py-2 items-center">
 
-                                {{-- <x-input-text title="Supplier Name" name="supname" id="supname" class="col-span-2" value="{{ $supplier->title }}" disabled  /> --}}
+                                {{-- <x-input-text title="shname" name="shname" id="shname" class="col-span-2" value="{{ $supplier->title }}" disabled  /> --}}
 
                                     {{-- <label for="supplier_id">Supplier</label>
                                     <select  autocomplete="on" class="col-span-2" name="supplier_id" id="supplier_id" required>
@@ -36,7 +36,29 @@
                                             <option value="{{$supplier->id}}"> {{$supplier->title}} </option>
                                         @endforeach
                                     </select> --}}
-                                <x-input-text title="Supplier Name" name="supname" id="supname" class="col-span-2" value="{{ $banktransaction->supname }}" disabled  />
+
+                                    <label for="head_id">Main Head<x-req /></label>
+                                    <select autocomplete="on" class="col-span-2" name="head_id" id="head_id" >
+                                        {{-- <option value="" selected>--Payment Head</option> --}}
+                                        @foreach($heads as $head)
+                                        @if ($head->id == $banktransaction->head_id)
+                                            <option value="{{$head->id}}" selected> {{$head->title}} </option>
+                                        @endif
+                                        <option value="{{$head->id}}"> {{$head->title}} </option>
+                                        @endforeach
+                                    </select>
+
+                                    <div class="w-96 relative grid grid-cols-4 gap-1 px-10 py-5  "   onclick="event.stopImmediatePropagation();" >
+                                        {{-- <label for="autocompleted1">Sub Head<x-req /></label> --}}
+                                        <input id="autocompleted1" title="Head Name" placeholder="Select Sub Head Name" value="{{ $banktransaction->supname }}" class=" px-5 py-3 w-auto border border-gray-400 rounded-md"
+                                        onkeyup="onkeyUp1(event)" />
+                                        <div>
+                                            <select  id="supplier_id" name="supplier_id" size="20"  class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-auto h-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                                            </select>
+                                        </div>
+                                    </div>
+
+                                <x-input-text title="shname" name="shname" id="shname" class="col-span-2" value="{{ $banktransaction->supname }}" hidden disabled  />
                                 <x-input-date title="Payment Date" name="documentdate" class="col-span-2" value="{{ $banktransaction->documentdate->format('Y-m-d') }}"  />
 
                                     {{-- <label for="head_id">Payment To<x-req /></label>
@@ -48,10 +70,14 @@
                                     </select> --}}
                                     <x-input-text title="Payment Seq.#" name="transno" id="transno" value="{{ $banktransaction->transno }}"  class="col-span-2"    />
                                     <x-input-numeric title="" name="paymentid" id="paymentid" value="{{ $banktransaction->id }}" hidden   />
-                                    <x-input-numeric title="" name="supplier_id" id="supplier_id" value="{{ $banktransaction->subhead_id }}" hidden  />
+                                    <x-input-numeric title="subhdid" name="subhdid" id="subhdid" value="{{ $banktransaction->subhead_id }}" hidden    />
+                                     <x-input-numeric title="" name="lastsupplier_id" id="lastsupplier_id" value="{{ $banktransaction->subhead_id }}" hidden   />
+                                        <x-input-numeric title="" name="hdid" id="hdid" value="{{ $banktransaction->head_id }}" hidden   />
+
+
                                     </div>
 
-                        <div class="grid grid-cols-12 gap-2 py-2 ">
+                            <div class="grid grid-cols-12 gap-2 py-2 ">
 
                             {{-- <label for="bank_id">Payment From<x-req /></label>
                             <select autocomplete="on"  name="bank_id" id="bank_id" class="col-span-2" >
@@ -141,8 +167,17 @@
 let table;
 let searchValue = "";
 
+var getDetails = @json(route('banktransaction.quotationsdtl'));
+
+const headlistp = @json(route('banktransaction.headlistp1'));
+const head = document.getElementById('head_id')
+const value = head.value
+
 document.addEventListener('DOMContentLoaded',()=>{
         document.getElementById("submitbutton").disabled = true;
+        filldrplst();
+        // hidedropdown();
+        hidedropdown1();
      })
 
 
@@ -264,16 +299,37 @@ function pushDynamicData(data)
      dynamicTable.setData(dynamicTableData);
 }
 
+var tamountpkr=0;
+var tamountusd=0;
+    function tnetamount()
+        {
+
+            // console.log(tamount)
+            amount_fc.value=  tamountusd
+            amount_pkr.value=  tamountpkr
+        }
+
+
+
+
 var updateValues = (cell) => {
         var data = cell.getData();
         var sum = (Number(data.payedusd) * Number(data.convrate))
         var invbal = (Number(data.invoice_amount) - Number(data.payedusd) - Number(data.purretamount))
+
+
+        var amtinusd = Number(data.payedusd)
+
         // var invbal = (Number(data.invoice_amount) )
         var row = cell.getRow();
         row.update({
              "payedrup": sum,
              "invoice_bal":invbal,
-             totalVal: sum
+             totalVal: sum,
+
+             totalVal1:sum,
+             totalVal2:amtinusd,
+
 
         });
     }
@@ -289,7 +345,27 @@ var updateValues = (cell) => {
 
     }
 
+    var totalVal1 = function(values, data, calcParams){
+        var calc1 = 0;
+        values.forEach(function(value){
+            calc1 += Number(value) ;
+        });
+        tamountpkr = calc1;
+        tnetamount();
+        return calc1;
 
+    }
+
+    var totalVal2 = function(values, data, calcParams){
+        var calc = 0;
+        values.forEach(function(value){
+            calc += Number(value) ;
+        });
+        tamountusd = calc;
+        tnetamount();
+        return calc;
+
+    }
 
 
 //  Dynamic Table [User data]
@@ -401,7 +477,8 @@ dynamicTable = new Tabulator("#dynamicTable", {
                         // {
                         //     return (cell.getData().invoice_amount * cell.getData().convrate).toFixed(0)
                         // },
-                        bottomCalc:totalVal  },
+                        bottomCalc:totalVal2  },
+                        // totalVal
 
                         {   title:"Conversion Rate",
                             headerHozAlign :'right',
@@ -430,7 +507,8 @@ dynamicTable = new Tabulator("#dynamicTable", {
                         {
                             return (cell.getData().payedusd * cell.getData().convrate).toFixed(0)
                         },
-                        bottomCalc:totalVal  },
+                        bottomCalc:totalVal1  },
+                        // bottomCalc:totalVal
                     ]},
 
                     {title:"Invoice Balance.",
@@ -482,8 +560,9 @@ function validateForm()
 {
     var sid = document.getElementById("bank_id");
             var bank_id = sid.options[sid.selectedIndex];
-            var transno = document.getElementById("transno")
-            // var per= document.getElementById("per");
+            var transno = document.getElementById("transno");
+            var subhdid = document.getElementById("subhdid");
+            var hdid = document.getElementById("hdid");
 
             if(bank_id.value <0)
             {
@@ -491,13 +570,22 @@ function validateForm()
                 bank_id.focus();
                 return;
             }
-        // if(saldate.value === "")
-        // {
-        //     showSnackbar("Please select From Invoice Date");
-        //     saldate.focus();
-        //     return;
-        // }
-        // if(poseqno.value == 0)
+         if(subhdid.value == "" || subhdid.value == 0 )
+         {
+             showSnackbar("Please select Subhead");
+             autocompleted1.focus();
+             return;
+         }
+         if(hdid.value == "" || hdid.value == 0 )
+         {
+             showSnackbar("Please select MainHead");
+             head_id.focus();
+             return;
+         }
+
+
+
+         // if(poseqno.value == 0)
         // {
         //     showSnackbar("Please add poseqno");
         //     poseqno.focus();
@@ -554,8 +642,8 @@ function validateForm()
 
     var data = { 'banktransaction' : dynamicTableData,'supplier_id':supplier_id.value,'transno':transno.value,'bank_id':bank_id.value,'documentdate':documentdate.value,
             'cheque_no':cheque_no.value,'cheque_date':cheque_date.value,'head_id':head_id.value ,'description': description.value,'transno':transno.value
-        ,'amount_fc':amount_fc.value,'amount_pkr':amount_pkr.value,'conversion_rate':conversion_rate.value,'advtxt':advtxt.value,
-        'paymentid':paymentid.value,'supname':supname.value,'impgdno':impgdno.value,'cusinvid':cusinvid.value,'pmntto':pmntto.value};
+        ,'amount_fc':amount_fc.value,'amount_pkr':amount_pkr.value,'conversion_rate':conversion_rate.value,'advtxt':advtxt.value,'hdid':hdid.value,'subhdid':subhdid.value,
+        'paymentid':paymentid.value,'shname':shname.value,'impgdno':impgdno.value,'cusinvid':cusinvid.value,'pmntto':pmntto.value,'lastsupplier_id':lastsupplier_id.value};
 
 
 
@@ -658,6 +746,22 @@ function chngpkr()
 
 });
 
+
+
+// supplier_id.addEventListener("change", () => {
+//     var supname = document.getElementById("supname");
+//     supname.value=supplier_id.options[supplier_id.selectedIndex].text;
+
+//     // if(supplier_id.value != lastsupplier_id.value)
+//     // { alert('subhead changed') }
+
+// });
+
+
+
+
+
+
 function enbldspl(invid) {
         var supinvid = document.getElementById("cusinvid");
         supinvid.disabled = invid.checked ? false : true;
@@ -676,7 +780,189 @@ function enbldspl(invid) {
 
     }
 
+    supplier_id.addEventListener("click", () => {
 
+        let supplier_id= document.getElementById("supplier_id");
+        let input1= document.getElementById("autocompleted1");
+        let subhdid= document.getElementById("subhdid");
+        let hdid= document.getElementById("hdid");
+        let shname= document.getElementById("shname");
+        // dynamicTable.setData();
+        input1.value=supplier_id.options[supplier_id.selectedIndex].text;
+        subhdid.value=supplier_id.options[supplier_id.selectedIndex].value;
+        // hdid.value =$itmdata[supplier_id.options[supplier_id.selectedIndex].value][0].mnhdid;
+        shname.value =$itmdata[supplier_id.options[supplier_id.selectedIndex].value][0].shdname;
+        dynamicTable.setData();
+        detailsUrl = `${getDetails}/?id=${supplier_id.options[supplier_id.selectedIndex].value}`
+        fetchDataFromServer(detailsUrl)
+        adopted = true
+
+        hidedropdown1();
+});
+
+async function fetchDataFromServer(url)
+        {
+            var data =  await fetch(url,{
+                method:"GET",
+                headers: { 'Accept':'application/json','Content-type':'application/json'},
+                })
+                .then((response) => response.json()) //Transform data to json
+                .then(function(response){
+                    // console.log(response);
+                    return response;
+                })
+                .catch(function(error){
+                    console.log("Error : " + error);
+            })
+            //  Stremaline Data for Tabulator
+            for (let index = 0; index < data.length; index++) {
+
+                const obj = data[index];
+                const mat = obj['material']
+                var vpcs = obj.totpcs
+                // console.log(vpcs);
+                // var vwinkg = ((obj.gdswt / vpcs ) * 1000).toFixed(3)
+                var vwinkg = ((obj.gdswt / vpcs ) ).toFixed(3)
+                dynamicTable.addData([
+                    {
+                        invoice_id :        obj.invoice_id,
+                        invoice_date :      obj.invoice_date,
+                        invoice_dated :      obj.invoice_dated,
+                        invoice_no :        obj.invoice_no,
+                        invoice_amount :     obj.invoice_amount,
+                        curncy:             obj.curncy,
+                        convrate:           obj.convrate,
+                        payedusd:           obj.payedusd,
+                        payedrup:           obj.payedrup,
+                        invoice_bal:        obj.invoice_bal,
+                        purretamount:       obj.purretamount,
+
+                    }
+                ])
+            }
+        }
+
+
+
+
+
+
+
+const addSelectElement = (select,id,value) => {
+        var option = document.createElement('option')
+        option.value = id
+        option.text  = value
+        select.appendChild(option)
+    }
+list=@json($resultArray1);
+// const contries1 = myarray1;
+function onkeyUp1(e)
+{
+    let keyword= e.target.value;
+    var supplier_id = document.getElementById("supplier_id");
+    supplier_id.classList.remove("hidden");
+
+    let filteredContries=list.filter((c)=>c.supname.toLowerCase().includes(keyword.toLowerCase()));
+    // console.log(filteredContries);
+    renderOptions1(filteredContries);
+    // e.id + '      '+ e.srchb+' '+e.dimension
+}
+
+function renderOptions1(sup){
+
+    let dropdownEl=document.getElementById("supplier_id");
+
+
+                // $shid= [];
+                // $mnhdid= [];
+                // $shdname= [];
+                $itmdata=[];
+                dropdownEl.length = 0
+                sup.forEach(e => {
+                    addSelectElement(dropdownEl,e.id,e.supname )
+                    // $shid =e.id;
+                    // $mnhdid =e.head_id;
+                    // $shdname =e.osuppname;
+                    $itmdata[e.id]=[ { shid:e.id,mnhdid:e.head_id,shdname:e.osuppname }  ];
+                });
+
+
+}
+
+document.addEventListener("click" , () => {
+    // hidedropdown();
+    hidedropdown1();
+});
+
+
+function hidedropdown1()
+{
+    var supplier_id = document.getElementById("supplier_id");
+    supplier_id.classList.add("hidden");
+}
+
+
+
+
+supplier_id.addEventListener("keyup", function(event) {
+if (event.keyCode === 13) {
+// event.preventDefault();
+supplier_id.click();
+
+}
+});
+
+// document.onkeydown=function(e){
+//     // if(e.keyCode == 17) isCtrl=true;
+//     // if(e.keyCode == 83 && isCtrl == true) {
+//         if(e.ctrlKey && e.which === 83){
+//         //run code for CTRL+S -- ie, save!
+//         // alert("dfadfasd");
+//         submitbutton.click();
+//         return false;
+//     }
+// }
+
+
+function filldrplst()
+{
+
+    const value = head.value
+        // autocompleted1.value='';
+        supplier_id.options.length = 0 // Reset List
+        fetch(headlistp + `?head_id=${value} `,{
+                    method:"GET",
+                    headers: { 'Accept':'application/json','Content-type':'application/json'},
+                    })
+                    .then(response => response.json())
+                    .then( data => {
+                        if(data.length > 0)
+                        {
+
+                            let a = 0;
+
+                            $itmdata= [];
+                            list=data;
+                            list.forEach(e => {
+                                a += 1;
+                                addSelectElement(supplier_id,e.id,a + '         ' + e.supname )
+                                $itmdata[e.id]=[ { shid:e.id,mnhdid:e.head_id,shdname:e.osuppname }  ];
+                            });
+                        }else{
+                        }
+                    })
+                    .catch(error => console.error(error))
+                // break;
+
+}
+
+
+head_id.addEventListener("change", () => {
+    filldrplst();
+    autocompleted1.value="";
+    subhdid.value="";
+
+});
 
 
 </script>

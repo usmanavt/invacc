@@ -985,10 +985,10 @@ function renderOptions(xyz){
 
                 dropdownEl.length = 0
                 xyz.forEach(e => {
-                    addSelectElement(dropdownEl,e.id,e.title+' ' + e.cheque_no)
+                    addSelectElement(dropdownEl,e.id,e.title)
                 });
 }
-
+// +' ' + e.cheque_no
 document.addEventListener("click" , () => {
     hidedropdown();
 });
@@ -1056,7 +1056,7 @@ function renderOptions1(sup){
                     // $shid =e.id;
                     // $mnhdid =e.head_id;
                     // $mychqdt =e.cheque_date;
-                     $mychqno[e.id]=[ { chqno:e.cheque_no,chqdt:e.cheque_date,mychqamount:e.received,shid:e.subheadid,mnhdid:e.head_id,subhdname:e.custname }  ];
+                     $mychqno[e.id]=[ { chqno:e.cheque_no,chqdt:e.cheque_date,mychqamount:e.received,shid:e.subheadid,mnhdid:e.head_id,subhdname:e.dspcustname }  ];
 
                     });
 
@@ -1230,7 +1230,7 @@ function filldrplst()
                             list.forEach(e => {
                                 a += 1;
                                 addSelectElement(supplier_id,e.id,e.custname )
-                                $mychqno[e.id]=[ { chqno:e.cheque_no,chqdt:e.cheque_date,mychqamount:e.received,shid:e.subheadid,mnhdid:e.head_id,subhdname:e.custname }  ];
+                                $mychqno[e.id]=[ { chqno:e.cheque_no,chqdt:e.cheque_date,mychqamount:e.received,shid:e.subheadid,mnhdid:e.head_id,subhdname:e.dspcustname }  ];
                             });
                         }else{
                         }
