@@ -30,19 +30,17 @@
 
                                 <label for="autocompleted" >Bank<x-req /></label>
                                 <div class="w-96 relative"   onclick="event.stopImmediatePropagation();" >
-                                    <input id="autocompleted" placeholder="Select Bank" class=" px-5 py-3 w-full border border-gray-400 rounded-md"
+                                    <input id="autocompleted" placeholder="Select Bank" class=" px-5 py-3 w-auto border border-gray-400 rounded-md"
                                     onkeyup="onkeyUp(event)" />
                                     <div  >
-                                        <select  id="bank_id" name="bank_id" size="20"  class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-auto h-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                                        <select  id="bank_id" name="bank_id" size="20"  class=" col-span-2 bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-auto h-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
                                         </select>
                                     </div>
                                 </div>
 
 
-
-                                <label for="head_id">Main Head<x-req /></label>
-
-                                    <select  autocomplete="on" class="col-span-2" name="head_id" id="head_id" style="text-align: right"  >
+                                <label for="head_id" style="text-align:right ">Main Head<x-req /></label>
+                                    <select  autocomplete="on" class="col-span-2" name="head_id" id="head_id"  style="text-align: right"  >
                                             {{-- <option value="" selected>--Payment Head</option> --}}
                                             @foreach($heads as $head)
                                             <option value="{{$head->id}}"> {{$head->title}} </option>
@@ -51,10 +49,10 @@
 
                                 <div class="w-96 relative grid grid-cols-4 gap-1 px-10 py-5  "   onclick="event.stopImmediatePropagation();" >
                                     {{-- <label for="autocompleted1">Sub Head<x-req /></label> --}}
-                                    <input id="autocompleted1" title="Head Name" placeholder="Select Sub Head Name" class="col-span-2 px-5 py-3 w-auto border border-gray-400 rounded-md"
+                                    <input id="autocompleted1" title="Head Name" placeholder="Select Sub Head Name"  class="col-span-2 px-5 py-3 w-auto border border-gray-400 rounded-md"
                                     onkeyup="onkeyUp1(event)" />
                                     <div>
-                                        <select  id="supplier_id" name="supplier_id" size="20"  class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-auto h-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                                        <select  id="supplier_id" name="supplier_id"   class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-auto h-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
                                         </select>
                                     </div>
                                 </div>

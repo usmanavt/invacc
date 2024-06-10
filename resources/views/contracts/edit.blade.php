@@ -65,7 +65,7 @@
 
                             {{-- Contract Master - Invoice Date --}}
                             <label for="invoice_date">Contract Date</label>
-                            <input type="date" class="col-span-2" id="invoice_date" name="invoice_date" value="{{ $contract->invoice_date->format('Y-m-d') }}" required>
+                            <input type="date" class="col-span-2" id="invoice_date" style="text-align: right" name="invoice_date" value="{{ $contract->invoice_date->format('Y-m-d') }}" required>
 
                             {{-- Contract Master - Invoice Number --}}
                             <label for="number">Contract #</label>

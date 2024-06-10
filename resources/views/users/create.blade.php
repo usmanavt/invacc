@@ -1,6 +1,8 @@
 
 <x-app-layout>
 
+
+{{-- @include('layouts.auth') --}}
     <x-slot name="header">
         <h2 class="font-semibold text-xl text-gray-800 leading-tight">
             Create User

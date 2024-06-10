@@ -1,6 +1,6 @@
 
 <x-app-layout>
-
+    @extends('layouts.auth')
     <x-slot name="header">
         {{-- <h2 class="font-semibold text-xl text-gray-800 leading-tight">
             Users
@@ -22,7 +22,7 @@
 
 
     <div class="py-6">
-        @extends('layouts.auth')
+
         <div class="max-w-3xl mx-auto sm:px-2 lg:px-4">
             <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
 

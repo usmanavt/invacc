@@ -88,7 +88,7 @@
 
                             <x-input-text title="Cheque No" name="cheque_no" id="cheque_no" req required class="col-span-2" value="{{ $banktransaction->cheque_no }}"  />
                             <x-input-date title="Cheque Date" id="cheque_date" name="cheque_date" req required class="col-span-2" value="{{ $banktransaction->cheque_date->format('Y-m-d') }}" />
-                            <x-input-text title="Cheque Amount" name="chqamount" id="chqamount" disabled  class="col-span-2"    />
+                            {{-- <x-input-text title="Cheque Amount" name="chqamount" id="chqamount" disabled  class="col-span-2"    /> --}}
                             <x-input-text title="Payment to" name="pmntto" id="pmntto"  class="col-span-2" value="{{ $banktransaction->pmntto }}"  />
 
 

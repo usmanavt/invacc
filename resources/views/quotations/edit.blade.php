@@ -62,8 +62,8 @@
                             <label for="saldate">Quotation Date<x-req /></label>
                             <input type="date"  size="10" class="col-span-2" style="text-align: right"  id="saldate" name="saldate" value="{{ $quotation->saldate->format('Y-m-d') }}" required>
 
-                            <label for="valdate">Valid Date<x-req /></label>
-                            <input type="date"  size="10"  id="valdate" style="text-align: right" class="col-span-2" name="valdate" value="{{ $quotation->valdate->format('Y-m-d') }}" required>
+                            {{-- <label for="valdate">Valid Date<x-req /></label> --}}
+                            <input type="date"  size="10"  id="valdate" style="text-align: right" class="col-span-2" name="valdate" value="{{ $quotation->valdate->format('Y-m-d') }}" hidden required>
                         </div>
 
 
