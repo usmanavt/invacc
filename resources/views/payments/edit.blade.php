@@ -305,8 +305,11 @@ var tamountusd=0;
         {
 
             // console.log(tamount)
-            amount_fc.value=  tamountusd
-            amount_pkr.value=  tamountpkr
+          if(tamountusd!=0 || tamountpkr!=0 )
+            {
+                amount_fc.value=  tamountusd
+                amount_pkr.value=  tamountpkr
+            }
         }
 
 

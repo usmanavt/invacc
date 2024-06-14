@@ -2,13 +2,13 @@
 <x-app-layout>
 
 
-{{-- @include('layouts.auth') --}}
+
     <x-slot name="header">
         <h2 class="font-semibold text-xl text-gray-800 leading-tight">
             Create User
         </h2>
     </x-slot>
-
+    {{-- @extends('layouts.auth') --}}
     <div class="py-6">
 
         <div class="max-w-2xl mx-auto sm:px-2 lg:px-4">

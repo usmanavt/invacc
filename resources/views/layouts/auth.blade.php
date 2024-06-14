@@ -93,12 +93,6 @@
 
 
 
-
-
-
-
-
-
     <div class="wrapper">
 
 
@@ -113,7 +107,7 @@
                 <img src= "{{asset('assets/auth/images/logo.png')}}"    alt="Mono">
 
 
-                <span class="brand-name">MONO</span>
+                <span class="brand-name">N & R CO.</span>
               </a>
             </div>
             <!-- begin sidebar scrollbar -->

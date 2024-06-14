@@ -1,14 +1,16 @@
 
+{{-- @section('layouts.auth') --}}
 <x-app-layout>
-    @extends('layouts.auth')
+
+
     <x-slot name="header">
-        {{-- <h2 class="font-semibold text-xl text-gray-800 leading-tight">
+        <h2 class="font-semibold text-xl text-gray-800 leading-tight">
             Users
             <a class="text-sm text-green-500 hover:text-gray-900" href="{{route('users.create')}}">
                 <i class="fa fa-file fa-fw"></i>
                 Add New Record
             </a>
-        </h2> --}}
+        </h2>
 
     </x-slot>
 
@@ -18,10 +20,7 @@
     @endpush
 
 
-
-
-
-    <div class="py-6">
+    <div class="py-6 px-1">
 
         <div class="max-w-3xl mx-auto sm:px-2 lg:px-4">
             <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">

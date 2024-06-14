@@ -1,3 +1,5 @@
+
+{{-- @include('layouts.dbheader') --}}
 <x-app-layout>
 
     @push('styles')

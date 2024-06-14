@@ -1,6 +1,6 @@
-{{-- @include('layouts.auth') --}}
-<!DOCTYPE html>
 
+<!DOCTYPE html>
+@extends('layouts.auth')
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
 
 <head>
@@ -21,7 +21,6 @@
         <style>
             /* Learn More : https://www.w3schools.com/howto/howto_js_snackbar.asp */
             /* The snackbar - position it at the bottom and in the middle of the screen */
-
             #snackbar {
                 visibility: hidden; /* Hidden by default. Visible on click */
                 min-width: 250px; /* Set a default minimum width */
@@ -74,7 +73,7 @@
     <body class="font-sans antialiased">
         <div class="min-h-screen bg-gray-100">
 
-            @include('layouts.navigation')
+            {{-- @include('layouts.navigation') --}}
 
 
             {{-- @include('layouts.auth') --}}
