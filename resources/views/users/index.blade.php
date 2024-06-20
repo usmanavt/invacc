@@ -1,7 +1,6 @@
 
-{{-- @section('layouts.auth') --}}
-<x-app-layout>
 
+<x-app-layout>
 
     <x-slot name="header">
         <h2 class="font-semibold text-xl text-gray-800 leading-tight">
@@ -15,11 +14,11 @@
     </x-slot>
 
 
-    @push('styles')
+
+
+    {{-- @push('styles')
     <script scr="https://cdn.tailwindcss.com"></script>
-    @endpush
-
-
+    @endpush --}}
     <div class="py-6 px-1">
 
         <div class="max-w-3xl mx-auto sm:px-2 lg:px-4">
@@ -194,3 +193,6 @@ let head_id= document.getElementById("head_id");
 </script>
 
 </x-app-layout>
+
+
+{{-- @endsection --}}

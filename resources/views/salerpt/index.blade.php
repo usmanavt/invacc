@@ -15,7 +15,7 @@
                         @csrf
                         <div class="flex flex-col md:flex-row flex-wrap gap-2  justify-center">
                             {{-- <fieldset class="border px-4 py-2 height 30 rounded"> --}}
-                                <fieldset class="border h-60 w-32 px-4 py-2 rounded">
+                                <fieldset class="border h-60  px-4 py-2 rounded">
                                 <legend>Report Type</legend>
                                 <div>
                                     <input type="radio" name="report_type" value="quotation" required onchange="checkReportType('quotation')">
@@ -151,7 +151,7 @@
                                         </select>
                                     </div> --}}
 
-                                    <div class="w-96 relative grid grid-cols-4 gap-1 px-10 py-5  "   onclick="event.stopImmediatePropagation();" >
+                                    <div class="w-96 relative grid grid-cols-4 gap-1   "   onclick="event.stopImmediatePropagation();" >
                                         {{-- <label for="autocompleted1">Sub Head<x-req /></label> --}}
                                         <input id="autocompleted1" title="Head Name" placeholder="Select Sub Head Name" class=" px-5 py-3 w-full border border-gray-400 rounded-md"
                                         onkeyup="onkeyUp1(event)" />
@@ -161,9 +161,6 @@
                                             </select>
                                         </div>
                                     </div>
-
-
-
 
 
                                 </fieldset>
@@ -231,6 +228,15 @@
     let subheadavailable = false
     let rptType = ''
     let list;
+
+
+    document.addEventListener('DOMContentLoaded',()=> {
+    hidedropdown();
+        });
+
+
+
+
 
     const headSelected = ()=>{
           const value = head.value

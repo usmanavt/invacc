@@ -1,4 +1,4 @@
-{{-- @include('layouts.auth') --}}
+{{-- @extends('layouts.auth') --}}
 <!DOCTYPE html>
 
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}">

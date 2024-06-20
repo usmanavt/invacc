@@ -1,5 +1,9 @@
-@include('layouts.auth')
 
-{{-- @extends('layouts.content') --}}
+
+@extends('layouts.auth')
+
+@section('contents')
+
+@endsection
 
 
