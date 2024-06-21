@@ -6,28 +6,33 @@
     </x-slot>
 
     <div class="py-4">
-        <div class="max-w-7xl mx-auto">
+        <div class="max-w-3xl mx-auto">
             <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
-                <div class="p-6 bg-white border-b border-gray-200">
+                <div class="p-4 bg-white border-b border-gray-200">
 
 
                     <form action="{{ route('reports.fetch')}}" method="POST" target="_blank">
                         @csrf
-                        <div class="flex flex-col md:flex-row flex-wrap gap-2  justify-center">
-                            {{-- <fieldset class="border px-4 py-2 height 30 rounded"> --}}
-                                <fieldset class="border h-60  px-4 py-2 rounded">
+                        <div class="flex flex-col md:flex-row flex-wrap gap-2   justify-center">
+                            <fieldset class="border px-4 py-2 rounded">
                                 <legend>Report Type</legend>
                                 <div>
-                                    {{-- <input type="radio" name="report_type" value="quotation" required onchange="checkReportType('quotation')"> --}}
                                     <input type="radio" name="report_type" value="tpl" required onchange="checkReportType('tpl')">
                                     <label for="">Transaction Prove List</label>
                                 </div>
-
                                 <div>
                                     <input type="radio" name="report_type" value="gl" required onchange="checkReportType('gl')">
                                     <label for="">General Ledger</label>
-                                </div>
 
+                                    {{-- <input class="checked:bg-blue-500 checked:border-blue-500 focus:outline-none"  type="checkbox" name="imppurf2" id="imppurf2"   onclick="imppur(this)" > --}}
+                                    {{-- <label for="">
+                                       <span style="color: brown;font-weight: bold"> Import Purchase Detail </span> <span class="text-red-500 font-semibold  "></span>
+                                        </label> --}}
+
+
+
+
+                                </div>
                                 <div>
                                     <input type="radio" name="report_type" value="glhw" required onchange="checkReportType('glhw')">
                                     <label for="">General Ledger (Head Wise)</label>
@@ -42,9 +47,12 @@
                                            <span style="color: brown;font-weight: bold"> In PKR </span> <span class="text-red-500 font-semibold  ">(*)</span>
                                             </label>
 
+
                                 </div>
-
-
+                                {{-- <div>
+                                    <input type="radio" name="report_type" value="glhws" required onchange="checkReportType('glhws')">
+                                    <label for="">General Ledger Summary (Head Wise)</label>
+                                </div> --}}
 
                                 <div>
                                     <input type="radio" name="report_type" value="invwspay" required onchange="checkReportType('invwspay')">
@@ -56,19 +64,33 @@
                                         </label>
 
                                 </div>
+
                                 <div>
                                     <input type="radio" name="report_type" value="chktran" required onchange="checkReportType('chktran')">
                                     <label for="">Cheque Transaction</label>
 
+                                    {{-- <input class="checked:bg-blue-500 checked:border-blue-500 focus:outline-none" hidden  type="checkbox" name="chq" id="chq"   onclick="chqcol(this)" >
+                                    <label for="">
+                                       <span style="color: brown;font-weight: bold"> Show Only Pending Cheques</span> <span class="text-red-500 font-semibold  ">(*)</span>
+                                        </label> --}}
+
                                 </div>
+
+
+
+
+
+
+                                {{-- <div>
+                                    <input type="radio" name="report_type" value="invwscol" required onchange="checkReportType('invwscol')">
+                                    <label for="">Invoice Wise Collection</label>
+                                </div> --}}
 
 
                                 <div>
                                     <input type="radio" name="report_type" value="vchr" required onchange="checkReportType('vchr')">
                                     <label for="">Voucher</label>
-
                                 </div>
-
                                 <div>
                                     <input type="radio" name="report_type" value="agng" required onchange="checkReportType('agng')">
                                     <label for="">Aging Detail</label>
@@ -79,108 +101,111 @@
                                         </label>
 
                                 </div>
-                                {{-- <div>
-                                    <input type="radio" name="report_type" value="saltxinvs" required onchange="checkReportType('saltxinvs')">
-                                    <label for="">Commercial Invoice </label>
+
+                            </fieldset>
+
+
+
+
+
+                            {{-- <fieldset class="border px-4 py-2 rounded">
+                                <legend>Additional Requests</legend>
+                                <div>
+                                    <input type="checkbox" name="additional[]" value="wdrfa">
+                                    <label for="">With Detail Report (For Aging)</label>
                                 </div>
                                 <div>
-                                    <input type="radio" name="report_type" value="salret" required onchange="checkReportType('salret')">
-                                    <label for="">Sale Return Invoice </label>
+                                    <input type="checkbox" name="additional[]" value="mmbfa">
+                                    <label for="">Mention Minus Balance (For Aging)</label>
                                 </div>
                                 <div>
-                                    <input type="radio" name="report_type" value="salhist" required onchange="checkReportType('salhist')">
-                                    <label for="">Sale History </label>
+                                    <input type="checkbox" name="additional[]" value="wsfgl">
+                                    <label for="">With Summary (For General Ledger)</label>
                                 </div>
                                 <div>
-                                    <input type="radio" name="report_type" value="salrethist" required onchange="checkReportType('salrethist')">
-                                    <label for="">Sale Return History</label>
+                                    <input type="checkbox" name="additional[]" value="wiwcd">
+                                    <label for="">With Invoice Wise Collections Details</label>
                                 </div>
-                                <br> --}}
+                            </fieldset> --}}
+                        </div>
+                        <input type="text" title="t1"  id="p1" name="p1" value="0" hidden  >
+                        <input type="text" title="t2"  id="p2" name="p2" value="0" hidden  >
+                        <input type="text" title="t3"  id="p3" name="p3" value="0" hidden  >
+                        <input type="text" title="t4"  id="p4" name="p4" value="0" hidden   >
+                        <input type="text" title="t5"  id="p5" name="p5" value="0" hidden   >
+                        <input type="text" title="t6"  id="p6" name="p6" value="0" hidden    >
+                        <div class="flex flex-col md:flex-row w-full gap-2 px-6 pt-4">
+
+                            <fieldset class="border px-4 py-2 rounded w-full">
+                                <legend>Date Selection</legend>
+                                <div class="flex justify-between py-1">
+                                    <x-input-date title="From Date" req id="fromdate" name="fromdate" required/>
+                                </div>
+                                <div class="flex justify-between py-1">
+                                    <x-input-date title="To Date" req id="todate" name="todate" required/>
+                                    {{-- <x-input-date name="to"  id="to" required> --}}
+                                </div>
+                            </fieldset>
+                        </div>
+                        <div class="flex flex-col ">
+                            <label for="">
+                                Customer Name<span class="text-red-500 font-semibold w-10">(*)</span>
+                            </label>
+                            <textarea name="cname" id="cname" cols="40" rows="1"  maxlength="150" required class="rounded">
+                                MUHAMMAD NAZIR & Co
+                            </textarea>
+
+                            <label for="">
+                                Customer Address <span class="text-red-500 font-semibold w-10 ">(*)</span>
+                            </label>
+                            <textarea name="csdrs" id="csdrs" cols="40" rows="5" maxlength="255"   class="rounded">
+                                Steam Pipes, Pipe Fitting, Flanges Valves, S.S Pipes
+                                PLOT NO. E-13, S.I.T.E AREA KARACHI MOBILE NO. 0333-3804744"
+                                Phone : 021-32588781, 021-32574285 , Fax : 021-32588782
+
+                            </textarea>
+                        </div>
 
 
-                                <div class="flex flex-col ">
-                                    <div class="flex flex-col ">
-                                        <label for="">
-                                            Customer Name<span class="text-red-500 font-semibold w-10">(*)</span>
-                                        </label>
-                                        <textarea name="cname" id="cname" cols="40" rows="1"  maxlength="150" required class="rounded">
-                                            MUHAMMAD NAZIR & Co
-                                        </textarea>
 
-                                        <label for="">
-                                            Customer Address <span class="text-red-500 font-semibold w-10 ">(*)</span>
-                                        </label>
-                                        <textarea name="csdrs" id="csdrs" cols="40" rows="5" maxlength="255"   class="rounded">
-                                            Steam Pipes, Pipe Fitting, Flanges Valves, S.S Pipes
-                                            PLOT NO. E-13, S.I.T.E AREA KARACHI MOBILE NO. 0333-3804744"
-                                            Phone : 021-32588781, 021-32574285 , Fax : 021-32588782
 
-                                        </textarea>
-                                    </div>
 
-                                    {{-- <label for="">
-                                        Term of Condition(For Quotation) <span class="text-red-500 font-semibold w-10 ">(*)</span>
-                                    </label> --}}
-                                    {{-- <textarea name="toc" id="toc" cols="40" rows="4" maxlength="255"  class="rounded"></textarea> --}}
 
-                                    <input type="text" title="t1"  id="p1" name="p1" value="0" hidden  >
-                                    <input type="text" title="t2"  id="p2" name="p2" value="0" hidden  >
-                                    <input type="text" title="t3"  id="p3" name="p3" value="0" hidden  >
-                                    <input type="text" title="t4"  id="p4" name="p4" value="0" hidden   >
-                                    <input type="text" title="t5"  id="p5" name="p5" value="0" hidden   >
-                                    <input type="text" title="t6"  id="p6" name="p6" value="0" hidden    >
+                        <div class="flex flex-col md:flex-row w-full gap-2 px-6 pt-4">
 
-                                    <div class="flex flex-col md:flex-row w-full gap-2 px-6 pt-4">
+                            <fieldset class="border px-4 py-2 rounded w-full">
+                                <legend>Heads</legend>
+                                <div class="flex justify-between py-1">
+                                    <select  name="head_id" id="head_id" required class="w-full" disabled onchange="headSelected()">
+                                    </select>
+                                </div>
+                            </fieldset>
+                        </div>
 
+                        <div class="flex flex-col md:flex-row w-full gap-2 px-6 pt-4">
+
+
+
+
+
+                            <fieldset class="border px-4 py-2 rounded w-full">
+                                <legend>Sub Head <span class="text-xs text-mute">shift & click to select multiple items</span></legend>
+
+                                <label for="autocompleted" >S E A R C H I N G<x-req /></label>
+                                <div class="w-96 relative"   onclick="event.stopImmediatePropagation();" >
+                                    <input id="autocompleted"  class=" px-5 py-3 w-full border border-gray-400 rounded-md"
+                                    onkeyup="onkeyUp(event)" />
+                               </div>
+                                <div class="flex justify-between py-1">
+                                    <select size="18" multiple class="h-full w-full" name="subhead_id[]" id="subhead_id" required class="w-full disabled:opacity-50" disabled>
+                                    </select>
                                 </div>
                             </fieldset>
 
-                            <fieldset class="border px-6 py-1.5  rounded  ">
-                                <legend>Report Criteria</legend>
-                                {{-- <div class="flex flex-col md:flex-row w-full gap-2 px-6 pt-4"> --}}
 
-                                    <fieldset class="border px-4 py-2  rounded w-full">
-                                        <legend>Date Selection</legend>
-                                        <div class="flex justify-between py-1">
-                                            <x-input-date title="From" req id="fromdate" name="fromdate" required/>
-                                            <x-input-date title="To" req id="todate" name="todate" required/>
-                                        </div>
-                                    </fieldset>
-                                {{-- </div> --}}
-
-                                <fieldset class="border px-4 py-2 rounded w-full">
-                                    <legend>Customer Selection</legend>
-
-                                    <div class="flex justify-between py-1">
-                                        <select  name="head_id" id="head_id" required class="w-full" disabled onchange="headSelected()">
-                                        </select>
-                                    </div>
-
-                                </fieldset>
-
-                                <fieldset class="border px-4 py-2 rounded w-full">
-                                    {{-- <legend>Sub Head <span class="text-xs text-mute">shift & click to select multiple items</span></legend> --}}
-
-                                    <label for="autocompleted" >S E A R C H I N G<x-req /></label>
-                                    <div class="w-96 relative"   onclick="event.stopImmediatePropagation();" >
-                                        <input id="autocompleted"  class=" px-5 py-3 w-full border border-gray-400 rounded-md"
-                                        onkeyup="onkeyUp(event)" />
-                                   </div>
-                                    <div class="flex justify-between py-1">
-                                        <select size="18" multiple class="h-full w-full" name="subhead_id[]" id="subhead_id" required class="w-full disabled:opacity-50" disabled>
-                                        </select>
-                                    </div>
-                                </fieldset>
-
-                            {{-- </div> --}}
-
-                            {{-- </fieldset> --}}
-                            {{-- <div class="flex flex-col md:flex-row w-full gap-2 px-6 py-2"> --}}
-                                <x-button type="submit">
-                                    Print Preview
-                                </x-button>
-                            {{-- </div> --}}
-
+                            <x-button type="submit">
+                                Submit
+                            </x-button>
                         </div>
 
                     </form>

@@ -126,8 +126,6 @@
 
 
                                 </div>
-
-
                             </fieldset>
 
                             <fieldset class="border px-6 py-1.5  rounded  ">
@@ -176,7 +174,7 @@
                             </fieldset>
                             <div class="flex flex-col md:flex-row w-full gap-2 px-6 py-2">
                                 <x-button type="submit">
-                                    Generate PDF
+                                    Print Preview
                                 </x-button>
                             </div>
 

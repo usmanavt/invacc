@@ -152,37 +152,61 @@
                                 </div>
 
                                 <fieldset class="border px-4 py-2 rounded w-full">
-                                    <legend>Item Group Selection</legend>
+                                    <legend>Item Group/Category/Specification/Godown </legend>
                                     <div class="flex justify-between py-1">
                                         <select  name="head_id" id="head_id" required class="w-full" disabled onchange="headSelected()">
                                         </select>
                                     </div>
+                                    <div class="flex justify-between py-1">
+                                        <select  name="source_id" id="source_id" required class="w-full" disabled onchange="headSelected()">
+                                        </select>
+                                    </div>
+                                    <div class="flex justify-between py-1">
+                                        <select  name="brand_id" id="brand_id" required class="w-full" disabled onchange="headSelected()">
+                                        </select>
+                                    </div>
+                                    <div class="flex justify-between py-1">
+                                        <select  name="gc" id="gc" required class="w-full" >
+                                        </select>
+                                    </div>
+
+                                    <label for="autocompleted" >S E A R C H I N G<x-req /></label>
+                                    <div class="w-96 relative"   onclick="event.stopImmediatePropagation();" >
+                                        <input id="autocompleted"  class=" px-5 py-3 w-full border border-gray-400 rounded-md"
+                                        onkeyup="onkeyUp(event)" />
+                                   </div>
+                                        <select search="true" size="20" multiple class="h-full w-full" name="subhead_id[]" id="subhead_id"
+                                        required class="w-full disabled:opacity-50"   disabled>
+                                        </select>
+                                    </div>
+
+
+
                                 </fieldset>
 
-                                <fieldset class="border px-4 py-2 rounded w-full">
+                                {{-- <fieldset class="border px-4 py-2 rounded w-full">
                                     <legend>Category Selection</legend>
                                     <div class="flex justify-between py-1">
                                         <select  name="source_id" id="source_id" required class="w-full" disabled onchange="headSelected()">
                                         </select>
                                     </div>
-                                </fieldset>
+                                </fieldset> --}}
 
-                                <fieldset class="border px-4 py-2 rounded w-full">
+                                {{-- <fieldset class="border px-4 py-2 rounded w-full">
                                     <legend>Specification Selection</legend>
                                     <div class="flex justify-between py-1">
                                         <select  name="brand_id" id="brand_id" required class="w-full" disabled onchange="headSelected()">
                                         </select>
                                     </div>
-                                </fieldset>
+                                </fieldset> --}}
 
-                                <fieldset class="border px-4 py-2 rounded w-full">
+                                {{-- <fieldset class="border px-4 py-2 rounded w-full">
                                     <legend>Godown Selection</legend>
                                     <div class="flex justify-between py-1">
                                         <select  name="gc" id="gc" required class="w-full" >
-                                            {{-- disabled onchange="headSelected()" --}}
                                         </select>
                                     </div>
-                                </fieldset>
+                                </fieldset> --}}
 
 
 
@@ -192,33 +216,20 @@
                                 {{-- <input type="text" title="Search List Text" class="col-span-2" id="srch" name="srch"  onchange="headSelected()" > --}}
 
 
-                                <fieldset class="border px-4 py-2 rounded w-full">
+                                {{-- <fieldset class="border px-4 py-2 rounded w-full"> --}}
 
                                     {{-- <div><input type="text" title="Searching"  id="srch" name="srch"   > </div> --}}
-                                    <legend>Invoices Selection <span class="text-xs text-mute">shift & click to select multiple items</span></legend>
+                                    {{-- <legend>Invoices Selection <span class="text-xs text-mute">shift & click to select multiple items</span></legend> --}}
 
-                                    <label for="autocompleted" >S E A R C H I N G<x-req /></label>
-                                    <div class="w-96 relative"   onclick="event.stopImmediatePropagation();" >
-                                        <input id="autocompleted"  class=" px-5 py-3 w-full border border-gray-400 rounded-md"
-                                        onkeyup="onkeyUp(event)" />
-                                   </div>
+                                {{-- </fieldset> --}}
+                            {{-- </div> --}}
 
-
-
-
-                                        <select search="true" size="20" multiple class="h-full w-full" name="subhead_id[]" id="subhead_id"
-                                        required class="w-full disabled:opacity-50"  disabled>
-                                        </select>
-                                    </div>
-                                </fieldset>
-                            </div>
-
-                            <div class="flex flex-col md:flex-row w-full gap-1 px-6 pt-4">
+                            {{-- <div class="flex flex-col md:flex-row w-full gap-1 px-6 pt-4">
 
 
 
                             </fieldset>
-                        </div>
+                        </div> --}}
 
                         {{-- <div class="flex flex-col md:flex-row w-full gap-2 px-6 pt-4">
 
@@ -256,9 +267,19 @@
                                 </div>
                             </fieldset> --}}
 
-                            <x-button type="submit" >
-                                Generate PDF
+
+                            <x-button type="submit"    >
+                                Print Priview
                             </x-button>
+
+                            {{-- <x-button id="submitbutton" type="button" >
+                                <i class="fa fa-save fa-fw"></i>
+                                Submit
+                            </x-button> --}}
+
+
+
+
                         </div>
 
                     </form>
@@ -1122,7 +1143,12 @@ function ldevent()
 }
 
 
-
+// document.onkeydown=function(e){
+//         if(e.ctrlKey && e.which === 83){
+//             submit.click();
+//         return false;
+//     }
+// }
 
 
 </script>
