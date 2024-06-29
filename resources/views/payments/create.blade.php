@@ -17,13 +17,13 @@
         <div class="max-w-full mx-auto sm:px-2 lg:px-4">
             <div class="bg-white overflow-hidden shadow-sm  sm:rounded-lg">
                 {{-- Create Form --}}
-                <div class="px-6 py-2">
+                <div class="px-6 py-1">
 
                     <div class="grid">
 
-                        <fieldset class="border px-4 py-2 rounded">
+                        <fieldset class="border px-4 py-1 rounded">
                             <legend>Invoice Level Entries</legend>
-                            <div class="grid grid-cols-12 gap-2 py-2 items-center">
+                            <div class="grid grid-cols-12 gap-1 py-1 items-center">
                             <label for="head_id">Main Head<x-req /></label>
                                     <select autocomplete="on" class="col-span-2" name="head_id" id="head_id" >
                                         {{-- <option value="" selected>--Payment Head</option> --}}
@@ -32,7 +32,7 @@
                                         @endforeach
                                     </select>
 
-                            <div class="w-96 relative grid grid-cols-4 gap-1 px-10 py-5  "   onclick="event.stopImmediatePropagation();" >
+                            <div class="w-96 relative grid grid-cols-4 gap-1 px-10 py-1  "   onclick="event.stopImmediatePropagation();" >
                                 {{-- <label for="autocompleted1">Sub Head<x-req /></label> --}}
                                 <input id="autocompleted1" title="Head Name" placeholder="Select Sub Head Name" class=" px-5 py-3 w-full border border-gray-400 rounded-md"
                                 onkeyup="onkeyUp1(event)" />
@@ -43,7 +43,7 @@
                             </div>
                             </div>
 
-                            <div class="grid grid-cols-12 gap-2 py-2 items-center">
+                            <div class="grid grid-cols-12 gap-1 py-1 items-center">
 
                                 {{-- <x-input-text title="Supplier Name" name="supname" id="supname" class="col-span-2" hidden  /> --}}
 
@@ -52,7 +52,7 @@
 
                                 <label for="autocompleted" >Bank<x-req /></label>
                                 <div class="w-96 relative"   onclick="event.stopImmediatePropagation();" >
-                                    <input id="autocompleted" placeholder="Select Bank" class=" px-5 py-3 w-full border border-gray-400 rounded-md"
+                                    <input id="autocompleted" placeholder="Select Bank" class=" px-5 py-1 w-full border border-gray-400 rounded-md"
                                     onkeyup="onkeyUp(event)" />
                                     <div  >
                                         <select  id="bank_id" name="bank_id" size="20"  class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-auto h-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
@@ -62,7 +62,7 @@
 
                             </div>
 
-                        <div class="grid grid-cols-12 gap-2 py-2 ">
+                        <div class="grid grid-cols-12 gap-1 py-1 ">
 
 
 
@@ -72,7 +72,7 @@
 
                         </div>
 
-                        <div class="grid grid-cols-12 gap-2 py-2 items-center">
+                        <div class="grid grid-cols-12 gap-1 py-1 items-center">
                             <x-input-numeric title="Amount(USD)" name="amount_fc" id="amount_fc" onkeyup="chngpkr(event)" class="col-span-2"      />
                             <x-input-numeric title="Conversion Rate" name="conversion_rate" id="conversion_rate" value=1 onkeyup="chngpkr(event)"  class="col-span-2" disabled   />
                             <x-input-numeric title="Amount(PKR)" name="amount_pkr" id="amount_pkr" class="col-span-2" disabled />
@@ -84,7 +84,7 @@
                             <x-input-numeric title="" name="advtxt" id="advtxt" value="0"  hidden     />
                         </div>
 
-                        <div class="grid grid-cols-12 gap-2 py-2 items-center">
+                        <div class="grid grid-cols-12 gap-1 py-1 items-center">
                             <label for="">
                                 Description <span class="text-red-500 font-semibold  "></span>
                                 </label>
@@ -143,7 +143,7 @@
                         <x-tabulator-dynamic />
 
                         {{-- Submit Button --}}
-                        <div class="pt-2">
+                        <div class="pt-1">
                             <x-button id="submitbutton" type="button" onclick="validateForm()">
                                 <i class="fa fa-save fa-fw"></i>
                                 Submit

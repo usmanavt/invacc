@@ -6,7 +6,7 @@
     </x-slot>
 
     <div class="py-4">
-        <div class="max-w-full mx-auto">
+        <div class="max-w-6xl mx-auto">
             <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
                 <div class="p-6 bg-white border-b border-gray-200">
 
@@ -146,7 +146,7 @@
                                 </div> --}}
                             </fieldset>
 
-                            <fieldset class="border px-6 py-1.5  rounded ">
+                            <fieldset class="border px-6 py-1  rounded ">
                                 <legend>Report Criteria</legend>
                                 {{-- <div>
                                     <input type="checkbox" name="additional[]" value="wdrfa">
@@ -165,33 +165,50 @@
                                     <label for="">With Invoice Wise Collections Details</label>
                                 </div> --}}
 
-                                <div class="flex flex-col md:flex-row w-full gap-2 px-6 pt-4">
+                                <div class="flex flex-col md:flex-row w-full gap-1 px-6 ">
 
-                                    <fieldset class="border px-4 py-2  rounded w-full">
-                                        <legend>Date Selection</legend>
+                                    <fieldset class="border px-4 py-2  rounded w-full  ">
+                                        <legend >Date Selection</legend>
                                         <div class="flex justify-between py-1">
                                             <x-input-date title="From" req id="fromdate" name="fromdate" required/>
                                             <x-input-date title="To" req id="todate" name="todate" required/>
                                         </div>
+
+                                        {{-- <div >
+                                            <select autocomplete="on" title="Source" name="source_id"  id="source_id" class="border px-4 py-2  rounded w-full ">
+                                                @foreach ($sources as $source)
+                                                    <option value="{{ $source->id }}">{{ $source->title }}</option>
+                                                @endforeach
+                                            </select>
+
+                                        </div> --}}
+
                                     </fieldset>
                                 </div>
 
-                                <fieldset class="border px-4 py-2 rounded w-full">
+                                <fieldset class=" border px-4 py-2 rounded w-full ">
+                                    <legend>Supplier Source</legend>
+
+                                    <select autocomplete="on" title="Source" name="source_id"  id="source_id" class="border px-4 py-1  rounded w-full ">
+                                        @foreach ($sources as $source)
+                                            <option value="{{ $source->id }}">{{ $source->title }}</option>
+                                        @endforeach
+                                    </select>
+
+                                </fieldset>
+
+
+
+
+
+
+                                {{-- <fieldset class="border px-4 py-2 rounded w-full">
                                     <legend>Category Selection</legend>
 
 
 
-                                    <div class="flex justify-between py-1">
-                                        <select autocomplete="on" name="source_id" id="source_id"  required>
-                                            {{-- <option disabled selected value="">--Select</option> --}}
-                                            @foreach ($sources as $source)
-                                                <option value="{{ $source->id }}">{{ $source->title }}</option>
-                                            @endforeach
-                                        </select>
 
-                                    </div>
-
-                                </fieldset>
+                                </fieldset> --}}
                                 {{-- <x-input-text title="Searching" name="srch" id="srch"/> --}}
 
 
@@ -203,8 +220,7 @@
                                     </div>
                                 </fieldset> --}}
 
-                                <div class="w-96 relative grid grid-cols-4 gap-1 px-10 py-5  "   onclick="event.stopImmediatePropagation();" >
-                                    {{-- <label for="autocompleted1">Sub Head<x-req /></label> --}}
+                                {{-- <div class="w-96 relative grid grid-cols-4 gap-1 px-10 py-5  "   onclick="event.stopImmediatePropagation();" >
                                     <input id="autocompleted1" title="Head Name" placeholder="Select Sub Head Name" class=" px-5 py-3 w-full border border-gray-400 rounded-md"
                                     onkeyup="onkeyUp1(event)" />
                                     <div>
@@ -212,16 +228,23 @@
                                             id="head_id" name="head_id" size="20" onchange="headSelected()"  class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full h-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
                                         </select>
                                     </div>
-                                </div>
-
-
-
-
-
-
+                                </div> --}}
 
                                 <fieldset class="border px-4 py-2 rounded w-full">
-                                    <legend>Inoices Selection <span class="text-xs text-mute">shift & click to select multiple items</span></legend>
+
+                                    <label for="autocompleted1" >S E A R C H I N G<x-req /></label>
+                                    <div class="w-96 relative"   onclick="event.stopImmediatePropagation();" >
+                                        <input id="autocompleted1" title="Source"  class=" px-5 py-3 w-full border border-gray-400 rounded-md"
+                                        onkeyup="onkeyUp1(event)" />
+                                   </div>
+                                    <div class="flex justify-between py-1">
+                                        <select size="18" onchange="headSelected()" multiple class="h-full w-full" name="head_id" id="head_id" required class="w-full disabled:opacity-50" >
+                                        </select>
+                                    </div>
+                                </fieldset>
+
+                                <fieldset class="border px-4 py-2 rounded w-full">
+                                    {{-- <legend>Inoices Selection <span class="text-xs text-mute">shift & click to select multiple items</span></legend> --}}
                                     <div class="flex justify-between py-1">
                                         <select size="20" multiple class="h-full w-full" name="subhead_id[]" id="subhead_id" required class="w-full disabled:opacity-50" disabled>
                                         </select>
@@ -271,11 +294,11 @@
                                     </select>
                                 </div>
                             </fieldset> --}}
-
-                            <x-button type="submit">
-                                Generate PDF
-                            </x-button>
                         </div>
+                        <x-button type="submit"  >
+                            Print Preview
+                        </x-button>
+
 
                     </form>
 

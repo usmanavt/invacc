@@ -978,26 +978,31 @@
 
           <!-- Header -->
           <header class="main-header" id="header">
-            <nav class="navbar navbar-expand-lg navbar-light" id="navbar">
-              <!-- Sidebar toggle button -->
-              <button id="sidebar-toggler" class="sidebar-toggle">
-                <span class="sr-only">Toggle navigation</span>
-              </button>
+            <nav class="navbar navbar-expand-lg  bg-blue-500" id="navbar">
 
-              <span class="page-title">dashboard</span>
+
+
+              <!-- Sidebar toggle button -->
+              {{-- <button id="sidebar-toggler" class="sidebar-toggle">
+                <span class="sr-only">Toggle navigation</span>
+              </button> --}}
+
+              {{-- <span class="page-title">dashboard</span> --}}
+
+
 
               <div class="navbar-right ">
 
                 <!-- search form -->
                 <div class="search-form">
-                  <form action="index.html" method="get">
+                  {{-- <form action="index.html" method="get">
                     <div class="input-group input-group-sm" id="input-group-search">
                       <input type="text" autocomplete="off" name="query" id="search-input" class="form-control" placeholder="Search..." />
                       <div class="input-group-append">
                         <button class="btn" type="button">/</button>
                       </div>
                     </div>
-                  </form>
+                  </form> --}}
                   <ul class="dropdown-menu dropdown-menu-search">
 
                     <li class="nav-item">
@@ -1050,7 +1055,8 @@
                             <div class="media media-sm bg-warning-10 p-4 mb-0">
                               <div class="media-sm-wrapper">
                                 <a href="user-profile.html">
-                                  <img src="images/user/user-sm-02.jpg" alt="User Image">
+                                  {{-- <img src="images/user/user-sm-02.jpg" alt="User Image"> --}}
+                                  <img src= "{{asset('assets/auth/images/user/user-sm-02.jpg')}}" alt="User Image">
                                 </a>
                               </div>
                               <div class="media-body">
@@ -1279,11 +1285,85 @@
                       </footer>
                     </div>
                   </li>
+
+
+            {{-- Master Setup --}}
+            <div>
+            <li class="dropdown user-menu  ">
+                <button class="dropdown-toggle nav-link  " data-toggle="dropdown">
+                <img src="{{asset('assets/auth/images/user/user-sm-01.jpg')}}" class="user-image rounded-circle" alt="User Image" />
+                <span class="d-none d-lg-inline-block ">MASTER SETUP</span>
+                </button>
+                <ul class="dropdown-menu dropdown-menu-right">
+                <li>
+                    <a class="dropdown-link-item" href="{{ route('users.index') }}">
+                    <i class="mdi mdi-account-outline"></i>
+                    <span class="nav-text">User</span>
+                    </a>
+                </li>
+                <li>
+                    <a class="dropdown-link-item" href="">
+                    <i class="mdi mdi-email-outline"></i>
+                    <span class="nav-text">Category</span>
+                    <span class="badge badge-pill badge-primary">24</span>
+                    </a>
+                </li>
+                <li>
+                    <a class="dropdown-link-item" href="user-activities.html">
+                    <i class="mdi mdi-diamond-stone"></i>
+                    <span class="nav-text">Items</span></a>
+                </li>
+                <li>
+                    <a class="dropdown-link-item" href="user-account-settings.html">
+                    <i class="mdi mdi-settings"></i>
+                    <span class="nav-text">Dimension</span>
+                    </a>
+                </li>
+
+                <li>
+                  <a class="dropdown-link-item" href="">
+                  <i class="mdi mdi-settings"></i>
+                  <span class="nav-text">Specification</span>
+                  </a>
+                </li>
+
+                <li>
+                  <a class="dropdown-link-item" href="">
+                  <i class="mdi mdi-settings"></i>
+                  <span class="nav-text">Suppliers</span>
+                  </a>
+                </li>
+
+                <li>
+                  <a class="dropdown-link-item" href="">
+                  <i class="mdi mdi-settings"></i>
+                  <span class="nav-text">Customers</span>
+                  </a>
+                </li>
+
+
+
+
+
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
                   <!-- User Account -->
-                  <li class="dropdown user-menu">
-                    <button class="dropdown-toggle nav-link" data-toggle="dropdown">
-                      <img src="images/user/user-xs-01.jpg" class="user-image rounded-circle" alt="User Image" />
-                      <span class="d-none d-lg-inline-block">John Doe</span>
+                  <li class="dropdown user-menu  ">
+                    <button class="dropdown-toggle nav-link  " data-toggle="dropdown">
+                      <img src="{{asset('assets/auth/images/user/user-sm-01.jpg')}}" class="user-image rounded-circle" alt="User Image" />
+                      <span class="d-none d-lg-inline-block ">John Doe</span>
                     </button>
                     <ul class="dropdown-menu dropdown-menu-right">
                       <li>
