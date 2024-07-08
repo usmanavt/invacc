@@ -1,6 +1,6 @@
-<nav x-data="{ open: false }" class="bg-white border-b border-gray-100">
+<nav x-data="{ open: false }" class="bg-blue-600 border-b border-gray-100">
     <!-- Primary Navigation Menu -->
-    <div class="max-w-9xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="bg-green-700 max-w-9xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="flex justify-between h-16">
             <div class="flex">
 
@@ -13,6 +13,10 @@
 
                 <!-- Master Setup -->
                 <div class="hidden sm:flex sm:items-center sm:ml-6">
+                    <x-slot name="trigger">
+                        <x-dropdown-link href="{{ route('mastersetup') }}">Dashboard</x-dropdown-link>
+                    </x-slot>
+
                     <x-dropdown align="left" width="60">
                         <x-slot name="trigger">
                             <button
@@ -56,15 +60,15 @@
                     </x-dropdown>
                 </div>
 
-                {{-- Transactions --}}
+                 <!-- Transactions -->
                 <div class="hidden sm:flex sm:items-center sm:ml-6">
-                    <x-dropdown align="left" width="100">
+                    <x-dropdown align="left" width="100%">
                         <x-slot name="trigger">
                             <button
                                 class="flex items-center text-sm font-medium text-gray-500 hover:text-gray-700 hover:border-gray-300 focus:outline-none focus:text-gray-700 focus:border-gray-300 transition duration-150 ease-in-out">
                                 <x-dropdown-link href="{{ route('transaction') }}">Office Transaction</x-dropdown-link>
-
-                                <div class="ml-1">
+                                Office Transaction
+                                 <div class="ml-1">
                                     <svg class="fill-current h-4 w-20" xmlns="http://www.w3.org/2000/svg"
                                         viewBox="0 0 20 20">
                                         <path fill-rule="evenodd"
@@ -75,9 +79,10 @@
                             </button>
                         </x-slot>
 
-                        <x-slot name="content" width="60">
+                        <x-slot name="content" width="100%">
 
                             <x-dropdown-link href="{{ route('contracts.index') }}">Contracts</x-dropdown-link>
+                            <!-- {{-- <x-dropdown-link ></x-dropdown-link>Contracts</x-dropdown-link> --}} -->
                             <x-dropdown-link href="{{ route('cis.index') }}">Importet Purchase Invoice</x-dropdown-link>
                             <x-dropdown-link href="{{ route('localpurchase.index') }}">Local Purchase Invoice</x-dropdown-link>
                             <x-dropdown-link href="{{ route('purchasereturn.index') }}">Purchase Return Invoice</x-dropdown-link>
@@ -89,10 +94,10 @@
                             <x-dropdown-link href="{{ route('salereturn.index') }}">Sales Return</x-dropdown-link>
                             <x-dropdown-link href="{{ route('banktransaction.index') }}">Payments Voucher</x-dropdown-link>
                             <x-dropdown-link href="{{ route('banktransactionr.index') }}">Received Voucher</x-dropdown-link>
-                            {{-- <x-dropdown-link href="{{ route('bankpayments.index') }}">Bank Payments</x-dropdown-link> --}}
+                             <!-- <x-dropdown-link href="{{ route('bankpayments.index') }}">Bank Payments</x-dropdown-link>  -->
                             <x-dropdown-link href="{{ route('bankrecivings.index') }}">Cheque Collection</x-dropdown-link>
-                            {{-- <x-dropdown-link href="{{ route('cashpayments.index') }}">Cash Payments</x-dropdown-link> --}}
-                            {{-- <x-dropdown-link href="{{ route('cashrecivings.index') }}">Cash Receiving</x-dropdown-link> --}}
+                             <!-- <x-dropdown-link href="{{ route('cashpayments.index') }}">Cash Payments</x-dropdown-link> -->
+                             <!-- <x-dropdown-link href="{{ route('cashrecivings.index') }}">Cash Receiving</x-dropdown-link> -->
                             <x-dropdown-link href="{{ route('jv.index') }}">Journal Vouchers</x-dropdown-link>
                             <x-dropdown-link href="{{ route('godownmovement.index') }}">Stock Transfer Order</x-dropdown-link>
                         </x-slot>
@@ -111,7 +116,7 @@
                             <button
                                 class="flex items-center text-sm font-medium text-gray-500 hover:text-gray-700 hover:border-gray-300 focus:outline-none focus:text-gray-700 focus:border-gray-300 transition duration-150 ease-in-out">
                                 <x-dropdown-link href="">Godown Transaction</x-dropdown-link>
-                                {{-- {{ route('gtransaction') }} --}}
+                                 <!-- {{ route('gtransaction') }}  -->
                                 <div class="ml-1">
                                     <svg class="fill-current h-4 w-20" xmlns="http://www.w3.org/2000/svg"
                                         viewBox="0 0 20 20">
