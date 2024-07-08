@@ -74,8 +74,8 @@
     <body class="font-sans antialiased">
         <div class="min-h-screen bg-blue-100">
 
-            {{-- @include('layouts.navigationnew') --}}
-            @include('layouts.mainscreen')
+            @include('layouts.navigation')
+            {{-- @include('layouts.mainscreen') --}}
 
 
 

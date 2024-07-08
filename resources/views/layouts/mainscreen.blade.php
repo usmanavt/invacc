@@ -58,8 +58,8 @@
                             <li class="relative" x-data="{showChildren:false}" @mouseleave="showChildren=false" @mouseenter="showChildren=true">
                                 <a href="{{ route('brands.index') }}" class=" border border-gray-300 px-4 py-2 flex w-full items-start hover:bg-sky-700 no-underline hover:no-underline transition-colors duration-100 cursor-pointer"> <span class="flex-1">Specification</span> </a>
                             </li>
-                           
-                            
+
+
                             <li class="relative" x-data="{showChildren:false}" @mouseleave="showChildren=false" @mouseenter="showChildren=true">
                                 <a href="{{ route('suppliers.index') }}" class=" border border-gray-300 px-4 py-2 flex w-full items-start hover:bg-sky-700 no-underline hover:no-underline transition-colors duration-100 cursor-pointer"> <span class="flex-1">Suppliers</span> </a>
                             </li>
@@ -314,13 +314,13 @@
                     </div>
                 </div>
             </li>
-            
 
 
 
 
 
-            
+
+
             {{-- <a href="#" class="rounded-md bg-gray-900 px-3 py-2 text-sm font-medium text-white  " aria-current="page">Dashboard</a>
             <a href="#" class="rounded-md px-3 py-2 text-sm font-medium text-gray-300 hover:bg-gray-700 hover:text-white">Team</a>
             <a href="#" class="rounded-md px-3 py-2 text-sm font-medium text-gray-300 hover:bg-gray-700 hover:text-white">Projects</a>
@@ -417,12 +417,12 @@
             <a href="#" class="block px-4 py-2 text-sm text-gray-700" role="menuitem" tabindex="-1" id="user-menu-item-1">Settings</a>
             <a href="#" class="block px-4 py-2 text-sm text-gray-700" role="menuitem" tabindex="-1" id="user-menu-item-2">Sign out</a> --}}
 
-            
-        
-        
+
+
+
         {{-- </div> --}}
-        
-        
+
+
         </div>
       </div>
     </div>
@@ -457,8 +457,8 @@
                     <li class="relative" x-data="{showChildren:false}" @mouseleave="showChildren=false" @mouseenter="showChildren=true">
                         <a href="{{ route('brands.index') }}" class=" border border-gray-300 px-4 py-2 flex w-full items-start hover:bg-sky-700 no-underline hover:no-underline transition-colors duration-100 cursor-pointer"> <span class="flex-1">Specification</span> </a>
                     </li>
-                   
-                    
+
+
                     <li class="relative" x-data="{showChildren:false}" @mouseleave="showChildren=false" @mouseenter="showChildren=true">
                         <a href="{{ route('suppliers.index') }}" class=" border border-gray-300 px-4 py-2 flex w-full items-start hover:bg-sky-700 no-underline hover:no-underline transition-colors duration-100 cursor-pointer"> <span class="flex-1">Suppliers</span> </a>
                     </li>
