@@ -76,7 +76,7 @@
 
             {{-- @include('layouts.navigation') --}}
             @include('layouts.mainscreen')
-//
+
 
 
 
