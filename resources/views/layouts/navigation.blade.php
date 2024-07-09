@@ -1,6 +1,6 @@
 
 
-<!DOCTYPE html>
+{{-- <!DOCTYPE html>
 <html lang="en">
  <head>
     <meta charset="UTF-8">
@@ -9,12 +9,12 @@
     <title>Document</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.2.19/tailwind.min.css">
 </head>
- <body class="bg-red-700">
+ <body class="bg-red-700"> --}}
 
 
 
 
-@extends('layouts.dbheader')
+@extends('layouts.mainscreen')
 
 <!-- {{-- @extends('layouts.dbheader') --}}
 
@@ -36,11 +36,12 @@
 
 @section('content')
 
+jdkjfkasdjfkjadskfj
 @endsection
 
 
 
 
-</html>
+{{-- </html> --}}
 
 
