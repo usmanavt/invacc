@@ -34,7 +34,7 @@
 
                             <label for="autocompleted" >Supplier<x-req /></label>
                             <div class="w-96 relative"   onclick="event.stopImmediatePropagation();" >
-                                <input id="autocompleted" placeholder="Select Supplier Name" class=" px-5 py-3 w-full border border-gray-400 rounded-md"
+                                <input id="autocompleted" placeholder="Select Supplier Name" class=" px-5  w-full border border-gray-400 rounded-md"
                                 onkeyup="onkeyUp(event)" />
                                 <div>
                                     <select  id="supplier_id" name="supplier_id" size="20"  class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full h-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
@@ -47,7 +47,7 @@
                                 {{-- <label for="autocompleted1">Item Name<x-req /></label> --}}
                                 {{-- <input type="text"  class="col-span-2" id="autocompleted1" name="autocompleted1" placeholder="Select Items Name"
                                 onkeyup="onkeyUp1(event)"  > --}}
-                                <input id="autocompleted1" placeholder="Select Item Name" class=" px-5 py-10 w-full border border-gray-400 rounded-md"
+                                <input id="autocompleted1" placeholder="Select Item Name" class=" px-5  w-full border border-gray-400 rounded-md"
                                 onkeyup="onkeyUp1(event)" />
 
                             <div>

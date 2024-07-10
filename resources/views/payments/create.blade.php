@@ -4,7 +4,7 @@
     {{-- <link rel="stylesheet" href="{{ asset('css/tabulator_simple.min.css') }}"> --}}
     <link href="https://unpkg.com/tabulator-tables/dist/css/tabulator.min.css" rel="stylesheet">
     <script type="text/javascript" src="https://unpkg.com/tabulator-tables/dist/js/tabulator.min.js"></script>
-
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     @endpush
 
 
@@ -32,9 +32,9 @@
                                         @endforeach
                                     </select>
 
-                            <div class="w-96 relative grid grid-cols-4 gap-1 px-10 py-1  "   onclick="event.stopImmediatePropagation();" >
+                            <div class=" w-96 relative  px-24 "   onclick="event.stopImmediatePropagation();" >
                                 {{-- <label for="autocompleted1">Sub Head<x-req /></label> --}}
-                                <input id="autocompleted1" title="Head Name" placeholder="Select Sub Head Name" class=" px-5 py-3 w-full border border-gray-400 rounded-md"
+                                <input id="autocompleted1" title="Head Name"  class=" border border-gray-400 rounded-md"
                                 onkeyup="onkeyUp1(event)" />
                                 <div>
                                     <select  id="supplier_id" name="supplier_id" size="20"  class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-auto h-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">

@@ -215,18 +215,18 @@
             {
                 title:'Contract Data', headerHozAlign:"center",
                     columns:[
-            {title: "Weight",field: "conversion_rate" ,formatter:"money",formatterParams:{thousand:",",precision:0}},
-            {title: "Pcs",field: "totalpcs" ,formatter:"money",formatterParams:{thousand:",",precision:0}},
-            {title: "Supp.Val($)",field: "insurance" ,formatter:"money",formatterParams:{thousand:",",precision:3}},
-            {title: "Duty.Val($)",field: "dutyval" ,formatter:"money",
+            {title: "Weight",field: "conversion_rate" ,formatter:"money", responsive:0,formatterParams:{thousand:",",precision:0}},
+            {title: "Pcs",field: "totalpcs" ,formatter:"money", responsive:0,formatterParams:{thousand:",",precision:0}},
+            {title: "Supp.Val($)",field: "insurance" ,formatter:"money", responsive:0,formatterParams:{thousand:",",precision:3}},
+            {title: "Duty.Val($)",field: "dutyval" ,formatter:"money", responsive:0,
                 formatterParams:{thousand:",",precision:3}} ]},
 
                 {
                 title:'Pending Data', headerHozAlign:"center",
                     columns:[
-            {title: "Weight",field: "balwt" ,formatter:"money",formatterParams:{thousand:",",precision:0}},
-            {title: "Pcs",field: "balpcs" ,formatter:"money",formatterParams:{thousand:",",precision:0}},
-            {title: "Supp.Val($)",field: "balsupval" ,formatter:"money",formatterParams:{thousand:",",precision:0}}
+            {title: "Weight",field: "balwt" ,formatter:"money", responsive:0,formatterParams:{thousand:",",precision:0}},
+            {title: "Pcs",field: "balpcs" ,formatter:"money", responsive:0,formatterParams:{thousand:",",precision:0}},
+            {title: "Supp.Val($)",field: "balsupval" ,formatter:"money", responsive:0,formatterParams:{thousand:",",precision:0}}
              ]},
 
 

@@ -1,3 +1,10 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<link href=
+"https://unpkg.com/tailwindcss@^1.0/dist/tailwind.min.css"
+		rel="stylesheet">
+</head>
 
 
 {{-- <!DOCTYPE html>
@@ -34,9 +41,10 @@
 
 
 
-@section('content')
+@section('contents')
+{{-- @extends('layouts.content') --}}
 
-jdkjfkasdjfkjadskfj
+
 @endsection
 
 

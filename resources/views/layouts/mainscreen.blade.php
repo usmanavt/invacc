@@ -1,4 +1,4 @@
-<header>
+
 <nav class="bg-sky-700 " >
   <div class="mx-auto max-w-7xl px-2 sm:px-6 lg:px-8">
     <div class="relative flex h-16 items-center justify-between  ">
@@ -176,9 +176,6 @@
 
 
 
-
-
-
             <li class="block relative" x-data="{showChildren:false}" @click.away="showChildren=false">
                 <a href="#" class="flex items-center h-10 leading-10 px-4 rounded cursor-pointer no-underline hover:no-underline transition-colors
                 text-white duration-100 mx-1 hover:bg-black" @click.prevent="showChildren=!showChildren">
@@ -285,7 +282,7 @@
                     </div>
                 </div>
             </li>
-
+<a href="#" class="block rounded-md bg-gray-900 px-3 py-2 text-base font-medium text-white" aria-current="page">Dashboard</a>
 
             {{-- <li class="block relative" x-data="{showChildren:false}" @click.away="showChildren=false">
                 <a href="#" class="flex items-center h-10 leading-10 px-4 rounded cursor-pointer no-underline hover:no-underline transition-colors
@@ -321,7 +318,6 @@
  --}}
 
 
-            <a href="{{ route('users.index') }}" id="XYZ" name="xyz" class="rounded-md bg-gray-900 px-3 py-2 text-sm font-medium text-white  " aria-current="page">Dashboard</a>
             {{-- <a href="#" class="rounded-md px-3 py-2 text-sm font-medium text-gray-300 hover:bg-gray-700 hover:text-white">Team</a>
             <a href="#" class="rounded-md px-3 py-2 text-sm font-medium text-gray-300 hover:bg-gray-700 hover:text-white">Projects</a>
             <a href="#" class="rounded-md px-3 py-2 text-sm font-medium text-gray-300 hover:bg-gray-700 hover:text-white">Calendar</a> --}}
@@ -708,15 +704,16 @@
     </li>
 
 
-      {{-- <a href="#" class="block rounded-md bg-gray-900 px-3 py-2 text-base font-medium text-white" aria-current="page">Dashboard123</a>
-      <a href="#" class="block rounded-md px-3 py-2 text-base font-medium text-gray-300 hover:bg-gray-700 hover:text-white">Team</a>
+      <a href="#" class="block rounded-md bg-gray-900 px-3 py-2 text-base font-medium text-white" aria-current="page">Dashboard</a>
+      {{-- <a href="#" class="block rounded-md px-3 py-2 text-base font-medium text-gray-300 hover:bg-gray-700 hover:text-white">Team</a>
       <a href="#" class="block rounded-md px-3 py-2 text-base font-medium text-gray-300 hover:bg-gray-700 hover:text-white">Projects</a>
-      <a href="#" class="block rounded-md px-3 py-2 text-base font-medium text-gray-300 hover:bg-gray-700 hover:text-white">Calendar</a> --}}
+      <a href="#" class="block rounded-md px-3 py-2 text-base font-medium text-gray-300 hover:bg-gray-700 hover:text-white">Calendar</a>  --}}
 
     </div>
 
 </div>
 
+
 </nav>
-</header>
+@yield('contents')
 

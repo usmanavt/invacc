@@ -13,6 +13,11 @@
         </h2>
     </x-slot>
 
+
+
+
+
+
     <div class="py-6">
         <div class="max-w-full mx-auto sm:px-2 lg:px-4">
             <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">

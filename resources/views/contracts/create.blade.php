@@ -2,9 +2,17 @@
 
     @push('styles')
     {{-- <link rel="stylesheet" href="{{ asset('css/tabulator_simple.min.css') }}"> --}}
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
     <link href="https://unpkg.com/tabulator-tables/dist/css/tabulator.min.css" rel="stylesheet">
     <script type="text/javascript" src="https://unpkg.com/tabulator-tables/dist/js/tabulator.min.js"></script>
     @endpush
+
+
+
+
+
 
 
     <x-slot name="header">
@@ -15,9 +23,10 @@
 
     <div class="py-6">
         <div class="max-w-full mx-auto sm:px-2 lg:px-4">
+
             <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
                 {{-- Create Form --}}
-                <div class="px-6 py-2">
+                {{-- <div class="px-6 py-2"> --}}
 
                     <div class="grid grid-cols-1">
                         {{-- Contract Master --}}
@@ -38,35 +47,35 @@
 
 
                             <label for="autocompleted" >Supplier<x-req /></label>
-                            <div class="w-96 relative"   onclick="event.stopImmediatePropagation();" >
-                                <input id="autocompleted" placeholder="Select Supplier Name" class=" px-5 py-3 w-48 border border-gray-400 rounded-md"
-                                onkeyup="onkeyUp(event)" />
-                                <div>
-                                    <select  id="supplier_id" name="supplier_id" size="20"  class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full h-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
-                                    </select>
+                                <div class="w-96 relative"   onclick="event.stopImmediatePropagation();" >
+                                    <input id="autocompleted" placeholder="Select Supplier Name" class=" px-5 py-3 w-48 border border-gray-400 rounded-md"
+                                    onkeyup="onkeyUp(event)" />
+                                        <div>
+                                            <select  id="supplier_id" name="supplier_id" size="20"  class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full h-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                                            </select>
+                                        </div>
                                 </div>
-                            </div>
 
 
-                            <label for="autocompleted1" class="w-32 text-right  " >Items<x-req /></label>
-                            <div class="w-96 relative"   onclick="event.stopImmediatePropagation();" >
-                                {{-- <label for="autocompleted1">Item Name<x-req /></label> --}}
-                                {{-- <input type="text"  class="col-span-2" id="autocompleted1" name="autocompleted1" placeholder="Select Items Name"
-                                onkeyup="onkeyUp1(event)"  > --}}
-                                <input id="autocompleted1" placeholder="Select Item Name" class=" px-5 py-3 w-48 border border-gray-400 rounded-md"
-                                onkeyup="onkeyUp1(event)" />
+                                <label for="autocompleted1" class="w-32 text-right  " >Items<x-req /></label>
+                                <div class="w-96 relative"   onclick="event.stopImmediatePropagation();" >
+                                    {{-- <label for="autocompleted1">Item Name<x-req /></label> --}}
+                                    {{-- <input type="text"  class="col-span-2" id="autocompleted1" name="autocompleted1" placeholder="Select Items Name"
+                                    onkeyup="onkeyUp1(event)"  > --}}
+                                    <input id="autocompleted1" placeholder="Select Item Name" class=" px-5 py-3 w-48 border border-gray-400 rounded-md"
+                                    onkeyup="onkeyUp1(event)" />
 
-                            <div>
-                                <select  id="item_id" name="item_id" size="20"  class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-96 h-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
-                                </select>
-                            </div>
+                                    <div>
+                                        <select  id="item_id" name="item_id" size="20"  class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-96 h-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                                        </select>
+                                    </div>
 
-                            </div>
+                                </div>
 
-                            <label for="invoice_date" class="w-32 text-right" >Contract Date<x-req /></label>
-                            <input type="date" value="{{ date('Y-m-d') }}"  class="col-span-2 w-40 text-right " id="invoice_date" name="Contract_date"  required>
-                            <label for="number">Contract #<x-req /></label>
-                            <input type="text"  id="number" name="number"   placeholder="Contract No"
+                                <label for="invoice_date" class="w-32 text-right" >Contract Date<x-req /></label>
+                                <input type="date" value="{{ date('Y-m-d') }}"  class="col-span-2 w-40 text-right " id="invoice_date" name="Contract_date"  required>
+                                <label for="number">Contract #<x-req /></label>
+                                <input type="text"  id="number" name="number"   placeholder="Contract No"
                                 minlength="3" title="minimum 3 characters required" required>
 
 
