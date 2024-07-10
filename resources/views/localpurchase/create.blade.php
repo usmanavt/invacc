@@ -47,7 +47,7 @@
                                 {{-- <label for="autocompleted1">Item Name<x-req /></label> --}}
                                 {{-- <input type="text"  class="col-span-2" id="autocompleted1" name="autocompleted1" placeholder="Select Items Name"
                                 onkeyup="onkeyUp1(event)"  > --}}
-                                <input id="autocompleted1" placeholder="Select Item Name" class=" px-5  w-full border border-gray-400 rounded-md"
+                                <input id="autocompleted1" placeholder="Select Item Name" class=" px-5   border border-gray-400 rounded-md"
                                 onkeyup="onkeyUp1(event)" />
 
                             <div>
