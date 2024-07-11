@@ -28,9 +28,9 @@
 
 
       <div class="flex flex-1 items-center justify-center sm:items-stretch sm:justify-start">
-        <div class="flex flex-shrink-0 items-center">
+        {{-- <div class="flex flex-shrink-0 items-center">
           <img class="h-8 w-auto" src="https://tailwindui.com/img/logos/mark.svg?color=white&shade=500" alt="Your Company">
-        </div>
+        </div> --}}
         <div class="hidden sm:ml-1 sm:block">
           <div class="flex space-x-1">
             <!-- Current: "bg-gray-900 text-white", Default: "text-gray-300 hover:bg-gray-700 hover:text-white" -->
@@ -40,7 +40,7 @@
                 <a href="#" class=" flex items-center h-10 leading-4 px-1 rounded cursor-pointer no-underline hover:no-underline transition-colors
                 text-white duration-100 mx-1 hover:bg-black" @click.prevent="showChildren=!showChildren">
                     <span class="mr-3 text-xl "> <i class="mdi mdi-apple-safari"></i> </span>
-                    <span>Master Setup</span>
+                    <span>Master</span>
                     <span class="ml-2"> <i class="mdi mdi-chevron-down"></i> </span>
                 </a>
                 <div class="bg-white shadow-md rounded border border-gray-300 text-sm absolute top-auto left-0 min-w-full w-56 z-30 mt-1" x-show="showChildren" x-transition:enter="transition ease duration-300 transform" x-transition:enter-start="opacity-0 translate-y-2" x-transition:enter-end="opacity-100 translate-y-0" x-transition:leave="transition ease duration-300 transform" x-transition:leave-start="opacity-100 translate-y-0" x-transition:leave-end="opacity-0 translate-y-4" style="display: none;">
@@ -109,7 +109,7 @@
                 <a href="#" class="flex items-center h-10 leading-10 px-4 rounded cursor-pointer no-underline hover:no-underline transition-colors
                 text-white duration-100 mx-1 hover:bg-black" @click.prevent="showChildren=!showChildren">
                     <span class="mr-3 text-xl "> <i class="mdi mdi-apple-safari"></i> </span>
-                    <span>Office Transaction</span>
+                    <span>Office</span>
                     <span class="ml-2"> <i class="mdi mdi-chevron-down"></i> </span>
                 </a>
                 <div class="bg-white shadow-md rounded border border-gray-300 text-sm absolute top-auto left-0 min-w-full w-56 z-30 mt-1" x-show="showChildren" x-transition:enter="transition ease duration-300 transform" x-transition:enter-start="opacity-0 translate-y-2" x-transition:enter-end="opacity-100 translate-y-0" x-transition:leave="transition ease duration-300 transform" x-transition:leave-start="opacity-100 translate-y-0" x-transition:leave-end="opacity-0 translate-y-4" style="display: none;">
@@ -180,7 +180,7 @@
                 <a href="#" class="flex items-center h-10 leading-10 px-4 rounded cursor-pointer no-underline hover:no-underline transition-colors
                 text-white duration-100 mx-1 hover:bg-black" @click.prevent="showChildren=!showChildren">
                     <span class="mr-3 text-xl "> <i class="mdi mdi-apple-safari"></i> </span>
-                    <span>Godown Transaction</span>
+                    <span>Godown</span>
                     <span class="ml-2"> <i class="mdi mdi-chevron-down"></i> </span>
                 </a>
                 <div class="bg-white shadow-md rounded border border-gray-300 text-sm absolute top-auto left-0 min-w-full w-56 z-30 mt-1" x-show="showChildren" x-transition:enter="transition ease duration-300 transform" x-transition:enter-start="opacity-0 translate-y-2" x-transition:enter-end="opacity-100 translate-y-0" x-transition:leave="transition ease duration-300 transform" x-transition:leave-start="opacity-100 translate-y-0" x-transition:leave-end="opacity-0 translate-y-4" style="display: none;">
@@ -282,7 +282,7 @@
                     </div>
                 </div>
             </li>
-<a href="#" class="block rounded-md bg-gray-900 px-3 py-2 text-base font-medium text-white" aria-current="page">Dashboard</a>
+<a href="{{ route('mastersetup') }}" class="block rounded-md bg-gray-900 px-3 py-2 text-base font-medium text-white" aria-current="page">Dashboard</a>
 
             {{-- <li class="block relative" x-data="{showChildren:false}" @click.away="showChildren=false">
                 <a href="#" class="flex items-center h-10 leading-10 px-4 rounded cursor-pointer no-underline hover:no-underline transition-colors
@@ -675,7 +675,7 @@
     </li>
 
 
-    <li class="block relative" x-data="{showChildren:false}" @click.away="showChildren=false">
+    {{-- <li class="block relative" x-data="{showChildren:false}" @click.away="showChildren=false">
         <a href="#" class="flex items-center h-10 leading-10 px-4 rounded cursor-pointer no-underline hover:no-underline transition-colors
         text-white duration-100 mx-1 hover:bg-black" @click.prevent="showChildren=!showChildren">
             <span class="mr-3 text-xl "> <i class="mdi mdi-apple-safari"></i> </span>
@@ -701,10 +701,10 @@
                 </ul>
             </div>
         </div>
-    </li>
+    </li> --}}
 
 
-      <a href="#" class="block rounded-md bg-gray-900 px-3 py-2 text-base font-medium text-white" aria-current="page">Dashboard</a>
+      <a href="{{ route('mastersetup') }}" class="block rounded-md bg-gray-900 px-3 py-2 text-base font-medium text-white" aria-current="page">Dashboard</a>
       {{-- <a href="#" class="block rounded-md px-3 py-2 text-base font-medium text-gray-300 hover:bg-gray-700 hover:text-white">Team</a>
       <a href="#" class="block rounded-md px-3 py-2 text-base font-medium text-gray-300 hover:bg-gray-700 hover:text-white">Projects</a>
       <a href="#" class="block rounded-md px-3 py-2 text-base font-medium text-gray-300 hover:bg-gray-700 hover:text-white">Calendar</a>  --}}
@@ -715,5 +715,5 @@
 
 
 </nav>
-@yield('contents')
+{{-- @yield('contents') --}}
 

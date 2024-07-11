@@ -22,6 +22,7 @@
 
 
 @extends('layouts.mainscreen')
+{{-- @extends('layouts.dboard') --}}
 
 <!-- {{-- @extends('layouts.dbheader') --}}
 
@@ -40,12 +41,12 @@
     </div> --}} -->
 
 
-
+{{--
 @section('contents')
-{{-- @extends('layouts.content') --}}
+@extends('layouts.content') --}}
 
 
-@endsection
+{{-- @endsection --}}
 
 
 

@@ -72,12 +72,9 @@
         {{-- @vite(['resources/css/app.css', 'resources/js/app.js']) --}}
     </head>
     <body class="font-sans antialiased">
-        <div class="min-h-screen bg-blue-100">
+        <div class="min-h-screen border-t-green-300">
 
             @include('layouts.navigation')
-
-
-
 
             {{-- @include('layouts.auth') --}}
             <!-- Page Heading -->
