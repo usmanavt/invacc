@@ -2,6 +2,7 @@
 
     @push('styles')
     {{-- <link rel="stylesheet" href="{{ asset('css/tabulator_simple.min.css') }}"> --}}
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="https://unpkg.com/tabulator-tables/dist/css/tabulator.min.css" rel="stylesheet">
     <script type="text/javascript" src="https://unpkg.com/tabulator-tables/dist/js/tabulator.min.js"></script>
     @endpush
@@ -12,67 +13,47 @@
         </h2>
     </x-slot>
 
-    <div class="py-6">
-        <div class="max-w-full mx-auto sm:px-2 lg:px-4">
+    <div class="py-2">
+        <div class=" max-w-full mx-auto sm:px-2 lg:px-2 2xl:w-2/3   ">
             <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
                 {{-- Create Form --}}
-                <div class="px-6 py-2">
+                {{-- <div class="px-6 py-2"> --}}
 
-                    <div class="grid grid-cols-1">
+                    {{-- <div class="grid grid-cols-1"> --}}
                         {{-- Contract Master --}}
-                        <div class="grid grid-cols-12 gap-2 py-2 items-center">
-                            {{-- Contract Master --}}
-                            {{-- <label for="supplier_id">Supplier</label>
-                            <select  autocomplete="on" class="col-span-2" name="supplier_id" id="supplier_id" required>
-                                @foreach($suppliers as $supplier)
-                                    @if ($supplier->id == $contract->supplier_id)
-                                        <option value="{{$supplier->id}}" selected> {{$supplier->title}} </option>
-                                    @endif
-                                    <option value="{{$supplier->id}}"> {{$supplier->title}} </option>
-                                @endforeach
-                            </select> --}}
-
-                            <label for="autocompleted" >Supplier/Item/Date<x-req /></label>
-                            <div class="w-96 relative"   onclick="event.stopImmediatePropagation();" >
-                                <input id="autocompleted" placeholder="Select Supplier Name" disabled value="{{$pcontract}}"   class=" px-5 py-3 w-full border border-gray-400 rounded-md"
-                                onkeyup="onkeyUp(event)" />
-
-
-
-
-                                <div>
-                                    <select  id="supplier_id" name="supplier_id" size="20"  class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full h-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
-                                   </select>
+                        <div class=" grid grid-cols-8  py-1  text-right gap-2 divide-black focus:bg-blue-500  ">
+                            <label for="autocompleted"   >Supplier: </label>
+                                <div class="relative"   onclick="event.stopImmediatePropagation();" >
+                                    <!-- {{-- <input id="autocompleted" placeholder="Select Supplier Name" class=" px-5 py-3 w-48 border border-gray-400 rounded-md" --}} -->
+                                    <input type="text" id="autocompleted"
+                                    {{-- class="  bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-1.5   dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 " placeholder="Supplier" --}}
+                                    onkeyup="onkeyUp(event)" />
+                                        <div>
+                                            <select  id="supplier_id" name="supplier_id" size="20"  class=" bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block  h-auto p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                                            </select>
+                                        </div>
                                 </div>
-                            </div>
 
 
-                            <label for="autocompleted1" >Items<x-req /></label>
-                            <div class="w-96 relative"   onclick="event.stopImmediatePropagation();" >
-                                {{-- <label for="autocompleted1">Item Name<x-req /></label> --}}
-                                {{-- <input type="text"  class="col-span-2" id="autocompleted1" name="autocompleted1" placeholder="Select Items Name"
-                                onkeyup="onkeyUp1(event)"  > --}}
-                                <input id="autocompleted1" placeholder="Select Item Name" class=" px-5 py-10 w-full border border-gray-400 rounded-md"
-                                onkeyup="onkeyUp1(event)" />
+                                <label for="autocompleted1"  >Items:</label>
+                                <div class="relative"   onclick="event.stopImmediatePropagation();" >
+                                    <input type="text" id="autocompleted1"
+                                 {{-- class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-1.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Items" --}}
+                                    onkeyup="onkeyUp1(event)" />
 
-                            <div>
-                                <select  id="item_id" name="item_id" size="20"  class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-96 h-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
-                                </select>
-                            </div>
+                                    <div>
+                                        <select  id="item_id" name="item_id" size="20"  class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-96 h-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                                        </select>
+                                    </div>
 
-                            </div>
-
+                                </div>
 
                             {{-- Contract Master - Invoice Date --}}
-                            <label for="invoice_date">Contract Date</label>
-                            <input type="date" class="col-span-2" id="invoice_date" style="text-align: right" name="invoice_date" value="{{ $contract->invoice_date->format('Y-m-d') }}" required>
+                            <label for="number"  >Contract #:</label>
+                            <input type="text"  id="number" name="number"    placeholder="Contract No">
+                            <label for="invoice_date"  >Contract Date:</label>
+                            <input type="date" value="{{ date('Y-m-d') }}"  class=" text-right" id="invoice_date" name="Contract_date"  required>
 
-                            {{-- Contract Master - Invoice Number --}}
-                            <label for="number">Contract #</label>
-                            <input type="text" class="col-span-2" id="number" name="number" placeholder="Invoice No"
-                                minlength="3" title="minimum 3 characters required" value="{{ $contract->number }}" required>
-
-                                <input type="text"  id="supid" name="supid" class="col-span-2" hidden   value="{{ $contract->supplier_id }}" >
                         </div>
 
 
@@ -93,8 +74,8 @@
 
                         </div>
 
-                    </div>
-                </div>
+                    {{-- </div> --}}
+                {{-- </div> --}}
             </div>
         </div>
     </div>
