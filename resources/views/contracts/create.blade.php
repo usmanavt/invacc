@@ -16,7 +16,7 @@
             {{ __('Create Contract') }}
         </h2>
     </x-slot>
-
+{{-- jkdjka dkfjakdfjs --}}
     <div class="py-2  ">
         <div class=" max-w-full mx-auto sm:px-2 lg:px-2 2xl:w-3/5   ">
             {{--  max-w-full mx-auto sm:px-2 lg:px-2 --}}
