@@ -9,7 +9,7 @@
     <script type="text/javascript" src="https://unpkg.com/tabulator-tables/dist/js/tabulator.min.js"></script>
     @endpush
 
-///
+
 
     <x-slot name="header">
         <h2 class="font-semibold text-xl text-gray-800 leading-tight">
