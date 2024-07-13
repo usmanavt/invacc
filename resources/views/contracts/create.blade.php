@@ -11,10 +11,6 @@
 
 
 
-
-
-
-
     <x-slot name="header">
         <h2 class="font-semibold text-xl text-gray-800 leading-tight">
             {{ __('Create Contract') }}
@@ -22,12 +18,12 @@
     </x-slot>
 
     <div class="py-2  ">
-        <div class=" max-w-full mx-auto sm:px-2 lg:px-2   ">
+        <div class=" max-w-full mx-auto sm:px-2 lg:px-2 2xl:w-3/5   ">
             {{--  max-w-full mx-auto sm:px-2 lg:px-2 --}}
             <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
                 {{-- Create Form --}}
                     {{-- <div class="grid grid-cols-1"> --}}
-                        <div class=" grid grid-cols-8  py-1  text-right gap-2 divide-black focus:bg-blue-500">
+                        <div class=" grid grid-cols-8  py-1  text-right gap-2 divide-black focus:bg-blue-500 xl: max-w-full mx-auto sm:px-2 lg:px-2 2xl:max-w-2/3 ">
 
                             <label for="autocompleted"   >Supplier: </label>
                                 <div class="relative"   onclick="event.stopImmediatePropagation();" >
