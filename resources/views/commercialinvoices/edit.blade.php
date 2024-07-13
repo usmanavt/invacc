@@ -13,31 +13,31 @@
         </h2>
     </x-slot>
 
-    <div class="py-6">
-        <div class="max-w-full mx-auto sm:px-2 lg:px-4">
+    <div class="py-2">
+        <div class="max-w-full mx-auto sm:px-2 lg:px-2 text-xs text-right">
             <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
                 {{-- Create Form --}}
                 <div class="px-6 py-2">
 
                     <div class="grid">
 
-                        <fieldset class="border px-4 py-2 rounded">
+                        <fieldset class="border px-2 py-1 rounded">
                             <legend>Invoice Level Entries</legend>
-                            <div class="grid grid-cols-12 gap-2 py-2 items-center">
+                            <div class="grid grid-cols-12 gap-1 py-1 items-center">
 
-                                <x-input-date title="Inv. Date" name="invoicedate" value="{{ $i->invoice_date->format('Y-m-d') }}" req required class="col-span-2"/>
+                                <x-input-date title="Inv. Date" name="invoicedate" value="{{ $i->invoice_date->format('Y-m-d') }}"  class="col-span-2"/>
 
-                                <x-input-text title="Invoice #" name="invoiceno" value="{{ $i->invoiceno }}" req required class=""/>
+                                <x-input-text title="Invoice #" name="invoiceno" value="{{ $i->invoiceno }}"  class=""/>
                                 {{-- <x-input-text title="Challan #" name="challanno" value="{{ $i->challanno }}" req required class=""/> --}}
 
-                                <x-input-numeric title="Duty.Conv.Rate" name="conversionrate" value="{{ $i->conversionrate }}" req required class=""/>
-                                <x-input-numeric title="Supp.Conv.Rate" name="sconversionrate" value="{{ $i->sconversionrate }}"  req required class=""/>
-                                <x-input-numeric title="Insurance" name="insurance"  value="{{ $i->insurance }}" req required class=""/>
+                                <x-input-numeric title="Duty.Conv.Rate" name="conversionrate" value="{{ $i->conversionrate }}"  class=""/>
+                                <x-input-numeric title="Supp.Conv.Rate" name="sconversionrate" value="{{ $i->sconversionrate }}"   class=""/>
+                                <x-input-numeric title="Insurance" name="insurance"  value="{{ $i->insurance }}"  class=""/>
                                 <x-input-numeric title="" name="purid"  value="{{ $i->purid }}" hidden/>
                             </div>
                             <div class="grid grid-cols-12 gap-2 py-2 items-center">
-                                <x-input-date title="Mac. Date" name="machine_date" value="{{ $i->machine_date->format('Y-m-d') }}" req required class="col-span-2"/>
-                                <x-input-text title="Machine #" name="machineno" value="{{ $i->machineno }}" req required class="col-span-2"/>
+                                <x-input-date title="Mac. Date" name="machine_date" value="{{ $i->machine_date->format('Y-m-d') }}"  class="col-span-2"/>
+                                <x-input-text title="Machine #" name="machineno" value="{{ $i->machineno }}"  class="col-span-2"/>
 
                                     <x-label for="" value="Packaging Type"/>
                                     <select autocomplete="on" required name="packingid" id ="packingid"   >
@@ -53,7 +53,7 @@
                                  <x-input-text title="Nos Of Packages" name="packingwt" value="{{ $i->packingwt }}" />
 
                                     <x-label for="" value="Unit as Per Duty Calculation"/>
-                                    <select autocomplete="on" required name="dunitid" id ="dunitid"  required >
+                                    <select autocomplete="on"  name="dunitid" id ="dunitid"   >
                                         <option value="" selected>--Unit</option>
                                         @foreach ($cd as $sku)
 

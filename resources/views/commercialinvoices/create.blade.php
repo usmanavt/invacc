@@ -2,11 +2,11 @@
 
     @push('styles')
     {{-- <link rel="stylesheet" href="{{ asset('css/tabulator_simple.min.css') }}"> --}}
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="https://unpkg.com/tabulator-tables/dist/css/tabulator.min.css" rel="stylesheet">
     <script type="text/javascript" src="https://unpkg.com/tabulator-tables/dist/js/tabulator.min.js"></script>
 
     @endpush
-
 
     <x-slot name="header">
         <h2 class="font-semibold text-xl text-gray-800 leading-tight">
@@ -14,28 +14,28 @@
         </h2>
     </x-slot>
 
-    <div class="py-6">
-        <div class="max-w-full mx-auto sm:px-2 lg:px-4">
+    <div class="py-2">
+        <div class="max-w-full mx-auto sm:px-2 lg:px-2 xl:text-xs text-right  ">
             <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
                 {{-- Create Form --}}
-                <div class="px-6 py-2">
+                <div class="px-1 py-1">
 
                     <div class="grid">
 
-                        <fieldset class="border px-4 py-2 rounded">
+                        <fieldset class="border px-1 py-1 rounded">
                             <legend>Invoice Level Entries</legend>
-                            <div class="grid grid-cols-12 gap-2 py-2 items-center">
+                            <div class="grid grid-cols-12 gap-2 py-1 items-center">
 
-                                <x-input-date title="Inv. Date" id="invoicedate" name="invoicedate" req required class="col-span-2"/>
+                                <x-input-date title="Inv. Date" id="invoicedate" name="invoicedate"  class="col-span-2"/>
 
-                                <x-input-text title="Invoice #" name="invoiceno" req required class=""/>
+                                <x-input-text title="Invoice #" name="invoiceno"  class=""/>
                                 {{-- <x-input-text title="Challan #" name="challanno" req required class=""/> --}}
 
-                                <x-input-numeric title="Duty.Conv. Rate" name="conversionrate"  req required class=""/>
-                                <x-input-numeric title="Supp.Conv. Rate" name="sconversionrate"  req required class=""/>
-                                <x-input-numeric title="Insurance" name="insurance"  req required class=""/>
+                                <x-input-numeric title="Duty.Conv. Rate" name="conversionrate"   class=""/>
+                                <x-input-numeric title="Supp.Conv. Rate" name="sconversionrate"   class=""/>
+                                <x-input-numeric title="Insurance" name="insurance"   class=""/>
                             </div>
-                            <div class="grid grid-cols-12 gap-2 py-2 items-center">
+                            <div class="grid grid-cols-12 gap-1 py-2 items-center">
                                 <x-input-date title="G.D Date" name="machine_date" />
                                 <x-input-text title="G.D #" name="machineno" />
                                 {{-- <div class="col-sm-3 mt-3">
@@ -54,7 +54,7 @@
                                 </select>
 
                                 {{-- <x-input-text title="packingtype" name="packingtype" /> --}}
-                                <x-input-text title="Nos Of Packages" name="packingwt"  req required class="col-span-2"/>
+                                <x-input-text title="Nos Of Packages" name="packingwt"   class="col-span-2"/>
 
 
 
