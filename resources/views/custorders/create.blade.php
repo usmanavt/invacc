@@ -14,69 +14,56 @@
         </h2>
     </x-slot>
 
-    <div class="py-2">
+    <div class="py-1">
         <div class="max-w-full mx-auto sm:px-2 lg:px-4">
             <div class="bg-white overflow-hidden shadow-sm  sm:rounded-lg">
                 {{-- Create Form --}}
-                <div class="px-6 py-2">
+                <div class="px-2 py-2">
 
                     <div class="grid">
 
                         <fieldset class="border px-4 py-2 rounded">
                             <legend>Invoice Level Entries</legend>
-                            <div class="grid grid-cols-12 gap-1 py-2 items-center">
+                            {{-- <div class="grid grid-cols-12 gap-1 py-2 items-center"> --}}
+                                <div class=" grid grid-cols-8   py-1  text-right  gap-1 divide-black focus:bg-blue-500 w-full  ">
 
-                                {{-- <label for="customer_id">Customer<x-req /></label>
-                                    <select autocomplete="on" class="col-span-2" name="customer_id" id="customer_id" >
-                                        <option value="" selected>--Customer</option>
-                                        @foreach($customers as $customer)
-                                        <option value="{{$customer->id}}"> {{$customer->title}} </option>
-                                        @endforeach
-                                    </select> --}}
-                                <x-input-text title="Customer Name" name="custname" id="custname" req required class="col-span-2" disabled  />
-                                <x-input-text title="Quotation No" name="qutno" id="qutno" req required class="col-span-2" disabled  />
-                                <x-input-date title="Quotation Date" name="qutdate" id="qutdate" req required class="col-span-2" disabled  />
-                                <x-input-text title="P.R No" name="prno" id="prno" req required class="col-span-2" disabled  />
+                                <x-input-text title="Customer Name" name="custname" id="custname"   disabled  />
+                                <x-input-text title="Quotation No" name="qutno" id="qutno"   disabled  />
+                                <x-input-date title="Quotation Date" name="qutdate" id="qutdate"   disabled  />
+                                <x-input-text title="P.R No" name="prno" id="prno"   disabled  />
+                                <x-input-date title="P.O Date" id="podate" name="podate"  class="col-span-1" />
+                                <x-input-text title="P.O #" name="pono" id="pono"  class="col-span-1"  />
+                                <x-input-text title="P.O Seq.#" name="poseqno" id="poseqno" value="{{$maxposeqno}}" class="col-span-1"  />
+
 
                             </div>
-                            <div class="grid grid-cols-12 gap-1 py-2 items-center">
-                                <x-input-date title="P.O Date" id="podate" name="podate" req required class="col-span-2" />
-                                <x-input-text title="P.O #" name="pono" id="pono" req required class="col-span-2"  />
-                                <x-input-date title="" name="deliverydt" hidden req required class="col-span-2"/>
-                                <x-input-text title="P.O Seq.#" name="poseqno" id="poseqno" value="{{$maxposeqno}}"    placeholder="poseqno" required   />
+                            <div class=" grid grid-cols-8   py-1  text-right  gap-1 divide-black focus:bg-blue-500 w-full  ">
+                                <x-input-numeric title="Discount(%)" name="discntper" id="discntper" class="col-span-1"     />
+                                {{-- <input class="checked:bg-blue-500 checked:border-blue-500 focus:outline-none" type="checkbox" name="per" id="per" onclick="EnableDisableTextBox(this)" > --}}
+                                <x-input-numeric title="Discount(Amount)" name="discntamt" id="discntamt" class="col-span-1"   />
+                                <x-input-numeric title="Receivable Amount" name="rcvblamount" class="col-span-1" disabled />
 
-
-                                {{-- <label for="">
-                                    Remakrs <span class="text-red-500 font-semibold  ">(*)</span>
-                                </label>
-                                <textarea name="remarks" id="remarks" cols="100" rows="2" maxlength="150" required class="rounded"></textarea> --}}
+                                <x-input-numeric title="Sale Tax(%)" name="saletaxper" class="col-span-1"  onblur="tnetamount()"  />
+                                <x-input-numeric title="Sale Tax(Rs)" name="saletaxamt" class="col-span-1" disabled    />
+                                <x-input-numeric title="Cartage" name=cartage  class="col-span-1"  onblur="tnetamount()"  />
+                                <x-input-numeric title="Total Amount" name="totrcvbamount" class="col-span-1" disabled />
                             </div>
                         </fieldset>
 
-                        <fieldset class="border px-4 py-2 rounded">
-                            {{-- <legend>Invoice Level Expenses</legend> --}}
+                        {{-- <fieldset class="border px-4 py-2 rounded">
                             <div class="grid grid-cols-12 gap-2 py-2 items-center">
-                                <x-input-numeric title="Discou(%)" name="discntper" id="discntper" disabled    />
-                                <input class="checked:bg-blue-500 checked:border-blue-500 focus:outline-none" type="checkbox" name="per" id="per" onclick="EnableDisableTextBox(this)" >
-                                <x-input-numeric title="Discount(Amount)" name="discntamt" id="discntamt"   />
-                                <x-input-numeric title="Receivable Amount" name="rcvblamount" disabled />
-                            </div>
-                            <div class="grid grid-cols-12 gap-2 py-2 items-center">
-                                <x-input-numeric title="Sale Tax(%)" name="saletaxper" required  onblur="tnetamount()"  />
-                                <x-input-numeric title="Sale Tax(Rs)" name="saletaxamt" disabled    />
-                                <x-input-numeric title="Cartage" name=cartage  required  onblur="tnetamount()"  />
-                                <x-input-numeric title="Total Amount" name="totrcvbamount" disabled />
-                            </div>
-                        </fieldset>
 
-                        <div class="flex flex-row px-4 py-2 items-center">
+                            </div>
+                            <div class="grid grid-cols-12 gap-2 py-2 items-center">
+                            </div>
+                        </fieldset> --}}
+
+                        {{-- <div class="flex flex-row px-4 py-2 items-center">
                             <x-label value="Add Pcs & Feet Size & Press"></x-label>
                             <x-button id="calculate" class="mx-2" type="button" onclick="calculate()">Calculate</x-button>
                             <x-label value="This will prepare your commercial invoice for Submission"></x-label>
-
-                            {{-- <input class="checked:bg-blue-500 checked:border-blue-500 focus:outline-none" title="W/Qutation" type="checkbox" value="checked" name="woq" id="woq"   > --}}
-                        </div>
-
+                        </div> --}}
+                        <x-input-date title="" name="deliverydt" hidden  class="col-span-2"/>
 
 
                         <x-tabulator-dynamic />
@@ -254,7 +241,7 @@
             detailsUrl = `${getDetails}/?id=${data.id}`
             fetchDataFromServer(detailsUrl)
             adopted = true
-            calculateButton.disabled = false
+            // calculateButton.disabled = false
             closeModal()
         })
     </script>
@@ -541,6 +528,7 @@ var updateValues = (cell) => {
                         hozAlign:"right",
                         width:120,
                         field:"saleamnt",
+                        responsive:0,
                         cssClass:"bg-gray-200 font-semibold",
                         formatter:"money",
                         cssClass:"bg-green-200 font-semibold",

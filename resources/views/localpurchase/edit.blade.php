@@ -12,18 +12,19 @@
         </h2>
     </x-slot>
 
-    <div class="py-6">
-        <div class="max-w-full mx-auto sm:px-2 lg:px-4">
+    <div class="py-1">
+        <div class="max-w-full mx-auto sm:px-1 lg:px-1">
             <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
                 {{-- Create Form --}}
-                <div class="px-6 py-2">
+                <div class="px-1 py-1">
 
-                    <div class="grid grid-cols-1">
+                    {{-- <div class="grid grid-cols-1"> --}}
                         {{-- Contract Master --}}
-                        <div class="grid grid-cols-12 gap-2 py-2 items-center">
+                        {{-- <div class="grid grid-cols-12 gap-2 py-2 items-center"> --}}
                             {{-- Contract Master --}}
+                            <div class=" grid grid-cols-8   py-1  text-right gap-1 divide-black focus:bg-blue-500  ">
                             <label for="supplier_id">Supplier</label>
-                            <select  autocomplete="on" class="col-span-2" name="supplier_id" id="supplier_id" disabled >
+                            <select  autocomplete="on" class="" name="supplier_id" id="supplier_id" width=20 disabled >
                                 @foreach($suppliers as $supplier)
                                     @if ($supplier->id == $commercialInvoice->supplier_id)
                                     <option value="{{$supplier->id}}" selected> {{$supplier->title}} </option>
@@ -32,65 +33,62 @@
                                 @endforeach
                             </select>
 
-                            <label for="autocompleted1" >Items<x-req /></label>
-                            <div class="w-96 relative"   onclick="event.stopImmediatePropagation();" >
-                                <input id="autocompleted1" placeholder="Select Item Name" class=" px-5 py-10 w-full border border-gray-400 rounded-md"
+                            <label for="autocompleted1"  >Items:</label>
+                            <div class="relative"   onclick="event.stopImmediatePropagation();" >
+                                <input type="text" id="autocompleted1"
                                 onkeyup="onkeyUp1(event)" />
-
-                            <div>
-                                <select  id="item_id" name="item_id" size="20"  class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-96 h-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
-                                </select>
+                                <div>
+                                    <select  id="item_id" name="item_id" size="20"  class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-96 h-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                                    </select>
+                                </div>
                             </div>
 
-                            </div>
-
-                            <label for="invoice_date">Invoice Date</label>
-                            <input type="date"  id="invoice_date" size="10" name="invoice_date" value="{{ $commercialInvoice->invoice_date->format('Y-m-d') }}"  required>
-                            {{-- ->format('Y-m-d') --}}
-                            {{-- Contract Master - Invoice Number --}}
+                            <label for="invoice_date">Date</label>
+                            <input type="date"  id="invoice_date"  name="invoice_date" value="{{ $commercialInvoice->invoice_date->format('Y-m-d') }}"  >
                             <label for="invoiceno">Invoice #</label>
-                            <input type="text"  id="invoiceno" size="10" name="invoiceno" placeholder="Invoice No"
-                                minlength="3" title="minimum 3 characters required" value="{{ $commercialInvoice->invoiceno }}" required>
+                            <input type="text"  id="invoiceno"  name="invoiceno" placeholder="Invoice No"
+                             minlength="3" title="minimum 3 characters required" value="{{ $commercialInvoice->invoiceno }}" >
 
-                            <label for="challanno">Bill #<x-req /></label>
-                            <input type="text"  id="challanno" name="challanno" size="10" value="{{ $commercialInvoice->challanno }}" >
+                            {{-- <label for="challanno">Bill #<x-req /></label>
+                            <input type="text"  id="challanno" name="challanno" size="10" value="{{ $commercialInvoice->challanno }}" > --}}
 
 
                                 {{-- <label for="gpassno">GatePass #<x-req /></label> --}}
-                                <input type="text" class="col-span-2" id="gpassno" name="gpassno" value="{{ $commercialInvoice->gpassno }}" hidden   placeholder="gpassno"
-                                    minlength="1" title="minimum 1 characters required" required>
+
                         </div>
 
-                        <fieldset class="border px-4 py-2 rounded">
-                            <legend>Invoice Level Expenses</legend>
-                            <div class="grid grid-cols-12 gap-2 py-2 items-center">
-                                <x-input-numeric title="Discou(%)" name="insurance" value="{{ $commercialInvoice->insurance }}" disabled  />
-                                 <input class="checked:bg-blue-500 checked:border-blue-500 focus:outline-none" type="checkbox" name="per" id="per" onclick="EnableDisableTextBox(this)" >
-                                 <x-input-numeric title="Discount(Amount)" name="collofcustom" value="{{ $commercialInvoice->collofcustom }}"    />
+                        {{-- <fieldset class="border px-4 py-2 rounded"> --}}
+                            {{-- <legend>Invoice Level Expenses</legend> --}}
+                            <div class="grid grid-cols-8 gap-1 py-1 text-right">
+
+                                <x-input-text title="Bill #" name="challanno" value="{{ $commercialInvoice->challanno }}" disabled  />
+                                 <x-input-numeric title="Discou(%)" name="insurance" value="{{ $commercialInvoice->insurance }}" disabled  />
+                                 <input class="checked:bg-blue-500 checked:border-blue-500 focus:outline-none mt-2 float-left " type="checkbox" name="per" id="per" onclick="EnableDisableTextBox(this)" >
+                                 <x-input-numeric title="Discount(Amount)" name="collofcustom" class="col-span-2" value="{{ $commercialInvoice->collofcustom }}"    />
                                 <x-input-numeric title="Cartage/Loading Charges" name="exataxoffie" value="{{ $commercialInvoice->exataxoffie }}"  required  onblur="tnetamount()"  />
                                 <x-input-numeric title="Cutting/Repairing Charges" name="otherchrgs" value="{{ $commercialInvoice->otherchrgs }}" required  onblur="tnetamount()"  />
-                                <x-input-numeric title="Payble Amount" name="bankntotal" value="{{ $commercialInvoice->total }}"  />
-                                <x-input-numeric title="" name="contract_id" value="{{ $commercialInvoice->id }}" hidden />
-                                    <x-input-numeric title="Delete Mode" name="dltid" id="dltid" hidden />
+                                    <label for="">
+                                        Descripiton <span class="text-red-500 font-semibold"></span>
+                                    </label>
+                                    <textarea name="comdescription" id="comdescription" cols="30" rows="2" maxlength="150" required class="rounded"> {{ $commercialInvoice->comdescription }} </textarea>
+                                <x-input-numeric title="Payble Amount" name="bankntotal" value="{{ $commercialInvoice->total }}" disabled  />
+
                             </div>
-                        </fieldset>
+                        {{-- </fieldset> --}}
 
                         <div class="flex flex-row px-4 py-2 items-center">
-                            {{-- <x-label value="Add Pcs & Feet Size & Press"></x-label> --}}
-                            <x-button id="calculate" class="mx-2" type="button" onclick="calculate()">Generate Item Cost With Other Charges</x-button>
-                            {{-- <x-label value="This will prepare your commercial invoice for Submission"></x-label> --}}
-                            <label for="">
-                                Descripiton <span class="text-red-500 font-semibold"></span>
-                            </label>
-                            <textarea name="comdescription" id="comdescription" cols="30" rows="2" maxlength="150" required class="rounded"> {{ $commercialInvoice->comdescription }} </textarea>
-                        </div>
-                        <div>
                             <input class="checked:bg-blue-500 checked:border-blue-500 focus:outline-none" {{ $commercialInvoice->ttype === 1 ? 'checked' : '' }} type="checkbox" name="comp" id="comp"   onclick="chqcol(this)" >
-
                             <label for="">
                                 <span style="color: brown;font-weight: bold"> Temporary </span> <span class="text-red-500 font-semibold  "></span>
                                  </label>
+
+                            <x-button id="calculate" class="mx-2" type="button" onclick="calculate()">Generate Item Cost With Other Charges</x-button>
+                        </div>
+                        <div>
                                  <input type="text" title="t1"  id="p9" name="p9" value="0"  hidden    >
+                                 <input type="text" class="col-span-2" id="gpassno" name="gpassno" value="{{ $commercialInvoice->gpassno }}" hidden   placeholder="gpassno">
+                                 <x-input-numeric title="" name="contract_id" value="{{ $commercialInvoice->id }}" hidden />
+                                 <x-input-numeric title="" name="dltid" id="dltid" hidden />
                         </div>
 
 
@@ -111,7 +109,7 @@
                         </div>
 
                     </div>
-                </div>
+                {{-- </div> --}}
             </div>
         </div>
     </div>

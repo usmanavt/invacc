@@ -14,92 +14,87 @@
         </h2>
     </x-slot>
 
-    <div class="py-6">
+    <div class="py-1">
         <div class="max-w-full mx-auto sm:px-2 lg:px-4">
             <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
                 {{-- Create Form --}}
-                <div class="px-6 py-2">
+                <div class="px-1 py-1">
 
-                    <div class="grid grid-cols-1">
-                        {{-- Contract Master --}}
-                        <div class="grid grid-cols-12 gap-1 py-1 items-center">
-                            <label for="autocompleted" >Customers<x-req /></label>
-                            <div class="w-96 relative"   onclick="event.stopImmediatePropagation();" >
-                                <input id="autocompleted" placeholder="Select Customer Name"  class=" px-5 py-3 w-50 border border-gray-400 rounded-md"
+                            <div class=" grid grid-cols-9   py-1  text-right  gap-1 divide-black focus:bg-blue-500 w-full  ">
+                            <label for="autocompleted"   >Customers: </label>
+                            <div class="relative"   onclick="event.stopImmediatePropagation();" >
+                                <input type="text" id="autocompleted"
                                 onkeyup="onkeyUp(event)" />
+                                    <div>
+                                        <select  id="customer_id" name="customer_id" size="20"  class=" bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block  h-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                                        </select>
+                                    </div>
+                            </div>
+
+                            <label for="autocompleted1"  >Items:</label>
+                            <div class="relative"   onclick="event.stopImmediatePropagation();" >
+                                <input type="text" id="autocompleted1"
+                             {{-- class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-1.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Items" --}}
+                                onkeyup="onkeyUp1(event)" />
                                 <div>
-                                    <select  id="customer_id" name="customer_id" size="20"  class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full h-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                                    <select  id="item_id" name="item_id" size="20"  class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-96 h-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
                                     </select>
                                 </div>
-                            </div>
-
-                            <label for="autocompleted1" style="text-align:right " ><x-req /> Items</label>
-                            <div class="w-96 relative"   onclick="event.stopImmediatePropagation();" >
-                                <input id="autocompleted1" class="col-span-2 border border-gray-400 rounded-md" placeholder="Select Item Name" class=" col-span-2  px-0 py-10 w-full border border-gray-400 rounded-md"
-                                onkeyup="onkeyUp1(event)" />
-
-                            <div>
-                                <select  id="item_id" name="item_id" size="20"  class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-auto h-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
-                                </select>
-                            </div>
 
                             </div>
 
-                            <label for="saldate" style="text-align:right ">Date<x-req /></label>
-                            <input type="date" value="{{ date('Y-m-d') }}" size="10" class="col-span-2"  id="saldate" name="saldate" required>
-                            {{-- <label for="valdate" style="text-align:right ">Valid Date<x-req /></label> --}}
-                            <input type="date" value="{{ date('Y-m-d') }}" class="col-span-2" width="10"  id="valdate" name="valdate" hidden   >
-                            <input tabindex="-1" class="checked:bg-blue-500 checked:border-blue-500 focus:outline-none" type="checkbox" name="vdt" id="vdt"  onclick="hideshowTextBox(this)" >
-                            <input type="text" title="custid"  id="custid" name="custid" value=0 hidden    >
-                            <input type="text" title="txtvaldt"  id="txtvaldt" name="txtvaldt" value=0 hidden     >
-                        </div>
-
-                        <div class="grid grid-cols-12 gap-1 py-1 items-center">
-                            <label for="qutno">Quotation No <x-req /></label>
-                            <input type="text" class="col-span-2" id="qutno" name="qutno" value="{{$maxdcno}}"    placeholder="qutno" disabled required>
-                            <input tabindex="-1" class="checked:bg-blue-500 checked:border-blue-500 focus:outline-none" type="checkbox" name="qutid" id="qutid"  onclick="EnableDisableTextBox(this)" >
-                            <label for="prno">P.R No#<x-req /></label>
-                            <input type="text" class="col-span-2" id="prno" name="prno"  placeholder="prno" required>
+                            <label for="saldate" >Date</label>
+                            <input type="date" value="{{ date('Y-m-d') }}"    id="saldate" name="saldate"   >
+                            <label for="qutno">Qut.# </label>
+                            <input type="text"  id="qutno" name="qutno" value="{{$maxdcno}}"    placeholder="qutno" disabled>
+                            <input tabindex="-1" class="checked:bg-blue-500 checked:border-blue-500 focus:outline-none mt-2 float-left  "
+                            type="checkbox"  name="qutid" id="qutid"  onclick="EnableDisableTextBox(this)" >
+                            <label for="prno">P.R No#</label>
+                            <input type="text" class="col-span-1" id="prno" name="prno"  placeholder="prno" >
                             <label for="">
                                 Cash Customer <span class="text-red-500 font-semibold"></span>
                             </label>
-                            <textarea name="cashcustomer" id="cashcustomer" cols="20" rows="2" maxlength="100" required class="rounded"></textarea>
+                            <textarea name="cashcustomer" id="cashcustomer" cols="20" rows="1" maxlength="100"  class=" col-span-1  rounded"></textarea>
 
                             <label for="">
-                                Cash Cust.Address <span class="text-red-500 font-semibold">(*)</span>
+                                Cash Cust.Address <span class="text-red-500 font-semibold"></span>
                             </label>
-                            <textarea name="cashcustadrs" id="cashcustadrs" class="col-span-8" cols="30" rows="2" maxlength="150" required class="rounded"></textarea>
-
+                            <textarea name="cashcustadrs" id="cashcustadrs" class="col-span-3" cols="30" rows="1" maxlength="150"  class="rounded"></textarea>
                         </div>
 
-                        <div class="grid grid-cols-12 gap-1 py-1 items-center">
-                            <label for="t1">Term & Condition <x-req /></label>
-                            <input type="text" class="col-span-2" id="t1" name="t1" >
-                            <input type="text" class="col-span-2" id="t2" name="t2" >
-                            <input type="text" class="col-span-2" id="t3" name="t3" >
-                            <input type="text" class="col-span-2" id="t4" name="t4" >
-                            <input type="text" class="col-span-2" id="t5" name="t5" >
-
-
+                        <div class=" grid grid-cols-9   py-1  text-right  gap-1 divide-black focus:bg-blue-500 w-full  ">
+                            <x-input-numeric title="Discount(%)" name="discntper" id="discntper" class="col-span-1"    />
+                            <x-input-numeric title="Discount(Amount)" name="discntamt" id="discntamt" class="col-span-1"   />
+                            <x-input-numeric title="Rcvbl Amount" name="rcvblamount" class="col-span-3" disabled />
                         </div>
+
+                        <div class=" grid grid-cols-9 py-0  text-right  gap-1 divide-black focus:bg-blue-500 w-full  ">
+                            <x-input-numeric title="Sale Tax(%)" name="saletaxper" class="col-span-1"   onblur="tnetamount()"  />
+                            <x-input-numeric title="Sale Tax(Rs)" name="saletaxamt" class="col-span-1" disabled    />
+                            <x-input-numeric title="Cartage" name=cartage  class="col-span-1"  onblur="tnetamount()"  />
+                            <x-input-numeric title="Total Amount" name="totrcvbamount" class="col-span-1" disabled />
+                        </div>
+
 
                         <div class="grid grid-cols-1">
                             {{-- Contract Master --}}
 
-                            <fieldset class="border px-4 py-2 rounded">
-                                <legend>Invoice Level Expenses</legend>
-                                <div class="grid grid-cols-12 gap-2 py-2 items-center">
-                                    <x-input-numeric title="Discou(%)" name="discntper" id="discntper"    />
-                                    <x-input-numeric title="Discount(Amount)" name="discntamt" id="discntamt"   />
-                                    <x-input-numeric title="Receivable Amount" name="rcvblamount" disabled />
-                                </div>
-                                <div class="grid grid-cols-12 gap-2 py-2 items-center">
-                                    <x-input-numeric title="Sale Tax(%)" name="saletaxper" required  onblur="tnetamount()"  />
-                                    <x-input-numeric title="Sale Tax(Rs)" name="saletaxamt" disabled    />
-                                    <x-input-numeric title="Cartage" name=cartage  required  onblur="tnetamount()"  />
-                                    <x-input-numeric title="Total Amount" name="totrcvbamount" disabled />
-                                </div>
-                            </fieldset>
+                            <div class=" grid grid-cols-9 py-2  text-right  gap-1 divide-black focus:bg-blue-500 w-full  ">
+                                <label for="t1">Term & Condition </label>
+                                <input type="text" class="col-span-2" id="t1" name="t1" placeholder="T&C-1"  >
+                                <input type="text" class="col-span-2" id="t2" name="t2" placeholder="T&C-2"  >
+                                <input type="text" class="col-span-1" id="t3" name="t3" placeholder="T&C-3"  >
+                                <input type="text" class="col-span-1" id="t4" name="t4" placeholder="T&C-4"  >
+                                <input type="text" class="col-span-1" id="t5" name="t5" placeholder="T&C-5"  >
+                            </div>
+
+
+
+
+                                <input type="date" value="{{ date('Y-m-d') }}" class="col-span-2" width="10"  id="valdate" name="valdate" hidden   >
+                                <input tabindex="-1" class="checked:bg-blue-500 checked:border-blue-500 focus:outline-none" hidden type="checkbox" name="vdt" id="vdt"  onclick="hideshowTextBox(this)" >
+                                <input type="text" title="custid"  id="custid" name="custid" value=0 hidden    >
+                                <input type="text" title="txtvaldt"  id="txtvaldt" name="txtvaldt" value=0 hidden     >
 
 
                         {{-- Contract Details --}}
@@ -113,7 +108,7 @@
                                 <i class="fa fa-save fa-fw"></i>
                                 Submit
                             </button>
-                        </div>
+                        {{-- </div> --}}
 
                     </div>
 
@@ -490,57 +485,16 @@ const skus = @json($skus);
             },
 
 
-            // {title:"LastSalePrice",
-            //     field:"pcspbundle1",
-            //     // editor:"number",
-            //     cssClass:"bg-gray-200 font-semibold",
-            //     validator:"required",
-            //     formatter:"money",
-            //     formatterParams:{thousand:",",precision:2},
-            //     // validator:["required","integer"],
-            //     cellEdited: updateValues,
-            //    },
-
 
                {
             title:'Last Sale', headerHozAlign:"center",
             columns:[
 
-            {title:"Price",field:"pcspbundle1",width:100,editor:true,responsive:0,headerHozAlign:"center"},
-            {title:"Unit",field:"lsalunit",width:100,editor:true,responsive:0,headerHozAlign:"center"},
+            {title:"Price",field:"pcspbundle1",width:100,editor:false,responsive:0,headerHozAlign:"center"},
+            {title:"Unit",field:"lsalunit",width:100,editor:false,responsive:0,headerHozAlign:"center"},
 
 
         ]},
-
-
-
-
-
-
-
-
-
-        {
-            title:'Market Suppliers', headerHozAlign:"center",
-            columns:[
-
-            {title:"1st",field:"supp1",width:100,editor:true,responsive:0,headerHozAlign:"center"},
-            {title:"2nd",field:"supp2",width:100,editor:true,responsive:0,headerHozAlign:"center"},
-            {title:"3rd",field:"supp3",width:100,editor:true,responsive:0,headerHozAlign:"center"},
-
-
-        ]},
-
-
-        {
-            title:'Market Price', headerHozAlign:"center",
-            columns:[
-
-            {title:"1st",field:"mrktprice1",width:100,responsive:0,formatter:"money",headerHozAlign:"center",editor:"number"},
-            {title:"2nd",field:"mrktprice2",width:100,responsive:0,formatter:"money",headerHozAlign:"center",editor:"number"},
-            {title:"3rd",field:"mrktprice3",width:100,responsive:0,formatter:"money",headerHozAlign:"center",editor:"number"},
-        ]},
-
 
         {
             title:'Sale', headerHozAlign:"center",
@@ -574,6 +528,30 @@ const skus = @json($skus);
 
 
 
+
+
+
+
+        {
+            title:'Market Suppliers', headerHozAlign:"center",
+            columns:[
+
+            {title:"1st",field:"supp1",width:100,editor:true,responsive:0,headerHozAlign:"center"},
+            {title:"2nd",field:"supp2",width:100,editor:true,responsive:0,headerHozAlign:"center"},
+            {title:"3rd",field:"supp3",width:100,editor:true,responsive:0,headerHozAlign:"center"},
+
+
+        ]},
+
+
+        {
+            title:'Market Price', headerHozAlign:"center",
+            columns:[
+
+            {title:"1st",field:"mrktprice1",width:100,responsive:0,formatter:"money",headerHozAlign:"center",editor:"number"},
+            {title:"2nd",field:"mrktprice2",width:100,responsive:0,formatter:"money",headerHozAlign:"center",editor:"number"},
+            {title:"3rd",field:"mrktprice3",width:100,responsive:0,formatter:"money",headerHozAlign:"center",editor:"number"},
+        ]},
 
 
 

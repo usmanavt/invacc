@@ -14,95 +14,96 @@
     </x-slot>
 
 
-    <div class="py-6">
-        <div class="max-w-full mx-auto sm:px-2 lg:px-4">
+    <div class="py-1">
+        <div class="max-w-full mx-auto sm:px-1 lg:px-1">
             <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">.
                 {{-- Create Form --}}
-                <div class="px-6 py-2">
+                <div class="px-1 py-1">
 
-                    <div class="grid grid-cols-1">
+                    {{-- <div class="grid grid-cols-1"> --}}
                         {{-- Contract Master --}}
-                        <div class="grid grid-cols-12 gap-1 py-2 items-center">
+                        {{-- <div class="grid grid-cols-12 gap-1 py-2 items-center"> --}}
+                        <div class=" grid grid-cols-8   py-1  text-right gap-2 divide-black focus:bg-blue-500  ">
 
-                            {{-- <label for="supplier_id">Supplier<x-req /></label>
-                            <select autocomplete="on" class="col-span-2" name="supplier_id" id="supplier_id" required>
-                                <option value="" selected>--Supplier</option>
-                                @foreach($suppliers as $supplier)
-                                <option value="{{$supplier->id}}"> {{$supplier->title}} </option>
-                                @endforeach
-                            </select> --}}
-
-                            <label for="autocompleted" >Supplier<x-req /></label>
-                            <div class="w-96 relative"   onclick="event.stopImmediatePropagation();" >
-                                <input id="autocompleted" placeholder="Select Supplier Name" class=" px-5  w-full border border-gray-400 rounded-md"
+                            <label for="autocompleted"   >Suppliers: </label>
+                            <div class="relative"   onclick="event.stopImmediatePropagation();" >
+                                <!-- {{-- <input id="autocompleted" placeholder="Select Supplier Name" class=" px-5 py-3 w-48 border border-gray-400 rounded-md" --}} -->
+                                <input type="text" id="autocompleted"
+                                {{-- class="  bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-1.5   dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 " placeholder="Supplier" --}}
                                 onkeyup="onkeyUp(event)" />
-                                <div>
-                                    <select  id="supplier_id" name="supplier_id" size="20"  class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full h-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
-                                    </select>
-                                </div>
+                                    <div>
+                                        <select  id="supplier_id" name="supplier_id" size="20"  class=" bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block  h-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                                        </select>
+                                    </div>
                             </div>
-
-                            <label for="autocompleted1" >Items<x-req /></label>
-                            <div class="w-96 relative"   onclick="event.stopImmediatePropagation();" >
-                                {{-- <label for="autocompleted1">Item Name<x-req /></label> --}}
-                                {{-- <input type="text"  class="col-span-2" id="autocompleted1" name="autocompleted1" placeholder="Select Items Name"
-                                onkeyup="onkeyUp1(event)"  > --}}
-                                <input id="autocompleted1" placeholder="Select Item Name" class=" px-5   border border-gray-400 rounded-md"
+                            <label for="autocompleted1"  >Items:</label>
+                            <div class="relative"   onclick="event.stopImmediatePropagation();" >
+                                <input type="text" id="autocompleted1"
+                             {{-- class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-1.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Items" --}}
                                 onkeyup="onkeyUp1(event)" />
 
-                            <div>
-                                <select  id="item_id" name="item_id" size="20"  class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-96 h-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
-                                </select>
-                            </div>
+                                <div>
+                                    <select  id="item_id" name="item_id" size="20"  class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-96 h-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                                    </select>
+                                </div>
 
                             </div>
 
-                            <label for="invoice_date">Invoice Date<x-req /></label>
-                            <input type="date" value="{{ date('Y-m-d') }}"  size="10" id="invoice_date" name="invoice_date" required>
+                            <label for="invoice_date"> Date</label>
+                            <input type="date" value="{{ date('Y-m-d') }}"   id="invoice_date" name="invoice_date" >
 
-                            <label for="number">Invoice #<x-req /></label>
-                            <input type="text"  id="number" name="number" size="10" placeholder="Invoice No" >
+                            <label for="number">Invoice #</label>
+                            <input type="text"  id="number" name="number"  placeholder="Invoice No" >
 
-                            <label for="challanno">Bill #<x-req /></label>
-                            <input type="text"  id="challanno" size="10" name="challanno"  >
-                            <input type="text" class="col-span-2" id="gpassno" name="gpassno" value="{{$maxgpno}}" hidden   placeholder="gpassno">
+                            {{-- <label for="challanno">Bill #<x-req /></label>
+                            <input type="text"  id="challanno"  name="challanno"  > --}}
+
 
                         </div>
 
                         <div class="grid grid-cols-1">
                             {{-- Contract Master --}}
 
-                            <fieldset class="border px-4 py-2 rounded">
-                                <legend>Invoice Level Expenses</legend>
-                                <div class="grid grid-cols-12 gap-2 py-2 items-center">
-                                    <x-input-numeric title="Discou(%)" name="insurance" id="insurance" disabled    />
-                                    <input tabindex="-1" class="checked:bg-blue-500 checked:border-blue-500 focus:outline-none" type="checkbox" name="per" id="per" onclick="EnableDisableTextBox(this)" >
+                            {{-- <fieldset class="border px-4 py-2 rounded"> --}}
+                                {{-- <legend>Invoice Level Expenses</legend> --}}
+                                <div class="grid grid-cols-8 gap-2 py-1 text-right">
+
+                                    <x-input-text title="Bill#" name="challanno" id="challanno"   />
+                                    <x-input-numeric title="Discount(%)" name="insurance" id="insurance" disabled    />
+                                    <input tabindex="-1" class="checked:bg-blue-500 checked:border-blue-500 focus:outline-none mt-2 float-left " type="checkbox" name="per" id="per" onclick="EnableDisableTextBox(this)" >
                                     <x-input-numeric title="Discount(Amount)" name="collofcustom" class="col-span-2"     />
-                                    <x-input-numeric title="Cartage/Loading Charges" name="exataxoffie" required  onblur="tnetamount()"  />
-                                    <x-input-numeric title="Cutting/Reapair Charges" name="otherchrgs" required  onblur="tnetamount()"  />
+                                    <x-input-numeric title="Cartage/Loading Charges" name="exataxoffie"   onblur="tnetamount()"  />
+                                    <x-input-numeric title="Cutting/Reapair Charges" name="otherchrgs"   onblur="tnetamount()"  />
+
+                                    {{-- <label for="comdescription">
+                                        Descripiton <span class="text-red-500 font-semibold  "></span>
+                                    </label>
+                                    <textarea name="comdescription" id="comdescription px-2 col-span-4 "  cols="30" rows="2" maxlength="150" required class="rounded"> </textarea> --}}
+
+
+                                    <label for="">
+                                        Descripiton <span class="text-red-500 font-semibold"></span>
+                                    </label>
+                                    <textarea name="comdescription" id="comdescription" cols="30" rows="2" maxlength="150"  class="rounded"> </textarea>
                                     <x-input-numeric title="Payble Amount" name="bankntotal" disabled />
+
+
                                 </div>
-                            </fieldset>
+                            {{-- </fieldset> --}}
 
                             <div class="flex flex-row px-4 py-2 items-center">
-                                {{-- <x-label value="Add Pcs & Feet Size & Press"></x-label> --}}
-                                <x-button tabindex="-1"  id="calculate" class="mx-2" type="button" onclick="calculate()">Generate Item Cost With Other Charges</x-button>
-                                {{-- <x-label value="This will prepare your commercial invoice for Submission"></x-label> --}}
+                                <input tabindex="-1" class="checked:bg-blue-500 checked:border-blue-500 focus:outline-none  "  type="checkbox" name="comp" id="comp"   onclick="chqcol(this)" >
 
                                 <label for="">
-                                    Descripiton <span class="text-red-500 font-semibold"></span>
-                                </label>
-                                <textarea name="comdescription" id="comdescription" cols="30" rows="2" maxlength="150" required class="rounded"> </textarea>
-                            </div>
-
-                            <div>
-                                <input tabindex="-1" class="checked:bg-blue-500 checked:border-blue-500 focus:outline-none"  type="checkbox" name="comp" id="comp"   onclick="chqcol(this)" >
-
-                                <label for="">
-                                    <span style="color: brown;font-weight: bold"> Temporary </span> <span class="text-red-500 font-semibold  "></span>
+                                    <span style="color: brown;font-weight: bold "> Temporary </span> <span class="text-red-500 font-semibold "></span>
                                      </label>
+                                     <x-button tabindex="-1"  id="calculate" class="mx-2" type="button" onclick="calculate()">Generate Item Cost With Other Charges</x-button>
+                            </div>
+                            <div>
+
                                      <input type="text" title="t1"  id="p9" name="p9" value="0" hidden    >
                                      <input type="text" title="supid"  id="supid" name="supid" value="0" hidden     >
+                                    <input type="text" class="col-span-2" id="gpassno" name="gpassno" value="{{$maxgpno}}" hidden   placeholder="gpassno">
                             </div>
 
 
@@ -119,7 +120,7 @@
                             </button>
                         </div>
 
-                    </div>
+                    {{-- </div> --}}
 
             </div>
         </div>
@@ -979,7 +980,7 @@ document.onkeydown=function(e){
     document.getElementById("otherchrgs").value='';
 
     document.getElementById("bankntotal").value=0;
-    document.getElementById("comdescription").value=1;
+    document.getElementById("comdescription").value='';
     document.getElementById("supid").value=0;
 }
 

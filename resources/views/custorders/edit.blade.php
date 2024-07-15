@@ -13,21 +13,23 @@
         </h2>
     </x-slot>
 
-    <div class="py-6">
+    <div class="py-2">
         <div class="max-w-full mx-auto sm:px-2 lg:px-4">
             <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
                 {{-- Create Form --}}
-                <div class="px-6 py-2">
+                <div class="px-1 py-1">
 
-                    <div class="grid grid-cols-1">
+                    {{-- <div class="grid grid-cols-1"> --}}
                         {{-- Contract Master --}}
-                        <div class="grid grid-cols-12 gap-2 py-2 items-center">
+                        {{-- <div class="grid grid-cols-12 gap-2 py-2 items-center"> --}}
                             {{-- Contract Master --}}
 
+                    <fieldset class="border px-4 py-2 rounded">
+                        <legend>Invoice Level Entries</legend>
 
-
+                          <div class=" grid grid-cols-8   py-1  text-right  gap-1 divide-black focus:bg-blue-500 w-full  ">
                             <label for="customer_id">Customer</label>
-                            <select  autocomplete="on" class="col-span-2" name="customer_id" id="customer_id" disabled required>
+                            <select  autocomplete="on"  name="customer_id" id="customer_id" disabled required>
                                 @foreach($customer as $customer)
                                     @if ($customer->id == $customerorder->customer_id)
                                     <option value="{{$customer->id}}" selected> {{$customer->title}} </option>
@@ -35,50 +37,36 @@
                                     <option value="{{$customer->id}}"> {{$customer->title}} </option>
                                 @endforeach
                             </select>
-
-                            <x-input-text title="" name="quotation_id" id="quotation_id" value="{{ $customerorder->quotation_id }}" hidden     />
-                            <x-input-text title="Quotation No" name="qutno" id="qutno" value="{{ $customerorder->pqutno }}" disabled     />
-                            <x-input-date title="Quotation Date" name="qutdate" id="qutdate" value="{{ $customerorder->qutdate->format('Y-m-d') }}"  class="col-span-2" disabled  />
-                            <x-input-text title="P.R No" name="prno" id="prno" value="{{ $customerorder->pprno }}" disabled     />
-
-
-
-
+                                <x-input-text title="Quotation No" name="qutno" id="qutno" value="{{ $customerorder->pqutno }}"   disabled  />
+                                <x-input-date title="Quotation Date" name="qutdate" id="qutdate" value="{{ $customerorder->qutdate->format('Y-m-d') }}"   disabled  />
+                                <x-input-text title="P.R No" name="prno" id="prno" value="{{ $customerorder->pprno }}"   disabled  />
+                                <x-input-date title="P.O Date" id="podate" name="podate" value="{{ $customerorder->podate->format('Y-m-d') }}"  class="col-span-1" />
+                                <x-input-text title="P.O #" name="pono" id="pono" value="{{ $customerorder->pono }}"  class="col-span-1"  />
+                                <x-input-text title="P.O Seq.#" name="poseqno" id="poseqno" value="{{ $customerorder->poseqno }}" class="col-span-1"  />
                         </div>
-                        <div class="grid grid-cols-12 gap-1 py-2 items-center">
-                            <x-input-date title="P.O Date" id="podate" name="podate" value="{{ $customerorder->podate->format('Y-m-d') }}" req required class="col-span-2" />
-                            <x-input-text title="P.O #" name="pono" id="pono" value="{{ $customerorder->pono }}"  />
-                            <x-input-date title="Delivery Date" name="deliverydt" hidden value="{{ $customerorder->deliverydt->format('Y-m-d') }}" />
-                            <x-input-text title="P.O Seq.#" name="poseqno" id="poseqno" value="{{ $customerorder->poseqno }}"    required   />
+                        <div class=" grid grid-cols-8   py-1  text-right  gap-1 divide-black focus:bg-blue-500 w-full  ">
+                            <x-input-numeric title="Discount(%)" name="discntper" id="discntper"  class="col-span-1" value="{{ $customerorder->discntper }}"     />
+                            {{-- <input class="checked:bg-blue-500 checked:border-blue-500 focus:outline-none" type="checkbox" name="per" id="per" onclick="EnableDisableTextBox(this)" > --}}
+                            <x-input-numeric title="Discount(Amount)" name="discntamt" id="discntamt" value="{{ $customerorder->discntamt }}" class="col-span-1"   />
+                            <x-input-numeric title="Receivable Amount" name="rcvblamount" value="{{ $customerorder->rcvblamount }}" class="col-span-1" disabled />
 
-                            {{-- <label for="">
-                                Remakrs <span class="text-red-500 font-semibold  ">(*)</span>
-                            </label>
-                            <textarea name="remarks" id="remarks" cols="100" rows="2" maxlength="150" required class="rounded">
-                                {{ $customerorder->remarks }}
-
-                            </textarea> --}}
+                            <x-input-numeric title="Sale Tax(%)" name="saletaxper" class="col-span-1" value="{{ $customerorder->saletaxper }}"  onblur="tnetamount()"  />
+                            <x-input-numeric title="Sale Tax(Rs)" name="saletaxamt" class="col-span-1" value="{{ $customerorder->saletaxamt }}" disabled    />
+                            <x-input-numeric title="Cartage" name=cartage  class="col-span-1" value="{{ $customerorder->cartage }}"  onblur="tnetamount()"  />
+                            <x-input-numeric title="Total Amount" name="totrcvbamount" value="{{ $customerorder->totrcvbamount }}" class="col-span-1" disabled />
                         </div>
                     </fieldset>
+                        {{-- </div> --}}
 
-
-                        </div>
-
-                        <fieldset class="border px-4 py-2 rounded">
+                        {{-- <fieldset class="border px-4 py-2 rounded">
                             <legend>Invoice Level Expenses</legend>
                             <div class="grid grid-cols-12 gap-2 py-2 items-center">
                                 <x-input-numeric title="Discou(%)" name="discntper" id="discntper" value="{{ $customerorder->discntper }}" disabled    />
-                                    {{-- <div class="basis-0 md:basis-1/5 self-center pt-4"> --}}
                                         <input class="checked:bg-blue-500 checked:border-blue-500 focus:outline-none" type="checkbox" name="per" id="per" onclick="EnableDisableTextBox(this)" >
-                                        {{-- <label class="inline-block text-gray-800"> --}}
-
-                                        {{-- </label> --}}
-                                    {{-- </div> --}}
-
 
                                 <x-input-numeric title="Discount(Amount)" name="discntamt" id="discntamt" value="{{ $customerorder->discntamt }}"    />
                                 <x-input-numeric title="Payble Amount" name="rcvblamount" value="{{ $customerorder->rcvblamount }}" disabled />
-                                <x-input-numeric title="" name="sale_invoice_id" id="sale_invoice_id" value="{{ $customerorder->id }}" hidden  />
+
                             </div>
 
                             <div class="grid grid-cols-12 gap-2 py-2 items-center">
@@ -91,7 +79,10 @@
 
 
 
-                        </fieldset>
+                        </fieldset> --}}
+                        <x-input-text title="" name="quotation_id" id="quotation_id" value="{{ $customerorder->quotation_id }}" hidden     />
+                        <x-input-numeric title="" name="sale_invoice_id" id="sale_invoice_id" value="{{ $customerorder->id }}" hidden  />
+                            <x-input-date title="" name="deliverydt" hidden  />
 
                         {{-- Contract Details --}}
                         <x-tabulator-dynamic />
@@ -109,7 +100,7 @@
 
                         </div>
 
-                    </div>
+                    {{-- </div> --}}
                 </div>
             </div>
         </div>

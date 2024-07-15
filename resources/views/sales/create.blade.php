@@ -18,14 +18,14 @@
         <div class="max-w-full mx-auto sm:px-2 lg:px-4">
             <div class="bg-white overflow-hidden shadow-sm  sm:rounded-lg">
                 {{-- Create Form --}}
-                <div class="px-6 py-2">
+                <div class="px-1 py-2">
 
                     <div class="grid">
 
                         <fieldset class="border px-4 py-2 rounded">
                             <legend>Invoice Level Entries</legend>
-                            <div class="grid grid-cols-12 gap-1 py-2 items-center">
-
+                            {{-- <div class="grid grid-cols-12 gap-1 py-2 items-center"> --}}
+                                <div class=" grid grid-cols-7   py-1   text-right  gap-2  divide-black focus:bg-blue-500  w-full  ">
                                 {{-- <label for="customer_id">Customer<x-req /></label>
                                     <select autocomplete="on" class="col-span-2" name="customer_id" id="customer_id" >
                                         <option value="" selected>--Customer</option>
@@ -33,44 +33,29 @@
                                         <option value="{{$customer->id}}"> {{$customer->title}} </option>
                                         @endforeach
                                     </select> --}}
-                                <x-input-text title="Customer Name" name="custname" id="custname"  class="col-span-2" disabled  />
-                                <x-input-text title="P.O No" name="pono" id="pono"  class="col-span-2" disabled  />
-                                <x-input-date title="P.O Date" name="podate" id="podate"  class="col-span-2" disabled  />
-                                {{-- <x-input-text title="G.Pass No" name="gpno" id="gpno"      class="col-span-2"   /> --}}
-                            </div>
-                            <div class="grid grid-cols-12 gap-1 py-2 items-center">
-                                <x-input-date title="Deilivery Date" id="deliverydt" name="deliverydt"  class="col-span-2" />
+                                <x-input-text title="Customer" name="custname" id="custname" class="col-span-2"   disabled  />
+                                <x-input-text title="P.O No" name="pono" id="pono"   disabled  />
+                                <x-input-date title="P.O Date" name="podate" id="podate"   disabled  />
+
                                 <x-input-text title="DC No" name="dcno" id="dcno" value="{{$maxdcno}}" class="col-span-2"   />
-                                <x-input-text title="Bill No" name="billno" id="billno" value="{{$maxbillno}}"   class="col-span-2"   />
-                                {{-- <label for="">
-                                    Remakrs <span class="text-red-500 font-semibold  ">(*)</span>
-                                </label>
-                                <textarea name="remarks" id="remarks" cols="100" rows="2" maxlength="150" required class="rounded"></textarea> --}}
-                            </div>
-                        </fieldset>
+                                <x-input-date title="Deilivery Date" id="deliverydt" name="deliverydt"  class="col-span-1" />
+                                <x-input-text title="Bill No" name="billno" id="billno" value="{{$maxbillno}}"   class="col-span-1"   />
 
-                        <fieldset class="border px-4 py-2 rounded">
-                            {{-- <legend>Invoice Level Expenses</legend> --}}
-                            <div class="grid grid-cols-12 gap-2 py-2 items-center">
-                                <x-input-numeric title="Discou(%)" name="discntper" id="discntper" class="col-span-2" disabled    />
-                                <input class="checked:bg-blue-500 checked:border-blue-500 focus:outline-none" type="checkbox" name="per" id="per" onclick="EnableDisableTextBox(this)" >
-                                <x-input-numeric title="Discount(Amount)" name="discntamt" id="discntamt"   />
-                                <x-input-numeric title="Receivable Amount" name="rcvblamount" disabled />
-                            </div>
-                            <div class="grid grid-cols-12 gap-2 py-2 items-center">
+                                <x-input-numeric title="Discou(%)" name="discntper" id="discntper" class="col-span-1" disabled     />
+                                <input tabindex="-1" class="checked:bg-blue-500 checked:border-blue-500 focus:outline-none mt-2 float-left " type="checkbox" name="per" id="per" onclick="EnableDisableTextBox(this)" >
+                                <x-input-numeric title="Discount(Amount)" name="discntamt" id="discntamt" class="col-span-1"   />
+                                <x-input-numeric title="Receivable Amount" name="rcvblamount" class="col-span-1" disabled />
                                 <x-input-numeric title="Sale Tax(%)" name="saletaxper" class="col-span-2"  onblur="tnetamount()"  />
-                                <x-input-numeric title="Sale Tax(Rs)" name="saletaxamt" disabled class="col-span-2"    />
-                                <x-input-numeric title="Cartage" name=cartage  class="col-span-2"  onblur="tnetamount()"  />
+                                <x-input-numeric title="Sale Tax(Rs)" name="saletaxamt" disabled class="col-span-1"    />
+                                <x-input-numeric title="Cartage" name=cartage  class="col-span-1"  onblur="tnetamount()"  />
                                 <x-input-numeric title="Total Amount" name="totrcvbamount" class="col-span-2" disabled />
-                            </div>
-                            <div class="grid grid-cols-12 gap-2 py-2 items-center">
                                 <label for="">
-                                    Descripiton <span class="text-red-500 font-semibold;" class="col-span-2" ></span>
+                                    Descripiton <span class="text-red-500 font-semibold;"  ></span>
                                 </label>
-                                <textarea name="saldescription" id="saldescription"  cols="30" rows="2" maxlength="150"  class="rounded" ></textarea>
+                                <textarea name="saldescription" id="saldescription"  cols="30" rows="1" maxlength="150" class="col-span-3 rounded"  ></textarea>
+
                             </div>
                         </fieldset>
-
 
 
                         {{-- <div > --}}
@@ -617,7 +602,7 @@ var totalVal = function(values, data, calcParams){
 
 
         dynamicTable = new Tabulator("#dynamicTable", {
-            height:"350px",
+            height:"300px",
             width:"1000px",
             rowContextMenu: rowMenu,
             layout:'fitDataTable',
@@ -634,10 +619,10 @@ var totalVal = function(values, data, calcParams){
                 {title:"S.No",            field:"sno", formatter:"rownum",responsive:0,cssClass:"bg-gray-200 font-semibold"},
                 {title:"Id",           field:"id", visible:false},
                 {title:"Material Name",     field:"material_title",responsive:0, cssClass:"bg-gray-200 font-semibold",width:300,responsive:0},
-                {title:"Material Size",    field:"dimension",cssClass:"bg-gray-200 font-semibold",width:150,responsive:0},
-                {title:"Item Source",    field:"itemsource",cssClass:"bg-gray-200 font-semibold",width:100,responsive:0},
-                {title:"Master Unit",         field:"munitname",responsive:0, hozAlign:"center", cssClass:"bg-gray-200 font-semibold",width:120,responsive:0},
-                {title:"Sale Unit",         field:"sku",responsive:0, hozAlign:"center", cssClass:"bg-gray-200 font-semibold",width:120,responsive:0},
+                {title:"Dimension",    field:"dimension",cssClass:"bg-gray-200 font-semibold",width:110,responsive:0},
+                {title:"Source",    field:"itemsource",cssClass:"bg-gray-200 font-semibold",width:100,responsive:0},
+                {title:"M.Unit",         field:"munitname",responsive:0, hozAlign:"center", cssClass:"bg-gray-200 font-semibold",width:70,responsive:0},
+                {title:"S.Unit",         field:"sku",responsive:0, hozAlign:"center", cssClass:"bg-gray-200 font-semibold",width:70,responsive:0},
                 {title:"Unitid",       field:"sku_id",visible:false},
                 // {title:"contract_id",  field:"contract_id",visible:false},
                 {title:"material_id",  field:"material_id",visible:false},
@@ -655,12 +640,12 @@ var totalVal = function(values, data, calcParams){
                 {
                 title:'STOCK QUANTITY', headerHozAlign:"center",
                     columns:[
-                {title:"InKg", field:"sqtykg", cssClass:"bg-gray-200 font-semibold",width:120,responsive:0},
-                {title:"InPcs", field:"sqtypcs", cssClass:"bg-gray-200 font-semibold",width:120,responsive:0},
-                {title:"InFeet", field:"sqtyfeet", cssClass:"bg-gray-200 font-semibold"}],width:120,responsive:0},
+                {title:"InKg", field:"sqtykg", cssClass:"bg-gray-200 font-semibold",width:80,responsive:0},
+                {title:"InPcs", field:"sqtypcs", cssClass:"bg-gray-200 font-semibold",width:80,responsive:0},
+                {title:"InFeet", field:"sqtyfeet", cssClass:"bg-gray-200 font-semibold",width:80,responsive:0}]},
 
-                {title:"Order BalQty",headerHozAlign :'center',
-                            field:"balqty", cssClass:"bg-gray-200 font-semibold",
+                {title:"Order",headerHozAlign :'center',
+                             field:"balqty", cssClass:"bg-gray-200 font-semibold",responsive:0,
                 },
 
                 {
@@ -676,10 +661,10 @@ var totalVal = function(values, data, calcParams){
                             // headerVertical:true,
                             bottomCalc:"sum",
                             formatter:"money",
-                            // cellEdited: updateValues,
+                            responsive:0,
                             validator:["required","numeric"],
                             cssClass:"bg-gray-200 font-semibold",
-                            formatterParams:{thousand:",",precision:2},width:120,responsive:0,
+                            formatterParams:{thousand:",",precision:2},width:80,responsive:0,
 
                         },
 
@@ -695,22 +680,21 @@ var totalVal = function(values, data, calcParams){
                             // cellEdited: updateValues,
                             validator:["required","numeric"],
                             cssClass:"bg-gray-200 font-semibold",
-                            formatterParams:{thousand:",",precision:2},width:120,responsive:0,
+                            formatterParams:{thousand:",",precision:2},width:80,responsive:0,
                         },
 
                         {   title:"InFeet",
                             headerHozAlign :'right',
                             hozAlign:"right",
-                            responsive:0,
                             field:"qtyfeet",
                             editor:"number",
-                            // headerVertical:true,
+                            responsive:0,
                             bottomCalc:"sum",
                             formatter:"money",
                             // cellEdited: updateValues,
                             validator:["required",".numeric"],
                             cssClass:"bg-gray-200 font-semibold",
-                            formatterParams:{thousand:",",precision:2},width:120,responsive:0,
+                            formatterParams:{thousand:",",precision:2},width:80,responsive:0,
                         },
 
 
@@ -732,12 +716,11 @@ var totalVal = function(values, data, calcParams){
 
                 {   title:"Replace Name",headerHozAlign :'center',
                             field:"repname",
-                            responsive:0,
                             editor:true,width:150,responsive:0,
                         },
 
                         {   title:"Brand",headerHozAlign :'center',
-                            field:"mybrand",visible:false,
+                            field:"mybrand",visible:false,responsive:0,
                             editor:true,
                         },
 
@@ -752,8 +735,8 @@ var totalVal = function(values, data, calcParams){
                     columns:[
 
 
-                    {title:"Conversion", field:"unitconver",cellEdited: updateValues,editor:"number",width:90,responsive:0},
-                    {title:"Quantity", field:"feedqty",cellEdited: updateValues,editor:"number",width:120,responsive:0},
+                    {title:"Conversion", field:"unitconver",cellEdited: updateValues,editor:"number",width:80,responsive:0},
+                    {title:"Quantity", field:"feedqty",cellEdited: updateValues,editor:"number",width:80,responsive:0},
 
                     {   title:"Price",
                             headerHozAlign :'right',
@@ -765,7 +748,7 @@ var totalVal = function(values, data, calcParams){
                             formatter:"money",
                             cellEdited: updateValues,
                             validator:["required","numeric"],
-                            formatterParams:{thousand:",",precision:2},width:120,responsive:0,
+                            formatterParams:{thousand:",",precision:2},width:80,responsive:0,
                         },
 
 

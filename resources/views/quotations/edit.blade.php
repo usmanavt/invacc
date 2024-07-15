@@ -13,27 +13,16 @@
         </h2>
     </x-slot>
 
-    <div class="py-6">
+    <div class="py-1">
         <div class="max-w-full mx-auto sm:px-2 lg:px-4">
             <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
                 {{-- Create Form --}}
-                <div class="px-6 py-2">
+                <div class="px-1 py-1">
 
-
-                    {{-- <label for="autocompleted" >Customers/Items<x-req /></label>
-                    <div class="w-96 relative"   onclick="event.stopImmediatePropagation();" >
-                        <input id="autocompleted" placeholder="Select Conuntry Name"  class=" px-5 py-3 w-50 border border-gray-400 rounded-md"
-                        onkeyup="onkeyUp(event)" />
-                        <div>
-                            <select  id="customer_id" name="customer_id" size="20"  class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full h-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
-                            </select>
-                        </div>
-                    </div> --}}
-
-
-                    <div class="grid grid-cols-1">
+                    {{-- <div class="grid grid-cols-1"> --}}
                         {{-- Contract Master --}}
-                        <div class="grid grid-cols-12 gap-2 py-2 items-center">
+                        {{-- <div class="grid grid-cols-9 gap-2 py-2 items-center"> --}}
+                        <div class=" grid grid-cols-9   py-1  text-right  gap-1 divide-black focus:bg-blue-500 w-full  ">
                             {{-- Contract Master --}}
                             <label for="customer_id" style="text-align: right">Customer</label>
                             <select  autocomplete="on" class="col-span-2" name="customer_id" id="customer_id" disabled>
@@ -46,96 +35,66 @@
                             </select>
 
 
-                            <label for="autocompleted1" style="text-align: right" > Items<x-req /></label>
-                            <div class="w-96 relative"   onclick="event.stopImmediatePropagation();" >
-                                <input id="autocompleted1" placeholder="Select Item Name" class=" px-0 py-10 w-full border border-gray-400 rounded-md"
+                            <label for="autocompleted1"  >Items:</label>
+                            <div class="relative"   onclick="event.stopImmediatePropagation();" >
+                                <input type="text" id="autocompleted1"
+                             {{-- class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-1.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Items" --}}
                                 onkeyup="onkeyUp1(event)" />
+                                <div>
+                                    <select  id="item_id" name="item_id" size="20"  class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-96 h-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                                    </select>
+                                </div>
 
-                            <div>
-                                <select  id="item_id" name="item_id" size="20"  class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-96 h-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
-                                </select>
                             </div>
 
-                            </div>
-
-
-                            <label for="saldate">Quotation Date<x-req /></label>
-                            <input type="date"  size="10" class="col-span-2" style="text-align: right"  id="saldate" name="saldate" value="{{ $quotation->saldate->format('Y-m-d') }}" required>
-
-                            {{-- <label for="valdate">Valid Date<x-req /></label> --}}
-                            <input type="date"  size="10"  id="valdate" style="text-align: right" class="col-span-2" name="valdate" value="{{ $quotation->valdate->format('Y-m-d') }}" hidden required>
-                        </div>
-
-
-                        <div class="grid grid-cols-12 gap-2 py-2 items-center">
-
-                            <label for="qutno">Quotation No <x-req /></label>
-                            <input type="text" class="col-span-2" id="qutno" name="qutno" value="{{ $quotation->qutno }}"    placeholder="qutno" required>
-
-                            <label for="prno">P.R No#<x-req /></label>
-                            <input type="text" class="col-span-2" id="prno" name="prno" value="{{ $quotation->prno }}"  placeholder="prno" required>
+                            <label for="saldate" >Date</label>
+                            <input type="date"    id="saldate" name="saldate" value="{{ $quotation->saldate->format('Y-m-d') }}"  >
+                            <label for="qutno">Qut.# </label>
+                            <input type="text"  id="qutno" name="qutno" value="{{ $quotation->qutno }}"    placeholder="qutno" disabled>
+                            <input tabindex="-1" class="checked:bg-blue-500 checked:border-blue-500 focus:outline-none mt-2 float-left  "
+                            type="checkbox"  name="qutid" id="qutid"  onclick="EnableDisableTextBox(this)" >
+                            <label for="prno">P.R No#</label>
+                            <input type="text" class="col-span-1" id="prno" name="prno" value="{{ $quotation->prno }}"  placeholder="prno" >
+                            <label for="">
+                                Cash Customer <span class="text-red-500 font-semibold"></span>
+                            </label>
+                            <textarea name="cashcustomer" id="cashcustomer" cols="20" rows="1" maxlength="100"  class=" col-span-1  rounded">{{ $quotation->cashcustomer }}</textarea>
 
                             <label for="">
-                                Cash Customer Name
-                                {{-- <span class="text-red-500 font-semibold">(*)</span> --}}
+                                Cash Cust.Address <span class="text-red-500 font-semibold"></span>
                             </label>
-                            <textarea name="cashcustomer" id="cashcustomer" cols="30"  rows="1" maxlength="100"   required class="rounded">
-                                {{ $quotation->cashcustomer }}
-                            </textarea>
-                            <label for="">
-                                Cash Customer Address
-                                {{-- <span class="text-red-500 font-semibold">(*)</span> --}}
-                            </label>
-
-                            <textarea name="cashcustadrs" id="cashcustadrs" cols="50" rows="1" maxlength="150" required class="rounded">
-                            {{ $quotation->cashcustadrs }} </textarea>
+                            <textarea name="cashcustadrs" id="cashcustadrs" class="col-span-3" cols="30" rows="1" maxlength="150"  class="rounded">{{ $quotation->cashcustadrs }}</textarea>
 
                         </div>
 
-                        <div class="grid grid-cols-12 gap-1 py-1 items-center">
-                            <label for="t1">Term & Condition <x-req /></label>
-                            <input type="text" class="col-span-2" id="t1" name="t1" value="{{ $quotation->t1 }}" >
-                            <input type="text" class="col-span-2" id="t2" name="t2" value="{{ $quotation->t2 }}" >
-                            <input type="text" class="col-span-2" id="t3" name="t3" value="{{ $quotation->t3 }}" >
-                            <input type="text" class="col-span-2" id="t4" name="t4" value="{{ $quotation->t4 }}" >
-                            <input type="text" class="col-span-2" id="t5" name="t5" value="{{ $quotation->t5 }}" >
+                        <div class=" grid grid-cols-9   py-1  text-right  gap-1 divide-black focus:bg-blue-500 w-full  ">
+                            <x-input-numeric title="Discount(%)" name="discntper" id="discntper" value="{{ $quotation->discntper }}" class="col-span-1"    />
+                            <x-input-numeric title="Discount(Amount)" name="discntamt" id="discntamt" value="{{ $quotation->discntamt }}" class="col-span-1"   />
+                            <x-input-numeric title="Rcvbl Amount" name="rcvblamount" class="col-span-3" value="{{ $quotation->rcvblamount }}" disabled />
+                        </div>
 
+                        <div class=" grid grid-cols-9 py-0  text-right  gap-1 divide-black focus:bg-blue-500 w-full  ">
+                            <x-input-numeric title="Sale Tax(%)" name="saletaxper" class="col-span-1" value="{{ $quotation->saletaxper }}"   onblur="tnetamount()"  />
+                            <x-input-numeric title="Sale Tax(Rs)" name="saletaxamt" class="col-span-1" value="{{ $quotation->saletaxamt }}" disabled    />
+                            <x-input-numeric title="Cartage" name=cartage  class="col-span-1" value="{{ $quotation->cartage }}"  onblur="tnetamount()"  />
+                            <x-input-numeric title="Total Amount" name="totrcvbamount" class="col-span-1" value="{{ $quotation->totrcvbamount }}" disabled />
+                        </div>
 
+                        <div class=" grid grid-cols-9 py-2  text-right  gap-1 divide-black focus:bg-blue-500 w-full  ">
+                            <label for="t1">Term & Condition </label>
+                            <input type="text" class="col-span-2" id="t1" name="t1" placeholder="T&C-1" value="{{ $quotation->t1 }}"  >
+                            <input type="text" class="col-span-2" id="t2" name="t2" placeholder="T&C-2" value="{{ $quotation->t2 }}"  >
+                            <input type="text" class="col-span-1" id="t3" name="t3" placeholder="T&C-3" value="{{ $quotation->t3 }}"  >
+                            <input type="text" class="col-span-1" id="t4" name="t4" placeholder="T&C-4" value="{{ $quotation->t4 }}"  >
+                            <input type="text" class="col-span-1" id="t5" name="t5" placeholder="T&C-5" value="{{ $quotation->t5 }}"  >
                         </div>
 
 
 
-
-
+                        <input type="date"  size="10"  id="valdate" style="text-align: right" class="col-span-2" name="valdate" value="{{ $quotation->valdate->format('Y-m-d') }}" hidden required>
                         <input type="text"  id="p5" name="p5" value="{{ $quotation->closed }}" hidden   >
+                        <x-input-numeric title="" name="sale_invoice_id" id="sale_invoice_id" value="{{ $quotation->id }}" hidden  />
 
-                        <fieldset class="border px-4 py-2 rounded">
-                            <legend>Invoice Level Expenses</legend>
-                            <div class="grid grid-cols-12 gap-2 py-2 items-center">
-                                <x-input-numeric title="Discou(%)" name="discntper" id="discntper" value="{{ $quotation->discntper }}"    />
-                                <x-input-numeric title="Discount(Amount)" name="discntamt" id="discntamt" value="{{ $quotation->discntamt }}"    />
-                                <x-input-numeric title="Payble Amount" name="rcvblamount" value="{{ $quotation->rcvblamount }}" disabled />
-                                <x-input-numeric title="" name="sale_invoice_id" id="sale_invoice_id" value="{{ $quotation->id }}" hidden  />
-                            </div>
-
-                            <div class="grid grid-cols-12 gap-2 py-2 items-center">
-                                <x-input-numeric title="Sale Tax(%)" name="saletaxper" value="{{ $quotation->saletaxper }}" required  onblur="tnetamount()"  />
-                                <x-input-numeric title="Sale Tax(Rs)" name="saletaxamt" value="{{ $quotation->saletaxamt }}" disabled    />
-                                <x-input-numeric title="Cartage" name="cartage" value="{{ $quotation->cartage }}"  required  onblur="tnetamount()"  />
-                                <x-input-numeric title="Total Amount" name="totrcvbamount" value="{{ $quotation->totrcvbamount }}" disabled />
-                            </div>
-                            <div>
-                                <input class="checked:bg-blue-500 checked:border-blue-500 focus:outline-none" {{ $quotation->closed === 0 ? 'checked' : '' }}  type="checkbox" name="qutclose" id="qutclose"   onclick="imppur(this)" >
-                                <label for="">
-                                   <span style="color: brown;font-weight: bold"> Quotation  Close </span> <span class="text-red-500 font-semibold  "> </span>
-                                    </label>
-
-                            </div>
-
-
-
-
-                        </fieldset>
 
                         {{-- Contract Details --}}
                         <x-tabulator-dynamic />
@@ -153,7 +112,7 @@
 
                         </div>
 
-                    </div>
+                    {{-- </div> --}}
                 </div>
             </div>
         </div>
@@ -504,85 +463,7 @@ dynamicTable = new Tabulator("#dynamicTable", {
                 cellEdited: updateValues,
                },
 
-            {
-            title:'Market Suppliers', headerHozAlign:"center",
-            columns:[
-
-            {title:"1st",field:"supp1",width:150,editor:true,responsive:0,headerHozAlign:"center"},
-            {title:"2nd",field:"supp2",width:150,editor:true,responsive:0,headerHozAlign:"center"},
-            {title:"3rd",field:"supp3",width:150,editor:true,responsive:0,headerHozAlign:"center"},
-
-
-        ]},
-
-
-        {
-            title:'Market Price', headerHozAlign:"center",
-            columns:[
-
-            {title:"1st",field:"mrktprice1",width:100,responsive:0,formatter:"money",headerHozAlign:"center",editor:"number"},
-            {title:"2nd",field:"mrktprice2",width:100,responsive:0,formatter:"money",headerHozAlign:"center",editor:"number"},
-            {title:"3rd",field:"mrktprice3",width:100,responsive:0,formatter:"money",headerHozAlign:"center",editor:"number"},
-        ]},
-
-
-
-
-
-
-
-
-            //    {title:"Supplier1",
-            //     field:"supp1",
-            //     width:300,
-            //     editor:true,
-            //     responsive:0,
-            //     validator:"required",
-            //     formatter:"money",
-            //     // formatterParams:{thousand:",",precision:2},
-            //     // validator:["required","integer"],
-            //     // cellEdited: updateValues,
-            //    },
-
-
-            //    {title:"MarketPrice1",
-            //     field:"mrktprice1",
-            //     editor:"number",
-            //     responsive:0,
-            //     validator:"required",
-            //     formatter:"money",
-            //     formatterParams:{thousand:",",precision:2},
-            //     // validator:["required","integer"],
-            //     cellEdited: updateValues,
-            //    },
-
-            //    {title:"Supplier1",
-            //     field:"supp2",
-            //     width:300,
-            //     editor:true,
-            //     responsive:0,
-            //     validator:"required",
-            //     formatter:"money",
-            //     // formatterParams:{thousand:",",precision:2},
-            //     // validator:["required","integer"],
-            //     // cellEdited: updateValues,
-            //    },
-
-
-
-            //    {title:"MarketPrice2",
-            //     field:"mrktprice2",
-            //     editor:"number",
-            //     responsive:0,
-            //     validator:"required",
-            //     formatter:"money",
-            //     formatterParams:{thousand:",",precision:2},
-            //     // validator:["required","integer"],
-            //     cellEdited: updateValues,
-            //    },
-
-
-            {
+               {
             title:'Sale', headerHozAlign:"center",
             columns:[
 
@@ -623,7 +504,30 @@ dynamicTable = new Tabulator("#dynamicTable", {
                 //      return  ( cell.getData().qtykg * cell.getData().price)
                 // },
                 bottomCalc:totval  },
-            ]}
+            ]},
+
+
+
+               {
+            title:'Market Suppliers', headerHozAlign:"center",
+            columns:[
+
+            {title:"1st",field:"supp1",width:150,editor:true,responsive:0,headerHozAlign:"center"},
+            {title:"2nd",field:"supp2",width:150,editor:true,responsive:0,headerHozAlign:"center"},
+            {title:"3rd",field:"supp3",width:150,editor:true,responsive:0,headerHozAlign:"center"},
+
+
+        ]},
+
+
+        {
+            title:'Market Price', headerHozAlign:"center",
+            columns:[
+
+            {title:"1st",field:"mrktprice1",width:100,responsive:0,formatter:"money",headerHozAlign:"center",editor:"number"},
+            {title:"2nd",field:"mrktprice2",width:100,responsive:0,formatter:"money",headerHozAlign:"center",editor:"number"},
+            {title:"3rd",field:"mrktprice3",width:100,responsive:0,formatter:"money",headerHozAlign:"center",editor:"number"},
+        ]},
 
 
     ],
@@ -1049,7 +953,14 @@ function clearform()
 }
 
 
-
+function EnableDisableTextBox(qutid) {
+        var qutno = document.getElementById("qutno");
+        qutno.disabled = qutid.checked ? false : true;
+        qutno.style.color ="black";
+        // if (!discntper.disabled) {
+        //     discntper.focus();
+        // }
+    }
 
 
 

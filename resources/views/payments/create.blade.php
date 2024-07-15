@@ -17,99 +17,74 @@
         <div class="max-w-full mx-auto sm:px-2 lg:px-4">
             <div class="bg-white overflow-hidden shadow-sm  sm:rounded-lg">
                 {{-- Create Form --}}
-                <div class="px-6 py-1">
+                <div class="px-1 py-1">
 
-                    <div class="grid">
+                    {{-- <div class="grid"> --}}
 
                         <fieldset class="border px-4 py-1 rounded">
                             <legend>Invoice Level Entries</legend>
-                            <div class="grid grid-cols-12 gap-1 py-1 items-center">
-                            <label for="head_id">Main Head<x-req /></label>
-                                    <select autocomplete="on" class="col-span-2" name="head_id" id="head_id" >
-                                        {{-- <option value="" selected>--Payment Head</option> --}}
+                            {{-- <div class="grid grid-cols-12 gap-1 py-1 items-center"> --}}
+                        <div class=" grid grid-cols-8   py-1  text-right  gap-1 divide-black focus:bg-blue-500 w-full   ">
+                            <label for="head_id">Main Head</label>
+                                    <select autocomplete="on"  name="head_id" id="head_id" >
                                         @foreach($heads as $head)
                                         <option value="{{$head->id}}"> {{$head->title}} </option>
                                         @endforeach
                                     </select>
 
-                            <div class=" w-96 relative  px-24 "   onclick="event.stopImmediatePropagation();" >
-                                {{-- <label for="autocompleted1">Sub Head<x-req /></label> --}}
-                                <input id="autocompleted1" title="Head Name"  class=" border border-gray-400 rounded-md"
+                               <label for="autocompleted1">Sub Head<x-req /></label>
+                               <div class=" relative "   onclick="event.stopImmediatePropagation();" >
+                                <input type="text" id="autocompleted1" size=20
                                 onkeyup="onkeyUp1(event)" />
                                 <div>
                                     <select  id="supplier_id" name="supplier_id" size="20"  class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-auto h-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
                                     </select>
                                 </div>
                             </div>
-                            </div>
 
-                            <div class="grid grid-cols-12 gap-1 py-1 items-center">
+                            <x-input-date  title="Date" name="documentdate" class="col-span-1" />
+                            <x-input-text tabindex="-1" title="Payment Seq.#" name="transno" id="transno" value="{{$maxposeqno}}"  class="col-span-1"    />
 
-                                {{-- <x-input-text title="Supplier Name" name="supname" id="supname" class="col-span-2" hidden  /> --}}
-
-                                <x-input-date  title="Payment Date" name="documentdate" class="col-span-2" />
-                                <x-input-text tabindex="-1" title="Payment Seq.#" name="transno" id="transno" value="{{$maxposeqno}}"  class="col-span-2"    />
-
-                                <label for="autocompleted" >Bank<x-req /></label>
-                                <div class="w-96 relative"   onclick="event.stopImmediatePropagation();" >
-                                    <input id="autocompleted" placeholder="Select Bank" class=" px-5 py-1 w-full border border-gray-400 rounded-md"
-                                    onkeyup="onkeyUp(event)" />
-                                    <div  >
-                                        <select  id="bank_id" name="bank_id" size="20"  class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-auto h-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                            <label for="autocompleted"   >Bank </label>
+                            <div class="relative"   onclick="event.stopImmediatePropagation();" >
+                                <input type="text"  id="autocompleted"
+                                onkeyup="onkeyUp(event)" />
+                                    <div>
+                                        <select  id="bank_id" name="bank_id" size="20"  class=" bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block  h-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
                                         </select>
                                     </div>
-                                </div>
-
                             </div>
 
-                        <div class="grid grid-cols-12 gap-1 py-1 ">
+                            <x-input-text title="Cheque No" name="cheque_no" id="cheque_no"   class="col-span-1 "  disabled  />
+                            <x-input-date title="Cheque Date" id="cheque_date" name="cheque_date"  class="col-span-1"  />
+                            <x-input-text title="Payment to" name="pmntto" id="pmntto"  class="col-span-1"   />
 
-
-
-                            <x-input-text title="Cheque No" name="cheque_no" id="cheque_no"   class="col-span-2 " width="20rem"  disabled  />
-                            <x-input-date title="Cheque Date" id="cheque_date" name="cheque_date"  class="col-span-2"  />
-                            <x-input-text title="Payment to" name="pmntto" id="pmntto"  class="col-span-2"   />
-
-                        </div>
-
-                        <div class="grid grid-cols-12 gap-1 py-1 items-center">
-                            <x-input-numeric title="Amount(USD)" name="amount_fc" id="amount_fc" onkeyup="chngpkr(event)" class="col-span-2"      />
-                            <x-input-numeric title="Conversion Rate" name="conversion_rate" id="conversion_rate" value=1 onkeyup="chngpkr(event)"  class="col-span-2" disabled   />
-                            <x-input-numeric title="Amount(PKR)" name="amount_pkr" id="amount_pkr" class="col-span-2" disabled />
+                            <x-input-numeric title="Amount(USD)" name="amount_fc" id="amount_fc" onkeyup="chngpkr(event)" class="col-span-1"      />
+                            <x-input-numeric title="Conversion Rate" name="conversion_rate" id="conversion_rate" value=1 onkeyup="chngpkr(event)"  class="col-span-1" disabled   />
+                            <x-input-numeric title="Amount(PKR)" name="amount_pkr" id="amount_pkr" class="col-span-1" disabled />
                             <label for="">
                                 Invoice Level Payment <span class="text-red-500 font-semibold  "></span>
                                 </label>
                             <input tabindex="-1" class="checked:bg-blue-500 checked:border-blue-500 focus:outline-none"  type="checkbox" name="per" id="per" checked=true onclick="EnableDisableTextBox(this)" >
 
-                            <x-input-numeric title="" name="advtxt" id="advtxt" value="0"  hidden     />
-                        </div>
-
-                        <div class="grid grid-cols-12 gap-1 py-1 items-center">
                             <label for="">
                                 Description <span class="text-red-500 font-semibold  "></span>
                                 </label>
-                            <textarea name="description" id="description" cols="150" rows="2" maxlength="150" class="col-span-2" required class="rounded"></textarea>
+                            <textarea name="description" id="description" cols="150" rows="1" maxlength="150" class="col-span-2" required class="rounded"></textarea>
 
-                            <x-input-text title="G.D No For Import Expenses" name="impgdno" id="impgdno" disabled req required class="col-span-2"  />
-
-
-                            {{-- <label for="">
-                                Advance Payment For Clearance Future Invoices <span class="text-red-500 font-semibold  "></span>
-                                </label>
-                            <input class="checked:bg-blue-500 checked:border-blue-500 focus:outline-none"  type="checkbox" name="adv" id="adv"  onclick="advpayment(this)" > --}}
-
-                            <x-input-text title="Cust.DC No" name="cusinvid" id="cusinvid" class="col-span-2;w-20" value=0  disabled     />
-                            <input tabindex="-1" class="checked:bg-blue-500 checked:border-blue-500 focus:outline-none"  type="checkbox" name="invid" id="invid" onclick="enbldspl(this)" >
-
-
+                            <x-input-text title="G.D No For Import Expenses" name="impgdno" id="impgdno" disabled req required class="col-span-1"  />
+                            <x-input-text title="Cust.DC No" name="cusinvid" id="cusinvid" class="col-span-1" value=0  disabled     />
+                            <input tabindex="-1" class="checked:bg-blue-500 checked:border-blue-500 focus:outline-none mt-2 float-left "  type="checkbox"  name="invid" id="invid" onclick="enbldspl(this)" >
 
                         </div>
+
+
 
                     <div>
                         <x-input-text tabindex="-1" title="" name="subhdid" id="subhdid" hidden      />
                         <x-input-text tabindex="-1" title="" name="hdid" id="hdid" hidden      />
                         <x-input-text tabindex="-1" title="" name="shname" id="shname" hidden     />
-
+                        <x-input-numeric title="" name="advtxt" id="advtxt" value="0"  hidden     />
                     </div>
 
                     </fieldset>
@@ -150,7 +125,7 @@
                             </x-button>
                         </div>
 
-                    </div>
+                    {{-- </div> --}}
                 </div>
             </div>
         </div>
