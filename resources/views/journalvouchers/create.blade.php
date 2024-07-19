@@ -12,13 +12,13 @@
         </h2>
     </x-slot>
 
-    <div class="py-6">
+    <div class="py-1">
         <div class="max-w-7xl mx-auto sm:px-1 lg:px-1">
 
             <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
 
                 {{-- Create Form --}}
-                <div class="px-6 py-2" >
+                <div class="px-1 py-1" >
 
                     {{-- Form Data --}}
                     <div class="flex">
@@ -37,86 +37,102 @@
 
                         {{-- </fieldset> --}}
 
-                        <fieldset class="max-w-7xl border px-4 py-2 gap-4 rounded">
-                            <legend>Transaction Date</legend>
-                            <x-input-text title="Cheque No" name="cheque_no" id="cheque_no" req required class="col-span-2" disabled  />
-                            <x-input-text title="Cheque Amount" name="cheque_amt" id="cheque_amt" req required class="col-span-2" disabled  />
+                        {{-- <fieldset class="max-w-7xl border px-4 py-2 gap-4 rounded"> --}}
 
-                            <input tabindex="-1" class="checked:bg-blue-500 checked:border-blue-500 focus:outline-none" type="checkbox" name="per" id="per" onclick="EnableDisableTextBox(this)" >
-                            <label for="">
-                                <span style="color: brown;font-weight: bold"> J.V Against Cheque Collection </span> <span class="text-red-500 font-semibold  ">(*)</span>
-                                 </label>
+                            {{-- <div class="flex flex-row justify-start px-4 ">
 
-                         </fieldset>
-                         <fieldset class="max-w-7xl border px-4 py-2 gap-4 rounded">
-                                 <label for="jvstts">J.V Status</label>
-                                 <select  autocomplete="on" class="col-span-2"  name="jvstts" id="jvstts"  >
-                                    <option value="0">None</option>
-                                     <option value="1">Payment Through Cheque</option>
-                                     <option value="2">Cheque Return to Supplier</option>
-                                     <option value="3">Cheque Pending</option>
+                                <input tabindex="-1" class="checked:bg-blue-500 checked:border-blue-500 focus:outline-none   " type="checkbox" name="per" id="per" onclick="EnableDisableTextBox(this)" >
 
-                                 </select>
-                         </fieldset>
+                                <label for="per">
+                                    <span style="color: brown;font-weight: bold"> J.V Against Cheque Collection </span> <span class="text-red-500 font-semibold   "></span>
+                                    </label>
+                            </div> --}}
 
+                            <div class="flex flex-row px-4 py-2 gap-2 items-center">
+                                <input tabindex="-1" class="checked:bg-blue-500 checked:border-blue-500 focus:outline-none  "  type="checkbox" name="per" id="per"   onclick="EnableDisableTextBox(this)" >
 
-
-
-
-
-
-
-
-
-
-
-
-                        <fieldset class="max-w-7xl border px-1 py-1 gap-1 rounded">
-
-                            <div class="grid grid-cols-12 gap-2 py-1 items-center">
-                                <x-input-date title="J.V Date" class="col-span-2" name="document_date" req required/>
-                                <x-input-text tabindex="-1" title="J.V No" class="col-span-2" name="document_no" disabled value="{{$maxjvno}}"/>
-
-                                <input tabindex="-1" class="checked:bg-blue-500 checked:border-blue-500 focus:outline-none" type="checkbox" name="jno" id="jno" onclick="EnableDisablejvno(this)" >
                                 <label for="">
-                                    <span style="color: brown;font-weight: bold"> </span> <span class="text-red-500 font-semibold  "></span>
+                                    <span style="color: brown;font-weight: bold  "> J.V Against Cheque Collection </span> <span class="text-red-500 font-semibold  "></span>
                                      </label>
 
-                                <label for="jvtype">J.V Type</label>
-                                <select  autocomplete="on" class="col-span-2"  name="jvtype" id="jvtype"  >
-                                    <option value="1">DEBIT</option>
-                                    <option value="2">CREDIT</option>
-                                </select>
+                                     <input tabindex="-1" class="checked:bg-blue-500 checked:border-blue-500 focus:outline-none ml-6 mt-2 float-left " type="checkbox" name="jno" id="jno" onclick="EnableDisablejvno(this)" >
+                                     <label for="">
+                                        <span style="color: brown;font-weight: bold  "> Enable J.V No TextBox </span> <span class="text-red-500 font-semibold  "></span>
+                                         </label>
+
+
+
+
                             </div>
 
 
 
-                            <div class="grid grid-cols-12 gap-2 py-1 items-center">
-                                <label for="head_id">Main Head<x-req /></label>
-                                        <select autocomplete="on" class="col-span-2" name="head_id" id="head_id" >
-                                            {{-- <option value="" selected>--Payment Head</option> --}}
-                                            @foreach($heads as $head)
-                                            <option value="{{$head->id}}"> {{$head->title}} </option>
-                                            @endforeach
-                                        </select>
+                        <fieldset class="border px-4 py-1 rounded">
+                            <legend>Transaction Date</legend>
+                        <div class=" grid grid-cols-8   py-1  text-right  gap-1 divide-black focus:bg-blue-500 w-full   ">
+                            <x-input-text title="Cheque No" name="cheque_no" id="cheque_no" class="col-span-1"   disabled  />
+                            <x-input-text title="Cheque Amount" name="cheque_amt" id="cheque_amt" class="col-span-1"    disabled  />
 
-                                <div class="w-96 relative grid grid-cols-4 gap-1 px-10 py-5  "   onclick="event.stopImmediatePropagation();" >
-                                    {{-- <label for="autocompleted1">Sub Head<x-req /></label> --}}
+                            <label for="jvstts">J.V Status</label>
+                            <select  autocomplete="on"   name="jvstts" id="jvstts" class="col-span-1 text-left "  >
+                               <option value="0">None</option>
+                                <option value="1">Payment Through Cheque</option>
+                                <option value="2">Cheque Return to Supplier</option>
+                                <option value="3">Cheque Pending</option>
+
+                            </select>
+                                <x-input-date title="J.V Date" class="col-span-1" name="document_date" />
+
+
+                                <label for="head_id">Main Head<x-req /></label>
+                                <select autocomplete="on" class="col-span-1" name="head_id" id="head_id" >
+                                    {{-- <option value="" selected>--Payment Head</option> --}}
+                                    @foreach($heads as $head)
+                                    <option value="{{$head->id}}"> {{$head->title}} </option>
+                                    @endforeach
+                                </select>
+
+                                <label for="autocompleted1">Sub Head</label>
+                                <div class=" relative "   onclick="event.stopImmediatePropagation();" >
+                                 <input type="text" id="autocompleted1" size=20
+                                 onkeyup="onkeyUp1(event)" />
+                                 <div>
+                                     <select  id="supplier_id" name="supplier_id" size="20"  class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-auto h-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                                     </select>
+                                 </div>
+                             </div>
+
+
+                                <x-input-text tabindex="-1" title="J.V No" class="col-span-1" name="document_no" disabled value="{{$maxjvno}}"/>
+
+
+
+                                <label for="jvtype">J.V Type</label>
+                                <select  autocomplete="on" class="col-span-1"  name="jvtype" id="jvtype"  >
+                                    <option value="1">DEBIT</option>
+                                    <option value="2">CREDIT</option>
+                                </select>
+
+                                <x-input-numeric title="Amount" name="amount" id="amount"  class="col-span-1"      />
+                                <x-input-text title="Description" name="mdescription" id="mdescription" class="col-span-4" />
+                                <x-button   id="arw" class="mx-2" type="button" onclick="addgrdrw()">Add Row</x-button>
+                         </div>
+                         </fieldset>
+
+
+
+                                {{-- <div class="w-96 relative grid grid-cols-4 gap-1 px-10 py-5  "   onclick="event.stopImmediatePropagation();" >
+                                    <label for="autocompleted1">Sub Head<x-req /></label>
                                     <input id="autocompleted1" title="Head Name" placeholder="Select Sub Head Name" class=" px-5 py-3 w-auto border border-gray-400 rounded-md"
                                     onkeyup="onkeyUp1(event)" />
                                     <div>
                                         <select  id="supplier_id" name="supplier_id" size="20"  class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-auto h-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
                                         </select>
                                     </div>
-                                </div>
-                                </div>
-                                <div class="grid grid-cols-12 gap-2 py-1 items-center">
-                                <x-input-numeric title="Amount" name="amount" id="amount"  class="col-span-2"      />
-                                <x-input-text title="Description" name="mdescription" id="mdescription" class="col-span-2" />
-                                <x-button   id="arw" class="mx-2" type="button" onclick="addgrdrw()">Add Row</x-button>
+                                </div> --}}
+
+
                                 <x-input-text title="" name="chqtext" id="chqtext" hidden    />
-                            </div>
-                            </fieldset>
 
 
                         {{-- Dynamic Tabulator --}}
@@ -640,7 +656,7 @@ function addgrdrw()
 
 
 
-            var input = document.getElementById("jvtype").focus();
+            var input = document.getElementById("head_id").focus();
         }
 
 

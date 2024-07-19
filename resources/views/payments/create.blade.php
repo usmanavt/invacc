@@ -25,8 +25,9 @@
                             <legend>Invoice Level Entries</legend>
                             {{-- <div class="grid grid-cols-12 gap-1 py-1 items-center"> --}}
                         <div class=" grid grid-cols-8   py-1  text-right  gap-1 divide-black focus:bg-blue-500 w-full   ">
+
                             <label for="head_id">Main Head</label>
-                                    <select autocomplete="on"  name="head_id" id="head_id" >
+                                    <select autocomplete="on"  name="head_id" id="head_id" style="text-align:left" >
                                         @foreach($heads as $head)
                                         <option value="{{$head->id}}"> {{$head->title}} </option>
                                         @endforeach
@@ -300,12 +301,15 @@ supplier_id.addEventListener("click", () => {
         dynamicTable.setData();
         input1.value=supplier_id.options[supplier_id.selectedIndex].text;
         subhdid.value=supplier_id.options[supplier_id.selectedIndex].value;
-        // hdid.value=$mnhdid;
-        hdid.value =$itmdata[supplier_id.options[supplier_id.selectedIndex].value][0].mnhdid,
-        // shname.value= supplier_id.options[supplier_id.selectedIndex].text;
-        shname.value =$itmdata[supplier_id.options[supplier_id.selectedIndex].value][0].shdname,
+        hdid.value =$itmdata[supplier_id.options[supplier_id.selectedIndex].value][0].mnhdid;
+        shname.value =$itmdata[supplier_id.options[supplier_id.selectedIndex].value][0].shdname;
+
+        if(hdid.value==32)
+{
+
         detailsUrl = `${getDetails}/?id=${supplier_id.options[supplier_id.selectedIndex].value}`
-            fetchDataFromServer(detailsUrl)
+            fetchDataFromServer(detailsUrl);
+}
             adopted = true
        hidedropdown1();
 });

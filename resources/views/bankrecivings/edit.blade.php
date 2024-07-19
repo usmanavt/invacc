@@ -2,23 +2,20 @@
 
     <x-slot name="header">
         <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-           Edit Bank Recivings
+           Edit Bank Receiving
         </h2>
     </x-slot>
 
 
-    <div class="py-6">
+    <div class="py-1 text-sm">
         <div class="max-w-2xl mx-auto sm:px-2 lg:px-4">
             <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg p-4">
 
                  {{-- Create Form --}}
-                 <div class="px-6 py-2" >
-                    <div class="flex gap-8">
+                 <div class="px-6 py-1" >
+                    <div class="flex gap-2">
 
                         {{-- Form Data --}}
-
-
-
 
                         <div class="flex flex-col justify-start items-center">
                             <form action="{{ route('bankrecivings.update',$bt) }}" method="post" class="flex flex-col">
@@ -33,6 +30,7 @@
                                     @endforeach
                                 </select> --}}
                                 {{-- Head --}}
+
                                 <x-input-date title="Document Date" name="documentdate" value="{{ $bt->documentdate }}"/>
                                 <x-input-text title="Bank Naration" name="banknaration" value="{{ $bt->banknaration }}"/>
                                 <label for="">Head</label>

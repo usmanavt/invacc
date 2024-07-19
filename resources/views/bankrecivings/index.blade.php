@@ -13,19 +13,20 @@
         </h2>
     </x-slot>
 
-    <div class="py-6">
+    <div class="py-1">
         <div class="max-w-full mx-auto sm:px-2 lg:px-4">
             <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg p-4">
 
                  {{-- Create Form --}}
-                 <div class="px-6 py-2" >
-                    <div class="flex gap-2">
+                 <div class="px-1 py-1" >
+                    <div class="flex   gap-1">
 
                         {{-- Form Data --}}
-                        <div class="flex flex-col justify-start items-center">
+                        <div class="flex flex-col justify-start   items-center text-sm">
+                         {{-- <div class="grid-column: 1 / auto;"> --}}
                             <form action="{{ route('bankrecivings.store') }}" method="post" class="flex flex-col" id="createForm">
                                 @csrf
-                                <x-input-date title="Document Date" name="documentdate"  req required/>
+                                <x-input-date title="Document Date" name="documentdate" class="w-32"  />
                                 {{-- <label for="">Bank</label>
                                 <select name="bank_id" required autocomplete="on">
                                     <option disabled selected value="">--Select</option>
@@ -34,9 +35,9 @@
                                     @endforeach
                                 </select> --}}
                                 {{-- Head --}}
-                                <x-input-text title="Bank Naration" name="banknaration" req required class=""/>
+                                <x-input-text title="Bank Naration" name="banknaration"  class="w-40"/>
                                 <label for="">Head</label>
-                                <select name="head_id" id="head_id" required autocomplete="on">
+                                <select name="head_id" id="head_id" class="w-40" autocomplete="on">
                                     <option disabled selected value="">--Select</option>
                                     @foreach ($heads as $head)
                                         <option value="{{ $head->id }}">{{ $head->title }}</option>
@@ -44,7 +45,7 @@
                                 </select>
                                 {{-- Subhead --}}
                                 <label for="">Subead</label>
-                                <select name="subhead_id" id="subhead_id" disabled class="disabled:opacity-50" autocomplete="on">
+                                <select name="subhead_id" id="subhead_id" disabled class="disabled:opacity-50 w-40 "  autocomplete="on">
                                     <option disabled selected value="">--Select</option>
                                     {{-- @foreach ($heads as $head)
                                         <option value="{{ $head->id }}">{{ $head->title }}</option>
@@ -52,7 +53,7 @@
                                 </select>
                                 {{-- Supplier --}}
                                 <label for="">Supplier</label>
-                                <select name="supplier_id" id="supplier_id" disabled class="disabled:opacity-50" autocomplete="on">
+                                <select name="supplier_id" id="supplier_id" disabled class="disabled:opacity-50 w-40 " autocomplete="on">
                                     <option disabled selected value="">--Select</option>
                                     @foreach ($suppliers as $supplier)
                                         <option value="{{ $supplier->id }}">{{ $supplier->title }}</option>
@@ -60,7 +61,7 @@
                                 </select>
                                 {{-- Customer --}}
                                 <label for="">Customer</label>
-                                <select name="customer_id" id="customer_id" disabled class="disabled:opacity-50" autocomplete="on">
+                                <select name="customer_id" id="customer_id" disabled class="disabled:opacity-50 w-40" autocomplete="on">
                                     <option disabled selected value="">--Select</option>
                                     @foreach ($customers as $customer)
                                         <option value="{{ $customer->id }}">{{ $customer->title }}</option>
@@ -68,17 +69,17 @@
                                 </select>
 
                                 {{-- <x-input-numeric title="Conversion Rate" name="conversion_rate" id="conversion_rate" value="1" min="1" step="0.01" required  onblur="convamounttodlr()"/> --}}
-                                <x-input-numeric title="Receiving" name="received" id="received" min="1" required  onblur="convamounttodlr()"/>
+                                <x-input-numeric title="Receiving" name="received" id="received" min="1" class="w-40"  onblur="convamounttodlr()"/>
                                 <x-input-numeric title="" name="payment" id="payment" hidden   value=0/>
-                                <x-input-text title="Cheque #" name="cheque_no" req required class=""/>
-                                <x-input-date title="Cheque Date" name="cheque_date" req required/>
+                                <x-input-text title="Cheque #" name="cheque_no" class="w-40" />
+                                <x-input-date title="Cheque Date" name="cheque_date" class="w-40"/>
 
 
                                 <div class="flex flex-col">
                                     <label for="">
-                                        Description <span class="text-red-500 font-semibold">(*)</span>
+                                        Description <span class="text-red-500 font-semibold"></span>
                                     </label>
-                                    <textarea name="description" id="description" cols="30" rows="3" maxlength="255" class="rounded"></textarea>
+                                    <textarea name="description" id="description" cols="30" rows="4" maxlength="255" class="rounded w-40"></textarea>
                                 </div>
 
 
@@ -106,17 +107,10 @@
 
 
                             </div> --}}
-
-
-
-
-
-
                         </div>
 
-
                         {{-- Listing --}}
-                        <div class="p-2 pb-2 border border-slate-300 w-full">
+                        <div class="p-2 pb-2 border border-slate-300 w-10/12 text-sm">
                             {{-- tabulator component --}}
                             <x-tabulator />
                         </div>
@@ -228,6 +222,8 @@
     }
     // The Table for Items Modal
     table = new Tabulator("#tableData", {
+         height:"500px",
+        // width:"10000px",
         autoResize:true,
         responsiveLayout:"collapse",
         layout:"fitData",
@@ -245,7 +241,7 @@
         ajaxURL: getMaster,
         ajaxContentType:"json",
         initialSort:[ {column:"id", dir:"desc"} ],
-        height:"100%",
+        // height:"100%",
 
         columns:[
             // Master Data
@@ -260,7 +256,7 @@
             {title:"Subhead", field:"supname" , visible:true , responsive:0},
             {title:"Entry Date", field:"documentdate" , visible:true , responsive:0},
             {title:"Receiving", field:"received",hozAlign:"right" ,  responsive:0,formatter:"money",formatterParams:{thousand:",",precision:2}},
-            {title:"Payment", field:"payment",hozAlign:"right" ,  responsive:0,formatter:"money",formatterParams:{thousand:",",precision:0}},
+            {title:"Payment", field:"payment",hozAlign:"right",visible:false ,  responsive:0,formatter:"money",formatterParams:{thousand:",",precision:0}},
             {title:"Cheque Date", field:"cheque_date" ,  responsive:0},
             {title:"Cheque #", field:"cheque_no" ,  responsive:0},
             {title:"Description", field:"description" ,  responsive:0}]},
@@ -276,13 +272,13 @@
                     columns:[
 
             // {title:"Status", field:"clrstatus" ,  responsive:0},
-            {title:"AmountCredit", field:"AmountCredit", hozAlign:"center",  headerSort:false},
-            {title:"ClrdAmount", field:"AmountInvsCleared", hozAlign:"center",  headerSort:false},
-            {title:"InvsBal", field:"invsbal", hozAlign:"center",  headerSort:false},
+            {title:"AmountCredit", field:"AmountCredit", hozAlign:"center", responsive:0,  headerSort:false},
+            {title:"ClrdAmount", field:"AmountInvsCleared", hozAlign:"center", responsive:0,  headerSort:false},
+            {title:"InvsBal", field:"invsbal", hozAlign:"center", responsive:0,  headerSort:false},
 
-            {title:"Status", field:"clrstatus", hozAlign:"center", formatter:"tickCross", headerSort:false},
+            {title:"Status", field:"clrstatus", hozAlign:"center", responsive:0, formatter:"tickCross", headerSort:false},
             {title:"Date", field:"clrdate" ,  responsive:0},
-            {title:"", field:"clrid" ,  responsive:0,visible:false},
+            {title:"", field:"clrid" ,  visible:false},
             {title:"Ref.", field:"ref" ,  responsive:0},
             {title:"Deposit Bank", field:"dbank" ,  responsive:0},
 

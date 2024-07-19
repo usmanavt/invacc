@@ -15,7 +15,7 @@
         </h2>
     </x-slot>
 
-    <div class="py-6">
+    <div class="py-0.5">
         <div class="max-w-full mx-auto sm:px-2 lg:px-4">
             <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg p-4">
 
@@ -77,9 +77,9 @@
         groupBy:'transaction',
         columns:[
             // Master Data
-            {formatter:"rowSelection", titleFormatter:"rowSelection", hozAlign:"center", headerSort:false, cellClick:function(e, cell){
-        cell.getRow().toggleSelect();
-        }},
+        //     {formatter:"rowSelection", titleFormatter:"rowSelection", hozAlign:"center", headerSort:false, cellClick:function(e, cell){
+        // cell.getRow().toggleSelect();
+        // }},
             {title:"Id", field:"id" , responsive:0,visible:false},
             {title:"Transaction", field:"transaction" , responsive:0},
             {title:"Doc Date", field:"document_date" ,  responsive:0},
@@ -94,7 +94,7 @@
             // {title:"Customer", field:"customer_id" , visible:true , responsive:0},
             {title:"JV#", field:"jvno",hozAlign:"right" ,  responsive:0},
             {title:"Amount Rs", field:"amount",hozAlign:"right" ,  responsive:0,formatter:"money",formatterParams:{thousand:",",precision:2}},
-            {title:"Description", field:"description" ,  responsive:0},
+            {title:"Description", field:"description",width:220 ,  responsive:0},
             {title:"Edit" , formatter:editIcon, hozAlign:"center",headerSort:false, responsive:0,
                 cellClick:function(e, cell){
                     window.open(window.location + "/" + cell.getData().transaction + "/edit" ,"_self");

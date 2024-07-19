@@ -24,7 +24,7 @@ class BankRecivingsController extends Controller
         ->with('bts',ChequeTransaction::where('status',1)->orderBy('id','desc')->limit(10)->get())
         ->with('banks',Bank::where('status',1)->get())
         ->with('suppliers',Supplier::where('status',1)->get())
-        ->with('heads',Head::where('status',1)->get())
+        ->with('heads',Head::where('forbr',1)->get())
         ->with('subheads',Subhead::where('status',1)->get())
         ->with('customers',Customer::where('status',1)->get())
         ;
