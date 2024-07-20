@@ -25,7 +25,68 @@
                             <legend>Invoice Level Entries</legend>
                             {{-- <div class="grid grid-cols-12 gap-2 py-2 items-center"> --}}
                             <div class=" grid grid-cols-8   py-1  text-right  gap-1 divide-black focus:bg-blue-500 w-full   ">
-                                    <label for="head_id">Main Head</label>
+
+                                <x-input-date  title="Date" name="documentdate" class="col-span-1 " value="{{ $banktransaction->documentdate->format('Y-m-d') }}" />
+                                <x-input-text tabindex="-1" title="Payment Ref.#" name="transno" id="transno" value="{{ $banktransaction->transno }}"  class="col-span-1"    />
+                                <x-input-text title="G.D No" name="impgdno" id="impgdno" disabled  class="col-span-1" value="{{ $banktransaction->impgdno }}"  />
+
+                                <label for="per" class="gap-6">
+                                    Invoice Level <span class="text-red-500 font-semibold   "></span>
+                                    </label>
+                                <input tabindex="-1" class="checked:bg-blue-500 checked:border-blue-500 focus:outline-none mt-2 float-right  "   type="checkbox" name="per" id="per" checked=true onclick="EnableDisableTextBox(this)" >
+
+
+                                        <label for="head_id">Main Head</label>
+                                        <select autocomplete="on"  name="head_id" id="head_id" style="text-align:left" class="col-span-3" >
+                                            @foreach($heads as $head)
+                                            @if ($head->id == $banktransaction->head_id)
+                                                <option value="{{$head->id}}" selected> {{$head->title}} </option>
+                                            @endif
+                                            <option value="{{$head->id}}"> {{$head->title}} </option>
+                                            @endforeach
+                                        </select>
+
+                                    <label for="autocompleted1">Sub Head</label>
+                                   <div class=" relative col-span-3 "   onclick="event.stopImmediatePropagation();" >
+                                    <input type="text" id="autocompleted1"  size=48
+                                    onkeyup="onkeyUp1(event)" />
+                                    <div>
+                                        <select  id="supplier_id" name="supplier_id" size="20"   class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-auto h-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                                        </select>
+                                    </div>
+                                </div>
+
+
+                                <label for="bank_id">Cash/Bank</label>
+                                <select autocomplete="on"  name="bank_id" id="bank_id" class="col-span-3"  >
+                                    @foreach($banks as $bank)
+                                        <option value="{{ $bank->id }}" @if ($bank->id == $banktransaction->bank_id) selected @endif>{{$bank->title}}</option>
+                                    @endforeach
+                                </select>
+
+
+
+
+                                <x-input-text title="Cheque No" name="cheque_no" id="cheque_no"   class="col-span-1" value="{{ $banktransaction->cheque_no }}"  disabled  />
+                                <x-input-date title="Cheque Date" id="cheque_date" name="cheque_date"  class="col-span-1" value="{{ $banktransaction->cheque_date->format('Y-m-d') }}"  />
+                                <x-input-text title="Payment to" name="pmntto" id="pmntto"  class="col-span-1" value="{{ $banktransaction->pmntto }}"   />
+
+                                <x-input-numeric title="Amount(USD)" name="amount_fc" id="amount_fc" onkeyup="chngpkr(event)" class="col-span-1" value="{{ $banktransaction->amount_fc }}"      />
+                                <x-input-numeric title="Exc. Rate" name="conversion_rate" id="conversion_rate" value=1 onkeyup="chngpkr(event)"  class="col-span-1" value="{{ $banktransaction->conversion_rate }}" disabled   />
+                                <x-input-numeric title="Amount(PKR)" name="amount_pkr" id="amount_pkr" class="col-span-1" value="{{ $banktransaction->amount_pkr }}" disabled />
+
+                                <label for="">
+                                    Description <span class="text-red-500 font-semibold  "></span>
+                                    </label>
+                                <textarea name="description" id="description" cols="150" rows="3" maxlength="150" class="col-span-5 rounded"  >{{ $banktransaction->description }}</textarea>
+                                <x-input-text tabindex="-1" title="Cust.DC No" name="cusinvid" id="cusinvid" class="col-span-1" value=0  disabled     />
+
+
+
+
+
+{{--
+                                <label for="head_id">Main Head</label>
                                     <select autocomplete="on"  name="head_id" id="head_id" >
                                         @foreach($heads as $head)
                                         @if ($head->id == $banktransaction->head_id)
@@ -33,9 +94,9 @@
                                         @endif
                                         <option value="{{$head->id}}"> {{$head->title}} </option>
                                         @endforeach
-                                    </select>
+                                    </select> --}}
 
-                                    <label for="autocompleted1">Sub Head</label>
+                                    {{-- <label for="autocompleted1">Sub Head</label>
                                     <div class=" relative "   onclick="event.stopImmediatePropagation();" >
                                      <input type="text" id="autocompleted1" size=20
                                      onkeyup="onkeyUp1(event)" />
@@ -43,25 +104,14 @@
                                          <select  id="supplier_id" name="supplier_id" size="20"  class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-auto h-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
                                          </select>
                                      </div>
-                                 </div>
-
-
-                                 <x-input-date  title="Date" name="documentdate" value="{{ $banktransaction->documentdate->format('Y-m-d') }}" class="col-span-1" />
-                                 <x-input-text tabindex="-1" title="Payment Seq.#" name="transno" id="transno" value="{{ $banktransaction->transno }}"  class="col-span-1"    />
-
-                                 {{-- <label for="autocompleted"   >Bank </label>
-                                 <div class="relative"   onclick="event.stopImmediatePropagation();" >
-                                     <input type="text"  id="autocompleted"
-                                     onkeyup="onkeyUp(event)" />
-                                         <div>
-                                             <select  id="bank_id" name="bank_id" size="20"  class=" bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block  h-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
-                                             </select>
-                                         </div>
                                  </div> --}}
+
+
+                                 {{-- <x-input-date  title="Date" name="documentdate" value="{{ $banktransaction->documentdate->format('Y-m-d') }}" class="col-span-1" />
+                                 <x-input-text tabindex="-1" title="Payment Seq.#" name="transno" id="transno" value="{{ $banktransaction->transno }}"  class="col-span-1"    />
 
                                  <label for="bank_id">Payment From</label>
                                  <select autocomplete="on"  name="bank_id" id="bank_id"  >
-                                     {{-- <option value="" selected>--Payment From</option> --}}
                                      @foreach($banks as $bank)
                                          <option value="{{ $bank->id }}" @if ($bank->id == $banktransaction->bank_id) selected @endif>{{$bank->title}}</option>
                                      @endforeach
@@ -88,46 +138,10 @@
 
                                  <x-input-text title="G.D No For Import Expenses" name="impgdno" id="impgdno" disabled value="{{ $banktransaction->impgdno }}"  class="col-span-1"  />
                                  <x-input-text title="Cust.DC No" name="cusinvid" id="cusinvid" value="{{ $banktransaction->cusinvid }}" class="col-span-1" value=0  disabled     />
-                                 <input tabindex="-1" class="checked:bg-blue-500 checked:border-blue-500 focus:outline-none mt-2 float-left "  type="checkbox"  name="invid" id="invid" onclick="enbldspl(this)" >
+                                 <input tabindex="-1" class="checked:bg-blue-500 checked:border-blue-500 focus:outline-none mt-2 float-left "  type="checkbox"  name="invid" id="invid" onclick="enbldspl(this)" > --}}
 
-                                     {{-- 2112121212121221
-                                     22121121212121211
-                                     32121212121212121 --}}
+                                </div>
 
-
-
-                                {{-- <x-input-date title="Payment Date" name="documentdate" class="col-span-2" value="{{ $banktransaction->documentdate->format('Y-m-d') }}"  />
-                                <x-input-text title="Payment Seq.#" name="transno" id="transno" value="{{ $banktransaction->transno }}"  class="col-span-2"    /> --}}
-
-
-
-                                    </div>
-
-                            {{-- <div class="grid grid-cols-12 gap-2 py-2 ">
-
-                           <x-input-text title="Cheque No" name="cheque_no" id="cheque_no" req required class="col-span-2" value="{{ $banktransaction->cheque_no }}"  />
-                            <x-input-date title="Cheque Date" id="cheque_date" name="cheque_date" req required class="col-span-2" value="{{ $banktransaction->cheque_date->format('Y-m-d') }}" />
-                            <x-input-text title="Payment to" name="pmntto" id="pmntto" req required class="col-span-2" value="{{ $banktransaction->pmntto }}"  />
-                           </div>
-
-                        <div class="grid grid-cols-12 gap-2 py-2 items-center">
-                            <x-input-numeric title="Amount(USD)" name="amount_fc" id="amount_fc" class="col-span-2" onkeyup="chngpkr(event)" value="{{ $banktransaction->amount_fc }}"   disabled     />
-                            <x-input-numeric title="Conversion Rate" name="conversion_rate" id="conversion_rate" onkeyup="chngpkr(event)" class="col-span-2" value="{{ $banktransaction->conversion_rate }}" disabled   />
-                            <x-input-numeric title="Amount(PKR)" name="amount_pkr" id="amount_pkr" class="col-span-2" value="{{ $banktransaction->amount_pkr }}" disabled />
-                            <label for="">
-                                Invoice Level Payment <span class="text-red-500 font-semibold  ">(*)</span>
-                                </label>
-                            <input class="checked:bg-blue-500 checked:border-blue-500 focus:outline-none "  type="checkbox" name="per" id="per" @if( $banktransaction->invslvl==1  )  checked else unchecked @endif   onclick="EnableDisableTextBox(this)" >
-                        </div>
-                        <div class="grid grid-cols-12 gap-2 py-2 items-center">
-                            <label for="">
-                                Description <span class="text-red-500 font-semibold  ">(*)</span>
-                                </label>
-                            <textarea name="description" id="description" cols="150" rows="2" maxlength="150" class="col-span-2" required class="rounded"> {{ $banktransaction->description }} </textarea>
-                            <x-input-text title="G.D No For Import Expenses" name="impgdno" id="impgdno"   class="col-span-2"  value="{{ $banktransaction->impgdno }}" disabled  />
-                            <x-input-text title="Cust.DC No" name="cusinvid" id="cusinvid" class="col-span-2;w-20" value="{{ $banktransaction->cusinvid }}"  disabled     />
-                            <input class="checked:bg-blue-500 checked:border-blue-500 focus:outline-none"  type="checkbox" name="invid" id="invid" onclick="enbldspl(this)" >
-                        </div> --}}
 
                     </fieldset>
                     <x-input-text title="" name="shname" id="shname" class="col-span-2" value="{{ $banktransaction->supname }}" hidden disabled  />
@@ -380,6 +394,7 @@ var updateValues = (cell) => {
 //  Dynamic Table [User data]
 dynamicTable = new Tabulator("#dynamicTable", {
     data:dynamicTableData,
+    height:"200px",
     layout:'fitData',
     reactiveData:true,
     columns:[
@@ -446,12 +461,6 @@ dynamicTable = new Tabulator("#dynamicTable", {
                             cssClass:"bg-gray-200 font-semibold",
                             formatterParams:{thousand:",",precision:3},
                         },
-
-
-
-
-
-
 
 
                         {   title:"Currency",

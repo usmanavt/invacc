@@ -13,75 +13,83 @@
         </h2>
     </x-slot>
 
-    <div class="py-6">
+    <div class="py-2">
         <div class="max-w-7xl mx-auto sm:px-2 lg:px-4">
             <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg p-4">
 
                  {{-- Create Form --}}
-                 <div class="px-6 py-2" >
+                 <div class="px-2 py-2" >
                     <div class="flex gap-8">
 
                         {{-- Form Data --}}
                         <div class="flex flex-col justify-start items-center">
                             <form action="{{ route('jv.edit',$transaction) }}" method="post" class="flex flex-col">
                                 @csrf
-                                <fieldset class="border px-4 py-2 rounded">
-                                    <legend>Transaction Date</legend>
-                                    <x-input-date title="J.V Date" name="jvdate" value="{{ $document_date }}" />
+
+                                {{-- <fieldset class="border px-4 py-2 rounded"> --}}
+                                <fieldset class="border px-2 py-1 rounded">
+                                    <legend>Invoice Level Entries</legend>
+                                    {{-- <x-input-text title="Description" name="description" id="description" value="{{ $description }}" req required class="col-span-2"   /> --}}
+                                <div class=" grid grid-cols-8   py-1  text-right  gap-1 divide-black focus:bg-blue-500 w-full    ">
+                                    <x-input-text title="Cheque No" name="cheque_no" id="cheque_no" value="{{ $cheque_no }}"  class="col-span-2" disabled  />
+                                    <input class="checked:bg-blue-500 checked:border-blue-500 focus:outline-none mt-2 float-left " type="checkbox" name="per" id="per"  onclick="EnableDisableTextBox(this)" >
+
+                                         <label for="jvstts">J.V Status</label>
+                                         <select  autocomplete="on" class="col-span-2"  name="jvstts" id="jvstts"   >
+                                           @if ( $jvsttsid===0)
+                                             <option value="0" selected >None</option>
+                                           @else
+                                             <option value="0">None</option>
+                                           @endif
+
+                                           @if ( $jvsttsid===1)
+                                             <option value="1" selected>Payment Through Cheque</option>
+                                           @else
+                                             <option value="1" >Payment Through Cheque</option>
+                                           @endif
+
+                                           @if ( $jvsttsid===2)
+                                             <option value="2" selected>Cheque Return to Supplier</option>
+                                           @else
+                                             <option value="2">Cheque Return to Supplier</option>
+                                           @endif
+
+                                           @if ( $jvsttsid===3)
+                                             <option value="3" selected  >Cheque Pending</option>
+                                           @else
+                                             <option value="3"  >Cheque Pending</option>
+                                           @endif
+                                         </select>
+
+                                         {{-- <label for="">
+                                            <span  style="color: brown;font-weight: bold"> Cheque Collection </span> <span class="text-red-500 font-semibold   "></span>
+                                             </label> --}}
+
+
+
+
+
+
+                                </div>
+
+                                <div class=" grid grid-cols-8   py-1  text-right  gap-1 divide-black focus:bg-blue-500 w-full    ">
+
+                                    <x-input-date title="J.V Date" name="jvdate" value="{{ $document_date }}" class="col-span-3" />
                                     <x-input-text title="J.V No" name="document_no" value="{{ $jvno }}" disabled  />
 
-                                    <input tabindex="-1" class="checked:bg-blue-500 checked:border-blue-500 focus:outline-none" type="checkbox" name="jno" id="jno" onclick="EnableDisablejvno(this)" >
+                                    <input tabindex="-1" class="checked:bg-blue-500 checked:border-blue-500 focus:outline-none mt-2 float-left" type="checkbox" name="jno" id="jno" onclick="EnableDisablejvno(this)" >
                                     <label for="">
                                         <span style="color: brown;font-weight: bold"> </span> <span class="text-red-500 font-semibold  "></span>
                                          </label>
-                                </fieldset>
-
-                                <fieldset class="border px-4 py-2 rounded">
-                                    <legend>Transaction Date</legend>
-                                    {{-- <x-input-text title="Description" name="description" id="description" value="{{ $description }}" req required class="col-span-2"   /> --}}
-                                    <x-input-text title="Cheque No" name="cheque_no" id="cheque_no" value="{{ $cheque_no }}" req required class="col-span-2" disabled  />
-                                    <input class="checked:bg-blue-500 checked:border-blue-500 focus:outline-none" type="checkbox" name="per" id="per" onclick="EnableDisableTextBox(this)" >
-                                    <label for="">
-                                        <span style="color: brown;font-weight: bold"> J.V Against Cheque Collection </span> <span class="text-red-500 font-semibold  ">(*)</span>
-                                         </label>
-                                </fieldset>
-
-                                <fieldset class="border px-4 py-2 rounded">
-                                    <label for="jvstts">J.V Status</label>
-                                    <select  autocomplete="on" class="col-span-2"  name="jvstts" id="jvstts"   >
-                                      @if ( $jvsttsid===0)
-                                        <option value="0" selected >None</option>
-                                      @else
-                                        <option value="0">None</option>
-                                      @endif
-
-                                      @if ( $jvsttsid===1)
-                                        <option value="1" selected>Payment Through Cheque</option>
-                                      @else
-                                        <option value="1" >Payment Through Cheque</option>
-                                      @endif
-
-                                      @if ( $jvsttsid===2)
-                                        <option value="2" selected>Cheque Return to Supplier</option>
-                                      @else
-                                        <option value="2">Cheque Return to Supplier</option>
-                                      @endif
-
-                                      @if ( $jvsttsid===3)
-                                        <option value="3" selected  >Cheque Pending</option>
-                                      @else
-                                        <option value="3"  >Cheque Pending</option>
-                                      @endif
 
 
+                                </div>
 
 
-
-
-
-                                    </select>
 
                             </fieldset>
+
+
 
 
                             {{-- @foreach($customer as $customer)
@@ -117,7 +125,7 @@
                                     {{-- <x-input-text title="Password For Deletion" name="delpwrd" id="delpwrd" type="password" class="col-span-2"    />
                                     <x-input-text title="" name="delpwrd2" id="delpwrd2" hidden  class="col-span-2"    value="{{$passwrddel}}" /> --}}
                                     <x-input-text title="" name="p2" id="p2" value="0" hidden  />
-                                    <x-input-text title="" name="cheque_nofd" id="cheque_nofd" hidden value="{{ $cheque_no }}" req required class="col-span-2" disabled  />
+                                    <x-input-text title="" name="cheque_nofd" id="cheque_nofd" hidden value="{{ $cheque_no }}"  class="col-span-2" disabled  />
                                     <x-input-text title="" name="gdno" id="gdno" value="{{ $vgdno }}" hidden disabled  />
                                 </div>
 

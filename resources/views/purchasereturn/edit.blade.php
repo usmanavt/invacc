@@ -13,21 +13,19 @@
         </h2>
     </x-slot>
 
-    <div class="py-6">
+    <div class="py-2">
         <div class="max-w-full mx-auto sm:px-2 lg:px-4">
             <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
                 {{-- Create Form --}}
-                <div class="px-6 py-2">
+                <div class="px-2 py-2">
 
-                    <div class="grid grid-cols-1">
+                    {{-- <div class="grid grid-cols-1"> --}}
                         {{-- Contract Master --}}
-                        <div class="grid grid-cols-12 gap-2 py-2 items-center">
+                        {{-- <div class="grid grid-cols-6 gap-2 py-2 items-center"> --}}
                             {{-- Contract Master --}}
-
-
-
+                        <div class=" grid grid-cols-6   py-1  text-right  gap-1 divide-black focus:bg-blue-500 w-full   ">
                             <label for="supplier_id">Supplier</label>
-                            <select  autocomplete="on" class="col-span-2" name="supplier_id" id="supplier_id" disabled required>
+                            <select  autocomplete="on" class="col-span-3" name="supplier_id" id="supplier_id" disabled required>
                                 @foreach($supplier as $supplier)
                                     @if ($supplier->id == $purchasereturn->supplier_id)
                                     <option value="{{$supplier->id}}" selected> {{$supplier->title}} </option>
@@ -35,31 +33,24 @@
                                     <option value="{{$supplier->id}}"> {{$supplier->title}} </option>
                                 @endforeach
                             </select>
+                            <x-input-date title="Purchase Invoice Date" name="invoice_date" id="invoice_date"  class="col-span-1"  value="{{ $purchasereturn->prinvdate }}" disabled  />
 
-                            {{-- <x-input-text title="" name="quotation_id" id="quotation_id" value="{{ $customerorder->quotation_id }}" hidden     />
-                            <x-input-text title="Quotation No" name="qutno" id="qutno" value="{{ $customerorder->pqutno }}" disabled     />
-                            <x-input-date title="Quotation Date" name="qutdate" id="qutdate" value="{{ $customerorder->qutdate->format('Y-m-d') }}"  class="col-span-2" disabled  />
-                            <x-input-text title="P.R No" name="prno" id="prno" value="{{ $customerorder->pprno }}" disabled     /> --}}
 
-                            <x-input-date title="Purchase Invoice Date" name="invoice_date" id="invoice_date" req required class="col-span-2"  value="{{ $purchasereturn->prinvdate }}" disabled  />
-                            <x-input-text title="Purchase Invoice No" name="invoiceno" id="invoiceno" req required class="col-span-2" value="{{ $purchasereturn->prinvno }}" disabled  />
-                        </div>
-                        <div class="grid grid-cols-12 gap-1 py-2 items-center">
-                            <x-input-date title="Purchase Return Date" id="prdate" name="prdate" value="{{ $purchasereturn->prdate }}" req required class="col-span-2" />
-                            <x-input-text title="Purchase Return No" name="prno" id="prno" value="{{ $purchasereturn->prno }}"      />
+                            <x-input-text title="Purchase Invoice No" name="invoiceno" id="invoiceno"  class="col-span-1" value="{{ $purchasereturn->prinvno }}" disabled  />
+                            <x-input-date title="Purchase Return Date" id="prdate" name="prdate" value="{{ $purchasereturn->prdate }}"  class="col-span-1" />
+                            <x-input-text title="Purchase Return No" name="prno" id="prno" class="col-span-1" value="{{ $purchasereturn->prno }}"      />
 
-                            <x-input-text title="" name="prid" id="prid" value="{{ $purchasereturn->id }}"      />
                                 <label for="">
                                     Descripiton <span class="text-red-500 font-semibold"></span>
                                 </label>
-                                <textarea name="retdescription" id="retdescription" cols="30" rows="2" maxlength="150" required class="rounded"> {{ $purchasereturn->retdescription }} </textarea>
+                                <textarea name="retdescription" id="retdescription" cols="30" rows="3" maxlength="150"  class=" col-span-5 rounded"> {{ $purchasereturn->retdescription }} </textarea>
 
 
                             </div>
                     </fieldset>
 
+                    <x-input-text title="" name="prid" id="prid" value="{{ $purchasereturn->id }}" hidden      />
 
-                        </div>
 
                         {{-- <fieldset class="border px-4 py-2 rounded">
                             <legend>Invoice Level Expenses</legend>
@@ -96,7 +87,7 @@
                             <x-input-text title="" name="dbpwrd2" id="dbpwrd2"  class="col-span-2" hidden value="{{$passwrd}}" />
                         </div>
 
-                    </div>
+                    {{-- </div> --}}
                 </div>
             </div>
         </div>
@@ -279,6 +270,7 @@ var updateValues = (cell) => {
 
 //  Dynamic Table [User data]
 dynamicTable = new Tabulator("#dynamicTable", {
+    height:"300px",
     data:dynamicTableData,
     layout:'fitData',
     reactiveData:true,

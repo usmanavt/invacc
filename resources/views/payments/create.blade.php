@@ -24,31 +24,37 @@
                         <fieldset class="border px-4 py-1 rounded">
                             <legend>Invoice Level Entries</legend>
                             {{-- <div class="grid grid-cols-12 gap-1 py-1 items-center"> --}}
-                        <div class=" grid grid-cols-8   py-1  text-right  gap-1 divide-black focus:bg-blue-500 w-full   ">
+                        <div class=" grid grid-cols-8   py-1  text-right  gap-2  divide-black focus:bg-blue-500 w-full place-items-stretch   ">
+
+                            <x-input-date  title="Date" name="documentdate" class="col-span-1 w-auto" />
+                            <x-input-text tabindex="-1" title="Payment Ref.#" name="transno" id="transno" value="{{$maxposeqno}}"  class="col-span-1"    />
+                            <x-input-text title="G.D No" name="impgdno" id="impgdno" disabled  class="col-span-1"  />
+
+                            <label for="per" class="gap-6">
+                                Invoice Level <span class="text-red-500 font-semibold   "></span>
+                                </label>
+                            <input tabindex="-1" class="checked:bg-blue-500 checked:border-blue-500 focus:outline-none mt-2 float-right  "   type="checkbox" name="per" id="per" checked=true onclick="EnableDisableTextBox(this)" >
 
                             <label for="head_id">Main Head</label>
-                                    <select autocomplete="on"  name="head_id" id="head_id" style="text-align:left" >
+                                    <select autocomplete="on"  name="head_id" id="head_id" style="text-align:left" class="col-span-3" >
                                         @foreach($heads as $head)
                                         <option value="{{$head->id}}"> {{$head->title}} </option>
                                         @endforeach
                                     </select>
 
-                               <label for="autocompleted1">Sub Head<x-req /></label>
-                               <div class=" relative "   onclick="event.stopImmediatePropagation();" >
-                                <input type="text" id="autocompleted1" size=20
+                               <label for="autocompleted1">Sub Head</label>
+                               <div class=" relative col-span-3 "   onclick="event.stopImmediatePropagation();" >
+                                <input type="text" id="autocompleted1" size=47
                                 onkeyup="onkeyUp1(event)" />
                                 <div>
-                                    <select  id="supplier_id" name="supplier_id" size="20"  class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-auto h-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                                    <select  id="supplier_id" name="supplier_id" size="20"   class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-auto h-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
                                     </select>
                                 </div>
                             </div>
 
-                            <x-input-date  title="Date" name="documentdate" class="col-span-1" />
-                            <x-input-text tabindex="-1" title="Payment Seq.#" name="transno" id="transno" value="{{$maxposeqno}}"  class="col-span-1"    />
-
-                            <label for="autocompleted"   >Bank </label>
-                            <div class="relative"   onclick="event.stopImmediatePropagation();" >
-                                <input type="text"  id="autocompleted"
+                            <label for="autocompleted"   >Cash/Bank</label>
+                            <div class="relative col-span-3 "   onclick="event.stopImmediatePropagation();" >
+                                <input type="text"  id="autocompleted" size=47
                                 onkeyup="onkeyUp(event)" />
                                     <div>
                                         <select  id="bank_id" name="bank_id" size="20"  class=" bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block  h-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
@@ -61,21 +67,15 @@
                             <x-input-text title="Payment to" name="pmntto" id="pmntto"  class="col-span-1"   />
 
                             <x-input-numeric title="Amount(USD)" name="amount_fc" id="amount_fc" onkeyup="chngpkr(event)" class="col-span-1"      />
-                            <x-input-numeric title="Conversion Rate" name="conversion_rate" id="conversion_rate" value=1 onkeyup="chngpkr(event)"  class="col-span-1" disabled   />
+                            <x-input-numeric title="Exc. Rate" name="conversion_rate" id="conversion_rate" value=1 onkeyup="chngpkr(event)"  class="col-span-1" disabled   />
                             <x-input-numeric title="Amount(PKR)" name="amount_pkr" id="amount_pkr" class="col-span-1" disabled />
-                            <label for="">
-                                Invoice Level Payment <span class="text-red-500 font-semibold  "></span>
-                                </label>
-                            <input tabindex="-1" class="checked:bg-blue-500 checked:border-blue-500 focus:outline-none"  type="checkbox" name="per" id="per" checked=true onclick="EnableDisableTextBox(this)" >
 
                             <label for="">
                                 Description <span class="text-red-500 font-semibold  "></span>
                                 </label>
-                            <textarea name="description" id="description" cols="150" rows="1" maxlength="150" class="col-span-2" required class="rounded"></textarea>
-
-                            <x-input-text title="G.D No For Import Expenses" name="impgdno" id="impgdno" disabled req required class="col-span-1"  />
-                            <x-input-text title="Cust.DC No" name="cusinvid" id="cusinvid" class="col-span-1" value=0  disabled     />
-                            <input tabindex="-1" class="checked:bg-blue-500 checked:border-blue-500 focus:outline-none mt-2 float-left "  type="checkbox"  name="invid" id="invid" onclick="enbldspl(this)" >
+                            <textarea name="description" id="description" cols="150" rows="3" maxlength="150" class="col-span-5 rounded" ></textarea>
+                            <x-input-text tabindex="-1" title="Cust.DC No" name="cusinvid" id="cusinvid" class="col-span-1" value=0  disabled     />
+                            {{-- <input tabindex="-1" class="checked:bg-blue-500 checked:border-blue-500 focus:outline-none mt-2 float-left "  type="checkbox"  name="invid" id="invid" onclick="enbldspl(this)" > --}}
 
                         </div>
 
@@ -148,7 +148,7 @@ const value = head.value
 
 
 window.onload = function() {
-            var input = document.getElementById("autocompleted1").focus();
+            var input = document.getElementById("documentdate").focus();
         }
 
         let table;
@@ -512,7 +512,7 @@ var updateValues = (cell) => {
 
 
         dynamicTable = new Tabulator("#dynamicTable", {
-            height:"350px",
+            height:"200px",
             width:"1500px",
             rowContextMenu: rowMenu,
             layout:'fitDataTable',
@@ -779,7 +779,7 @@ var updateValues = (cell) => {
                    clearform();
                    newsno();
                    dynamicTable.setData();
-                   var input = document.getElementById("autocompleted1").focus();
+                   var input = document.getElementById("documentdate").focus();
 
                 }
             })

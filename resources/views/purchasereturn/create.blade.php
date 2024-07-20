@@ -18,29 +18,23 @@
         <div class="max-w-full mx-auto sm:px-2 lg:px-4">
             <div class="bg-white overflow-hidden shadow-sm  sm:rounded-lg">
                 {{-- Create Form --}}
-                <div class="px-6 py-2">
+                <div class="px-2 py-2">
 
-                    <div class="grid">
+                    {{-- <div class="grid"> --}}
 
-                        <fieldset class="border px-4 py-2 rounded">
+                        <fieldset class="border px-2 py-2 rounded">
                             <legend>Invoice Level Entries</legend>
-                            <div class="grid grid-cols-12 gap-1 py-2 items-center">
-
-                                {{-- <label for="supplier_id">Customer<x-req /></label>
-                                    <select autocomplete="on" class="col-span-2" name="supplier_id" id="supplier_id" >
-                                        <option value="" selected>--Customer</option>
-                                        @foreach($customers as $customer)
-                                        <option value="{{$customer->id}}"> {{$customer->title}} </option>
-                                        @endforeach
-                                    </select> --}}
-                                <x-input-text title="Supplier Name" name="supname" id="supname" req required class="col-span-2" disabled  />
-                                <x-input-date title="Purchase Invoice Date" name="invoice_date" id="invoice_date" req required class="col-span-2" disabled  />
-                                <x-input-text title="Purchase Invoice No" name="invoiceno" id="invoiceno" req required class="col-span-2" disabled  />
-
-                            </div>
-                            <div class="grid grid-cols-12 gap-1 py-2 items-center">
-                                <x-input-date title="Purchase Return Date" id="prdate" name="prdate" req required class="col-span-2" />
-                                <x-input-text title="Purchase Return No" name="prno" id="prno" value="{{$maxposeqno}}"      />
+                            {{-- <div class="grid grid-cols-12 gap-1 py-2 items-center"> --}}
+                            <div class=" grid grid-cols-6   py-1  text-right  gap-1 divide-black focus:bg-blue-500 w-full   ">
+                                <x-input-text title="Supplier Name" name="supname" id="supname" class="col-span-3"   disabled  />
+                                <x-input-date title="Purchase Invoice Date" name="invoice_date" id="invoice_date"  disabled  />
+                                <x-input-text title="Purchase Invoice No" name="invoiceno" id="invoiceno"  disabled  />
+                                <x-input-date title="Purchase Return Date" id="prdate" name="prdate" class="col-span-1" />
+                                <x-input-text title="Purchase Return No" name="prno" id="prno" class="col-span-1" value="{{$maxposeqno}}"      />
+                                <label for="retdescription">
+                                    Descripiton <span class="text-red-500 font-semibold"></span>
+                                </label>
+                                <textarea name="retdescription" id="retdescription" cols="30" rows="2" maxlength="150"  class=" col-span-5 rounded"> </textarea>
 
                             </div>
                         </fieldset>
@@ -60,17 +54,12 @@
                             </div>
                         </fieldset> --}}
 
-                        <div class="flex flex-row px-4 py-2 items-center">
+                        {{-- <div class="flex flex-row px-4 py-2 items-center">
                             <x-label value="Add Pcs & Feet Size & Press"></x-label>
                             <x-button id="calculate" class="mx-2" type="button" onclick="calculate()">Calculate</x-button>
-                            {{-- <x-label value="This will prepare your commercial invoice for Submission"></x-label> --}}
 
-                            <label for="">
-                                Descripiton <span class="text-red-500 font-semibold"></span>
-                            </label>
-                            <textarea name="retdescription" id="retdescription" cols="30" rows="2" maxlength="150" required class="rounded"> </textarea>
 
-                        </div>
+                        </div> --}}
 
 
 
@@ -84,7 +73,7 @@
                             </x-button>
                         </div>
 
-                    </div>
+                    {{-- </div> --}}
                 </div>
             </div>
         </div>
@@ -171,8 +160,8 @@
         }
         //  The Table for Materials Modal
         table = new Tabulator("#tableData", {
-            width:"600px",
-            height:"600px",
+            width:"800px",
+            height:"450px",
             autoResize:true,
             responsiveLayout:"collapse",
             // layout:"fitData",
@@ -244,7 +233,7 @@
             detailsUrl = `${getDetails}/?id=${data.id}`
             fetchDataFromServer(detailsUrl)
             adopted = true
-            calculateButton.disabled = false
+            // calculateButton.disabled = false
             closeModal()
         })
     </script>
@@ -470,10 +459,10 @@ var updateValues = (cell) => {
                 },
                 {title:"S.No",             field:"sno", formatter:"rownum",responsive:0},
                 {title:"Id",           field:"id", visible:false},
-                {title:"Material Name",     field:"matname",responsive:0},
+                {title:"Material Name",     field:"matname",width:275,responsive:0},
                 {title:"Material Size",    field:"size",responsive:0,frozen:true, headerMenu:headerMenu},
                 {title:"UOM",         field:"unitname",responsive:0, hozAlign:"center"},
-                {title:"Unitid",       field:"prunitid",visible:true},
+                {title:"Unitid",       field:"prunitid",visible:false},
                 {title:"material_id",  field:"material_id",visible:false},
                 {title:"supplier_id",  field:"supplier_id",visible:false},
 
@@ -541,6 +530,7 @@ var updateValues = (cell) => {
 
 
                         {title:"Amount",
+                        responsive:0,
                         headerHozAlign :'right',
                         hozAlign:"right",
                         field:"amtinpkr",
@@ -612,6 +602,7 @@ var updateValues = (cell) => {
                         },
 
                         {title:"Return Amount",
+                        responsive:0,
                         headerHozAlign :'right',
                         hozAlign:"right",
                         field:"pramount",

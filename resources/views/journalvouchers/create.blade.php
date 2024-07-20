@@ -54,38 +54,35 @@
                                 <label for="">
                                     <span style="color: brown;font-weight: bold  "> J.V Against Cheque Collection </span> <span class="text-red-500 font-semibold  "></span>
                                      </label>
-
-                                     <input tabindex="-1" class="checked:bg-blue-500 checked:border-blue-500 focus:outline-none ml-6 mt-2 float-left " type="checkbox" name="jno" id="jno" onclick="EnableDisablejvno(this)" >
-                                     <label for="">
-                                        <span style="color: brown;font-weight: bold  "> Enable J.V No TextBox </span> <span class="text-red-500 font-semibold  "></span>
-                                         </label>
-
-
-
-
+                                     <x-input-text title="Cheque No" name="cheque_no" id="cheque_no" class="col-span-1"   disabled  />
+                                     <x-input-text title="Cheque Amount" name="cheque_amt" id="cheque_amt" class="col-span-1"    disabled  />
                             </div>
 
 
 
                         <fieldset class="border px-4 py-1 rounded">
-                            <legend>Transaction Date</legend>
-                        <div class=" grid grid-cols-8   py-1  text-right  gap-1 divide-black focus:bg-blue-500 w-full   ">
-                            <x-input-text title="Cheque No" name="cheque_no" id="cheque_no" class="col-span-1"   disabled  />
-                            <x-input-text title="Cheque Amount" name="cheque_amt" id="cheque_amt" class="col-span-1"    disabled  />
+                            <legend>Invoice Level Entries</legend>
+                        <div class=" grid grid-cols-8   py-1  text-right  gap-1 divide-black focus:bg-blue-500 w-full    ">
+                            <x-input-date title="J.V Date"  name="document_date" />
+                        </div>
 
+                        <div class=" grid grid-cols-8   py-1  text-right  gap-1 divide-black focus:bg-blue-500 w-full   ">
                             <label for="jvstts">J.V Status</label>
-                            <select  autocomplete="on"   name="jvstts" id="jvstts" class="col-span-1 text-left "  >
-                               <option value="0">None</option>
+                            <select  autocomplete="on"   name="jvstts" id="jvstts" class="col-span-2 text-left  divide-black "  >
+                            <option value="0">None</option>
                                 <option value="1">Payment Through Cheque</option>
                                 <option value="2">Cheque Return to Supplier</option>
                                 <option value="3">Cheque Pending</option>
 
                             </select>
-                                <x-input-date title="J.V Date" class="col-span-1" name="document_date" />
-
+                            <x-input-text tabindex="-1" title="J.V No" class="col-span-3" name="document_no" disabled value="{{$maxjvno}}"/>
+                            <input tabindex="-1" class="checked:bg-blue-500 checked:border-blue-500 focus:outline-none  mt-2 float-left " type="checkbox" name="jno" id="jno" onclick="EnableDisablejvno(this)" >
+                            {{-- <label for="">
+                               <span style="color: brown;font-weight: bold  "> Enable J.V No TextBox </span> <span class="text-red-500 font-semibold  "></span>
+                                </label> --}}
 
                                 <label for="head_id">Main Head<x-req /></label>
-                                <select autocomplete="on" class="col-span-1" name="head_id" id="head_id" >
+                                <select autocomplete="on" class="col-span-2" name="head_id" id="head_id" >
                                     {{-- <option value="" selected>--Payment Head</option> --}}
                                     @foreach($heads as $head)
                                     <option value="{{$head->id}}"> {{$head->title}} </option>
@@ -93,8 +90,8 @@
                                 </select>
 
                                 <label for="autocompleted1">Sub Head</label>
-                                <div class=" relative "   onclick="event.stopImmediatePropagation();" >
-                                 <input type="text" id="autocompleted1" size=20
+                                <div class=" relative col-span-3 "    onclick="event.stopImmediatePropagation();" >
+                                 <input type="text" id="autocompleted1" size=49
                                  onkeyup="onkeyUp1(event)" />
                                  <div>
                                      <select  id="supplier_id" name="supplier_id" size="20"  class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-auto h-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
@@ -102,22 +99,28 @@
                                  </div>
                              </div>
 
-
-                                <x-input-text tabindex="-1" title="J.V No" class="col-span-1" name="document_no" disabled value="{{$maxjvno}}"/>
-
+                        </div>
 
 
-                                <label for="jvtype">J.V Type</label>
-                                <select  autocomplete="on" class="col-span-1"  name="jvtype" id="jvtype"  >
-                                    <option value="1">DEBIT</option>
-                                    <option value="2">CREDIT</option>
-                                </select>
 
-                                <x-input-numeric title="Amount" name="amount" id="amount"  class="col-span-1"      />
-                                <x-input-text title="Description" name="mdescription" id="mdescription" class="col-span-4" />
-                                <x-button   id="arw" class="mx-2" type="button" onclick="addgrdrw()">Add Row</x-button>
+
+                        <div class=" grid grid-cols-8   py-1  text-right  gap-1 divide-black focus:bg-blue-500 w-full   ">
+                            <label for="jvtype">J.V Type</label>
+                            <select  autocomplete="on" class="col-span-2"  name="jvtype" id="jvtype"  >
+                                <option value="1">DEBIT</option>
+                                <option value="2">CREDIT</option>
+                            </select>
+                             <x-input-numeric title="Amount" name="amount" id="amount"  class="col-span-1"      />
                          </div>
-                         </fieldset>
+
+                         <div class=" grid grid-cols-8   py-1  text-right  gap-1 divide-black focus:bg-blue-500 w-full   ">
+                            <x-input-text title="Description" name="mdescription" id="mdescription" class="col-span-5" />
+                            <x-button   id="arw" class="ml-4" type="button"  onclick="addgrdrw()">Add Row</x-button>
+
+                         </div>
+
+
+                        </fieldset>
 
 
 
@@ -226,7 +229,7 @@ let dyanmicTable = ""; // Tabulator
     //  Dynamic Table [User data]
     dynamicTable = new Tabulator("#dynamicTable", {
         width:"1000px",
-        height:"300px",
+        height:"200px",
         layout:'fitDataTable',
         responsiveLayout:"collapse",
         reactiveData:true,
@@ -272,7 +275,7 @@ let dyanmicTable = ""; // Tabulator
             {title:"Credit", field:"creditamt",headerSort: false, editor:"number", responsive:0,width:"100",cellEdited: updateValues,
             validator:['required','numeric'],bottomCalc:"sum"},
             {title:"tamount", field:"tamount",headerSort: false, editor:"number", responsive:0,visible:false,validator:['required','numeric'],bottomCalc:"sum"},
-            {title:"Description", width:300, field:"description",headerSort: false, responsive:0,validator:['required'],  editor:"input"},
+            {title:"Description", width:350, field:"description",headerSort: false, responsive:0,validator:['required'],  editor:"input"},
         ],
     })
     // dynamicTable.on("cellEdited", (cell) => {
@@ -631,12 +634,7 @@ function addgrdrw()
             dynamicTable.addData([
                 {
 
-
-                    // $itmdata[e.id]=[ { shid:e.subheadid,mnhdid:e.head_id,shdname:e.osuppname }  ];
                     ttype:jvtype.options[jvtype.selectedIndex].text,
-                    // mhead:head_id.options[head_id.selectedIndex].text,
-                    // shead:supplier_id.options[supplier_id.selectedIndex].text,
-                    // mheadid:head_id.options[head_id.selectedIndex].value,
                     sheadid:supplier_id.options[supplier_id.selectedIndex].value,
                     mhead:$itmdata[supplier_id.options[supplier_id.selectedIndex].value][0].mnhead,
                     shead:$itmdata[supplier_id.options[supplier_id.selectedIndex].value][0].shdname,
@@ -646,9 +644,6 @@ function addgrdrw()
                     creditamt:vcrdt,
                     tamount:amount.value,
                     description:mdescription.value
-                    // title:supplier_id.options[supplier_id.selectedIndex].text,
-                    // category_id:$itmdata[supplier_id.options[supplier_id.selectedIndex].value][0].category_id,
-                    // category:$itmdata[supplier_id.options[supplier_id.selectedIndex].value][0].category,
 
                 }
 
